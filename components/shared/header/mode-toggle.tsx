@@ -10,7 +10,7 @@ import {
     DropdownMenuCheckboxItem
 } from "@/components/ui/dropdown-menu"
 import { useTheme } from "next-themes"
-import { SunIcon, MoonIcon, SunMoon, ComputerIcon } from 'lucide-react'
+import { SunIcon, MoonIcon, ComputerIcon } from 'lucide-react'
 
 export default function ModeToggle() {
     const [mounted, setMounted] = useState(false)
