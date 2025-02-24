@@ -27,29 +27,31 @@ export default function ModeToggle() {
 
 
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant='ghost' className="focus-visible:ring-0 focus-visible:ring-offset-0">
-                    { theme === 'tech' ? (
-                        <ComputerIcon />
-                    ) : theme === 'dark' ? (
-                        <MoonIcon />
-                    ) : <SunIcon />}
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuCheckboxItem checked={theme === 'tech'} onClick={() => setTheme('tech')}>
-                    Tech
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem checked={theme === 'dark'} onClick={() => setTheme('dark')}>
-                    Dark
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem checked={theme === 'light'} onClick={() => setTheme('light')}>
-                    Light
-                </DropdownMenuCheckboxItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <div>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant='ghost' className="focus-visible:ring-0 focus-visible:ring-offset-0">
+                        {theme === 'tech' ? (
+                            <ComputerIcon />
+                        ) : theme === 'dark' ? (
+                            <MoonIcon />
+                        ) : <SunIcon />}
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-primary">
+                    <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem checked={theme === 'tech'} onClick={() => setTheme('tech')}>
+                        Tech
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem checked={theme === 'dark'} onClick={() => setTheme('dark')}>
+                        Dark
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem checked={theme === 'light'} onClick={() => setTheme('light')}>
+                        Light
+                    </DropdownMenuCheckboxItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
     )
 }

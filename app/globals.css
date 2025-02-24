@@ -6,14 +6,17 @@
   :root {
     --background: rgb(49, 52, 52);
     --foreground: black;
+    --primary: maroon;
   }
   .dark {
-    --background: black;
+    --background: navy;
     --foreground: white;
+    --primary: orange;
   }
   .tech {
     --background: green;
     --foreground: yellow;
+    --primary: white;
   }
 }
 
@@ -61,6 +64,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
 
 @layer base {
   body {
