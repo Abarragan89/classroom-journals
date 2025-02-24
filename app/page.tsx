@@ -22,9 +22,19 @@ export default function Home() {
       );
       setCursorIndex((prev) => prev - 1);
     } else if (e.key === "ArrowLeft" && cursorIndex > 0) {
-      setCursorIndex((prev) => prev - 1); // Move cursor left
+      // Move cursor left but skip over '\n' if it's the next character
+      let newCursorIndex = cursorIndex - 1;
+      while (newCursorIndex > 0 && journalText[newCursorIndex] === "\n") {
+        newCursorIndex--;
+      }
+      setCursorIndex(newCursorIndex);
     } else if (e.key === "ArrowRight" && cursorIndex < journalText.length) {
-      setCursorIndex((prev) => prev + 1); // Move cursor right
+      // Move cursor right but skip over '\n' if it's the next character
+      let newCursorIndex = cursorIndex + 1;
+      while (newCursorIndex < journalText.length && journalText[newCursorIndex] === "\n") {
+        newCursorIndex++;
+      }
+      setCursorIndex(newCursorIndex);
     } else if (e.key === "Enter") {
       // Create two new lines after the cursor
       e.preventDefault(); // Prevent default line break (in input)
@@ -34,6 +44,7 @@ export default function Home() {
       setCursorIndex((prev) => prev + 2); // Move cursor to the second new line
     }
   };
+
 
   function removeExtraReturns(userText: string): string {
     // I need to turn into array  `
@@ -61,7 +72,7 @@ export default function Home() {
       <pre className="text-lg max-w-[900px] mx-auto w-[85%] bg-gray-800 text-gray-200 border border-gray-700 rounded-md p-4 whitespace-pre-wrap">
         {journalText.slice(0, cursorIndex)}
         <span className="bg-transparent border-b border-white">
-          {journalText[cursorIndex] === "\n" ? "\u00A0" : journalText[cursorIndex] || "\u00A0"}
+          {journalText[cursorIndex] === "\n" && journalText[cursorIndex] === "\n" ? "\n\u00A0" : journalText[cursorIndex] || "\u00A0"}
         </span>
         {journalText.slice(cursorIndex + 1)}
       </pre>
