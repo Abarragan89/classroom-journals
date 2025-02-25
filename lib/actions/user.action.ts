@@ -12,10 +12,25 @@ export async function signInWithMagicLink(prevState: unknown, formData: FormData
         await signIn("sendgrid", formData)
         return { success: true, message: 'Signed in successfully' }
     } catch (error) {
+        // redirect is part of the normal flow and this lets Auth handle the redirect without crashing
         if (isRedirectError(error)) {
             throw error
         }
         return { success: false, message: 'Invalid email or password' }
+    }
+}
+
+// Sign in with google 
+export async function signInWithGoogle() {
+    try {
+        await signIn("google")
+        return { success: true, message: 'Signed in successfully' }
+    } catch (error) {
+        // redirect is part of the normal flow and this lets Auth handle the redirect without crashing
+        if (isRedirectError(error)) {
+            throw error
+        }
+        return { success: false, message: 'Email may be associated with an existing accout. Try signing in with Magic Link' }
     }
 }
 

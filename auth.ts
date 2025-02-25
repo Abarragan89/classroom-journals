@@ -1,19 +1,33 @@
 import NextAuth from "next-auth"
 import Sendgrid from "next-auth/providers/sendgrid"
+import Google from "next-auth/providers/google"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/db/prisma";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     adapter: PrismaAdapter(prisma),
+    trustHost: true,
+    secret: process.env.AUTH_SECRET,
     providers: [
         Sendgrid({
             apiKey: process.env.AUTH_SENDGRID_KEY,
             from: "customer.team@math-fact-missions.com"
         }),
+        Google({
+            clientId: process.env.AUTH_GOOGLE_ID!,
+            clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+            authorization: {
+                params: {
+                    prompt: "consent",
+                    access_type: "offline",
+                    response_type: "code",
+                },
+            },
+        }),
     ],
     pages: {
         signIn: '/sign-in',
-        error: '/sign-in'
+        error: '/sign-in',
     },
     session: {
         strategy: 'jwt',
@@ -53,6 +67,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 })
             }
             return token
-        }
+        },
+        async redirect({ url, baseUrl }) {
+            // Ensure the user is redirected to a valid page after signing in
+            return url.startsWith(baseUrl) ? url : baseUrl;
+        },
     }
 })
