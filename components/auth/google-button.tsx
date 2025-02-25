@@ -7,7 +7,8 @@ import { useSearchParams } from "next/navigation"
 
 export default function GoogleButton() {
     // Error message does not render because of the redirect.
-    const [__, dispatchGoogle] = useActionState(signInWithGoogle, {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_errorMsg, dispatchGoogle] = useActionState(signInWithGoogle, {
         success: true,
         message: ''
     })
