@@ -2,7 +2,7 @@
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from "../ui/button"
-import { signInWithMagicLink } from "@/lib/actions/user.action"
+import { signInWithMagicLink } from "@/lib/actions/auth.action"
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
 
@@ -28,22 +28,22 @@ export default function MagicLink() {
                 action={action}
             >
                 <input type="hidden" name="callbackUrl" />
-                    <div className='mb-4'>
-                        <Label htmlFor='email'>Email</Label>
-                        <Input
-                            id='email'
-                            name='email'
-                            type='email'
-                            required
-                            autoComplete='email'
-                        />
+                <div className='mb-4'>
+                    <Label htmlFor='email'>Email</Label>
+                    <Input
+                        id='email'
+                        name='email'
+                        type='email'
+                        required
+                        autoComplete='email'
+                    />
+                </div>
+                <SignInButton />
+                {data && !data.success && (
+                    <div className="text-center text-destructive">
+                        {data.message}
                     </div>
-                    <SignInButton />
-                    {data && !data.success && (
-                        <div className="text-center text-destructive">
-                            {data.message}
-                        </div>
-                    )}
+                )}
             </form>
         </>
 

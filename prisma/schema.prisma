@@ -8,22 +8,27 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name          String?   @default("NO_NAME")
-  email         String    @unique(map: "user_email_idx")
-  emailVerified DateTime? @db.Timestamp(6)
+  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String?        @default("NO_NAME")
+  email         String?        @unique(map: "user_email_idx")
+  emailVerified DateTime?      @db.Timestamp(6)
   image         String?
-  role          String    @default("user")
-  address       Json?     @db.Json
-  paymentMethod String?
+  classCode     String         @default("")
+  role          String         @default("teacher") // either teacher or student?
   sessions      Session[]
   accounts      Account[]
-  createdAt     DateTime  @default(now()) @db.Timestamp(6)
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime       @default(now()) @db.Timestamp(6)
+  updatedAt     DateTime       @updatedAt
+  comments      Comment[]
+  postLikes     PostLike[]
+  commentLikes  CommentLike[]
+  notifications Notification[]
+  posts         Post[]
+  classes       ClassUser[]
 }
 
 model Account {
-  userId            String  @db.Uuid
+  userId            String   @db.Uuid
   type              String
   provider          String
   providerAccountId String
@@ -34,11 +39,9 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now()) @db.Timestamp(6)
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -58,4 +61,89 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+}
+
+model Class {
+  id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name    String
+  subject String?
+  room    String?
+  period  String?
+  color   String
+  users ClassUser[] // Many-to-many relationship
+}
+
+model ClassUser {
+  userId  String @db.Uuid
+  classId String @db.Uuid
+  role    String @default("student") // "teacher" or "student"
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@id([userId, classId]) // Composite primary key
+}
+
+model Notification {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String   @db.Uuid
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId      String   @db.Uuid
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  url         String
+  message     String
+  commentText String?
+  createdAt   DateTime @default(now())
+  isRead      Boolean  @default(false)
+}
+
+model Post {
+  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  text          String
+  likeCount     Int            @default(0)
+  likes         PostLike[]
+  publishedDate DateTime       @default(now())
+  userId        String         @db.Uuid
+  notifications Notification[]
+  isPublished   Boolean        @default(false)
+  comments      Comment[]
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Comment {
+  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  text      String        @db.VarChar(1000)
+  likeCount Int           @default(0)
+  likes     CommentLike[]
+  createdAt DateTime      @default(now())
+  userId    String        @db.Uuid
+  postId    String        @db.Uuid
+  parentId  String?       @db.Uuid // Null for top-level comments; set for replies
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent    Comment?      @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[]     @relation("CommentReplies")
+
+  @@index([parentId]) // Optional: Improves performance when querying replies
+}
+
+model PostLike {
+  id        String   @id @default(cuid())
+  userId    String   @db.Uuid
+  postId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId]) // Ensure a user can like a post only once
+}
+
+model CommentLike {
+  id        String  @id @default(cuid())
+  userId    String  @db.Uuid
+  commentId String  @db.Uuid
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId]) // Ensure a user can like a post only once
 }

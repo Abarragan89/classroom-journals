@@ -1,5 +1,5 @@
 'use client'
-import { signInWithGoogle } from "@/lib/actions/user.action"
+import { signInWithGoogle } from "@/lib/actions/auth.action"
 import { useActionState } from "react"
 import { Button } from "../ui/button"
 import { useFormStatus } from "react-dom"

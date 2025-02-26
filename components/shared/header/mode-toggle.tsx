@@ -38,7 +38,7 @@ export default function ModeToggle() {
                         ) : <SunIcon />}
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-primary">
+                <DropdownMenuContent>
                     <DropdownMenuLabel>Appearance</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuCheckboxItem checked={theme === 'tech'} onClick={() => setTheme('tech')}>

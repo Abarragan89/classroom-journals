@@ -1,16 +1,15 @@
-import { signIn } from "@/auth"
-export default function page() {
+import { auth } from "@/auth"
+import { redirect } from "next/navigation";
+export default async function page() {
 
+    const session = await auth();
+    // Send to dashboard if logged in
+    if (session) {
+        redirect('/dashboard')
+    }
     return (
         <main>
-            <form
-                action={async () => {
-                    "use server"
-                    await signIn("google")
-                }}
-            >
-                <button type="submit">Signin with Google</button>
-            </form>
+            <p>Home page</p>
         </main>
     )
 }

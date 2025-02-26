@@ -1,7 +1,7 @@
-import React from 'react'
+import AddClassModal from "@/components/modals/add-class";
 
-export default function page() {
+export default function Dashboard() {
     return (
-        <div>page</div>
+        <AddClassModal />
     )
 }
