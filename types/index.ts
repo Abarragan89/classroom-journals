@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createClassSchema } from "@/lib/validators";
+import { classSchema } from "@/lib/validators";
 
 export type User = {
     id: string;
@@ -14,7 +14,7 @@ export type User = {
     classes: ClassUser[];
 };
 
-export type Class = z.infer<typeof createClassSchema> & {
+export type Class = z.infer<typeof classSchema> & {
     id: string;
     users?: ClassUser[]
 }
