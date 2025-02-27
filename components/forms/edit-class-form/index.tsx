@@ -34,7 +34,7 @@ export default function EditClassForm({
         setSelectedColor(color);
     };
 
-    const CreateButton = () => {
+    const UpdateButton = () => {
         const { pending } = useFormStatus()
         return (
             <Button type="submit" className="mx-auto">
@@ -115,7 +115,7 @@ export default function EditClassForm({
                 name="classroomId"
                 value={classData.id}
             />
-            <CreateButton />
+            <UpdateButton />
             {state && !state.success && (
                 <p className="text-center text-destructive">{state.message}</p>
             )}

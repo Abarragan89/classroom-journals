@@ -8,13 +8,15 @@ import {
     DropdownMenuItem
 } from "@/components/ui/dropdown-menu"
 import { EllipsisVertical, Edit, Trash2Icon } from "lucide-react";
-import EditClassModal from '@/components/forms/edit-class-form';
-import { ClassForm, Class } from '@/types';
+import EditClassForm from '@/components/forms/edit-class-form';
+import DeleteClassForm from '@/components/forms/delete-class-form';
+import { Class } from '@/types';
 
 
 export default function OptionsMenu({ teacherId, classData }: { teacherId: string, classData: Class }) {
     const [mounted, setMounted] = useState<boolean>(false)
-    const [isModalOpen, setIsOpenModal] = useState<boolean>(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
 
     useEffect(() => {
         setMounted(true)
@@ -27,24 +29,38 @@ export default function OptionsMenu({ teacherId, classData }: { teacherId: strin
 
     return (
         <>
+            {/* Edit Modal */}
             <ResponsiveDialog
-                isOpen={isModalOpen}
-                setIsOpen={setIsOpenModal}
+                isOpen={isEditModalOpen}
+                setIsOpen={setIsEditModalOpen}
                 title='Edit Class'
                 description='Fill out the form below to create a new class.'
             >
-                <EditClassModal classData={classData} />
+                <EditClassForm classData={classData} />
             </ResponsiveDialog>
+
+            {/* Delete Modal */}
+            <ResponsiveDialog
+                isOpen={isDeleteModalOpen}
+                setIsOpen={setIsDeleteModalOpen}
+                title='Delete Class'
+                description='Confirm class delete'
+            >
+                <DeleteClassForm classroomId={classData.id} />
+            </ResponsiveDialog>
+
+            {/* Options Menu */}
             <div className='absolute right-4 top-4 z-10'>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
+                        {/* Ellipse */}
                         <EllipsisVertical className="hover:cursor-pointer" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => setIsOpenModal(true)} className="hover:cursor-pointer">
+                        <DropdownMenuItem onClick={() => setIsEditModalOpen(true)} className="hover:cursor-pointer">
                             <Edit />Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="hover:cursor-pointer text-destructive">
+                        <DropdownMenuItem onClick={() => setIsDeleteModalOpen(true)} className="hover:cursor-pointer text-destructive">
                             <Trash2Icon />Delete
                         </DropdownMenuItem>
                     </DropdownMenuContent>

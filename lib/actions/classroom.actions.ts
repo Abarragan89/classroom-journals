@@ -75,13 +75,11 @@ export async function updateClassInfo(prevState: unknown, formData: FormData) {
             period: formData.get('period'),
             color: formData.get('color')
         })
-        // Get Teacher Id
+        // Get classroom Id
         const classroomId = formData.get('classroomId')
         if (typeof classroomId !== 'string') {
-            throw new Error('Missing teacher ID');
+            throw new Error('Missing classroom ID');
         }
-
-
         await prisma.class.update({
             where: {
                 id: classroomId
@@ -99,5 +97,24 @@ export async function updateClassInfo(prevState: unknown, formData: FormData) {
     } catch (error) {
         console.log('error creating classroom', error)
         return { success: false, message: 'Error creating class. Try again.' }
+    }
+}
+
+// Delete Classroom
+export async function deleteClassroom(prevState: unknown, formData: FormData) {
+    try {
+
+        const classroomId = formData.get('classroomId') as string
+        await prisma.class.delete({
+            where: {
+                id: classroomId
+            }
+        })
+        
+        return { success: true, message: 'Class Delete' }
+
+    } catch (error) {
+        return { success: true, message: 'Error deleting class' }
+
     }
 }

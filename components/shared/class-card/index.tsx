@@ -14,7 +14,8 @@ import { Separator } from "@/components/ui/separator";
 export default function ClassCard({ classData, teacherId }: { classData: Class, teacherId: string }) {
     return (
 
-        <Card className="min-w-[350px] relative">
+        <Card className="min-w-[350px] relative hover:border-primary">
+
             {/* Absolutely positions options menu with responsive dialogs */}
             <OptionsMenu teacherId={teacherId} classData={classData} />
             <Link
@@ -28,6 +29,7 @@ export default function ClassCard({ classData, teacherId }: { classData: Class, 
                     </div>
                 </CardHeader>
                 <CardContent>
+
                     <p>&nbsp;</p>
                 </CardContent>
                 <Separator />
