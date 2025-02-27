@@ -49,9 +49,7 @@ export default function JournalEntry() {
     function removeExtraReturns(userText: string): string {
         // I need to turn into array  `
         for (const char of userText) {
-            console.log('char ', char)
             if (char === '\n') {
-                console.log(true)
             }
         }
         return userText

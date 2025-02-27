@@ -15,9 +15,9 @@ ALTER COLUMN "role" SET DEFAULT 'teacher';
 -- CreateTable
 CREATE TABLE "Class" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "name" TEXT NOT NULL,
+    "name" VARCHAR(30) NOT NULL,
     "subject" TEXT,
-    "room" TEXT,
+    "year" VARCHAR(12),
     "period" TEXT,
     "color" TEXT NOT NULL,
 

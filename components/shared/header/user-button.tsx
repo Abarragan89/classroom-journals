@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
 import { UserIcon } from "lucide-react";
+import Image from "next/image";
 
 export default async function UserButton() {
 
@@ -32,9 +33,21 @@ export default async function UserButton() {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <div className="flex items-center">
-                        <Button className="relative w-8 h-8 rounded-full ml-2 flex items-center justify-center bg-gray-200">
-                            {firstInitial}
-                        </Button>
+                        {session?.user?.image ?
+                            <Button className="flex items-center justify-center ml-2 bg-transparent px-0">
+                                <Image
+                                    className="rounded-full"
+                                    src={session.user.image}
+                                    alt="user profile image"
+                                    width={30}
+                                    height={30}
+                                />
+                            </Button>
+                            :
+                            <Button className="relative w-8 h-8 rounded-full ml-2 flex items-center justify-center bg-gray-200">
+                                {firstInitial}
+                            </Button>
+                        }
                     </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>

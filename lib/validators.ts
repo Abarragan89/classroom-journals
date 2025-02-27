@@ -10,7 +10,7 @@ export const signInFormSchema = z.object({
 export const classSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     subject: z.string().optional(),
-    room: z.string().optional(),
+    year: z.string().min(1, 'Year is required'),
     period: z.string().optional(),
     color: z.string().min(1, 'Color is required'),
 })

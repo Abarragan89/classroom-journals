@@ -24,7 +24,7 @@ export type ClassForm = Omit<Class, "id">;
 export type ClassUser = {
     userId: string;
     classId: string;
-    role: "teacher" | "student"; // Ensuring only "teacher" or "student"
+    role: "teacher" | "student";
     user: User;
     class: Class;
 }

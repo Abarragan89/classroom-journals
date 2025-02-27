@@ -1,35 +1,67 @@
 'use server';
 import { prisma } from "@/db/prisma";
 import { classSchema } from "../validators";
-import { redirect } from "next/navigation";
-import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 // Create a new class
 export async function createNewClass(prevState: unknown, formData: FormData) {
     try {
-        console.log('class in the form data part ', formData)
-        const { name, subject, room, period, color } = classSchema.parse({
+        const { name, subject, year, period, color } = classSchema.parse({
             name: formData.get('name'),
             subject: formData.get('subject'),
-            room: formData.get('room'),
+            year: formData.get('year'),
             period: formData.get('period'),
             color: formData.get('color')
         })
-        await prisma.class.create({
-            data: {
-                name,
-                subject,
-                room,
-                period,
-                color
-            }
+        // Get Teacher Id
+        const teacherId = formData.get('teacherId')
+        if (typeof teacherId !== 'string') {
+            throw new Error('Missing teacher ID');
+        }
+
+        await prisma.$transaction(async (tx) => {
+            const newClass = await tx.class.create({
+                data: {
+                    name,
+                    subject,
+                    year,
+                    period,
+                    color
+                }
+            })
+            await tx.classUser.create({
+                data: {
+                    userId: teacherId,
+                    classId: newClass.id,
+                    role: "teacher"
+                }
+            })
+            return newClass
         })
-        redirect('/dashboard')
+
+        return { success: true, message: 'Class Created!' }
     } catch (error) {
         console.log('error creating classroom', error)
-        if (isRedirectError(error)) {
-            throw error
-        }
         return { success: false, message: 'Error creating class. Try again.' }
+    }
+}
+
+// Get all Teacher Classes (Dashboard)
+export async function getAllClassrooms(teacherId: string) {
+    try {
+        const allClasses = await prisma.class.findMany({
+            where: {
+                users: {
+                    some: {
+                        userId: teacherId,
+                        role: 'teacher'
+                    }
+                }
+            },
+        })
+        return allClasses
+    } catch (error) {
+        console.log('error creating classroom', error)
+        return { success: false, message: 'Error creating class. Try again.' }
+        return []
     }
 }

@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -64,13 +65,13 @@ model VerificationToken {
 }
 
 model Class {
-  id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name    String
+  id      String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name    String      @db.VarChar(30)
   subject String?
-  room    String?
+  year    String?     @db.VarChar(12)
   period  String?
   color   String
-  users ClassUser[] // Many-to-many relationship
+  users   ClassUser[] // Many-to-many relationship
 }
 
 model ClassUser {

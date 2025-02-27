@@ -11,13 +11,14 @@ import { Plus } from "lucide-react"
 import AddClassForm from "./add-class-form"
 
 
-export default function AddClassModal() {
+export default function AddClassModal({ teacherId }: { teacherId: string }) {
+
 
     return (
         <Dialog>
             <DialogTrigger asChild>
                 <Button>
-                    <Plus /> Add Class
+                    <Plus />Add Class
                 </Button>
             </DialogTrigger>
             <DialogContent className="max-w-[425px]">
@@ -25,7 +26,7 @@ export default function AddClassModal() {
                     <DialogTitle>Create Class</DialogTitle>
                     <DialogDescription>Fill out the form below to create a new class.</DialogDescription>
                 </DialogHeader>
-                <AddClassForm />
+                <AddClassForm teacherId={teacherId} />
             </DialogContent>
         </Dialog>
     )

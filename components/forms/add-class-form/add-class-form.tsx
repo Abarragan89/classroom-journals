@@ -2,18 +2,27 @@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
-import { useActionState, useState } from "react";
+import { useActionState, useState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { DialogFooter } from "@/components/ui/dialog";
 import { createNewClass } from "@/lib/actions/classroom.actions";
 import ColorSelect from "./color-select";
+import { redirect } from "next/navigation";
+import { ClassForm } from "@/types";
 
-export default function AddClassForm() {
+export default function AddClassForm({ teacherId, formData }: { teacherId: string, formData?: ClassForm }) {
 
-    const [errorMsg, action] = useActionState(createNewClass, {
+    const [state, action] = useActionState(createNewClass, {
         success: false,
         message: ''
     })
+
+    //redirect if the state is success
+    useEffect(() => {
+        if (state.success) {
+            redirect('/dashboard')
+        }
+    }, [state])
 
     const [selectedColor, setSelectedColor] = useState<string>('#f87171');
 
@@ -45,6 +54,21 @@ export default function AddClassForm() {
                     placeholder="required"
                     className="col-span-3"
                     name="name"
+                    defaultValue={formData?.name ?? undefined}
+                    maxLength={30}
+                />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="year" className="text-right">
+                    Year
+                </Label>
+                <Input
+                    id="year"
+                    className="col-span-3"
+                    name="year"
+                    required
+                    maxLength={12}
+                    placeholder="required"
                 />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
@@ -57,15 +81,6 @@ export default function AddClassForm() {
                     name="subject"
                 />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="room" className="text-right">
-                    Room
-                </Label>
-                <Input
-                    id="room"
-                    className="col-span-3"
-                    name="room"
-                />            </div>
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="period" className="text-right">
                     Period
@@ -87,13 +102,18 @@ export default function AddClassForm() {
                     <input
                         type="hidden"
                         name="color"
-                        value={selectedColor} // Set the selected color here
+                        value={selectedColor}
                     />
                 </div>
             </div>
+            <input
+                type="hidden"
+                name="teacherId"
+                value={teacherId}
+            />
             <CreateButton />
-            {errorMsg && !errorMsg.success && (
-                <p className="text-center text-destructive">{errorMsg.message}</p>
+            {state && !state.success && (
+                <p className="text-center text-destructive">{state.message}</p>
             )}
         </form>
     )

@@ -18,7 +18,7 @@ export default function GoogleButton() {
 
     const error = searchParams.get('error')
 
-    console.log('erro ', error)
+    console.log('error ', error)
 
 
     return (
