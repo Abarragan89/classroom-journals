@@ -62,6 +62,42 @@ export async function getAllClassrooms(teacherId: string) {
     } catch (error) {
         console.log('error creating classroom', error)
         return { success: false, message: 'Error creating class. Try again.' }
-        return []
+    }
+}
+
+// Update Class Info
+export async function updateClassInfo(prevState: unknown, formData: FormData) {
+    try {
+        const { name, subject, year, period, color } = classSchema.parse({
+            name: formData.get('name'),
+            subject: formData.get('subject'),
+            year: formData.get('year'),
+            period: formData.get('period'),
+            color: formData.get('color')
+        })
+        // Get Teacher Id
+        const classroomId = formData.get('classroomId')
+        if (typeof classroomId !== 'string') {
+            throw new Error('Missing teacher ID');
+        }
+
+
+        await prisma.class.update({
+            where: {
+                id: classroomId
+            },
+            data: {
+                name,
+                subject,
+                year,
+                period,
+                color
+            }
+        })
+
+        return { success: true, message: 'Class Created!' }
+    } catch (error) {
+        console.log('error creating classroom', error)
+        return { success: false, message: 'Error creating class. Try again.' }
     }
 }

@@ -1,28 +1,124 @@
+'use client';
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { useActionState, useState, useEffect } from "react";
+import { useFormStatus } from "react-dom";
+import { updateClassInfo } from "@/lib/actions/classroom.actions";
+import ColorSelect from "../class-color-select";
+import { redirect } from "next/navigation";
+import { Class } from "@/types";
 
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog"
-import AddClassForm from "../add-class-form/add-class-form"
+export default function EditClassForm({
+    classData,
+}: {
+    classData: Class,
+}) {
 
+    const [state, action] = useActionState(updateClassInfo, {
+        success: false,
+        message: ''
+    })
 
-export default function EditClassModal(
-    { teacherId, open }
-        : { teacherId: string, open: boolean }) {
+    //redirect if the state is success
+    useEffect(() => {
+        if (state.success) {
+            redirect('/dashboard')
+        }
+    }, [state])
 
+    const [selectedColor, setSelectedColor] = useState<string>(classData?.color ?? '#f87171');
+
+    // Handler for setting the color value when a color is selected
+    const handleColorSelect = (color: string) => {
+        setSelectedColor(color);
+    };
+
+    const CreateButton = () => {
+        const { pending } = useFormStatus()
+        return (
+            <Button type="submit" className="mx-auto">
+                {pending ? 'Updating...' : 'Update Class'}
+            </Button>
+        )
+    }
 
     return (
-        <Dialog>
-            <DialogContent className="max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>Create Class</DialogTitle>
-                    <DialogDescription>Fill out the form below to create a new class.</DialogDescription>
-                </DialogHeader>
-                <AddClassForm teacherId={teacherId} />
-            </DialogContent>
-        </Dialog>
+        <form action={action} className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                    Name
+                </Label>
+                <Input
+                    id="name"
+                    required
+                    placeholder="required"
+                    className="col-span-3"
+                    name="name"
+                    defaultValue={classData?.name ?? ''}
+                    maxLength={30}
+                />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="year" className="text-right">
+                    Year
+                </Label>
+                <Input
+                    id="year"
+                    className="col-span-3"
+                    name="year"
+                    required
+                    maxLength={12}
+                    defaultValue={classData?.year ?? ''}
+                    placeholder="required"
+                />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="subject" className="text-right">
+                    Subject
+                </Label>
+                <Input
+                    id="subject"
+                    className="col-span-3"
+                    name="subject"
+                    defaultValue={classData?.subject ?? ''}
+                />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="period" className="text-right">
+                    Period
+                </Label>
+                <Input
+                    id="period"
+                    className="col-span-3"
+                    name="period"
+                    defaultValue={classData?.period ?? ''}
+                />
+            </div>
+            {/* Color Selection */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="color" className="text-right">
+                    Color
+                </Label>
+                <div className="col-span-3">
+                    <ColorSelect setColor={handleColorSelect} selectedColor={selectedColor} />
+                    {/* Hidden input to store selected color */}
+                    <input
+                        type="hidden"
+                        name="color"
+                        value={selectedColor}
+                    />
+                </div>
+            </div>
+            <input
+                type="hidden"
+                name="classroomId"
+                value={classData.id}
+            />
+            <CreateButton />
+            {state && !state.success && (
+                <p className="text-center text-destructive">{state.message}</p>
+            )}
+        </form>
     )
 }

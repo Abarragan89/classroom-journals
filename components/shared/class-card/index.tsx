@@ -15,7 +15,8 @@ export default function ClassCard({ classData, teacherId }: { classData: Class, 
     return (
 
         <Card className="min-w-[350px] relative">
-            <OptionsMenu teacherId={teacherId} />
+            {/* Absolutely positions options menu with responsive dialogs */}
+            <OptionsMenu teacherId={teacherId} classData={classData} />
             <Link
                 href={`/classroom/${classData.id}`}
                 className="hover:cursor-pointer"
@@ -30,7 +31,7 @@ export default function ClassCard({ classData, teacherId }: { classData: Class, 
                     <p>&nbsp;</p>
                 </CardContent>
                 <Separator />
-                <CardFooter className="flex justify-between text-xs mt-2">
+                <CardFooter className="flex justify-between text-sm mt-2">
                     <p>Students: 24</p>
                     <p>created: 2/12/19</p>
                 </CardFooter>

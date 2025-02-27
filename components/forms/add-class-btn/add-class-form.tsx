@@ -4,9 +4,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
 import { useActionState, useState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
-import { DialogFooter } from "@/components/ui/dialog";
 import { createNewClass } from "@/lib/actions/classroom.actions";
-import ColorSelect from "./color-select";
+import ColorSelect from "../class-color-select";
 import { redirect } from "next/navigation";
 import { ClassForm } from "@/types";
 
@@ -34,11 +33,9 @@ export default function AddClassForm({ teacherId, formData }: { teacherId: strin
     const CreateButton = () => {
         const { pending } = useFormStatus()
         return (
-            <DialogFooter>
                 <Button type="submit" className="mx-auto">
                     {pending ? 'Creating...' : 'Create Class'}
                 </Button>
-            </DialogFooter>
         )
     }
 
