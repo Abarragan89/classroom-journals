@@ -39,13 +39,13 @@ export default function DeleteClassForm({ classroomId }: { classroomId: string }
 
     return (
         <form action={action} className="space-y-5">
-            <div className="grid grid-cols-1 items-center gap-4">
-                <Label htmlFor="year" className="text-center">
+            <div className="grid items-center gap-4">
+                <Label htmlFor="year" className="text-center mx-auto mt-1">
                     Type <span className="text-destructive">Delete my class</span> to confirm delete.
                 </Label>
                 <Input
                     id="year"
-                    className="col-span-3"
+                    className="max-w-[320px] mx-auto"
                     name="year"
                     required
                     placeholder="required"

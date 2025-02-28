@@ -45,7 +45,7 @@ export default function EditClassForm({
 
     return (
         <form action={action} className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
                 <Label htmlFor="name" className="text-right">
                     Name
                 </Label>
@@ -59,7 +59,7 @@ export default function EditClassForm({
                     maxLength={30}
                 />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
                 <Label htmlFor="year" className="text-right">
                     Year
                 </Label>
@@ -73,7 +73,7 @@ export default function EditClassForm({
                     placeholder="required"
                 />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
                 <Label htmlFor="subject" className="text-right">
                     Subject
                 </Label>
@@ -84,7 +84,7 @@ export default function EditClassForm({
                     defaultValue={classData?.subject ?? ''}
                 />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
                 <Label htmlFor="period" className="text-right">
                     Period
                 </Label>
@@ -96,7 +96,7 @@ export default function EditClassForm({
                 />
             </div>
             {/* Color Selection */}
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
                 <Label htmlFor="color" className="text-right">
                     Color
                 </Label>

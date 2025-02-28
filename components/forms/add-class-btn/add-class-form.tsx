@@ -7,9 +7,8 @@ import { useFormStatus } from "react-dom";
 import { createNewClass } from "@/lib/actions/classroom.actions";
 import ColorSelect from "../class-color-select";
 import { redirect } from "next/navigation";
-import { ClassForm } from "@/types";
 
-export default function AddClassForm({ teacherId, formData }: { teacherId: string, formData?: ClassForm }) {
+export default function AddClassForm({ teacherId }: { teacherId: string }) {
 
     const [state, action] = useActionState(createNewClass, {
         success: false,
@@ -33,15 +32,15 @@ export default function AddClassForm({ teacherId, formData }: { teacherId: strin
     const CreateButton = () => {
         const { pending } = useFormStatus()
         return (
-                <Button type="submit" className="mx-auto">
-                    {pending ? 'Creating...' : 'Create Class'}
-                </Button>
+            <Button type="submit" className="mx-auto">
+                {pending ? 'Creating...' : 'Create Class'}
+            </Button>
         )
     }
 
     return (
         <form action={action} className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
                 <Label htmlFor="name" className="text-right">
                     Name
                 </Label>
@@ -51,11 +50,10 @@ export default function AddClassForm({ teacherId, formData }: { teacherId: strin
                     placeholder="required"
                     className="col-span-3"
                     name="name"
-                    defaultValue={formData?.name ?? undefined}
                     maxLength={30}
                 />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
                 <Label htmlFor="year" className="text-right">
                     Year
                 </Label>
@@ -68,7 +66,7 @@ export default function AddClassForm({ teacherId, formData }: { teacherId: strin
                     placeholder="required"
                 />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
                 <Label htmlFor="subject" className="text-right">
                     Subject
                 </Label>
@@ -78,7 +76,7 @@ export default function AddClassForm({ teacherId, formData }: { teacherId: strin
                     name="subject"
                 />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
                 <Label htmlFor="period" className="text-right">
                     Period
                 </Label>
@@ -89,7 +87,7 @@ export default function AddClassForm({ teacherId, formData }: { teacherId: strin
                 />
             </div>
             {/* Color Selection */}
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
                 <Label htmlFor="color" className="text-right">
                     Color
                 </Label>

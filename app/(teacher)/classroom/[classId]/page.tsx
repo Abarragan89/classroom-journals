@@ -1,9 +1,9 @@
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
 import Header from "@/components/shared/header";
 import { getSingleClassroom } from "@/lib/actions/classroom.actions";
 import { prisma } from "@/db/prisma";
 import { notFound } from "next/navigation"; // Import notFound for 404 handling
+import { Class } from "@/types";
 
 export default async function Classroom({ params }: { params: Promise<{ classId: string }> }) {
     const session = await auth()
@@ -30,14 +30,15 @@ export default async function Classroom({ params }: { params: Promise<{ classId:
 
     if (!isTeacherAuthorized) notFound()
 
-    // Look up class
-    const classroomData = await getSingleClassroom(classroomId);
-    // make sure it belongs to the teacher
-    console.log('classroom data ', classroomData)
+    // Get Class Data
+    const classroomData = await getSingleClassroom(classroomId) as Class;
 
     return (
         <>
             <Header teacherId={teacherId} inClassroom={true} />
+            <div className="wrapper">
+                <h1 className="h1-bold">{classroomData.name}</h1>
+            </div>
         </>
     )
 }

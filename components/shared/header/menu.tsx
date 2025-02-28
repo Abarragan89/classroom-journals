@@ -1,6 +1,7 @@
 import ModeToggle from "./mode-toggle"
 import UserButton from "./user-button"
 import { EllipsisVertical } from "lucide-react";
+import AddPromptBtn from "@/components/forms/add-prompt-btn";
 import {
     SheetContent,
     SheetDescription,
@@ -12,42 +13,42 @@ import AddClassBtn from "@/components/forms/add-class-btn";
 
 export default function Menu({ teacherId, inClassroom }: { teacherId?: string, inClassroom?: boolean }) {
 
-    function MenuOptions() {
+    // Define the menu items for different conditions
+    const renderClassroomMenu = () => (
+        <>
+            <AddPromptBtn teacherId={teacherId!} />
+            <ModeToggle />
+            <UserButton />
+        </>
+    );
+
+    const renderDashboardMenu = () => (
+        <>
+            <AddClassBtn teacherId={teacherId!} />
+            <ModeToggle />
+            <UserButton />
+        </>
+    );
+
+    const renderGuestMenu = () => (
+        <>
+            <ModeToggle />
+            <UserButton />
+        </>
+    );
+
+    const renderMenuOptions = () => {
         if (teacherId) {
-            if (inClassroom) {
-                // Show this in header if they are in classroom
-                return (
-                    <>
-                        <p>My Posts</p>
-                        <ModeToggle />
-                        <UserButton />
-                    </>
-                )
-            } else {
-                // Show this if they are in dashboard
-                return (
-                    <>
-                        <AddClassBtn teacherId={teacherId} />
-                        <ModeToggle />
-                        <UserButton />
-                    </>
-                )
-            }
+            return inClassroom ? renderClassroomMenu() : renderDashboardMenu();
         } else {
-            // Show these options if they are not signed in
-            return (
-                <>
-                    <ModeToggle />
-                    <UserButton />
-                </>
-            )
+            return renderGuestMenu();
         }
-    }
+    };
 
     return (
         <div className="flex justify-end gap-3">
             <nav className="hidden md:flex-center w-full max-w-xs gap-5">
-                <MenuOptions />
+                {renderMenuOptions()}
             </nav>
 
             {/* Sheet menu */}
@@ -58,9 +59,7 @@ export default function Menu({ teacherId, inClassroom }: { teacherId?: string, i
                     </SheetTrigger>
                     <SheetContent className="flex flex-col items-start">
                         <SheetTitle>Menu</SheetTitle>
-
-                        <MenuOptions />
-
+                        {renderMenuOptions()}
                         <SheetDescription></SheetDescription>
                     </SheetContent>
                 </Sheet>

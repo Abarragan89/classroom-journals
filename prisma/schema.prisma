@@ -67,7 +67,7 @@ model VerificationToken {
 model Class {
   id        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String      @db.VarChar(30)
-  classCode String      @db.VarChar(8) @unique
+  classCode String      @unique @db.VarChar(8)
   color     String
   subject   String?
   year      String?     @db.VarChar(12)
@@ -130,7 +130,7 @@ model Comment {
 }
 
 model PostLike {
-  id        String   @id @default(cuid())
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId    String   @db.Uuid
   postId    String   @db.Uuid
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -141,7 +141,7 @@ model PostLike {
 }
 
 model CommentLike {
-  id        String  @id @default(cuid())
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId    String  @db.Uuid
   commentId String  @db.Uuid
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -149,3 +149,38 @@ model CommentLike {
 
   @@unique([userId, commentId]) // Ensure a user can like a post only once
 }
+
+model Prompt {
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  isActive  Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  questions Question[] 
+}
+
+model Question {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content   String
+  promptId  String   @db.Uuid 
+  prompt    Prompt   @relation(fields: [promptId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// const newPrompt = await prisma.prompt.create({
+//   data: {
+//     isActive: true,
+//     questions: {
+//       create: [
+//         { content: "What did you enjoy most?" },
+//         { content: "What could be improved?" },
+//         { content: "What did you learn from this exercise?" }
+//       ]
+//     }
+//   }
+// });
+
+// const promptWithQuestions = await prisma.prompt.findUnique({
+//   where: { id: promptId },
+//   include: { questions: true }
+// });

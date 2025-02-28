@@ -35,16 +35,16 @@ export function ResponsiveDialog({
     title: string;
     description?: string;
 }) {
-    // const isDesktop = useMedidaQuery('(min-width: 768px)');
+    // const isDesktop = useMediaQuery('(min-width: 768px)');
 
     // if (isDesktop) {
         return (
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[460px] max-h-[80vh] overflow-y-auto p-4 rounded-md">
                     <DialogHeader>
                         <DialogTitle>{title}</DialogTitle>
                         {description && (
-                            <DialogDescription>{description}</DialogDescription>
+                            <DialogDescription className="sr-only">{description}</DialogDescription>
                         )}
                     </DialogHeader>
                     {children}

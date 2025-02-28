@@ -18,7 +18,7 @@ export default function ClassCard({ classData, teacherId }: { classData: Class, 
 
         <Card className="min-w-[350px] relative hover:shadow-[0_4px_10px_-3px_var(--accent)] active:shadow-none">
             {/* Absolutely positions options menu with responsive dialogs */}
-            <OptionsMenu teacherId={teacherId} classData={classData} />
+            <OptionsMenu classData={classData} />
             <Link
                 href={`/classroom/${classData.id}`}
                 className="hover:cursor-pointer"
