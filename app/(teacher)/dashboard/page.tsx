@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { getAllClassrooms } from "@/lib/actions/classroom.actions";
 import ClassCard from "@/components/shared/class-card";
 import { Class } from "@/types";
@@ -8,12 +8,10 @@ import Header from "@/components/shared/header";
 export default async function Dashboard() {
     const session = await auth()
 
-    if (!session) {
-        redirect('/')
-    }
+    if (!session) notFound()
 
     const teacherId = session?.user?.id as string
-    if (!teacherId) redirect('/')
+    if (!teacherId) notFound()
 
     const allClassrooms = await getAllClassrooms(teacherId) as Class[]
 

@@ -1,6 +1,7 @@
 'use server';
 import { prisma } from "@/db/prisma";
 import { classSchema } from "../validators";
+import { generateClassCode } from "../utils";
 
 // Create a new class
 export async function createNewClass(prevState: unknown, formData: FormData) {
@@ -10,13 +11,15 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
             subject: formData.get('subject'),
             year: formData.get('year'),
             period: formData.get('period'),
-            color: formData.get('color')
+            color: formData.get('color'),
         })
         // Get Teacher Id
         const teacherId = formData.get('teacherId')
         if (typeof teacherId !== 'string') {
             throw new Error('Missing teacher ID');
         }
+
+        const classCode = generateClassCode();
 
         await prisma.$transaction(async (tx) => {
             const newClass = await tx.class.create({
@@ -25,7 +28,8 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
                     subject,
                     year,
                     period,
-                    color
+                    color,
+                    classCode
                 }
             })
             await tx.classUser.create({
@@ -62,6 +66,19 @@ export async function getAllClassrooms(teacherId: string) {
     } catch (error) {
         console.log('error creating classroom', error)
         return { success: false, message: 'Error creating class. Try again.' }
+    }
+}
+
+// Get a single Classroom
+export async function getSingleClassroom(classroomId: string) {
+    try {
+        const classroom = await prisma.class.findUnique({
+            where: { id: classroomId }
+        })
+        return classroom
+    } catch (error) {
+        console.log('error getting single classroom', error);
+        return { success: false, message: 'Error finding class. Try again.' }
     }
 }
 
@@ -110,10 +127,11 @@ export async function deleteClassroom(prevState: unknown, formData: FormData) {
                 id: classroomId
             }
         })
-        
+
         return { success: true, message: 'Class Delete' }
 
     } catch (error) {
+        console.log('error deleting class', error)
         return { success: true, message: 'Error deleting class' }
 
     }

@@ -16,10 +16,11 @@ ALTER COLUMN "role" SET DEFAULT 'teacher';
 CREATE TABLE "Class" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" VARCHAR(30) NOT NULL,
+    "classCode" VARCHAR(8) NOT NULL,
+    "color" TEXT NOT NULL,
     "subject" TEXT,
     "year" VARCHAR(12),
     "period" TEXT,
-    "color" TEXT NOT NULL,
 
     CONSTRAINT "Class_pkey" PRIMARY KEY ("id")
 );
@@ -90,6 +91,9 @@ CREATE TABLE "CommentLike" (
 
     CONSTRAINT "CommentLike_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Class_classCode_key" ON "Class"("classCode");
 
 -- CreateIndex
 CREATE INDEX "Comment_parentId_idx" ON "Comment"("parentId");

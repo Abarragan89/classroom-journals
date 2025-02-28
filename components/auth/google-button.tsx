@@ -16,10 +16,8 @@ export default function GoogleButton() {
 
     const searchParams = useSearchParams();
 
+    // This error will appear if email is already registered with magic link
     const error = searchParams.get('error')
-
-    console.log('error ', error)
-
 
     return (
         <form action={dispatchGoogle}>

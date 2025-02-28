@@ -23,7 +23,7 @@ export default function AddClassForm({ teacherId, formData }: { teacherId: strin
         }
     }, [state])
 
-    const [selectedColor, setSelectedColor] = useState<string>('#f87171');
+    const [selectedColor, setSelectedColor] = useState<string>('#dc2626');
 
     // Handler for setting the color value when a color is selected
     const handleColorSelect = (color: string) => {

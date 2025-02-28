@@ -14,8 +14,6 @@ import { Separator } from "@/components/ui/separator";
 
 export default function ClassCard({ classData, teacherId }: { classData: Class, teacherId: string }) {
 
-    console.log('class data color', classData.color)
-
     return (
 
         <Card className="min-w-[350px] relative hover:shadow-[0_4px_10px_-3px_var(--accent)] active:shadow-none">
@@ -40,16 +38,8 @@ export default function ClassCard({ classData, teacherId }: { classData: Class, 
                 </CardContent>
                 <Separator />
                 <CardFooter className="flex justify-between text-sm mt-2 pb-3">
-                    {classData.period ? (
-                        <p>Period: {classData.period}</p>
-                    ) : (
-                        <p>&nbsp;</p>
-                    )}
-
-                    {/* <div className='w-6 h-6 rounded-full bg-black flex-center'> */}
-                        {/* <div style={{ backgroundColor: classData.color }} className={`w-5 h-5 rounded-full`}></div> */}
-                    {/* </div> */}
-                    {/* <p>Students: 24</p> */}
+                    {classData.period ? (<p>Period: {classData.period}</p>) : (<p>&nbsp;</p>)}
+                    <p>Class Code: <span className="bg-accent px-2 py-1 rounded-full tracking-wider">{classData.classCode}</span></p>
                 </CardFooter>
             </Link>
         </Card>
