@@ -26,7 +26,7 @@ export default async function SignIn() {
                     <CardHeader className="space-y-4">
                         <Link href='/' className="flex-center">
                             <Image
-                                src='/images/logo.svg'
+                                src='/images/logo.png'
                                 alt={`${APP_NAME}`}
                                 width={100}
                                 height={100}

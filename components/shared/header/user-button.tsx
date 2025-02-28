@@ -34,7 +34,7 @@ export default async function UserButton() {
                 <DropdownMenuTrigger asChild>
                     <div className="flex items-center">
                         {session?.user?.image ?
-                            <Button className="flex items-center justify-center ml-2 bg-transparent px-0">
+                            <Button className="flex items-center justify-center ml-2 bg-transparent px-0 shadow-none">
                                 <Image
                                     className="rounded-full"
                                     src={session.user.image}

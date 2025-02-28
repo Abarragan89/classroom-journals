@@ -3,7 +3,7 @@ import Image from "next/image"
 import { APP_NAME } from "@/lib/constants"
 import Menu from "./menu"
 
-export default function Header() {
+export default function Header({ teacherId, inClassroom }: { teacherId?: string, inClassroom?: boolean }) {
     return (
         <header className='w-full border-b'>
             <div className="wrapper flex-between">
@@ -12,18 +12,19 @@ export default function Header() {
                         href='/'
                         className='flex-start'>
                         <Image
-                            src='/images/logo.svg'
+                            src='/images/logo.png'
                             alt={`${APP_NAME} logo`}
-                            height={48}
-                            width={48}
+                            height={50}
+                            width={50}
                             priority={true}
+                            className="rounded-lg"
                         />
                         <span className="hidden lg:block font-bold text-2xl ml-3">
                             {APP_NAME}
                         </span>
                     </Link>
                 </div>
-                <Menu />
+                <Menu teacherId={teacherId} inClassroom={inClassroom}/>
             </div>
         </header>
     )

@@ -44,7 +44,7 @@ export default function OptionsMenu({ teacherId, classData }: { teacherId: strin
                 isOpen={isDeleteModalOpen}
                 setIsOpen={setIsDeleteModalOpen}
                 title='Delete Class'
-                description='Confirm class delete'
+                description='Confirm class deletion'
             >
                 <DeleteClassForm classroomId={classData.id} />
             </ResponsiveDialog>
@@ -54,13 +54,16 @@ export default function OptionsMenu({ teacherId, classData }: { teacherId: strin
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         {/* Ellipse */}
-                        <EllipsisVertical className="hover:cursor-pointer" />
+                        <div style={{ backgroundColor: classData.color }} className={`w-8 h-8 rounded-full flex-center`}>
+                            <EllipsisVertical className="hover:cursor-pointer text-white" />
+                        </div>
+
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => setIsEditModalOpen(true)} className="hover:cursor-pointer">
+                        <DropdownMenuItem onClick={() => setIsEditModalOpen(true)} className="hover:cursor-pointer rounded-md">
                             <Edit />Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setIsDeleteModalOpen(true)} className="hover:cursor-pointer text-destructive">
+                        <DropdownMenuItem onClick={() => setIsDeleteModalOpen(true)} className="hover:cursor-pointer text-destructive rounded-md">
                             <Trash2Icon />Delete
                         </DropdownMenuItem>
                     </DropdownMenuContent>

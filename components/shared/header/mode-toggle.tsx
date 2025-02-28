@@ -30,7 +30,7 @@ export default function ModeToggle() {
         <div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant='ghost' className="focus-visible:ring-0 focus-visible:ring-offset-0 md:px-5 md:ml-2">
+                    <Button variant='ghost' className="focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full px-[10px] py-2">
                         {theme === 'tech' ? (
                             <ComputerIcon />
                         ) : theme === 'dark' ? (

@@ -65,13 +65,14 @@ model VerificationToken {
 }
 
 model Class {
-  id      String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name    String      @db.VarChar(30)
-  subject String?
-  year    String?     @db.VarChar(12)
-  period  String?
-  color   String
-  users   ClassUser[] // Many-to-many relationship
+  id        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String      @db.VarChar(30)
+  classCode String      @db.VarChar(8)
+  color     String
+  subject   String?
+  year      String?     @db.VarChar(12)
+  period    String?
+  users     ClassUser[] // Many-to-many relationship
 }
 
 model ClassUser {
