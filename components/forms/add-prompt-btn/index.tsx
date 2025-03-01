@@ -13,6 +13,8 @@ export default function AddPromptBtn({ teacherId }: { teacherId: string }) {
     const pathname = usePathname()
     console.log('pathname in add promt btn', pathname)
 
+    
+
     return (
         <>
             <ResponsiveDialog

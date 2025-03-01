@@ -68,6 +68,30 @@ export async function getAllClassrooms(teacherId: string) {
     }
 }
 
+// Get all Teacher Classes
+export async function getAllClassroomIds(teacherId: string) {
+    try {
+        const allClasses = await prisma.class.findMany({
+            where: {
+                users: {
+                    some: {
+                        userId: teacherId,
+                        role: 'teacher'
+                    }
+                }
+            },
+            select: {
+                id: true,
+                name: true,
+            }
+        })
+        return allClasses
+    } catch (error) {
+        console.log('error creating classroom', error)
+        return { success: false, message: 'Error creating class. Try again.' }
+    }
+}
+
 // Get a single Classroom
 export async function getSingleClassroom(classroomId: string) {
     try {

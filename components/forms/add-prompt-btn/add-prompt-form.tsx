@@ -8,13 +8,19 @@ import { useFormStatus } from "react-dom";
 import { redirect } from "next/navigation";
 import { createNewPrompt } from "@/lib/actions/prompt.actions";
 import { Plus } from "lucide-react";
-import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator";
+import { Checkbox } from "@/components/ui/checkbox"
+import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
 
 interface Question {
     name: string;
     label: string;
     value: string;
+}
+
+interface ClassroomIds {
+    id: string;
+    name: string
 }
 
 export default function AddPromptForm({ teacherId }: { teacherId: string }) {
@@ -23,11 +29,24 @@ export default function AddPromptForm({ teacherId }: { teacherId: string }) {
         success: false,
         message: ''
     })
+    const [classrooms, setClassrooms] = useState<ClassroomIds[]>([]);
+
+    useEffect(() => {
+        const fetchClassrooms = async () => {
+            if (teacherId) {
+                const data = await getAllClassroomIds(teacherId); // Fetch classroom IDs
+                setClassrooms(data as ClassroomIds[]);
+            }
+        };
+        fetchClassrooms();
+    }, [teacherId]);
+
+    if (!classrooms) return
 
     // redirect if the state is success
     useEffect(() => {
         if (state.success) {
-            redirect(`/jot-library/${teacherId}`)
+            redirect(`/jot-library`)
         }
     }, [state])
 
@@ -76,7 +95,7 @@ export default function AddPromptForm({ teacherId }: { teacherId: string }) {
             </div>
             {questions.map((question, index) => (
                 <div key={question.name}>
-                    <div className="mt-1">
+                    <div className="mt-4">
                         <Label htmlFor={question.name} className="text-right">
                             {question.label}
                         </Label>
@@ -90,31 +109,42 @@ export default function AddPromptForm({ teacherId }: { teacherId: string }) {
                         />
                     </div>
                     {questions.length > 1 &&
-                        <p onClick={() => handleRemoveQuestion(index)} className="hover:cursor-pointer hover:underline p-1 text-[.875rem] text-destructive w-fit relative right-[-23rem] leading-none">Delete</p>
+                        <p onClick={() => handleRemoveQuestion(index)} className="hover:cursor-pointer hover:underline p-1 text-[.875rem] text-destructive w-fit leading-none">Delete</p>
                     }
                 </div>
             ))}
-            {/*   */}
-            {state && !state.success && (
-                <p className="text-center text-destructive">{state.message}</p>
-            )}
 
-            <Separator className="mt-5 mb-3" />
-            <div className="flex-between">
-                <div className="flex items-center space-x-2">
-                    <Switch id="airplane-mode" />
-                    <Label htmlFor="airplane-mode">Add prompt to all classes</Label>
-                </div>
-                <Button asChild variant='link' className=" bottom-[0px] right-[6px]">
-                    <p onClick={() => handleAddQuestion()} className="hover:cursor-pointer w-fit"><Plus />Add question</p>
-                </Button>
+            <Button asChild variant='link' className="flex justify-end w-full pt-0">
+                <p onClick={() => handleAddQuestion()} className="hover:cursor-pointer w-fit justify-end"><Plus />Add question</p>
+            </Button>
+
+            <Separator className="my-3" />
+            {/* Associate with a classroom */}
+            <div className="space-y-3">
+                <p className="text-sm">Organize Under Classrooms (Optional)</p>
+                {classrooms.length > 0 && classrooms.map((classroom: ClassroomIds) => (
+                    <div key={classroom.id} className="flex items-center space-x-2">
+                        <Checkbox id={classroom.id} value={classroom.id} name={`classroom-${classroom.id}`} />
+                        <label
+                            htmlFor={classroom.id}
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                            {classroom.name}
+                        </label>
+                    </div>
+                ))}
             </div>
-            <CreateButton />
             <input
                 type="hidden"
                 name="teacherId"
                 value={teacherId}
             />
+
+            {state && !state.success && (
+                <p className="text-center text-destructive">{state.message}</p>
+            )}
+            
+            <CreateButton />
         </form>
     )
 }

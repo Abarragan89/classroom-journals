@@ -74,7 +74,7 @@ model Class {
   year      String?     @db.VarChar(12)
   period    String?
   users     ClassUser[] // Many-to-many relationship
-  prompts   Prompt[]
+  prompts   Prompt[]    @relation("PromptClass")
 }
 
 model ClassUser {
@@ -156,13 +156,12 @@ model Prompt {
   id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   isActive  Boolean    @default(false)
   title     String
-  teacherId String?    @db.Uuid
-  teacher   User?      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  classId   String?    @db.Uuid
-  class     Class?     @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teacherId String     @db.Uuid
+  teacher   User       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   questions Question[]
+  classes   Class[]    @relation("PromptClass")
 }
 
 model Question {
