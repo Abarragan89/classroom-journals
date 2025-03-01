@@ -18,7 +18,6 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
         if (typeof teacherId !== 'string') {
             throw new Error('Missing teacher ID');
         }
-
         const classCode = generateClassCode();
 
         await prisma.$transaction(async (tx) => {

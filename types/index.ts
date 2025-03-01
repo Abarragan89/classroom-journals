@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { classSchema } from "@/lib/validators";
+import { classSchema, promptSchema} from "@/lib/validators";
 
 export type User = {
     id: string;
@@ -29,3 +29,9 @@ export type ClassForm = Omit<Class, "id">;
 //     user: User;
 //     class: Class;
 // }
+
+export type Prompt = z.infer<typeof promptSchema> & {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+}

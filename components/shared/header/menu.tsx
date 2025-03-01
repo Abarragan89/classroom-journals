@@ -10,13 +10,22 @@ import {
     Sheet
 } from "@/components/ui/sheet";
 import AddClassBtn from "@/components/forms/add-class-btn";
+import { usePathname } from "next/navigation";
 
-export default function Menu({ teacherId, inClassroom }: { teacherId?: string, inClassroom?: boolean }) {
+export default function Menu({
+    teacherId,
+    inClassroom,
+    classId
+}: {
+    teacherId?: string,
+    inClassroom?: boolean,
+    classId?: string
+}) {
 
     // Define the menu items for different conditions
     const renderClassroomMenu = () => (
         <>
-            <AddPromptBtn teacherId={teacherId!} />
+            <AddPromptBtn teacherId={teacherId!} classId={classId!} />
             <ModeToggle />
             <UserButton />
         </>

@@ -35,7 +35,7 @@ export default async function Classroom({ params }: { params: Promise<{ classId:
 
     return (
         <>
-            <Header teacherId={teacherId} inClassroom={true} />
+            <Header teacherId={teacherId} inClassroom={true} classId={classroomId} />
             <div className="wrapper">
                 <h1 className="h1-bold">{classroomData.name}</h1>
             </div>

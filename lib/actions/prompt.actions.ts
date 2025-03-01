@@ -1,21 +1,32 @@
 import { prisma } from "@/db/prisma";
+import { promptSchema } from "../validators";
 
 // Create new prompt 
 export async function createNewPrompt(prevState: unknown, formData: FormData) {
     try {
-        const questions: { name: string; value: string }[] = [];
+        const questions: { content: string }[] = [];
 
-        // Loop through all formData entries
+        // Extract all questions from formData
         formData.forEach((value, key) => {
             if (key.startsWith("question")) {
-                questions.push({ name: key, value: value as string });
+                questions.push({ content: value as string }); // Convert into correct format
             }
         });
-        const title = formData.get('title')
+        const title = formData.get("title");
 
+        // Validate using Zod
+        const validationResult = promptSchema.safeParse({
+            title,
+            questions,
+        });
+        // Check for validation error
+        if (!validationResult.success) {
+            console.log("Validation failed:", validationResult.error.format());
+            return { success: false, message: "Title and one question required"};
+        }
 
-        console.log('title ', title)
-        console.log("Questions: ", questions);
+        // Create prompt and add to database
+        
 
         return { success: true, message: 'Prompt Created!' }
     } catch (error) {

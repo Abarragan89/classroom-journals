@@ -7,6 +7,9 @@ import { useActionState, useState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { redirect } from "next/navigation";
 import { createNewPrompt } from "@/lib/actions/prompt.actions";
+import { Plus } from "lucide-react";
+import { Switch } from "@/components/ui/switch"
+import { Separator } from "@/components/ui/separator";
 
 interface Question {
     name: string;
@@ -14,7 +17,7 @@ interface Question {
     value: string;
 }
 
-export default function AddPromptForm({ teacherId }: { teacherId: string }) {
+export default function AddPromptForm({ teacherId, classId }: { teacherId: string, classId: string }) {
 
     const [state, action] = useActionState(createNewPrompt, {
         success: false,
@@ -24,7 +27,7 @@ export default function AddPromptForm({ teacherId }: { teacherId: string }) {
     // redirect if the state is success
     useEffect(() => {
         if (state.success) {
-            redirect('/dashboard')
+            redirect(`/classroom/${classId}`)
         }
     }, [state])
 
@@ -60,20 +63,20 @@ export default function AddPromptForm({ teacherId }: { teacherId: string }) {
 
     return (
         <form action={action} className="grid relative">
-            <div>
+            <div className="mb-3">
                 <Label htmlFor="title" className="text-right">
                     Title
                 </Label>
                 <Input
                     id="title"
-                    placeholder="optional"
                     className="col-span-3"
                     name="title"
+                    required
                 />
             </div>
             {questions.map((question, index) => (
                 <div key={question.name}>
-                    <div className="mt-5">
+                    <div className="mt-1">
                         <Label htmlFor={question.name} className="text-right">
                             {question.label}
                         </Label>
@@ -81,29 +84,37 @@ export default function AddPromptForm({ teacherId }: { teacherId: string }) {
                             id={question.name}
                             className="col-span-3"
                             name={question.name}
-                            value={question.value} // Keep text state
+                            value={question.value} // Keep text state for deletion
                             onChange={(e) => handleChange(index, e.target.value)}
                             required
                         />
                     </div>
-                    <Button asChild variant='link' className="flex-start p-1 underline">
-                        <p onClick={() => handleRemoveQuestion(index)} className="hover:cursor-pointer">Delete question</p>
-                    </Button>
+                    {questions.length > 1 &&
+                        <p onClick={() => handleRemoveQuestion(index)} className="hover:cursor-pointer hover:underline p-1 text-[.875rem] text-destructive w-fit relative right-[-23rem] leading-none">Delete</p>
+                    }
                 </div>
             ))}
-            <Button asChild variant='link' className="absolute bottom-[56px] right-[6px] underline">
-                <p onClick={() => handleAddQuestion()} className="hover:cursor-pointer">Add question</p>
-            </Button>
+            {/*   */}
+            {state && !state.success && (
+                <p className="text-center text-destructive">{state.message}</p>
+            )}
+
+            <Separator className="mt-5 mb-3" />
+            <div className="flex-between">
+                <div className="flex items-center space-x-2">
+                    <Switch id="airplane-mode" />
+                    <Label htmlFor="airplane-mode">Add prompt to all classes</Label>
+                </div>
+                <Button asChild variant='link' className=" bottom-[0px] right-[6px]">
+                    <p onClick={() => handleAddQuestion()} className="hover:cursor-pointer w-fit"><Plus />Add question</p>
+                </Button>
+            </div>
+            <CreateButton />
             <input
                 type="hidden"
                 name="teacherId"
                 value={teacherId}
             />
-
-            <CreateButton />
-            {/* {state && !state.success && (
-                <p className="text-center text-destructive">{state.message}</p>
-            )} */}
         </form>
     )
 }

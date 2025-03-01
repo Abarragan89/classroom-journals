@@ -39,7 +39,7 @@ export default function ClassCard({ classData, teacherId }: { classData: Class, 
                 <Separator />
                 <CardFooter className="flex justify-between text-sm mt-2 pb-3">
                     {classData.period ? (<p>Period: {classData.period}</p>) : (<p>&nbsp;</p>)}
-                    <p>Class Code: <span className="bg-accent px-2 py-1 rounded-full tracking-wider">{classData.classCode}</span></p>
+                    <p>Class Code: <span className="bg-accent  text-accent-foreground px-2 py-1 rounded-full tracking-wider">{classData.classCode}</span></p>
                 </CardFooter>
             </Link>
         </Card>

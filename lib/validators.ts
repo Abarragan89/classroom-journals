@@ -14,3 +14,13 @@ export const classSchema = z.object({
     period: z.string().optional(),
     color: z.string().min(1, 'Color is required'),
 })
+
+// Schema for creating a new prompt
+export const promptSchema = z.object({
+    title: z.string().min(1, 'Title is required'),
+    questions: z.array(
+        z.object({
+            content: z.string().min(1, 'Question text is required')
+        })
+    ).min(1, 'At least one question is required')
+})

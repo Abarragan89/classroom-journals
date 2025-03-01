@@ -24,8 +24,9 @@ model User {
   postLikes     PostLike[]
   commentLikes  CommentLike[]
   notifications Notification[]
-  posts         Post[]
+  posts         Post[] // Posts are for tudents
   classes       ClassUser[]
+  prompts       Prompt[] // Prompts are for teachers
 }
 
 model Account {
@@ -73,6 +74,7 @@ model Class {
   year      String?     @db.VarChar(12)
   period    String?
   users     ClassUser[] // Many-to-many relationship
+  prompts   Prompt[]
 }
 
 model ClassUser {
@@ -153,15 +155,20 @@ model CommentLike {
 model Prompt {
   id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   isActive  Boolean    @default(false)
+  title     String
+  teacherId String?
+  teacher   User?      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  classId   String?
+  class     Class?     @relation(fields: [classId], references: [id], onDelete: Cascade)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  questions Question[] 
+  questions Question[]
 }
 
 model Question {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   content   String
-  promptId  String   @db.Uuid 
+  promptId  String   @db.Uuid
   prompt    Prompt   @relation(fields: [promptId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
