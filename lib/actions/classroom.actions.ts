@@ -48,7 +48,7 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
     }
 }
 
-// Get all Teacher Classes (Dashboard)
+// Get all Teacher Classes
 export async function getAllClassrooms(teacherId: string) {
     try {
         const allClasses = await prisma.class.findMany({

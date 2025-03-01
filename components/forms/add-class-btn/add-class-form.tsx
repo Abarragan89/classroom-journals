@@ -18,7 +18,7 @@ export default function AddClassForm({ teacherId }: { teacherId: string }) {
     //redirect if the state is success
     useEffect(() => {
         if (state.success) {
-            redirect('/dashboard')
+            redirect('/classes')
         }
     }, [state])
 

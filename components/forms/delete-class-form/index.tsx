@@ -18,7 +18,7 @@ export default function DeleteClassForm({ classroomId }: { classroomId: string }
     //redirect if the state is success
     useEffect(() => {
         if (state.success) {
-            redirect('/dashboard')
+            redirect('/classes')
         }
     }, [state])
 

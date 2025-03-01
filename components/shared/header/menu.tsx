@@ -1,7 +1,6 @@
 import ModeToggle from "./mode-toggle"
 import UserButton from "./user-button"
 import { EllipsisVertical } from "lucide-react";
-import AddPromptBtn from "@/components/forms/add-prompt-btn";
 import {
     SheetContent,
     SheetDescription,
@@ -9,31 +8,19 @@ import {
     SheetTrigger,
     Sheet
 } from "@/components/ui/sheet";
-import AddClassBtn from "@/components/forms/add-class-btn";
-import { usePathname } from "next/navigation";
+import ActionSubMenu from "./action-sub-menu";
+import NavLinks from "./nav-links";
+import { Separator } from "@/components/ui/separator";
 
 export default function Menu({
     teacherId,
-    inClassroom,
-    classId
 }: {
     teacherId?: string,
-    inClassroom?: boolean,
-    classId?: string
 }) {
-
-    // Define the menu items for different conditions
-    const renderClassroomMenu = () => (
+    const renderAuthenticatedMenu = () => (
         <>
-            <AddPromptBtn teacherId={teacherId!} classId={classId!} />
-            <ModeToggle />
-            <UserButton />
-        </>
-    );
-
-    const renderDashboardMenu = () => (
-        <>
-            <AddClassBtn teacherId={teacherId!} />
+            <NavLinks />
+            <ActionSubMenu teacherId={teacherId!} />
             <ModeToggle />
             <UserButton />
         </>
@@ -48,7 +35,7 @@ export default function Menu({
 
     const renderMenuOptions = () => {
         if (teacherId) {
-            return inClassroom ? renderClassroomMenu() : renderDashboardMenu();
+            return renderAuthenticatedMenu()
         } else {
             return renderGuestMenu();
         }
@@ -56,7 +43,7 @@ export default function Menu({
 
     return (
         <div className="flex justify-end gap-3">
-            <nav className="hidden md:flex-center w-full max-w-xs gap-5">
+            <nav className="hidden md:flex-center w-full max-w-md gap-8">
                 {renderMenuOptions()}
             </nav>
 
@@ -68,6 +55,7 @@ export default function Menu({
                     </SheetTrigger>
                     <SheetContent className="flex flex-col items-start">
                         <SheetTitle>Menu</SheetTitle>
+                        <Separator />
                         {renderMenuOptions()}
                         <SheetDescription></SheetDescription>
                     </SheetContent>

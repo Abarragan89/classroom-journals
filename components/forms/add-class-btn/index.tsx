@@ -19,8 +19,8 @@ export default function AddClassBtn({ teacherId }: { teacherId: string }) {
             >
                 <AddClassForm teacherId={teacherId} />
             </ResponsiveDialog>
-            <Button variant='ghost' onClick={() => setIsOpenModal(true)} className="focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full px-[10px] py-2">
-                <Plus />
+            <Button variant='ghost' onClick={() => setIsOpenModal(true)}>
+                <Plus />Add Class
             </Button>
         </>
     )

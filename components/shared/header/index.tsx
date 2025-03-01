@@ -4,13 +4,9 @@ import { APP_NAME } from "@/lib/constants"
 import Menu from "./menu"
 
 export default function Header({
-    teacherId,
-    inClassroom,
-    classId
+    teacherId
 }: {
-    teacherId?: string,
-    inClassroom?: boolean
-    classId?: string
+    teacherId?: string
 }) {
     return (
         <header className='w-full border-b'>
@@ -34,8 +30,6 @@ export default function Header({
                 </div>
                 <Menu
                     teacherId={teacherId}
-                    inClassroom={inClassroom}
-                    classId={classId}
                 />
             </div>
         </header>

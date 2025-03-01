@@ -17,7 +17,7 @@ export default function MagicLink() {
         const { pending } = useFormStatus()
         return (
             <Button disabled={pending} className="w-full" variant='default'>
-                {pending ? 'Signing In...' : 'Sign in with Magic Link'}
+                {pending ? 'Signing In...' : 'Send Magic Link Email'}
             </Button>
         )
     }

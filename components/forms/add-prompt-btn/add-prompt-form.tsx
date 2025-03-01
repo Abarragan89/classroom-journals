@@ -17,7 +17,7 @@ interface Question {
     value: string;
 }
 
-export default function AddPromptForm({ teacherId, classId }: { teacherId: string, classId: string }) {
+export default function AddPromptForm({ teacherId }: { teacherId: string }) {
 
     const [state, action] = useActionState(createNewPrompt, {
         success: false,
@@ -27,7 +27,7 @@ export default function AddPromptForm({ teacherId, classId }: { teacherId: strin
     // redirect if the state is success
     useEffect(() => {
         if (state.success) {
-            redirect(`/classroom/${classId}`)
+            redirect(`/jot-library/${teacherId}`)
         }
     }, [state])
 

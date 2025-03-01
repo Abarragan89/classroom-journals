@@ -35,7 +35,7 @@ export default async function SignIn() {
                         </Link>
                         <CardTitle className="text-center">Sign In</CardTitle>
                         <CardDescription className="text-center">
-                            Sign in to your account
+                            Sign in with a Magic Link or Google
                         </CardDescription>
                     </CardHeader>
                     <CardContent>

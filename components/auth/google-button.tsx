@@ -22,7 +22,7 @@ export default function GoogleButton() {
     return (
         <form action={dispatchGoogle}>
             <Button className="w-full" variant='default' disabled={pending}>
-                Google Sign In
+                Login with Google
             </Button>
             {error === 'OAuthAccountNotLinked' && (
                 <>

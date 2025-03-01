@@ -4,6 +4,8 @@ import { getSingleClassroom } from "@/lib/actions/classroom.actions";
 import { prisma } from "@/db/prisma";
 import { notFound } from "next/navigation"; // Import notFound for 404 handling
 import { Class } from "@/types";
+import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
 
 export default async function Classroom({ params }: { params: Promise<{ classId: string }> }) {
     const session = await auth()
@@ -35,9 +37,12 @@ export default async function Classroom({ params }: { params: Promise<{ classId:
 
     return (
         <>
-            <Header teacherId={teacherId} inClassroom={true} classId={classroomId} />
+            <Header teacherId={teacherId} />
             <div className="wrapper">
-                <h1 className="h1-bold">{classroomData.name}</h1>
+                <Link href={'/classes'} className="flex items-center hover:underline">
+                    <ArrowLeftIcon className="mr-1" size={20} />Back to all classes
+                </Link>
+                <h1 className="h1-bold mt-5">{classroomData.name}</h1>
             </div>
         </>
     )
