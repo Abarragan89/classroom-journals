@@ -54,14 +54,14 @@ export default function ClassFilterCombobox({
                     aria-expanded={open}
                     className="justify-between truncate relative overflow-hidden"
                 >
-                    <span className="block truncate w-[350px] md:w-[170px]">{value
+                    <span className="block truncate">{value
                         ? classroomData.find((classroom) => classroom.id === value)?.name
                         : "All Classes..."}</span>
                     <div className="absolute right-6 top-0 bottom-0 w-8 pointer-events-none"></div>
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[170px] p-0">
+            <PopoverContent className="p-0">
                 <Command>
                     <CommandList>
                         <CommandGroup>

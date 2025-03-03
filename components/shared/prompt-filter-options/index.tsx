@@ -15,30 +15,22 @@ export default function PromptFilterOptions({
     getFilteredSearch
 
 }: Props) {
-    
+
     return (
-        <div className="flex space-y-5 flex-col md:space-y-0 md:flex-row md:justify-between items-end flex-wrap mt-10">
-            <div className="w-[350px] md:max-w-[215px] mx-auto">
-                <PromptSearchBar
-                    searchOptionsRef={searchOptionsRef}
-                    getFilteredSearch={getFilteredSearch}
-                />
-            </div>
-            <div className="flex-center mx-auto w-[350px] md:max-w-[215px]">
-                <p className="text-right pr-2">Filter:</p>
-                <TraitFilterCombobox
-                    searchOptionsRef={searchOptionsRef}
-                    getFilteredSearch={getFilteredSearch}
-                />
-            </div>
-            <div className="flex-center mx-auto w-[350px] md:max-w-[215px]">
-                <p className="text-right pr-2">Class:</p>
-                <ClassFilterCombobox
-                    searchOptionsRef={searchOptionsRef}
-                    classroomData={classroomData}
-                    getFilteredSearch={getFilteredSearch}
-                />
-            </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-5 mt-10">
+            <PromptSearchBar
+                searchOptionsRef={searchOptionsRef}
+                getFilteredSearch={getFilteredSearch}
+            />
+            <TraitFilterCombobox
+                searchOptionsRef={searchOptionsRef}
+                getFilteredSearch={getFilteredSearch}
+            />
+            <ClassFilterCombobox
+                searchOptionsRef={searchOptionsRef}
+                classroomData={classroomData}
+                getFilteredSearch={getFilteredSearch}
+            />
         </div>
     )
 }

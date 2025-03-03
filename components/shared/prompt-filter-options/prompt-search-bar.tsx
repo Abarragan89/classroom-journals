@@ -19,7 +19,7 @@ export default function PromptSearchBar({ searchOptionsRef, getFilteredSearch }:
         getFilteredSearch(searchOptionsRef.current);
     };
     return (
-        <div className="relative">
+        <div className="relative col-span-2 sm:col-span-1">
             <Search size={20} className="absolute bottom-2 left-1 text-border" />
             <Input
                 className="pl-8"
