@@ -9,9 +9,11 @@ export default async function page() {
         redirect('/classes')
     }
     return (
-        <main>
+        <>
             <Header />
-            <p>Home page</p>
-        </main>
+            <main>
+                <p>Home page</p>
+            </main>
+        </>
     )
 }

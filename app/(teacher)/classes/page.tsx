@@ -18,16 +18,15 @@ export default async function Classes() {
     return (
         <>
             <Header teacherId={teacherId} />
-            <div className="mt-10 flex flex-wrap justify-center items-end gap-14 mx-auto wrapper">
+            <main className="mt-10 flex flex-wrap justify-center items-end gap-14 mx-auto wrapper">
                 {allClassrooms && allClassrooms.map((classroom: Class) => (
                     <ClassCard
                         key={classroom.id}
-                        teacherId={teacherId}
                         classData={classroom}
                     />
 
                 ))}
-            </div>
+            </main>
         </>
     )
 }

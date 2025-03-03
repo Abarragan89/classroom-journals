@@ -38,12 +38,12 @@ export default async function Classroom({ params }: { params: Promise<{ classId:
     return (
         <>
             <Header teacherId={teacherId} />
-            <div className="wrapper">
+            <main className="wrapper">
                 <Link href={'/classes'} className="flex items-center hover:underline">
                     <ArrowLeftIcon className="mr-1" size={20} />Back to all classes
                 </Link>
                 <h1 className="h1-bold mt-5">{classroomData.name}</h1>
-            </div>
+            </main>
         </>
     )
 }

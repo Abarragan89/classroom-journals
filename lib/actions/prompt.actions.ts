@@ -1,11 +1,11 @@
 "use server"
 import { prisma } from "@/db/prisma";
 import { promptSchema } from "../validators";
+import { SearchOptions } from "@/types";
 
 // Create new prompt 
 export async function createNewPrompt(prevState: unknown, formData: FormData) {
     try {
-        console.log([...formData])
         // Verify Teacher Id
         const teacherId = formData.get('teacherId')
         if (typeof teacherId !== 'string') {
@@ -29,10 +29,6 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         if (!title) {
             return { success: false, message: "Title is required" };
         }
-        console.log('classroom ids', classroomIds)
-        console.log('questions', questions)
-        console.log('teacher id', teacherId)
-        console.log('title ', title)
 
         // Validate using Zod
         const validationResult = promptSchema.safeParse({
@@ -45,35 +41,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             return { success: false, message: "Complete question required" };
         }
 
-        console.log('right before the prima')
-
-        // Start transaction to ensure atomicity
-        // const newPrompt = await prisma.$transaction(async (prisma) => {
-        //     // Create prompt
-        //     const prompt = await prisma.prompt.create({
-        //         data: {
-        //             title: title.trim(),
-        //             teacherId,
-        //             classes: {
-        //                 connect: classroomIds.map((id) => ({ id })), // Connect multiple classrooms
-        //             },
-        //         },
-        //     })
-
-        //     // Create questions in bulk
-        //     if (questions.length > 0) {
-        //         await prisma.question.createMany({
-        //             data: questions.map((q) => ({
-        //                 content: q.trim(),
-        //                 promptId: prompt.id, // Associate each question with the newly created prompt
-        //             })),
-        //         });
-        //     }
-
-        //     return prompt;
-        // });
-
-        const newPrompt = await prisma.prompt.create({
+        await prisma.prompt.create({
             data: {
                 title: title.trim(),
                 teacherId,
@@ -91,9 +59,8 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             },
         });
 
-        console.log('new prompt ', newPrompt)
-
         return { success: true, message: 'Prompt Created!' }
+
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
@@ -104,6 +71,92 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         }
 
         return { success: false, message: 'Error creating prompt. Try again.' }
-
     }
 }
+
+// Get all prompts of Teacher
+export async function getAllTeacherPrompts(teacherId: string) {
+    try {
+        const allPrompts = await prisma.prompt.findMany({
+            where: { teacherId },
+            include: {
+                questions: true,
+                classes: {
+                }
+            },
+            orderBy: {
+                updatedAt: 'desc'
+            },
+            take: 15
+        })
+        return allPrompts
+
+    } catch (error) {
+        // Improved error logging
+        if (error instanceof Error) {
+            console.log('Error creating new prompt:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+
+        return { success: false, message: 'Error creating prompt. Try again.' }
+    }
+}
+
+// Get prompts from a particular class
+export async function getFilterPrompts(filterOptions: SearchOptions) {
+    try {
+        const allPrompts = await prisma.prompt.findMany({
+            where: {
+                // 1️ Filter by classroom if specified
+                classes: filterOptions.classroom
+                    ? { some: { id: filterOptions.classroom } }
+                    : undefined,
+
+                // 2️ Filter by keywords in the title
+                title: filterOptions.searchWords
+                    ? { contains: filterOptions.searchWords, mode: "insensitive" }
+                    : undefined,
+
+                // 3️ Filter by active status (if filter option is set to 'active')
+                isActive: filterOptions.filter === "active" ? true : undefined,
+
+                // 4️ filter by never assigned (if filter option is 'neverAssigned')
+                lastAssigned: filterOptions.filter === "neverAssigned" ? null : undefined,
+            },
+            include: {
+                questions: true
+            },
+            orderBy: {
+                updatedAt: filterOptions.filter === 'asc' ? 'asc' : 'desc'
+            },
+            skip: filterOptions.paginationSkip, // 5️⃣ Handle pagination
+            take: 15 // Only fetch 15 at a time
+        });
+
+        return allPrompts;
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+
+        return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
+
+// Get prompts from a filter and possibly a class if provided
+// export async function getAllTeacherPromptsFiltered(teacherId: string, filter: string, limit: number, offset: number) {
+//     return prisma.prompt.findMany({
+//         where: {
+//             teacherId,
+//             category: filter !== "all" ? filter : undefined, // Apply filter only if it's not "all"
+//         },
+//         take: limit,  // Fetch limited results (pagination)
+//         skip: offset, // Skip for pagination
+//         orderBy: { createdAt: "desc" } // Newest first
+//     });
+// }

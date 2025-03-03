@@ -153,15 +153,16 @@ model CommentLike {
 }
 
 model Prompt {
-  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  isActive  Boolean    @default(false)
-  title     String
-  teacherId String     @db.Uuid
-  teacher   User       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  questions Question[]
-  classes   Class[]    @relation("PromptClass")
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  isActive     Boolean    @default(false)
+  title        String
+  teacherId    String     @db.Uuid
+  teacher      User       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  lastAssigned DateTime?
+  questions    Question[]
+  classes      Class[]    @relation("PromptClass")
 }
 
 model Question {
@@ -172,21 +173,3 @@ model Question {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-// const newPrompt = await prisma.prompt.create({
-//   data: {
-//     isActive: true,
-//     questions: {
-//       create: [
-//         { content: "What did you enjoy most?" },
-//         { content: "What could be improved?" },
-//         { content: "What did you learn from this exercise?" }
-//       ]
-//     }
-//   }
-// });
-
-// const promptWithQuestions = await prisma.prompt.findUnique({
-//   where: { id: promptId },
-//   include: { questions: true }
-// });

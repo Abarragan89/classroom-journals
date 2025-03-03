@@ -11,6 +11,7 @@ import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox"
 import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
+import { ClassroomIds } from "@/types";
 
 interface Question {
     name: string;
@@ -18,10 +19,6 @@ interface Question {
     value: string;
 }
 
-interface ClassroomIds {
-    id: string;
-    name: string
-}
 
 export default function AddPromptForm({ teacherId }: { teacherId: string }) {
 
@@ -46,7 +43,7 @@ export default function AddPromptForm({ teacherId }: { teacherId: string }) {
     // redirect if the state is success
     useEffect(() => {
         if (state.success) {
-            redirect(`/jot-library`)
+            redirect(`/prompt-library`)
         }
     }, [state])
 
@@ -143,7 +140,7 @@ export default function AddPromptForm({ teacherId }: { teacherId: string }) {
             {state && !state.success && (
                 <p className="text-center text-destructive">{state.message}</p>
             )}
-            
+
             <CreateButton />
         </form>
     )

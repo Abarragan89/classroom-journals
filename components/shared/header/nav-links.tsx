@@ -16,9 +16,9 @@ export default function NavLinks() {
                 <GraduationCap size={21} className='mr-1' />Classes
             </Link>
 
-            <Link href={`/jot-library`} className={`
+            <Link href={`/prompt-library`} className={`
             flex-center hover:cursor-pointer hover:text-primary
-            ${pathname === 'jot-library' ? 'text-primary underline' : 'text-ring'}  
+            ${pathname === 'prompt-library' ? 'text-primary underline' : 'text-ring'}  
             `}>
                 <PenTool size={16} className='mr-1' />Jots
             </Link>

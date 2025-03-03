@@ -40,7 +40,7 @@ export function ResponsiveDialog({
     // if (isDesktop) {
         return (
             <Dialog open={isOpen} onOpenChange={setIsOpen} >
-                <DialogContent onKeyDown={(event) => event.stopPropagation()} className="sm:max-w-[430px] max-h-[80vh] overflow-y-auto p-4 rounded-md">
+                <DialogContent onKeyDown={(event) => event.stopPropagation()} className="sm:max-w-[450px] overflow-y-hidden p-4 pr-0 rounded-md">
                     <DialogHeader>
                         <DialogTitle>{title}</DialogTitle>
                         {description && (
