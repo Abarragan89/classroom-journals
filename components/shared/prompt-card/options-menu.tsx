@@ -8,11 +8,13 @@ import {
     DropdownMenuItem
 } from "@/components/ui/dropdown-menu"
 import { EllipsisVertical, Edit, Trash2Icon } from "lucide-react";
-import DeleteClassForm from '@/components/forms/delete-class-form';
 import { Prompt } from '@/types';
+import EditPromptForm from '@/components/forms/edit-prompt-form';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import DeletePromptForm from '@/components/forms/delete-prompt-form';
 
+export default function OptionsMenu({ promptData, teacherId }: { promptData: Prompt, teacherId: string }) {
 
-export default function OptionsMenu({ promptData }: { promptData: Prompt }) {
     const [mounted, setMounted] = useState<boolean>(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
@@ -20,6 +22,14 @@ export default function OptionsMenu({ promptData }: { promptData: Prompt }) {
     useEffect(() => {
         setMounted(true)
     }, [])
+
+    function closeDeleteModal() {
+        setIsDeleteModalOpen(false)
+    }
+    
+    function closeEditModal() {
+        setIsEditModalOpen(false)
+    }
 
     // Prevents Hydration Warnings/Errors
     if (!mounted) {
@@ -32,20 +42,26 @@ export default function OptionsMenu({ promptData }: { promptData: Prompt }) {
             <ResponsiveDialog
                 isOpen={isEditModalOpen}
                 setIsOpen={setIsEditModalOpen}
-                title='Edit Class'
-                description='Fill out the form below to create a new class.'
+                title='Edit Jot'
+                description='Fill out the form below to edit your jot.'
             >
-                <p>Edit Form Content Here</p>
+                <ScrollArea className="max-h-[50vh] pr-11 pl-5">
+                    <EditPromptForm
+                        teacherId={teacherId}
+                        promptData={promptData}
+                        closeModal={closeEditModal}
+                    />
+                </ScrollArea>
             </ResponsiveDialog>
 
             {/* Delete Modal */}
             <ResponsiveDialog
                 isOpen={isDeleteModalOpen}
                 setIsOpen={setIsDeleteModalOpen}
-                title={`Delete ${promptData.title}`}
-                description='Confirm class deletion'
+                title={`Confirm Delete`}
+                description='Confirm prompt deletion'
             >
-                <DeleteClassForm classroomId={promptData.id} />
+                <DeletePromptForm promptId={promptData.id} promptTitle={promptData.title} closeModal={closeDeleteModal} />
             </ResponsiveDialog>
 
             {/* Options Menu */}
@@ -53,7 +69,7 @@ export default function OptionsMenu({ promptData }: { promptData: Prompt }) {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         {/* Ellipse */}
-                        <EllipsisVertical className="hover:cursor-pointer text-accent" />
+                        <EllipsisVertical className="hover:cursor-pointer text-primary" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuItem onClick={() => setIsEditModalOpen(true)} className="hover:cursor-pointer rounded-md">

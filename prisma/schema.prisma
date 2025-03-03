@@ -75,6 +75,8 @@ model Class {
   period    String?
   users     ClassUser[] // Many-to-many relationship
   prompts   Prompt[]    @relation("PromptClass")
+  createdAt DateTime    @default(now()) @db.Timestamp(6)
+  updatedAt DateTime    @updatedAt @default(now()) @db.Timestamp(6)
 }
 
 model ClassUser {
@@ -169,7 +171,7 @@ model Question {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   content   String
   promptId  String   @db.Uuid
-  prompt    Prompt   @relation(fields: [promptId], references: [id])
+  prompt    Prompt   @relation(fields: [promptId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

@@ -22,6 +22,13 @@ export default function OptionsMenu({ classData }: { classData: Class }) {
         setMounted(true)
     }, [])
 
+    function closeDeleteModal() {
+        setIsDeleteModalOpen(false)
+    }
+    function closeEditModal() {
+        setIsEditModalOpen(false)
+    }
+
     // Prevents Hydration Warnings/Errors
     if (!mounted) {
         return null
@@ -36,7 +43,7 @@ export default function OptionsMenu({ classData }: { classData: Class }) {
                 title='Edit Class'
                 description='Fill out the form below to create a new class.'
             >
-                <EditClassForm classData={classData} />
+                <EditClassForm classData={classData} closeModal={closeEditModal} />
             </ResponsiveDialog>
 
             {/* Delete Modal */}
@@ -46,7 +53,7 @@ export default function OptionsMenu({ classData }: { classData: Class }) {
                 title={`Delete ${classData.name}`}
                 description='Confirm class deletion'
             >
-                <DeleteClassForm classroomId={classData.id} />
+                <DeleteClassForm classroomId={classData.id} closeModal={closeDeleteModal} />
             </ResponsiveDialog>
 
             {/* Options Menu */}

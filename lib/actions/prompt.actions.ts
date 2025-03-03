@@ -104,7 +104,7 @@ export async function getAllTeacherPrompts(teacherId: string) {
     }
 }
 
-// Get prompts from a particular class
+// Get prompts based on filtered options
 export async function getFilterPrompts(filterOptions: SearchOptions) {
     try {
         const allPrompts = await prisma.prompt.findMany({
@@ -148,15 +148,110 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
     }
 }
 
-// Get prompts from a filter and possibly a class if provided
-// export async function getAllTeacherPromptsFiltered(teacherId: string, filter: string, limit: number, offset: number) {
-//     return prisma.prompt.findMany({
-//         where: {
-//             teacherId,
-//             category: filter !== "all" ? filter : undefined, // Apply filter only if it's not "all"
-//         },
-//         take: limit,  // Fetch limited results (pagination)
-//         skip: offset, // Skip for pagination
-//         orderBy: { createdAt: "desc" } // Newest first
-//     });
-// }
+// Update a prompt
+// Update a prompt
+export async function updateAPrompt(prevState: unknown, formData: FormData) {
+    try {
+        // Verify Teacher Id
+        const teacherId = formData.get('teacherId');
+        if (typeof teacherId !== 'string') {
+            throw new Error('Missing teacher ID');
+        }
+
+        const questions: string[] = [];
+        const classroomIds: string[] = [];
+
+        // Extract questions & classrooms from formData
+        formData.forEach((value, key) => {
+            if (key.startsWith("question")) {
+                questions.push(value as string);
+            }
+            if (key.startsWith("classroom")) {
+                classroomIds.push(value as string);
+            }
+        });
+
+        // Get & Validate Prompt Title
+        const title = formData.get("title")?.toString().trim() || "";
+        if (!title) {
+            return { success: false, message: "Title is required" };
+        }
+
+        // Get & Validate Prompt ID
+        const promptId = formData.get("promptId")?.toString().trim() || "";
+        if (!promptId) {
+            return { success: false, message: "Prompt ID is required" };
+        }
+
+        // Validate using Zod
+        const validationResult = promptSchema.safeParse({ title, questions });
+        if (!validationResult.success) {
+            console.log("Validation failed:", validationResult.error.format());
+            return { success: false, message: "Complete question required" };
+        }
+
+        // Fetch existing prompt data
+        const existingPrompt = await prisma.prompt.findUnique({
+            where: { id: promptId },
+            include: { questions: true, classes: true }
+        });
+
+        if (!existingPrompt) {
+            return { success: false, message: "Prompt not found" };
+        }
+
+        // Find classrooms to disconnect
+        const currentClassIds = existingPrompt.classes.map(c => c.id);
+        const classesToDisconnect = currentClassIds.filter(id => !classroomIds.includes(id));
+
+        // Perform update
+        await prisma.prompt.update({
+            where: { id: promptId },
+            data: {
+                title: title.trim(),
+                teacherId,
+                classes: {
+                    connect: classroomIds.map(id => ({ id })), // Connect new classrooms
+                    disconnect: classesToDisconnect.map(id => ({ id })), // Disconnect removed classrooms
+                },
+                questions: {
+                    deleteMany: {}, // Remove old questions
+                    create: questions.map(q => ({ content: q.trim() })), // Add new questions
+                },
+            },
+            include: { questions: true }
+        });
+
+        return { success: true, message: 'Prompt Updated!' };
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error('Error updating prompt:', error.message);
+            console.error(error.stack);
+        } else {
+            console.error('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error updating prompt. Try again.' };
+    }
+}
+
+// Delete Prompt
+export async function deletePrompt(prevState: unknown, formData: FormData) {
+    try {
+        const promptId = formData.get('promptId') as string
+
+        await prisma.prompt.delete({
+            where: { id: promptId }
+        })
+        return { success: true, message: 'Prompt Updated!' };
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error('Error updating prompt:', error.message);
+            console.error(error.stack);
+        } else {
+            console.error('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error updating prompt. Try again.' };
+    }
+}

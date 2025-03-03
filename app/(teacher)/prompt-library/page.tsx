@@ -28,6 +28,7 @@ export default async function PromptLibrary() {
                 <JotSearchArea
                     initialPrompts={allPrompts}
                     classroomData={allClassroomIds}
+                    teacherId={teacherId}
                 />
             </main>
         </>

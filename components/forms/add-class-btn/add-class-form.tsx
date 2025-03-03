@@ -6,19 +6,26 @@ import { useActionState, useState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { createNewClass } from "@/lib/actions/classroom.actions";
 import ColorSelect from "../class-color-select";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { toast } from "sonner"
 
-export default function AddClassForm({ teacherId }: { teacherId: string }) {
+export default function AddClassForm({ teacherId, closeModal }: { teacherId: string, closeModal: () => void }) {
 
     const [state, action] = useActionState(createNewClass, {
         success: false,
         message: ''
     })
+    const pathname = usePathname()
+    const router = useRouter();
+
 
     //redirect if the state is success
     useEffect(() => {
         if (state.success) {
-            redirect('/classes')
+            toast.success('Class Added!');
+            closeModal()
+            router.push(pathname); // Navigates without losing state instantly
         }
     }, [state])
 

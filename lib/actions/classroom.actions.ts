@@ -23,10 +23,10 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
         await prisma.$transaction(async (tx) => {
             const newClass = await tx.class.create({
                 data: {
-                    name,
-                    subject,
-                    year,
-                    period,
+                    name: name.trim(),
+                    subject: subject?.trim(),
+                    year: year?.trim(),
+                    period: period?.trim(),
                     color,
                     classCode
                 }
@@ -60,6 +60,9 @@ export async function getAllClassrooms(teacherId: string) {
                     }
                 }
             },
+            orderBy: {
+                updatedAt: 'desc'
+            }
         })
         return allClasses
     } catch (error) {
@@ -83,6 +86,10 @@ export async function getAllClassroomIds(teacherId: string) {
             select: {
                 id: true,
                 name: true,
+                updatedAt: true,
+            },
+            orderBy: {
+                updatedAt: 'desc'
             }
         })
         return allClasses
@@ -125,10 +132,10 @@ export async function updateClassInfo(prevState: unknown, formData: FormData) {
                 id: classroomId
             },
             data: {
-                name,
-                subject,
-                year,
-                period,
+                name: name.trim(),
+                subject: subject?.trim(),
+                year: year?.trim(),
+                period: period?.trim(),
                 color
             }
         })

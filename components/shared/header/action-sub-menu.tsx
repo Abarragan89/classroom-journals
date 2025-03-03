@@ -15,6 +15,11 @@ export default function ActionSubMenu({ teacherId }: { teacherId: string }) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
+    function closeModal() {
+        setIsOpen(false)
+    }
+
+
     return (
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenuTrigger asChild>
@@ -26,12 +31,12 @@ export default function ActionSubMenu({ teacherId }: { teacherId: string }) {
             <DropdownMenuContent>
                 <DropdownMenuItem className="hover:cursor-pointer rounded-md" onSelect={(e) => e.preventDefault()}>
                     <div onClick={(e) => {e.stopPropagation()}}>
-                        <AddClassBtn teacherId={teacherId!} />
+                        <AddClassBtn teacherId={teacherId!} closeSubMenu={closeModal} />
                     </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="hover:cursor-pointer rounded-md" onSelect={(e) => e.preventDefault()}>
                     <div onClick={(e) => e.stopPropagation()}>
-                        <AddPromptBtn teacherId={teacherId!} />
+                        <AddPromptBtn teacherId={teacherId!} closeSubMenu={closeModal} />
                     </div>
                 </DropdownMenuItem>
             </DropdownMenuContent>

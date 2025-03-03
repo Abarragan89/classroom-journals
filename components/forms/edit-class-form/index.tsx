@@ -6,24 +6,31 @@ import { useActionState, useState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { updateClassInfo } from "@/lib/actions/classroom.actions";
 import ColorSelect from "../class-color-select";
-import { redirect } from "next/navigation";
 import { Class } from "@/types";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from 'sonner'
 
 export default function EditClassForm({
     classData,
+    closeModal
 }: {
     classData: Class,
+    closeModal: () => void
 }) {
 
     const [state, action] = useActionState(updateClassInfo, {
         success: false,
         message: ''
     })
+    const pathname = usePathname()
+    const router = useRouter();
 
-    //redirect if the state is success
+    // redirect if the state is success
     useEffect(() => {
         if (state.success) {
-            redirect('/classes')
+            closeModal()
+            toast('Class Updated!');
+            router.push(pathname); // Navigates without losing state instantly
         }
     }, [state])
 

@@ -9,10 +9,12 @@ import { ClassroomIds } from "@/types"
 
 export default function JotSearchArea({
     initialPrompts,
-    classroomData
+    classroomData,
+    teacherId
 }: {
     initialPrompts: Prompt[],
-    classroomData: ClassroomIds[]
+    classroomData: ClassroomIds[],
+    teacherId: string
 }) {
 
     const [fetchedPrompts, setFetchedPrompts] = useState(initialPrompts)
@@ -36,10 +38,14 @@ export default function JotSearchArea({
                 getFilteredSearch={getFilteredSearch}
                 classroomData={classroomData}
             />
-            <div className="mt-10 flex justify-around items-start flex-wrap gap-x-10 mb-10">
+            <div className="mt-10 flex flex-wrap justify-around items-start  gap-x-5 mb-10">
                 {/* Insert all the prompt jot cards here */}
                 {fetchedPrompts?.length > 0 && fetchedPrompts.map((prompt: Prompt) => (
-                    <PromptCard key={prompt.id} promptData={prompt} />
+                    <PromptCard
+                        key={prompt.id}
+                        promptData={prompt}
+                        teacherId={teacherId}
+                    />
                 ))}
             </div>
         </>

@@ -1,24 +1,32 @@
 'use client'
 import { useState } from "react"
 import { useActionState, useEffect } from "react"
-import { redirect } from "next/navigation"
 import { useFormStatus } from "react-dom"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { deleteClassroom } from "@/lib/actions/classroom.actions"
+import { usePathname, useRouter } from "next/navigation"
+import { toast } from "sonner"
 
-export default function DeleteClassForm({ classroomId }: { classroomId: string }) {
+
+export default function DeleteClassForm({ classroomId, closeModal }: { classroomId: string, closeModal: () => void }) {
 
     const [state, action] = useActionState(deleteClassroom, {
         success: false,
         message: ''
     })
+    const pathname = usePathname();
+    const router = useRouter();
 
     //redirect if the state is success
     useEffect(() => {
         if (state.success) {
-            redirect('/classes')
+            toast.error('Class Deleted!', {
+                style: {background: 'hsl(0 84.2% 60.2%)', color: 'white'}
+            });
+            closeModal()
+            router.push(pathname); // Navigates without losing state instantly
         }
     }, [state])
 

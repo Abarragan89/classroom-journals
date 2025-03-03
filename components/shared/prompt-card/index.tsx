@@ -10,11 +10,11 @@ import { Prompt } from "@/types";
 import OptionsMenu from "./options-menu";
 import { Button } from "@/components/ui/button";
 
-export default function PromptCard({ promptData }: { promptData: Prompt }) {
+export default function PromptCard({ teacherId, promptData }: { teacherId: string, promptData: Prompt }) {
     return (
-        <Card className="w-[335px] h-[250px] relative mb-14">
+        <Card className="w-[100%] sm:w-[320px] h-[250px] relative mb-14">
             {/* Absolutely positions options menu with responsive dialogs */}
-            <OptionsMenu promptData={promptData} />
+            <OptionsMenu teacherId={teacherId} promptData={promptData} />
             <CardHeader className="flex flex-row justify-between h-[130px]">
                 <div className="w-[95%]">
                     <CardTitle className="tracking-wide leading-5">{promptData.title}</CardTitle>
