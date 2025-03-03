@@ -38,15 +38,16 @@ export default function AddPromptForm({ teacherId }: { teacherId: string }) {
         fetchClassrooms();
     }, [teacherId]);
 
-    if (!classrooms) return
-
+    
     // redirect if the state is success
     useEffect(() => {
         if (state.success) {
             redirect(`/prompt-library`)
         }
     }, [state])
-
+    
+    if (!classrooms.length) return null;
+    
     const [questions, setQuestions] = useState<Question[]>([
         { name: "question1", label: "Question 1", value: "" }
     ]);
