@@ -46,8 +46,7 @@ export default function AddPromptForm({ teacherId }: { teacherId: string }) {
         }
     }, [state])
     
-    if (!classrooms.length) return null;
-    
+
     const [questions, setQuestions] = useState<Question[]>([
         { name: "question1", label: "Question 1", value: "" }
     ]);
@@ -77,6 +76,8 @@ export default function AddPromptForm({ teacherId }: { teacherId: string }) {
         const { pending } = useFormStatus();
         return <Button type="submit" className="mx-auto mt-5">{pending ? "Creating..." : "Create Prompt"}</Button>;
     };
+
+    if (!classrooms.length) return null;
 
     return (
         <form action={action} className="grid relative">
