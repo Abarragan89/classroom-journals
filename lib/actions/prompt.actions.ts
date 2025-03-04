@@ -1,7 +1,9 @@
 "use server"
 import { prisma } from "@/db/prisma";
 import { promptSchema } from "../validators";
-import { SearchOptions } from "@/types";
+import { SearchOptions, Question } from "@/types";
+import { Prisma } from '@prisma/client';
+
 
 // Create new prompt 
 export async function createNewPrompt(prevState: unknown, formData: FormData) {
@@ -11,18 +13,20 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         if (typeof teacherId !== 'string') {
             throw new Error('Missing teacher ID');
         }
-        const questions: string[] = [];
+        const questions: Question[] = [];
         const classroomIds: string[] = []
 
         // Extract all questions from formData & dump into questions[]
         formData.forEach((value, key) => {
             if (key.startsWith("question")) {
-                questions.push(value as string); // Convert into correct format
+                questions.push({ question: value as string }); // Convert into correct format
             }
             if (key.startsWith("classroom")) {
                 classroomIds.push(value as string)
             }
         });
+
+        console.log('questions , ', questions)
 
         // Get title for prompt(only searchable text)
         const title = formData.get("title")?.toString().trim() || "";
@@ -38,7 +42,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         // Check for validation error
         if (!validationResult.success) {
             console.log("Validation failed:", validationResult.error.format());
-            return { success: false, message: "Complete question required" };
+            return { success: false, message: "Missing a required field" };
         }
 
         await prisma.prompt.create({
@@ -48,14 +52,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                 classes: {
                     connect: classroomIds.map((classId) => ({ id: classId })), // Connect multiple classrooms
                 },
-                questions: {
-                    create: questions.map((q) => ({
-                        content: q.trim(),
-                    })),
-                },
-            },
-            include: {
-                questions: true, // Include created questions in the returned result
+                questions: questions as unknown as Prisma.InputJsonValue,
             },
         });
 
@@ -79,11 +76,6 @@ export async function getAllTeacherPrompts(teacherId: string) {
     try {
         const allPrompts = await prisma.prompt.findMany({
             where: { teacherId },
-            include: {
-                questions: true,
-                classes: {
-                }
-            },
             orderBy: {
                 updatedAt: 'desc'
             },
@@ -125,9 +117,6 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
                 // 4️ filter by never assigned (if filter option is 'neverAssigned')
                 lastAssigned: filterOptions.filter === "neverAssigned" ? null : undefined,
             },
-            include: {
-                questions: true
-            },
             orderBy: {
                 updatedAt: filterOptions.filter === 'asc' ? 'asc' : 'desc'
             },
@@ -149,7 +138,6 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
 }
 
 // Update a prompt
-// Update a prompt
 export async function updateAPrompt(prevState: unknown, formData: FormData) {
     try {
         // Verify Teacher Id
@@ -158,13 +146,13 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
             throw new Error('Missing teacher ID');
         }
 
-        const questions: string[] = [];
+        const questions: Question[] = [];
         const classroomIds: string[] = [];
 
         // Extract questions & classrooms from formData
         formData.forEach((value, key) => {
             if (key.startsWith("question")) {
-                questions.push(value as string);
+                questions.push({ question: value as string });
             }
             if (key.startsWith("classroom")) {
                 classroomIds.push(value as string);
@@ -193,7 +181,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
         // Fetch existing prompt data
         const existingPrompt = await prisma.prompt.findUnique({
             where: { id: promptId },
-            include: { questions: true, classes: true }
+            include: { classes: true }
         });
 
         if (!existingPrompt) {
@@ -205,7 +193,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
         const classesToDisconnect = currentClassIds.filter(id => !classroomIds.includes(id));
 
         // Perform update
-        await prisma.prompt.update({
+        const updatedPrompt = await prisma.prompt.update({
             where: { id: promptId },
             data: {
                 title: title.trim(),
@@ -214,15 +202,11 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
                     connect: classroomIds.map(id => ({ id })), // Connect new classrooms
                     disconnect: classesToDisconnect.map(id => ({ id })), // Disconnect removed classrooms
                 },
-                questions: {
-                    deleteMany: {}, // Remove old questions
-                    create: questions.map(q => ({ content: q.trim() })), // Add new questions
-                },
+                questions: questions as unknown as Prisma.InputJsonValue,
             },
-            include: { questions: true }
+            
         });
-
-        return { success: true, message: 'Prompt Updated!' };
+        return { success: true, message: 'Prompt Updated!', data: updatedPrompt };
 
     } catch (error) {
         if (error instanceof Error) {
@@ -243,7 +227,7 @@ export async function deletePrompt(prevState: unknown, formData: FormData) {
         await prisma.prompt.delete({
             where: { id: promptId }
         })
-        return { success: true, message: 'Prompt Updated!' };
+        return { success: true, message: 'Prompt Updated!', promptId };
 
     } catch (error) {
         if (error instanceof Error) {

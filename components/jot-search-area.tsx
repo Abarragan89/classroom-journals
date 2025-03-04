@@ -17,7 +17,7 @@ export default function JotSearchArea({
     teacherId: string
 }) {
 
-    const [fetchedPrompts, setFetchedPrompts] = useState(initialPrompts)
+    const [fetchedPrompts, setFetchedPrompts] = useState<Prompt[]>(initialPrompts)
     // Make the following into one state object
     const promptSearchOptions = useRef<SearchOptions>({
         classroom: '',
@@ -30,6 +30,8 @@ export default function JotSearchArea({
         const filterPrompts = await getFilterPrompts(filterOptions) as unknown as Prompt[]
         setFetchedPrompts(filterPrompts)
     }
+
+
 
     return (
         <>
@@ -45,6 +47,7 @@ export default function JotSearchArea({
                         key={prompt.id}
                         promptData={prompt}
                         teacherId={teacherId}
+                        updatePromptData={setFetchedPrompts}
                     />
                 ))}
             </div>

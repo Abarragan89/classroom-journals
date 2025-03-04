@@ -19,6 +19,10 @@ export const classSchema = z.object({
 export const promptSchema = z.object({
     title: z.string().min(1, 'Title is required'),
     questions: z.array(
-        z.string().min(1, 'Question text is required')
+        z.object({
+            question: z.string().min(1, 'Question is required'),
+            answer: z.string().optional(),
+            score: z.number().optional(),
+        })
     ).min(1, 'At least one question is required')
 })

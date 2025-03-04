@@ -13,7 +13,15 @@ import EditPromptForm from '@/components/forms/edit-prompt-form';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import DeletePromptForm from '@/components/forms/delete-prompt-form';
 
-export default function OptionsMenu({ promptData, teacherId }: { promptData: Prompt, teacherId: string }) {
+export default function OptionsMenu({
+    promptData,
+    teacherId,
+    updatePromptData
+}: {
+    promptData: Prompt,
+    teacherId: string,
+    updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
+}) {
 
     const [mounted, setMounted] = useState<boolean>(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
@@ -26,7 +34,7 @@ export default function OptionsMenu({ promptData, teacherId }: { promptData: Pro
     function closeDeleteModal() {
         setIsDeleteModalOpen(false)
     }
-    
+
     function closeEditModal() {
         setIsEditModalOpen(false)
     }
@@ -50,6 +58,7 @@ export default function OptionsMenu({ promptData, teacherId }: { promptData: Pro
                         teacherId={teacherId}
                         promptData={promptData}
                         closeModal={closeEditModal}
+                        updatePromptData={updatePromptData}
                     />
                 </ScrollArea>
             </ResponsiveDialog>
@@ -61,7 +70,12 @@ export default function OptionsMenu({ promptData, teacherId }: { promptData: Pro
                 title={`Confirm Delete`}
                 description='Confirm prompt deletion'
             >
-                <DeletePromptForm promptId={promptData.id} promptTitle={promptData.title} closeModal={closeDeleteModal} />
+                <DeletePromptForm
+                    promptId={promptData.id}
+                    promptTitle={promptData.title}
+                    closeModal={closeDeleteModal}
+                    updatePromptData={updatePromptData}
+                />
             </ResponsiveDialog>
 
             {/* Options Menu */}

@@ -35,15 +35,16 @@ export interface ClassroomIds {
     name: string
 }
 export interface Question {
-    id: string;
-    content: string
+    question: string;
+    answer?: string;
+    score?: number;
+
 }
 export type Prompt = z.infer<typeof promptSchema> & {
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    questions: Question[]
-    classes: ClassroomIds[]
+    classes?: ClassroomIds[]
 }
 
 export interface SearchOptions {

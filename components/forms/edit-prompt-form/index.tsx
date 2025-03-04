@@ -20,7 +20,17 @@ interface Question {
     value: string;
 }
 
-export default function EditPromptForm({ promptData, teacherId, closeModal }: { promptData: Prompt, teacherId: string, closeModal: () => void }) {
+export default function EditPromptForm({
+    promptData,
+    teacherId,
+    closeModal,
+    updatePromptData
+}: {
+    promptData: Prompt,
+    teacherId: string,
+    closeModal: () => void,
+    updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
+}) {
 
     const [state, action] = useActionState(updateAPrompt, {
         success: false,
@@ -38,10 +48,10 @@ export default function EditPromptForm({ promptData, teacherId, closeModal }: { 
 
     useEffect(() => {
         if (promptData?.questions) {
-            setQuestions(promptData.questions.map((q: { content: string }, index) => ({
+            setQuestions(promptData.questions.map((q: { question: string }, index) => ({
                 name: `question${index + 1}`,
                 label: `Question ${index + 1}`,
-                value: q.content || "", // Ensure there's always a value
+                value: q.question || "", // Ensure there's always a value
             })));
             setIsLoaded(true)
         }
@@ -63,7 +73,13 @@ export default function EditPromptForm({ promptData, teacherId, closeModal }: { 
         if (state.success) {
             toast('Jot Updated!');
             closeModal()
-            router.push(pathname); // Navigates without losing state instantly
+            updatePromptData(prev =>
+                prev.map((prompt: Prompt) =>
+                    prompt.id === state.data?.id
+                        ? state.data as unknown as Prompt  // Ensure correct type
+                        : prompt
+                )
+            );
         }
     }, [state])
 
@@ -94,8 +110,8 @@ export default function EditPromptForm({ promptData, teacherId, closeModal }: { 
         return <Button type="submit" className="mx-auto mt-5">{pending ? "Updating..." : "Update Prompt"}</Button>;
     };
 
-    if (!classrooms.length || !isLoaded) {
-        return(
+    if (!isLoaded) {
+        return (
             <div className="min-h-[430px]">
                 Loading...
             </div>
@@ -144,22 +160,22 @@ export default function EditPromptForm({ promptData, teacherId, closeModal }: { 
             <Separator className="my-3" />
             {/* Associate with a classroom */}
             <div className="space-y-3">
-                <p className="text-sm">Organize Under Classrooms (Optional)</p>
-                {classrooms.length > 0 && classrooms.map((classroom: ClassroomIds) => (
-                    <div key={classroom.id} className="flex items-center space-x-2">
-                        <Checkbox
-                            defaultChecked={promptData.classes.some((currentClass: ClassroomIds) => currentClass.id === classroom.id)}
-                            id={classroom.id} value={classroom.id}
-                            name={`classroom-${classroom.id}`}
-                        />
-                        <label
-                            htmlFor={classroom.id}
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                            {classroom.name}
-                        </label>
-                    </div>
-                ))}
+                {classrooms?.length > 0 && (
+                    <>
+                        <p className="text-sm">Organize Under Classrooms (Optional)</p>
+                        {classrooms.map((classroom: ClassroomIds) => (
+                            <div key={classroom.id} className="flex items-center space-x-2">
+                                <Checkbox id={classroom.id} value={classroom.id} name={`classroom-${classroom.id}`} />
+                                <label
+                                    htmlFor={classroom.id}
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                    {classroom.name}
+                                </label>
+                            </div>
+                        ))}
+                    </>
+                )}
             </div>
             <input
                 type="hidden"

@@ -5,13 +5,21 @@ import { Plus } from "lucide-react"
 import AddClassForm from "./add-class-form"
 import { ResponsiveDialog } from "@/components/responsive-dialog"
 
-export default function AddClassBtn({ teacherId, closeSubMenu }: { teacherId: string, closeSubMenu: () => void }) {
+export default function AddClassBtn({
+    teacherId,
+    closeSubMenu,
+    variant = 'ghost'
+}: {
+    teacherId: string,
+    closeSubMenu?: () => void,
+    variant?: "ghost" | "link" | "default" | "destructive" | "outline" | "secondary" | null | undefined
+}) {
 
     const [isModalOpen, setIsOpenModal] = useState<boolean>(false)
 
     function closeModal() {
         setIsOpenModal(false)
-        closeSubMenu()
+        if (closeSubMenu) closeSubMenu()
     }
 
     return (
@@ -24,7 +32,7 @@ export default function AddClassBtn({ teacherId, closeSubMenu }: { teacherId: st
             >
                 <AddClassForm teacherId={teacherId} closeModal={closeModal} />
             </ResponsiveDialog>
-            <Button variant='ghost' onClick={() => setIsOpenModal(true)}>
+            <Button variant={variant} onClick={() => setIsOpenModal(true)}>
                 <Plus />Add Class
             </Button>
         </>

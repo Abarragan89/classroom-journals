@@ -66,17 +66,18 @@ model VerificationToken {
 }
 
 model Class {
-  id        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name      String      @db.VarChar(30)
-  classCode String      @unique @db.VarChar(8)
-  color     String
-  subject   String?
-  year      String?     @db.VarChar(12)
-  period    String?
-  users     ClassUser[] // Many-to-many relationship
-  prompts   Prompt[]    @relation("PromptClass")
-  createdAt DateTime    @default(now()) @db.Timestamp(6)
-  updatedAt DateTime    @updatedAt @default(now()) @db.Timestamp(6)
+  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String          @db.VarChar(30)
+  classCode     String          @unique @db.VarChar(8)
+  color         String
+  subject       String?
+  year          String?         @db.VarChar(12)
+  period        String?
+  users         ClassUser[] // Many-to-many relationship
+  prompts       Prompt[]        @relation("PromptClass")
+  createdAt     DateTime        @default(now()) @db.Timestamp(6)
+  updatedAt     DateTime        @default(now()) @updatedAt @db.Timestamp(6)
+  PromptSession PromptSession[]
 }
 
 model ClassUser {
@@ -155,23 +156,44 @@ model CommentLike {
 }
 
 model Prompt {
-  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  isActive     Boolean    @default(false)
-  title        String
-  teacherId    String     @db.Uuid
-  teacher      User       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  lastAssigned DateTime?
-  questions    Question[]
-  classes      Class[]    @relation("PromptClass")
+  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  isActive      Boolean         @default(false)
+  title         String
+  teacherId     String          @db.Uuid
+  teacher       User            @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  lastAssigned  DateTime?
+  questions     Json
+  classes       Class[]         @relation("PromptClass")
+  PromptSession PromptSession[]
 }
 
-model Question {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  content   String
-  promptId  String   @db.Uuid
-  prompt    Prompt   @relation(fields: [promptId], references: [id], onDelete: Cascade)
+model PromptSession {
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  promptId   String     @db.Uuid
+  title      String
+  questions  Json
+  assignedBy String
+  assignedAt DateTime   @default(now())
+  classId    String     @db.Uuid
+  status     String     @default("active") // e.g., "active", "completed"
+  responses  Response[]
+  // Relationship
+  prompt     Prompt     @relation(fields: [promptId], references: [id])
+  class      Class      @relation(fields: [classId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Response {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  promptSessionId String    @db.Uuid
+  studentId       String    @db.Uuid
+  answers         Json //stores questions, answers, and score (score is Correct, 1/2 or wrong)
+  submittedAt     DateTime? // Nullable in case they haven't submitted yet
+
+  // Relationship
+  promptSession PromptSession @relation(fields: [promptSessionId], references: [id])
 }

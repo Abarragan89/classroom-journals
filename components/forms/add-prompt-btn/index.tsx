@@ -6,7 +6,15 @@ import AddPromptForm from "./add-prompt-form";
 import { ResponsiveDialog } from "@/components/responsive-dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-export default function AddPromptBtn({ teacherId, closeSubMenu }: { teacherId: string, closeSubMenu: () => void }) {
+export default function AddPromptBtn({ 
+    teacherId, 
+    closeSubMenu,
+    variant='ghost' 
+}: { 
+    teacherId: string, 
+    closeSubMenu: () => void,
+    variant?: "ghost" | "link" | "default" | "destructive" | "outline" | "secondary" | null | undefined 
+}) {
 
     const [isModalOpen, setIsOpenModal] = useState<boolean>(false)
 
@@ -27,7 +35,7 @@ export default function AddPromptBtn({ teacherId, closeSubMenu }: { teacherId: s
                     <AddPromptForm teacherId={teacherId} closeModal={closeModal} />
                 </ScrollArea>
             </ResponsiveDialog>
-            <Button variant='ghost' onClick={() => setIsOpenModal(true)}>
+            <Button variant={variant} onClick={() => setIsOpenModal(true)}>
                 <Plus /> New Jot
             </Button>
         </>

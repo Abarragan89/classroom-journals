@@ -4,7 +4,8 @@ import { getAllClassrooms } from "@/lib/actions/classroom.actions";
 import ClassCard from "@/components/shared/class-card";
 import { Class } from "@/types";
 import Header from "@/components/shared/header";
-import { Plus } from "lucide-react";
+import AddClassBtn from "@/components/forms/add-class-btn";
+import { Button } from "@/components/ui/button";
 
 export default async function Classes() {
     const session = await auth()
@@ -31,8 +32,8 @@ export default async function Classes() {
                     )) :
                         (
                             <div className="flex flex-col items-center justify-center">
-                                <p className="mb-2">No classes</p>
-                                <p>Click the <Plus size={18} className="inline" /> to add a class</p>
+                                <p className="mb-4">No current classes</p>
+                                    <AddClassBtn variant='default' teacherId={teacherId} closeSubMenu={undefined} />
                             </div>
                         )
                     }

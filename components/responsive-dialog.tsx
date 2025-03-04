@@ -39,8 +39,8 @@ export function ResponsiveDialog({
 
     // if (isDesktop) {
         return (
-            <Dialog open={isOpen} onOpenChange={setIsOpen} >
-                <DialogContent onKeyDown={(event) => event.stopPropagation()} className="sm:max-w-[450px] overflow-y-hidden p-4 pr-0 rounded-md">
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogContent onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} onPointerMove={(e) => e.stopPropagation()} className="sm:max-w-[450px] overflow-y-hidden p-4 pr-0 rounded-md">
                     <DialogHeader>
                         <DialogTitle>{title}</DialogTitle>
                         {description && (

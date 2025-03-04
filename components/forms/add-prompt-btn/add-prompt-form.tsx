@@ -83,13 +83,13 @@ export default function AddPromptForm({ teacherId, closeModal }: { teacherId: st
         return <Button type="submit" className="mx-auto mt-5">{pending ? "Creating..." : "Create Jot"}</Button>;
     };
 
-    if (!classrooms.length) {
-        return (
-            <div className="min-h-[430px]">
-                Loading...
-            </div>
-        )
-    };
+    // if (!classrooms.length) {
+    //     return (
+    //         <div className="min-h-[430px] flex-center">
+    //             <p></p>
+    //         </div>
+    //     )
+    // };
 
     return (
         <form action={action} className="grid relative py-4">
@@ -132,18 +132,22 @@ export default function AddPromptForm({ teacherId, closeModal }: { teacherId: st
             <Separator className="my-3" />
             {/* Associate with a classroom */}
             <div className="space-y-3">
-                <p className="text-sm">Organize Under Classrooms (Optional)</p>
-                {classrooms.length > 0 && classrooms.map((classroom: ClassroomIds) => (
-                    <div key={classroom.id} className="flex items-center space-x-2">
-                        <Checkbox id={classroom.id} value={classroom.id} name={`classroom-${classroom.id}`} />
-                        <label
-                            htmlFor={classroom.id}
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                            {classroom.name}
-                        </label>
-                    </div>
-                ))}
+                {classrooms?.length > 0 && (
+                    <>
+                        <p className="text-sm">Organize Under Classrooms (Optional)</p>
+                        {classrooms.map((classroom: ClassroomIds) => (
+                            <div key={classroom.id} className="flex items-center space-x-2">
+                                <Checkbox id={classroom.id} value={classroom.id} name={`classroom-${classroom.id}`} />
+                                <label
+                                    htmlFor={classroom.id}
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                    {classroom.name}
+                                </label>
+                            </div>
+                        ))}
+                    </>
+                )}
             </div>
             <input
                 type="hidden"
