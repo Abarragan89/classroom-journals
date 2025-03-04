@@ -36,5 +36,5 @@ export async function signInWithGoogle() {
 
 // Sign user out
 export async function signOutUser() {
-    await signOut();
+    await signOut({redirectTo: '/'});
 }
