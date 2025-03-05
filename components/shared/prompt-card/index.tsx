@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Prompt } from "@/types";
 import OptionsMenu from "./options-menu";
 import { Button } from "@/components/ui/button";
+import AssignedToPopUp from "./assigned-to-popup";
 
 export default function PromptCard({
     teacherId,
@@ -19,6 +20,8 @@ export default function PromptCard({
     promptData: Prompt
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
 }) {
+
+    console.log('class /Data', promptData)
     
     return (
         <Card className="w-[100%] sm:w-[320px] h-[250px] relative mb-14">
@@ -37,7 +40,7 @@ export default function PromptCard({
             <Separator />
             <CardFooter className="flex justify-between text-sm mt-2 pb-3">
                 <p>Questions: {promptData.questions.length}</p>
-                <p>Assigned: {promptData.createdAt.toLocaleDateString()}</p>
+                <AssignedToPopUp classesData={promptData.promptSession as unknown as Prompt}/>
             </CardFooter>
         </Card>
     )

@@ -157,16 +157,14 @@ model CommentLike {
 
 model Prompt {
   id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  isActive      Boolean         @default(false)
   title         String
   teacherId     String          @db.Uuid
   teacher       User            @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-  lastAssigned  DateTime?
   questions     Json
-  classes       Class[]         @relation("PromptClass")
-  PromptSession PromptSession[]
+  classes       Class[]         @relation("PromptClass") // this is for prompt organization
+  promptSession PromptSession[]
 }
 
 model PromptSession {
@@ -174,26 +172,23 @@ model PromptSession {
   promptId   String     @db.Uuid
   title      String
   questions  Json
-  assignedBy String
   assignedAt DateTime   @default(now())
   classId    String     @db.Uuid
   status     String     @default("active") // e.g., "active", "completed"
   responses  Response[]
   // Relationship
-  prompt     Prompt     @relation(fields: [promptId], references: [id])
-  class      Class      @relation(fields: [classId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  prompt     Prompt     @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  class      Class      @relation(fields: [classId], references: [id], onDelete: Cascade)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 }
 
 model Response {
-  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  promptSessionId String    @db.Uuid
-  studentId       String    @db.Uuid
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  promptSessionId String        @db.Uuid
+  studentId       String        @db.Uuid
   answers         Json //stores questions, answers, and score (score is Correct, 1/2 or wrong)
   submittedAt     DateTime? // Nullable in case they haven't submitted yet
-
   // Relationship
-  promptSession PromptSession @relation(fields: [promptSessionId], references: [id])
+  promptSession   PromptSession @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
 }

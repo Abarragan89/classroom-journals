@@ -19,3 +19,11 @@ export function generateClassCode() {
   }
   return classCode.join("")
 }
+
+export function formatDateShort(date: Date): string {
+  const month = date.getMonth() + 1; // Months are zero-indexed, so we add 1
+  const day = date.getDate();
+  const year = date.getFullYear().toString().slice(-2); // Get last 2 digits of the year
+
+  return `${month}/${day}/${year}`;
+}

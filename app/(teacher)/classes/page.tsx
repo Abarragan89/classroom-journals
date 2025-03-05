@@ -29,8 +29,8 @@ export default async function Classes() {
                         />
                     )) :
                         (
-                            <div className="flex flex-col items-center justify-center">
-                                <p className="mb-4">No current classes</p>
+                            <div className="flex flex-col items-center justify-center text-primary">
+                                <p className="mb-4 font-bold">No classes</p>
                                     <AddClassBtn variant='default' teacherId={teacherId} closeSubMenu={undefined} />
                             </div>
                         )

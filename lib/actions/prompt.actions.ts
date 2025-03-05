@@ -50,18 +50,39 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             return { success: false, message: "Missing a required field" };
         }
 
-        await prisma.prompt.create({
-            data: {
-                title: title.trim(),
-                teacherId,
-                classes: {
-                    connect: classesOrganizeTo.map((classId) => ({ id: classId })), // Connect multiple classrooms
+        await prisma.$transaction(async (prisma) => {
+            // Create the Prompt
+            const createdPrompt = await prisma.prompt.create({
+                data: {
+                    title: title.trim(),
+                    teacherId,
+                    classes: {
+                        connect: classesOrganizeTo.map((classId) => ({ id: classId })), // Connect multiple classrooms
+                    },
+                    questions: questions as unknown as Prisma.InputJsonValue,
                 },
-                questions: questions as unknown as Prisma.InputJsonValue,
-            },
-        });
+            });
 
-        return { success: true, message: 'Prompt Created!' }
+            // Create PromptSessions if there are classes to assign
+            if (classesAssignTo.length > 0) {
+                const promptSessions = classesAssignTo.map((classId) => ({
+                    promptId: createdPrompt.id,
+                    title: createdPrompt.title,
+                    questions: createdPrompt.questions as Prisma.InputJsonValue,
+                    // assignedBy: teacherId,
+                    assignedAt: new Date(),
+                    classId: classId,
+                    status: 'active',
+                }));
+
+                // Create all the PromptSessions in one transaction
+                await prisma.promptSession.createMany({
+                    data: promptSessions,
+                });
+            }
+
+            return { success: true, message: 'Prompt Created!' };
+        })
 
     } catch (error) {
         // Improved error logging
@@ -167,6 +188,19 @@ export async function getAllTeacherPrompts(teacherId: string) {
     try {
         const allPrompts = await prisma.prompt.findMany({
             where: { teacherId },
+            include: {
+                promptSession: {
+                    select: {
+                        assignedAt: true,
+                        class: {
+                            select: {
+                                id: true,
+                                name: true
+                            },
+                        }
+                    },
+                }
+            },
             orderBy: {
                 updatedAt: 'desc'
             },
@@ -191,10 +225,20 @@ export async function getAllTeacherPrompts(teacherId: string) {
 export async function getSinglePrompt(promptId: string) {
     try {
         const prompt = await prisma.prompt.findUnique({
-            where: { id: promptId},
+            where: { id: promptId },
             include: {
-                classes: true
-            }
+                promptSession: {
+                    select: {
+                        assignedAt: true,
+                        class: {
+                            select: {
+                                id: true,
+                                name: true
+                            },
+                        }
+                    },
+                }
+            },
         })
         return prompt
     } catch (error) {
@@ -224,18 +268,25 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
                 title: filterOptions.searchWords
                     ? { contains: filterOptions.searchWords, mode: "insensitive" }
                     : undefined,
-
-                // 3️ Filter by active status (if filter option is set to 'active')
-                isActive: filterOptions.filter === "active" ? true : undefined,
-
-                // 4️ filter by never assigned (if filter option is 'neverAssigned')
-                lastAssigned: filterOptions.filter === "neverAssigned" ? null : undefined,
             },
+            include: {
+                promptSession: {
+                    select: {
+                        assignedAt: true,
+                        class: {
+                            select: {
+                                id: true,
+                                name: true
+                            },
+                        }
+                    },
+                }
+            },
+            take: 15,
             orderBy: {
                 updatedAt: filterOptions.filter === 'asc' ? 'asc' : 'desc'
             },
-            skip: filterOptions.paginationSkip, // 5️⃣ Handle pagination
-            take: 15 // Only fetch 15 at a time
+            skip: filterOptions.paginationSkip, // paginaction filter
         });
 
         return allPrompts;

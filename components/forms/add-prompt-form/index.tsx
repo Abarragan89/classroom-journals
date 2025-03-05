@@ -45,7 +45,7 @@ export default function AddPromptForm({ teacherId }: { teacherId: string }) {
 
     // redirect if the state is success
     useEffect(() => {
-        if (state.success) {
+        if (state?.success) {
             toast('Jot Added!');
             router.push('/prompt-library'); // Navigates without losing state instantly
         }

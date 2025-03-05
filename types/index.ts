@@ -46,7 +46,26 @@ export type Prompt = z.infer<typeof promptSchema> & {
     updatedAt: Date;
     teacherId: string;
     classes?: ClassroomIds[]
+    promptSession?: PromptSession[];
+
 }
+
+export type PromptSession = {
+    id: string;
+    promptId: string;
+    title: string;
+    questions: JSON;
+    assignedAt: Date;
+    classId: string;
+    status: string;
+    responses: Response[]; // Assuming 'Response' is a model type you're using
+    class: {
+        id: string;
+        name: string;
+    };
+    createdAt: Date;
+    updatedAt: Date;
+};
 
 export interface SearchOptions {
     classroom: string;
