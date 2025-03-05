@@ -144,12 +144,12 @@ export default function EditPromptForm({
             ))}
 
             <div className="relative">
-                <Button asChild variant='link' className="w-fit p-0 absolute right-0 top-[-20px]">
+                <Button asChild variant='link' className="w-fit p-0 absolute right-0 top-[0px]">
                     <p onClick={() => handleAddQuestion()} className="hover:cursor-pointer w-fit justify-end"><Plus />Add question</p>
                 </Button>
             </div>
 
-            <Separator className="mt-8 mb-5" />
+            <Separator className="mt-10 mb-5" />
             {/* Associate with a classroom */}
             <div className="space-y-3">
                 {classrooms?.length > 0 && (

@@ -24,7 +24,7 @@ export default function PromptCard({
     console.log('class /Data', promptData)
     
     return (
-        <Card className="w-[100%] sm:w-[320px] h-[250px] relative mb-14">
+        <Card className="w-[100%] sm:w-[320px] relative mb-14">
             {/* Absolutely positions options menu with responsive dialogs */}
             <OptionsMenu teacherId={teacherId} promptData={promptData} updatePromptData={updatePromptData} />
             <CardHeader className="flex flex-row justify-between h-[130px]">
@@ -33,9 +33,9 @@ export default function PromptCard({
                 </div>
             </CardHeader>
             <CardContent className="flex-end mt-3">
-                <Button variant='outline'>
+                {/* <Button variant='outline'>
                     Assign
-                </Button>
+                </Button> */}
             </CardContent>
             <Separator />
             <CardFooter className="flex justify-between text-sm mt-2 pb-3">

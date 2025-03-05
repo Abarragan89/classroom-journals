@@ -32,7 +32,7 @@ export type ClassForm = Omit<Class, "id">;
 
 export interface ClassroomIds {
     id: string;
-    name: string
+    name: string,
 }
 export interface Question {
     question: string;
@@ -59,10 +59,7 @@ export type PromptSession = {
     classId: string;
     status: string;
     responses: Response[]; // Assuming 'Response' is a model type you're using
-    class: {
-        id: string;
-        name: string;
-    };
+    class: ClassroomIds[];
     createdAt: Date;
     updatedAt: Date;
 };

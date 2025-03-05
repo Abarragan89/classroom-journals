@@ -73,7 +73,7 @@ model Class {
   subject       String?
   year          String?         @db.VarChar(12)
   period        String?
-  users         ClassUser[] // Many-to-many relationship
+  users         ClassUser[] // Many-to-many relationship(can be a teacher role or student rol)
   prompts       Prompt[]        @relation("PromptClass")
   createdAt     DateTime        @default(now()) @db.Timestamp(6)
   updatedAt     DateTime        @default(now()) @updatedAt @db.Timestamp(6)

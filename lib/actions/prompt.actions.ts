@@ -268,6 +268,9 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
                 title: filterOptions.searchWords
                     ? { contains: filterOptions.searchWords, mode: "insensitive" }
                     : undefined,
+                promptSession: filterOptions.filter === 'never-assigned'
+                    ? { none: {} }
+                    : undefined
             },
             include: {
                 promptSession: {
