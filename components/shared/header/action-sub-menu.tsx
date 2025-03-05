@@ -8,8 +8,8 @@ import {
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import AddClassBtn from "@/components/forms/add-class-btn";
-import AddPromptBtn from "@/components/forms/add-prompt-btn";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function ActionSubMenu({ teacherId }: { teacherId: string }) {
 
@@ -30,14 +30,19 @@ export default function ActionSubMenu({ teacherId }: { teacherId: string }) {
 
             <DropdownMenuContent>
                 <DropdownMenuItem className="hover:cursor-pointer rounded-md" onSelect={(e) => e.preventDefault()}>
-                    <div onClick={(e) => {e.stopPropagation()}}>
+                    <div onClick={(e) => { e.stopPropagation() }}>
                         <AddClassBtn teacherId={teacherId!} closeSubMenu={closeModal} />
                     </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="hover:cursor-pointer rounded-md" onSelect={(e) => e.preventDefault()}>
-                    <div onClick={(e) => e.stopPropagation()}>
-                        <AddPromptBtn teacherId={teacherId!} closeSubMenu={closeModal} />
-                    </div>
+                    <Button asChild variant='ghost'>
+                        <Link
+                            href={'/create-prompt'}
+                            className="flex"
+                        >
+                            <Plus /> New Jot
+                        </Link>
+                    </Button>
                 </DropdownMenuItem>
             </DropdownMenuContent>
 

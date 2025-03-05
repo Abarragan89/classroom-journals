@@ -13,7 +13,6 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox"
 import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
 import { ClassroomIds } from "@/types";
-import { usePathname } from "next/navigation";
 
 interface Question {
     name: string;
@@ -22,14 +21,14 @@ interface Question {
 }
 
 
-export default function AddPromptForm({ teacherId, closeModal }: { teacherId: string, closeModal: () => void }) {
+export default function AddPromptForm({ teacherId }: { teacherId: string }) {
 
     const [state, action] = useActionState(createNewPrompt, {
         success: false,
         message: ''
     })
     const [classrooms, setClassrooms] = useState<ClassroomIds[]>([]);
-    const pathname = usePathname()
+    const [isLoaded, setIsLoaded] = useState<boolean>(false)
     const router = useRouter()
 
     useEffect(() => {
@@ -37,6 +36,7 @@ export default function AddPromptForm({ teacherId, closeModal }: { teacherId: st
             if (teacherId) {
                 const data = await getAllClassroomIds(teacherId); // Fetch classroom IDs
                 setClassrooms(data as ClassroomIds[]);
+                setIsLoaded(true)
             }
         };
         fetchClassrooms();
@@ -47,8 +47,7 @@ export default function AddPromptForm({ teacherId, closeModal }: { teacherId: st
     useEffect(() => {
         if (state.success) {
             toast('Jot Added!');
-            closeModal()
-            router.push(pathname); // Navigates without losing state instantly
+            router.push('/prompt-library'); // Navigates without losing state instantly
         }
     }, [state])
 
@@ -83,16 +82,16 @@ export default function AddPromptForm({ teacherId, closeModal }: { teacherId: st
         return <Button type="submit" className="mx-auto mt-5">{pending ? "Creating..." : "Create Jot"}</Button>;
     };
 
-    // if (!classrooms.length) {
-    //     return (
-    //         <div className="min-h-[430px] flex-center">
-    //             <p></p>
-    //         </div>
-    //     )
-    // };
+    if (!isLoaded) {
+        return (
+            <div className="min-h-full flex-center">
+                Loading...
+            </div>
+        )
+    }
 
     return (
-        <form action={action} className="grid relative py-4">
+        <form action={action} className="grid relative">
             <div className="mb-3">
                 <Label htmlFor="title" className="text-right">
                     Title
@@ -117,29 +116,54 @@ export default function AddPromptForm({ teacherId, closeModal }: { teacherId: st
                             value={question.value} // Keep text state for deletion
                             onChange={(e) => handleChange(index, e.target.value)}
                             required
+                            rows={3}
                         />
                     </div>
-                    {questions.length > 1 &&
-                        <p onClick={() => handleRemoveQuestion(index)} className="hover:cursor-pointer hover:underline p-1 text-[.875rem] text-destructive w-fit leading-none">Delete</p>
+                    {questions.length > 1 ?
+                        <p onClick={() => handleRemoveQuestion(index)} className="hover:cursor-pointer hover:underline p-1 pt-2 text-[.875rem] text-destructive w-fit leading-none">Delete</p>
+                        :
+                        <p className="opacity-0">Delete</p>
                     }
                 </div>
             ))}
 
-            <Button asChild variant='link' className="flex justify-end w-full pt-0">
-                <p onClick={() => handleAddQuestion()} className="hover:cursor-pointer w-fit justify-end"><Plus />Add question</p>
-            </Button>
+            <div className="relative">
+                <Button asChild variant='link' className="w-fit p-0 absolute right-0 top-[-20px]">
+                    <p onClick={() => handleAddQuestion()} className="hover:cursor-pointer w-fit justify-end"><Plus />Add question</p>
+                </Button>
+            </div>
 
-            <Separator className="my-3" />
+            <Separator className="mt-8 mb-5" />
             {/* Associate with a classroom */}
             <div className="space-y-3">
                 {classrooms?.length > 0 && (
                     <>
-                        <p className="text-sm">Organize Under Classrooms (Optional)</p>
+                        <p className="text-sm">Organize By Classrooms (Optional)</p>
                         {classrooms.map((classroom: ClassroomIds) => (
                             <div key={classroom.id} className="flex items-center space-x-2">
-                                <Checkbox id={classroom.id} value={classroom.id} name={`classroom-${classroom.id}`} />
+                                <Checkbox id={classroom.id} value={classroom.id} name={`classroom-organize-${classroom.id}`} />
                                 <label
                                     htmlFor={classroom.id}
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                    {classroom.name}
+                                </label>
+                            </div>
+                        ))}
+                    </>
+                )}
+            </div>
+            {/* Assign to a classroom */}
+            <div className="space-y-3 mt-5">
+                {classrooms?.length > 0 && (
+                    <>
+                        <Separator />
+                        <p className="text-sm">Assign To Classrooms (Optional)</p>
+                        {classrooms.map((classroom: ClassroomIds) => (
+                            <div key={`classroom-assign-${classroom.id}`} className="flex items-center space-x-2">
+                                <Checkbox id={`classroom-assign-${classroom.id}`} value={classroom.id} name={`classroom-assign-${classroom.id}`} />
+                                <label
+                                    htmlFor={`classroom-assign-${classroom.id}`}
                                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                 >
                                     {classroom.name}
@@ -158,8 +182,10 @@ export default function AddPromptForm({ teacherId, closeModal }: { teacherId: st
             {state && !state.success && (
                 <p className="text-center text-destructive">{state.message}</p>
             )}
-
-            <CreateButton />
+            {/* <Separator className="mt-10 mb-3" /> */}
+            <div className="my-5 flex-center">
+                <CreateButton />
+            </div>
         </form>
     )
 }

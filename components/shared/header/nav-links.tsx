@@ -18,7 +18,7 @@ export default function NavLinks() {
 
             <Link href={`/prompt-library`} className={`
             flex-center hover:cursor-pointer hover:text-primary
-            ${pathname === 'prompt-library' ? 'text-primary underline' : 'text-ring'}  
+            ${pathname.includes('prompt') ? 'text-primary underline' : 'text-ring'}  
             `}>
                 <PenTool size={16} className='mr-1' />Jots
             </Link>

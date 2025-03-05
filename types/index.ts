@@ -44,6 +44,7 @@ export type Prompt = z.infer<typeof promptSchema> & {
     id: string;
     createdAt: Date;
     updatedAt: Date;
+    teacherId: string;
     classes?: ClassroomIds[]
 }
 

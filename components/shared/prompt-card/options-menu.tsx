@@ -9,13 +9,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { EllipsisVertical, Edit, Trash2Icon } from "lucide-react";
 import { Prompt } from '@/types';
-import EditPromptForm from '@/components/forms/edit-prompt-form';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import DeletePromptForm from '@/components/forms/delete-prompt-form';
+import Link from 'next/link';
 
 export default function OptionsMenu({
     promptData,
-    teacherId,
     updatePromptData
 }: {
     promptData: Prompt,
@@ -24,7 +22,6 @@ export default function OptionsMenu({
 }) {
 
     const [mounted, setMounted] = useState<boolean>(false)
-    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
 
     useEffect(() => {
@@ -35,10 +32,6 @@ export default function OptionsMenu({
         setIsDeleteModalOpen(false)
     }
 
-    function closeEditModal() {
-        setIsEditModalOpen(false)
-    }
-
     // Prevents Hydration Warnings/Errors
     if (!mounted) {
         return null
@@ -46,23 +39,6 @@ export default function OptionsMenu({
 
     return (
         <>
-            {/* Edit Modal */}
-            <ResponsiveDialog
-                isOpen={isEditModalOpen}
-                setIsOpen={setIsEditModalOpen}
-                title='Edit Jot'
-                description='Fill out the form below to edit your jot.'
-            >
-                <ScrollArea className="max-h-[50vh] pr-11 pl-5">
-                    <EditPromptForm
-                        teacherId={teacherId}
-                        promptData={promptData}
-                        closeModal={closeEditModal}
-                        updatePromptData={updatePromptData}
-                    />
-                </ScrollArea>
-            </ResponsiveDialog>
-
             {/* Delete Modal */}
             <ResponsiveDialog
                 isOpen={isDeleteModalOpen}
@@ -86,9 +62,11 @@ export default function OptionsMenu({
                         <EllipsisVertical className="hover:cursor-pointer text-primary" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => setIsEditModalOpen(true)} className="hover:cursor-pointer rounded-md">
-                            <Edit />Edit
-                        </DropdownMenuItem>
+                        <Link href={`/edit-prompt/${promptData.id}`}>
+                            <DropdownMenuItem className="hover:cursor-pointer rounded-md">
+                                <Edit />Edit
+                            </DropdownMenuItem>
+                        </Link>
                         <DropdownMenuItem onClick={() => setIsDeleteModalOpen(true)} className="hover:cursor-pointer text-destructive rounded-md">
                             <Trash2Icon />Delete
                         </DropdownMenuItem>

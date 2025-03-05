@@ -18,14 +18,14 @@ export default function Header({
                         <Image
                             src='/images/logo.png'
                             alt={`${APP_NAME} logo`}
-                            height={50}
-                            width={50}
+                            height={55}
+                            width={55}
                             priority={true}
-                            className="rounded-lg"
+                            className="rounded-2xl"
                         />
-                        <span className="hidden lg:block font-bold text-2xl ml-3">
+                        {/* <span className="hidden lg:block font-bold text-2xl ml-3">
                             {APP_NAME}
-                        </span>
+                        </span> */}
                     </Link>
                 </div>
                 <Menu

@@ -5,7 +5,6 @@ import ClassCard from "@/components/shared/class-card";
 import { Class } from "@/types";
 import Header from "@/components/shared/header";
 import AddClassBtn from "@/components/forms/add-class-btn";
-import { Button } from "@/components/ui/button";
 
 export default async function Classes() {
     const session = await auth()
@@ -22,7 +21,6 @@ export default async function Classes() {
             <Header teacherId={teacherId} />
             <main className=" wrapper">
                 <h1 className="h1-bold">My Classes</h1>
-                <p></p>
                 <div className="mt-10 flex flex-wrap justify-center items-end gap-14 mx-auto">
                     {allClassrooms?.length > 0 ? allClassrooms.map((classroom: Class) => (
                         <ClassCard

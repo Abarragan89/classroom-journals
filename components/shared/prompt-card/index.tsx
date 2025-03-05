@@ -19,6 +19,7 @@ export default function PromptCard({
     promptData: Prompt
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
 }) {
+    
     return (
         <Card className="w-[100%] sm:w-[320px] h-[250px] relative mb-14">
             {/* Absolutely positions options menu with responsive dialogs */}
