@@ -30,9 +30,6 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             }
         });
 
-        console.log('classes ot organize ', classesOrganizeTo)
-        console.log('classea assigned to ', classesAssignTo)
-
         // Get title for prompt(only searchable text)
         const title = formData.get("title")?.toString().trim() || "";
         if (!title) {

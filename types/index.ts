@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { classSchema, promptSchema } from "@/lib/validators";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 export type User = {
     id: string;
@@ -30,22 +31,28 @@ export type ClassForm = Omit<Class, "id">;
 //     class: Class;
 // }
 
-export interface ClassroomIds {
+export interface Classroom {
     id: string;
     name: string,
+    classCode?: string;
+    color?: string;
+    subject?: string | null;
+    year?: string | null;
+    period?: string | null;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 export interface Question {
     question: string;
     answer?: string;
     score?: number;
-
 }
 export type Prompt = z.infer<typeof promptSchema> & {
     id: string;
     createdAt: Date;
     updatedAt: Date;
     teacherId: string;
-    classes?: ClassroomIds[]
+    classes?: Classroom[]
     promptSession?: PromptSession[];
 
 }
@@ -54,12 +61,12 @@ export type PromptSession = {
     id: string;
     promptId: string;
     title: string;
-    questions: JSON;
+    questions: JsonValue;
     assignedAt: Date;
     classId: string;
     status: string;
-    responses: Response[]; // Assuming 'Response' is a model type you're using
-    class: ClassroomIds[];
+    responses?: Response[]; // Assuming 'Response' is a model type you're using
+    class?: Classroom;
     createdAt: Date;
     updatedAt: Date;
 };

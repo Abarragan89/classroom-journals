@@ -1,4 +1,4 @@
-import { Prompt, PromptSession } from '@/types'
+import { Classroom, Prompt, PromptSession } from '@/types'
 import {
     Popover,
     PopoverContent,
@@ -7,7 +7,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { formatDateShort } from '@/lib/utils'
 
-export default function AssignedToPopUp({ classesData }: { classesData: any }) {
+export default function AssignedToPopUp({ classesData }: { classesData: PromptSession[] }) {
 
     function assignedText() {
         switch (classesData.length) {
@@ -35,10 +35,10 @@ export default function AssignedToPopUp({ classesData }: { classesData: any }) {
                             <p className='text-sm font-bold'>Class</p>
                             <p className='text-sm font-bold'>Date</p>
                         </div>
-                        {classesData.map((singleClass: any) => (
-                            <div key={singleClass.class.id}>
+                        {classesData.map((singleClass: PromptSession) => (
+                            <div key={singleClass!.class!.id}>
                                 <div className='flex-between my-1'>
-                                    <p className='text-sm'>{singleClass.class.name}</p>
+                                    <p className='text-sm'>{singleClass!.class!.name}</p>
                                     <p className='text-sm'>{formatDateShort(singleClass.assignedAt)}</p>
                                 </div>
                             </div>

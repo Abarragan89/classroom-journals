@@ -5,7 +5,7 @@ import { getAllTeacherPrompts } from "@/lib/actions/prompt.actions";
 import { Prompt } from "@/types";
 import JotSearchArea from "@/components/jot-search-area";
 import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
-import { ClassroomIds } from "@/types";
+import { Classroom } from "@/types";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -19,7 +19,7 @@ export default async function PromptLibrary() {
     if (!teacherId) notFound()
 
     const allPrompts = await getAllTeacherPrompts(teacherId) as unknown as Prompt[]
-    let allClassroomIds = await getAllClassroomIds(teacherId) as ClassroomIds[]
+    let allClassroomIds = await getAllClassroomIds(teacherId) as Classroom[]
     // Add default value to beginning fo drop down
     allClassroomIds = [{ id: '', name: 'All Classes' }, ...allClassroomIds]
 

@@ -10,7 +10,7 @@ import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox"
 import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
-import { ClassroomIds, Prompt } from "@/types";
+import { Classroom, Prompt } from "@/types";
 import { useRouter } from "next/navigation";
 import { toast } from 'sonner';
 
@@ -32,7 +32,7 @@ export default function EditPromptForm({
         success: false,
         message: ''
     })
-    const [classrooms, setClassrooms] = useState<ClassroomIds[]>([]);
+    const [classrooms, setClassrooms] = useState<Classroom[]>([]);
     const [questions, setQuestions] = useState<Question[]>([
         { name: "question1", label: "Question 1", value: "" }
     ]);
@@ -56,7 +56,7 @@ export default function EditPromptForm({
         const fetchClassrooms = async () => {
             if (teacherId) {
                 const data = await getAllClassroomIds(teacherId); // Fetch classroom IDs
-                setClassrooms(data as ClassroomIds[]);
+                setClassrooms(data as Classroom[]);
                 setIsLoaded(true)
             }
         };
@@ -155,7 +155,7 @@ export default function EditPromptForm({
                 {classrooms?.length > 0 && (
                     <>
                         <p className="text-sm">Organize By Classrooms (Optional)</p>
-                        {classrooms.map((classroom: ClassroomIds) => (
+                        {classrooms.map((classroom: Classroom) => (
                             <div key={classroom.id} className="flex items-center space-x-2">
                                 <Checkbox
                                     defaultChecked={promptData.classes?.some(currentClass => currentClass.id === classroom.id)}
@@ -179,7 +179,7 @@ export default function EditPromptForm({
                     <>
                         <Separator />
                         <p className="text-sm">Assign To Classrooms (Optional)</p>
-                        {classrooms.map((classroom: ClassroomIds) => (
+                        {classrooms.map((classroom: Classroom) => (
                             <div key={`classroom-assign-${classroom.id}`} className="flex items-center space-x-2">
                                 <Checkbox id={`classroom-assign-${classroom.id}`} value={classroom.id} name={`classroom-assign-${classroom.id}`} />
                                 <label

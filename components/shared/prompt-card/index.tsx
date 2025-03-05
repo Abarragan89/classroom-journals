@@ -6,10 +6,11 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator";
-import { Prompt } from "@/types";
+import { Prompt, Question } from "@/types";
 import OptionsMenu from "./options-menu";
-import { Button } from "@/components/ui/button";
 import AssignedToPopUp from "./assigned-to-popup";
+import QuestionPopup from "./question-popup";
+import { PromptSession } from "@prisma/client";
 
 export default function PromptCard({
     teacherId,
@@ -21,8 +22,6 @@ export default function PromptCard({
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
 }) {
 
-    console.log('class /Data', promptData)
-    
     return (
         <Card className="w-[100%] sm:w-[320px] relative mb-14">
             {/* Absolutely positions options menu with responsive dialogs */}
@@ -33,14 +32,11 @@ export default function PromptCard({
                 </div>
             </CardHeader>
             <CardContent className="flex-end mt-3">
-                {/* <Button variant='outline'>
-                    Assign
-                </Button> */}
             </CardContent>
             <Separator />
             <CardFooter className="flex justify-between text-sm mt-2 pb-3">
-                <p>Questions: {promptData.questions.length}</p>
-                <AssignedToPopUp classesData={promptData.promptSession as unknown as Prompt}/>
+                <QuestionPopup promptQuestions={promptData.questions as unknown as Question[]} />
+                <AssignedToPopUp classesData={promptData.promptSession as unknown as PromptSession[]} />
             </CardFooter>
         </Card>
     )

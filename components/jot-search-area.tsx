@@ -5,7 +5,7 @@ import PromptFilterOptions from "./shared/prompt-filter-options"
 import PromptCard from "./shared/prompt-card"
 import { SearchOptions } from "@/types"
 import { getFilterPrompts } from "@/lib/actions/prompt.actions"
-import { ClassroomIds } from "@/types"
+import { Classroom } from "@/types"
 
 export default function JotSearchArea({
     initialPrompts,
@@ -13,7 +13,7 @@ export default function JotSearchArea({
     teacherId
 }: {
     initialPrompts: Prompt[],
-    classroomData: ClassroomIds[],
+    classroomData: Classroom[],
     teacherId: string
 }) {
 

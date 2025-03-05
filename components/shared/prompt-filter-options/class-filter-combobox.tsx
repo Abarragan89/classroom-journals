@@ -14,11 +14,11 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { ClassroomIds, SearchOptions } from "@/types"
+import { Classroom, SearchOptions } from "@/types"
 
 interface Props {
     searchOptionsRef: React.RefObject<SearchOptions>;
-    classroomData: ClassroomIds[];
+    classroomData: Classroom[];
     getFilteredSearch: (filterOptions: SearchOptions) => void;
 }
 
