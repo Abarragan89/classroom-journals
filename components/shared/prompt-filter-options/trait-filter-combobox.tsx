@@ -18,6 +18,14 @@ import { SearchOptions } from "@/types"
 
 const frameworks = [
     {
+        value: "multi-question",
+        label: "Multi-Question",
+    },
+    {
+        value: "single-question",
+        label: "Journal Prompts",
+    },
+    {
         value: "never-assigned",
         label: "Never Assigned",
     },

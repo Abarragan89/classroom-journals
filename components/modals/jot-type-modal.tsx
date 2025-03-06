@@ -1,15 +1,16 @@
 'use client'
-import { useState } from "react"
 import { ResponsiveDialog } from "../responsive-dialog"
 import { Button } from "../ui/button"
 import Link from "next/link"
 
 export default function JotTypeModal({
     isModalOpen,
-    setIsModalOpen
+    setIsModalOpen,
+    closeModal
 }: {
     isModalOpen: boolean,
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+    closeModal?: () => void
 }) {
 
 
@@ -17,19 +18,18 @@ export default function JotTypeModal({
         <ResponsiveDialog
             isOpen={isModalOpen}
             setIsOpen={setIsModalOpen}
-            title={`Jot Type`}
+            title={`Choose Jot Type`}
             description='Chose between journal entry or mulit-question assessment'
         >
-            <div className="flex flex-col justify-center mx-auto space-y-6 wrapper">
-                <p>Choose the type of Jot you would like to create</p>
+            <div className="flex flex-col justify-center space-y-6 mx-auto my-4">
                 <Button asChild>
-                    <Link href={'/create-prompt?type=single-question'}>
+                    <Link onClick={closeModal} href={'/create-prompt?type=single-question'}>
                         Journal Entry / Essay
                     </Link>
                 </Button>
                 <Button asChild>
-                    <Link href={'/create-prompt?type=multi-question'}>
-                        Multi-question / Assessment
+                    <Link onClick={closeModal} href={'/create-prompt?type=multi-question'}>
+                        Multi-Question / Assessment
                     </Link>
                 </Button>
             </div>

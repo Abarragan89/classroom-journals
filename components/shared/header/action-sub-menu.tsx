@@ -9,7 +9,6 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import AddClassBtn from "@/components/forms/add-class-btn";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import JotTypeModal from "@/components/modals/jot-type-modal";
 
 export default function ActionSubMenu({ teacherId }: { teacherId: string }) {
@@ -19,6 +18,7 @@ export default function ActionSubMenu({ teacherId }: { teacherId: string }) {
 
     function closeModal() {
         setIsOpen(false)
+        setIsNewJotModalOpen(false)
     }
 
 
@@ -41,6 +41,7 @@ export default function ActionSubMenu({ teacherId }: { teacherId: string }) {
                     <JotTypeModal
                         isModalOpen={isNewJotModalOpen}
                         setIsModalOpen={setIsNewJotModalOpen}
+                        closeModal={closeModal}
                     />
                     <Button variant='ghost' onClick={() => setIsNewJotModalOpen(true)}>
                         <Plus /> New Jot

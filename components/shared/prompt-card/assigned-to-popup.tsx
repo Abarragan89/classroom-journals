@@ -38,7 +38,7 @@ export default function AssignedToPopUp({ classesData }: { classesData: PromptSe
                     <div className='flex-center'>
                         <p className='mr-1'>Assigned:</p>
                         <PopoverTrigger asChild>
-                            <p className='hover:cursor-pointer text-accent-foreground bg-accent hover:bg-ring rounded-md py-1 px-2'>{assignedText()}</p>
+                            <p className='hover:cursor-pointer text-accent-foreground bg-accent hover:bg-ring rounded-md py-[3px] px-2'>{assignedText()}</p>
                         </PopoverTrigger>
                     </div>
                     <PopoverContent className="w-80 p-3">

@@ -72,17 +72,17 @@ export default function OptionsMenu({
             </ResponsiveDialog>
 
             {/* Options Menu */}
-            <div className='absolute right-4 top-4 z-10'>
+            <div className='absolute right-3 top-3 z-10'>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         {/* Ellipse */}
-                        <EllipsisVertical className="hover:cursor-pointer text-primary" />
+                        <EllipsisVertical size={20} className="hover:cursor-pointer text-primary" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuItem onClick={() => setIsAssignModalOpen(true)} className="hover:cursor-pointer rounded-md">
                             Assign
                         </DropdownMenuItem>
-                        <Link href={`/edit-prompt/${promptData.id}`}>
+                        <Link href={`/edit-prompt/${promptData.id}?type=${promptData.promptType}`}>
                             <DropdownMenuItem className="hover:cursor-pointer rounded-md">
                                 <Edit />Edit
                             </DropdownMenuItem>

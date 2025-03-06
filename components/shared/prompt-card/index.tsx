@@ -24,17 +24,23 @@ export default function PromptCard({
 
     return (
         <Card className="w-[100%] sm:w-[285px] relative mb-14">
-            {/* Absolutely positions options menu with responsive dialogs */}
+            {/* Absolutely positions options menu, type, and class colors with responsive dialogs */}
             <OptionsMenu teacherId={teacherId} promptData={promptData} updatePromptData={updatePromptData} />
-            <CardHeader className="flex flex-row justify-between h-[130px]">
+            {promptData.promptType === 'multi-question' ? (
+                <p className="text-xs absolute left-3 top-2 italic">Multi-Question</p>
+            ) : (
+                <p className="text-xs absolute left-3 top-2 italic">Journal</p>
+            )}
+
+            <CardHeader className="flex flex-row justify-between text-sm h-[200px] overflow-hidden mt-1">
                 <div className="w-[95%]">
-                    <CardTitle className="tracking-wide leading-5">{promptData.title}</CardTitle>
+                    <CardTitle className="tracking-wide leading-5 mt-2 line-clamp-[7]">
+                        {promptData.title}
+                    </CardTitle>
                 </div>
             </CardHeader>
-            <CardContent className="flex-end mt-3">
-            </CardContent>
             <Separator />
-            <CardFooter className="flex justify-between text-xs mt-2 pb-3 px-2">
+            <CardFooter className="flex justify-between text-xs mt-2 pb-3 px-3">
                 <QuestionPopup promptQuestions={promptData.questions as unknown as Question[]} />
                 <AssignedToPopUp classesData={promptData.promptSession as unknown as PromptSession[]} />
             </CardFooter>

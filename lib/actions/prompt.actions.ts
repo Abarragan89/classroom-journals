@@ -36,10 +36,15 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             return { success: false, message: "Title is required" };
         }
 
+
+        // Get Prompt Type
+        const promptType = formData.get("prompt-type") as string;
+
         // Validate using Zod
         const validationResult = promptSchema.safeParse({
             title,
             questions,
+            promptType
         });
         // Check for validation error
         if (!validationResult.success) {
@@ -53,6 +58,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                 data: {
                     title: title.trim(),
                     teacherId,
+                    promptType,
                     classes: {
                         connect: classesOrganizeTo.map((classId) => ({ id: classId })), // Connect multiple classrooms
                     },
@@ -202,7 +208,14 @@ export async function getAllTeacherPrompts(teacherId: string) {
     try {
         const allPrompts = await prisma.prompt.findMany({
             where: { teacherId },
-            include: {
+            select: {
+                id: true,
+                title: true,
+                promptType: true, // ✅ Now using select, not include
+                createdAt: true,
+                updatedAt: true,
+                questions: true,
+                classes: true, // Assuming you want to include this relation
                 promptSession: {
                     select: {
                         assignedAt: true,
@@ -212,7 +225,7 @@ export async function getAllTeacherPrompts(teacherId: string) {
                                 name: true
                             },
                         }
-                    },
+                    }
                 }
             },
             orderBy: {
@@ -272,7 +285,6 @@ export async function getSinglePrompt(promptId: string) {
 // Get prompts based on filtered options
 export async function getFilterPrompts(filterOptions: SearchOptions) {
     try {
-        console.log('prmpt ', filterOptions)
         const allPrompts = await prisma.prompt.findMany({
             where: {
                 // 1️ Filter by classroom if specified
@@ -286,6 +298,9 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
                     : undefined,
                 promptSession: filterOptions.filter === 'never-assigned'
                     ? { none: {} }
+                    : undefined,
+                promptType: filterOptions.filter === 'single-question' || filterOptions.filter === 'multi-question'
+                    ? filterOptions.filter
                     : undefined
             },
             include: {

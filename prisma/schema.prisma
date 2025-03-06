@@ -159,6 +159,7 @@ model Prompt {
   id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title         String
   teacherId     String          @db.Uuid
+  promptType    String          @default("single-question")
   teacher       User            @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt

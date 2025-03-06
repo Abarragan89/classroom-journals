@@ -24,5 +24,6 @@ export const promptSchema = z.object({
             answer: z.string().optional(),
             score: z.number().optional(),
         })
-    ).min(1, 'At least one question is required')
+    ).min(1, 'At least one question is required'),
+    promptType: z.string().optional()
 })

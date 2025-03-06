@@ -9,6 +9,7 @@ import { Classroom } from "@/types";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import CreateNewJot from "@/components/modalBtns/create-new-jot";
 
 export default async function PromptLibrary() {
     const session = await auth()
@@ -23,19 +24,14 @@ export default async function PromptLibrary() {
     // Add default value to beginning fo drop down
     allClassroomIds = [{ id: '', name: 'All Classes' }, ...allClassroomIds]
 
+
     return (
         <>
             <Header teacherId={teacherId} />
             <main className="wrapper mx-auto relative">
                 <div className="flex-between">
                     <h1 className="h1-bold">My Jots</h1>
-                    <Button asChild variant='outline'>
-                        <Link
-                            href='/create-prompt'
-                        >
-                            <Plus/>Create Jot
-                        </Link>
-                    </Button>
+                    <CreateNewJot />
                 </div>
                 <JotSearchArea
                     initialPrompts={allPrompts}

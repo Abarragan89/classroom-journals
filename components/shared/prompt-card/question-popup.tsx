@@ -12,7 +12,7 @@ export default function QuestionPopup({ promptQuestions }: { promptQuestions: Qu
             <div className='flex-center'>
                 <p className='mr-1'>Questions:</p>
                 <PopoverTrigger asChild>
-                    <p className='hover:cursor-pointer text-accent-foreground bg-accent hover:bg-ring rounded-md py-1 px-2'>{promptQuestions.length}</p>
+                    <p className='hover:cursor-pointer text-accent-foreground bg-accent hover:bg-ring rounded-md py-[3px] px-2'>{promptQuestions.length}</p>
                 </PopoverTrigger>
             </div>
             <PopoverContent className="w-80 p-3">
