@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button"
 import { deletePrompt } from "@/lib/actions/prompt.actions"
 import { toast } from 'sonner'
 import { Prompt } from "@/types"
+import { getAllClassroomIds } from "@/lib/actions/classroom.actions"
 
-export default function DeletePromptForm({
+export default function AssignPromptForm({
     promptId,
     promptTitle,
     closeModal,
@@ -41,9 +42,9 @@ export default function DeletePromptForm({
         return (
             <Button
                 type="submit"
-                className={`mx-auto block bg-destructive`}
+                className={`mx-auto block`}
             >
-                {pending ? 'Deleting...' : 'Delete Jot'}
+                {pending ? 'Assigning...' : 'Assign Jot'}
             </Button>
         );
     }
@@ -51,17 +52,9 @@ export default function DeletePromptForm({
     return (
         <form action={action} className="space-y-5">
             <div className="grid items-center gap-4">
-                <Label htmlFor="year" className="text-center mx-auto mt-1 px-5 leading-normal">
-                    <p>Are you sure you want to delete</p>
-                    <span className="text-destructive py-3">{promptTitle}</span>
-                    <p>from your library?</p>
-                </Label>
-                <input
-                    hidden
-                    defaultValue={promptId}
-                    id="promptId"
-                    name="promptId"
-                />
+                <p className="text-center">
+                    {promptTitle}
+                </p>
             </div>
             <DeleteButton />
             {state && !state.success && (

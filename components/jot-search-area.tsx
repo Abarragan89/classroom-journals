@@ -31,8 +31,6 @@ export default function JotSearchArea({
         setFetchedPrompts(filterPrompts)
     }
 
-
-
     return (
         <>
             <PromptFilterOptions
@@ -40,7 +38,7 @@ export default function JotSearchArea({
                 getFilteredSearch={getFilteredSearch}
                 classroomData={classroomData}
             />
-            <div className="mt-10 flex flex-wrap justify-around items-start  gap-x-5 mb-10">
+            <div className="mt-10 flex flex-wrap items-start  gap-x-5 mb-10">
                 {/* Insert all the prompt jot cards here */}
                 {fetchedPrompts?.length > 0 && fetchedPrompts.map((prompt: Prompt) => (
                     <PromptCard

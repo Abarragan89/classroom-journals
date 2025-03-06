@@ -18,10 +18,6 @@ import { SearchOptions } from "@/types"
 
 const frameworks = [
     {
-        value: "active",
-        label: "Active",
-    },
-    {
         value: "never-assigned",
         label: "Never Assigned",
     },

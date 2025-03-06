@@ -1,4 +1,5 @@
-import { Classroom, Prompt, PromptSession } from '@/types'
+import { useState } from 'react'
+import { PromptSession } from '@/types'
 import {
     Popover,
     PopoverContent,
@@ -9,12 +10,24 @@ import { formatDateShort } from '@/lib/utils'
 
 export default function AssignedToPopUp({ classesData }: { classesData: PromptSession[] }) {
 
+
+    // reduce the array ot get ride of duplicate classes incase it was reassigned
+    // only keep the prompt session that is latest in date (most recent)
+    const assignedClasses = Object.values(classesData.reduce((acc, singleClass) => {
+        const classId = singleClass.class!.id;
+        if (!acc[classId] || new Date(singleClass.assignedAt) > new Date(acc[classId].assignedAt)) {
+            acc[classId] = singleClass; // Keep the latest entry
+        }
+        return acc;
+    }, {} as Record<string, PromptSession>))
+
+    // Determine the text of the 
     function assignedText() {
-        switch (classesData.length) {
+        switch (assignedClasses.length) {
             case 1:
                 return '1 Class'
             default:
-                return `${classesData.length} classes`
+                return `${assignedClasses.length} Classes`
         }
     }
 
@@ -25,7 +38,7 @@ export default function AssignedToPopUp({ classesData }: { classesData: PromptSe
                     <div className='flex-center'>
                         <p className='mr-1'>Assigned:</p>
                         <PopoverTrigger asChild>
-                            <p className='hover:cursor-pointer text-accent-foreground bg-accent hover:bg-ring rounded-md py-[1px] px-2'>{assignedText()}</p>
+                            <p className='hover:cursor-pointer text-accent-foreground bg-accent hover:bg-ring rounded-md py-1 px-2'>{assignedText()}</p>
                         </PopoverTrigger>
                     </div>
                     <PopoverContent className="w-80 p-3">
@@ -35,7 +48,8 @@ export default function AssignedToPopUp({ classesData }: { classesData: PromptSe
                             <p className='text-sm font-bold'>Class</p>
                             <p className='text-sm font-bold'>Date</p>
                         </div>
-                        {classesData.map((singleClass: PromptSession) => (
+                        {/* First  */}
+                        {assignedClasses.map((singleClass) => (
                             <div key={singleClass!.class!.id}>
                                 <div className='flex-between my-1'>
                                     <p className='text-sm'>{singleClass!.class!.name}</p>
@@ -47,7 +61,7 @@ export default function AssignedToPopUp({ classesData }: { classesData: PromptSe
                 </Popover>
 
             ) : (
-                <p className='text-sm'>Assigned: <span className='text-destructive'>Never</span></p>
+                <p>Assigned: <span className='text-destructive'>Never</span></p>
             )}
         </>
     )

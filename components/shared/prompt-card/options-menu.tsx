@@ -10,6 +10,7 @@ import {
 import { EllipsisVertical, Edit, Trash2Icon } from "lucide-react";
 import { Prompt } from '@/types';
 import DeletePromptForm from '@/components/forms/delete-prompt-form';
+import AssignPromptForm from '@/components/forms/assign-prompt-form';
 import Link from 'next/link';
 
 export default function OptionsMenu({
@@ -23,6 +24,7 @@ export default function OptionsMenu({
 
     const [mounted, setMounted] = useState<boolean>(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
+    const [isAssignModalOpen, setIsAssignModalOpen] = useState<boolean>(false)
 
     useEffect(() => {
         setMounted(true)
@@ -54,6 +56,21 @@ export default function OptionsMenu({
                 />
             </ResponsiveDialog>
 
+            {/* Assign Prompt Modal */}
+            <ResponsiveDialog
+                isOpen={isAssignModalOpen}
+                setIsOpen={setIsAssignModalOpen}
+                title={`Assign Prompt`}
+                description='Choose '
+            >
+                <AssignPromptForm
+                    promptId={promptData.id}
+                    promptTitle={promptData.title}
+                    closeModal={closeDeleteModal}
+                    updatePromptData={updatePromptData}
+                />
+            </ResponsiveDialog>
+
             {/* Options Menu */}
             <div className='absolute right-4 top-4 z-10'>
                 <DropdownMenu>
@@ -62,6 +79,9 @@ export default function OptionsMenu({
                         <EllipsisVertical className="hover:cursor-pointer text-primary" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => setIsAssignModalOpen(true)} className="hover:cursor-pointer rounded-md">
+                            Assign
+                        </DropdownMenuItem>
                         <Link href={`/edit-prompt/${promptData.id}`}>
                             <DropdownMenuItem className="hover:cursor-pointer rounded-md">
                                 <Edit />Edit

@@ -10,10 +10,12 @@ import { useState } from "react";
 import AddClassBtn from "@/components/forms/add-class-btn";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import JotTypeModal from "@/components/modals/jot-type-modal";
 
 export default function ActionSubMenu({ teacherId }: { teacherId: string }) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isNewJotModalOpen, setIsNewJotModalOpen] = useState<boolean>(false)
 
     function closeModal() {
         setIsOpen(false)
@@ -21,6 +23,7 @@ export default function ActionSubMenu({ teacherId }: { teacherId: string }) {
 
 
     return (
+
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenuTrigger asChild>
                 <Button variant='ghost' className="focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full px-[10px] py-2">
@@ -35,13 +38,12 @@ export default function ActionSubMenu({ teacherId }: { teacherId: string }) {
                     </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="hover:cursor-pointer rounded-md" onSelect={(e) => e.preventDefault()}>
-                    <Button asChild variant='ghost'>
-                        <Link
-                            href={'/create-prompt'}
-                            className="flex"
-                        >
-                            <Plus /> New Jot
-                        </Link>
+                    <JotTypeModal
+                        isModalOpen={isNewJotModalOpen}
+                        setIsModalOpen={setIsNewJotModalOpen}
+                    />
+                    <Button variant='ghost' onClick={() => setIsNewJotModalOpen(true)}>
+                        <Plus /> New Jot
                     </Button>
                 </DropdownMenuItem>
             </DropdownMenuContent>

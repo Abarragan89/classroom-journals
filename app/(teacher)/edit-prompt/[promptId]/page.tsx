@@ -35,7 +35,7 @@ export default async function EditPrompt({
                     <ArrowLeftIcon className="mr-1" size={20} />Back to all Jots
                 </Link>
                 <h1 className="h1-bold mt-5">{promptData.title}</h1>
-                <div className="max-w-[600px] mx-auto mt-5">
+                <div className="max-w-[550px] mx-auto mt-2">
                     <EditPromptForm teacherId={teacherId} promptData={promptData} />
                 </div>
             </main>

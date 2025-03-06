@@ -5,14 +5,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useActionState, useState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
-import { updateAPrompt } from "@/lib/actions/prompt.actions";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner"
+import { createNewPrompt } from "@/lib/actions/prompt.actions";
 import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox"
 import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
-import { Classroom, Prompt } from "@/types";
-import { useRouter } from "next/navigation";
-import { toast } from 'sonner';
+import { Classroom } from "@/types";
 
 interface Question {
     name: string;
@@ -20,39 +20,16 @@ interface Question {
     value: string;
 }
 
-export default function EditPromptForm({
-    promptData,
-    teacherId,
-}: {
-    promptData: Prompt,
-    teacherId: string,
-}) {
 
-    const [state, action] = useActionState(updateAPrompt, {
+export default function AddMultiPromptForm({ teacherId }: { teacherId: string }) {
+
+    const [state, action] = useActionState(createNewPrompt, {
         success: false,
         message: ''
     })
     const [classrooms, setClassrooms] = useState<Classroom[]>([]);
-    const [questions, setQuestions] = useState<Question[]>([
-        { name: "question1", label: "Question 1", value: "" }
-    ]);
-
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
-
     const router = useRouter()
-
-    console.log('prompt data ', promptData)
-
-    useEffect(() => {
-        if (promptData?.questions) {
-            setQuestions(promptData.questions.map((q: { question: string }, index) => ({
-                name: `question${index + 1}`,
-                label: `Question ${index + 1}`,
-                value: q.question || "", // Ensure there's always a value
-            })));
-            setIsLoaded(true)
-        }
-    }, [promptData]);
 
     useEffect(() => {
         const fetchClassrooms = async () => {
@@ -66,14 +43,18 @@ export default function EditPromptForm({
     }, [teacherId]);
 
 
-    //redirect if the state is success
+    // redirect if the state is success
     useEffect(() => {
         if (state.success) {
-            toast('Jot Updated!');
-            router.push('/prompt-library')
+            toast('Jot Added!');
+            router.push('/prompt-library'); // Navigates without losing state instantly
         }
     }, [state])
 
+
+    const [questions, setQuestions] = useState<Question[]>([
+        { name: "question1", label: "Question 1", value: "" }
+    ]);
 
     const handleAddQuestion = () => {
         setQuestions(prevQuestions => [
@@ -96,21 +77,21 @@ export default function EditPromptForm({
         );
     };
 
-    const SubmitButton = () => {
+    const CreateButton = () => {
         const { pending } = useFormStatus();
-        return <Button type="submit" className="mx-auto mt-5">{pending ? "Updating..." : "Update Prompt"}</Button>;
+        return <Button type="submit" className="mx-auto mt-5">{pending ? "Creating..." : "Create Jot"}</Button>;
     };
 
     if (!isLoaded) {
         return (
-            <div className="min-h-[430px]">
+            <div className="min-h-full flex-center">
                 Loading...
             </div>
         )
-    };
+    }
 
     return (
-        <form action={action} className="grid relative min-h-[430px] py-4">
+        <form action={action} className="grid relative">
             <div className="mb-3">
                 <Label htmlFor="title" className="text-right">
                     Title
@@ -120,7 +101,6 @@ export default function EditPromptForm({
                     className="col-span-3"
                     name="title"
                     required
-                    defaultValue={promptData.title}
                 />
             </div>
             {questions.map((question, index) => (
@@ -139,8 +119,10 @@ export default function EditPromptForm({
                             rows={3}
                         />
                     </div>
-                    {questions.length > 1 &&
-                        <p onClick={() => handleRemoveQuestion(index)} className="hover:cursor-pointer hover:underline p-1 text-[.875rem] text-destructive w-fit leading-none">Delete</p>
+                    {questions.length > 1 ?
+                        <p onClick={() => handleRemoveQuestion(index)} className="hover:cursor-pointer hover:underline p-1 pt-2 text-[.875rem] text-destructive w-fit leading-none">Delete</p>
+                        :
+                        <p className="opacity-0">Delete</p>
                     }
                 </div>
             ))}
@@ -156,14 +138,10 @@ export default function EditPromptForm({
             <div className="space-y-3">
                 {classrooms?.length > 0 && (
                     <>
-                        <p className="text-sm">Organize Under:</p>
+                        <p className="text-sm">Organize By Classrooms (Optional)</p>
                         {classrooms.map((classroom: Classroom) => (
                             <div key={classroom.id} className="flex items-center space-x-2">
-                                <Checkbox
-                                    defaultChecked={promptData.classes?.some(currentClass => currentClass.id === classroom.id)}
-                                    id={classroom.id}
-                                    value={classroom.id}
-                                    name={`classroom-organize-${classroom.id}`} />
+                                <Checkbox id={classroom.id} value={classroom.id} name={`classroom-organize-${classroom.id}`} />
                                 <label
                                     htmlFor={classroom.id}
                                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -180,14 +158,10 @@ export default function EditPromptForm({
                 {classrooms?.length > 0 && (
                     <>
                         <Separator />
-                        <p className="text-sm">Assign To:</p>
+                        <p className="text-sm">Assign To Classrooms (Optional)</p>
                         {classrooms.map((classroom: Classroom) => (
                             <div key={`classroom-assign-${classroom.id}`} className="flex items-center space-x-2">
-                                <Checkbox
-                                    id={`classroom-assign-${classroom.id}`}
-                                    value={classroom.id}
-                                    name={`classroom-assign-${classroom.id}`}
-                                />
+                                <Checkbox id={`classroom-assign-${classroom.id}`} value={classroom.id} name={`classroom-assign-${classroom.id}`} />
                                 <label
                                     htmlFor={`classroom-assign-${classroom.id}`}
                                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -204,18 +178,13 @@ export default function EditPromptForm({
                 name="teacherId"
                 value={teacherId}
             />
-            <input
-                type="hidden"
-                name="promptId"
-                value={promptData.id}
-            />
 
             {state && !state.success && (
                 <p className="text-center text-destructive">{state.message}</p>
             )}
             {/* <Separator className="mt-10 mb-3" /> */}
             <div className="my-5 flex-center">
-                <SubmitButton />
+                <CreateButton />
             </div>
         </form>
     )

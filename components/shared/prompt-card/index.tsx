@@ -23,7 +23,7 @@ export default function PromptCard({
 }) {
 
     return (
-        <Card className="w-[100%] sm:w-[320px] relative mb-14">
+        <Card className="w-[100%] sm:w-[285px] relative mb-14">
             {/* Absolutely positions options menu with responsive dialogs */}
             <OptionsMenu teacherId={teacherId} promptData={promptData} updatePromptData={updatePromptData} />
             <CardHeader className="flex flex-row justify-between h-[130px]">
@@ -34,7 +34,7 @@ export default function PromptCard({
             <CardContent className="flex-end mt-3">
             </CardContent>
             <Separator />
-            <CardFooter className="flex justify-between text-sm mt-2 pb-3">
+            <CardFooter className="flex justify-between text-xs mt-2 pb-3 px-2">
                 <QuestionPopup promptQuestions={promptData.questions as unknown as Question[]} />
                 <AssignedToPopUp classesData={promptData.promptSession as unknown as PromptSession[]} />
             </CardFooter>

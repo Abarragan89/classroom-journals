@@ -66,7 +66,6 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                     promptId: createdPrompt.id,
                     title: createdPrompt.title,
                     questions: createdPrompt.questions as Prisma.InputJsonValue,
-                    // assignedBy: teacherId,
                     assignedAt: new Date(),
                     classId: classId,
                     status: 'active',
@@ -77,9 +76,9 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                     data: promptSessions,
                 });
             }
-
             return { success: true, message: 'Prompt Created!' };
         })
+        return { success: true, message: 'Prompt Created!' }
 
     } catch (error) {
         // Improved error logging
@@ -154,20 +153,38 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
         const classesToDisconnect = currentClassIds.filter(id => !classesOrganizeTo.includes(id));
 
         // Perform update
-        const updatedPrompt = await prisma.prompt.update({
-            where: { id: promptId },
-            data: {
-                title: title.trim(),
-                teacherId,
-                classes: {
-                    connect: classesOrganizeTo.map(id => ({ id })), // Connect new classrooms
-                    disconnect: classesToDisconnect.map(id => ({ id })), // Disconnect removed classrooms
+        await prisma.$transaction(async (prisma) => {
+            const updatedPrompt = await prisma.prompt.update({
+                where: { id: promptId },
+                data: {
+                    title: title.trim(),
+                    teacherId,
+                    classes: {
+                        connect: classesOrganizeTo.map(id => ({ id })), // Connect new classrooms
+                        disconnect: classesToDisconnect.map(id => ({ id })), // Disconnect removed classrooms
+                    },
+                    questions: questions as unknown as Prisma.InputJsonValue,
                 },
-                questions: questions as unknown as Prisma.InputJsonValue,
-            },
+            });
+            // Create PromptSessions if there are classes to assign
+            if (classesAssignTo.length > 0) {
+                const promptSessions = classesAssignTo.map((classId) => ({
+                    promptId: updatedPrompt.id,
+                    title: updatedPrompt.title,
+                    questions: updatedPrompt.questions as Prisma.InputJsonValue,
+                    assignedAt: new Date(),
+                    classId: classId,
+                    status: 'active',
+                }));
 
-        });
-        return { success: true, message: 'Prompt Updated!', data: updatedPrompt };
+                // Create all the PromptSessions in one transaction
+                await prisma.promptSession.createMany({
+                    data: promptSessions,
+                });
+                return { success: true, message: 'Prompt Updated!' };
+            }
+        })
+        return { success: true, message: 'Prompt Updated!' };
 
     } catch (error) {
         if (error instanceof Error) {
@@ -224,6 +241,7 @@ export async function getSinglePrompt(promptId: string) {
         const prompt = await prisma.prompt.findUnique({
             where: { id: promptId },
             include: {
+                classes: true,
                 promptSession: {
                     select: {
                         assignedAt: true,
@@ -254,6 +272,7 @@ export async function getSinglePrompt(promptId: string) {
 // Get prompts based on filtered options
 export async function getFilterPrompts(filterOptions: SearchOptions) {
     try {
+        console.log('prmpt ', filterOptions)
         const allPrompts = await prisma.prompt.findMany({
             where: {
                 // 1️ Filter by classroom if specified
