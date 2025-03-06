@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { PromptSession } from '@/types'
 import {
     Popover,
