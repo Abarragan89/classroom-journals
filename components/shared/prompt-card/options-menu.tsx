@@ -64,7 +64,7 @@ export default function OptionsMenu({
                 description='Choose '
             >
                 <AssignPromptForm
-                    promptId={promptData.id}
+                    // promptId={promptData.id}
                     promptTitle={promptData.title}
                     closeModal={closeDeleteModal}
                     updatePromptData={updatePromptData}
