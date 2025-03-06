@@ -9,7 +9,7 @@ import AddMultiPromptForm from "@/components/forms/add-multi-prompt-form";
 export default async function CreatePrompt({
     searchParams
 }: {
-    searchParams: Record<string, string | string[] | undefined>
+    searchParams: Promise<{ type: string }>
 }) {
     const session = await auth()
 

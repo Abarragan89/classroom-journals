@@ -13,7 +13,7 @@ export default async function EditPrompt({
     searchParams
 }: {
     params: Promise<{ promptId: string }>,
-    searchParams: Record<string, string | string[] | undefined>
+    searchParams: Promise<{ type: string }>
 }) {
     const session = await auth()
 
