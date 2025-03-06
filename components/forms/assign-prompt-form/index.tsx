@@ -1,20 +1,20 @@
 'use client'
 import { useActionState, useEffect } from "react"
 import { useFormStatus } from "react-dom"
-import { Label } from "@/components/ui/label"
+// import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { deletePrompt } from "@/lib/actions/prompt.actions"
 import { toast } from 'sonner'
 import { Prompt } from "@/types"
-import { getAllClassroomIds } from "@/lib/actions/classroom.actions"
+// import { getAllClassroomIds } from "@/lib/actions/classroom.actions"
 
 export default function AssignPromptForm({
-    promptId,
+    // promptId,
     promptTitle,
     closeModal,
     updatePromptData
 }: {
-    promptId: string,
+    // promptId: string,
     promptTitle: string,
     closeModal: () => void,
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
@@ -34,7 +34,7 @@ export default function AssignPromptForm({
             closeModal()
             updatePromptData(prev => [...prev.filter((prompt: Prompt) => prompt.id !== state.promptId)])
         }
-    }, [state])
+    }, [state, closeModal])
 
 
     function DeleteButton() {

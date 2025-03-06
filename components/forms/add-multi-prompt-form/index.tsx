@@ -49,7 +49,7 @@ export default function AddMultiPromptForm({ teacherId }: { teacherId: string })
             toast('Jot Added!');
             router.push('/prompt-library'); // Navigates without losing state instantly
         }
-    }, [state])
+    }, [state, router])
 
 
     const [questions, setQuestions] = useState<Question[]>([

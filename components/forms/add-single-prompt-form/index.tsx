@@ -1,6 +1,5 @@
 'use client';
 import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useActionState, useState, useEffect } from "react";
@@ -51,7 +50,7 @@ export default function AddSinglePromptForm({ teacherId }: { teacherId: string }
             toast('Jot Added!');
             router.push('/prompt-library'); // Navigates without losing state instantly
         }
-    }, [state])
+    }, [state, router])
 
     const handleChange = (index: number, newValue: string) => {
         setQuestions(prevQuestions =>

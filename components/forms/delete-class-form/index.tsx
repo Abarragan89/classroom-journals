@@ -28,7 +28,7 @@ export default function DeleteClassForm({ classroomId, closeModal }: { classroom
             closeModal()
             router.push(pathname); // Navigates without losing state instantly
         }
-    }, [state])
+    }, [state, router, pathname, closeModal])
 
     const [userText, setUserText] = useState<string>('')
 

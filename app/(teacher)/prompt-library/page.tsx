@@ -6,9 +6,6 @@ import { Prompt } from "@/types";
 import JotSearchArea from "@/components/jot-search-area";
 import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
 import { Classroom } from "@/types";
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import CreateNewJot from "@/components/modalBtns/create-new-jot";
 
 export default async function PromptLibrary() {

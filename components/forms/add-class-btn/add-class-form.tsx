@@ -27,7 +27,7 @@ export default function AddClassForm({ teacherId, closeModal }: { teacherId: str
             closeModal()
             router.push(pathname); // Navigates without losing state instantly
         }
-    }, [state])
+    }, [state, closeModal, pathname, router])
 
     const [selectedColor, setSelectedColor] = useState<string>('#dc2626');
 

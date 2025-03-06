@@ -33,7 +33,7 @@ export default function DeletePromptForm({
             closeModal()
             updatePromptData(prev => [...prev.filter((prompt: Prompt) => prompt.id !== state.promptId)])
         }
-    }, [state])
+    }, [state, closeModal])
 
 
     function DeleteButton() {
