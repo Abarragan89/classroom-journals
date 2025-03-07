@@ -29,11 +29,12 @@ export default function MagicLink() {
             >
                 <input type="hidden" name="callbackUrl" />
                 <div className='mb-4'>
-                    <Label htmlFor='email'>Email</Label>
+                    {/* <Label htmlFor='email'>Email</Label> */}
                     <Input
                         id='email'
                         name='email'
                         type='email'
+                        placeholder='Email'
                         required
                         autoComplete='email'
                     />

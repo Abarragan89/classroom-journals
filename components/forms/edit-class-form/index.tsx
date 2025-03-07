@@ -44,7 +44,7 @@ export default function EditClassForm({
     const UpdateButton = () => {
         const { pending } = useFormStatus()
         return (
-            <Button type="submit" className="mx-auto">
+            <Button disabled={pending} type="submit" className="mx-auto">
                 {pending ? 'Updating...' : 'Update Class'}
             </Button>
         )

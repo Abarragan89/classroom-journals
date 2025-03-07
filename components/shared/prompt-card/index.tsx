@@ -5,7 +5,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator";
-import { Prompt, Question } from "@/types";
+import { Classroom, Prompt, Question } from "@/types";
 import OptionsMenu from "./options-menu";
 import AssignedToPopUp from "./assigned-to-popup";
 import QuestionPopup from "./question-popup";
@@ -14,17 +14,23 @@ import { PromptSession } from "@prisma/client";
 export default function PromptCard({
     teacherId,
     promptData,
-    updatePromptData
+    updatePromptData,
+    classroomData
 }: {
     teacherId: string,
     promptData: Prompt
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
+    classroomData: Classroom[]
 }) {
 
     return (
         <Card className="w-[100%] sm:w-[285px] relative mb-14">
             {/* Absolutely positions options menu, type, and class colors with responsive dialogs */}
-            <OptionsMenu teacherId={teacherId} promptData={promptData} updatePromptData={updatePromptData} />
+            <OptionsMenu
+                promptData={promptData}
+                updatePromptData={updatePromptData}
+                classroomData={classroomData}
+            />
             {promptData.promptType === 'multi-question' ? (
                 <p className="text-xs absolute left-3 top-2 italic">Multi-Question</p>
             ) : (

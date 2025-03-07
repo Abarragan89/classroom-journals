@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { notFound } from "next/navigation";
 import { getAllClassrooms } from "@/lib/actions/classroom.actions";
 import ClassCard from "@/components/shared/class-card";
-import { Class } from "@/types";
+import { Class, Session } from "@/types";
 import Header from "@/components/shared/header";
 import AddClassBtn from "@/components/forms/add-class-btn";
 
@@ -18,7 +18,7 @@ export default async function Classes() {
 
     return (
         <>
-            <Header teacherId={teacherId} />
+            <Header teacherId={teacherId} session={session as Session}/>
             <main className=" wrapper">
                 <h1 className="h1-bold">My Classes</h1>
                 <div className="mt-10 flex flex-wrap justify-center items-end gap-14 mx-auto">
@@ -31,7 +31,7 @@ export default async function Classes() {
                         (
                             <div className="flex flex-col items-center justify-center text-primary">
                                 <p className="mb-4 font-bold">No classes</p>
-                                    <AddClassBtn variant='default' teacherId={teacherId} closeSubMenu={undefined} />
+                                <AddClassBtn variant='default' teacherId={teacherId} closeSubMenu={undefined} session={session as Session}/>
                             </div>
                         )
                     }

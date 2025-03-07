@@ -20,10 +20,12 @@ export default function GoogleButton() {
     const error = searchParams.get('error')
 
     return (
-        <form action={dispatchGoogle}>
-            <Button className="w-full" variant='default' disabled={pending}>
-                Login with Google
+        <form action={dispatchGoogle} className="mt-3">
+            {/* <p className="text-sm">Sign with Google to connect with Google Classroom!</p> */}
+            <Button className="w-full flex flex-col" variant='default' disabled={pending}>
+                <p>Google Sign In (recommended)</p>
             </Button>
+            <p className="mt-1 text-center text-sm font-bold">Connects with Google Classroom!</p>
             {error === 'OAuthAccountNotLinked' && (
                 <>
                     <p className="text-center text-destructive mt-5 text-sm">Another account already exists with the same e-mail.</p>

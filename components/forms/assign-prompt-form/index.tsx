@@ -1,47 +1,48 @@
 'use client'
-import { useActionState, useEffect } from "react"
+import { useActionState, useEffect, useState } from "react"
 import { useFormStatus } from "react-dom"
-// import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { deletePrompt } from "@/lib/actions/prompt.actions"
+import { assignPrompt } from "@/lib/actions/prompt.actions"
 import { toast } from 'sonner'
-import { Prompt } from "@/types"
-// import { getAllClassroomIds } from "@/lib/actions/classroom.actions"
+import { Classroom, Prompt } from "@/types"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export default function AssignPromptForm({
-    // promptId,
+    promptId,
     promptTitle,
     closeModal,
-    updatePromptData
+    updatePromptData,
+    classroomData
 }: {
-    // promptId: string,
+    promptId: string,
     promptTitle: string,
     closeModal: () => void,
-    updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
+    updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>,
+    classroomData: Classroom[],
 }) {
 
-    const [state, action] = useActionState(deletePrompt, {
+    const [state, action] = useActionState(assignPrompt, {
         success: false,
         message: ''
     })
 
+
     //redirect if the state is success
     useEffect(() => {
-        if (state.success) {
-            toast('Jot Deleted!', {
-                style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
-            });
-            closeModal()
-            updatePromptData(prev => [...prev.filter((prompt: Prompt) => prompt.id !== state.promptId)])
+        if (state.success && state.data) {
+            toast('Jot Assigned!');
+            updatePromptData(prev => prev.map(prompt => prompt.id === state.data.id ? state.data : prompt))
+            closeModal();
         }
-    }, [state, closeModal])
+    }, [state.success]);
 
 
-    function DeleteButton() {
+    function AssignButton() {
         const { pending } = useFormStatus();
         return (
             <Button
                 type="submit"
+                disabled={pending}
                 className={`mx-auto block`}
             >
                 {pending ? 'Assigning...' : 'Assign Jot'}
@@ -55,11 +56,38 @@ export default function AssignPromptForm({
                 <p className="text-center">
                     {promptTitle}
                 </p>
+                <div className="space-y-3">
+                    {classroomData?.length > 0 && (
+                        <>
+                            <p className="text-sm">Select Classes</p>
+                            {/* remove the first element which is hte all classes default for search dropdown */}
+                            {classroomData.slice(1).map((classroom: Classroom) => (
+                                <div key={classroom.id} className="flex items-center space-x-2">
+                                    <Checkbox id={classroom.id} value={classroom.id} name={`classroom-organize-${classroom.id}`} />
+                                    <label
+                                        htmlFor={classroom.id}
+                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                        {classroom.name}
+                                    </label>
+                                </div>
+                            ))}
+                        </>
+                    )}
+                </div>
+                <input
+                    id="promptId"
+                    name="promptId"
+                    value={promptId}
+                    required
+                    readOnly
+                    hidden
+                />
+                <AssignButton />
+                {state && !state.success && (
+                    <p className="text-center text-destructive">{state.message}</p>
+                )}
             </div>
-            <DeleteButton />
-            {state && !state.success && (
-                <p className="text-center text-destructive">{state.message}</p>
-            )}
         </form>
     )
 }

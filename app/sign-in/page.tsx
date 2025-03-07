@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card"
 import { APP_NAME } from "@/lib/constants"
 import { Metadata } from "next"
 import Link from "next/link"
@@ -34,24 +34,17 @@ export default async function SignIn() {
                                 priority={true}
                             />
                         </Link>
-                        <CardTitle className="text-center">Sign In</CardTitle>
-                        <CardDescription className="text-center">
-                            Sign in with a Magic Link or Google
-                        </CardDescription>
+                        <CardTitle className="text-center">JotterBlog Login</CardTitle>
                     </CardHeader>
-                    <CardContent>
-
-                        {/* Magic Link Login*/}
-                        <MagicLink />
-
-                        <p className="my-4 text-center relative">
+                    <CardContent className="mt-5">
+                        {/*  Google Login */}
+                        <GoogleButton />
+                        <p className="my-5 text-center relative">
                             <span className="relative z-10 bg-card px-3">or</span>
                             <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
                         </p>
-
-
-                        {/*  Google Login */}
-                        <GoogleButton />
+                        {/* Magic Link Login*/}
+                        <MagicLink />
 
                     </CardContent>
                 </Card>

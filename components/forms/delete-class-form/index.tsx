@@ -22,11 +22,11 @@ export default function DeleteClassForm({ classroomId, closeModal }: { classroom
     //redirect if the state is success
     useEffect(() => {
         if (state.success) {
+            closeModal()
+            router.push(pathname); // Navigates without losing state instantly
             toast.error('Class Deleted!', {
                 style: {background: 'hsl(0 84.2% 60.2%)', color: 'white'}
             });
-            closeModal()
-            router.push(pathname); // Navigates without losing state instantly
         }
     }, [state, router, pathname, closeModal])
 

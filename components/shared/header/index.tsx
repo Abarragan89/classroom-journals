@@ -2,11 +2,14 @@ import Link from "next/link"
 import Image from "next/image"
 import { APP_NAME } from "@/lib/constants"
 import Menu from "./menu"
+import { Session } from "@/types"
 
 export default function Header({
-    teacherId
+    teacherId,
+    session,
 }: {
     teacherId?: string
+    session?: Session
 }) {
     return (
         <header className='w-full border-b'>
@@ -30,6 +33,7 @@ export default function Header({
                 </div>
                 <Menu
                     teacherId={teacherId}
+                    session={session as Session}
                 />
             </div>
         </header>

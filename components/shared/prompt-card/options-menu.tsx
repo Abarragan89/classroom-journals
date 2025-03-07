@@ -7,19 +7,21 @@ import {
     DropdownMenuContent,
     DropdownMenuItem
 } from "@/components/ui/dropdown-menu"
-import { EllipsisVertical, Edit, Trash2Icon } from "lucide-react";
-import { Prompt } from '@/types';
+import { EllipsisVertical, Edit, Trash2Icon, Pin } from "lucide-react";
+import { Classroom, Prompt } from '@/types';
 import DeletePromptForm from '@/components/forms/delete-prompt-form';
 import AssignPromptForm from '@/components/forms/assign-prompt-form';
 import Link from 'next/link';
 
+
 export default function OptionsMenu({
     promptData,
-    updatePromptData
+    updatePromptData,
+    classroomData
 }: {
     promptData: Prompt,
-    teacherId: string,
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
+    classroomData: Classroom[],
 }) {
 
     const [mounted, setMounted] = useState<boolean>(false)
@@ -30,7 +32,8 @@ export default function OptionsMenu({
         setMounted(true)
     }, [])
 
-    function closeDeleteModal() {
+    function closeModal() {
+        setIsAssignModalOpen(false)
         setIsDeleteModalOpen(false)
     }
 
@@ -51,7 +54,7 @@ export default function OptionsMenu({
                 <DeletePromptForm
                     promptId={promptData.id}
                     promptTitle={promptData.title}
-                    closeModal={closeDeleteModal}
+                    closeModal={closeModal}
                     updatePromptData={updatePromptData}
                 />
             </ResponsiveDialog>
@@ -60,14 +63,15 @@ export default function OptionsMenu({
             <ResponsiveDialog
                 isOpen={isAssignModalOpen}
                 setIsOpen={setIsAssignModalOpen}
-                title={`Assign Prompt`}
-                description='Choose '
+                title={`Assign Jot`}
+                description='Select which classes to assign to'
             >
                 <AssignPromptForm
-                    // promptId={promptData.id}
+                    promptId={promptData.id}
                     promptTitle={promptData.title}
-                    closeModal={closeDeleteModal}
+                    closeModal={closeModal}
                     updatePromptData={updatePromptData}
+                    classroomData={classroomData}
                 />
             </ResponsiveDialog>
 
@@ -80,7 +84,7 @@ export default function OptionsMenu({
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuItem onClick={() => setIsAssignModalOpen(true)} className="hover:cursor-pointer rounded-md">
-                            Assign
+                        <Pin />Assign
                         </DropdownMenuItem>
                         <Link href={`/edit-prompt/${promptData.id}?type=${promptData.promptType}`}>
                             <DropdownMenuItem className="hover:cursor-pointer rounded-md">

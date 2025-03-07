@@ -40,6 +40,7 @@ export default function DeletePromptForm({
         const { pending } = useFormStatus();
         return (
             <Button
+                disabled={pending}
                 type="submit"
                 className={`mx-auto block bg-destructive`}
             >

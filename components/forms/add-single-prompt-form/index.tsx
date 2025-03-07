@@ -60,7 +60,7 @@ export default function AddSinglePromptForm({ teacherId }: { teacherId: string }
 
     const CreateButton = () => {
         const { pending } = useFormStatus();
-        return <Button type="submit" className="mx-auto mt-5">{pending ? "Creating..." : "Create Jot"}</Button>;
+        return <Button disabled={pending} type="submit" className="mx-auto mt-5">{pending ? "Creating..." : "Create Jot"}</Button>;
     };
 
     if (!isLoaded) {

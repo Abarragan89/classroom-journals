@@ -12,10 +12,10 @@ export default function AssignedToPopUp({ classesData }: { classesData: PromptSe
 
     // reduce the array ot get ride of duplicate classes incase it was reassigned
     // only keep the prompt session that is latest in date (most recent)
-    const assignedClasses = Object.values(classesData.reduce((acc, singleClass) => {
-        const classId = singleClass.class!.id;
-        if (!acc[classId] || new Date(singleClass.assignedAt) > new Date(acc[classId].assignedAt)) {
-            acc[classId] = singleClass; // Keep the latest entry
+    const assignedClasses = Object.values(classesData.reduce((acc, singlePromptSession) => {
+        const classId = singlePromptSession.class!.id;
+        if (!acc[classId] || new Date(singlePromptSession.assignedAt) > new Date(acc[classId].assignedAt)) {
+            acc[classId] = singlePromptSession; // Keep the latest entry
         }
         return acc;
     }, {} as Record<string, PromptSession>))

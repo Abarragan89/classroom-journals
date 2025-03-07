@@ -96,7 +96,7 @@ export default function EditMultiPromptForm({
 
     const SubmitButton = () => {
         const { pending } = useFormStatus();
-        return <Button type="submit" className="mx-auto mt-5">{pending ? "Updating..." : "Update Prompt"}</Button>;
+        return <Button disabled={pending} type="submit" className="mx-auto mt-5">{pending ? "Updating..." : "Update Prompt"}</Button>;
     };
 
     if (!isLoaded) {

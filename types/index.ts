@@ -77,3 +77,28 @@ export interface SearchOptions {
     paginationSkip: number,
     searchWords: string
 }
+
+
+// google classroom type 
+export type GoogleClassroom = {
+    id: string;
+    name: string;
+    section: string;
+    room: string;
+    ownerId: string;
+    creationTime: string; // ISO date string
+    updateTime: string; // ISO date string
+    enrollmentCode: string;
+    courseState: "ACTIVE" | "ARCHIVED" | "PROVISIONED" | "DECLINED"; // Based on Google Classroom API
+    alternateLink: string;
+    teacherGroupEmail: string;
+    courseGroupEmail: string;
+};
+
+
+export interface Session {
+    user: User;
+    expires: string; // ISO date string
+    googleProviderId: string;
+    accessToken: string;
+}

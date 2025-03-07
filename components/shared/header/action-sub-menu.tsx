@@ -10,8 +10,15 @@ import { useState } from "react";
 import AddClassBtn from "@/components/forms/add-class-btn";
 import { Button } from "@/components/ui/button";
 import JotTypeModal from "@/components/modals/jot-type-modal";
+import { Session } from "@/types";
 
-export default function ActionSubMenu({ teacherId }: { teacherId: string }) {
+export default function ActionSubMenu({
+    teacherId,
+    session
+}: {
+    teacherId: string,
+    session: Session
+}) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isNewJotModalOpen, setIsNewJotModalOpen] = useState<boolean>(false)
@@ -34,7 +41,7 @@ export default function ActionSubMenu({ teacherId }: { teacherId: string }) {
             <DropdownMenuContent>
                 <DropdownMenuItem className="hover:cursor-pointer rounded-md" onSelect={(e) => e.preventDefault()}>
                     <div onClick={(e) => { e.stopPropagation() }}>
-                        <AddClassBtn teacherId={teacherId!} closeSubMenu={closeModal} />
+                        <AddClassBtn teacherId={teacherId!} closeSubMenu={closeModal} session={session} />
                     </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="hover:cursor-pointer rounded-md" onSelect={(e) => e.preventDefault()}>

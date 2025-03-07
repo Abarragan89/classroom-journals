@@ -46,6 +46,7 @@ export default function JotSearchArea({
                         promptData={prompt}
                         teacherId={teacherId}
                         updatePromptData={setFetchedPrompts}
+                        classroomData={classroomData}
                     />
                 ))}
             </div>

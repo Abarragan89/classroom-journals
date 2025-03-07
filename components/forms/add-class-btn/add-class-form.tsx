@@ -9,8 +9,17 @@ import ColorSelect from "../class-color-select";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner"
+import { Session } from "@/types";
 
-export default function AddClassForm({ teacherId, closeModal }: { teacherId: string, closeModal: () => void }) {
+export default function AddClassForm({
+    teacherId,
+    closeModal,
+    session
+}: {
+    teacherId: string,
+    closeModal: () => void,
+    session: Session
+}) {
 
     const [state, action] = useActionState(createNewClass, {
         success: false,
@@ -25,7 +34,7 @@ export default function AddClassForm({ teacherId, closeModal }: { teacherId: str
         if (state.success) {
             toast.success('Class Added!');
             closeModal()
-            router.push(pathname); // Navigates without losing state instantly
+            router.push(`/classroom/${state.data}`); // Navigates without losing state instantly
         }
     }, [state, closeModal, pathname, router])
 
@@ -39,7 +48,7 @@ export default function AddClassForm({ teacherId, closeModal }: { teacherId: str
     const CreateButton = () => {
         const { pending } = useFormStatus()
         return (
-            <Button type="submit" className="mx-auto">
+            <Button disabled={pending} type="submit" className="mx-auto">
                 {pending ? 'Creating...' : 'Create Class'}
             </Button>
         )
@@ -105,6 +114,7 @@ export default function AddClassForm({ teacherId, closeModal }: { teacherId: str
                         type="hidden"
                         name="color"
                         value={selectedColor}
+                        hidden
                     />
                 </div>
             </div>
@@ -112,11 +122,26 @@ export default function AddClassForm({ teacherId, closeModal }: { teacherId: str
                 type="hidden"
                 name="teacherId"
                 value={teacherId}
+                hidden
             />
-            <CreateButton />
-            {state && !state.success && (
-                <p className="text-center text-destructive">{state.message}</p>
+            {state && !state.success === false && (
+                <p className="text-center text-destructive mt-3">{state.message}</p>
             )}
+            <CreateButton />
+
+            {session?.googleProviderId && (
+                <div className="flex flex-col mx-auto w-2/3">
+                    <p className="mb-3 text-center relative">
+                        <span className="relative z-10 bg-background px-3">or</span>
+                        <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
+                    </p>
+
+                    <Button className="mx-auto">
+                        Import From Google Classroom
+                    </Button>
+                </div>
+            )}
+
         </form>
     )
 }

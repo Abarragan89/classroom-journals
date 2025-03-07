@@ -11,16 +11,19 @@ import {
 import ActionSubMenu from "./action-sub-menu";
 import NavLinks from "./nav-links";
 import { Separator } from "@/components/ui/separator";
+import { Session } from "@/types";
 
 export default function Menu({
     teacherId,
+    session
 }: {
     teacherId?: string,
+    session: Session
 }) {
     const renderAuthenticatedMenu = () => (
         <>
             <NavLinks />
-            <ActionSubMenu teacherId={teacherId!} />
+            <ActionSubMenu teacherId={teacherId!} session={session as Session} />
             <ModeToggle />
             <UserButton />
         </>
@@ -43,7 +46,7 @@ export default function Menu({
 
     return (
         <div className="flex justify-end gap-3">
-            <nav className="hidden sm:flex-center w-full max-w-md gap-6">
+            <nav className="hidden sm:flex-center w-full max-w-md gap-8">
                 {renderMenuOptions()}
             </nav>
 

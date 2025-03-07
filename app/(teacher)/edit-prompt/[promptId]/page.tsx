@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Header from "@/components/shared/header";
 import EditMultiPromptForm from "@/components/forms/edit-multi-prompt-form";
 import { getSinglePrompt } from "@/lib/actions/prompt.actions";
-import { Prompt } from "@/types";
+import { Prompt, Session } from "@/types";
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
 import EditSinglePromptForm from "@/components/forms/edit-single-prompt-form";
@@ -33,14 +33,14 @@ export default async function EditPrompt({
 
     return (
         <>
-            <Header teacherId={teacherId} />
+            <Header teacherId={teacherId} session={session as Session}/>
             <main className="wrapper mx-auto">
-                <Link href={'/prompt-library'} className="flex items-center hover:underline">
+                <Link href={'/prompt-library'} className="flex items-center hover:underline w-fit">
                     <ArrowLeftIcon className="mr-1" size={20} />Back to all Jots
                 </Link>
                 {type === 'single-question' ? (
                     <>
-                        <h1 className="h1-bold mt-5">Edit Journal Prompt</h1>
+                        <h1 className="h1-bold mt-5">Edit Journal Jot</h1>
                         <div className="max-w-[600px] mx-auto mt-5">
                             <EditSinglePromptForm promptData={promptData} teacherId={teacherId} />
                         </div>

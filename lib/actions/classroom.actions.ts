@@ -19,6 +19,7 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
             throw new Error('Missing teacher ID');
         }
         const classCode = generateClassCode();
+        let classUrl:string = '';
 
         await prisma.$transaction(async (tx) => {
             const newClass = await tx.class.create({
@@ -38,10 +39,11 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
                     role: "teacher"
                 }
             })
+            classUrl = newClass.id
             return newClass
         })
 
-        return { success: true, message: 'Class Created!' }
+        return { success: true, message: 'Class Created!', data: classUrl }
     } catch (error) {
         console.log('error creating classroom', error)
         return { success: false, message: 'Error creating class. Try again.' }

@@ -1,8 +1,19 @@
-import NextAuth from "next-auth"
+import NextAuth, { DefaultSession } from "next-auth"
 import Sendgrid from "next-auth/providers/sendgrid"
 import Google from "next-auth/providers/google"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/db/prisma";
+
+
+declare module "next-auth" {
+    interface Session extends DefaultSession {
+        accessToken?: string | unknown; // Extend session type to include accessToken
+        googleProviderId?: string | unknown
+    }
+    interface JWT {
+        accessToken?: string | unknown; // Extend JWT type to include accessToken
+    }
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     adapter: PrismaAdapter(prisma),
@@ -21,6 +32,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     prompt: "consent",
                     access_type: "offline",
                     response_type: "code",
+                    scope: "openid email profile https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.rosters.readonly"
                 },
             },
         }),
@@ -35,36 +47,47 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     callbacks: {
         async session({ session, user, trigger, token }) {
-            // Set the user ID from the token
-            // @ts-expect-error: let there be any here
-            session.user.id = token.sub;
-            // @ts-expect-error: let there be any here
-            session.user.role = token.role;
-            session.user.name = token.name;
+            if (session.user) {
+                // Set up the google classroom credentials for query 
+                session.googleProviderId = token.googleProviderID;
+                session.accessToken = token.accessToken;
+                // Set the user ID from the token
+                // @ts-expect-error: let there be any here
+                session.user.id = token.sub;
+                // @ts-expect-error: let there be any here
+                session.user.role = token.role;
+                session.user.name = token.name;
+            }
             // It there is an update, set the user name
             if (trigger === 'update') {
                 session.user.name = user.name
             }
+
             return session
         },
-        async jwt({ token, user, trigger, session }) {
+        async jwt({ token, user, trigger, session, account }) {
             //assign user fields to the token
             if (user) {
+                if (account) {
+                    // pass the accessToken and provierAccount ID to the token to pass to the session
+                    token.googleProviderID = account.providerAccountId;
+                    token.accessToken = account.access_token;
+                }
                 // @ts-expect-error: let there be any here
                 token.role = user.role;
-
                 // If user has no name, then use the email
                 if (user.name === 'NO_NAME') {
                     // Assign Email to name
                     token.name = token.email!.split('@')[0];
+
+                    // update database to reflect token name
+                    await prisma.user.update({
+                        where: { id: user.id },
+                        data: {
+                            name: token.name
+                        }
+                    })
                 }
-                // update database to reflect token name
-                await prisma.user.update({
-                    where: { id: user.id },
-                    data: {
-                        name: token.name
-                    }
-                })
             }
             return token
         },

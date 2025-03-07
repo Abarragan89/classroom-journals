@@ -1,7 +1,7 @@
 "use server"
 import { prisma } from "@/db/prisma";
 import { promptSchema } from "../validators";
-import { SearchOptions, Question } from "@/types";
+import { SearchOptions, Question, Prompt } from "@/types";
 import { Prisma } from '@prisma/client';
 
 
@@ -336,7 +336,84 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
     }
 }
 
+// Assign prompt
+export async function assignPrompt(prevState: unknown, formData: FormData) {
+    try {
 
+        const promptId = formData.get('promptId') as string
+
+        const classesAssignTo: string[] = []
+
+        // Extract all questions from formData & dump into questions[]
+        formData.forEach((value, key) => {
+            if (key.startsWith("classroom")) {
+                classesAssignTo.push(value as string)
+            }
+        });
+
+        if (classesAssignTo.length < 1) {
+            return { success: false, message: 'At least one class needs to be selected.' }
+        }
+
+        // find the prompt
+        const currentPrompt = await prisma.prompt.findUnique({
+            where: { id: promptId },
+            select: {
+                id: true,
+                title: true,
+                questions: true
+            }
+        })
+
+        if (!currentPrompt) {
+            return { success: false, message: 'No prompt exists with that ID' }
+        }
+
+        // Create PromptSessions if there are classes to assign
+        if (classesAssignTo.length > 0) {
+            const promptSessions = classesAssignTo.map((classId) => ({
+                promptId: currentPrompt.id,
+                title: currentPrompt.title,
+                questions: currentPrompt.questions as Prisma.InputJsonValue,
+                assignedAt: new Date(),
+                classId: classId,
+                status: 'active',
+            }));
+
+            // Create all the PromptSessions in one transaction
+            await prisma.promptSession.createMany({
+                data: promptSessions,
+            });
+        }
+        // Fetch the updated prompt including its promptSessions
+        const updatedPrompt = await prisma.prompt.findUnique({
+            where: { id: promptId },
+            include: {
+                classes: true,
+                promptSession: {
+                    select: {
+                        assignedAt: true,
+                        class: {
+                            select: {
+                                id: true,
+                                name: true
+                            },
+                        }
+                    },
+                }
+            },
+        });
+        return { success: true, message: 'Prompt Updated!', data: updatedPrompt as unknown as Prompt };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+        return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
 
 // Delete Prompt
 export async function deletePrompt(prevState: unknown, formData: FormData) {
