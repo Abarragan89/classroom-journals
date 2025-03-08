@@ -8,6 +8,8 @@ import { prisma } from "@/db/prisma";
 declare module "next-auth" {
     interface Session extends DefaultSession {
         accessToken?: string | unknown; // Extend session type to include accessToken
+        refreshToken?: string | unknown; // Extend session type to include refreshToken
+        refraccessTokenExpires?: string | unknown
         googleProviderId?: string | unknown
     }
     interface JWT {
@@ -48,6 +50,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     callbacks: {
         async session({ session, user, trigger, token }) {
             if (session.user) {
+                // getRefresh
+                session.refreshToken = token.refreshToken
+                session.refraccessTokenExpires = token.refraccessTokenExpires
                 // Set up the google classroom credentials for query 
                 session.googleProviderId = token.googleProviderID;
                 session.accessToken = token.accessToken;
@@ -72,6 +77,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     // pass the accessToken and provierAccount ID to the token to pass to the session
                     token.googleProviderID = account.providerAccountId;
                     token.accessToken = account.access_token;
+                    token.refreshToken = account.refresh_token; // Store refresh token
+                    token.accessTokenExpires = Date.now() + account.expires_at! * 1000;
                 }
                 // @ts-expect-error: let there be any here
                 token.role = user.role;

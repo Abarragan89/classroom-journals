@@ -101,4 +101,6 @@ export interface Session {
     expires: string; // ISO date string
     googleProviderId: string;
     accessToken: string;
+    accessTokenExpires: number;
+    refreshToken: string;
 }

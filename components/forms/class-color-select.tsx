@@ -15,7 +15,7 @@ export default function ColorSelect({ setColor, selectedColor }: ColorSelectProp
                     style={{ backgroundColor: color }}
                     onClick={() => setColor(color)} // Set color when clicked
                     className={
-                        `w-[25px] h-[25px] rounded-[50%] mr-4 hover:cursor-pointer
+                        `w-[25px] h-[25px] rounded-[50%] mr-[15px] hover:cursor-pointer
                         ${selectedColor === color ? 'border-4 border-accent' : ''}
                         `
                     }

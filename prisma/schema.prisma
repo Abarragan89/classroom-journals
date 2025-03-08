@@ -65,9 +65,9 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-model Class {
+model Classroom {
   id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name          String          @db.VarChar(30)
+  name          String          
   classCode     String          @unique @db.VarChar(8)
   color         String
   subject       String?
@@ -86,7 +86,7 @@ model ClassUser {
   role    String @default("student") // "teacher" or "student"
 
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+  class Classroom @relation(fields: [classId], references: [id], onDelete: Cascade)
 
   @@id([userId, classId]) // Composite primary key
 }
@@ -164,7 +164,7 @@ model Prompt {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   questions     Json
-  classes       Class[]         @relation("PromptClass") // this is for prompt organization
+  classes       Classroom[]         @relation("PromptClass") // this is for prompt organization
   promptSession PromptSession[]
 }
 
@@ -179,7 +179,7 @@ model PromptSession {
   responses  Response[]
   // Relationship
   prompt     Prompt     @relation(fields: [promptId], references: [id], onDelete: Cascade)
-  class      Class      @relation(fields: [classId], references: [id], onDelete: Cascade)
+  class      Classroom      @relation(fields: [classId], references: [id], onDelete: Cascade)
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }

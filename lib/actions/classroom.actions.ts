@@ -22,7 +22,7 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
         let classUrl:string = '';
 
         await prisma.$transaction(async (tx) => {
-            const newClass = await tx.class.create({
+            const newClass = await tx.classroom.create({
                 data: {
                     name: name.trim(),
                     subject: subject?.trim(),
@@ -53,7 +53,7 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
 // Get all Teacher Classes
 export async function getAllClassrooms(teacherId: string) {
     try {
-        const allClasses = await prisma.class.findMany({
+        const allClasses = await prisma.classroom.findMany({
             where: {
                 users: {
                     some: {
@@ -76,7 +76,7 @@ export async function getAllClassrooms(teacherId: string) {
 // Get all Teacher Classes
 export async function getAllClassroomIds(teacherId: string) {
     try {
-        const allClasses = await prisma.class.findMany({
+        const allClasses = await prisma.classroom.findMany({
             where: {
                 users: {
                     some: {
@@ -104,7 +104,7 @@ export async function getAllClassroomIds(teacherId: string) {
 // Get a single Classroom
 export async function getSingleClassroom(classroomId: string) {
     try {
-        const classroom = await prisma.class.findUnique({
+        const classroom = await prisma.classroom.findUnique({
             where: { id: classroomId }
         })
         return classroom
@@ -129,7 +129,7 @@ export async function updateClassInfo(prevState: unknown, formData: FormData) {
         if (typeof classroomId !== 'string') {
             throw new Error('Missing classroom ID');
         }
-        await prisma.class.update({
+        await prisma.classroom.update({
             where: {
                 id: classroomId
             },
@@ -154,7 +154,7 @@ export async function deleteClassroom(prevState: unknown, formData: FormData) {
     try {
 
         const classroomId = formData.get('classroomId') as string
-        await prisma.class.delete({
+        await prisma.classroom.delete({
             where: {
                 id: classroomId
             }

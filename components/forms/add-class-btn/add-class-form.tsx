@@ -9,16 +9,20 @@ import ColorSelect from "../class-color-select";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner"
-import { Session } from "@/types";
+import { GoogleClassroom, Session } from "@/types";
+import { getTeacherGoogleClassrooms } from "@/lib/actions/google.classroom.actions";
 
 export default function AddClassForm({
     teacherId,
     closeModal,
-    session
+    session,
+    updateGoogleClassrooms,
+    
 }: {
     teacherId: string,
     closeModal: () => void,
-    session: Session
+    session: Session,
+    updateGoogleClassrooms: React.Dispatch<React.SetStateAction<GoogleClassroom[]>>
 }) {
 
     const [state, action] = useActionState(createNewClass, {
@@ -39,6 +43,7 @@ export default function AddClassForm({
     }, [state, closeModal, pathname, router])
 
     const [selectedColor, setSelectedColor] = useState<string>('#dc2626');
+    const [googleClassrooms, setGoogleClassrooms] = useState<[]>([]);
 
     // Handler for setting the color value when a color is selected
     const handleColorSelect = (color: string) => {
@@ -53,6 +58,23 @@ export default function AddClassForm({
             </Button>
         )
     }
+    
+        async function fetchGoogleClassrooms() {
+            try {
+                const response = await getTeacherGoogleClassrooms(session.googleProviderId)
+                updateGoogleClassrooms(response)
+                console.log('response ', response)
+            } catch (error) {
+                
+            }
+        }
+
+    if (googleClassrooms.length > 0) {
+        return (
+            <p>Here are your classes</p>
+        )
+    }
+
 
     return (
         <form action={action} className="grid gap-4 py-4">
@@ -136,7 +158,7 @@ export default function AddClassForm({
                         <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
                     </p>
 
-                    <Button className="mx-auto">
+                    <Button type="button" onClick={fetchGoogleClassrooms} className="mx-auto">
                         Import From Google Classroom
                     </Button>
                 </div>
