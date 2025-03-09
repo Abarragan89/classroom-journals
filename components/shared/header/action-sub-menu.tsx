@@ -50,7 +50,7 @@ export default function ActionSubMenu({
                         setIsModalOpen={setIsNewJotModalOpen}
                         closeModal={closeModal}
                     />
-                    <Button variant='ghost' onClick={() => setIsNewJotModalOpen(true)}>
+                    <Button className="w-full" variant='ghost' onClick={() => setIsNewJotModalOpen(true)}>
                         <Plus /> New Jot
                     </Button>
                 </DropdownMenuItem>

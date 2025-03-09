@@ -21,10 +21,17 @@ export default function AddClassBtn({
 
     const [isModalOpen, setIsOpenModal] = useState<boolean>(false)
     const [googleClassroomArr, setGoogleClassroomArr] = useState<GoogleClassroom[]>([])
+    const [showGoogleClassrooms, setShowGoogleClassrooms] = useState<boolean>(false)
+
 
     function closeModal() {
         setIsOpenModal(false)
         if (closeSubMenu) closeSubMenu()
+    }
+
+    function updateGoogleClassrooms(classes: GoogleClassroom[], isOpen:boolean) {
+        setGoogleClassroomArr(classes)
+        setShowGoogleClassrooms(isOpen)
     }
 
     return (
@@ -35,11 +42,11 @@ export default function AddClassBtn({
                 title="Create Class"
                 description="Fill out the form below to create a new class."
             >
-                {googleClassroomArr?.length > 0 ?
+                {showGoogleClassrooms ?
                     <div className="mt-3">
                         <GoogleClassroomOptions
                             googleClassrooms={googleClassroomArr}
-                            updateGoogleClassrooms={setGoogleClassroomArr}
+                            updateGoogleClassrooms={updateGoogleClassrooms}
                             session={session as Session}
                         />
                     </div>
@@ -48,12 +55,12 @@ export default function AddClassBtn({
                         teacherId={teacherId}
                         closeModal={closeModal}
                         session={session as Session}
-                        updateGoogleClassrooms={setGoogleClassroomArr}
+                        updateGoogleClassrooms={updateGoogleClassrooms}
                     />
                 }
 
             </ResponsiveDialog>
-            <Button variant={variant} onClick={() => setIsOpenModal(true)}>
+            <Button className="w-full" variant={variant} onClick={() => setIsOpenModal(true)}>
                 <Plus />Add Class
             </Button>
         </>

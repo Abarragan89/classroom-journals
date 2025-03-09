@@ -28,7 +28,7 @@ export default function DeleteClassForm({ classroomId, closeModal }: { classroom
                 style: {background: 'hsl(0 84.2% 60.2%)', color: 'white'}
             });
         }
-    }, [state, router, pathname, closeModal])
+    }, [state, router, pathname])
 
     const [userText, setUserText] = useState<string>('')
 

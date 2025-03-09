@@ -17,12 +17,12 @@ export default function AddClassForm({
     closeModal,
     session,
     updateGoogleClassrooms,
-    
+
 }: {
     teacherId: string,
     closeModal: () => void,
     session: Session,
-    updateGoogleClassrooms: React.Dispatch<React.SetStateAction<GoogleClassroom[]>>
+    updateGoogleClassrooms: (classes: GoogleClassroom[], isOpen: boolean) => void
 }) {
 
     const [state, action] = useActionState(createNewClass, {
@@ -43,7 +43,6 @@ export default function AddClassForm({
     }, [state, closeModal, pathname, router])
 
     const [selectedColor, setSelectedColor] = useState<string>('#dc2626');
-    const [googleClassrooms, setGoogleClassrooms] = useState<[]>([]);
 
     // Handler for setting the color value when a color is selected
     const handleColorSelect = (color: string) => {
@@ -58,88 +57,93 @@ export default function AddClassForm({
             </Button>
         )
     }
-    
-        async function fetchGoogleClassrooms() {
-            try {
-                const response = await getTeacherGoogleClassrooms(session.googleProviderId)
-                updateGoogleClassrooms(response)
-                console.log('response ', response)
-            } catch (error) {
-                
-            }
-        }
 
-    if (googleClassrooms.length > 0) {
-        return (
-            <p>Here are your classes</p>
-        )
+    async function fetchGoogleClassrooms() {
+        try {
+            const response = await getTeacherGoogleClassrooms(session.googleProviderId)
+            updateGoogleClassrooms(response, true)
+            console.log('response ', response)
+        } catch (error) {
+
+        }
     }
 
 
     return (
-        <form action={action} className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
-                <Label htmlFor="name" className="text-right">
-                    Name
-                </Label>
-                <Input
-                    id="name"
-                    required
-                    placeholder="required"
-                    className="col-span-3"
-                    name="name"
-                    maxLength={30}
-                />
+        <form action={action} className="py-4 px-2">
+            <div className="grid grid-cols-3 gap-x-5 mb-5">
+                <div className="flex flex-col col-span-2 items-start space-y-1">
+                    <Label htmlFor="name" className="text-right">
+                        Name
+                    </Label>
+                    <Input
+                        id="name"
+                        required
+                        placeholder="required"
+                        name="name"
+                        maxLength={30}
+                    />
+                </div>
+                <div className="flex flex-col col-span-1 items-start space-y-1">
+                    <Label htmlFor="year" className="text-right">
+                        Year
+                    </Label>
+                    <Input
+                        id="year"
+                        name="year"
+                        required
+                        maxLength={12}
+                        placeholder="required"
+                    />
+                </div>
+
             </div>
-            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
-                <Label htmlFor="year" className="text-right">
-                    Year
-                </Label>
-                <Input
-                    id="year"
-                    className="col-span-3"
-                    name="year"
-                    required
-                    maxLength={12}
-                    placeholder="required"
-                />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
-                <Label htmlFor="subject" className="text-right">
-                    Subject
-                </Label>
-                <Input
-                    id="subject"
-                    className="col-span-3"
-                    name="subject"
-                />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
-                <Label htmlFor="period" className="text-right">
-                    Period
-                </Label>
-                <Input
-                    id="period"
-                    className="col-span-3"
-                    name="period"
-                />
-            </div>
-            {/* Color Selection */}
-            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
-                <Label htmlFor="color" className="text-right">
-                    Color
-                </Label>
-                <div className="col-span-3">
-                    <ColorSelect setColor={handleColorSelect} selectedColor={selectedColor} />
-                    {/* Hidden input to store selected color */}
-                    <input
-                        type="hidden"
-                        name="color"
-                        value={selectedColor}
-                        hidden
+            <div className="grid grid-cols-3 gap-x-5 mb-4">
+                <div className="flex flex-col col-span-2 items-start space-y-1">
+                    <Label htmlFor="subject" className="text-right">
+                        Subject
+                    </Label>
+                    <Input
+                        id="subject"
+                        name="subject"
+                    />
+                </div>
+                <div className="flex flex-col col-span-1 items-start space-y-1">
+                    <Label htmlFor="period" className="text-right">
+                        Period
+                    </Label>
+                    <Input
+                        id="period"
+                        name="period"
                     />
                 </div>
             </div>
+
+            <div className="grid grid-cols-3 gap-x-5 items-end mb-2">
+                {/* Color Selection */}
+                <div className="items-center gap-x-2 col-span-2">
+                    <Label htmlFor="color" className="text-right">
+                        Color
+                    </Label>
+                    <div>
+                        <ColorSelect setColor={handleColorSelect} selectedColor={selectedColor} />
+                        {/* Hidden input to store selected color */}
+                        <input
+                            type="hidden"
+                            name="color"
+                            value={selectedColor}
+                            hidden
+                        />
+                    </div>
+                </div>
+
+                <div className="col-span-1">
+                    <CreateButton />
+                </div>
+
+            </div>
+
+
             <input
                 type="hidden"
                 name="teacherId"
@@ -149,11 +153,10 @@ export default function AddClassForm({
             {state && !state.success === false && (
                 <p className="text-center text-destructive mt-3">{state.message}</p>
             )}
-            <CreateButton />
 
             {session?.googleProviderId && (
                 <div className="flex flex-col mx-auto w-2/3">
-                    <p className="mb-3 text-center relative">
+                    <p className="my-3 text-center relative">
                         <span className="relative z-10 bg-background px-3">or</span>
                         <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
                     </p>

@@ -12,19 +12,21 @@ export default function GoogleClassroomOptions({
     session
 }: {
     googleClassrooms: GoogleClassroom[],
-    updateGoogleClassrooms: React.Dispatch<React.SetStateAction<GoogleClassroom[]>>,
+    updateGoogleClassrooms: (classes: GoogleClassroom[], isOpen: boolean) => void
     session: Session
 }) {
 
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const router = useRouter();
 
-    async function createClassroom(classroomId: string) {
+    async function createClassroom(classInfo: GoogleClassroom) {
+        console.log('classinog ', classInfo)
         try {
             setIsLoading(true)
-            const classroom = createClassroomWithGoogle(classroomId) as unknown as Classroom
-            router.push(`/classroom/${classroom.id}`)
+            const classroomUrl = await createClassroomWithGoogle(classInfo, session?.user?.id)
+            console.log('classroom;alijfaf', classroomUrl)
+            router.push(`/classroom/${classroomUrl}`)
         } catch (error) {
             console.log('error creating classroom', error)
         } finally {
@@ -34,18 +36,26 @@ export default function GoogleClassroomOptions({
 
     if (isLoading) {
         return (
-            <div className="flex-center">
-                <p className='font-bold'>Creating Class...</p>
+            <div className="flex-center min-h-[280px]">
+                <p className='font-bold flex-center'>Creating Class...</p>
             </div>
         )
     }
 
     return (
         <>
-            <p className='font-bold text-md text-center mb-3'>Choose a class to import</p>
+            {googleClassrooms?.length > 0 ? (
+                <p className='font-bold text-md text-center mb-3'>Choose a class to import</p>
+            ) : (
+                <>
+                <p className='text-md w-[75%] mb-1 mx-auto text-center'>No classrooms associated with your Google Account:</p>
+                <p className='mb-5 mt-2 text-center font-bold'>{session.user.email}</p>
+                </>
+                
+            )}
             {googleClassrooms?.length > 0 && googleClassrooms.map((classroom) => (
                 <div
-                    onClick={() => createClassroom(classroom.id)}
+                    onClick={() => createClassroom(classroom)}
                     className='grid grid-cols-4 p-1 bg-gray-300  rounded-xl mx-4 mb-6 border-[1px] border-gray-300 hover:cursor-pointer hover:bg-white'
                     key={classroom.id}>
                     <Image
@@ -67,7 +77,7 @@ export default function GoogleClassroomOptions({
                 </div>
             ))}
             <div className="flex-center">
-                <Button variant='outline' onClick={() => updateGoogleClassrooms([])}>Back</Button>
+                <Button variant='outline' onClick={() => updateGoogleClassrooms([], false)}>Back</Button>
             </div>
         </>
     )

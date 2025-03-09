@@ -5,6 +5,7 @@ import { JsonValue } from "@prisma/client/runtime/library";
 export type User = {
     id: string;
     name?: string;
+    googleId?: string;
     email?: string;
     emailVerified?: Date;
     image?: string;
