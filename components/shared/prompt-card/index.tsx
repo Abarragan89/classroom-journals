@@ -12,12 +12,10 @@ import QuestionPopup from "./question-popup";
 import { PromptSession } from "@prisma/client";
 
 export default function PromptCard({
-    teacherId,
     promptData,
     updatePromptData,
     classroomData
 }: {
-    teacherId: string,
     promptData: Prompt
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
     classroomData: Classroom[]

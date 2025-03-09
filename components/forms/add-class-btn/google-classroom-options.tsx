@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { Classroom, GoogleClassroom, Session } from '@/types'
+import { GoogleClassroom, Session } from '@/types'
 import Image from 'next/image'
 import React from 'react'
 import { useState } from 'react'

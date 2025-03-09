@@ -42,7 +42,7 @@ export default async function Classroom({ params }: { params: Promise<{ classId:
                 <Link href={'/classes'} className="flex items-center hover:underline w-fit">
                     <ArrowLeftIcon className="mr-1" size={20} />Back to all classes
                 </Link>
-                <h1 className="h1-bold mt-5">{classroomData.name}</h1>
+                <h1 className="h1-bold mt-2">{classroomData.name}</h1>
             </main>
         </>
     )
