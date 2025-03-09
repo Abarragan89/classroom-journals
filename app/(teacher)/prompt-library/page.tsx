@@ -24,7 +24,7 @@ export default async function PromptLibrary() {
 
     return (
         <>
-            <Header teacherId={teacherId} session={session as Session}/>
+            <Header teacherId={teacherId} session={session as Session} />
             <main className="wrapper mx-auto relative">
                 <div className="flex-between">
                     <h1 className="h1-bold">My Jots</h1>
@@ -33,7 +33,6 @@ export default async function PromptLibrary() {
                 <JotSearchArea
                     initialPrompts={allPrompts}
                     classroomData={allClassroomIds}
-                    teacherId={teacherId}
                 />
             </main>
         </>

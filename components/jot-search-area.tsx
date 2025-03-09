@@ -10,11 +10,9 @@ import { Classroom } from "@/types"
 export default function JotSearchArea({
     initialPrompts,
     classroomData,
-    teacherId
 }: {
     initialPrompts: Prompt[],
     classroomData: Classroom[],
-    teacherId: string
 }) {
 
     const [fetchedPrompts, setFetchedPrompts] = useState<Prompt[]>(initialPrompts)
@@ -44,7 +42,6 @@ export default function JotSearchArea({
                     <PromptCard
                         key={prompt.id}
                         promptData={prompt}
-                        teacherId={teacherId}
                         updatePromptData={setFetchedPrompts}
                         classroomData={classroomData}
                     />
