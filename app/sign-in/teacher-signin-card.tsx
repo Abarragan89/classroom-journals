@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { APP_NAME } from '@/lib/constants'
 import GoogleButton from '@/components/auth/google-button'
 import MagicLink from '@/components/auth/magic-link'
 import { TabsList, TabsTrigger } from '@/components/ui/tabs'
