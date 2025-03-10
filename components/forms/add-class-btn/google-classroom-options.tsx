@@ -21,11 +21,9 @@ export default function GoogleClassroomOptions({
     const router = useRouter();
 
     async function createClassroom(classInfo: GoogleClassroom) {
-        console.log('classinog ', classInfo)
         try {
             setIsLoading(true)
             const classroomUrl = await createClassroomWithGoogle(classInfo, session?.user?.id)
-            console.log('classroom;alijfaf', classroomUrl)
             router.push(`/classroom/${classroomUrl}`)
         } catch (error) {
             console.log('error creating classroom', error)

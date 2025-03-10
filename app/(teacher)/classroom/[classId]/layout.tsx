@@ -1,0 +1,69 @@
+import { AppSidebar } from "@/components/classroom-teacher-sidebar";
+import { auth } from "@/auth";
+import Header from "@/components/shared/header";
+import { Separator } from "@/components/ui/separator";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import notFound from "@/app/not-found";
+import { Class, Classroom, Session } from "@/types";
+import { getAllClassrooms, getSingleClassroom } from "@/lib/actions/classroom.actions";
+import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
+import { prisma } from "@/db/prisma";
+
+export default async function DashboardLayout({
+    children,
+    params
+}: Readonly<{
+    children: React.ReactNode;
+    params: Promise<{ classId: string }>
+}>) {
+
+    const session = await auth()
+
+    if (!session) notFound()
+
+    const teacherId = session?.user?.id as string
+    if (!teacherId) notFound()
+
+    const teacherClasses = await getAllClassrooms(teacherId)
+
+    const classroomId = (await params).classId
+    if (!classroomId) notFound()
+
+    console.log('teacher classrooms', teacherClasses)
+
+    // Check if the authenticated teacher is part of the classroom and has the role of 'teacher'
+    const isTeacherAuthorized = await prisma.classUser.findFirst({
+        where: {
+            classId: classroomId,
+            userId: teacherId,
+            role: 'teacher'
+        }
+    });
+
+    if (!isTeacherAuthorized) notFound()
+
+    // Get Class Data
+    const classroomData = await getSingleClassroom(classroomId) as Class;
+    console.log('classroom data ', classroomData)
+
+    return (
+        <SidebarProvider>
+            <AppSidebar classes={teacherClasses as Classroom[]} />
+            <SidebarInset>
+                <Header teacherId={teacherId} session={session as Session} />
+                <div className="flex h-10 shrink-0 items-center gap-2 border-b px-4">
+                    <SidebarTrigger size='sm' className="-ml-1" />
+                    <Separator orientation="vertical" className="mr-2 h-4" />
+                </div>
+                <main className="wrapper">
+                    <Link href={'/classes'} className="flex items-center hover:underline w-fit">
+                        <ArrowLeftIcon className="mr-1" size={20} />Back to all classes
+                    </Link>
+                    <h1 className="h1-bold mt-2 line-clamp-1">{classroomData.name}</h1>
+                    {children}
+                </main>
+            </SidebarInset>
+        </SidebarProvider>
+    );
+}

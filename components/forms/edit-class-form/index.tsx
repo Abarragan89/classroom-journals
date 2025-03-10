@@ -63,7 +63,6 @@ export default function EditClassForm({
                     className="col-span-3"
                     name="name"
                     defaultValue={classData?.name ?? ''}
-                    maxLength={30}
                 />
             </div>
             <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">

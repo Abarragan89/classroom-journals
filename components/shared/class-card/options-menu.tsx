@@ -61,8 +61,8 @@ export default function OptionsMenu({ classData }: { classData: Class }) {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         {/* Ellipse */}
-                        <div style={{ backgroundColor: classData.color }} className={`w-8 h-8 rounded-full flex-center`}>
-                            <EllipsisVertical className="hover:cursor-pointer text-white" />
+                        <div style={{ backgroundColor: classData.color }} className={`w-7 h-7 rounded-full flex-center`}>
+                            <EllipsisVertical size={20} className="hover:cursor-pointer text-white" />
                         </div>
 
                     </DropdownMenuTrigger>

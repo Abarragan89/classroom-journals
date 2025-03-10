@@ -6,7 +6,6 @@ export default async function page() {
 
     const session = await auth();
     // Send to Classes if logged in
-    console.log('session in classes', session)
     if (session) {
         redirect('/classes')
     }

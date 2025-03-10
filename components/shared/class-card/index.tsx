@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator";
 export default function ClassCard({ classData }: { classData: Class }) {
 
     return (
-        <Card className="min-w-[350px] relative hover:shadow-[0_4px_10px_-3px_var(--accent)] active:shadow-none">
+        <Card className="w-[350px] relative hover:shadow-[0_4px_10px_-3px_var(--accent)] active:shadow-none">
             {/* Absolutely positions options menu with responsive dialogs */}
             <OptionsMenu classData={classData} />
             <Link
@@ -24,7 +24,7 @@ export default function ClassCard({ classData }: { classData: Class }) {
             >
                 <CardHeader className="flex flex-row justify-between">
                     <div>
-                        <CardTitle>{classData.name}</CardTitle>
+                        <CardTitle className="line-clamp-1 w-[95%]">{classData.name}</CardTitle>
                         <CardDescription>{classData.year}</CardDescription>
                     </div>
                 </CardHeader>

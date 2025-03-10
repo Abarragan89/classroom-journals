@@ -5,7 +5,17 @@ interface ColorSelectProps {
 
 export default function ColorSelect({ setColor, selectedColor }: ColorSelectProps) {
 
-    const colors = ["#dc2626", "#d97706", "#65a30d", "#0d9488", "#2563eb", "#9333ea"];
+    // const colors = ["#dc2626", "#d97706", "#65a30d", "#0d9488", "#2563eb", "#9333ea"];
+    // muted
+    const colors = [
+        "rgba(220, 38, 38, 0.95)",  // Muted Red  
+        "rgba(217, 119, 6, 0.95)",  // Muted Orange  
+        "rgba(101, 163, 13, 0.95)", // Muted Green  
+        "rgba(13, 148, 136, 0.95)", // Muted Teal  
+        "rgba(37, 99, 235, 0.95)",  // Muted Blue  
+        "rgba(147, 51, 234, 0.95)"  // Muted Purple  
+    ];
+
 
     return (
         <div className="flex flex-wrap">

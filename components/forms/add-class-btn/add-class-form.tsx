@@ -40,7 +40,7 @@ export default function AddClassForm({
             closeModal()
             router.push(`/classroom/${state.data}`); // Navigates without losing state instantly
         }
-    }, [state, closeModal, pathname, router])
+    }, [state, pathname, router])
 
     const [selectedColor, setSelectedColor] = useState<string>('#dc2626');
 
@@ -80,7 +80,6 @@ export default function AddClassForm({
                         required
                         placeholder="required"
                         name="name"
-                        maxLength={30}
                     />
                 </div>
                 <div className="flex flex-col col-span-1 items-start space-y-1">
