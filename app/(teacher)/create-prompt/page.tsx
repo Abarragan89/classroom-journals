@@ -12,18 +12,18 @@ export default async function CreatePrompt({
 }: {
     searchParams: Promise<{ type: string }>
 }) {
-    const session = await auth()
+    const session = await auth() as Session
 
     if (!session) notFound()
 
     const teacherId = session?.user?.id as string
-    if (!teacherId) notFound()
+    if (!teacherId || session?.user?.role !== 'teacher') notFound()
 
     const { type } = await searchParams;
 
     return (
         <>
-            <Header teacherId={teacherId} session={session as Session}/>
+            <Header teacherId={teacherId} session={session as Session} />
             <main className="wrapper mx-auto">
                 <Link href={'/prompt-library'} className="flex items-center hover:underline w-fit">
                     <ArrowLeftIcon className="mr-1" size={20} />Back to all Jots

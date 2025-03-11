@@ -38,7 +38,7 @@ export default function AddClassForm({
         if (state.success) {
             toast.success('Class Added!');
             closeModal()
-            router.push(`/classroom/${state.data}`); // Navigates without losing state instantly
+            router.push(`/classroom/${state.data}/${teacherId}`); // Navigates without losing state instantly
         }
     }, [state, pathname, router])
 

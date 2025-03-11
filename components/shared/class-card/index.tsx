@@ -12,19 +12,19 @@ import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 
 
-export default function ClassCard({ classData }: { classData: Class }) {
+export default function ClassCard({ classData, teacherId }: { classData: Class, teacherId: string }) {
 
     return (
         <Card className="w-[350px] relative hover:shadow-[0_4px_10px_-3px_var(--accent)] active:shadow-none">
             {/* Absolutely positions options menu with responsive dialogs */}
             <OptionsMenu classData={classData} />
             <Link
-                href={`/classroom/${classData.id}`}
+                href={`/classroom/${classData.id}/${teacherId}`}
                 className="hover:cursor-pointer"
             >
                 <CardHeader className="flex flex-row justify-between">
-                    <div>
-                        <CardTitle className="line-clamp-1 w-[95%]">{classData.name}</CardTitle>
+                    <div className="w-[95%]"> 
+                        <CardTitle className="line-clamp-1">{classData.name}</CardTitle>
                         <CardDescription>{classData.year}</CardDescription>
                     </div>
                 </CardHeader>

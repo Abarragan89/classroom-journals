@@ -2,6 +2,7 @@
 import { prisma } from "@/db/prisma";
 import { classSchema } from "../validators";
 import { generateClassCode } from "../utils";
+import { decryptText } from "../utils";
 
 // Create a new class
 export async function createNewClass(prevState: unknown, formData: FormData) {
@@ -19,7 +20,7 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
             throw new Error('Missing teacher ID');
         }
         const classCode = generateClassCode();
-        let classUrl:string = '';
+        let classUrl: string = '';
 
         await prisma.$transaction(async (tx) => {
             const newClass = await tx.classroom.create({
@@ -149,11 +150,69 @@ export async function updateClassInfo(prevState: unknown, formData: FormData) {
     }
 }
 
+// Get all Students in a classroom 
+export async function getAllStudents(classId: string) {
+    try {
+
+        const allStudents = await prisma.classUser.findMany({
+            where: {
+                classId: classId,
+                role: 'student'
+            },
+            select: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true, // Encrypted name
+                        iv: true,
+                        updatedAt: true,
+                        username: true,
+                        password: true
+                    }
+                }
+            }
+        });
+
+        // Decrypt each student's name
+        const decryptedStudents = allStudents
+            .filter(studentObj => studentObj.user) // Ensure user exists
+            .map(({ user }) => ({ // Destructure `user` from `studentObj`
+                id: user.id,
+                updatedAt: user.updatedAt,
+                username: decryptText(user.username as string, user.iv as string),
+                password: user.password,
+                name: decryptText(user.name as string, user.iv as string) // Decrypt name
+            }));
+        return decryptedStudents
+    } catch (error) {
+        console.log('error deleting class', error)
+        return { success: true, message: 'Error deleting class' }
+
+    }
+}
+
 // Delete Classroom
 export async function deleteClassroom(prevState: unknown, formData: FormData) {
     try {
-
         const classroomId = formData.get('classroomId') as string
+        const studentUsers = await prisma.classUser.findMany({
+            where: {
+                classId: classroomId,
+                role: "student",
+            },
+            select: { userId: true }, // Get only user IDs
+        });
+
+        const studentUserIds = studentUsers.map((student) => student.userId);
+
+        if (studentUserIds.length > 0) {
+            await prisma.user.deleteMany({
+                where: {
+                    id: { in: studentUserIds }, // Delete all student users
+                },
+            });
+        }
+
         await prisma.classroom.delete({
             where: {
                 id: classroomId

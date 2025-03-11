@@ -1,8 +1,10 @@
-import NextAuth, { DefaultSession } from "next-auth"
-import Sendgrid from "next-auth/providers/sendgrid"
-import Google from "next-auth/providers/google"
-import { PrismaAdapter } from "@auth/prisma-adapter"
+import NextAuth, { DefaultSession } from "next-auth";
+import Sendgrid from "next-auth/providers/sendgrid";
+import Google from "next-auth/providers/google";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db/prisma";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { User } from "./types";
 
 
 declare module "next-auth" {
@@ -38,6 +40,66 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 },
             },
         }),
+        CredentialsProvider({
+            name: "Student Login",
+            credentials: {
+                classCode: { label: "Class Code", type: "text" },
+                password: { label: "Password", type: "password" },
+            },
+            async authorize(credentials) {
+                console.log('credentials ', credentials)
+
+                const classCode = credentials?.classCode as string;
+                const password = credentials?.password as string
+
+                if (!classCode || !password) {
+                    throw new Error("Missing class code or password.");
+                }
+
+                // Find the classroom by class code
+                const classroom = await prisma.classroom.findUnique({
+                    where: { classCode: classCode.trim() as string },
+                    include: {
+                        users: {
+                            where: {
+                                role: 'student',
+                            }
+                        }
+                    }
+                });
+
+                const studentIds = classroom?.users.map(student => student.userId)
+
+                const allStudents = await prisma.user.findMany({
+                    where: { id: { in: studentIds } },
+                    select: {
+                        password: true,
+                        username: true,
+                        name: true,
+                        id: true
+                    }
+                })
+
+                if (!classroom) {
+                    throw new Error("Classroom not found.");
+                }
+
+                // Find student within the class
+                const loggedInStudent = allStudents.find(student => student.password === password) as User
+
+                if (!loggedInStudent) {
+                    throw new Error("Invalid password or not a student in this class.");
+                }
+
+                return {
+                    id: loggedInStudent.id,
+                    name: loggedInStudent.name,
+                    username: loggedInStudent.username,
+                    role: 'student',
+                    classroomId: classroom.id
+                };
+            },
+        }),
     ],
     pages: {
         signIn: '/sign-in',
@@ -60,7 +122,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 // @ts-expect-error: let there be any here
                 session.user.id = token.sub;
                 // @ts-expect-error: let there be any here
-                session.user.role = token.role;
+                session.user.role = token?.email ? 'teacher' : 'student';
                 session.user.name = token.name;
             }
             // It there is an update, set the user name
@@ -73,6 +135,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         async jwt({ token, user, trigger, session, account }) {
             //assign user fields to the token
             if (user) {
+                console.log('jwt toketn ', user)
                 if (account) {
                     // pass the accessToken and provierAccount ID to the token to pass to the session
                     token.googleProviderID = account.providerAccountId;
@@ -80,13 +143,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     token.refreshToken = account.refresh_token; // Store refresh token
                     token.accessTokenExpires = Date.now() + account.expires_at! * 1000;
                 }
-                // @ts-expect-error: let there be any here
-                token.role = user.role;
                 // If user has no name, then use the email
                 if (user.name === 'NO_NAME') {
                     // Assign Email to name
                     token.name = token.email!.split('@')[0];
-
                     // update database to reflect token name
                     await prisma.user.update({
                         where: { id: user.id },

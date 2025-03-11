@@ -9,18 +9,18 @@ import { Classroom } from "@/types";
 import CreateNewJot from "@/components/modalBtns/create-new-jot";
 
 export default async function PromptLibrary() {
-    const session = await auth()
+
+    const session = await auth() as Session
 
     if (!session) notFound()
 
     const teacherId = session?.user?.id as string
-    if (!teacherId) notFound()
+    if (!teacherId || session?.user?.role !== 'teacher') notFound()
 
     const allPrompts = await getAllTeacherPrompts(teacherId) as unknown as Prompt[]
     let allClassroomIds = await getAllClassroomIds(teacherId) as Classroom[]
     // Add default value to beginning fo drop down for searchbar
     allClassroomIds = [{ id: '', name: 'All Classes' }, ...allClassroomIds]
-
 
     return (
         <>

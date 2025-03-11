@@ -20,24 +20,24 @@ import { usePathname } from "next/navigation"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & { classes: Classroom[] }) {
 
-  console.log('propt ', props.classes)
   const pathname = usePathname();
   const currentClassroomId = pathname.split("/")[2];
-  const currentRoute = pathname.split("/")[3];
+  const teacherId = pathname.split("/")[3];
+  const currentRoute = pathname.split("/")[4];
   const selectedClassroom = props?.classes?.find(c => c.id === currentClassroomId) || props.classes[0];
 
 
-  console.log('currentroute ', currentRoute)
   const data = {
     navMain: [
       {
         title: "Menu",
         items: [
-          { title: "Assignment", slug: `/classroom/${currentClassroomId}`, isActive: currentRoute === undefined, isLink: true },
-          { title: "Roster", slug: `/classroom/${currentClassroomId}/roster`, isActive: currentRoute === 'roster', isLink: true },
-          { title: "Jots", slug: `/classroom/${currentClassroomId}/jots`, isActive: currentRoute === 'jots', isLink: true },
+          { title: "Assignment", slug: `/classroom/${currentClassroomId}/${teacherId}`, isActive: currentRoute === undefined, isLink: true },
+          { title: "Roster", slug: `/classroom/${currentClassroomId}/${teacherId}/roster`, isActive: currentRoute === 'roster', isLink: true },
+          { title: "Jots", slug: `/classroom/${currentClassroomId}/${teacherId}/jots`, isActive: currentRoute === 'jots', isLink: true },
           { title: "Notifications", slug: `/classroom/${currentClassroomId}/notifications`, isActive: currentRoute === 'notifications', isLink: true },
-          { title: "Settings", slug: `/classroom/${currentClassroomId}/settings`, isActive: currentRoute === 'settings', isLink: true },
+          { title: "Student Requests", slug: `/classroom/${currentClassroomId}/student-requests`, isActive: currentRoute === 'student-request', isLink: true },
+          { title: "Class Settings", slug: `/classroom/${currentClassroomId}/${teacherId}/settings`, isActive: currentRoute === 'settings', isLink: true },
         ],
       },
     ]

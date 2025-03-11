@@ -1,9 +1,9 @@
-import { AppSidebar } from "@/components/classroom-teacher-sidebar";
+import { AppSidebar } from "@/components/shared/teacher-sidebar/classroom-teacher-sidebar";
 import { auth } from "@/auth";
 import Header from "@/components/shared/header";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import notFound from "@/app/not-found";
+import { notFound } from "next/navigation";
 import { Class, Classroom, Session } from "@/types";
 import { getAllClassrooms, getSingleClassroom } from "@/lib/actions/classroom.actions";
 import { ArrowLeftIcon } from "lucide-react";
@@ -25,12 +25,11 @@ export default async function DashboardLayout({
     const teacherId = session?.user?.id as string
     if (!teacherId) notFound()
 
+    // Get all classrooms to render 
     const teacherClasses = await getAllClassrooms(teacherId)
 
     const classroomId = (await params).classId
     if (!classroomId) notFound()
-
-    console.log('teacher classrooms', teacherClasses)
 
     // Check if the authenticated teacher is part of the classroom and has the role of 'teacher'
     const isTeacherAuthorized = await prisma.classUser.findFirst({
@@ -45,7 +44,6 @@ export default async function DashboardLayout({
 
     // Get Class Data
     const classroomData = await getSingleClassroom(classroomId) as Class;
-    console.log('classroom data ', classroomData)
 
     return (
         <SidebarProvider>

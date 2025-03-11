@@ -9,11 +9,14 @@ import { useRouter } from 'next/navigation'
 export default function GoogleClassroomOptions({
     googleClassrooms,
     updateGoogleClassrooms,
-    session
+    session,
+    teacherId
 }: {
     googleClassrooms: GoogleClassroom[],
     updateGoogleClassrooms: (classes: GoogleClassroom[], isOpen: boolean) => void
-    session: Session
+    session: Session,
+    teacherId: string
+
 }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -23,8 +26,9 @@ export default function GoogleClassroomOptions({
     async function createClassroom(classInfo: GoogleClassroom) {
         try {
             setIsLoading(true)
+
             const classroomUrl = await createClassroomWithGoogle(classInfo, session?.user?.id)
-            router.push(`/classroom/${classroomUrl}`)
+            router.push(`/classroom/${classroomUrl}/${teacherId}`)
         } catch (error) {
             console.log('error creating classroom', error)
         } finally {
@@ -34,8 +38,8 @@ export default function GoogleClassroomOptions({
 
     if (isLoading) {
         return (
-            <div className="flex-center min-h-[280px]">
-                <p className='font-bold flex-center'>Creating Class...</p>
+            <div className="flex-center min-h-[240px]">
+                <p className='font-bold flex-center mt-[-30px]'>Creating Class...</p>
             </div>
         )
     }
@@ -46,10 +50,9 @@ export default function GoogleClassroomOptions({
                 <p className='font-bold text-md text-center mb-3'>Choose a class to import</p>
             ) : (
                 <>
-                <p className='text-md w-[75%] mb-1 mx-auto text-center'>No classrooms associated with your Google Account:</p>
-                <p className='mb-5 mt-2 text-center font-bold'>{session.user.email}</p>
+                    <p className='text-md w-[75%] mb-1 mx-auto text-center'>No classrooms associated with your Google Account:</p>
                 </>
-                
+
             )}
             {googleClassrooms?.length > 0 && googleClassrooms.map((classroom) => (
                 <div

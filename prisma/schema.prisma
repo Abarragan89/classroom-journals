@@ -12,9 +12,12 @@ model User {
   id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   googleId      String?        @unique // Optional, only for students with Google IDs
   name          String?        @default("NO_NAME")
+  username      String?
   email         String?        @unique(map: "user_email_idx")
   emailVerified DateTime?      @db.Timestamp(6)
   image         String?
+  password      String? // this password is only for student accounts and needs to be accessible to teacher
+  iv            String? // this is used to encrypt student names, ensures no duplicates when same input is given
   sessions      Session[]
   accounts      Account[]
   createdAt     DateTime       @default(now()) @db.Timestamp(6)

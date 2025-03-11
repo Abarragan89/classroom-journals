@@ -48,6 +48,7 @@ export default function AddClassBtn({
                             googleClassrooms={googleClassroomArr}
                             updateGoogleClassrooms={updateGoogleClassrooms}
                             session={session as Session}
+                            teacherId={teacherId}
                         />
                     </div>
                     :
