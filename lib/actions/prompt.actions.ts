@@ -84,7 +84,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             }
             return { success: true, message: 'Prompt Created!' };
         })
-        return { success: true, message: 'Prompt Created!' }
+        return { success: false, message: 'Error creating prompt. Try again.' }
 
     } catch (error) {
         // Improved error logging

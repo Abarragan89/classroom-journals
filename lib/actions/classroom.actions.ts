@@ -19,7 +19,17 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
         if (typeof teacherId !== 'string') {
             throw new Error('Missing teacher ID');
         }
-        const classCode = generateClassCode();
+
+        // Get all classcodes to ensure no duplicates
+        let allClassCodes = await prisma.classroom.findMany({
+            where: {},
+            select: { classCode: true }
+        })
+
+        const classCodes = allClassCodes.map(classroom => classroom.classCode)
+        const classCode = generateClassCode(classCodes);
+
+        // This gets passed as the return to redirect to classroom page
         let classUrl: string = '';
 
         await prisma.$transaction(async (tx) => {

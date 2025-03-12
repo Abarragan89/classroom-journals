@@ -1,7 +1,6 @@
 import JotListBanner from "@/components/jot-list-banner";
 import { Button } from "@/components/ui/button";
 import { getAllSessionsInClass } from "@/lib/actions/prompt.session.actions"
-import { Prompt } from "@/types";
 import { PromptSession } from "@prisma/client";
 import { Plus } from "lucide-react";
 
@@ -16,7 +15,7 @@ export default async function Classroom({
 
     return (
         <div className="relative max-w-[900px] mx-auto">
-            <Button className="absolute top-[-75px] right-[2%]" variant='outline'>
+            <Button className="absolute top-[-120px] right-[2%]" variant='secondary'>
                 <Plus /> Assign Jot
             </Button>
             <div className="w-[95%] max-w-[750px] mt-10 mx-auto">
@@ -26,7 +25,6 @@ export default async function Classroom({
                         key={prompt.id}
                         jotData={prompt}
                     />
-
                 )) : (
                     <p>No Jots posted</p>
                 )}

@@ -79,7 +79,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
           </SidebarGroup>
         ))}
         <SidebarSeparator />
-        <SidebarGroupLabel className="text-sm ml-2">ClassCode: <span className="ml-2 bg-accent py-1 px-2 rounded-full">{selectedClassroom.classCode}</span></SidebarGroupLabel>
+        <SidebarGroupLabel className="text-sm ml-2">Class Code: <span className="ml-2 bg-accent text-accent-foreground py-1 px-2 rounded-full">{selectedClassroom.classCode}</span></SidebarGroupLabel>
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

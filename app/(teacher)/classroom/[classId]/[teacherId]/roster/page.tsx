@@ -7,8 +7,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { User } from "@/types";
+import { Session, User } from "@/types";
 import StudentOptionsMenu from "@/components/menus/student-options-menu";
+import AddStudentBtn from "@/components/forms/add-student-button";
+import { auth } from "@/auth";
 
 export default async function Roster({
   params
@@ -20,9 +22,14 @@ export default async function Roster({
 
   let studentRoster = (await getAllStudents(classId)) as unknown as User[];
 
+  const session = await auth() as Session;
+
 
   return (
-    <div>
+    <div className="relative">
+      <div className="absolute top-[-120px] right-[2%]">
+        <AddStudentBtn classId={classId} session={session} variant='secondary' />
+      </div>
       <h2 className="text-2xl mt-2">Student Roster</h2>
       <Table className="mt-5">
         <TableHeader>

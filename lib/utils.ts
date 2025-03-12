@@ -8,16 +8,16 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Generate class code
-export function generateClassCode() {
-  const characters = [
-    ..."abcdefghikmnpqrstuvwxyzq", // Lowercase (without o, l)
-  ];
+const characters = [..."abcdefghikmnpqrstuvwxyz"]; // Lowercase (without o, l)
 
-  const classCode = [];
-  for (let i = 0; i < 6; i++) {
-    classCode.push(characters[Math.floor(Math.random() * characters.length)])
-  }
-  return classCode.join("")
+export function generateClassCode(excludeArr: string[]): string {
+  const classCode = Array.from({ length: 6 }, () =>
+    characters[Math.floor(Math.random() * characters.length)]
+  ).join("");
+
+  return excludeArr.includes(classCode)
+    ? generateClassCode(excludeArr)
+    : classCode;
 }
 
 export function formatDateShort(date: Date): string {
@@ -31,7 +31,6 @@ export function formatDateShort(date: Date): string {
 
 // Encryption and Decryption Settings
 const algorithm = 'aes-256-cbc'; // AES algorithm
-const ivLength = 16; // Initialization vector length for AES-256
 const secretKey = crypto.createHash('sha256').update(process.env.ENCRYPTION_KEY || 'fallback-key').digest('base64').slice(0, 32);
 
 // Encryption Helpers
@@ -50,4 +49,17 @@ export function decryptText(encryptedData: string, iv: string) {
   let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
   decrypted += decipher.final('utf8');
   return decrypted; // Return decrypted text
+}
+
+// genrerate random password for new student
+export function generateRandom5DigitNumber(excludeArr: string[]) {
+  const min = 10000;
+  const max = 99999;
+  const randomNumber = (Math.floor(Math.random() * (max - min + 1)) + min).toString();
+
+  if (excludeArr.includes(randomNumber)) {
+    return generateRandom5DigitNumber(excludeArr)
+  } else {
+    return randomNumber
+  }
 }

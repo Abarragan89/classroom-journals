@@ -27,3 +27,8 @@ export const promptSchema = z.object({
     ).min(1, 'At least one question is required'),
     promptType: z.string().optional()
 })
+
+export const newStudentSchema = z.object({
+    name: z.string().min(1, 'name is required'),
+    username: z.string().optional(),
+})
