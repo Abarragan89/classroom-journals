@@ -21,7 +21,7 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
         }
 
         // Get all classcodes to ensure no duplicates
-        let allClassCodes = await prisma.classroom.findMany({
+        const allClassCodes = await prisma.classroom.findMany({
             where: {},
             select: { classCode: true }
         })

@@ -6,7 +6,7 @@ import { encryptText, generateRandom5DigitNumber } from "../utils";
 
 export async function addStudentToRoster(prevState: unknown, formData: FormData) {
     try {
-        let { name, username } = newStudentSchema.parse({
+        const { name, username } = newStudentSchema.parse({
             name: formData.get('name'),
             username: formData.get('username')
         })
@@ -17,7 +17,7 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
             throw new Error('Missing teacher ID');
         }
 
-        let allStudentPasswords = await prisma.classUser.findMany({
+        const allStudentPasswords = await prisma.classUser.findMany({
             where: {
                 classId,
                 role: 'student'
@@ -31,11 +31,11 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
 
         const studentPasswords = allStudentPasswords.map(classroom => classroom.user?.password ? classroom.user.password : '')
         const password = generateRandom5DigitNumber(studentPasswords)
-        username = username ? username : name.split(' ')[0]
+        const adjustedUsername = username ? username : name.split(' ')[0]
 
         const iv = crypto.randomBytes(16); // Generate a random IV
         const { encryptedData: encryptedName } = encryptText(name, iv);
-        const { encryptedData: encryptedNickName } = encryptText(username, iv);
+        const { encryptedData: encryptedNickName } = encryptText(adjustedUsername, iv);
 
 
         const newStudent = await prisma.user.create({

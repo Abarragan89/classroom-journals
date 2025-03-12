@@ -2,7 +2,7 @@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
-import { useActionState, useState, useEffect } from "react";
+import { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
@@ -87,10 +87,9 @@ export default function AddStudentForm({
                     />
                 </div>
             </div>
-            <div className="flex-center mt-6">
+            <div className="flex-center mt-5">
                 <CreateButton />
             </div>
-
 
             <input
                 type="hidden"
@@ -104,13 +103,13 @@ export default function AddStudentForm({
 
             {session?.googleProviderId && (
                 <div className="flex flex-col mx-auto w-2/3">
-                    <p className="my-3 text-center relative">
+                    <p className="my-5 text-center relative">
                         <span className="relative z-10 bg-background px-3">or</span>
                         <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
                     </p>
 
                     <Button type="button" onClick={fetchGoogleClassrooms} className="mx-auto">
-                        Import Roster From Google Classroom
+                        Import From Google Classroom
                     </Button>
                 </div>
             )}

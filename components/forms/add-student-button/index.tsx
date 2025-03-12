@@ -48,7 +48,8 @@ export default function AddStudentBtn({
                             googleClassrooms={googleClassroomArr}
                             updateGoogleClassrooms={updateGoogleClassrooms}
                             session={session as Session}
-                            teacherId={classId}
+                            classId={classId}
+                            closeModal={closeModal}
                         />
                     </div>
                     :

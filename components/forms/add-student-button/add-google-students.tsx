@@ -3,32 +3,32 @@ import { GoogleClassroom, Session } from '@/types'
 import Image from 'next/image'
 import React from 'react'
 import { useState } from 'react'
-import { createClassroomWithGoogle } from '@/lib/actions/google.classroom.actions'
+import { populateStudentRosterFromGoogle } from '@/lib/actions/google.classroom.actions'
 import { useRouter } from 'next/navigation'
 
 export default function AddGoogleStudents({
     googleClassrooms,
     updateGoogleClassrooms,
     session,
-    teacherId
+    classId,
+    closeModal,
 }: {
     googleClassrooms: GoogleClassroom[],
     updateGoogleClassrooms: (classes: GoogleClassroom[], isOpen: boolean) => void
     session: Session,
-    teacherId: string
-
+    classId: string
+    closeModal: () => void
 }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
     const router = useRouter();
 
-    async function createClassroom(classInfo: GoogleClassroom) {
+    async function addRosterFromGoogle(classInfo: GoogleClassroom) {
         try {
             setIsLoading(true)
-
-            const classroomUrl = await createClassroomWithGoogle(classInfo, session?.user?.id)
-            router.push(`/classroom/${classroomUrl}/${teacherId}`)
+            await populateStudentRosterFromGoogle(classInfo, session?.user?.id, classId)
+            closeModal();
+            router.push(`/classroom/${classId}/${session?.user?.id}/roster`)
         } catch (error) {
             console.log('error creating classroom', error)
         } finally {
@@ -56,7 +56,7 @@ export default function AddGoogleStudents({
             )}
             {googleClassrooms?.length > 0 && googleClassrooms.map((classroom) => (
                 <div
-                    onClick={() => createClassroom(classroom)}
+                    onClick={() => addRosterFromGoogle(classroom)}
                     className='grid grid-cols-4 p-1 bg-gray-300  rounded-xl mx-4 mb-6 border-[1px] border-gray-300 hover:cursor-pointer hover:bg-white'
                     key={classroom.id}>
                     <Image
