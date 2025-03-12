@@ -8,6 +8,7 @@ export type User = {
     username?: string,
     googleId?: string;
     password?: string;
+    iv?: string;
     email?: string;
     emailVerified?: Date;
     image?: string;
@@ -106,4 +107,5 @@ export interface Session {
     accessToken: string;
     accessTokenExpires: number;
     refreshToken: string;
+    iv: string
 }

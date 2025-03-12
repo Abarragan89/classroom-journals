@@ -1,5 +1,4 @@
 import Link from "next/link"
-import { auth } from "@/auth"
 import { signOutUser } from "@/lib/actions/auth.action"
 import {
     DropdownMenu,
@@ -11,10 +10,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { UserIcon } from "lucide-react";
 import Image from "next/image";
+import { decryptText } from "@/lib/utils";
+import { Session } from "@/types";
 
-export default async function UserButton() {
-
-    const session = await auth();
+export default async function UserButton({
+    session
+} : {
+    session?: Session
+}) {
 
     if (!session) {
         return (
@@ -26,7 +29,10 @@ export default async function UserButton() {
         )
     }
 
-    const firstInitial = session.user?.name?.charAt(0).toUpperCase() ?? 'U'
+    // decrypt encoded name
+    const username = decryptText(session?.user?.name as string, session?.iv as string)
+
+    const firstInitial = username.charAt(0).toUpperCase() ?? 'U'
 
     return (
         <div className="flex gap-2 items-center">
@@ -54,7 +60,7 @@ export default async function UserButton() {
                     <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
                             <div className="text-sm font-medium leading-none">
-                                {session.user?.name}
+                                {username}
                             </div>
                         </div>
                     </DropdownMenuLabel>

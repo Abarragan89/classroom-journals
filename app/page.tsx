@@ -7,7 +7,6 @@ import { Session } from "@/types";
 export default async function page() {
 
     const session = await auth() as Session;
-    console.log('session in teh ', session)
 
     if (session) {
         if (session?.user?.role === 'teacher') {

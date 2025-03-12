@@ -28,8 +28,6 @@ export default function StudentSignInCard({ changeTab }: { changeTab: () => void
             redirectTo: '/'
         })
 
-        console.log('result in the oaiejf;aewf', result)
-
         if (result?.error) {
             setError('Invalid class code or password')
         } else {

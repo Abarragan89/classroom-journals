@@ -5,7 +5,8 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { User } from "./types";
-
+import { encryptText } from "./lib/utils";
+import crypto from 'crypto';
 
 declare module "next-auth" {
     interface Session extends DefaultSession {
@@ -13,9 +14,10 @@ declare module "next-auth" {
         refreshToken?: string | unknown; // Extend session type to include refreshToken
         refraccessTokenExpires?: string | unknown
         googleProviderId?: string | unknown
+        iv?: Buffer | unknown
     }
-    interface JWT {
-        accessToken?: string | unknown; // Extend JWT type to include accessToken
+    interface User {
+        iv?: string;
     }
 }
 
@@ -47,7 +49,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
-                console.log('credentials ', credentials)
 
                 const classCode = credentials?.classCode as string;
                 const password = credentials?.password as string
@@ -76,7 +77,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         password: true,
                         username: true,
                         name: true,
-                        id: true
+                        id: true,
+                        iv: true,
                     }
                 })
 
@@ -96,7 +98,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     name: loggedInStudent.name,
                     username: loggedInStudent.username,
                     role: 'student',
-                    classroomId: classroom.id
+                    classroomId: classroom.id,
+                    iv: loggedInStudent.iv
                 };
             },
         }),
@@ -124,6 +127,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 // @ts-expect-error: let there be any here
                 session.user.role = token?.email ? 'teacher' : 'student';
                 session.user.name = token.name;
+                session.iv = user?.iv ? user.iv : token.iv
             }
             // It there is an update, set the user name
             if (trigger === 'update') {
@@ -132,28 +136,37 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
             return session
         },
-        async jwt({ token, user, trigger, session, account }) {
+        async jwt({ token, user, trigger, account }) {
             //assign user fields to the token
             if (user) {
-                console.log('jwt toketn ', user)
+
                 if (account) {
                     // pass the accessToken and provierAccount ID to the token to pass to the session
                     token.googleProviderID = account.providerAccountId;
                     token.accessToken = account.access_token;
                     token.refreshToken = account.refresh_token; // Store refresh token
-                    token.accessTokenExpires = Date.now() + account.expires_at! * 1000;
+                    token.accessTokenExpires = Date.now() + account.expires_at! * 1000; // used to create a new token
                 }
-                // If user has no name, then use the email
-                if (user.name === 'NO_NAME') {
-                    // Assign Email to name
-                    token.name = token.email!.split('@')[0];
-                    // update database to reflect token name
+
+                if (trigger === 'signUp') {
+                    // if signing up, encrypt name and save name and iv(random string) 
+                    const iv = crypto.randomBytes(16);
+                    // Encrypt the user name
+                    const { encryptedData } = encryptText(user.name!, iv);
+                    token.name = encryptedData;
+                    token.iv = iv.toString('hex');
+
                     await prisma.user.update({
                         where: { id: user.id },
                         data: {
-                            name: token.name
+                            name: token.name,
+                            iv: token.iv as string
                         }
                     })
+                } else if (trigger === 'signIn') {
+                    // If signing back in, just set the token to the user name that is already encyrpted
+                    token.name = user.name;
+                    token.iv = user.iv
                 }
             }
             return token

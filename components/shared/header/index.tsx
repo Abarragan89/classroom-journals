@@ -11,6 +11,7 @@ export default function Header({
     teacherId?: string
     session?: Session
 }) {
+
     return (
         <header className='w-full border-b'>
             <div className="py-3 px-5  flex-between">

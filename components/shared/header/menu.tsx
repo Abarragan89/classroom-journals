@@ -20,19 +20,20 @@ export default function Menu({
     teacherId?: string,
     session: Session
 }) {
+
     const renderAuthenticatedMenu = () => (
         <>
             <NavLinks />
             <ActionSubMenu teacherId={teacherId!} session={session as Session} />
             <ModeToggle />
-            <UserButton />
+            <UserButton session={session as Session}/>
         </>
     );
 
     const renderGuestMenu = () => (
         <>
             <ModeToggle />
-            <UserButton />
+            <UserButton session={session as Session}/>
         </>
     );
 

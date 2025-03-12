@@ -39,7 +39,7 @@ export default function GoogleClassroomOptions({
     if (isLoading) {
         return (
             <div className="flex-center min-h-[240px]">
-                <p className='font-bold flex-center mt-[-30px]'>Creating Class...</p>
+                <p className='font-bold flex-center mt-[-60px]'>Creating Class...</p>
             </div>
         )
     }
