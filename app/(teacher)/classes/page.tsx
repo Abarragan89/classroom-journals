@@ -4,7 +4,7 @@ import { getAllClassrooms } from "@/lib/actions/classroom.actions";
 import ClassCard from "@/components/shared/class-card";
 import { Class, Session } from "@/types";
 import Header from "@/components/shared/header";
-import AddClassBtn from "@/components/forms/add-class-btn";
+import AddClassBtn from "@/components/forms/class-forms/add-class-btn";
 
 export default async function Classes() {
 

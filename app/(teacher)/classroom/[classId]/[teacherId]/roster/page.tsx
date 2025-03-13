@@ -8,8 +8,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Session, User } from "@/types";
-import StudentOptionsMenu from "@/components/menus/student-options-menu";
-import AddStudentBtn from "@/components/forms/add-student-button";
+import StudentOptionsMenu from "@/components/menus/student-roster-options-menu";
+import AddStudentBtn from "@/components/forms/roster-forms/add-student-button";
 import { auth } from "@/auth";
 
 export default async function Roster({
@@ -23,7 +23,6 @@ export default async function Roster({
   const studentRoster = (await getAllStudents(classId)) as unknown as User[];
 
   const session = await auth() as Session;
-
 
   return (
     <div className="relative">
@@ -41,12 +40,22 @@ export default async function Roster({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {studentRoster?.length > 0 && studentRoster.map((student: User) => (
+          {studentRoster?.length > 0 && studentRoster.sort((a, b) => {
+            const lastNameA = a.name?.split(' ')[1] || '';
+            const lastNameB = b.name?.split(' ')[1] || '';
+            return lastNameA.localeCompare(lastNameB);
+          }).map((student: User) => (
             <TableRow key={student.id}>
               <TableCell className="font-medium">{student.name}</TableCell>
               <TableCell>{student.username}</TableCell>
               <TableCell>{student.password}</TableCell>
-              <TableCell className="text-right"><StudentOptionsMenu /></TableCell>
+              <TableCell className="text-right">
+                <StudentOptionsMenu
+                  studentInfo={student}
+                  session={session}
+                  classId={classId}
+                />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

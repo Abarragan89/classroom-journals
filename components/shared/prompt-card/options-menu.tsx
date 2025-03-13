@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { EllipsisVertical, Edit, Trash2Icon, Pin } from "lucide-react";
 import { Classroom, Prompt } from '@/types';
-import DeletePromptForm from '@/components/forms/delete-prompt-form';
-import AssignPromptForm from '@/components/forms/assign-prompt-form';
+import DeletePromptForm from '@/components/forms/prompt-forms/delete-prompt-form';
+import AssignPromptForm from '@/components/forms/prompt-forms/assign-prompt-form';
 import Link from 'next/link';
 
 

@@ -1,10 +1,10 @@
 import { auth } from "@/auth";
 import { notFound } from "next/navigation";
 import Header from "@/components/shared/header";
-import AddSinglePromptForm from "@/components/forms/add-single-prompt-form";
+import AddSinglePromptForm from "@/components/forms/prompt-forms/add-single-prompt-form";
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
-import AddMultiPromptForm from "@/components/forms/add-multi-prompt-form";
+import AddMultiPromptForm from "@/components/forms/prompt-forms/add-multi-prompt-form";
 import { Session } from "@/types";
 
 export default async function CreatePrompt({

@@ -8,8 +8,8 @@ import {
     DropdownMenuItem
 } from "@/components/ui/dropdown-menu"
 import { EllipsisVertical, Edit, Trash2Icon } from "lucide-react";
-import EditClassForm from '@/components/forms/edit-class-form';
-import DeleteClassForm from '@/components/forms/delete-class-form';
+import DeleteClassForm from '@/components/forms/class-forms/delete-class-form';
+import EditClassForm from '@/components/forms/class-forms/edit-class-form';
 import { Class } from '@/types';
 
 

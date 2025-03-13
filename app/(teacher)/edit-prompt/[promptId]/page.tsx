@@ -1,12 +1,12 @@
 import { auth } from "@/auth";
 import { notFound } from "next/navigation";
 import Header from "@/components/shared/header";
-import EditMultiPromptForm from "@/components/forms/edit-multi-prompt-form";
+import EditMultiPromptForm from "@/components/forms/prompt-forms/edit-multi-prompt-form";
 import { getSinglePrompt } from "@/lib/actions/prompt.actions";
 import { Prompt, Session } from "@/types";
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
-import EditSinglePromptForm from "@/components/forms/edit-single-prompt-form";
+import EditSinglePromptForm from "@/components/forms/prompt-forms/edit-single-prompt-form";
 
 export default async function EditPrompt({
     params,

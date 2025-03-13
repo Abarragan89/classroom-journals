@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import AddClassBtn from "@/components/forms/add-class-btn";
+import AddClassBtn from "@/components/forms/class-forms/add-class-btn";
 import { Button } from "@/components/ui/button";
 import JotTypeModal from "@/components/modals/jot-type-modal";
 import { Session } from "@/types";
