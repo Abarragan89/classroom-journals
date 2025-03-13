@@ -7,11 +7,12 @@ import {
     DropdownMenuContent,
     DropdownMenuItem
 } from "@/components/ui/dropdown-menu"
-import { Edit, Trash2Icon } from "lucide-react";
+import { Edit, Eye, Trash2Icon } from "lucide-react";
 import { Ellipsis } from "lucide-react"
 import { Session, User } from '@/types';
-import EditStudentForm from '../forms/roster-forms/edit-student-form';
-import DeleteStudentForm from '../forms/roster-forms/delete-student-form';
+import EditStudentForm from '../../forms/roster-forms/edit-student-form';
+import DeleteStudentForm from '../../forms/roster-forms/delete-student-form';
+import Link from 'next/link';
 
 export default function StudentRosterOptionsMenu({
     studentInfo,
@@ -68,7 +69,7 @@ export default function StudentRosterOptionsMenu({
                 title={`Delete ${studentInfo.name}`}
                 description='Confirm class deletion'
             >
-                <DeleteStudentForm 
+                <DeleteStudentForm
                     closeModal={closeDeleteModal}
                     studentInfo={studentInfo}
                     session={session}
@@ -82,6 +83,11 @@ export default function StudentRosterOptionsMenu({
                     <Ellipsis size={20} className="hover:cursor-pointer text-white" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
+                    <Link href={`/classroom/${classId}/${session.user.id}/roster/${studentInfo.id}`}>
+                    <DropdownMenuItem className="hover:cursor-pointer rounded-md">
+                        <Eye />Work
+                    </DropdownMenuItem>
+                    </Link>
                     <DropdownMenuItem onClick={() => setIsEditModalOpen(true)} className="hover:cursor-pointer rounded-md">
                         <Edit />Edit
                     </DropdownMenuItem>

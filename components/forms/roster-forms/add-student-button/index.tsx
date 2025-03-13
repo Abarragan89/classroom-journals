@@ -1,7 +1,7 @@
 'use client';
 import { Button } from "@/components/ui/button"
 import { useState } from "react";
-import { Plus } from "lucide-react"
+import { Plus, UserRoundPlus } from "lucide-react"
 import AddStudentForm from "./add-student-form";
 import { ResponsiveDialog } from "@/components/responsive-dialog"
 import { GoogleClassroom, Session } from "@/types";
@@ -62,8 +62,8 @@ export default function AddStudentBtn({
                 }
 
             </ResponsiveDialog>
-            <Button className="w-full" variant={variant} onClick={() => setIsOpenModal(true)}>
-                <Plus />Add Students
+            <Button className="w-11 h-11 rounded-full" variant={variant} onClick={() => setIsOpenModal(true)}>
+                <UserRoundPlus />
             </Button>
         </>
     )

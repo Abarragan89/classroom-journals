@@ -16,7 +16,7 @@ import { ClassroomSwitcher } from "./classroom-switcher"
 import Link from "next/link"
 import { Classroom } from "@/types"
 import { usePathname } from "next/navigation"
-
+import { Home, User, FileText, Bell, ClipboardList, Settings } from "lucide-react"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & { classes: Classroom[] }) {
 
@@ -32,12 +32,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
       {
         title: "Menu",
         items: [
-          { title: "Assignment", slug: `/classroom/${currentClassroomId}/${teacherId}`, isActive: currentRoute === undefined, isLink: true },
-          { title: "Roster", slug: `/classroom/${currentClassroomId}/${teacherId}/roster`, isActive: currentRoute === 'roster', isLink: true },
-          { title: "Jots", slug: `/classroom/${currentClassroomId}/${teacherId}/jots`, isActive: currentRoute === 'jots', isLink: true },
-          { title: "Notifications", slug: `/classroom/${currentClassroomId}/notifications`, isActive: currentRoute === 'notifications', isLink: true },
-          { title: "Student Requests", slug: `/classroom/${currentClassroomId}/student-requests`, isActive: currentRoute === 'student-request', isLink: true },
-          { title: "Class Settings", slug: `/classroom/${currentClassroomId}/${teacherId}/settings`, isActive: currentRoute === 'settings', isLink: true },
+          { title: "Assignment", icon: Home, slug: `/classroom/${currentClassroomId}/${teacherId}`, isActive: currentRoute === undefined, isLink: true },
+          { title: "Roster", icon: User, slug: `/classroom/${currentClassroomId}/${teacherId}/roster`, isActive: currentRoute === 'roster', isLink: true },
+          { title: "Jots", icon: FileText, slug: `/classroom/${currentClassroomId}/${teacherId}/jots`, isActive: currentRoute === 'jots', isLink: true },
+          { title: "Notifications", icon: Bell, slug: `/classroom/${currentClassroomId}/notifications`, isActive: currentRoute === 'notifications', isLink: true },
+          { title: "Student Requests", icon: ClipboardList, slug: `/classroom/${currentClassroomId}/student-requests`, isActive: currentRoute === 'student-request', isLink: true },
+          { title: "Class Settings", icon: Settings, slug: `/classroom/${currentClassroomId}/${teacherId}/settings`, isActive: currentRoute === 'settings', isLink: true },
         ],
       },
     ]
@@ -59,21 +59,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
             <SidebarGroupLabel className="opacity-70">{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {item.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    {item.isLink ?
-                      <SidebarMenuButton asChild isActive={item.isActive}>
-                        <Link href={`${item.slug}`}>
+                {item.items.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      {item.isLink ? (
+                        <SidebarMenuButton asChild isActive={item.isActive}>
+                          <Link href={`${item.slug}`} className="flex items-center gap-2">
+                            {Icon && <Icon size={18} />}
+                            {item.title}
+                          </Link>
+                        </SidebarMenuButton>
+                      ) : (
+                        <p className="ml-2 flex items-center gap-2">
+                          {Icon && <Icon size={18} />}
                           {item.title}
-                        </Link>
-                      </SidebarMenuButton>
-                      :
-                      <p className="ml-2">
-                        {item.title}
-                      </p>
-                    }
-                  </SidebarMenuItem>
-                ))}
+                        </p>
+                      )}
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

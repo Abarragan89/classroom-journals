@@ -5,7 +5,7 @@ import { CardContent } from '@/components/ui/card'
 import { TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input';
-import { signIn } from 'next-auth/react'
+import { getSession, signIn } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 
@@ -32,7 +32,8 @@ export default function StudentSignInCard({ changeTab }: { changeTab: () => void
             setError('Invalid class code or password')
         } else {
             // Redirect the student to the dashboard after successful login
-            router.push(`/student-dashboard/`)
+            const session = await getSession()
+            router.push(`/student-dashboard/${session?.user?.id}`)
         }
     }
     return (

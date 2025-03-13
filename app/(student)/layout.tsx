@@ -2,8 +2,6 @@ import { auth } from "@/auth";
 import Header from "@/components/shared/header";
 import { notFound } from "next/navigation";
 import { Session } from "@/types";
-import { ArrowLeftIcon } from "lucide-react";
-import Link from "next/link";
 import { prisma } from "@/db/prisma";
 
 
@@ -44,9 +42,6 @@ export default async function DashboardLayout({
         <>
             <Header session={session} />
             <main className="wrapper">
-                <Link href={'/classes'} className="flex items-center hover:underline w-fit">
-                    <ArrowLeftIcon className="mr-1" size={20} />Back to all classes
-                </Link>
                 <h1 className="h1-bold mt-2 line-clamp-1">{currentClass.class.name}</h1>
                 {children}
             </main>
