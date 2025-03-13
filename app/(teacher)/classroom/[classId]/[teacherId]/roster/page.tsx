@@ -20,7 +20,7 @@ export default async function Roster({
 
   const { classId } = await params;
 
-  let studentRoster = (await getAllStudents(classId)) as unknown as User[];
+  const studentRoster = (await getAllStudents(classId)) as unknown as User[];
 
   const session = await auth() as Session;
 
