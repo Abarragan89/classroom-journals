@@ -29,7 +29,10 @@ export default async function RootLayout({
 
   const headersList = await headers();
   const nonce = headersList.get('x-nonce');
+
+  console.log('nonce ', nonce)
   if (!nonce) return
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
