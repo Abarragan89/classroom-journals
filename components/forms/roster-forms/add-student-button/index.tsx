@@ -1,7 +1,7 @@
 'use client';
 import { Button } from "@/components/ui/button"
 import { useState } from "react";
-import { Plus, UserRoundPlus } from "lucide-react"
+import {  UserRoundPlus } from "lucide-react"
 import AddStudentForm from "./add-student-form";
 import { ResponsiveDialog } from "@/components/responsive-dialog"
 import { GoogleClassroom, Session } from "@/types";
