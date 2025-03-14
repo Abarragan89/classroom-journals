@@ -2,13 +2,11 @@ import { getAllStudents } from "@/lib/actions/classroom.actions";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
 import { Session, User } from "@/types";
-import StudentOptionsMenu from "@/components/shared/student-roster-row/student-roster-options-menu";
 import AddStudentBtn from "@/components/forms/roster-forms/add-student-button";
 import { auth } from "@/auth";
 import StudentRosterRow from "@/components/shared/student-roster-row";

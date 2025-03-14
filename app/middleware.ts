@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function middleware(request: NextRequest) {
+export async function middleware() {
     const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
 
     // Apply Content Security Policy (CSP)
@@ -21,7 +21,7 @@ export async function middleware(request: NextRequest) {
         connect-src 'self' blob:;
         upgrade-insecure-requests;
     `;
-    } 
+    }
     const response = NextResponse.next();
     const contentSecurityPolicyHeaderValue = cspHeader.replace(/\s{2,}/g, ' ').trim();
     response.headers.set('Content-Security-Policy', contentSecurityPolicyHeaderValue);

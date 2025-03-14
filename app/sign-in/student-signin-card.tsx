@@ -5,7 +5,7 @@ import { CardContent } from '@/components/ui/card'
 import { TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input';
-import { getSession, signIn } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 
