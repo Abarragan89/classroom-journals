@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
+import { headers } from 'next/headers';
 import Footer from "@/components/footer";
 
 const geistSans = Geist({
@@ -26,10 +27,14 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
+  const headersList = await headers();
+  const nonce = headersList.get('x-nonce');
+  if (!nonce) return
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        nonce={nonce}
       >
         <ThemeProvider
           attribute='class'

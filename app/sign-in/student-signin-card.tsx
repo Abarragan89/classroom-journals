@@ -13,27 +13,33 @@ export default function StudentSignInCard({ changeTab }: { changeTab: () => void
 
     const router = useRouter();
 
-    const [classCode, setClassCode] = useState('')
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
+    const [classCode, setClassCode] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+    const [error, setError] = useState<string>('')
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault()
-        setError('') // Clear errors
+        try {
+            setError('') // Clear errors
+            setIsLoading(true)
+            const result = await signIn('credentials', {
+                classCode,
+                password,
+                redirect: false,
+                redirectTo: '/'
+            })
 
-        const result = await signIn('credentials', {
-            classCode,
-            password,
-            redirect: false,
-            redirectTo: '/'
-        })
-
-        if (result?.error) {
-            setError('Invalid class code or password')
-        } else {
-            // Redirect the student to the dashboard after successful login
-            const session = await getSession()
-            router.push(`/student-dashboard/${session?.user?.id}`)
+            if (result?.error) {
+                setError('Invalid class code or password')
+            } else {
+                // Redirect the student to the dashboard after successful login
+                router.push(`/student-dashboard/`)
+            }
+        } catch (error) {
+            console.log('error with student sign in ')
+        } finally {
+            setIsLoading(false)
         }
     }
     return (
@@ -71,7 +77,11 @@ export default function StudentSignInCard({ changeTab }: { changeTab: () => void
                         />
                     </div>
                     {error && <p className="text-red-500">{error}</p>}
-                    <Button type="submit">Sign In</Button>
+                    <Button
+                        className={isLoading ? 'opacity-75' : 'opacity-100'}
+                        disabled={isLoading}
+                        type="submit"
+                    >Sign In</Button>
                 </form>
             </CardContent>
         </Card>

@@ -113,6 +113,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         maxAge: 30 * 24 * 60 * 60 // 30 days 
     },
     callbacks: {
+        // user only comes back when loggin in with  GOogle
         async session({ session, user, trigger, token }) {
             if (session.user) {
                 // getRefresh
@@ -128,6 +129,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 session.user.role = token?.email ? 'teacher' : 'student';
                 session.user.name = token.name;
                 session.iv = user?.iv ? user.iv : token.iv
+
+                // Setting the classroomId is only needed or student login
+                if (token?.classroomId) {
+                    // @ts-expect-error: let there be any here
+                    session.classroomId = token.classroomId
+                }
             }
             // It there is an update, set the user name
             if (trigger === 'update') {
@@ -146,6 +153,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     token.accessToken = account.access_token;
                     token.refreshToken = account.refresh_token; // Store refresh token
                     token.accessTokenExpires = Date.now() + account.expires_at! * 1000; // used to create a new token
+                    // @ts-expect-error: let there be any here
+                    if (user?.classroomId) {
+                        // @ts-expect-error: let there be any here
+                        token.classroomId = user.classroomId
+                    }
                 }
 
                 if (trigger === 'signUp') {

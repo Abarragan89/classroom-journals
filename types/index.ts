@@ -107,5 +107,6 @@ export interface Session {
     accessToken: string;
     accessTokenExpires: number;
     refreshToken: string;
-    iv: string
+    iv: string;
+    classroomId?: string;
 }
