@@ -86,7 +86,6 @@ model ClassUser {
   userId  String @db.Uuid
   classId String @db.Uuid
   role    String @default("student") // "teacher" or "student"
-
   user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   class Classroom @relation(fields: [classId], references: [id], onDelete: Cascade)
 
@@ -174,7 +173,7 @@ model PromptSession {
   id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   promptId   String     @db.Uuid
   title      String
-  questions  Json
+  questions  Json     // Single array 
   assignedAt DateTime   @default(now())
   classId    String     @db.Uuid // relate it to which side it is attached to
   status     String     @default("active") // e.g., "active", "completed"

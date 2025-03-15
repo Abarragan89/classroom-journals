@@ -65,15 +65,23 @@ export type PromptSession = {
     id: string;
     promptId: string;
     title: string;
-    questions: JsonValue;
+    questions: Question[] | JsonValue;
     assignedAt: Date;
     classId: string;
     status: string;
-    responses?: Response[]; // Assuming 'Response' is a model type you're using
+    responses?: Response[]; 
     class?: Classroom;
     createdAt: Date;
     updatedAt: Date;
 };
+
+export interface Response {
+    id: string;
+    promptSessionId: string;
+    studentId: string;
+    answers: JsonValue;
+    submittedAt: Date | null;
+}
 
 export interface SearchOptions {
     classroom: string;

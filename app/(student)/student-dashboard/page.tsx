@@ -3,6 +3,9 @@ import Header from "@/components/shared/header";
 import { prisma } from "@/db/prisma";
 import { Session } from "@/types";
 import { notFound } from "next/navigation";
+import StudentTaskListItem from "@/components/student-task-list-item";
+import { Question } from "@/types";
+import { PromptSession } from "@prisma/client";
 
 export default async function StudentDashboard() {
 
@@ -22,9 +25,19 @@ export default async function StudentDashboard() {
         where: { id: classroomId },
         include: {
             users: true,
-            PromptSession: true
+            PromptSession: {
+                include: {
+                    responses: true
+                }
+            }
         }
     })
+
+    console.log('classroomData ', classroomData)
+
+    const tasksToDo = classroomData?.PromptSession.filter(singleSession => singleSession.status === 'active') as unknown as PromptSession[]
+
+    if (!classroomData) return;
 
 
     return (
@@ -32,10 +45,12 @@ export default async function StudentDashboard() {
             <Header session={session} />
             <main className="wrapper">
                 <h1 className="h1-bold mt-2 line-clamp-1">{classroomData?.name}</h1>
-                {/* 
-            {classroomData.map(() => (
-
-            ))} */}
+                {/* show only prompot session if there are active ones */}
+                {tasksToDo?.map((task: PromptSession) => (
+                    <StudentTaskListItem
+                        jotData={task}
+                    />
+                ))}
             </main>
         </div>
     )
