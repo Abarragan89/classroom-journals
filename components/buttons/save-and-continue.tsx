@@ -13,6 +13,7 @@ export default function SaveAndContinueBtns({ submitHandler, isSaving }: Props) 
                 variant='secondary'
                 type="button"
                 onClick={submitHandler}
+                disabled={isSaving}
             >
                 {isSaving ?
                     <BarLoader
@@ -31,8 +32,21 @@ export default function SaveAndContinueBtns({ submitHandler, isSaving }: Props) 
             <Button
                 variant='default'
                 type="submit"
+                disabled={isSaving}
             >
-                Save and Continue
+                {isSaving ?
+                    <BarLoader
+                        color={'white'}
+                        width={30}
+                        height={2}
+                        loading={isSaving}
+                        aria-label="Loading Spinner"
+                        data-testid="loader"
+                        className="mb-1 min-w-28"
+                    />
+                    :
+
+                    'Save and Continue'}
             </Button>
         </div>
     )

@@ -20,7 +20,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         // Extract all questions from formData & dump into questions[]
         formData.forEach((value, key) => {
             if (key.startsWith("question")) {
-                questions.push({ question: value as string }); // Convert into correct format
+                questions.push({ question: (value as string).trim()}); // Convert into correct format
             }
             if (key.startsWith("classroom-assign")) {
                 classesAssignTo.push(value as string)
@@ -115,7 +115,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
         // Extract all questions from formData & dump into questions[]
         formData.forEach((value, key) => {
             if (key.startsWith("question")) {
-                questions.push({ question: value as string }); // Convert into correct format
+                questions.push({ question: (value as string).trim() }); // Convert into correct format
             }
             if (key.startsWith("classroom-assign")) {
                 classesAssignTo.push(value as string)

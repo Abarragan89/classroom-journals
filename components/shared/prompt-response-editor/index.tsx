@@ -5,6 +5,8 @@ import { useSearchParams, useParams } from "next/navigation";
 import SaveAndContinueBtns from "@/components/buttons/save-and-continue";
 import { saveFormData, getFormData } from "@/lib/indexed.db.actions";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 export default function PromptResponseEditor({
     questions,
@@ -13,20 +15,22 @@ export default function PromptResponseEditor({
 }) {
 
     const searchParams = useSearchParams();
-    const questionNumber = searchParams.get('q') as string;
+    let questionNumber: string | number = searchParams.get('q') as string;
     const { promptSessionId } = useParams();
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);
+
+
 
     console.log('question ', questions)
 
     const [journalText, setJournalText] = useState<string>("");
     const [cursorIndex, setCursorIndex] = useState<number>(0);
-    const [allQuestions, setAllQuestions] = useState<Question[]>(questions);
+    const [_allQuestions, setAllQuestions] = useState<Question[]>(questions);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
+    const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
     const [isTyping, setIsTyping] = useState(false); // Track user typing
-
     const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
 
@@ -45,12 +49,13 @@ export default function PromptResponseEditor({
         } catch (error) {
             console.log('error getting saved data in indexedb', error)
         }
-
     }
+    // This runs on every new page
     useEffect(() => {
         if (questionNumber && questions) {
             setCurrentQuestion(questions[Number(questionNumber)].question)
             getSavedText()
+            setJournalText('')
         }
     }, [questionNumber, questions])
 
@@ -133,7 +138,6 @@ export default function PromptResponseEditor({
     async function handleSaveResponses() {
         try {
             setIsSaving(true)
-
             setAllQuestions((prev) => {
                 const updatedQuestions = prev.map((q, index) =>
                     index === Number(questionNumber)
@@ -151,7 +155,7 @@ export default function PromptResponseEditor({
         } finally {
             setTimeout(() => {
                 setIsSaving(false)
-            }, 800);
+            }, 350);
         }
     }
 
@@ -168,18 +172,20 @@ export default function PromptResponseEditor({
         }
     }
 
-    console.log('all questions ', allQuestions)
-
+    async function submitResponses() {
+        console.log('submitted!')
+    }
 
     return (
-        <>
-            <p className="h2-bold mt-16 mb-16 w-11/12 mx-auto text-center">{currentQuestion}</p>
-            <div className="mb-20 w-11/12 mx-auto flex flex-col items-center">
+        <div className="w-full max-w-[900px] mx-auto relative">
+            <p className="absolute -top-14 right-0 text-sm">Question: {Number(questionNumber) + 1} / {questions.length}</p>
+            <p className="h2-bold mt-12 mb-12 w-full mx-auto text-center">{currentQuestion}</p>
+            <div className="mb-12 w-full mx-auto flex flex-col items-center">
                 <div
                     ref={inputRef}
                     tabIndex={0}
                     onKeyDown={handleKeyDown}
-                    className="w-full border-2 border-bg-accent rounded-lg outline-none"
+                    className="mx-auto w-full border-2 border-bg-accent rounded-lg outline-none"
                 >
                     <pre className="text-lg w-full p-5 whitespace-pre-wrap">
                         {journalText.slice(0, cursorIndex)}
@@ -191,12 +197,35 @@ export default function PromptResponseEditor({
                 </div>
                 <p className="text-sm text-center mt-2 italic">click in the box to start typing</p>
             </div>
-            <form onSubmit={(e) => saveAndContinue(e)} className="mt-16">
-                <SaveAndContinueBtns
-                    isSaving={isSaving}
-                    submitHandler={handleSaveResponses}
-                />
-            </form>
-        </>
+
+            {/* Save and Submit Buttons */}
+            {/* <Separator className="w-4/5 mx-auto mb-5" /> */}
+            {/* check to see if it is on the last questions */}
+            {Number(questionNumber) === questions.length - 1 ? (
+                confirmSubmission ? (
+                    <div className="flex flex-col justify-center items-center">
+                        <p className="text-center text-destructive mb-3 font-bold">Are you sure you want to submit all your answers?</p>
+                        <div className="flex-center gap-x-7">
+                            <Button variant='secondary' onClick={() => setConfirmSubmission(false)}>Cancel</Button>
+                            <Button onClick={submitResponses}>Confirm Submission</Button>
+                        </div>
+                    </div>
+
+                ) : (
+                    <div className="flex flex-col justify-center items-center">
+                        <p className="text-center mb-3 font-bold">You're all done. Ready to submit?</p>
+                        <Button onClick={() => { setConfirmSubmission(true); handleSaveResponses() }}>Submit Responses</Button>
+                    </div>
+                )
+            ) : (
+                <form onSubmit={(e) => saveAndContinue(e)} className="mt-16">
+                    <SaveAndContinueBtns
+                        isSaving={isSaving}
+                        submitHandler={handleSaveResponses}
+                    />
+                </form>
+
+            )}
+        </div>
     );
 }

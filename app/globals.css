@@ -6,9 +6,9 @@
   :root {
     --background: hsl(48, 24%, 88%);
     --foreground: hsl(0, 0%, 20%);
-    --primary: hsl(217, 61%, 22%);
+    --primary: hsl(217, 90%, 23%);
     --primary-foreground: hsl(0, 3%, 94%);
-    --secondary: hsl(217, 46%, 25%);
+    --secondary: hsl(228, 5%, 21%);
     --secondary-foreground: hsl(210 40% 98%);
     --muted: hsl(228, 19%, 35%);
     --muted-foreground: hsl(0, 0%, 59%);
