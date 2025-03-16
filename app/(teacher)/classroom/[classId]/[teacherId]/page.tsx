@@ -9,7 +9,7 @@ export default async function Classroom({
 }: {
     params: Promise<{ classId: string, teacherId: string }>
 }) {
-    const { classId } = await params;
+    const { classId, teacherId } = await params;
 
     const allPromptSessions = await getAllSessionsInClass(classId) as unknown as PromptSession[]
 
@@ -24,6 +24,8 @@ export default async function Classroom({
                     <JotListBanner
                         key={prompt.id}
                         jotData={prompt}
+                        classId={classId}
+                        teacherId={teacherId}
                     />
                 )) : (
                     <p>No Jots posted</p>

@@ -23,7 +23,7 @@ export default async function Classes() {
             <Header teacherId={teacherId} session={session as Session} />
             <main className=" wrapper">
                 <h1 className="h1-bold">My Classes</h1>
-                <div className="mt-10 flex flex-wrap justify-center items-start gap-14 mx-auto">
+                <div className="mt-10 flex flex-wrap items-start gap-14 mx-auto">
                     {allClassrooms?.length > 0 ? allClassrooms.map((classroom: Class) => (
                         <ClassCard
                             key={classroom.id}

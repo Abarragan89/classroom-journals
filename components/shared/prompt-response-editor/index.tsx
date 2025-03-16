@@ -6,12 +6,18 @@ import SaveAndContinueBtns from "@/components/buttons/save-and-continue";
 import { saveFormData, getFormData } from "@/lib/indexed.db.actions";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { ArrowBigLeft } from "lucide-react";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+import { createStudentResponse } from "@/lib/actions/response.action";
+import { toast } from "sonner";
 
 export default function PromptResponseEditor({
     questions,
+    studentId,
 }: {
-    questions: Question[]
+    questions: Question[],
+    studentId: string,
 }) {
 
     const searchParams = useSearchParams();
@@ -20,18 +26,26 @@ export default function PromptResponseEditor({
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);
 
-
-
-    console.log('question ', questions)
-
     const [journalText, setJournalText] = useState<string>("");
     const [cursorIndex, setCursorIndex] = useState<number>(0);
-    const [_allQuestions, setAllQuestions] = useState<Question[]>(questions);
+    const [allQuestions, setAllQuestions] = useState<Question[]>(questions);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
-    const [isTyping, setIsTyping] = useState(false); // Track user typing
+    const [isTyping, setIsTyping] = useState(false);
     const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+    const [state, action] = useActionState(createStudentResponse, {
+        success: false,
+        message: ''
+    })
+
+    useEffect(() => {
+        if (state?.success) {
+            router.push('/')
+            toast('Answers Submitted!')
+        }
+    }, [state.success])
 
 
     async function getSavedText() {
@@ -56,6 +70,7 @@ export default function PromptResponseEditor({
             setCurrentQuestion(questions[Number(questionNumber)].question)
             getSavedText()
             setJournalText('')
+            inputRef.current?.focus()
         }
     }, [questionNumber, questions])
 
@@ -73,7 +88,17 @@ export default function PromptResponseEditor({
             }, 2000); // Save after 10 seconds of inactivity
         }
         return () => clearTimeout(typingTimeoutRef.current);
-    }, [journalText]);
+    }, [journalText, isTyping]);
+
+    // Go into fullscreen mode
+    useEffect(() => {
+        const goFullScreen = async () => {
+            if (typeof window !== "undefined" && document.documentElement.requestFullscreen) {
+                await document.documentElement.requestFullscreen();
+            }
+        };
+        goFullScreen().catch((err) => console.warn("Fullscreen request failed:", err));
+    }, []);
 
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -131,10 +156,6 @@ export default function PromptResponseEditor({
         return userText
     }
 
-    useEffect(() => {
-        inputRef.current?.focus()
-    }, [])
-
     async function handleSaveResponses() {
         try {
             setIsSaving(true)
@@ -176,16 +197,27 @@ export default function PromptResponseEditor({
         console.log('submitted!')
     }
 
+    const SubmitFormBtn = () => {
+        const { pending } = useFormStatus()
+        return (
+            <Button disabled={pending} className="w-full" variant='default'>
+                {pending ? 'Submitting...' : 'Confirm Submission'}
+            </Button>
+        )
+    }
+
+
     return (
-        <div className="w-full max-w-[900px] mx-auto relative">
-            <p className="absolute -top-14 right-0 text-sm">Question: {Number(questionNumber) + 1} / {questions.length}</p>
-            <p className="h2-bold mt-12 mb-12 w-full mx-auto text-center">{currentQuestion}</p>
+        <div className="w-full max-w-[900px] mx-auto relative px-10">
+            <p className="absolute -top-16 right-0 text-sm">Question: {Number(questionNumber) + 1} / {questions.length}</p>
+            <ArrowBigLeft className="absolute -top-16 left-0 text-sm hover:cursor-pointer hover:text-accent" onClick={() => router.back()} />
+            <p className="h2-bold mt-20 mb-12 w-full mx-auto text-center">{currentQuestion}</p>
             <div className="mb-12 w-full mx-auto flex flex-col items-center">
                 <div
                     ref={inputRef}
                     tabIndex={0}
                     onKeyDown={handleKeyDown}
-                    className="mx-auto w-full border-2 border-bg-accent rounded-lg outline-none"
+                    className="mx-auto w-full border-2 border-bg-accent rounded-md outline-none"
                 >
                     <pre className="text-lg w-full p-5 whitespace-pre-wrap">
                         {journalText.slice(0, cursorIndex)}
@@ -204,21 +236,44 @@ export default function PromptResponseEditor({
             {Number(questionNumber) === questions.length - 1 ? (
                 confirmSubmission ? (
                     <div className="flex flex-col justify-center items-center">
-                        <p className="text-center text-destructive mb-3 font-bold">Are you sure you want to submit all your answers?</p>
-                        <div className="flex-center gap-x-7">
-                            <Button variant='secondary' onClick={() => setConfirmSubmission(false)}>Cancel</Button>
-                            <Button onClick={submitResponses}>Confirm Submission</Button>
-                        </div>
+                        <p className="text-center text-destructive font-bold">Are you sure you want to submit all your answers?</p>
+                        <form action={action} className="mt-5">
+                            <input
+                                id="studentId"
+                                name="studentId"
+                                value={studentId}
+                                hidden
+                                readOnly
+                            />
+                            <input
+                                id="promptSessionId"
+                                name="promptSessionId"
+                                value={promptSessionId}
+                                hidden
+                                readOnly
+                            />
+                            <input
+                                id="responseData"
+                                name="responseData"
+                                value={JSON.stringify(allQuestions)}
+                                hidden
+                                readOnly
+                            />
+                            <div className="flex-center gap-x-7">
+                                <Button variant='secondary' type="button">Cancel</Button>
+                                <SubmitFormBtn />
+                            </div>
+                        </form>
                     </div>
 
                 ) : (
                     <div className="flex flex-col justify-center items-center">
-                        <p className="text-center mb-3 font-bold">You're all done. Ready to submit?</p>
+                        <p className="text-center mb-3 font-bold">Ready to submit?</p>
                         <Button onClick={() => { setConfirmSubmission(true); handleSaveResponses() }}>Submit Responses</Button>
                     </div>
                 )
             ) : (
-                <form onSubmit={(e) => saveAndContinue(e)} className="mt-16">
+                <form onSubmit={(e) => saveAndContinue(e)}>
                     <SaveAndContinueBtns
                         isSaving={isSaving}
                         submitHandler={handleSaveResponses}

@@ -56,7 +56,7 @@ export default async function DashboardLayout({
                 </div>
                 <main className="wrapper">
                     <Link href={'/classes'} className="flex items-center hover:underline w-fit">
-                        <ArrowLeftIcon className="mr-1" size={20} />Back to all classes
+                        <ArrowLeftIcon className="mr-1" size={20} />Back to All Classes
                     </Link>
                     <h1 className="h1-bold mt-2 line-clamp-1">{classroomData.name}</h1>
                     {children}

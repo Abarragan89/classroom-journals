@@ -83,11 +83,11 @@ model Classroom {
 }
 
 model ClassUser {
-  userId  String @db.Uuid
-  classId String @db.Uuid
-  role    String @default("student") // "teacher" or "student"
-  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  class Classroom @relation(fields: [classId], references: [id], onDelete: Cascade)
+  userId  String    @db.Uuid
+  classId String    @db.Uuid
+  role    String    @default("student") // "teacher" or "student"
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  class   Classroom @relation(fields: [classId], references: [id], onDelete: Cascade)
 
   @@id([userId, classId]) // Composite primary key
 }
@@ -173,13 +173,13 @@ model PromptSession {
   id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   promptId   String     @db.Uuid
   title      String
-  questions  Json     // Single array 
+  questions  Json // Single array 
   assignedAt DateTime   @default(now())
   classId    String     @db.Uuid // relate it to which side it is attached to
   status     String     @default("active") // e.g., "active", "completed"
   responses  Response[]
   // Relationship
-  prompt     Prompt     @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  prompt     Prompt     @relation(fields: [promptId], references: [id])
   class      Classroom  @relation(fields: [classId], references: [id], onDelete: Cascade)
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
@@ -189,7 +189,7 @@ model Response {
   id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   promptSessionId String        @db.Uuid
   studentId       String        @db.Uuid
-  answers         Json //stores questions, answers, and score (score is Correct, 1/2 or wrong)
+  response        Json //stores questions, answers, and score (score is Correct, 1/2 or wrong)
   submittedAt     DateTime? // Nullable in case they haven't submitted yet
   // Relationship
   promptSession   PromptSession @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)

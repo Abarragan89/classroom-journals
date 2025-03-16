@@ -33,11 +33,7 @@ export default async function StudentDashboard({
 
     }) as unknown as PromptSession
 
-    console.log('prompt sesession ', promptSessionData)
-
-
     if (!promptSessionData) return;
-
 
     const questions = promptSessionData?.questions as unknown as Question[]
 
@@ -47,6 +43,7 @@ export default async function StudentDashboard({
             <main className="wrapper">
             <PromptResponseEditor 
                 questions={questions}
+                studentId={studentId}
             />
             </main>
         </div>

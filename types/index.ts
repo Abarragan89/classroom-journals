@@ -69,7 +69,7 @@ export type PromptSession = {
     assignedAt: Date;
     classId: string;
     status: string;
-    responses?: Response[]; 
+    responses?: Response[];
     class?: Classroom;
     createdAt: Date;
     updatedAt: Date;
@@ -80,7 +80,8 @@ export interface Response {
     promptSessionId: string;
     studentId: string;
     answers: JsonValue;
-    submittedAt: Date | null;
+    score: number;
+    submittedAt: Date;
 }
 
 export interface SearchOptions {

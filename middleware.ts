@@ -26,7 +26,6 @@ export async function middleware() {
     const contentSecurityPolicyHeaderValue = cspHeader.replace(/\s{2,}/g, ' ').trim();
     response.headers.set('Content-Security-Policy', contentSecurityPolicyHeaderValue);
     response.headers.set('x-nonce', nonce);
-    console.log('headers ', response.headers)
     return response;
 }
 
