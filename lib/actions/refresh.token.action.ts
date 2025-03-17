@@ -26,7 +26,7 @@ async function refreshAccessToken(refreshToken: string) {
             refreshToken: refreshedTokens.refresh_token ?? refreshToken, // Keep old refresh token if not returned
         };
     } catch (error) {
-        console.error("Error refreshing access token:", error);
+        // console.error("Error refreshing access token:", error);
         return null;
     }
 }

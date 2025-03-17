@@ -57,14 +57,18 @@ export default async function StudentDashboard() {
             <main className="wrapper">
                 <h1 className="h1-bold mt-2 line-clamp-1">{classroomData?.name}</h1>
                 {/* Show prompto sessions if they exist */}
-                {tasksToDo?.length > 0 ? tasksToDo.map((task: PromptSession) => (
-                    <div key={task.id}>
-                        <h2 className="h2-bold mt-5">Assignments</h2>
-                        <StudentTaskListItem
-                            jotData={task}
-                        />
-                    </div>
-                )) : (
+                {tasksToDo?.length > 0 ? (
+                    <>
+                        <h2 className=" mt-5">Assignments</h2>
+                        {tasksToDo.map((task: PromptSession) => (
+                            <div key={task.id}>
+                                <StudentTaskListItem
+                                    jotData={task}
+                                />
+                            </div>
+                        ))}
+                    </>
+                ) : (
                     <p>No assignments this is your dashboard</p>
                 )}
             </main>

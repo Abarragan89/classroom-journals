@@ -20,7 +20,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         // Extract all questions from formData & dump into questions[]
         formData.forEach((value, key) => {
             if (key.startsWith("question")) {
-                questions.push({ question: (value as string).trim()}); // Convert into correct format
+                questions.push({ question: (value as string).trim() }); // Convert into correct format
             }
             if (key.startsWith("classroom-assign")) {
                 classesAssignTo.push(value as string)
@@ -90,7 +90,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         // Improved error logging
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);
-            console.error(error.stack); // Log stack trace for better debugging
+            // // console.error(error.stack); // Log stack trace for better debugging
         } else {
             console.log('Unexpected error:', error);
         }
@@ -194,10 +194,11 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
 
     } catch (error) {
         if (error instanceof Error) {
-            console.error('Error updating prompt:', error.message);
-            console.error(error.stack);
+            console.log('Error updating prompt:', error.message)
+            // console.error('Error updating prompt:', error.message);
+            // console.error(error.stack);
         } else {
-            console.error('Unexpected error:', error);
+            // console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error updating prompt. Try again.' };
     }
@@ -239,7 +240,7 @@ export async function getAllTeacherPrompts(teacherId: string) {
         // Improved error logging
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);
-            console.error(error.stack); // Log stack trace for better debugging
+            // console.error(error.stack); // Log stack trace for better debugging
         } else {
             console.log('Unexpected error:', error);
         }
@@ -273,7 +274,7 @@ export async function getSinglePrompt(promptId: string) {
         // Improved error logging
         if (error instanceof Error) {
             console.log('Error getting single prompt:', error.message);
-            console.error(error.stack); // Log stack trace for better debugging
+            // console.error(error.stack); // Log stack trace for better debugging
         } else {
             console.log('Unexpected error:', error);
         }
@@ -327,7 +328,7 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
     } catch (error) {
         if (error instanceof Error) {
             console.log("Error fetching prompts:", error.message);
-            console.error(error.stack);
+            // console.error(error.stack);
         } else {
             console.log("Unexpected error:", error);
         }
@@ -407,7 +408,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
     } catch (error) {
         if (error instanceof Error) {
             console.log("Error fetching prompts:", error.message);
-            console.error(error.stack);
+            // console.error(error.stack);
         } else {
             console.log("Unexpected error:", error);
         }
@@ -427,10 +428,10 @@ export async function deletePrompt(prevState: unknown, formData: FormData) {
 
     } catch (error) {
         if (error instanceof Error) {
-            console.error('Error updating prompt:', error.message);
-            console.error(error.stack);
+            console.log('Error updating prompt:', error.message);
+            // console.error(error.stack);
         } else {
-            console.error('Unexpected error:', error);
+            // console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error updating prompt. Try again.' };
     }

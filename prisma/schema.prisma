@@ -172,7 +172,7 @@ model Prompt {
 
 model PromptSession {
   id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  promptId   String     @db.Uuid
+  promptId   String?     @db.Uuid
   title      String
   questions  Json // Single array 
   assignedAt DateTime   @default(now())
@@ -180,7 +180,7 @@ model PromptSession {
   status     String     @default("active") // e.g., "active", "completed"
   responses  Response[]
   // Relationship
-  prompt     Prompt     @relation(fields: [promptId], references: [id])
+  prompt     Prompt?     @relation(fields: [promptId], references: [id], onDelete: SetNull)
   class      Classroom  @relation(fields: [classId], references: [id], onDelete: Cascade)
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt

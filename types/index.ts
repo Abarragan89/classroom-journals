@@ -63,7 +63,7 @@ export type Prompt = z.infer<typeof promptSchema> & {
 
 export type PromptSession = {
     id: string;
-    promptId: string;
+    promptId: string | null;
     title: string;
     questions: Question[] | JsonValue;
     assignedAt: Date;

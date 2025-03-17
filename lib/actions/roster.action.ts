@@ -60,7 +60,7 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
         // Improved error logging
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);
-            console.error(error.stack); // Log stack trace for better debugging
+            // console.error(error.stack); // Log stack trace for better debugging
         } else {
             console.log('Unexpected error:', error);
         }
@@ -104,7 +104,7 @@ export async function editStudent(prevState: unknown, formData: FormData) {
     } catch (error) {
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);
-            console.error(error.stack); // Log stack trace for better debugging
+            // console.error(error.stack); // Log stack trace for better debugging
         } else {
             console.log('Unexpected error:', error);
         }
@@ -131,7 +131,7 @@ export async function deleteStudent(prevState: unknown, formData: FormData) {
     } catch (error) {
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);
-            console.error(error.stack); // Log stack trace for better debugging
+            // console.error(error.stack); // Log stack trace for better debugging
         } else {
             console.log('Unexpected error:', error);
         }

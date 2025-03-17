@@ -59,7 +59,7 @@ export default function PromptResponseEditor({
             const savedResponse = await getFormData(promptSessionId as string)
             const isThereResponse = savedResponse.questions[Number(questionNumber)].answer
             const savedText = savedResponse.questions[Number(questionNumber)].answer || "";
-            setCursorIndex(savedText.length); // Move cursor to end of text
+            setCursorIndex(savedText.length);
 
             if (!savedResponse || !isThereResponse) {
                 return
@@ -164,24 +164,20 @@ export default function PromptResponseEditor({
 
     async function handleSaveResponses() {
         try {
-            setIsSaving(true)
-            setAllQuestions((prev) => {
-                const updatedQuestions = prev.map((q, index) =>
-                    index === Number(questionNumber)
-                        ? { question: currentQuestion, answer: journalText }
-                        : q
-                );
-
-                // Save the updated state immediately
-                saveFormData(updatedQuestions, promptSessionId);
-
-                return updatedQuestions; // Ensure React updates the state correctly
-            });
+            setIsSaving(true);
+            const updatedQuestions = allQuestions.map((q, index) =>
+                index === Number(questionNumber)
+                    ? { question: currentQuestion, answer: journalText }
+                    : q
+            );
+            // Save immediately after updating questions
+            await saveFormData(updatedQuestions, promptSessionId);
+            setAllQuestions(updatedQuestions);
         } catch (error) {
-            console.log('error saving to indexed db', error)
+            console.log('error saving to indexed db', error);
         } finally {
             setTimeout(() => {
-                setIsSaving(false)
+                setIsSaving(false);
             }, 350);
         }
     }

@@ -9,8 +9,8 @@ import {
 import { prisma } from '@/db/prisma';
 import Link from 'next/link';
 import { formatDateShort } from '@/lib/utils';
-import { Button } from "@/components/ui/button";
 import { decryptText } from "@/lib/utils";
+import { ClipboardCheckIcon } from "lucide-react";
 
 export default async function SinglePromptSession({
     params
@@ -54,21 +54,27 @@ export default async function SinglePromptSession({
 
     return (
         <div>
-            <h2 className="text-2xl lg:text-3xl line-clamp-4 mt-7">{promptSession.prompt.title}</h2>
+            <h2 className="text-2xl lg:text-3xl line-clamp-4 mt-7">{promptSession?.prompt?.title}</h2>
             <Table className="mt-5">
                 <TableHeader>
                     <TableRow>
+                        <TableHead className="text-right">&nbsp;</TableHead>
                         <TableHead>Name</TableHead>
                         <TableHead>Score</TableHead>
                         <TableHead>Percentage</TableHead>
                         <TableHead>Comments</TableHead>
                         <TableHead>Submitted</TableHead>
-                        <TableHead className="text-right">&nbsp;</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {promptSession.responses.map((response) => (
                         <TableRow key={response.id}>
+                                <TableCell>
+                                    <Link
+                                        href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSession.id}/single-response/${response.id}`}>
+                                    <ClipboardCheckIcon />
+                                    </Link>
+                                </TableCell>
                             <TableCell className="font-medium">
                                 <Link
                                     className="underline hover:text-accent"
@@ -80,14 +86,6 @@ export default async function SinglePromptSession({
                             <TableCell>(92%)</TableCell>
                             <TableCell>13</TableCell>
                             <TableCell>{formatDateShort(response.submittedAt)}</TableCell>
-                            <TableCell className="text-right">
-                                <Button asChild variant='secondary' className="h-7">
-                                    <Link
-                                        href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSession.id}/single-response/${response.id}`}>
-                                        Review
-                                    </Link>
-                                </Button>
-                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

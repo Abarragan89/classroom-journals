@@ -48,8 +48,6 @@ export default async function SingleResponse({
 
     const questionsAndAnswers = response.response as unknown as ResponseData[]
 
-    console.log('questions and answers ', questionsAndAnswers)
-
     return (
         <div>
             <div className="mb-10 space-y-1">
@@ -58,7 +56,7 @@ export default async function SingleResponse({
             </div>
             <div className="flex flex-wrap justify-start gap-7">
                 {questionsAndAnswers?.length > 0 && questionsAndAnswers.map((responseData: ResponseData, index: number) => (
-                    <Card className='w-[450px] p-4 space-y-3' key={responseData.id}>
+                    <Card className='w-full p-4 space-y-3' key={responseData.id}>
                         <div className="flex-between text-sm">
                             <p>Question {index + 1}</p>
                             <p className='ml-2'> Marked As: Incorrect</p>
