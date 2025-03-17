@@ -10,9 +10,6 @@ import { Session, User } from "@/types";
 import AddStudentBtn from "@/components/forms/roster-forms/add-student-button";
 import { auth } from "@/auth";
 import StudentRosterRow from "@/components/shared/student-roster-row";
-import Link from "next/link";
-import { ArrowLeftIcon } from "lucide-react";
-
 export default async function Roster({
   params
 }: {

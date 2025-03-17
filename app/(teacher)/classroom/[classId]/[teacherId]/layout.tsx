@@ -6,8 +6,6 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { notFound } from "next/navigation";
 import { Class, Classroom, Session } from "@/types";
 import { getAllClassrooms, getSingleClassroom } from "@/lib/actions/classroom.actions";
-import { ArrowLeftIcon } from "lucide-react";
-import Link from "next/link";
 import { prisma } from "@/db/prisma";
 import DynamicHeader from "@/components/dynamic-header";
 

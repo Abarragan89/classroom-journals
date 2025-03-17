@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { ArrowLeftIcon } from "lucide-react";
 import { prisma } from "@/db/prisma";
 import { decryptText } from "@/lib/utils";
 
@@ -9,7 +7,7 @@ export default async function SingleStudentView({
     params: Promise<{ studentId: string, classId: string, teacherId: string }>
 }) {
 
-    const { studentId, classId, teacherId, } = await params;
+    const { studentId} = await params;
 
     const studentData = await prisma.user.findUnique({
         where: { id: studentId }

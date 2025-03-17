@@ -1,5 +1,4 @@
-import Link from "next/link"
-import { ArrowLeftIcon } from "lucide-react"
+
 
 export default async function Jots({
     params
