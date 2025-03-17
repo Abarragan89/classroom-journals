@@ -85,6 +85,12 @@ export interface Response {
     student: User;
 }
 
+export interface ResponseData {
+    answer: string;
+    question: string;
+    score: number;
+}
+
 export interface SearchOptions {
     classroom: string;
     filter: string;
