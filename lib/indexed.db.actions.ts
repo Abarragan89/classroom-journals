@@ -27,7 +27,6 @@ export const saveFormData = async (data, sessionId) => {
     const store = tx.objectStore('jot-responses');
 
     // Retrieve existing data within the same transaction
-    const existingData = await store.get(sessionId);
     const mergedData = { questions: data, id: sessionId };
 
     // Save the merged data back to the database
