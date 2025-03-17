@@ -4,7 +4,7 @@ import { openDB } from 'idb';
 // Utility function to open IndexedDB
 export const openIndexedDB = async () => {
     const db = await openDB('savedResponses', 1, {
-        upgrade(db, oldVersion, newVersion, transaction, event) {
+        upgrade(db, oldVersion) {
             // If it's the first time opening the database
             if (oldVersion < 1) {
                 db.createObjectStore('jot-responses', {
@@ -20,7 +20,7 @@ export const openIndexedDB = async () => {
 // Utility function to save form data
 //@ts-expect-error: data varies and too complex to type
 export const saveFormData = async (data, sessionId) => {
-    
+
     // Open store
     const db = await openIndexedDB();
     const tx = db.transaction('jot-responses', 'readwrite');

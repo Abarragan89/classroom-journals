@@ -8,7 +8,7 @@ export default async function Notifications({
     console.log(params)
     return (
         <div>
-            <h2>Notifications</h2>
+            <h2 className="text-2xl lg:text-3xl mt-2">Notifications</h2>
         </div>
     )
 }

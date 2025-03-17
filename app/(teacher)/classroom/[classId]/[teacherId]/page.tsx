@@ -14,12 +14,12 @@ export default async function Classroom({
     const allPromptSessions = await getAllSessionsInClass(classId) as unknown as PromptSession[]
 
     return (
-        <div className="relative max-w-[900px] mx-auto">
-            <Button className="absolute top-[-10px] right-[2%]" variant='secondary'>
+        <div className="relative">
+            <Button className="absolute top-[0px] right-[2%]" variant='secondary'>
                 <Plus />Assign
             </Button>
+            <h2 className="text-2xl lg:text-3xl mt-2">Posted Assignments</h2>
             <div className="w-[95%] max-w-[750px] mt-10 mx-auto">
-                <h2 className="text-2xl">Posted Assignments</h2>
                 {allPromptSessions?.length > 0 ? allPromptSessions.map((prompt) => (
                     <JotListBanner
                         key={prompt.id}

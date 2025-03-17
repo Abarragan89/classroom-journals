@@ -24,6 +24,7 @@ export function ClassroomSwitcher({
 
     const pathname = usePathname();
     const currentClassroomId = pathname.split("/")[2];
+    const teacherId = pathname.split("/")[3];
     const selectedClassroom = classrooms.find(c => c.id === currentClassroomId) || classrooms[0];
 
     return (
@@ -53,7 +54,7 @@ export function ClassroomSwitcher({
                             <DropdownMenuItem
                                 key={classroom.id}
                             >
-                                <Link href={`/classroom/${classroom.id}`} className="w-full block">
+                                <Link href={`/classroom/${classroom.id}/${teacherId}`} className="w-full block">
                                     {classroom.name}
                                 </Link>
                             </DropdownMenuItem>

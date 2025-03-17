@@ -21,7 +21,7 @@ export default function PromptResponseEditor({
 }) {
 
     const searchParams = useSearchParams();
-    let questionNumber: string | number = searchParams.get('q') as string;
+    const questionNumber: string | number = searchParams.get('q') as string;
     const { promptSessionId } = useParams();
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);

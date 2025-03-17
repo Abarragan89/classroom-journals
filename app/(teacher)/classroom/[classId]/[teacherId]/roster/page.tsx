@@ -24,10 +24,10 @@ export default async function Roster({
 
   return (
     <div className="relative">
-      <div className="absolute top-[20px] right-[2%]">
+      <div className="absolute top-[0px] right-[2%]">
         <AddStudentBtn classId={classId} session={session} variant='secondary' />
       </div>
-      <h2 className="text-2xl mt-2">Class Roster</h2>
+      <h2 className="text-2xl lg:text-3xl mt-2">Class Roster</h2>
       <Table className="mt-5">
         <TableHeader>
           <TableRow>
