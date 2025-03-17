@@ -79,9 +79,10 @@ export interface Response {
     id: string;
     promptSessionId: string;
     studentId: string;
-    answers: JsonValue;
+    response: JsonValue;
     score: number;
     submittedAt: Date;
+    student: User;
 }
 
 export interface SearchOptions {

@@ -83,7 +83,7 @@ export default async function SinglePromptSession({
                             <TableCell className="text-right">
                                 <Button asChild variant='secondary' className="h-7">
                                     <Link
-                                        href={`/classroom/${classId}/${teacherId}/single-response/${response.id}`}>
+                                        href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSession.id}/single-response/${response.id}`}>
                                         Review
                                     </Link>
                                 </Button>
