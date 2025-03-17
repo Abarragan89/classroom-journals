@@ -15,8 +15,8 @@ export default async function Classroom({
 
     return (
         <div className="relative max-w-[900px] mx-auto">
-            <Button className="absolute top-[-120px] right-[2%]" variant='secondary'>
-                <Plus /> Assign Jot
+            <Button className="absolute top-[-10px] right-[2%]" variant='secondary'>
+                <Plus />Assign
             </Button>
             <div className="w-[95%] max-w-[750px] mt-10 mx-auto">
                 <h2 className="text-2xl">Posted Assignments</h2>

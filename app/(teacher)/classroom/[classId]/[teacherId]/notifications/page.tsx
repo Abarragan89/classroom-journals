@@ -1,3 +1,6 @@
+import Link from "next/link"
+import { ArrowLeftIcon } from "lucide-react"
+
 export default async function Notifications({
     params
 }: {
@@ -5,7 +8,9 @@ export default async function Notifications({
 }) {
     console.log(params)
     return (
-        <div>Assignments</div>
+        <div>
+            <h2>Notifications</h2>
+        </div>
     )
 }
 

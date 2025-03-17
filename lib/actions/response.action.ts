@@ -6,21 +6,14 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
         const studentId = formData.get('studentId') as string
         const promptSessionId = formData.get('promptSessionId') as string
         const responseData = formData.get('responseData') as string
-
         const response = JSON.parse(responseData)
-        console.log('resposne ', response)
-
-
-        // console.log('studentId', studentId)
-        // console.log('prompotsession', promptSessionId)
-        // console.log('response ', responseData)
 
         await prisma.response.create({
             data: {
                 promptSessionId,
                 studentId,
-                response
-
+                response,
+                submittedAt: new Date()
             }
         })
 

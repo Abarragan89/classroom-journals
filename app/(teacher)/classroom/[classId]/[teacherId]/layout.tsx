@@ -9,6 +9,7 @@ import { getAllClassrooms, getSingleClassroom } from "@/lib/actions/classroom.ac
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { prisma } from "@/db/prisma";
+import DynamicHeader from "@/components/dynamic-header";
 
 export default async function DashboardLayout({
     children,
@@ -28,22 +29,24 @@ export default async function DashboardLayout({
     // Get all classrooms to render 
     const teacherClasses = await getAllClassrooms(teacherId)
 
-    const classroomId = (await params).classId
-    if (!classroomId) notFound()
+    const { classId } = await params
+    if (!classId) notFound()
 
     // Check if the authenticated teacher is part of the classroom and has the role of 'teacher'
     const isTeacherAuthorized = await prisma.classUser.findFirst({
         where: {
-            classId: classroomId,
+            classId: classId,
             userId: teacherId,
             role: 'teacher'
-        }
+        },
+        select: { userId: true }
     });
 
     if (!isTeacherAuthorized) notFound()
 
     // Get Class Data
-    const classroomData = await getSingleClassroom(classroomId) as Class;
+    const classroomData = await getSingleClassroom(classId) as Class;
+
 
     return (
         <SidebarProvider>
@@ -55,9 +58,12 @@ export default async function DashboardLayout({
                     <Separator orientation="vertical" className="mr-2 h-4" />
                 </div>
                 <main className="wrapper">
-                    <Link href={'/classes'} className="flex items-center hover:underline w-fit">
-                        <ArrowLeftIcon className="mr-1" size={20} />Back to All Classes
-                    </Link>
+
+                    <DynamicHeader
+                        classId={classId}
+                        teacherId={teacherId}
+                    />
+
                     <h1 className="h1-bold mt-2 line-clamp-1">{classroomData.name}</h1>
                     {children}
                 </main>

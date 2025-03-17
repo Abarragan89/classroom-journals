@@ -25,6 +25,7 @@ model User {
   comments      Comment[]
   postLikes     PostLike[]
   commentLikes  CommentLike[]
+  responses     Response[]
   notifications Notification[]
   posts         Post[] // Posts are for tudents
   classes       ClassUser[]
@@ -190,7 +191,8 @@ model Response {
   promptSessionId String        @db.Uuid
   studentId       String        @db.Uuid
   response        Json //stores questions, answers, and score (score is Correct, 1/2 or wrong)
-  submittedAt     DateTime? // Nullable in case they haven't submitted yet
+  submittedAt     DateTime // Nullable in case they haven't submitted yet
   // Relationship
   promptSession   PromptSession @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
+  student         User @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }

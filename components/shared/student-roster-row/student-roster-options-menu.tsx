@@ -80,7 +80,7 @@ export default function StudentRosterOptionsMenu({
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     {/* Ellipse trigger */}
-                    <Ellipsis size={20} className="hover:cursor-pointer text-white" />
+                    <Ellipsis size={20} className="hover:cursor-pointer text-foreground" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <Link href={`/classroom/${classId}/${session.user.id}/roster/${studentInfo.id}`}>

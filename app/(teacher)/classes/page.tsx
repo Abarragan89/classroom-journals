@@ -22,23 +22,36 @@ export default async function Classes() {
         <>
             <Header teacherId={teacherId} session={session as Session} />
             <main className=" wrapper">
-                <h1 className="h1-bold">My Classes</h1>
-                <div className="mt-10 flex flex-wrap items-start gap-14 mx-auto">
-                    {allClassrooms?.length > 0 ? allClassrooms.map((classroom: Class) => (
-                        <ClassCard
-                            key={classroom.id}
-                            teacherId={teacherId}
-                            classData={classroom}
-                        />
-                    )) :
-                        (
-                            <div className="flex flex-col items-center justify-center text-primary">
-                                <p className="mb-4 font-bold">No classes</p>
+
+                {allClassrooms?.length > 0 ? (
+                    <>
+                        <h1 className="h1-bold">My Classes</h1>
+                        <div className="mt-10 flex flex-wrap items-start gap-14 mx-auto">
+                            {allClassrooms.map((classroom: Class) => (
+                                <ClassCard
+                                    key={classroom.id}
+                                    teacherId={teacherId}
+                                    classData={classroom}
+                                />
+                            ))
+                            }
+                        </div>
+                    </>
+                ) :
+                    (
+                        <>
+                            <h1 className="h1-bold">Create a Class</h1>
+                            <div className="flex flex-col mx-auto items-center justify-center text-primary mt-10">
+                                {session.googleProviderId && (
+                                    <p className="mb-3">Easily import from Google Classroom!</p>
+                                )}
+                                <div className="w-[90%] max-w-[150px]">
                                 <AddClassBtn variant='default' teacherId={teacherId} closeSubMenu={undefined} session={session as Session} />
+                                </div>
                             </div>
-                        )
-                    }
-                </div>
+                        </>
+                    )
+                }
             </main>
         </>
     )

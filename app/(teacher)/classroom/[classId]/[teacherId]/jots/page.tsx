@@ -1,3 +1,6 @@
+import Link from "next/link"
+import { ArrowLeftIcon } from "lucide-react"
+
 export default async function Jots({
     params
 }: {
@@ -5,6 +8,8 @@ export default async function Jots({
 }) {
     console.log(params)
     return (
-        <div>Assignments</div>
+        <div>
+            <h2>Jots</h2>
+        </div>
     )
 }

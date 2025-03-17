@@ -3,7 +3,7 @@ import { Question } from "@/types";
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams, useParams } from "next/navigation";
 import SaveAndContinueBtns from "@/components/buttons/save-and-continue";
-import { saveFormData, getFormData } from "@/lib/indexed.db.actions";
+import { saveFormData, getFormData, deleteRow } from "@/lib/indexed.db.actions";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowBigLeft } from "lucide-react";
@@ -42,10 +42,16 @@ export default function PromptResponseEditor({
 
     useEffect(() => {
         if (state?.success) {
-            router.push('/')
-            toast('Answers Submitted!')
+
+            async function finishResponseHandler() {
+                await deleteRow(promptSessionId as string)
+                router.push('/')
+                toast('Answers Submitted!')
+            }
+            finishResponseHandler()
         }
     }, [state.success])
+
 
 
     async function getSavedText() {
@@ -191,10 +197,6 @@ export default function PromptResponseEditor({
         } catch (error) {
             console.log('error saving and continuing ', error)
         }
-    }
-
-    async function submitResponses() {
-        console.log('submitted!')
     }
 
     const SubmitFormBtn = () => {

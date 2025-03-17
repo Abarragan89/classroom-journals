@@ -10,6 +10,8 @@ import { Session, User } from "@/types";
 import AddStudentBtn from "@/components/forms/roster-forms/add-student-button";
 import { auth } from "@/auth";
 import StudentRosterRow from "@/components/shared/student-roster-row";
+import Link from "next/link";
+import { ArrowLeftIcon } from "lucide-react";
 
 export default async function Roster({
   params
@@ -25,10 +27,10 @@ export default async function Roster({
 
   return (
     <div className="relative">
-      <div className="absolute top-[0px] right-[2%]">
+      <div className="absolute top-[20px] right-[2%]">
         <AddStudentBtn classId={classId} session={session} variant='secondary' />
       </div>
-      <h2 className="text-2xl mt-2">Student Roster</h2>
+      <h2 className="text-2xl mt-2">Class Roster</h2>
       <Table className="mt-5">
         <TableHeader>
           <TableRow>

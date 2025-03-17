@@ -12,15 +12,15 @@ export default function JotListBanner({
     classId: string,
     teacherId: string
 }) {
-    console.log('jot Data ', jotData)
+
     return (
-        <Link href={`/classroom/${classId}/${teacherId}/single-prompt-session/${jotData.id}`}>
+        <Link className='max-w-[500px]' href={`/classroom/${classId}/${teacherId}/single-prompt-session/${jotData.id}`}>
             <article className='bg-card opacity-80 text-card-foreground px-5 py-2 rounded-lg mt-3 mb-4 border border-border hover:cursor-pointer hover:opacity-100'>
                 <div className="flex-between text-xs">
                     <p>Status: {jotData.status}</p>
-                    <p>{formatDateShort(jotData.createdAt)}</p>
+                    <p>Posted: {formatDateShort(jotData.createdAt)}</p>
                 </div>
-                <p className='text-md py-3 font-bold'>{jotData.title}</p>
+                <p className='text-md py-2 font-bold'>{jotData.title}</p>
                 <div className="flex-between text-xs">
                     <p>Submissions: 3/12</p>
                     <p>Questions: {(jotData.questions as Question[])?.length}</p>

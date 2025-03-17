@@ -20,7 +20,7 @@ export const openIndexedDB = async () => {
 // Utility function to save form data
 //@ts-expect-error: data varies and too complex to type
 export const saveFormData = async (data, sessionId) => {
-    console.log('data ', data)
+    
     // Open store
     const db = await openIndexedDB();
     const tx = db.transaction('jot-responses', 'readwrite');
@@ -44,7 +44,7 @@ export const getFormData = async (sessionId: string) => {
 };
 
 
-export const deleteField = async (fieldName: string) => {
+export const deleteRow = async (rowId: string) => {
     const db = await openIndexedDB();
     // const store = db.transaction('formData').objectStore('formData');
 
@@ -52,13 +52,6 @@ export const deleteField = async (fieldName: string) => {
     const store = tx.objectStore('jot-responses');
 
     // Get all records (or use a cursor if needed)
-    const firstRecord = await store.get(0);
-    if (firstRecord) {
-        // Set the field to an empty string
-        firstRecord[fieldName] = '';
-        // Update the record
-        await store.put(firstRecord);
-    }
-
+    await store.delete(rowId);
 }
 

@@ -32,7 +32,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
       {
         title: "Menu",
         items: [
-          { title: "Assignment", icon: Home, slug: `/classroom/${currentClassroomId}/${teacherId}`, isActive: currentRoute === undefined, isLink: true },
+          { title: "Assignments", icon: Home, slug: `/classroom/${currentClassroomId}/${teacherId}`, isActive: currentRoute === undefined, isLink: true },
           { title: "Roster", icon: User, slug: `/classroom/${currentClassroomId}/${teacherId}/roster`, isActive: currentRoute === 'roster', isLink: true },
           { title: "Jots", icon: FileText, slug: `/classroom/${currentClassroomId}/${teacherId}/jots`, isActive: currentRoute === 'jots', isLink: true },
           { title: "Notifications", icon: Bell, slug: `/classroom/${currentClassroomId}/notifications`, isActive: currentRoute === 'notifications', isLink: true },

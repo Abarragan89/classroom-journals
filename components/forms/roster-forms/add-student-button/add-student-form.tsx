@@ -103,7 +103,7 @@ export default function AddStudentForm({
 
             {session?.googleProviderId && (
                 <div className="flex flex-col mx-auto w-2/3">
-                    <p className="my-5 text-center relative">
+                    <p className="my-3 text-center relative">
                         <span className="relative z-10 bg-background px-3">or</span>
                         <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
                     </p>
