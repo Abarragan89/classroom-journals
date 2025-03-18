@@ -71,6 +71,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                 const promptSessions = classesAssignTo.map((classId) => ({
                     promptId: createdPrompt.id,
                     title: createdPrompt.title,
+                    promptType: createdPrompt.promptType,
                     questions: createdPrompt.questions as Prisma.InputJsonValue,
                     assignedAt: new Date(),
                     classId: classId,
@@ -177,6 +178,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
                 const promptSessions = classesAssignTo.map((classId) => ({
                     promptId: updatedPrompt.id,
                     title: updatedPrompt.title,
+                    promptType: updatedPrompt.promptType,
                     questions: updatedPrompt.questions as Prisma.InputJsonValue,
                     assignedAt: new Date(),
                     classId: classId,
@@ -195,10 +197,10 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
     } catch (error) {
         if (error instanceof Error) {
             console.log('Error updating prompt:', error.message)
-            // console.error('Error updating prompt:', error.message);
-            // console.error(error.stack);
+            console.error('Error updating prompt:', error.message);
+            console.error(error.stack);
         } else {
-            // console.error('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error updating prompt. Try again.' };
     }
@@ -240,7 +242,7 @@ export async function getAllTeacherPrompts(teacherId: string) {
         // Improved error logging
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);
-            // console.error(error.stack); // Log stack trace for better debugging
+            console.error(error.stack); // Log stack trace for better debugging
         } else {
             console.log('Unexpected error:', error);
         }
@@ -274,7 +276,7 @@ export async function getSinglePrompt(promptId: string) {
         // Improved error logging
         if (error instanceof Error) {
             console.log('Error getting single prompt:', error.message);
-            // console.error(error.stack); // Log stack trace for better debugging
+            console.error(error.stack); // Log stack trace for better debugging
         } else {
             console.log('Unexpected error:', error);
         }
@@ -328,7 +330,7 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
     } catch (error) {
         if (error instanceof Error) {
             console.log("Error fetching prompts:", error.message);
-            // console.error(error.stack);
+            console.error(error.stack);
         } else {
             console.log("Unexpected error:", error);
         }
@@ -342,7 +344,6 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
     try {
 
         const promptId = formData.get('promptId') as string
-
         const classesAssignTo: string[] = []
 
         // Extract all questions from formData & dump into questions[]
@@ -362,7 +363,8 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
             select: {
                 id: true,
                 title: true,
-                questions: true
+                questions: true,
+                promptType: true
             }
         })
 
@@ -375,6 +377,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
             const promptSessions = classesAssignTo.map((classId) => ({
                 promptId: currentPrompt.id,
                 title: currentPrompt.title,
+                promptType: currentPrompt.promptType,
                 questions: currentPrompt.questions as Prisma.InputJsonValue,
                 assignedAt: new Date(),
                 classId: classId,
@@ -408,7 +411,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
     } catch (error) {
         if (error instanceof Error) {
             console.log("Error fetching prompts:", error.message);
-            // console.error(error.stack);
+            console.error(error.stack);
         } else {
             console.log("Unexpected error:", error);
         }
@@ -429,9 +432,9 @@ export async function deletePrompt(prevState: unknown, formData: FormData) {
     } catch (error) {
         if (error instanceof Error) {
             console.log('Error updating prompt:', error.message);
-            // console.error(error.stack);
+            console.error(error.stack);
         } else {
-            // console.error('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error updating prompt. Try again.' };
     }

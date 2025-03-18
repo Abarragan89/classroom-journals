@@ -87,11 +87,10 @@ export default function PromptResponseEditor({
             if (typingTimeoutRef.current) {
                 clearTimeout(typingTimeoutRef.current);
             }
-
             typingTimeoutRef.current = setTimeout(() => {
                 handleSaveResponses();
                 setIsTyping(false);
-            }, 2000); // Save after 10 seconds of inactivity
+            }, 5000); // Save after 5 seconds of inactivity
         }
         return () => clearTimeout(typingTimeoutRef.current);
     }, [journalText, isTyping]);
@@ -171,14 +170,12 @@ export default function PromptResponseEditor({
                     : q
             );
             // Save immediately after updating questions
-            await saveFormData(updatedQuestions, promptSessionId);
             setAllQuestions(updatedQuestions);
+            await saveFormData(updatedQuestions, promptSessionId);
         } catch (error) {
             console.log('error saving to indexed db', error);
         } finally {
-            setTimeout(() => {
-                setIsSaving(false);
-            }, 350);
+            setIsSaving(false);
         }
     }
 
@@ -229,8 +226,6 @@ export default function PromptResponseEditor({
             </div>
 
             {/* Save and Submit Buttons */}
-            {/* <Separator className="w-4/5 mx-auto mb-5" /> */}
-            {/* check to see if it is on the last questions */}
             {Number(questionNumber) === questions.length - 1 ? (
                 confirmSubmission ? (
                     <div className="flex flex-col justify-center items-center">
@@ -267,14 +262,17 @@ export default function PromptResponseEditor({
                 ) : (
                     <div className="flex flex-col justify-center items-center">
                         <p className="text-center mb-3 font-bold">Ready to submit?</p>
+                        <div className="flex-center gap-5">
+                        <Button variant='secondary' onClick={() => {handleSaveResponses(); toast('Answers Saved!')}} className="flex justify-center mx-auto">Save</Button>
                         <Button onClick={() => { setConfirmSubmission(true); handleSaveResponses() }}>Submit Responses</Button>
+                        </div>
                     </div>
                 )
             ) : (
                 <form onSubmit={(e) => saveAndContinue(e)}>
                     <SaveAndContinueBtns
                         isSaving={isSaving}
-                        submitHandler={handleSaveResponses}
+                        submitHandler={() => {handleSaveResponses(); toast('Answers Saved!')}}
                     />
                 </form>
 

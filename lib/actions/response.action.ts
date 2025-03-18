@@ -43,7 +43,6 @@ export async function gradeStudentResponse(responseId: string, question: number,
             throw new Error("Response not found");
         }
 
-        console.log('existing responses ', existingResponse)
         // Clone and update the response JSON
         const updatedResponse = [...existingResponse.response as any[]];
         if (!updatedResponse[question]) {
@@ -51,8 +50,6 @@ export async function gradeStudentResponse(responseId: string, question: number,
         }
 
         updatedResponse[question].score = score;
-
-        console.log('updated repsonse ', updatedResponse)
 
         // // Save the updated response
         await prisma.response.update({

@@ -11,6 +11,9 @@ import Link from 'next/link';
 import { formatDateShort } from '@/lib/utils';
 import { decryptText } from "@/lib/utils";
 import { ClipboardCheckIcon } from "lucide-react";
+import { ResponseData, User } from "@/types";
+import { PromptSession } from "@/types";
+import { getAllStudents } from "@/lib/actions/classroom.actions";
 
 export default async function SinglePromptSession({
     params
@@ -31,6 +34,7 @@ export default async function SinglePromptSession({
                 select: {
                     id: true,
                     submittedAt: true,
+                    response: true,
                     student: {
                         select: {
                             id: true,
@@ -46,10 +50,48 @@ export default async function SinglePromptSession({
                 },
             },
         },
-    });
+    }) as unknown as PromptSession;
 
     if (!promptSession) {
         return <div>Prompt session not found</div>;
+    }
+
+    console.log('resonses ', promptSession.responses)
+    const studentSubmittedWithFormattedNamed = promptSession?.responses?.map(response => ({
+        ...response,
+        student: {
+            name: decryptText(response.student.name as string, response.student.iv as string)
+        }
+    }));
+
+    // Get student list to show which students have not submitted
+    const classRoster = await getAllStudents(classId) as User[]
+    const studentSubmittedIds = promptSession?.responses?.map(user => user.student.id)
+    const notSubmitted = classRoster.filter(student => !studentSubmittedIds?.includes(student.id))
+
+    function responseScore(response: ResponseData[]) {
+        const isGraded = response.every(entry => entry.score !== undefined)
+        if (!isGraded) {
+            return (
+                'Not Graded'
+            )
+        }
+        const totalQuestions = response.length
+        const score = response.reduce((accum, currVal) => currVal.score + accum, 0)
+        return `${score} / ${totalQuestions}`
+    }
+
+    function responsePercentage(response: ResponseData[]) {
+        const isGraded = response.every(entry => entry.score !== undefined)
+        if (!isGraded) {
+            return (
+                'N/A'
+            )
+        } else {
+            const totalQuestions = response.length
+            const score = response.reduce((accum, currVal) => currVal.score + accum, 0)
+            return `${(Math.round((score / totalQuestions) * 100)).toString()}%`
+        }
     }
 
     return (
@@ -67,25 +109,42 @@ export default async function SinglePromptSession({
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {promptSession.responses.map((response) => (
+                    <TableRow>
+                        <TableCell colSpan={6} className="text-center font-bold bg-background text-green-600">Submitted</TableCell>
+                    </TableRow>
+                    {(studentSubmittedWithFormattedNamed ?? []).sort((a, b) => {
+                        const lastNameA = a.student.name?.split(" ")[1] ?? "";
+                        const lastNameB = b.student.name?.split(" ")[1] ?? "";
+                        return lastNameA.localeCompare(lastNameB);
+                    }).map((response) => (
                         <TableRow key={response.id}>
-                                <TableCell>
-                                    <Link
-                                        href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSession.id}/single-response/${response.id}`}>
-                                    <ClipboardCheckIcon />
-                                    </Link>
-                                </TableCell>
-                            <TableCell className="font-medium">
+                            <TableCell>
                                 <Link
-                                    className="underline hover:text-accent"
+                                    className="hover:cursor-pointer hover:text-accent"
                                     href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSession.id}/single-response/${response.id}`}>
-                                    {decryptText(response.student.name as string, response.student.iv as string)}
+                                    <ClipboardCheckIcon />
                                 </Link>
                             </TableCell>
-                            <TableCell>6 / 7</TableCell>
-                            <TableCell>(92%)</TableCell>
+                            <TableCell className="font-medium">
+                                {response.student.name}
+                            </TableCell>
+                            <TableCell>{responseScore(response.response as unknown as ResponseData[])}</TableCell>
+                            <TableCell>{responsePercentage(response.response as unknown as ResponseData[])}</TableCell>
                             <TableCell>13</TableCell>
                             <TableCell>{formatDateShort(response.submittedAt)}</TableCell>
+                        </TableRow>
+                    ))}
+                    <TableRow>
+                        <TableCell colSpan={6} className="text-center font-bold bg-background text-destructive">Not Submitted</TableCell>
+                    </TableRow>
+                    {notSubmitted?.length > 0 && notSubmitted.map((user) => (
+                        <TableRow key={user.id}>
+                            <TableCell>&nbsp;</TableCell>
+                            <TableCell className="font-medium">{user.name}</TableCell>
+                            <TableCell>-</TableCell>
+                            <TableCell>-</TableCell>
+                            <TableCell>-</TableCell>
+                            <TableCell>-</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

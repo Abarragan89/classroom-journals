@@ -67,6 +67,7 @@ export type PromptSession = {
     title: string;
     questions: Question[] | JsonValue;
     assignedAt: Date;
+    prompt: Prompt;
     classId: string;
     status: string;
     responses?: Response[];

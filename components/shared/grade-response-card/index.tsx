@@ -13,7 +13,7 @@ export default function GradeResponseCard({
     responseId: string
 }) {
 
-    const [responseArr, setResponseArr] = useState(questionsAndAnswers)
+    const [responseArr, setResponseArr] = useState<ResponseData[]>(questionsAndAnswers)
 
     function updateScoreUIHandler(questionNumber: number, score: number) {
         setResponseArr(prev => {
@@ -32,20 +32,18 @@ export default function GradeResponseCard({
                 return (
                     <span className="text-destructive font-bold ml-1">Incorrect</span>
                 );
-                break;
             case 0.5:
                 return (
                     <span className="text-yellow-500 font-bold ml-1">Half Credit</span>
                 );
-                break;
             case 1:
                 return (
                     <span className="text-green-600 font-bold ml-1">Correct</span>
                 );
-                break;
             default:
-                return 'not graded'
-                break;
+                return (
+                    <span className="font-bold ml-1">Not Graded</span>
+                );
         }
     }
 
@@ -55,7 +53,7 @@ export default function GradeResponseCard({
                 <Card className='w-full p-4 space-y-2 max-w-[700px] mx-auto' key={index}>
                     <div className="flex-between text-sm">
                         <p>Question {index + 1}</p>
-                        <p className='ml-2'> Marked As: 
+                        <p className='ml-2'> Marked As:
                             {renderScoreUIText(responseData.score)}
                         </p>
                     </div>
