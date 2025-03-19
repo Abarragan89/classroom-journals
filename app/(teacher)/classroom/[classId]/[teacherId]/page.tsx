@@ -1,8 +1,9 @@
 import JotListBanner from "@/components/jot-list-banner";
 import { Button } from "@/components/ui/button";
 import { getAllSessionsInClass } from "@/lib/actions/prompt.session.actions"
-import { PromptSession } from "@prisma/client";
+import { PromptSession } from "@/types";
 import { Plus } from "lucide-react";
+import { getStudentCountByClassId } from "@/lib/actions/roster.action";
 
 export default async function Classroom({
     params
@@ -12,6 +13,8 @@ export default async function Classroom({
     const { classId, teacherId } = await params;
 
     const allPromptSessions = await getAllSessionsInClass(classId) as unknown as PromptSession[]
+    const { count: studentCount } = await getStudentCountByClassId(classId)
+
 
     return (
         <div className="relative">
@@ -19,13 +22,14 @@ export default async function Classroom({
                 <Plus />Assign
             </Button>
             <h2 className="text-2xl lg:text-3xl mt-2">Posted Assignments</h2>
-            <div className="mt-10">
+            <div className="mt-10 space-y-10">
                 {allPromptSessions?.length > 0 ? allPromptSessions.map((prompt: PromptSession) => (
                     <JotListBanner
                         key={prompt.id}
                         jotData={prompt}
                         classId={classId}
                         teacherId={teacherId}
+                        classSize={studentCount}
                     />
                 )) : (
                     <p>No Jots posted</p>

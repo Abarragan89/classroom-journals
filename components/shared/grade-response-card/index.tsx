@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import GradingPanel from "@/components/grading-panel"
-import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { ResponseData } from "@/types"
 
@@ -52,26 +52,24 @@ export default function GradeResponseCard({
             {responseArr?.length > 0 && responseArr.map((responseData: ResponseData, index: number) => (
                 <Card className='w-full p-4 space-y-2 max-w-[700px] mx-auto' key={index}>
                     <div className="flex-between text-sm">
-                        <p>Question {index + 1}</p>
                         <p className='ml-2'> Marked As:
                             {renderScoreUIText(responseData.score)}
                         </p>
-                    </div>
-                    <Separator />
-                    <CardTitle className='p-2 leading-snug text-center'>{responseData.question}</CardTitle>
-                    <CardContent className='p-3 pt-0'>
-                        <p className='ml-1'>Answer:</p>
-                        <div className='bg-background p-2 rounded-md'>
-                            {responseData.answer}
-                        </div>
-                    </CardContent>
-                    <CardFooter className='pb-1'>
                         <GradingPanel
+                            currentScore={responseData.score}
                             responseId={responseId}
                             questionNumber={index}
                             updateScoreUIHandler={updateScoreUIHandler}
                         />
-                    </CardFooter>
+                    </div>
+                    <Separator />
+                    <CardTitle className='p-2 leading-snug text-center'>{responseData.question}</CardTitle>
+                    <CardContent className='p-3 pt-0'>
+                        <p className='ml-1 text-sm'>Answer:</p>
+                        <div className='bg-background p-2 m-0 rounded-md'>
+                            {responseData.answer}
+                        </div>
+                    </CardContent>
                 </Card>
             ))}
         </>

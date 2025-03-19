@@ -28,6 +28,11 @@ export function formatDateShort(date: Date): string {
   return `${month}/${day}/${year}`;
 }
 
+export function formatDateLong(date: Date): string {
+  const options: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString('en-US', options);
+}
+
 
 // Encryption and Decryption Settings
 const algorithm = 'aes-256-cbc'; // AES algorithm

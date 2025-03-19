@@ -64,7 +64,7 @@
   }
 
   .tech {
-    --background: hsl(120, 78%, 2%);
+    --background: hsl(120, 13%, 5%);
     --foreground: hsl(210, 20%, 85%);
     --primary: hsl(107, 89%, 48%);
     --primary-foreground: hsl(0, 0%, 0%);

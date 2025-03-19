@@ -67,7 +67,8 @@ export type PromptSession = {
     title: string;
     questions: Question[] | JsonValue;
     assignedAt: Date;
-    prompt: Prompt;
+    promptType: string;
+    prompt?: Prompt;
     classId: string;
     status: string;
     responses?: Response[];
@@ -81,6 +82,7 @@ export interface Response {
     promptSessionId: string;
     studentId: string;
     response: JsonValue;
+    promptSession?: PromptSession;
     score: number;
     submittedAt: Date;
     student: User;

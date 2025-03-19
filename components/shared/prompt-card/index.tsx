@@ -9,7 +9,7 @@ import { Classroom, Prompt, Question } from "@/types";
 import OptionsMenu from "./options-menu";
 import AssignedToPopUp from "./assigned-to-popup";
 import QuestionPopup from "./question-popup";
-import { PromptSession } from "@prisma/client";
+import { PromptSession } from "@/types";
 
 export default function PromptCard({
     promptData,

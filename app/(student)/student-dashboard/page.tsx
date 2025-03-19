@@ -4,7 +4,9 @@ import { prisma } from "@/db/prisma";
 import { Session } from "@/types";
 import { notFound } from "next/navigation";
 import StudentTaskListItem from "@/components/student-task-list-item";
-import { PromptSession } from "@prisma/client";
+import { PromptSession } from "@/types";
+import JotListBanner from "@/components/jot-list-banner";
+import { getStudentCountByClassId } from "@/lib/actions/roster.action";
 
 export default async function StudentDashboard() {
 
@@ -49,14 +51,16 @@ export default async function StudentDashboard() {
 
     if (!classroomData) return;
 
+    const { count: studentCount } = await getStudentCountByClassId(classroomData.id)
+
+
 
 
     return (
         <div>
-            <Header session={session} />
             <main className="wrapper">
                 <h1 className="h1-bold mt-2 line-clamp-1">{classroomData?.name}</h1>
-                {/* Show prompto sessions if they exist */}
+                {/* Show prompt sessions if they exist */}
                 {tasksToDo?.length > 0 ? (
                     <>
                         <h2 className=" mt-5">Assignments</h2>
@@ -69,7 +73,17 @@ export default async function StudentDashboard() {
                         ))}
                     </>
                 ) : (
-                    <p>No assignments this is your dashboard</p>
+                    <>
+                        {classroomData?.PromptSession?.length > 0 && classroomData.PromptSession.map((session) => (
+                            <JotListBanner
+                                key={session.id}
+                                jotData={session as PromptSession}
+                                classId={classroomData.id}
+                                studentId={studentId}
+                                classSize={studentCount}
+                            />
+                        ))}
+                    </>
                 )}
             </main>
         </div>

@@ -138,3 +138,27 @@ export async function deleteStudent(prevState: unknown, formData: FormData) {
         return { success: false, message: 'Error deleting student. Try again.' }
     }
 }
+
+export async function getStudentCountByClassId(classId: string) {
+    try {
+        if (typeof classId !== 'string') {
+            throw new Error('Missing or invalid classId');
+        }
+
+        const studentCount = await prisma.classUser.count({
+            where: {
+                classId,
+                role: 'student'
+            }
+        });
+
+        return { success: true, count: studentCount };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log('Error fetching student count:', error.message);
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, count: 0 };
+    }
+}

@@ -7,20 +7,24 @@ import { BarLoader } from "react-spinners"
 export default function GradingPanel({
     responseId,
     questionNumber,
-    updateScoreUIHandler
+    updateScoreUIHandler,
+    currentScore
 }: {
     responseId: string,
     questionNumber: number,
     updateScoreUIHandler: (questionNumber: number, score: number) => void;
+    currentScore: number
 }) {
 
     const [isGrading, setIsGrading] = useState<boolean>(false)
+    const [currentScoreState, setCurrentScoreState] = useState<number>(currentScore)
 
     async function updateResponseScore(score: number) {
         try {
             setIsGrading(true)
             await gradeStudentResponse(responseId, questionNumber, score)
             updateScoreUIHandler(questionNumber, score)
+            setCurrentScoreState(score)
         } catch (error) {
             console.log('error updating score ', error)
         } finally {
@@ -28,34 +32,39 @@ export default function GradingPanel({
         }
     }
 
-    const iconStyles = 'text-slate-950 border border-border opacity-85 hover:cursor-pointer hover:opacity-100 p-1 rounded-full'
+    const iconStyles = 'text-slate-950 p-1 rounded-full'
 
     return (
-        <div className="flex gap-x-8 mx-auto">
+        <div className="flex gap-x-8">
             {isGrading ? (
                 <BarLoader
                     color={'white'}
-                    width={30}
-                    height={2}
+                    width={70}
+                    height={5}
                     aria-label="Loading Spinner"
                     data-testid="loader"
-                    className="mb-1"
+                    className="my-3 mx-auto"
                 />
             ) : (
                 <>
                     <X
-                        onClick={() => updateResponseScore(0)}
-                        size={28}
-                        className={`bg-destructive ${iconStyles}`} />
+                        onClick={() => { if (currentScore !== 0) updateResponseScore(0) }}
+                        size={25}
+                        className={`bg-destructive ${iconStyles} ${currentScoreState === 0 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`} />
                     <p
-                        onClick={() => updateResponseScore(0.5)}
-                        className={`bg-yellow-500 text-sm ${iconStyles}`}
-                    >0.5
+                        onClick={() => { if (currentScore !== 0.5) updateResponseScore(0.5) }}
+                        className={`bg-yellow-500 text-[.93rem] ${iconStyles} ${currentScoreState === 0.5 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 50 50">
+                            <text x="37%" y="30%" dominantBaseline="middle" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="26" fontWeight={600} fill="black">1</text>
+                            <line x1="12" y1="40" x2="40" y2="9" stroke="black" strokeWidth="3" />
+                            <text x="66%" y="80%" dominantBaseline="middle" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="26" fontWeight={600} fill="black">2</text>
+                        </svg>
                     </p>
                     <Check
-                        onClick={() => updateResponseScore(1)}
-                        size={28}
-                        className={`bg-green-600 ${iconStyles}`}
+                        onClick={() => { if (currentScoreState !== 1) updateResponseScore(1) }}
+                        size={25}
+                        className={`bg-green-600 ${iconStyles} ${currentScoreState === 1 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`}
                     />
                 </>
             )}
