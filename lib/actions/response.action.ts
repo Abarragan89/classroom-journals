@@ -45,8 +45,8 @@ export async function gradeStudentResponse(responseId: string, question: number,
         }
 
         // Clone and update the response JSON
-        // @ts-ignore: using any for formated response
-        const updatedResponse = [...existingResponse.response as any[]];
+        // @ts-expect-error: may be error  with typing response
+        const updatedResponse = [...existingResponse.response as InputJsonValue[]];
         if (!updatedResponse[question]) {
             throw new Error("Invalid question index");
         }
