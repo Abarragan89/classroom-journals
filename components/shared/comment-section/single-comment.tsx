@@ -27,11 +27,13 @@ export default function SingleComment({
     const [showReplyTextarea, setShowReplyTextarea] = useState<boolean>(false);
     const [replyText, setReplyText] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [replyCommentState, setReplyCommentState] = useState<ResponseComment[]>(commentData.replies)
+    const [totalReplies, setTotalReplies] = useState<number>(commentData?.replies?.length || 0)
+    const [replyCommentState, setReplyCommentState] = useState<ResponseComment[]>(commentData?.replies || [])
 
     useEffect(() => {
-        if (commentData.likes.length > 0) {
-            const isLiked = commentData.likes.some((like) => like.userId === studentId);
+        if (commentData?.likes?.length > 0) {
+            const isLiked = commentData?.likes?.some((like) => like.userId === studentId);
+            setTotalReplies(commentData.likes.length)
             setIsLikeByUser(isLiked);
         }
     }, [commentData?.likes, studentId]);
@@ -42,7 +44,10 @@ export default function SingleComment({
         try {
             setIsLoading(true)
             const replyCommentData = await replyComment(responseId, commentData.id, replyText.trim(), studentId)
+            setShowReplies(true)
             setReplyCommentState(prev => [replyCommentData as ResponseComment, ...prev])
+            setTotalReplies(prev => prev + 1)
+            setReplyText('')
             toast('Reply Added!')
         } catch (error) {
             console.log('error adding comment ', error)
@@ -112,7 +117,7 @@ export default function SingleComment({
     return (
         <div className="mb-7 mx-4">
             <div className="flex items-center">
-                <p className="relative w-9 h-9 bg-primary text-primary-foreground rounded-full flex items-center justify-center mr-2">
+                <p className="relative w-9 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center mr-2">
                     {commentData?.user?.username?.charAt(0).toUpperCase()}
                 </p>
                 <div className="flex justify-between items-center w-full">
@@ -125,7 +130,7 @@ export default function SingleComment({
                             <FaHeart
                                 onClick={() => toggleCommentLikeHandler('remove', commentData.id, studentId)}
                                 size={20}
-                                className="hover:cursor-pointer text-[var(--success)]" />
+                                className="hover:cursor-pointer text-sidebar-primary" />
                             :
                             <FaRegHeart
                                 onClick={() => toggleCommentLikeHandler('add', commentData.id, studentId)}
@@ -149,6 +154,7 @@ export default function SingleComment({
                             <Textarea
                                 placeholder="reply to comment..."
                                 rows={3}
+                                value={replyText}
                                 className="pr-5 h-[90px] resize-none mt-2"
                                 onChange={(e) => setReplyText(e.target.value)}
                             />
@@ -183,7 +189,7 @@ export default function SingleComment({
                     className="w-fit mr-0 flex justify-end items-center hover:cursor-pointer"
                 >
                     <p>replies</p>
-                    <p className="text-[.9rem] ml-[4px]">{commentData?.replies?.length || 0}</p>
+                    <p className="text-[.9rem] ml-[4px]">{totalReplies}</p>
                     {showReplies ? <ChevronLeft size={18} /> : <ChevronDown size={18} />}
                 </div>
                 {showReplyTextarea ?

@@ -57,7 +57,8 @@ export default async function StudentDashboard() {
 
 
     return (
-        <div>
+        <>
+            <Header session={session} />
             <main className="wrapper">
                 <h1 className="h1-bold mt-2 line-clamp-1">{classroomData?.name}</h1>
                 {/* Show prompt sessions if they exist */}
@@ -86,6 +87,6 @@ export default async function StudentDashboard() {
                     </>
                 )}
             </main>
-        </div>
+        </>
     )
 }

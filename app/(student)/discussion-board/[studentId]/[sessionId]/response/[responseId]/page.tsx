@@ -1,4 +1,6 @@
+import BlogMetaDetails from "@/components/blog-meta-details";
 import CommentSection from "@/components/shared/comment-section";
+import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { getSingleResponse } from "@/lib/actions/response.action"
 import { Response, ResponseComment, ResponseData } from "@/types";
@@ -13,10 +15,24 @@ export default async function SingleResponse({
     const { responseId, studentId } = await params;
     const response = await getSingleResponse(responseId) as unknown as Response
 
-
     return (
-        <div className="max-w-[900px] px-3 mx-auto">
-            <p className="bg-card text-card-foreground rounded-md p-8 leading-relaxed tracking-wide">{(response.response as unknown as ResponseData[])?.[0].answer}</p>
+        <div className="max-w-[700px] px-3 mx-auto">
+            <BlogMetaDetails
+                responseData={response}
+                studentId={studentId}
+            />
+
+            <Image
+                src={'https://unfinished-pages.s3.us-east-2.amazonaws.com/17.png-1735541082906'}
+                width={700}
+                height={394}
+                alt={'blog cover photo'}
+                className="block mx-auto mb-5"
+                priority
+            />
+            <p className="text-card-foreground rounded-md leading-relaxed tracking-wide">{(response.response as unknown as ResponseData[])?.[0].answer}</p>
+
+
             <Separator className="my-5" />
             <CommentSection
                 comments={response.comments as unknown as ResponseComment[]}

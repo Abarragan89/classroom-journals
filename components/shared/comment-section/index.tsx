@@ -39,7 +39,9 @@ export default function CommentSection({
     }
 
     return (
-        <section className="relative mx-auto pb-5" id="comment-section-main">
+        <section className="relative mx-auto" id="comment-section-main">
+            <h3 className="h3-bold text-center pb-3">Comments</h3>
+
             <form
                 onSubmit={(e) => addCommentHandler(e)}
                 className="relative"
@@ -74,7 +76,6 @@ export default function CommentSection({
                     }
                 </button>
             </form>
-
             {allComments?.length > 0 && allComments.map((comment: ResponseComment) => (
                 <SingleComment
                     key={comment.id}

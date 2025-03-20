@@ -18,7 +18,7 @@ export default function CommentReplySection({
 
 
     useEffect(() => {
-        if (studentId && replyCommentData.likes.length > 0) {
+        if (studentId && replyCommentData?.likes?.length > 0) {
             const isLiked = replyCommentData.likes.some((like) => like.userId === studentId);
             setIsLikeByUser(isLiked);
         }
@@ -50,7 +50,7 @@ export default function CommentReplySection({
     return (
         <div className="mb-4 border-l ps-4">
             <div className="flex items-center">
-                <p className="relative w-9 h-9 bg-primary text-primary-foreground rounded-full flex items-center justify-center mr-2">
+                <p className="relative w-9 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center">
                     {replyCommentData?.user?.username?.charAt(0).toUpperCase()}
                 </p>
                 <div className="flex justify-between items-center w-full ml-3">
@@ -63,7 +63,7 @@ export default function CommentReplySection({
                             <FaHeart
                                 onClick={() => toggleCommentLikeHandler('remove', replyCommentData.id)}
                                 size={20}
-                                className="hover:cursor-pointer text-[var(--success)]" />
+                                className="hover:cursor-pointer text-sidebar-primary" />
                             :
                             <FaRegHeart
                                 onClick={() => toggleCommentLikeHandler('add', replyCommentData.id)}
@@ -74,7 +74,7 @@ export default function CommentReplySection({
                     </div>
                 </div>
             </div>
-            <p className="text-[1rem] px-[50px] mt-2 whitespace-pre">{replyCommentData.text}</p>
+            <p className="text-[1rem] px-[50px] whitespace-pre">{replyCommentData.text}</p>
         </div>
     )
 }

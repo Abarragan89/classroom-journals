@@ -80,7 +80,10 @@ export type PromptSession = {
 export interface Response {
     id: string;
     promptSessionId: string;
+    likes: ResponseLike[];
+    likeCount: number;
     studentId: string;
+    _count: { comments: number }
     response: JsonValue;
     promptSession?: PromptSession;
     score: number;
@@ -132,6 +135,12 @@ export interface Session {
 }
 
 export interface CommentLike {
+    id: string;
+    userId: string;
+    commentId: string;
+}
+
+export interface ResponseLike {
     id: string;
     userId: string;
     commentId: string;

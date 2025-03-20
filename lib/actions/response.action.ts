@@ -80,11 +80,20 @@ export async function getSingleResponse(responseId: string) {
         const response = await prisma.response.findUnique({
             where: { id: responseId },
             select: {
+                id: true,
+                likes: true,
+                likeCount: true,
                 submittedAt: true,
                 response: true,
+                _count: {
+                    select: { comments: true }
+                },
                 comments: {
                     where: {
                         parentId: null
+                    },
+                    orderBy: {
+                        likeCount: 'desc'
                     },
                     select: {
                         user: {
@@ -94,6 +103,9 @@ export async function getSingleResponse(responseId: string) {
                             }
                         },
                         replies: {
+                            orderBy: {
+                                likeCount: 'desc'
+                            },
                             select: {
                                 user: {
                                     select: {
@@ -159,8 +171,55 @@ export async function getSingleResponse(responseId: string) {
                 }))
             }))
         }
-        console.log('get singe reposne total', formattedResponse)
         return formattedResponse
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+        return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
+
+
+export async function toggleResponseLike(responseId: string, userId: string) {
+    try {
+        // Start a transaction
+        await prisma.$transaction(async (prisma) => {
+            // Check if the user has already liked the comment
+            const existingLike = await prisma.responseLike.findUnique({
+                where: { userId_responseId: { userId, responseId } }
+            });
+
+            if (!existingLike) {
+                // Add a new like if not already liked
+                await prisma.responseLike.create({
+                    data: {
+                        userId,
+                        responseId
+                    }
+                });
+
+                // Update the comment's likes
+                await prisma.response.update({
+                    where: { id: responseId },
+                    data: { likeCount: { increment: 1 } }
+                });
+            } else if (existingLike) {
+                // Remove the like if the user is unliking the comment
+                await prisma.responseLike.delete({
+                    where: { userId_responseId: { userId, responseId } }
+                });
+
+                // Decrement the likes on the comment
+                await prisma.response.update({
+                    where: { id: responseId },
+                    data: { likeCount: { decrement: 1 } }
+                });
+            }
+        });
     } catch (error) {
         if (error instanceof Error) {
             console.log("Error fetching prompts:", error.message);

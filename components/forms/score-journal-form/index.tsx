@@ -1,5 +1,4 @@
 'use client'
-import { useState } from "react";
 import { gradeStudentResponse } from "@/lib/actions/response.action";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -14,7 +13,6 @@ export default function ScoreJournalForm({
 
 
     async function updateResponseScore(score: number) {
-        console.log('hit')
         try {
             await gradeStudentResponse(responseId, 0, score)
             toast('Grade Update!')

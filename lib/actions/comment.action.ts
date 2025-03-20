@@ -25,6 +25,13 @@ export async function addComment(responseId: string, text: string, userId: strin
                 createdAt: true,
                 id: true,
                 text: true,
+                likes: {
+                    select: {
+                        id: true,
+                        userId: true,
+                        commentId: true,
+                    }
+                }
             }
         })
 
@@ -71,6 +78,13 @@ export async function replyComment(responseId: string, parentId: string, text: s
                 createdAt: true,
                 id: true,
                 text: true,
+                likes: {
+                    select: {
+                        id: true,
+                        userId: true,
+                        commentId: true,
+                    }
+                }
             }
         })
 
