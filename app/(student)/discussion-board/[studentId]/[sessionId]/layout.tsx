@@ -4,7 +4,7 @@ import Header from "@/components/shared/header";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { getSinglePromptSession } from "@/lib/actions/prompt.session.actions";
-import { PromptSession, Session } from "@/types";
+import { PromptSession, Question, Session } from "@/types";
 import { notFound } from "next/navigation";
 
 
@@ -21,16 +21,13 @@ export default async function StudentDashboardLayout({
 
     if (!session) notFound()
 
-    const { studentId, sessionId } = await params;
+    const { sessionId } = await params;
 
-    const promptSession = await getSinglePromptSession(sessionId)
-
-    console.log('prmpt session ', promptSession)
+    const promptSession = await getSinglePromptSession(sessionId) as unknown as PromptSession
 
     return (
         <SidebarProvider>
             <DiscussionSidebar prompt_data={promptSession as unknown as PromptSession} />
-
             <SidebarInset>
                 <Header session={session as Session} />
                 <div className="flex h-10 shrink-0 items-center gap-2 border-b px-4">
@@ -38,6 +35,8 @@ export default async function StudentDashboardLayout({
                     <Separator orientation="vertical" className="mr-2 h-4" />
                 </div>
                 <main className="wrapper">
+                    {/* <p>{(promptSession?.questions as Question[] | undefined)?.[0]?.question ?? ''}</p>
+                    <Separator className="my-5"/> */}
                     {children}
                 </main>
             </SidebarInset>

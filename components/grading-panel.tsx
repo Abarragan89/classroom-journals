@@ -64,7 +64,7 @@ export default function GradingPanel({
                     <Check
                         onClick={() => { if (currentScoreState !== 1) updateResponseScore(1) }}
                         size={25}
-                        className={`bg-green-600 ${iconStyles} ${currentScoreState === 1 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`}
+                        className={`bg-success ${iconStyles} ${currentScoreState === 1 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`}
                     />
                 </>
             )}

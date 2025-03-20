@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sidebar"
 
 import Link from "next/link"
-import { PromptSession, User } from "@/types"
+import { PromptSession } from "@/types"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -22,14 +22,18 @@ export function DiscussionSidebar({ ...props }: React.ComponentProps<typeof Side
     const pathname = usePathname();
     const studentId = pathname.split("/")[2];
     const sessionId = pathname.split("/")[3];
+    const responseId = pathname?.split("/")[4];
 
     const [responses, setResponses] = useState(props?.prompt_data?.responses)
+    const [currentResponseId, setCurrentResponseId] = useState<string>('')
 
     useEffect(() => {
         if (props?.prompt_data?.responses && props?.prompt_data?.responses !== responses) {
             setResponses(props?.prompt_data?.responses);
         }
+        setCurrentResponseId(pathname?.split("/")[5])
     }, [props?.prompt_data?.responses, pathname])
+
 
     return (
         <Sidebar
@@ -41,11 +45,10 @@ export function DiscussionSidebar({ ...props }: React.ComponentProps<typeof Side
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {responses && responses?.map((response) => {
-                                console.log('response, ', response)
                                 return (
                                     <SidebarMenuItem key={response.id}>
                                         <Link href={`/discussion-board/${studentId}/${sessionId}/response/${response.id}`}>
-                                            <SidebarMenuButton>
+                                            <SidebarMenuButton isActive={currentResponseId === response.id}>
                                                 {response.student.username}
                                             </SidebarMenuButton>
                                         </Link>

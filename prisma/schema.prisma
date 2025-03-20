@@ -179,7 +179,6 @@ model Response {
   studentId       String   @db.Uuid
   response        Json //stores questions, answers, and score (score is Correct, 1/2 or wrong)
   submittedAt     DateTime // Nullable in case they haven't submitted yet
-
   likeCount     Int            @default(0)
   likes         ResponseLike[]
   notifications Notification[]

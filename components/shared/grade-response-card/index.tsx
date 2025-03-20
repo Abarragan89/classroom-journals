@@ -38,7 +38,7 @@ export default function GradeResponseCard({
                 );
             case 1:
                 return (
-                    <span className="text-green-600 font-bold ml-1">Correct</span>
+                    <span className="text-success font-bold ml-1">Correct</span>
                 );
             default:
                 return (

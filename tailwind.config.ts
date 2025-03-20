@@ -12,6 +12,7 @@ export default {
 			colors: {
 				background: 'var(--background)',
 				foreground: 'var(--foreground)',
+				success: 'var(--success)',
 				primary: {
 					DEFAULT: 'var(--primary)',
 					foreground: 'var(--primary-foreground)'

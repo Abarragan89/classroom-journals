@@ -1,5 +1,6 @@
 "use server";
 import { prisma } from "@/db/prisma";
+import { decryptText } from "../utils";
 
 export async function createStudentResponse(prevState: unknown, formData: FormData) {
     try {
@@ -58,6 +59,82 @@ export async function gradeStudentResponse(responseId: string, question: number,
                 response: updatedResponse,
             },
         });
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+
+        return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
+
+// Get a single response with comments
+export async function getSingleResponse(responseId: string) {
+    try {
+        if (!responseId) {
+            return { success: false, message: "Response Id required." }
+        }
+        const response = await prisma.response.findUnique({
+            where: { id: responseId },
+            select: {
+                submittedAt: true,
+                response: true,
+                comments: {
+                    where: {
+                        parentId: null
+                    },
+                    select: {
+                        user: {
+                            select: {
+                                username: true,
+                                iv: true
+                            }
+                        },
+                        replies: {
+                            select: {
+                                user: {
+                                    select: {
+                                        username: true,
+                                        iv: true
+                                    }
+                                },
+                            }
+                        },
+                        createdAt: true,
+                        id: true,
+                        text: true
+                    }
+                },
+                student: {
+                    select: {
+                        id: true,
+                        username: true,
+                        iv: true,
+                    }
+                }
+            }
+        })
+
+        // with the name decoded
+        const formattedResponse = {
+            ...response,
+            student: {
+                id: response?.student.id,
+                username: decryptText(response?.student.username as string, response?.student.iv as string)
+            },
+            comments: response?.comments.map(comment => ({
+                ...comment,
+                user: {
+                    ...comment.user,
+                    username: decryptText(comment.user.username as string, comment.user.iv as string)
+                }
+            }))
+        }
+
+        return formattedResponse
     } catch (error) {
         if (error instanceof Error) {
             console.log("Error fetching prompts:", error.message);

@@ -84,6 +84,7 @@ export interface Response {
     response: JsonValue;
     promptSession?: PromptSession;
     score: number;
+    comments: Comment[]
     submittedAt: Date;
     student: User;
 }
@@ -129,3 +130,17 @@ export interface Session {
     iv: string;
     classroomId?: string;
 }
+
+export interface ResponseComment {
+    id: string;
+    text: string;
+    likeCount: number;
+    createdAt: Date;
+    userId: string;
+    responseId: string;
+    parentId?: string | null;
+    user: User;
+    response: Response;
+    parent?: Comment | null;
+    replies: Comment[];
+};

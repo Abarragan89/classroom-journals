@@ -39,7 +39,7 @@ export default function JotListBanner({
                         {type === 'Multi-Question' ? (
                             <QuestionPopup promptQuestions={jotData.questions as unknown as Question[]} />
                         ) : (
-                            <p>Status: <span className="text-green-600">{jotData.status}</span></p>
+                            <p>Status: <span className="text-success">{jotData.status}</span></p>
                         )
                         }
                     </div>
@@ -62,7 +62,7 @@ export default function JotListBanner({
                         {type === 'Multi-Question' ? (
                             <QuestionPopup promptQuestions={jotData.questions as unknown as Question[]} />
                         ) : (
-                            <p>Status: <span className="text-green-600">{jotData.status}</span></p>
+                            <p>Status: <span className="text-success">{jotData.status}</span></p>
                         )
                         }
                     </div>

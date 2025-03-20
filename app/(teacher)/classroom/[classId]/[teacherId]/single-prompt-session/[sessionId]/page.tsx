@@ -109,7 +109,7 @@ export default async function SinglePromptSession({
                     </TableHeader>
                     <TableBody>
                         <TableRow>
-                            <TableCell colSpan={6} className="text-center font-bold bg-background text-green-600">Submitted</TableCell>
+                            <TableCell colSpan={6} className="text-center font-bold bg-background text-success">Submitted</TableCell>
                         </TableRow>
                         {(studentSubmittedWithFormattedNamed ?? []).sort((a, b) => {
                             const lastNameA = a.student.name?.split(" ")[1] ?? "";
@@ -160,7 +160,7 @@ export default async function SinglePromptSession({
                     </TableHeader>
                     <TableBody>
                         <TableRow>
-                            <TableCell colSpan={6} className="text-center font-bold bg-background text-green-600">Submitted</TableCell>
+                            <TableCell colSpan={6} className="text-center font-bold bg-background text-success">Submitted</TableCell>
                         </TableRow>
                         {(studentSubmittedWithFormattedNamed ?? []).sort((a, b) => {
                             const lastNameA = a.student.name?.split(" ")[1] ?? "";

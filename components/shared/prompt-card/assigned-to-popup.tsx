@@ -8,7 +8,6 @@ import { Separator } from '@/components/ui/separator'
 import { formatDateShort } from '@/lib/utils'
 
 export default function AssignedToPopUp({ classesData }: { classesData: PromptSession[] }) {
-    console.log('assigned to popup', classesData)
 
     // reduce the array ot get ride of duplicate classes incase it was reassigned
     // only keep the prompt session that is latest in date (most recent)
