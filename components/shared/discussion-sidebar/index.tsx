@@ -22,7 +22,6 @@ export function DiscussionSidebar({ ...props }: React.ComponentProps<typeof Side
     const pathname = usePathname();
     const studentId = pathname.split("/")[2];
     const sessionId = pathname.split("/")[3];
-    const responseId = pathname?.split("/")[4];
 
     const [responses, setResponses] = useState(props?.prompt_data?.responses)
     const [currentResponseId, setCurrentResponseId] = useState<string>('')

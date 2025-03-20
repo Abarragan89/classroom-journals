@@ -4,6 +4,9 @@ export default async function DiscussionBoard({
   params: Promise<{ studentId: string, sessionId: string }>
 }) {
 
+  const { studentId, sessionId } = await params;
+  console.log('student id ', studentId)
+  console.log('session id ', sessionId)
 
   return (
     <>

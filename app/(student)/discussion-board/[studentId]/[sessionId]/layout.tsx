@@ -4,7 +4,7 @@ import Header from "@/components/shared/header";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { getSinglePromptSession } from "@/lib/actions/prompt.session.actions";
-import { PromptSession, Question, Session } from "@/types";
+import { PromptSession, Session } from "@/types";
 import { notFound } from "next/navigation";
 
 
