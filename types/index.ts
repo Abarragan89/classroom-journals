@@ -131,11 +131,18 @@ export interface Session {
     classroomId?: string;
 }
 
+export interface CommentLike {
+    id: string;
+    userId: string;
+    commentId: string;
+}
+
 export interface ResponseComment {
     id: string;
     text: string;
     likeCount: number;
     createdAt: Date;
+    likes: CommentLike[];
     userId: string;
     responseId: string;
     parentId?: string | null;

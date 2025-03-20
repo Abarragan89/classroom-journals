@@ -101,11 +101,27 @@ export async function getSingleResponse(responseId: string) {
                                         iv: true
                                     }
                                 },
+                                likes: {
+                                    select: {
+                                        userId: true,
+                                        commentId: true,
+                                        id: true,
+                                    }
+                                },
+                                likeCount: true,
                                 text: true,
                                 createdAt: true,
                                 id: true
                             }
                         },
+                        likes: {
+                            select: {
+                                userId: true,
+                                commentId: true,
+                                id: true,
+                            }
+                        },
+                        likeCount: true,
                         createdAt: true,
                         id: true,
                         text: true

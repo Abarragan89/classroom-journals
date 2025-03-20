@@ -26,19 +26,17 @@ export default function CommentSection({
     async function addCommentHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
+            setIsLoading(true)
             const newComment = await addComment(responseId, commentText, studentId)
-
-            setAllComments(prev => [newComment as ResponseComment,...prev])
-            console.log('new comment in fron ent', newComment)
+            setAllComments(prev => [newComment as ResponseComment, ...prev])
             setCommentText('')
             toast('Comment Added!')
         } catch (error) {
             console.log('error adding comment ', error)
+        } finally {
+            setIsLoading(false)
         }
     }
-
-    console.log('all comments ', allComments)
-
 
     return (
         <section className="relative mx-auto pb-5" id="comment-section-main">

@@ -1,32 +1,24 @@
 "use client";
 import { useState, useEffect } from "react";
-// import { IoChevronDownOutline } from "react-icons/io5";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
-
-
-// import { FiChevronLeft } from "react-icons/fi";
-// import { Session } from "../../types/users";
-// import { Comment } from "../../types/comment";
-// import { formatDate } from "../../utils/formatDate";
-import { useRouter, usePathname } from "next/navigation";
-// import axios from "axios";
-// import TextareaLabel from "./FormInputs/TextareaLabel";
 import { BarLoader } from "react-spinners";
-// import CommentReplySection from "./comment-reply-section";
 import { ResponseComment } from "@/types";
 import { Textarea } from "@/components/ui/textarea";
 import { formatDateMonthDayYear } from "@/lib/utils";
 import { ChevronLeft, ChevronDown, SendHorizonalIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { replyComment } from "@/lib/actions/comment.action";
+import { replyComment, toggleCommentLike } from "@/lib/actions/comment.action";
 import CommentReplySection from "./comment-reply-section";
 import { toast } from "sonner";
 
 export default function SingleComment({
-    commentData, responseId, studentId
+    commentData,
+    responseId,
+    studentId
 }: {
-    commentData: ResponseComment, responseId: string, studentId: string
+    commentData: ResponseComment,
+    responseId: string,
+    studentId: string
 }) {
     const [showReplies, setShowReplies] = useState<boolean>(false)
     const [isLikedByUser, setIsLikeByUser] = useState<boolean>(false)
@@ -37,27 +29,25 @@ export default function SingleComment({
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [replyCommentState, setReplyCommentState] = useState<ResponseComment[]>(commentData.replies)
 
-    const router = useRouter();
-    const pathname = usePathname();
-
-    console.log('replyCOmmentSTate', replyCommentState)
-
-    // useEffect(() => {
-    //     if (session.data?.user?.id && commentData.likes.length > 0) {
-    //         const isLiked = commentData.likes.some((like) => like.userId === session?.data?.user?.id);
-    //         setIsLikeByUser(isLiked);
-    //     }
-    // }, [commentData?.likes, session?.data?.user?.id]);
+    useEffect(() => {
+        if (commentData.likes.length > 0) {
+            const isLiked = commentData.likes.some((like) => like.userId === studentId);
+            setIsLikeByUser(isLiked);
+        }
+    }, [commentData?.likes, studentId]);
 
 
     async function addCommentReplyHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         try {
-            const replyCommentData = await replyComment(responseId, commentData.id, replyText, studentId)
+            setIsLoading(true)
+            const replyCommentData = await replyComment(responseId, commentData.id, replyText.trim(), studentId)
             setReplyCommentState(prev => [replyCommentData as ResponseComment, ...prev])
             toast('Reply Added!')
         } catch (error) {
             console.log('error adding comment ', error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -96,20 +86,26 @@ export default function SingleComment({
 
     // This to toggle likes in main comment
 
-    async function toggleCommentLike(toggleOption: string, commentId: string) {
+    async function toggleCommentLikeHandler(toggleOption: string, commentId: string, studentId: string) {
         try {
-            // await axios.put('/api/userRoutes/comments', {
-            //     commentId
-            // })
-            // if (toggleOption === 'add') {
-            //     setIsLikeByUser(true)
-            //     setTotalCommentLikes(prev => prev + 1)
-            // } else if (toggleOption === 'remove') {
-            //     setIsLikeByUser(false)
-            //     setTotalCommentLikes(prev => prev - 1)
-            // }
+            // change UI immediately, and revert in catch block if there is an error
+            if (toggleOption === 'add') {
+                setIsLikeByUser(true)
+                setTotalCommentLikes(prev => prev + 1)
+            } else if (toggleOption === 'remove') {
+                setIsLikeByUser(false)
+                setTotalCommentLikes(prev => prev - 1)
+            }
+            await toggleCommentLike(commentId, studentId)
         } catch (error) {
-            console.log('error adding comment ', error)
+            console.log('error liking comments ', error)
+            if (toggleOption === 'add') {
+                setIsLikeByUser(true)
+                setTotalCommentLikes(prev => prev - 1)
+            } else if (toggleOption === 'remove') {
+                setIsLikeByUser(false)
+                setTotalCommentLikes(prev => prev + 1)
+            }
         }
     }
 
@@ -127,13 +123,12 @@ export default function SingleComment({
                     <div className="flex items-center text-primary">
                         {isLikedByUser ?
                             <FaHeart
-                                onClick={ () => toggleCommentLike('remove', commentData.id)}
+                                onClick={() => toggleCommentLikeHandler('remove', commentData.id, studentId)}
                                 size={20}
-                                fill="white"
                                 className="hover:cursor-pointer text-[var(--success)]" />
                             :
                             <FaRegHeart
-                                onClick={ () => toggleCommentLike('add', commentData.id)}
+                                onClick={() => toggleCommentLikeHandler('add', commentData.id, studentId)}
                                 size={20}
                                 className="hover:cursor-pointer" />
                         }
@@ -217,6 +212,7 @@ export default function SingleComment({
                         <CommentReplySection
                             key={index}
                             replyCommentData={reply}
+                            studentId={studentId}
                         />
                     ))}
                 </div>
