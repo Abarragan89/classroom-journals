@@ -81,7 +81,7 @@ export async function replyComment(responseId:string, parentId: string, text: st
                 username: decryptText(newComment.user.username as string, newComment.user.iv as string)
             }
         }
-
+        console.log("formated in the server ", formattedComment)
         return formattedComment
     } catch (error) {
         if (error instanceof Error) {

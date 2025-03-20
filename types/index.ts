@@ -84,7 +84,7 @@ export interface Response {
     response: JsonValue;
     promptSession?: PromptSession;
     score: number;
-    comments: Comment[]
+    comments: ResponseComment[]
     submittedAt: Date;
     student: User;
 }
@@ -142,5 +142,5 @@ export interface ResponseComment {
     user: User;
     response: Response;
     parent?: Comment | null;
-    replies: Comment[];
+    replies: ResponseComment[];
 };

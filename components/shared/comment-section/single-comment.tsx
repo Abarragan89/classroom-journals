@@ -1,8 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 // import { IoChevronDownOutline } from "react-icons/io5";
-// import { FaHeart } from "react-icons/fa";
-// import { FaRegHeart } from "react-icons/fa6";
+import { FaHeart } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa6";
+
+
 // import { FiChevronLeft } from "react-icons/fi";
 // import { Session } from "../../types/users";
 // import { Comment } from "../../types/comment";
@@ -18,6 +20,8 @@ import { formatDateMonthDayYear } from "@/lib/utils";
 import { ChevronLeft, ChevronDown, SendHorizonalIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { replyComment } from "@/lib/actions/comment.action";
+import CommentReplySection from "./comment-reply-section";
+import { toast } from "sonner";
 
 export default function SingleComment({
     commentData, responseId, studentId
@@ -27,14 +31,16 @@ export default function SingleComment({
     const [showReplies, setShowReplies] = useState<boolean>(false)
     const [isLikedByUser, setIsLikeByUser] = useState<boolean>(false)
 
-    // const [totalCommentLikes, setTotalCommentLikes] = useState<number>(commentData.likeCount || 0)
+    const [totalCommentLikes, setTotalCommentLikes] = useState<number>(commentData.likeCount || 0)
     const [showReplyTextarea, setShowReplyTextarea] = useState<boolean>(false);
     const [replyText, setReplyText] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [replyCommentState, setReplyCommentState] = useState<Comment[]>(commentData.replies)
+    const [replyCommentState, setReplyCommentState] = useState<ResponseComment[]>(commentData.replies)
 
     const router = useRouter();
     const pathname = usePathname();
+
+    console.log('replyCOmmentSTate', replyCommentState)
 
     // useEffect(() => {
     //     if (session.data?.user?.id && commentData.likes.length > 0) {
@@ -43,19 +49,13 @@ export default function SingleComment({
     //     }
     // }, [commentData?.likes, session?.data?.user?.id]);
 
-    const handleShowLoginModal = () => {
-        // Use router.push with the new query parameter
-        router.push(`${window.location.origin}/${pathname}?showModal=login`, {
-            scroll: false
-        })
-    };
-
 
     async function addCommentReplyHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         try {
             const replyCommentData = await replyComment(responseId, commentData.id, replyText, studentId)
-            console.log('replay comment data in front end, ', replyCommentData)
+            setReplyCommentState(prev => [replyCommentData as ResponseComment, ...prev])
+            toast('Reply Added!')
         } catch (error) {
             console.log('error adding comment ', error)
         }
@@ -96,22 +96,22 @@ export default function SingleComment({
 
     // This to toggle likes in main comment
 
-    // async function toggleCommentLike(toggleOption: string, commentId: string) {
-    //     try {
-    //         await axios.put('/api/userRoutes/comments', {
-    //             commentId
-    //         })
-    //         if (toggleOption === 'add') {
-    //             setIsLikeByUser(true)
-    //             setTotalCommentLikes(prev => prev + 1)
-    //         } else if (toggleOption === 'remove') {
-    //             setIsLikeByUser(false)
-    //             setTotalCommentLikes(prev => prev - 1)
-    //         }
-    //     } catch (error) {
-    //         console.log('error adding comment ', error)
-    //     }
-    // }
+    async function toggleCommentLike(toggleOption: string, commentId: string) {
+        try {
+            // await axios.put('/api/userRoutes/comments', {
+            //     commentId
+            // })
+            // if (toggleOption === 'add') {
+            //     setIsLikeByUser(true)
+            //     setTotalCommentLikes(prev => prev + 1)
+            // } else if (toggleOption === 'remove') {
+            //     setIsLikeByUser(false)
+            //     setTotalCommentLikes(prev => prev - 1)
+            // }
+        } catch (error) {
+            console.log('error adding comment ', error)
+        }
+    }
 
     return (
         <div className="mb-7 mx-4">
@@ -119,32 +119,33 @@ export default function SingleComment({
                 <p className="relative w-9 h-9 bg-primary text-primary-foreground rounded-full flex items-center justify-center mr-2">
                     {commentData?.user?.username?.charAt(0).toUpperCase()}
                 </p>
-                <div className="flex justify-betweenitems-center w-full">
+                <div className="flex justify-between items-center w-full">
                     <div>
                         <p className="leading-0 text-[.95rem] text-primary">{commentData.user.username}</p>
                         <p className="leading-none text-[.95rem] text-input">{formatDateMonthDayYear(commentData.createdAt)}</p>
                     </div>
                     <div className="flex items-center text-primary">
-                        {/* {isLikedByUser ?
+                        {isLikedByUser ?
                             <FaHeart
-                                onClick={session.status === 'authenticated' ? () => toggleCommentLike('remove', commentData.id) : handleShowLoginModal}
+                                onClick={ () => toggleCommentLike('remove', commentData.id)}
                                 size={20}
+                                fill="white"
                                 className="hover:cursor-pointer text-[var(--success)]" />
                             :
                             <FaRegHeart
-                                onClick={session.status === 'authenticated' ? () => toggleCommentLike('add', commentData.id) : handleShowLoginModal}
+                                onClick={ () => toggleCommentLike('add', commentData.id)}
                                 size={20}
                                 className="hover:cursor-pointer" />
-                        } */}
-                        {/* <p className="text-[.95rem] ml-1">{totalCommentLikes?.toString()}</p> */}
+                        }
+                        <p className="text-[.95rem] ml-1">{totalCommentLikes?.toString()}</p>
                     </div>
                 </div>
             </div>
-            <p className="text-[1rem] mt-0 whitespace-pre ml-[45px] pb-3">{commentData.text}</p>
+            <p className="text-[1rem] mt-0 whitespace-pre ml-[45px]">{commentData.text}</p>
 
             {/* Conditionally render reply form */}
             {showReplyTextarea &&
-                <section className="relative max-w-[700px] mx-auto pb-5 pt-5" id="comment-section-main">
+                <section className="relative max-w-[700px] mx-auto pb-2 pt-5" id="comment-section-main">
                     <form
                         onSubmit={(e) => addCommentReplyHandler(e)}
                         className="w-11/12 ml-auto mt-[-18px]"
@@ -153,13 +154,13 @@ export default function SingleComment({
                             <Textarea
                                 placeholder="reply to comment..."
                                 rows={3}
-                                className="pr-5 h-[90px] resize-none"
+                                className="pr-5 h-[90px] resize-none mt-2"
                                 onChange={(e) => setReplyText(e.target.value)}
                             />
                         </div>
                         <button
                             type="submit"
-                            className={`absolute right-[17px] top-[58px] h-[30px]`}
+                            className={`absolute right-[17px] top-[65px] h-[30px]`}
                         >
                             {isLoading ?
                                 <BarLoader
@@ -184,7 +185,7 @@ export default function SingleComment({
             <div className="flex justify-between text-input items-center text-[.975rem] mx-[50px] mt-2">
                 <div
                     onClick={() => setShowReplies(prev => !prev)}
-                    className="w-fit mr-0 flex justify-end  items-center hover:cursor-pointer"
+                    className="w-fit mr-0 flex justify-end items-center hover:cursor-pointer"
                 >
                     <p>replies</p>
                     <p className="text-[.9rem] ml-[4px]">{commentData?.replies?.length || 0}</p>
@@ -209,13 +210,12 @@ export default function SingleComment({
 
             {/* Replies */}
             {showReplies &&
-                <div style={{ transform: "scale(0.88)" }}
-                    className=""
+                <div style={{ transform: "scale(.97)" }}
+                    className="ml-8 mt-4"
                 >
-                    {replyCommentState && replyCommentState.map((reply: Comment, index: number) => (
+                    {replyCommentState && replyCommentState.map((reply: ResponseComment, index: number) => (
                         <CommentReplySection
                             key={index}
-                            handleShowLoginModal={handleShowLoginModal}
                             replyCommentData={reply}
                         />
                     ))}

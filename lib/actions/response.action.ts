@@ -101,6 +101,9 @@ export async function getSingleResponse(responseId: string) {
                                         iv: true
                                     }
                                 },
+                                text: true,
+                                createdAt: true,
+                                id: true
                             }
                         },
                         createdAt: true,
@@ -130,10 +133,17 @@ export async function getSingleResponse(responseId: string) {
                 user: {
                     ...comment.user,
                     username: decryptText(comment.user.username as string, comment.user.iv as string)
-                }
+                },
+                replies: comment.replies.map(reply => ({
+                    ...reply,
+                    user: {
+                        ...reply.user,
+                        username: decryptText(reply.user.username as string, reply.user.iv as string)
+                    }
+                }))
             }))
         }
-
+        console.log('get singe reposne total', formattedResponse)
         return formattedResponse
     } catch (error) {
         if (error instanceof Error) {
