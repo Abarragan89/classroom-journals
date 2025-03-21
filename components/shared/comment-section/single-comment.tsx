@@ -33,7 +33,7 @@ export default function SingleComment({
     useEffect(() => {
         if (commentData?.likes?.length > 0) {
             const isLiked = commentData?.likes?.some((like) => like.userId === studentId);
-            setTotalReplies(commentData.likes.length)
+            setTotalReplies(commentData.replies.length)
             setIsLikeByUser(isLiked);
         }
     }, [commentData?.likes, studentId]);

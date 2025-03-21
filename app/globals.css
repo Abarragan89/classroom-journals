@@ -27,8 +27,8 @@
     --sidebar-foreground: hsl(240 4.8% 95.9%);
     --sidebar-primary: hsl(224, 44%, 46%);
     --sidebar-primary-foreground: hsl(0 0% 100%);
-    --sidebar-accent: hsl(224.3 76.3% 48%);
-    --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+    --sidebar-accent: hsl(60, 2%, 79%);
+    --sidebar-accent-foreground: hsl(240, 74%, 15%);
     --sidebar-border: hsl(240 3.7% 15.9%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 54%, 38%);
@@ -62,7 +62,6 @@
     --sidebar-border: hsl(140, 4%, 16%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 80%, 43%);
-
   }
 
   .tech {
@@ -124,6 +123,24 @@
 
   .h3-bold {
     @apply font-bold text-xl lg:text-2xl;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: var(--card);
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--input);
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
   }
 }
 

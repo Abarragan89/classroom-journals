@@ -3,7 +3,8 @@ import Header from "@/components/shared/header";
 import { prisma } from "@/db/prisma";
 import { PromptSession, Question, Session } from "@/types";
 import { notFound } from "next/navigation";
-import PromptResponseEditor from "@/components/shared/prompt-response-editor";
+import MultipleQuestionEditor from "@/components/shared/prompt-response-editor/multiple-question-editor";
+import SinglePromptEditor from "@/components/shared/prompt-response-editor/single-question-editor";
 
 export default async function StudentDashboard({
     params
@@ -41,10 +42,17 @@ export default async function StudentDashboard({
         <div>
             <Header session={session} />
             <main className="wrapper">
-            <PromptResponseEditor 
-                questions={questions}
-                studentId={studentId}
-            />
+                {promptSessionData.promptType === 'multi-question' ? 
+                <MultipleQuestionEditor 
+                    questions={questions}
+                    studentId={studentId}
+                />
+                :
+                <SinglePromptEditor 
+                    questions={questions}
+                    studentId={studentId}
+                />
+            }
             </main>
         </div>
     )

@@ -54,12 +54,12 @@ export default async function SingleResponse({
                         responseId={responseId}
                     />
                 ) : (
-                    <div className='relative'>
+                    <div className='relative w-full'>
                         <ScoreJournalForm
                             responseId={response.id}
                             currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? 0}
                         />
-                        <p>{response.promptSession?.title}</p>
+                        <p className='text-md font-bold'>{response.promptSession?.title}</p>
                         <p className='mt-10 bg-card p-5 rounded-md'>
                             {(response?.response as { answer?: string }[] | undefined)?.[0]?.answer ?? ''}
                         </p>

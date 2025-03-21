@@ -40,6 +40,10 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         // Get Prompt Type
         const promptType = formData.get("prompt-type") as string;
 
+        // Add blog-title and blog-image questions if a journal prompt
+        questions.push({ question: 'Add a Blog Title' })
+        questions.push({ question: 'Add a Cover Photo' })
+
         // Validate using Zod
         const validationResult = promptSchema.safeParse({
             title,

@@ -1,4 +1,4 @@
-import { PromptSession } from '@/types'
+import { Prompt, PromptSession } from '@/types'
 import { formatDateLong } from '@/lib/utils'
 import { Question } from '@/types'
 import Link from 'next/link'
@@ -18,7 +18,10 @@ export default function JotListBanner({
     classSize?: number
 }) {
 
+    console.log('jotdata', jotData)
+
     const type = jotData.promptType === 'multi-question' ? 'Multi-Question' : 'Journal Prompt'
+    
     return (
         <div className='relative'>
             {teacherId ? (
@@ -36,8 +39,8 @@ export default function JotListBanner({
                         </article>
                     </Link>
                     <div className="text-xs absolute right-3 bottom-3">
-                        {type === 'Multi-Question' ? (
-                            <QuestionPopup promptQuestions={jotData.questions as unknown as Question[]} />
+                        {jotData.promptType === 'multi-question' ? (
+                            <QuestionPopup promptQuestions={jotData as unknown as Prompt} />
                         ) : (
                             <p>Status: <span className="text-success">{jotData.status}</span></p>
                         )
@@ -60,7 +63,7 @@ export default function JotListBanner({
                     </Link>
                     <div className="text-xs absolute right-3 bottom-3">
                         {type === 'Multi-Question' ? (
-                            <QuestionPopup promptQuestions={jotData.questions as unknown as Question[]} />
+                            <QuestionPopup promptQuestions={jotData as unknown as Prompt} />
                         ) : (
                             <p>Status: <span className="text-success">{jotData.status}</span></p>
                         )

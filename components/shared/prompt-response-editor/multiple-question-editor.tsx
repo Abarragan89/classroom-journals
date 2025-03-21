@@ -11,8 +11,9 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { createStudentResponse } from "@/lib/actions/response.action";
 import { toast } from "sonner";
+import Editor from "./editor";
 
-export default function PromptResponseEditor({
+export default function MultipleQuestionEditor({
     questions,
     studentId,
 }: {
@@ -42,7 +43,6 @@ export default function PromptResponseEditor({
 
     useEffect(() => {
         if (state?.success) {
-
             async function finishResponseHandler() {
                 await deleteRow(promptSessionId as string)
                 router.push('/')
@@ -73,7 +73,7 @@ export default function PromptResponseEditor({
     // This runs on every new page
     useEffect(() => {
         if (questionNumber && questions) {
-            setCurrentQuestion(questions[Number(questionNumber)].question)
+            setCurrentQuestion(questions[Number(questionNumber)]?.question)
             getSavedText()
             setJournalText('')
             inputRef.current?.focus()
@@ -105,61 +105,6 @@ export default function PromptResponseEditor({
         goFullScreen().catch((err) => console.warn("Fullscreen request failed:", err));
     }, []);
 
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        e.preventDefault(); // Prevent default behavior
-
-        let updatedText = journalText;
-        let updatedCursor = cursorIndex;
-
-        if (e.key.length === 1) {
-            // Insert character at cursor position
-            updatedText =
-                journalText.slice(0, cursorIndex) +
-                e.key +
-                journalText.slice(cursorIndex);
-            updatedCursor++;
-        } else if (e.key === "Backspace" && cursorIndex > 0) {
-            // Delete character before cursor
-            updatedText =
-                journalText.slice(0, cursorIndex - 1) +
-                journalText.slice(cursorIndex);
-            updatedCursor--;
-        } else if (e.key === "Enter") {
-            updatedText =
-                journalText.slice(0, cursorIndex) +
-                "\n\n" +
-                journalText.slice(cursorIndex);
-            updatedCursor += 2;
-        } else if (e.key === "ArrowLeft") {
-            // Move cursor left
-            if (cursorIndex > 0) {
-                updatedCursor--;
-            }
-        } else if (e.key === "ArrowRight") {
-            // Move cursor right
-            if (cursorIndex < updatedText.length) {
-                updatedCursor++;
-            }
-        } else {
-            return; // Ignore other keys (arrows, function keys, etc.)
-        }
-
-        const formatteedText = removeExtraReturns(updatedText)
-        setJournalText(formatteedText);
-        setCursorIndex(updatedCursor);
-        setIsTyping(true);
-    };
-
-
-    function removeExtraReturns(userText: string): string {
-        // I need to turn into array  `
-        for (const char of userText) {
-            if (char === '\n') {
-            }
-        }
-        return userText
-    }
 
     async function handleSaveResponses() {
         try {
@@ -201,32 +146,30 @@ export default function PromptResponseEditor({
         )
     }
 
+    if (questionNumber === 'blog-details') {
+        return (
+            <p>Add title and image</p>
+        )
+    }
 
     return (
         <div className="w-full max-w-[900px] mx-auto relative px-10">
             <p className="absolute -top-16 right-0 text-sm">Question: {Number(questionNumber) + 1} / {questions.length}</p>
             <ArrowBigLeft className="absolute -top-16 left-0 text-sm hover:cursor-pointer hover:text-accent" onClick={() => router.back()} />
             <p className="h2-bold mt-20 mb-12 w-full mx-auto text-center">{currentQuestion}</p>
-            <div className="mb-12 w-full mx-auto flex flex-col items-center">
-                <div
-                    ref={inputRef}
-                    tabIndex={0}
-                    onKeyDown={handleKeyDown}
-                    className="mx-auto w-full border-2 border-bg-accent rounded-md outline-none"
-                >
-                    <pre className="text-lg w-full p-5 whitespace-pre-wrap">
-                        {journalText.slice(0, cursorIndex)}
-                        <span className="bg-transparent border-b border-b-primary">
-                            {journalText[cursorIndex] === "\n" && journalText[cursorIndex] === "\n" ? "\n\u00A0" : journalText[cursorIndex] || "\u00A0"}
-                        </span>
-                        {journalText.slice(cursorIndex + 1)}
-                    </pre>
-                </div>
-                <p className="text-sm text-center mt-2 italic">click in the box to start typing</p>
-            </div>
+            <Editor
+                setJournalText={setJournalText}
+                journalText={journalText}
+                setIsTyping={setIsTyping}
+                cursorIndex={cursorIndex}
+                setCursorIndex={setCursorIndex}
+                inputRef={inputRef}
+            />
 
             {/* Save and Submit Buttons */}
+            {/* Check to see if user is on last page */}
             {Number(questionNumber) === questions.length - 1 ? (
+                // If last question and user is 
                 confirmSubmission ? (
                     <div className="flex flex-col justify-center items-center">
                         <p className="text-center text-destructive font-bold">Are you sure you want to submit all your answers?</p>
@@ -263,8 +206,8 @@ export default function PromptResponseEditor({
                     <div className="flex flex-col justify-center items-center">
                         <p className="text-center mb-3 font-bold">Ready to submit?</p>
                         <div className="flex-center gap-5">
-                        <Button variant='secondary' onClick={() => {handleSaveResponses(); toast('Answers Saved!')}} className="flex justify-center mx-auto">Save</Button>
-                        <Button onClick={() => { setConfirmSubmission(true); handleSaveResponses() }}>Submit Responses</Button>
+                            <Button variant='secondary' onClick={() => { handleSaveResponses(); toast('Answers Saved!') }} className="flex justify-center mx-auto">Save</Button>
+                            <Button onClick={() => { setConfirmSubmission(true); handleSaveResponses() }}>Submit Responses</Button>
                         </div>
                     </div>
                 )
@@ -272,7 +215,7 @@ export default function PromptResponseEditor({
                 <form onSubmit={(e) => saveAndContinue(e)}>
                     <SaveAndContinueBtns
                         isSaving={isSaving}
-                        submitHandler={() => {handleSaveResponses(); toast('Answers Saved!')}}
+                        submitHandler={() => { handleSaveResponses(); toast('Answers Saved!') }}
                     />
                 </form>
 

@@ -5,7 +5,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator";
-import { Classroom, Prompt, Question } from "@/types";
+import { Classroom, Prompt } from "@/types";
 import OptionsMenu from "./options-menu";
 import AssignedToPopUp from "./assigned-to-popup";
 import QuestionPopup from "./question-popup";
@@ -44,7 +44,7 @@ export default function PromptCard({
             </CardHeader>
             <Separator />
             <CardFooter className="flex justify-between text-xs mt-2 pb-3 px-3">
-                <QuestionPopup promptQuestions={promptData.questions as unknown as Question[]} />
+                <QuestionPopup promptQuestions={promptData as unknown as Prompt} />
                 <AssignedToPopUp classesData={promptData.promptSession as unknown as PromptSession[]} />
             </CardFooter>
         </Card>

@@ -23,16 +23,14 @@ export default async function SingleResponse({
             />
 
             <Image
-                src={'https://unfinished-pages.s3.us-east-2.amazonaws.com/17.png-1735541082906'}
+                src={'https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1737094660753'}
                 width={700}
                 height={394}
                 alt={'blog cover photo'}
                 className="block mx-auto mb-5"
                 priority
             />
-            <p className="text-card-foreground rounded-md leading-relaxed tracking-wide">{(response.response as unknown as ResponseData[])?.[0].answer}</p>
-
-
+            <p className="leading-[2rem] text-card-foreground text-[16px] sm:text-[19px]">{(response.response as unknown as ResponseData[])?.[0].answer}</p>
             <Separator className="my-5" />
             <CommentSection
                 comments={response.comments as unknown as ResponseComment[]}

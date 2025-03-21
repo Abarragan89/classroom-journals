@@ -17,6 +17,8 @@ import Link from "next/link"
 import { Classroom } from "@/types"
 import { usePathname } from "next/navigation"
 import { Home, User, FileText, Bell, ClipboardList, Settings } from "lucide-react"
+import { listS3Urls } from "@/lib/actions/s3.download.action"
+import { Button } from "@/components/ui/button"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & { classes: Classroom[] }) {
 
@@ -59,6 +61,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
             <SidebarGroupLabel className="opacity-70">{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
+
+                {/* GET S3 BUCKET URLS BUTTON */}
+                {/* <Button onClick={listS3Urls}>GetUrls</Button> */}
+
                 {item.items.map((item) => {
                   const Icon = item.icon;
                   return (
