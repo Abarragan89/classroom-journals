@@ -40,7 +40,7 @@ export default async function EditPrompt({
                 </Link>
                 {type === 'single-question' ? (
                     <>
-                        <h1 className="h1-bold mt-5">Edit Journal Jot</h1>
+                        <h1 className="h1-bold mt-5">Edit Blog Prompt</h1>
                         <div className="max-w-[600px] mx-auto mt-5">
                             <EditSinglePromptForm promptData={promptData} teacherId={teacherId} />
                         </div>

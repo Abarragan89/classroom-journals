@@ -111,7 +111,7 @@ export default function MultipleQuestionEditor({
             setIsSaving(true);
             const updatedQuestions = allQuestions.map((q, index) =>
                 index === Number(questionNumber)
-                    ? { question: currentQuestion, answer: journalText }
+                    ? { question: currentQuestion, answer: journalText.trim() }
                     : q
             );
             // Save immediately after updating questions

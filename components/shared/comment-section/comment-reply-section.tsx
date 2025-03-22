@@ -55,10 +55,10 @@ export default function CommentReplySection({
                 </p>
                 <div className="flex justify-between items-center w-full ml-3">
                     <div>
-                        <p className="leading-none text-[.95rem] mb-1">{replyCommentData.user.username}</p>
+                        <p className="leading-none text-[.95rem] mb-1 text-primary">{replyCommentData.user.username}</p>
                         <p className="leading-none text-[.95rem] text-input">{formatDateMonthDayYear(replyCommentData.createdAt)}</p>
                     </div>
-                    <div className="flex items-center text-[var(--gray-600)]">
+                    <div className="flex items-center text-primary">
                         {isLikedByUser ?
                             <FaHeart
                                 onClick={() => toggleCommentLikeHandler('remove', replyCommentData.id)}
@@ -74,7 +74,7 @@ export default function CommentReplySection({
                     </div>
                 </div>
             </div>
-            <p className="text-[1rem] px-[50px] whitespace-pre">{replyCommentData.text}</p>
+            <p className="px-[45px] whitespace-pre mt-1">{replyCommentData.text}</p>
         </div>
     )
 }

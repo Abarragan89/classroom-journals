@@ -22,7 +22,7 @@ export default function PromptCard({
 }) {
 
     return (
-        <Card className="w-[100%] sm:w-[285px] relative mb-14">
+        <Card className="w-[100%] sm:w-[275px] relative">
             {/* Absolutely positions options menu, type, and class colors with responsive dialogs */}
             <OptionsMenu
                 promptData={promptData}
@@ -32,7 +32,7 @@ export default function PromptCard({
             {promptData.promptType === 'multi-question' ? (
                 <p className="text-xs absolute left-3 top-2 italic">Multi-Question</p>
             ) : (
-                <p className="text-xs absolute left-3 top-2 italic">Journal</p>
+                <p className="text-xs absolute left-3 top-2 italic">Blog Prompt</p>
             )}
 
             <CardHeader className="flex flex-row justify-between text-sm h-[200px] overflow-hidden mt-1">

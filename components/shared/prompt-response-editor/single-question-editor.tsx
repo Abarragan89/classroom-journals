@@ -44,8 +44,6 @@ export default function SinglePromptEditor({
         message: ''
     })
 
-    console.log("question ", questions)
-
     useEffect(() => {
         if (state?.success) {
             async function finishResponseHandler() {
@@ -116,7 +114,7 @@ export default function SinglePromptEditor({
             setIsSaving(true);
             const updatedQuestions = allQuestions.map((q, index) =>
                 index === Number(questionNumber)
-                    ? { question: currentQuestion, answer: journalText }
+                    ? { question: currentQuestion, answer: journalText.trim() }
                     : q
             );
             // Save immediately after updating questions
@@ -163,7 +161,6 @@ export default function SinglePromptEditor({
             {/*  Show question if answer question */}
             {questionNumber === '0' && (
                 <>
-                    {/* <p className="h2-bold mt-20 mb-12 w-full mx-auto text-center">{currentQuestion}</p> */}
                     <Editor
                         setJournalText={setJournalText}
                         journalText={journalText}
@@ -187,7 +184,7 @@ export default function SinglePromptEditor({
             {/* show Blog title input */}
             {questionNumber === '1' && (
                 <>
-                    {/* <p className="h2-bold mt-20 mb-12 w-full mx-auto text-center">Add a Blog Title</p> */}
+                    <p className="text-sm text-right mr-2">{cursorIndex} / 70</p>
                     <Editor
                         setJournalText={setJournalText}
                         journalText={journalText}
@@ -195,6 +192,7 @@ export default function SinglePromptEditor({
                         cursorIndex={cursorIndex}
                         setCursorIndex={setCursorIndex}
                         inputRef={inputRef}
+                        characterLimit={70}
                     />
                     <div className="flex flex-col justify-center items-center mb-20">
                         <form onSubmit={(e) => saveAndContinue(e)}>
@@ -210,69 +208,77 @@ export default function SinglePromptEditor({
             {questionNumber === '2' && (
                 <>
                     {/* Save and Submit Buttons */}
-                    {confirmSubmission ? (
-                        <div className="flex flex-col justify-center items-center">
-                            <p className="text-center text-destructive font-bold">Are you sure you want to submit all your answers?</p>
-                            <form action={action} className="mt-5">
-                                <input
-                                    id="studentId"
-                                    name="studentId"
-                                    value={studentId}
-                                    hidden
-                                    readOnly
+                    <div className="flex flex-col justify-center items-center">
+                        <Image
+                            src={journalText || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
+                            alt="blog cover photo"
+                            width={500}
+                            height={300}
+                            priority
+                            className="rounded-md max-h-[300px]"
+                        />
+                        <h3 className="h3-bold text-center mt-5">Photo Library</h3>
+                        <div className="max-h-[300px] w-[500px] mx-auto mb-10 overflow-y-scroll bg-card flex-center flex-wrap gap-10 mt-5 rounded-md py-10 custom-scrollbar">
+                            {imageUrls.map((img) => (
+                                <Image
+                                    key={img}
+                                    src={img}
+                                    alt="blog cover photo"
+                                    width={200}
+                                    height={100}
+                                    onClick={() => setJournalText(img)}
+                                    className="hover:cursor-pointer"
                                 />
-                                <input
-                                    id="promptSessionId"
-                                    name="promptSessionId"
-                                    value={promptSessionId}
-                                    hidden
-                                    readOnly
-                                />
-                                <input
-                                    id="responseData"
-                                    name="responseData"
-                                    value={JSON.stringify(allQuestions)}
-                                    hidden
-                                    readOnly
-                                />
-                                <div className="flex-center gap-x-7">
-                                    <Button onClick={() => setConfirmSubmission(false)} variant='secondary' type="button">Cancel</Button>
-                                    <SubmitFormBtn />
-                                </div>
-                            </form>
+                            ))}
                         </div>
-
-                    ) : (
-                        <div className="flex flex-col justify-center items-center">
-                            <Image
-                                src={journalText || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
-                                alt="blog cover photo"
-                                width={500}
-                                height={300}
-                                priority
-                                className="rounded-md max-h-[300px]"
-                            />
-                            <h3 className="h3-bold text-center mt-5">Photo Library</h3>
-                            <div className="max-h-[300px] w-[500px] mx-auto mb-10 overflow-y-scroll bg-card flex-center flex-wrap gap-10 mt-5 rounded-md py-10 custom-scrollbar">
-                                {imageUrls.map((img) => (
-                                    <Image
-                                        key={img}
-                                        src={img}
-                                        alt="blog cover photo"
-                                        width={200}
-                                        height={100}
-                                        onClick={() => setJournalText(img)}
-                                        className="hover:cursor-pointer"
+                        {confirmSubmission ? (
+                            <div className="flex flex-col justify-center items-center">
+                                <p className="text-center text-destructive mb-3 font-bold">Are you sure you want to submit all your answers?</p>
+                                <form action={action} className="mt-5">
+                                    <input
+                                        id="studentId"
+                                        name="studentId"
+                                        value={studentId}
+                                        hidden
+                                        readOnly
                                     />
-                                ))}
+                                    <input
+                                        id="promptSessionId"
+                                        name="promptSessionId"
+                                        value={promptSessionId}
+                                        hidden
+                                        readOnly
+                                    />
+                                    <input
+                                        id="blogImage"
+                                        name="blogImage"
+                                        value={journalText}
+                                        hidden
+                                        readOnly
+                                    />
+                                    <input
+                                        id="responseData"
+                                        name="responseData"
+                                        value={JSON.stringify(allQuestions)}
+                                        hidden
+                                        readOnly
+                                    />
+                                    <div className="flex-center gap-x-7 mb-20">
+                                        <Button onClick={() => setConfirmSubmission(false)} variant='secondary' type="button">Cancel</Button>
+                                        <SubmitFormBtn />
+                                    </div>
+                                </form>
                             </div>
-                            <p className="text-center mb-3 font-bold">Ready to submit?</p>
-                            <div className="flex-center gap-5">
-                                <Button variant='secondary' onClick={() => { handleSaveResponses(); toast('Answers Saved!') }} className="flex justify-center mx-auto">Save</Button>
-                                <Button onClick={() => { setConfirmSubmission(true); handleSaveResponses() }}>Submit Responses</Button>
-                            </div>
-                        </div>
-                    )}
+                        ) : (
+                            <>
+                                <p className="text-center mb-3 font-bold">Ready to submit?</p>
+                                <div className="flex-center gap-5 mb-20">
+                                    <Button variant='secondary' onClick={() => { handleSaveResponses(); toast('Answers Saved!') }} className="flex justify-center mx-auto">Save</Button>
+                                    <Button onClick={() => { setConfirmSubmission(true); handleSaveResponses() }}>Submit Responses</Button>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </>
             )}
         </div>

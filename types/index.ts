@@ -82,6 +82,7 @@ export interface Response {
     promptSessionId: string;
     likes: ResponseLike[];
     likeCount: number;
+    blogImage?: string;
     studentId: string;
     _count: { comments: number }
     response: JsonValue;

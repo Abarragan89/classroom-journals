@@ -1,16 +1,17 @@
+import { ArrowBigLeft, ArrowBigLeftIcon } from "lucide-react";
+
 export default async function DiscussionBoard({
-  params
+  // params
 }: {
-  params: Promise<{ studentId: string, sessionId: string }>
+  // params: Promise<{ studentId: string, sessionId: string }>
 }) {
 
-  const { studentId, sessionId } = await params;
-  console.log('student id ', studentId)
-  console.log('session id ', sessionId)
+  // const { studentId, sessionId } = await params;
 
   return (
     <>
-      <p>hey this is the inner lading</p>
+      <h2 className="text-center h1-bold">Use the side navigation menu to read and comment on other Blogs! </h2>
+      <ArrowBigLeftIcon className="text-center"  size={60}/>
     </>
   )
 }

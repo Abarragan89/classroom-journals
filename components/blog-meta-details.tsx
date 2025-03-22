@@ -6,6 +6,8 @@ import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import Link from "next/link";
 import { toggleResponseLike } from "@/lib/actions/response.action";
+import Image from "next/image";
+import { formatDateMonthDayYear } from "@/lib/utils";
 
 interface Props {
     responseData: Response,
@@ -54,10 +56,21 @@ export default function BlogMetaDetails({
 
     return (
         <>
-            <h1 className="max-w-[700px] mx-auto leading-[1.4rem] sm:leading-[2.2rem] text-[30px] sm:text-[36px] mb-[18px] font-[700]">Written By: {responseData.student.username}</h1>
-
+            <h1 className="max-w-[700px] mx-auto leading-[1.4rem] sm:leading-[2.2rem] text-[30px] sm:text-[36px] mb-[18px] font-[700]">{(responseData?.response as { answer: string }[])?.[1]?.answer}</h1>
+            {/* Author information */}
+            <section className="flex max-w-[700px] mx-auto">
+                <p className="relative w-[43px] h-[40px] bg-primary text-primary-foreground rounded-full flex items-center justify-center">
+                    {responseData?.student?.username?.charAt(0).toUpperCase()}
+                </p>
+                <div className="ml-2 w-full text-sm text-input">
+                    <p className="leading-5">{responseData.student.username}</p>
+                    <div className="flex justify-between w-full">
+                        <p className="leading-5">{formatDateMonthDayYear(responseData?.submittedAt)}</p>
+                    </div>
+                </div>
+            </section>
             {/* Comment LIke Bar */}
-            <section className="flex items-center mx-auto mb-5 justify-between py-[5px] max-w-[700px] my-5 px-4 text-[var(--gray-500)] border-t border-b border-input">
+            <section className="flex items-center mx-auto mb-5 justify-between py-[5px] max-w-[700px] my-3 px-4 text-input border-t border-b border-input">
                 <div className="flex items-center text-input">
                     {isBlogLikedByUser ?
                         <FaHeart

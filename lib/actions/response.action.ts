@@ -4,10 +4,12 @@ import { decryptText } from "../utils";
 
 export async function createStudentResponse(prevState: unknown, formData: FormData) {
     try {
-        const studentId = formData.get('studentId') as string
-        const promptSessionId = formData.get('promptSessionId') as string
-        const responseData = formData.get('responseData') as string
-        const response = JSON.parse(responseData)
+        const studentId = formData.get('studentId') as string;
+        const promptSessionId = formData.get('promptSessionId') as string;
+        const responseData = formData.get('responseData') as string;
+        const response = JSON.parse(responseData);
+
+        console.log('prompt session ', promptSessionId)
 
         await prisma.response.create({
             data: {

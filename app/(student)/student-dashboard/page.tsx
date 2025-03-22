@@ -53,9 +53,6 @@ export default async function StudentDashboard() {
 
     const { count: studentCount } = await getStudentCountByClassId(classroomData.id)
 
-
-
-
     return (
         <>
             <Header session={session} />
@@ -64,26 +61,31 @@ export default async function StudentDashboard() {
                 {/* Show prompt sessions if they exist */}
                 {tasksToDo?.length > 0 ? (
                     <>
-                        <h2 className=" mt-5">Assignments</h2>
-                        {tasksToDo.map((task: PromptSession) => (
-                            <div key={task.id}>
-                                <StudentTaskListItem
-                                    jotData={task}
-                                />
-                            </div>
-                        ))}
+                        <h2 className="h3-bold my-5">Assignments</h2>
+                        <div className="flex-start flex-wrap gap-10">
+                            {tasksToDo.map((task: PromptSession) => (
+                                <div key={task.id}>
+                                    <StudentTaskListItem
+                                        jotData={task}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </>
                 ) : (
                     <>
-                        {classroomData?.PromptSession?.length > 0 && classroomData.PromptSession.map((session) => (
-                            <JotListBanner
-                                key={session.id}
-                                jotData={session as PromptSession}
-                                classId={classroomData.id}
-                                studentId={studentId}
-                                classSize={studentCount}
-                            />
-                        ))}
+                        <h2 className="h3-bold my-5">Blog Posts</h2>
+                        <div className="flex-start flex-wrap gap-7 w-full">
+                            {classroomData?.PromptSession?.length > 0 && classroomData.PromptSession.map((session) => (
+                                <JotListBanner
+                                    key={session.id}
+                                    jotData={session as PromptSession}
+                                    classId={classroomData.id}
+                                    studentId={studentId}
+                                    classSize={studentCount}
+                                />
+                            ))}
+                        </div>
                     </>
                 )}
             </main>

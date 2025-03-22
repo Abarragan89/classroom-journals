@@ -22,7 +22,7 @@ export default async function Classroom({
                 <Plus />Assign
             </Button>
             <h2 className="text-2xl lg:text-3xl mt-2">Posted Assignments</h2>
-            <div className="mt-10 space-y-10">
+            <div className="flex-start flex-wrap gap-7 mt-10">
                 {allPromptSessions?.length > 0 ? allPromptSessions.map((prompt: PromptSession) => (
                     <JotListBanner
                         key={prompt.id}

@@ -1,6 +1,5 @@
 "use server"
 import { S3Client, ListObjectsV2Command } from '@aws-sdk/client-s3'
-console.log('region ', process.env.AWS_S3_REGION)
 const s3Client = new S3Client({
   region: process.env.AWS_S3_REGION as string,
   credentials: {
@@ -18,7 +17,6 @@ export async function listS3Urls() {
       `https://unfinished-pages.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${item.Key}`
     ) || [];
 
-    console.log('urls', urls);
     return urls;
   } catch (error) {
     console.error("Error listing S3 objects:", error);

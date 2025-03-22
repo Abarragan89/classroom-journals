@@ -174,15 +174,15 @@ model PromptSession {
 }
 
 model Response {
-  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  promptSessionId String   @db.Uuid
-  studentId       String   @db.Uuid
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  promptSessionId String         @db.Uuid
+  studentId       String         @db.Uuid
   response        Json //stores questions, answers, and score (score is Correct, 1/2 or wrong)
   submittedAt     DateTime // Nullable in case they haven't submitted yet
-  likeCount     Int            @default(0)
-  likes         ResponseLike[]
-  notifications Notification[]
-  comments      Comment[]
+  likeCount       Int            @default(0)
+  likes           ResponseLike[]
+  notifications   Notification[]
+  comments        Comment[]
 
   // Relationship
   promptSession PromptSession @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)

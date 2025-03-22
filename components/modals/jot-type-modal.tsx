@@ -19,12 +19,12 @@ export default function JotTypeModal({
             isOpen={isModalOpen}
             setIsOpen={setIsModalOpen}
             title={`Choose Jot Type`}
-            description='Chose between journal entry or mulit-question assessment'
+            description='Choose between blog prompt or mulit-question assessment'
         >
             <div className="flex flex-col justify-center space-y-6 mx-auto mt-4">
                 <Button asChild>
                     <Link onClick={closeModal} href={'/create-prompt?type=single-question'}>
-                        Journal Jot
+                        Blog Prompt
                     </Link>
                 </Button>
                 <Button asChild>

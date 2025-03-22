@@ -23,7 +23,7 @@ const frameworks = [
     },
     {
         value: "single-question",
-        label: "Journal Prompts",
+        label: "Blog Prompts",
     },
     {
         value: "never-assigned",

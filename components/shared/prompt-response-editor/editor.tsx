@@ -7,7 +7,8 @@ export default function Editor({
     cursorIndex,
     setCursorIndex,
     inputRef,
-    jotType
+    jotType,
+    characterLimit
 }: {
     journalText: string;
     setJournalText: React.Dispatch<React.SetStateAction<string>>;
@@ -15,7 +16,8 @@ export default function Editor({
     cursorIndex: number;
     setCursorIndex: React.Dispatch<React.SetStateAction<number>>;
     inputRef: React.RefObject<HTMLDivElement | null>;
-    jotType?: string
+    jotType?: string;
+    characterLimit?: number
 }) {
 
     function removeExtraReturns(userText: string): string {
@@ -29,6 +31,9 @@ export default function Editor({
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         e.preventDefault(); // Prevent default behavior
+        if (characterLimit && characterLimit <= cursorIndex && e.key !== "Backspace") {
+            return
+        }
 
         let updatedText = journalText;
         let updatedCursor = cursorIndex;

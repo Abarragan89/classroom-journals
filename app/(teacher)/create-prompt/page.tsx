@@ -30,7 +30,7 @@ export default async function CreatePrompt({
                 </Link>
                 {type === 'single-question' ? (
                     <>
-                        <h1 className="h1-bold mt-5">New Journal Jot</h1>
+                        <h1 className="h1-bold mt-5">New Blog Prompt</h1>
                         <div className="max-w-[600px] mx-auto mt-5">
                             <AddSinglePromptForm teacherId={teacherId} />
                         </div>
