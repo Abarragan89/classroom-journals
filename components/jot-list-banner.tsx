@@ -19,7 +19,6 @@ export default function JotListBanner({
 
     const type = jotData.promptType === 'multi-question' ? 'Multi-Question' : 'Blog Prompt';
 
-    console.log('responses ', jotData.responses)
     return (
         <div>
             {teacherId ? (

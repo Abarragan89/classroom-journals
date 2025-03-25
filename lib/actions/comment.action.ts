@@ -4,7 +4,7 @@ import { decryptText } from "../utils";
 
 // add a comment to Response
 export async function addComment(responseId: string, text: string, userId: string, sessionId: string) {
-    console.log('user id at top of route', userId)
+    
     try {
         if (!responseId || !text || !userId || !sessionId) {
             return { success: false, message: "Missing required fields" };

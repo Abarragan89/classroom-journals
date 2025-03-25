@@ -9,8 +9,6 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
         const responseData = formData.get('responseData') as string;
         const response = JSON.parse(responseData);
 
-        console.log('prompt session ', promptSessionId)
-
         await prisma.response.create({
             data: {
                 promptSessionId,

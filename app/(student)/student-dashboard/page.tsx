@@ -5,13 +5,13 @@ import { Session } from "@/types";
 import { notFound } from "next/navigation";
 import StudentTaskListItem from "@/components/student-task-list-item";
 import { PromptSession } from "@/types";
-import JotListBanner from "@/components/jot-list-banner";
-import { getStudentCountByClassId } from "@/lib/actions/roster.action";
 import { getUserNotifications } from "@/lib/actions/notifications.action";
 import { UserNotification } from "@/types";
-import Link from "next/link";
 import ClassDiscussionCarousel from "@/components/carousels/class-discussion-carousel";
 import NotificationsCarousel from "@/components/carousels/notifications-carousel";
+import { decryptText } from "@/lib/utils";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default async function StudentDashboard() {
 
@@ -41,6 +41,9 @@ export default async function StudentDashboard() {
                     responses: {
                         select: { studentId: true, id: true }
                     }
+                },
+                orderBy: {
+                    createdAt: 'desc'
                 }
             }
         }
@@ -55,22 +58,21 @@ export default async function StudentDashboard() {
     // Get the blog sessions to display to link to discussion board
     const blogPrompts = classroomData?.PromptSession.filter(singleSession => singleSession.promptType === 'single-question') as unknown as PromptSession[]
 
-    console.log('blog prompt ', blogPrompts)
-
     if (!classroomData) return;
-
-    const { count: studentCount } = await getStudentCountByClassId(classroomData.id)
-
 
     const userNotifications = await getUserNotifications(studentId) as unknown as UserNotification[]
 
-    console.log('noties ', userNotifications)
+    const username = decryptText(session?.user?.name as string, session?.iv as string)
 
     return (
         <>
             <Header session={session} studentId={studentId} />
-            <main className="wrapper">
+            <main className="wrapper relative">
                 <h1 className="h1-bold mt-2 line-clamp-1">{classroomData?.name}</h1>
+                <h1 className="h2-bold mt-2 line-clamp-1">Hi, {username}</h1>
+                    <Button
+                    className="absolute right-24"
+                    ><Plus /> Request</Button>
                 {/* Show prompt sessions if they exist */}
                 {tasksToDo?.length > 0 ? (
                     <section>
@@ -85,23 +87,24 @@ export default async function StudentDashboard() {
                             ))}
                         </div>
                     </section>
+                    // Else show dashboard
                 ) : (
-                    <>
-                        <section>
-                            <h2 className="h3-bold my-5">Blog Posts</h2>
+                    <section className="mb-36">
+                        <article className="my-10">
+                            <h2 className="text-lg lg:text-xl ml-2 mb-2">Blog Discussions</h2>
                             <ClassDiscussionCarousel
                                 blogPrompts={blogPrompts as unknown as PromptSession[]}
                                 studentId={studentId}
                             />
-                        </section>
-                        <section>
-                            <h2 className="h3-bold my-5">Notifications</h2>
+                        </article>
+                        <article>
+                            <h2 className="text-lg lg:text-xl ml-2 mb-2">Notifications</h2>
                             <NotificationsCarousel
                                 notifications={userNotifications as UserNotification[]}
                                 studentId={studentId}
                             />
-                        </section>
-                    </>
+                        </article>
+                    </section>
                 )}
             </main>
         </>

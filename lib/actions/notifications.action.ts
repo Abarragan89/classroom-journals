@@ -21,6 +21,9 @@ export async function getUserNotifications(userId: string) {
                         username: true,
                     }
                 }
+            },
+            orderBy: {
+                createdAt: 'desc'
             }
         });
 

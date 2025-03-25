@@ -28,8 +28,8 @@ export default function NotificationsCarousel({
         try {
             clearAllNotifications(studentId)
             setNotificaitonsState([])
-        } catch (error) {   
-            console.log('error clearing all notifications')
+        } catch (error) {
+            console.log('error clearing all notifications', error)
         }
     }
 
@@ -39,17 +39,26 @@ export default function NotificationsCarousel({
                 opts={{
                     align: "start",
                 }}
-                className="w-[90%] max-w-[900px] mx-auto border border-border p-10 rounded-lg"
+                className="w-[85%] sm:w-[90%] mx-auto border border-border p-10 rounded-lg relative"
             >
-                <Button variant='destructive' onClick={clearNotifications}>Clear All</Button>
+                <Button
+                    variant='link'
+                    onClick={clearNotifications}
+                    className="text-destructive block absolute top-[-35px] right-0"
+                >
+                    Clear Notifications
+                </Button>
                 <CarouselContent>
                     {notificationsState?.length > 0 && notificationsState.map((notification: UserNotification) => (
                         <CarouselItem key={notification.id} className="md:basis-1/2 lg:basis-1/3">
                             <Card className="relative max-w-[350px] mx-auto">
                                 <CardContent className="flex items-center justify-center">
-                                    <Link key={notification.id} href={notification.url}>
-                                        <p className="text-xs">{notification.message}</p>
-                                        <p className="text-sm text-center">{notification.commentText}</p>
+                                    <Link key={notification.id} href={notification.url}
+                                        className="h-[70px] text-xs flex flex-col justify-between items-center opacity-80 hover:opacity-100"
+                                    >
+                                        <p>{notification.message}</p>
+                                        <p className="text-sm text-center line-clamp-1 italic font-bold text-foreground">"{notification.commentText}"</p>
+                                        <p>on: {formatDateLong(notification.createdAt)}</p>
                                     </Link>
 
                                 </CardContent>
