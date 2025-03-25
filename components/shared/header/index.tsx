@@ -7,9 +7,11 @@ import { Session } from "@/types"
 export default function Header({
     teacherId,
     session,
+    studentId,
 }: {
-    teacherId?: string
-    session?: Session
+    teacherId?: string;
+    studentId?: string;
+    session?: Session;
 }) {
 
     return (
@@ -31,6 +33,7 @@ export default function Header({
                 </div>
                 <Menu
                     teacherId={teacherId}
+                    studentId={studentId}
                     session={session as Session}
                 />
             </div>

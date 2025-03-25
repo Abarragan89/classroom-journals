@@ -5,7 +5,7 @@ import React from 'react'
 import { usePathname } from 'next/navigation';
 
 
-export default function NavLinks() {
+export default function TeacherNavLinks() {
     const pathname = usePathname().split('/')[1];
     return (
         <>

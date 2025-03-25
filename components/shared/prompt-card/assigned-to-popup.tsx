@@ -23,9 +23,9 @@ export default function AssignedToPopUp({ classesData }: { classesData: PromptSe
     function assignedText() {
         switch (assignedClasses.length) {
             case 1:
-                return '1 Class'
+                return `Assigned to 1 Class`
             default:
-                return `${assignedClasses.length} Classes`
+                return `Assigned to ${assignedClasses.length} Classes`
         }
     }
 
@@ -34,9 +34,8 @@ export default function AssignedToPopUp({ classesData }: { classesData: PromptSe
             {classesData?.length > 0 ? (
                 <Popover>
                     <div className='flex-center'>
-                        <p className='mr-1'>Assigned:</p>
                         <PopoverTrigger asChild>
-                            <p className='hover:cursor-pointer text-accent-foreground bg-accent hover:bg-ring rounded-md py-[3px] px-2'>{assignedText()}</p>
+                            <p className='hover:cursor-pointer text-foreground hover:underline hover:text-primaryrounded-md py-[3px] px-2'>Assignment History</p>
                         </PopoverTrigger>
                     </div>
                     <PopoverContent className="w-80 p-3">

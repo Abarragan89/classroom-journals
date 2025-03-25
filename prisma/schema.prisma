@@ -183,7 +183,6 @@ model Response {
   likes           ResponseLike[]
   notifications   Notification[]
   comments        Comment[]
-
   // Relationship
   promptSession PromptSession @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
   student       User          @relation(fields: [studentId], references: [id], onDelete: Cascade)

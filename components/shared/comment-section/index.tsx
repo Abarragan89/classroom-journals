@@ -11,11 +11,13 @@ import { toast } from "sonner";
 export default function CommentSection({
     comments,
     studentId,
-    responseId
+    responseId,
+    sessionId
 }: {
     comments: ResponseComment[],
     studentId: string,
-    responseId: string
+    responseId: string,
+    sessionId: string,
 }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -23,11 +25,12 @@ export default function CommentSection({
     const [commentText, setCommentText] = useState<string>('')
 
 
+    console.log("student id ", studentId)
     async function addCommentHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
             setIsLoading(true)
-            const newComment = await addComment(responseId, commentText, studentId)
+            const newComment = await addComment(responseId, commentText, studentId, sessionId)
             setAllComments(prev => [newComment as ResponseComment, ...prev])
             setCommentText('')
             toast('Comment Added!')
@@ -66,7 +69,7 @@ export default function CommentSection({
                             loading={isLoading}
                             aria-label="Loading Spinner"
                             data-testid="loader"
-                            className="text-primary"
+                            color="gray"
                         />
                         :
                         <SendHorizonalIcon
@@ -82,6 +85,7 @@ export default function CommentSection({
                     commentData={comment as ResponseComment}
                     responseId={responseId}
                     studentId={studentId}
+                    sessionId={sessionId}
                 />
             ))}
         </section>

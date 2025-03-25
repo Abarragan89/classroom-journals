@@ -30,20 +30,20 @@ export default function PromptCard({
                 classroomData={classroomData}
             />
             {promptData.promptType === 'multi-question' ? (
-                <p className="text-xs absolute left-3 top-2 italic">Multi-Question</p>
+                <p className="text-xs w-fit text-accent-foreground bg-accent rounded-md py-[3px] px-2 mt-3 ml-3">Assessment</p>
             ) : (
-                <p className="text-xs absolute left-3 top-2 italic">Blog Prompt</p>
+                <p className="text-xs w-fit text-card bg-card-foreground rounded-md py-[3px] px-2 mt-3 ml-3">Blog</p>
             )}
 
             <CardHeader className="flex flex-row justify-between text-sm h-[200px] overflow-hidden mt-1">
                 <div className="w-[95%]">
-                    <CardTitle className="tracking-wide leading-5 mt-2 line-clamp-[7]">
+                    <CardTitle className="tracking-wide leading-5 line-clamp-[7]">
                         {promptData.title}
                     </CardTitle>
                 </div>
             </CardHeader>
             <Separator />
-            <CardFooter className="flex justify-between text-xs mt-2 pb-3 px-3">
+            <CardFooter className="flex justify-between text-xs py-2 px-3">
                 <QuestionPopup promptQuestions={promptData as unknown as Prompt} />
                 <AssignedToPopUp classesData={promptData.promptSession as unknown as PromptSession[]} />
             </CardFooter>

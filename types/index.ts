@@ -65,7 +65,7 @@ export type PromptSession = {
     id: string;
     promptId: string | null;
     title: string;
-    questions: Question[] | JsonValue;
+    questions: JsonValue;
     assignedAt: Date;
     promptType: string;
     prompt?: Prompt;
@@ -161,3 +161,16 @@ export interface ResponseComment {
     parent?: Comment | null;
     replies: ResponseComment[];
 };
+
+export interface UserNotification {
+    id: string;
+    userId: string;
+    responseId: string;
+    url: string;
+    message: string;
+    commentText?: string;
+    user: User;
+    response: Response;
+    createdAt: Date;
+    isRead: boolean;
+}

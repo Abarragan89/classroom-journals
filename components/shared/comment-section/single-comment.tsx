@@ -14,11 +14,13 @@ import { toast } from "sonner";
 export default function SingleComment({
     commentData,
     responseId,
-    studentId
+    studentId,
+    sessionId
 }: {
     commentData: ResponseComment,
     responseId: string,
-    studentId: string
+    studentId: string,
+    sessionId: string
 }) {
     const [showReplies, setShowReplies] = useState<boolean>(false)
     const [isLikedByUser, setIsLikeByUser] = useState<boolean>(false)
@@ -43,7 +45,7 @@ export default function SingleComment({
         e.preventDefault()
         try {
             setIsLoading(true)
-            const replyCommentData = await replyComment(responseId, commentData.id, replyText.trim(), studentId)
+            const replyCommentData = await replyComment(responseId, commentData.id, replyText.trim(), studentId, sessionId)
             setShowReplies(true)
             setReplyCommentState(prev => [replyCommentData as ResponseComment, ...prev])
             setTotalReplies(prev => prev + 1)
@@ -55,41 +57,6 @@ export default function SingleComment({
             setIsLoading(false)
         }
     }
-
-    // async function addCommentReplyHandler(e: React.FormEvent<HTMLFormElement>) {
-    //     e.preventDefault();
-    //     try {
-    //         setIsLoading(true);
-    //         const { data } = await axios.post('/api/userRoutes/commentReplies', {
-    //             text: replyText.trim(),
-    //             blogId: blogId,
-    //             commentId: commentData.id
-    //         })
-
-    //         setReplyCommentState(prev => [data.comment, ...prev])
-
-    //         // create notifications. Someone replied to your comment
-    //         await axios.post('/api/userRoutes/notifications/replyToComment', {
-    //             blogId,
-    //             replierId: session.data?.user?.id,
-    //             commentOwnerId: commentData?.user?.id,
-    //             replierName: session.data?.user?.name,
-    //             blogSlug: pathname.split('/')[2],
-    //             commentText: replyText.trim(),
-    //             blogTitle
-    //         })
-
-    //     } catch (error) {
-    //         console.log('error adding comment ', error)
-    //     } finally {
-    //         setIsLoading(false);
-    //         setReplyText('');
-    //         setShowReplyTextarea(false)
-    //         setShowReplies(true)
-    //     }
-    // }
-
-    // This to toggle likes in main comment
 
     async function toggleCommentLikeHandler(toggleOption: string, commentId: string, studentId: string) {
         try {
@@ -170,7 +137,7 @@ export default function SingleComment({
                                     loading={isLoading}
                                     aria-label="Loading Spinner"
                                     data-testid="loader"
-                                    className="text-primary"
+                                    className="text-primary bg-primary"
                                 />
                                 :
                                 <SendHorizonalIcon

@@ -3,18 +3,25 @@ import CommentSection from "@/components/shared/comment-section";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { getSingleResponse } from "@/lib/actions/response.action"
-import { Response, ResponseComment, ResponseData } from "@/types";
+import { Response, ResponseComment, ResponseData, Session } from "@/types";
+import { auth } from "@/auth";
+import { notFound } from "next/navigation";
 
 
 export default async function SingleResponse({
     params
 }: {
-    params: Promise<{ responseId: string, studentId: string }>
+    params: Promise<{ responseId: string, sessionId: string }>
 }) {
 
-    const { responseId, studentId } = await params;
+    const session = await auth() as Session
+    const studentId = session?.user?.id
+
+    if (!session || !studentId) notFound()
+
+    const { responseId, sessionId } = await params;
     const response = await getSingleResponse(responseId) as unknown as Response
-    
+
     return (
         <div className="max-w-[700px] px-3 mx-auto">
             <BlogMetaDetails
@@ -36,6 +43,7 @@ export default async function SingleResponse({
                 comments={response.comments as unknown as ResponseComment[]}
                 responseId={responseId}
                 studentId={studentId}
+                sessionId={sessionId}
             />
         </div>
     )

@@ -6,6 +6,7 @@ import { assignPrompt } from "@/lib/actions/prompt.actions"
 import { toast } from 'sonner'
 import { Classroom, Prompt } from "@/types"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Separator } from "@/components/ui/separator"
 
 export default function AssignPromptForm({
     promptId,
@@ -43,7 +44,7 @@ export default function AssignPromptForm({
             <Button
                 type="submit"
                 disabled={pending}
-                className={`mx-auto block`}
+                className={`mx-auto block mt-3`}
             >
                 {pending ? 'Assigning...' : 'Assign Jot'}
             </Button>
@@ -56,10 +57,11 @@ export default function AssignPromptForm({
                 <p className="text-center">
                     {promptTitle}
                 </p>
+                <Separator />
                 <div className="space-y-3">
                     {classroomData?.length > 0 && (
                         <>
-                            <p className="text-sm">Select Classes</p>
+                            <p className="text-sm text-center">Select Classes</p>
                             {/* remove the first element which is hte all classes default for search dropdown */}
                             {classroomData.slice(1).map((classroom: Classroom) => (
                                 <div key={classroom.id} className="flex items-center space-x-2">

@@ -7,6 +7,11 @@ import StudentTaskListItem from "@/components/student-task-list-item";
 import { PromptSession } from "@/types";
 import JotListBanner from "@/components/jot-list-banner";
 import { getStudentCountByClassId } from "@/lib/actions/roster.action";
+import { getUserNotifications } from "@/lib/actions/notifications.action";
+import { UserNotification } from "@/types";
+import Link from "next/link";
+import ClassDiscussionCarousel from "@/components/carousels/class-discussion-carousel";
+import NotificationsCarousel from "@/components/carousels/notifications-carousel";
 
 export default async function StudentDashboard() {
 
@@ -21,7 +26,6 @@ export default async function StudentDashboard() {
 
     const classroomId = session?.classroomId
 
-
     const classroomData = await prisma.classroom.findUnique({
         where: { id: classroomId },
         include: {
@@ -35,7 +39,7 @@ export default async function StudentDashboard() {
             PromptSession: {
                 include: {
                     responses: {
-                        select: { studentId: true }
+                        select: { studentId: true, id: true }
                     }
                 }
             }
@@ -48,19 +52,28 @@ export default async function StudentDashboard() {
         !singleSession.responses.some(response => response.studentId === studentId)
     ) as unknown as PromptSession[];
 
+    // Get the blog sessions to display to link to discussion board
+    const blogPrompts = classroomData?.PromptSession.filter(singleSession => singleSession.promptType === 'single-question') as unknown as PromptSession[]
+
+    console.log('blog prompt ', blogPrompts)
 
     if (!classroomData) return;
 
     const { count: studentCount } = await getStudentCountByClassId(classroomData.id)
 
+
+    const userNotifications = await getUserNotifications(studentId) as unknown as UserNotification[]
+
+    console.log('noties ', userNotifications)
+
     return (
         <>
-            <Header session={session} />
+            <Header session={session} studentId={studentId} />
             <main className="wrapper">
                 <h1 className="h1-bold mt-2 line-clamp-1">{classroomData?.name}</h1>
                 {/* Show prompt sessions if they exist */}
                 {tasksToDo?.length > 0 ? (
-                    <>
+                    <section>
                         <h2 className="h3-bold my-5">Assignments</h2>
                         <div className="flex-start flex-wrap gap-10">
                             {tasksToDo.map((task: PromptSession) => (
@@ -71,21 +84,23 @@ export default async function StudentDashboard() {
                                 </div>
                             ))}
                         </div>
-                    </>
+                    </section>
                 ) : (
                     <>
-                        <h2 className="h3-bold my-5">Blog Posts</h2>
-                        <div className="flex-start flex-wrap gap-7 w-full">
-                            {classroomData?.PromptSession?.length > 0 && classroomData.PromptSession.map((session) => (
-                                <JotListBanner
-                                    key={session.id}
-                                    jotData={session as PromptSession}
-                                    classId={classroomData.id}
-                                    studentId={studentId}
-                                    classSize={studentCount}
-                                />
-                            ))}
-                        </div>
+                        <section>
+                            <h2 className="h3-bold my-5">Blog Posts</h2>
+                            <ClassDiscussionCarousel
+                                blogPrompts={blogPrompts as unknown as PromptSession[]}
+                                studentId={studentId}
+                            />
+                        </section>
+                        <section>
+                            <h2 className="h3-bold my-5">Notifications</h2>
+                            <NotificationsCarousel
+                                notifications={userNotifications as UserNotification[]}
+                                studentId={studentId}
+                            />
+                        </section>
                     </>
                 )}
             </main>

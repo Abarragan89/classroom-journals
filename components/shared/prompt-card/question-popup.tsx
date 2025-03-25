@@ -11,13 +11,12 @@ export default function QuestionPopup({ promptQuestions }: { promptQuestions: Pr
     return (
         <Popover>
             <div className='flex-center'>
-                <p className='mr-1'>Questions:</p>
                 <PopoverTrigger asChild>
-                    <p className='hover:cursor-pointer text-accent-foreground bg-accent hover:bg-ring rounded-md py-[3px] px-2'>
+                    <p className='hover:cursor-pointer text-foreground hover:underline rounded-md py-[3px] px-2'>
                         {promptQuestions?.promptType === 'multi-question' ? (
-                            promptQuestions?.questions?.length
+                            'Questions: ' + promptQuestions?.questions?.length
                         ) : (
-                            '1'
+                            'Full Prompt'
                         )}
                     </p>
                 </PopoverTrigger>

@@ -13,7 +13,7 @@ export default async function StudentDashboardLayout({
     params
 }: Readonly<{
     children: React.ReactNode,
-    params: Promise<{ studentId: string, sessionId: string }>
+    params: Promise<{ sessionId: string }>
 }>,
 ) {
 
@@ -35,8 +35,6 @@ export default async function StudentDashboardLayout({
                     <Separator orientation="vertical" className="mr-2 h-4" />
                 </div>
                 <main className="wrapper">
-                    {/* <p>{(promptSession?.questions as Question[] | undefined)?.[0]?.question ?? ''}</p>
-                    <Separator className="my-5"/> */}
                     {children}
                 </main>
             </SidebarInset>

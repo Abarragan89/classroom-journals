@@ -9,37 +9,49 @@ import {
     Sheet
 } from "@/components/ui/sheet";
 import ActionSubMenu from "./action-sub-menu";
-import NavLinks from "./nav-links";
+import StudentNavLinks from "./student-nav-links";
+import TeacherNavLinks from "./teacher-nav-links";
 import { Separator } from "@/components/ui/separator";
 import { Session } from "@/types";
 
 export default function Menu({
     teacherId,
-    session
+    session,
+    studentId
 }: {
     teacherId?: string,
+    studentId?: string,
     session: Session
 }) {
 
-    const renderAuthenticatedMenu = () => (
+    const renderTeacherHeader = () => (
         <>
-            <NavLinks />
+            <TeacherNavLinks />
             <ActionSubMenu teacherId={teacherId!} session={session as Session} />
             <ModeToggle />
-            <UserButton session={session as Session}/>
+            <UserButton session={session as Session} />
+        </>
+    );
+    const renderStudentHeader = () => (
+        <>
+            <StudentNavLinks />
+            <ModeToggle />
+            <UserButton session={session as Session} />
         </>
     );
 
     const renderGuestMenu = () => (
         <>
             <ModeToggle />
-            <UserButton session={session as Session}/>
+            <UserButton session={session as Session} />
         </>
     );
 
     const renderMenuOptions = () => {
         if (teacherId) {
-            return renderAuthenticatedMenu()
+            return renderTeacherHeader()
+        } else if (studentId) {
+            return renderStudentHeader();
         } else {
             return renderGuestMenu();
         }
