@@ -164,7 +164,7 @@ model PromptSession {
   promptType String // single-question or multi-question
   assignedAt DateTime   @default(now())
   classId    String     @db.Uuid // relate it to which side it is attached to
-  status     String     @default("active") // e.g., "active", "completed"
+  status     String     @default("open") // e.g., "open", "closed"
   responses  Response[]
   // Relationship
   prompt     Prompt?    @relation(fields: [promptId], references: [id], onDelete: SetNull)

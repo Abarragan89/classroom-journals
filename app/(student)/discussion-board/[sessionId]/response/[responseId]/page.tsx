@@ -22,6 +22,8 @@ export default async function SingleResponse({
     const { responseId, sessionId } = await params;
     const response = await getSingleResponse(responseId) as unknown as Response
 
+    const promptStatus = response?.promptSession?.status
+
     return (
         <div className="max-w-[700px] px-3 mx-auto">
             <BlogMetaDetails
@@ -44,6 +46,7 @@ export default async function SingleResponse({
                 responseId={responseId}
                 studentId={studentId}
                 sessionId={sessionId}
+                discussionStatus={promptStatus}
             />
         </div>
     )

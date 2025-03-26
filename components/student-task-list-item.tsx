@@ -13,7 +13,7 @@ export default function StudentTaskListItem({ jotData }: { jotData: PromptSessio
                     {jotData.promptType === 'multi-question' ?
                         <p>Questions: {questionCount.length}</p>
                         :
-                        <p>Blog Prompt</p>
+                        <p>Blog</p>
                     }
                     <p>Status: <span className='text-destructive'>incomplete</span></p>
                 </div>

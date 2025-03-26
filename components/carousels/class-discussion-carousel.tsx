@@ -30,7 +30,7 @@ export default function ClassDiscussionCarousel({
                         <CarouselItem key={session.id} className="md:basis-1/2 lg:basis-1/3 mx-auto">
                             <Card className="relative max-w-[350px] mx-auto">
                                 <CardContent>
-                                    <Link className='block' href={`/discussion-board/${session.id}/response/${session?.responses?.[0].id}`}>
+                                    <Link className='block' href={`/discussion-board/${session.id}/response/${session?.responses?.[0]?.id}`}>
                                         <article className='h-[150px] flex flex-col justify-between opacity-80 rounded-lg hover:cursor-pointer hover:opacity-100'>
                                             <div className="flex-between text-xs">
                                                 <p>World History</p>
@@ -38,8 +38,8 @@ export default function ClassDiscussionCarousel({
                                             </div>
                                             <p className='text-sm font-bold line-clamp-3 text-foreground'>{session.title}</p>
                                             <div className="flex-between text-xs ">
-                                                <p>{session?.responses?.length} Submission(s)</p>
-                                                <p>Status: <span className="text-success">{session.status}</span></p>
+                                                <p>{session?.responses?.length} Blogs</p>
+                                                <p>Discussion: <span className={`font-bold ${session.status === 'open' ? 'text-success' : 'text-destructive'}`}>{session.status}</span></p>
                                             </div>
                                         </article>
                                     </Link>

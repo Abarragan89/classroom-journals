@@ -12,20 +12,20 @@ export default function CommentSection({
     comments,
     studentId,
     responseId,
-    sessionId
+    sessionId,
+    discussionStatus
 }: {
     comments: ResponseComment[],
     studentId: string,
     responseId: string,
     sessionId: string,
+    discussionStatus: string
 }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [allComments, setAllComments] = useState<ResponseComment[]>(comments)
     const [commentText, setCommentText] = useState<string>('')
 
-
-    console.log("student id ", studentId)
     async function addCommentHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
@@ -45,40 +45,42 @@ export default function CommentSection({
         <section className="relative mx-auto" id="comment-section-main">
             <h3 className="h3-bold text-center pb-3">Comments</h3>
 
-            <form
-                onSubmit={(e) => addCommentHandler(e)}
-                className="relative"
-            >
-                <div className="mb-10">
-                    <Textarea
-                        placeholder="Add a comment..."
-                        rows={3}
-                        value={commentText}
-                        className="pr-5 h-[90px] resize-none"
-                        onChange={(e) => setCommentText(e.target.value)}
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className={`absolute right-[18px] top-[58px] h-[30px]`}
+            {discussionStatus === 'open' &&
+                <form
+                    onSubmit={(e) => addCommentHandler(e)}
+                    className="relative"
                 >
-                    {isLoading ?
-                        <BarLoader
-                            width={15}
-                            height={2}
-                            loading={isLoading}
-                            aria-label="Loading Spinner"
-                            data-testid="loader"
-                            color="gray"
+                    <div className="mb-10">
+                        <Textarea
+                            placeholder="Add a comment..."
+                            rows={3}
+                            value={commentText}
+                            className="pr-5 h-[90px] resize-none"
+                            onChange={(e) => setCommentText(e.target.value)}
                         />
-                        :
-                        <SendHorizonalIcon
-                            className="text-primary"
-                            size={22}
-                        />
-                    }
-                </button>
-            </form>
+                    </div>
+                    <button
+                        type="submit"
+                        className={`absolute right-[18px] top-[58px] h-[30px]`}
+                    >
+                        {isLoading ?
+                            <BarLoader
+                                width={15}
+                                height={2}
+                                loading={isLoading}
+                                aria-label="Loading Spinner"
+                                data-testid="loader"
+                                color="gray"
+                            />
+                            :
+                            <SendHorizonalIcon
+                                className="text-primary"
+                                size={22}
+                            />
+                        }
+                    </button>
+                </form>
+            }
             {allComments?.length > 0 && allComments.map((comment: ResponseComment) => (
                 <SingleComment
                     key={comment.id}
@@ -86,6 +88,7 @@ export default function CommentSection({
                     responseId={responseId}
                     studentId={studentId}
                     sessionId={sessionId}
+                    discussionStatus={discussionStatus}
                 />
             ))}
         </section>

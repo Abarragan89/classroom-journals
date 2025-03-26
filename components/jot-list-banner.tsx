@@ -17,7 +17,7 @@ export default function JotListBanner({
     classSize?: number
 }) {
 
-    const type = jotData.promptType === 'multi-question' ? 'Multi-Question' : 'Blog Prompt';
+    const type = jotData.promptType === 'multi-question' ? 'Assessment' : 'Blog';
 
     return (
         <div>
@@ -31,7 +31,7 @@ export default function JotListBanner({
                             </div>
                             <p className='text-sm font-bold line-clamp-3 text-foreground'>{jotData.title}</p>
                             <div className="flex-between text-xs">
-                                <p>Submissions: {jotData?.responses?.length} / {classSize}</p>
+                                <p>Submissions: {jotData?.responses?.length}/{classSize}</p>
                             </div>
                         </article>
                     </Link>
@@ -39,7 +39,7 @@ export default function JotListBanner({
                         {jotData.promptType === 'multi-question' ? (
                             <QuestionPopup promptQuestions={jotData as unknown as Prompt} />
                         ) : (
-                            <p>Status: <span className="text-success">{jotData.status}</span></p>
+                            <p>Discussion: <span className={`font-bold ${jotData.status === 'open' ? 'text-success' : 'text-destructive'}`}>{jotData.status}</span></p>
                         )}
                     </div>
                 </div>
@@ -53,7 +53,7 @@ export default function JotListBanner({
                             </div>
                             <p className='text-sm font-bold line-clamp-3 text-foreground'>{jotData.title}</p>
                             <div className="flex-between text-xs ">
-                                <p>Submissions: {jotData?.responses?.length} / {classSize}</p>
+                                <p>Submissions: {jotData?.responses?.length}/{classSize}</p>
                                 <p>Status: <span className="text-success">{jotData.status}</span></p>
                             </div>
                         </article>

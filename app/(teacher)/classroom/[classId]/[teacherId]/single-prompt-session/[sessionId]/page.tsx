@@ -10,10 +10,11 @@ import { prisma } from '@/db/prisma';
 import Link from 'next/link';
 import { formatDateShort } from '@/lib/utils';
 import { decryptText } from "@/lib/utils";
-import { ClipboardCheckIcon } from "lucide-react";
+import { ClipboardCheckIcon, Ellipsis } from "lucide-react";
 import { ResponseData, User } from "@/types";
 import { PromptSession } from "@/types";
 import { getAllStudents } from "@/lib/actions/classroom.actions";
+import EditPromptSessionPopUp from "@/components/modalBtns/edit-prompt-session-popup";
 
 export default async function SinglePromptSession({
     params
@@ -29,7 +30,10 @@ export default async function SinglePromptSession({
 
     const promptSession = await prisma.promptSession.findUnique({
         where: { id: sessionId },
-        include: {
+        select: {
+            status: true,
+            id: true,
+            promptType: true,
             responses: {
                 select: {
                     id: true,
@@ -96,6 +100,11 @@ export default async function SinglePromptSession({
     return (
         <div>
             <h2 className="text-1xl lg:text-2xl line-clamp-3 mt-5">{promptSession?.prompt?.title}</h2>
+                <EditPromptSessionPopUp
+                    promptSessionType={promptSession.promptType}
+                    promptSessionId={promptSession.id}
+                    initialStatus={promptSession.status}
+                />
             {promptSession.promptType === 'multi-question' ? (
                 <Table className="mt-5">
                     <TableHeader>

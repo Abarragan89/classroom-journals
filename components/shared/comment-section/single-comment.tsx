@@ -15,12 +15,14 @@ export default function SingleComment({
     commentData,
     responseId,
     studentId,
-    sessionId
+    sessionId,
+    discussionStatus
 }: {
     commentData: ResponseComment,
     responseId: string,
     studentId: string,
-    sessionId: string
+    sessionId: string,
+    discussionStatus: string
 }) {
     const [showReplies, setShowReplies] = useState<boolean>(false)
     const [isLikedByUser, setIsLikeByUser] = useState<boolean>(false)
@@ -82,7 +84,7 @@ export default function SingleComment({
     }
 
     return (
-        <div className="mb-7 mx-4">
+        <div className="mb-32 mx-4">
             <div className="flex items-center">
                 <p className="relative w-9 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center mr-2">
                     {commentData?.user?.username?.charAt(0).toUpperCase()}
@@ -111,7 +113,7 @@ export default function SingleComment({
             <p className="text-[1rem] mt-0 whitespace-pre ml-[45px]">{commentData.text}</p>
 
             {/* Conditionally render reply form */}
-            {showReplyTextarea &&
+            {showReplyTextarea && discussionStatus === 'open' &&
                 <section className="relative max-w-[700px] mx-auto pb-2 pt-5" id="comment-section-main">
                     <form
                         onSubmit={(e) => addCommentReplyHandler(e)}
@@ -159,7 +161,7 @@ export default function SingleComment({
                     <p className="text-[.9rem] ml-[4px]">{totalReplies}</p>
                     {showReplies ? <ChevronLeft size={18} /> : <ChevronDown size={18} />}
                 </div>
-                {showReplyTextarea ?
+                {showReplyTextarea  ?
                     <p
                         onClick={() => setShowReplyTextarea(false)}
                         className="hover:cursor-pointer text-[.95rem] underline text-primary opacity-[0.7] hover:opacity-[1]"
@@ -167,6 +169,7 @@ export default function SingleComment({
                         Cancel
                     </p>
                     :
+                    discussionStatus === 'open' &&
                     <p
                         onClick={() => setShowReplyTextarea(true)}
                         className="hover:cursor-pointer text-[.95rem] underline text-primary opacity-[0.7] hover:opacity-[1]"

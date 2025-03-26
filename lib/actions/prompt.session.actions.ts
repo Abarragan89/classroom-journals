@@ -79,3 +79,51 @@ export async function getSinglePromptSession(promptId: string) {
     }
 }
 
+
+// Delete Prompt
+export async function deletePromptSession(prevState: unknown, formData: FormData) {
+    try {
+        const promptId = formData.get('promptId') as string
+
+        await prisma.promptSession.delete({
+            where: { id: promptId }
+        })
+        return { success: true, message: 'Prompt Updated!', promptId };
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log('Error deleting prompt:', error.message);
+            console.error(error.stack);
+        } else {
+            console.error('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error deleting prompt. Try again.' };
+    }
+}
+
+// Delete Prompt
+export async function toggleBlogStatus(prevState: unknown, formData: FormData) {
+    try {
+        const promptStatus = formData.get('promptStatus') as string
+        const promptId = formData.get('promptId') as string
+
+        await prisma.promptSession.update({
+            where: { id: promptId },
+            data: {
+                status: promptStatus
+            }
+        })
+        return { success: true, message: 'Prompt Updated!', promptId };
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log('Error updating prompt:', error.message);
+            console.error(error.stack);
+        } else {
+            console.error('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error updating prompt. Try again.' };
+    }
+}
+
+

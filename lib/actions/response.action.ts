@@ -146,6 +146,11 @@ export async function getSingleResponse(responseId: string) {
                         username: true,
                         iv: true,
                     }
+                },
+                promptSession: {
+                    select: {
+                        status: true
+                    }
                 }
             }
         })

@@ -51,7 +51,6 @@ export default async function StudentDashboard() {
 
     // Extract the student IDs from responses and filter PromptSessions
     const tasksToDo = classroomData?.PromptSession.filter(singleSession =>
-        singleSession.status === 'active' &&
         !singleSession.responses.some(response => response.studentId === studentId)
     ) as unknown as PromptSession[];
 
@@ -64,6 +63,8 @@ export default async function StudentDashboard() {
 
     const username = decryptText(session?.user?.name as string, session?.iv as string)
 
+    console.log('tasks to do ', tasksToDo)
+
     return (
         <>
             <Header session={session} studentId={studentId} />
@@ -71,7 +72,7 @@ export default async function StudentDashboard() {
                 <h1 className="h1-bold mt-2 line-clamp-1">{classroomData?.name}</h1>
                 <h1 className="h2-bold mt-2 line-clamp-1">Hi, {username}</h1>
                     <Button
-                    className="absolute right-24"
+                    className="absolute right-10"
                     ><Plus /> Request</Button>
                 {/* Show prompt sessions if they exist */}
                 {tasksToDo?.length > 0 ? (

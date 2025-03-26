@@ -12,12 +12,12 @@
     --secondary-foreground: hsl(15, 40%, 98%);
     --muted: hsl(228, 19%, 35%);
     --muted-foreground: hsl(0, 0%, 59%);
-    --card: hsla(60, 30%, 43%, 0.091);
+    --card: hsla(60, 11%, 88%, 0.925);
     --card-foreground: hsl(24, 85%, 11%);
     --accent: hsl(203, 38%, 36%);
     --accent-foreground: hsl(0, 0%, 100%);
     --border: hsl(206, 15%, 43%);
-    --input: hsl(0, 2%, 53%);
+    --input: hsl(0, 1%, 47%);
     --ring: hsl(230, 76%, 19%);
     --destructive: hsl(0, 70%, 45%);
     --destructive-foreground: hsl(0, 0%, 100%);

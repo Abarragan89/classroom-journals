@@ -81,7 +81,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                     questions: createdPrompt.questions as Prisma.InputJsonValue,
                     assignedAt: new Date(),
                     classId: classId,
-                    status: 'active',
+                    status: 'open',
                 }));
 
                 // Create all the PromptSessions in one transaction
@@ -188,7 +188,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
                     questions: updatedPrompt.questions as Prisma.InputJsonValue,
                     assignedAt: new Date(),
                     classId: classId,
-                    status: 'active',
+                    status: 'open',
                 }));
 
                 // Create all the PromptSessions in one transaction
@@ -387,7 +387,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
                 questions: currentPrompt.questions as Prisma.InputJsonValue,
                 assignedAt: new Date(),
                 classId: classId,
-                status: 'active',
+                status: 'open',
             }));
 
             // Create all the PromptSessions in one transaction

@@ -32,7 +32,7 @@ export default async function Classroom({
                         classSize={studentCount}
                     />
                 )) : (
-                    <p>No Jots posted</p>
+                    <p>No Assignments posted</p>
                 )}
             </div>
         </div>
