@@ -45,6 +45,11 @@ export default async function SinglePromptSession({
                             name: true,
                             iv: true,
                         }
+                    },
+                    _count: {
+                        select: {
+                            comments: true
+                        }
                     }
                 },
             },
@@ -188,7 +193,7 @@ export default async function SinglePromptSession({
                                     {response.student.name}
                                 </TableCell>
                                 <TableCell>{(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? '-'}%</TableCell>
-                                <TableCell>13</TableCell>
+                                <TableCell>{response?._count?.comments || 0}</TableCell>
                                 <TableCell>{formatDateShort(response.submittedAt)}</TableCell>
                             </TableRow>
                         ))}

@@ -46,7 +46,7 @@ export default async function SingleResponse({
                 responseId={responseId}
                 studentId={studentId}
                 sessionId={sessionId}
-                discussionStatus={promptStatus}
+                discussionStatus={promptStatus as string}
             />
         </div>
     )
