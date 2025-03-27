@@ -56,6 +56,11 @@ export default async function SinglePromptSession({
             prompt: {
                 select: {
                     title: true,
+                    category: {
+                        select: {
+                            name: true
+                        }
+                    }
                 },
             },
         },
@@ -105,11 +110,11 @@ export default async function SinglePromptSession({
     return (
         <div>
             <h2 className="text-1xl lg:text-2xl line-clamp-3 mt-5">{promptSession?.prompt?.title}</h2>
-                <EditPromptSessionPopUp
-                    promptSessionType={promptSession.promptType}
-                    promptSessionId={promptSession.id}
-                    initialStatus={promptSession.status}
-                />
+            <EditPromptSessionPopUp
+                promptSessionType={promptSession.promptType}
+                promptSessionId={promptSession.id}
+                initialStatus={promptSession.status}
+            />
             {promptSession.promptType === 'multi-question' ? (
                 <Table className="mt-5">
                     <TableHeader>

@@ -11,6 +11,7 @@ import { EllipsisVertical, Edit, Trash2Icon, Pin } from "lucide-react";
 import { Classroom, Prompt } from '@/types';
 import DeletePromptForm from '@/components/forms/prompt-forms/delete-prompt-form';
 import AssignPromptForm from '@/components/forms/prompt-forms/assign-prompt-form';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 
@@ -23,6 +24,8 @@ export default function OptionsMenu({
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
     classroomData: Classroom[],
 }) {
+
+    const pathname = usePathname();
 
     const [mounted, setMounted] = useState<boolean>(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
@@ -80,13 +83,13 @@ export default function OptionsMenu({
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         {/* Ellipse */}
-                        <EllipsisVertical size={20} className="hover:cursor-pointer text-primary" />
+                        <EllipsisVertical size={20} className="hover:cursor-pointer text-card" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuItem onClick={() => setIsAssignModalOpen(true)} className="hover:cursor-pointer rounded-md">
                         <Pin />Assign
                         </DropdownMenuItem>
-                        <Link href={`/prompt-form/?type=${promptData.promptType}&edit=${promptData.id}`}>
+                        <Link href={`/prompt-form/?type=${promptData.promptType}&edit=${promptData.id}&callbackUrl=${pathname}`}>
                             <DropdownMenuItem className="hover:cursor-pointer rounded-md">
                                 <Edit />Edit
                             </DropdownMenuItem>

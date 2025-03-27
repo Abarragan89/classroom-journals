@@ -12,7 +12,7 @@ model User {
   id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   googleId       String?          @unique // Optional, only for students with Google IDs
   name           String?          @default("NO_NAME")
-  username       String?
+  username       String?          
   email          String?          @unique(map: "user_email_idx")
   emailVerified  DateTime?        @db.Timestamp(6)
   image          String?

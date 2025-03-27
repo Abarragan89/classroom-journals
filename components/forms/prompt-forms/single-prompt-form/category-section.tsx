@@ -59,7 +59,7 @@ export default function CategorySection({
                 description="Confirm you want to delete this category"
             >
                 <div className="items-center space-y-4 px-3 pb-2">
-                    <p className="text-center"><span className="text-destructive font-bold">Important! </span>Deleting this category will de-categorize all jots associated with it. You will have to re-categorize them manually.</p>
+                    <p className="text-center"><span className="text-destructive font-bold">Important! </span>Deleting this category will de-categorize all Jots associated with it. You will have to re-categorize them manually.</p>
                     <p className="text-sm font-bold m-0 p-0">Type: "delete {promptName.toLowerCase()}" to confirm</p>
                     <Input
                         type="text"
@@ -93,7 +93,7 @@ export default function CategorySection({
                     type="button"
                     onClick={() => handleAddCategory(newCategoryName)}
                     className="mt-3"
-                >Add</Button>
+                >Add Category</Button>
             </div>
             <div className="space-y-3 mt-3">
                 {categories?.length > 0 ? (

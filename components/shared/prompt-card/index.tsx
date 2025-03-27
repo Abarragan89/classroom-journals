@@ -30,14 +30,30 @@ export default function PromptCard({
                 classroomData={classroomData}
             />
             {promptData.promptType === 'multi-question' ? (
-                <p className="text-xs w-fit text-accent-foreground bg-accent rounded-md py-[3px] px-2 mt-3 ml-3">{promptData?.category?.name} Assessment</p>
+                <div className="w-full text-card bg-muted rounded-lg rounded-b-none h-[70px]">
+                    <div className="p-3">
+                        <p className="text-2xl font-bold">{promptData?.category?.name}</p>
+                        <p className={`${promptData?.category?.name ? 'text-xs' : 'text-2xl font-bold'}`}>Assessment</p>
+                        {!promptData?.category?.name &&
+                            <p className="text-xs">(no category)</p>
+                        }
+                    </div>
+                </div>
             ) : (
-                <p className="text-xs w-fit text-card bg-card-foreground rounded-md py-[3px] px-2 mt-3 ml-3">{promptData?.category?.name} Blog</p>
+                <div className="w-full text-card bg-muted rounded-lg rounded-b-none h-[70px]">
+                    <div className="p-3">
+                        <p className="text-2xl font-bold">{promptData?.category?.name}</p>
+                        <p className={`${promptData?.category?.name ? 'text-xs' : 'text-2xl font-bold'}`}>Blog</p>
+                        {!promptData?.category?.name &&
+                            <p className="text-xs">(no category)</p>
+                        }
+                    </div>
+                </div>
             )}
 
-            <CardHeader className="flex flex-row justify-between text-sm h-[200px] overflow-hidden">
-                <div className="w-[95%]">
-                    <CardTitle className="tracking-wide leading-5 line-clamp-[7]">
+            <CardHeader className="flex flex-row justify-between text-sm h-[150px] overflow-hidden">
+                <div >
+                    <CardTitle className="tracking-wide leading-5 line-clamp-5">
                         {promptData.title}
                     </CardTitle>
                 </div>

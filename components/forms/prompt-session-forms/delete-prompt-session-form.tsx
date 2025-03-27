@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { toast } from 'sonner'
 import { deletePromptSession } from "@/lib/actions/prompt.session.actions";
 import { useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 
 export default function DeletePromptSessionForm({
     promptSessionId,
@@ -16,6 +17,7 @@ export default function DeletePromptSessionForm({
 }) {
 
     const router = useRouter();
+    const { classId, teacherId} = useParams()
 
     const [state, action] = useActionState(deletePromptSession, {
         success: false,
@@ -28,7 +30,7 @@ export default function DeletePromptSessionForm({
             toast('Assignment Deleted!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
-            router.back();
+            router.push(`/classroom/${classId}/${teacherId}`);
         }
     }, [state])
 

@@ -6,7 +6,7 @@ import { SendHorizonalIcon } from "lucide-react";
 import { ResponseComment } from "@/types";
 import { addComment } from "@/lib/actions/comment.action";
 import SingleComment from "./single-comment";
-import { toast } from "sonner";
+import { toast } from "sonner";;
 
 export default function CommentSection({
     comments,

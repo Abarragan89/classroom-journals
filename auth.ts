@@ -172,6 +172,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         where: { id: user.id },
                         data: {
                             name: token.name,
+                            username: token.name,
                             iv: token.iv as string
                         }
                     })

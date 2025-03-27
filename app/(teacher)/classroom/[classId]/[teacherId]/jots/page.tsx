@@ -1,14 +1,17 @@
-
+import PromptLibrary from "@/components/shared/jot-library-server-comp"
 
 export default async function Jots({
     params
 }: {
     params: Promise<{ classId: string, teacherId: string }>
 }) {
-    console.log(params)
+    const { teacherId } = await params
     return (
         <div>
-            <h2 className="text-2xl lg:text-3xl mt-2">Jots</h2>
+            <PromptLibrary
+                teacherId={teacherId}
+                inClassroom={true}
+            />
         </div>
     )
 }

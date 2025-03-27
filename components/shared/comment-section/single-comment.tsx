@@ -24,6 +24,7 @@ export default function SingleComment({
     sessionId: string,
     discussionStatus: string
 }) {
+
     const [showReplies, setShowReplies] = useState<boolean>(false)
     const [isLikedByUser, setIsLikeByUser] = useState<boolean>(false)
 

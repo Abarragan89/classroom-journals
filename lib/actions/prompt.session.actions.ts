@@ -7,9 +7,23 @@ export async function getAllSessionsInClass(classId: string) {
         const allPromptSession = await prisma.promptSession.findMany({
             where: { classId: classId },
             orderBy: { createdAt: 'desc' },
-            include: {
+            select: {
+                id: true,
                 responses: true,
-
+                createdAt: true,
+                promptType: true,
+                title: true,
+                status: true,
+                questions: true,
+                prompt: {
+                    select: {
+                        category: {
+                            select: {
+                                name: true
+                            }
+                        }
+                    }
+                }
             }
         })
         return allPromptSession

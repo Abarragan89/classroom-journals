@@ -1,5 +1,5 @@
 'use client'
-import { Prompt } from "@/types"
+import { Prompt, PromptCategory } from "@/types"
 import { useState, useRef } from "react"
 import PromptFilterOptions from "./shared/prompt-filter-options"
 import PromptCard from "./shared/prompt-card"
@@ -10,15 +10,17 @@ import { Classroom } from "@/types"
 export default function JotSearchArea({
     initialPrompts,
     classroomData,
+    categories,
 }: {
     initialPrompts: Prompt[],
     classroomData: Classroom[],
+    categories: PromptCategory[]
 }) {
 
     const [fetchedPrompts, setFetchedPrompts] = useState<Prompt[]>(initialPrompts)
     // Make the following into one state object
     const promptSearchOptions = useRef<SearchOptions>({
-        classroom: '',
+        category: '',
         filter: '',
         paginationSkip: 0,
         searchWords: ''
@@ -34,7 +36,7 @@ export default function JotSearchArea({
             <PromptFilterOptions
                 searchOptionsRef={promptSearchOptions}
                 getFilteredSearch={getFilteredSearch}
-                classroomData={classroomData}
+                categories={categories}
             />
             <div className="mt-10 flex flex-wrap items-start  gap-10 mb-10">
                 {/* Insert all the prompt jot cards here */}

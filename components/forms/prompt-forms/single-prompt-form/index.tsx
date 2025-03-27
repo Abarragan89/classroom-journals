@@ -26,6 +26,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
 
     const searchParams = useSearchParams()
     const existingPromptId = searchParams.get('edit')
+    const callBackUrl = searchParams.get('callbackUrl')
 
     const actionFunction = existingPromptId ? updateAPrompt : createNewPrompt
 
@@ -74,7 +75,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     useEffect(() => {
         if (state.success) {
             toast('Jot Added!');
-            router.push('/prompt-library'); // Navigates without losing state instantly
+            router.push(callBackUrl as string); // Navigates without losing state instantly
         }
     }, [state, router])
 
@@ -136,7 +137,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
             <Separator className="mt-10 mb-5" />
 
             {/* Associate with a category*/}
-            <CategorySection 
+            <CategorySection
                 newCategoryName={newCategoryName}
                 setNewCategoryName={setNewCategoryName}
                 handleAddCategory={handleAddCategory}

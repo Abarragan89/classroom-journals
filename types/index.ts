@@ -69,6 +69,7 @@ export type PromptSession = {
     questions: JsonValue;
     assignedAt: Date;
     promptType: string;
+    category: PromptCategory;
     prompt?: Prompt;
     classId: string;
     status: string;
@@ -101,7 +102,7 @@ export interface ResponseData {
 }
 
 export interface SearchOptions {
-    classroom: string;
+    category: string;
     filter: string;
     paginationSkip: number,
     searchWords: string
@@ -179,7 +180,7 @@ export interface UserNotification {
 export interface PromptCategory {
     id: string;
     name: string;
-    userId: string;
+    userId?: string;
     user?: User;
     prompts?: Prompt[];
 }

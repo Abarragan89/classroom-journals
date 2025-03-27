@@ -23,7 +23,7 @@ export default function ClassCard({ classData, teacherId }: { classData: Class, 
                 className="hover:cursor-pointer"
             >
                 <CardHeader className="flex flex-row justify-between">
-                    <div className="w-[95%]"> 
+                    <div> 
                         <CardTitle className="line-clamp-1">{classData.name}</CardTitle>
                         <CardDescription>{classData.year}</CardDescription>
                     </div>

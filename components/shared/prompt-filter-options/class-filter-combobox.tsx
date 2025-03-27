@@ -14,18 +14,19 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { Classroom, SearchOptions } from "@/types"
+import { PromptCategory, SearchOptions } from "@/types"
 
 interface Props {
     searchOptionsRef: React.RefObject<SearchOptions>;
-    classroomData: Classroom[];
     getFilteredSearch: (filterOptions: SearchOptions) => void;
+    categories: PromptCategory[]
+
 }
 
 export default function ClassFilterCombobox({
     searchOptionsRef,
-    classroomData,
-    getFilteredSearch
+    getFilteredSearch,
+    categories
 }: Props) {
 
     const [open, setOpen] = useState<boolean>(false)
@@ -35,9 +36,8 @@ export default function ClassFilterCombobox({
         // Update the ref object directly
         searchOptionsRef.current = {
             ...searchOptionsRef.current,
-            classroom: value
+            category: value
         };
-
         // Call getFilteredSearch with the updated options
         getFilteredSearch(searchOptionsRef.current);
 
@@ -53,8 +53,8 @@ export default function ClassFilterCombobox({
                     className="justify-between truncate relative overflow-hidden"
                 >
                     <span className="block truncate">{value
-                        ? classroomData.find((classroom) => classroom.id === value)?.name
-                        : "All Classes..."}</span>
+                        ? categories.find((category) => category.id === value)?.name
+                        : "All Categories..."}</span>
                     <div className="absolute right-6 top-0 bottom-0 w-8 pointer-events-none"></div>
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -63,10 +63,10 @@ export default function ClassFilterCombobox({
                 <Command>
                     <CommandList>
                         <CommandGroup>
-                            {classroomData.map((classroom) => (
+                            {categories.map((category) => (
                                 <CommandItem
-                                    key={classroom.id}
-                                    value={classroom.id}
+                                    key={category.id}
+                                    value={category.id}
                                     onSelect={(currentValue) => {
                                         setValue(currentValue === value ? "" : currentValue)
                                         setOpen(false)
@@ -76,10 +76,10 @@ export default function ClassFilterCombobox({
                                     <Check
                                         className={cn(
                                             "mr-2 h-4 w-4",
-                                            value === classroom.id ? "opacity-100" : "opacity-0"
+                                            value === category.id ? "opacity-100" : "opacity-0"
                                         )}
                                     />
-                                    {classroom.name}
+                                    {category.name}
                                 </CommandItem>
                             ))}
                         </CommandGroup>

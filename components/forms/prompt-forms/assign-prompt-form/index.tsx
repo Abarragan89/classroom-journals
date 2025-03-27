@@ -62,8 +62,7 @@ export default function AssignPromptForm({
                     {classroomData?.length > 0 && (
                         <>
                             <p className="text-md font-bold">Select Classes</p>
-                            {/* remove the first element which is hte all classes default for search dropdown */}
-                            {classroomData.slice(1).map((classroom: Classroom) => (
+                            {classroomData.map((classroom: Classroom) => (
                                 <div key={classroom.id} className="flex items-center space-x-2">
                                     <Checkbox id={classroom.id} value={classroom.id} name={`classroom-organize-${classroom.id}`} />
                                     <label

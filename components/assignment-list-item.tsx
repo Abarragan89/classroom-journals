@@ -23,7 +23,7 @@ export default function AssignmentListItem({
                 <Link className='block h-[150px]' href={`/classroom/${classId}/${teacherId}/single-prompt-session/${jotData.id}`}>
                     <article className='bg-card h-[150px] flex flex-col justify-between opacity-80 px-4 py-3 rounded-lg mt-3 mb-4 border border-border hover:cursor-pointer hover:opacity-100'>
                         <div className="flex-between text-xs">
-                            <p>{type}</p>
+                            <p>{jotData?.prompt?.category?.name} {type}</p>
                             <p>{formatDateLong(jotData.createdAt)}</p>
                         </div>
                         <p className='text-sm font-bold line-clamp-3 text-foreground'>{jotData.title}</p>

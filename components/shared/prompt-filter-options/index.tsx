@@ -1,18 +1,18 @@
 
-import { Classroom, SearchOptions } from "@/types"
+import { PromptCategory, SearchOptions } from "@/types"
 import ClassFilterCombobox from "./class-filter-combobox"
 import PromptSearchBar from "./prompt-search-bar"
 import TraitFilterCombobox from "./trait-filter-combobox"
 
 interface Props {
     searchOptionsRef: React.RefObject<SearchOptions>;
-    classroomData: Classroom[],
-    getFilteredSearch: (filterOptions: SearchOptions) => void
+    getFilteredSearch: (filterOptions: SearchOptions) => void;
+    categories: PromptCategory[]
 }
 export default function PromptFilterOptions({
     searchOptionsRef,
-    classroomData,
-    getFilteredSearch
+    getFilteredSearch,
+    categories
 
 }: Props) {
 
@@ -28,7 +28,7 @@ export default function PromptFilterOptions({
             />
             <ClassFilterCombobox
                 searchOptionsRef={searchOptionsRef}
-                classroomData={classroomData}
+                categories={categories}
                 getFilteredSearch={getFilteredSearch}
             />
         </div>

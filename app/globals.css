@@ -1,4 +1,4 @@
-@tailwind base;
+ @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -71,11 +71,11 @@
     --primary-foreground: hsl(0, 0%, 0%);
     --secondary: hsl(73, 59%, 54%);
     --secondary-foreground: hsl(180, 3%, 6%);
-    --muted: hsl(228, 14%, 28%);
+    --muted: hsla(135, 16%, 25%, 0.833);
     --muted-foreground: hsl(0, 0%, 59%);
     --card: hsl(0, 0%, 0%);
     --card-foreground: hsl(210, 20%, 85%);
-    --accent: hsl(75, 88%, 56%);
+    --accent: hsl(75, 49%, 54%);
     --accent-foreground: hsl(0, 0%, 2%);
     --border: hsl(109, 66%, 17%);
     --input: hsl(210, 15%, 28%);

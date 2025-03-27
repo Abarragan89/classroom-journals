@@ -147,6 +147,14 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
             return { success: false, message: "Prompt ID is required" };
         }
 
+        const promptType = formData.get("prompt-type") as string;
+
+        if (promptType === 'single-question') {
+            // Add blog-title and blog-image questions if a journal prompt
+            questions.push({ question: 'Add a Blog Title' })
+            questions.push({ question: 'Add a Cover Photo' })
+        }
+
         // Validate using Zod
         const validationResult = promptSchema.safeParse({ title, questions });
         if (!validationResult.success) {
@@ -299,14 +307,14 @@ export async function getSinglePrompt(promptId: string) {
 
 // Get prompts based on filtered options
 export async function getFilterPrompts(filterOptions: SearchOptions) {
+    console.log('filetered options ', filterOptions)
     try {
         const allPrompts = await prisma.prompt.findMany({
             where: {
                 // 1️ Filter by classroom if specified
-                classes: filterOptions.classroom
-                    ? { some: { id: filterOptions.classroom } }
+                categoryId: filterOptions.category
+                    ? filterOptions.category
                     : undefined,
-
                 // 2️ Filter by keywords in the title
                 title: filterOptions.searchWords
                     ? { contains: filterOptions.searchWords, mode: "insensitive" }
@@ -319,6 +327,7 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
                     : undefined
             },
             include: {
+                category: true,
                 promptSession: {
                     select: {
                         assignedAt: true,
@@ -373,6 +382,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
         const currentPrompt = await prisma.prompt.findUnique({
             where: { id: promptId },
             select: {
+                category: true,
                 id: true,
                 title: true,
                 questions: true,
@@ -406,6 +416,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
             where: { id: promptId },
             include: {
                 classes: true,
+                category: true,
                 promptSession: {
                     select: {
                         assignedAt: true,
