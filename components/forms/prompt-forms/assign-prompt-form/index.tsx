@@ -46,22 +46,22 @@ export default function AssignPromptForm({
                 disabled={pending}
                 className={`mx-auto block mt-3`}
             >
-                {pending ? 'Assigning...' : 'Assign Jot'}
+                {pending ? 'Assigning...' : 'Assign'}
             </Button>
         );
     }
 
     return (
-        <form action={action} className="space-y-5">
-            <div className="grid items-center gap-4">
-                <p className="text-center">
-                    {promptTitle}
+        <form action={action} className="space-y-2">
+            <div className="grid items-center gap-3">
+                <p className="text-center italic line-clamp-4 text-primary">
+                    "{promptTitle}"
                 </p>
                 <Separator />
                 <div className="space-y-3">
                     {classroomData?.length > 0 && (
                         <>
-                            <p className="text-sm text-center">Select Classes</p>
+                            <p className="text-md font-bold">Select Classes</p>
                             {/* remove the first element which is hte all classes default for search dropdown */}
                             {classroomData.slice(1).map((classroom: Classroom) => (
                                 <div key={classroom.id} className="flex items-center space-x-2">

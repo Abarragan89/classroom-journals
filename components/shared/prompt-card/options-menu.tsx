@@ -63,7 +63,7 @@ export default function OptionsMenu({
             <ResponsiveDialog
                 isOpen={isAssignModalOpen}
                 setIsOpen={setIsAssignModalOpen}
-                title={`Assign Jot`}
+                title={`Assign`}
                 description='Select which classes to assign to'
             >
                 <AssignPromptForm

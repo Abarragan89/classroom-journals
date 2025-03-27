@@ -12,9 +12,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
 import { Classroom, Prompt, PromptCategory } from "@/types";
 import { addPromptCategory, getAllPromptCategories } from "@/lib/actions/prompt.categories";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useSearchParams } from "next/navigation";
+import CategorySection from "./category-section";
 
 interface Question {
     name: string;
@@ -135,41 +134,16 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
             ))}
 
             <Separator className="mt-10 mb-5" />
-            <p className="text-md font-bold">Category <span className="text-sm font-normal">(optional)</span></p>
-            {/* Add category form */}
-            <div className="flex-start">
-                <Input
-                    type="text"
-                    placeholder="add new category"
-                    value={newCategoryName}
-                    onChange={(e) => setNewCategoryName(e.target.value)}
-                    className="mr-3 mt-3"
-                />
-                <Button
-                    type="button"
-                    onClick={() => handleAddCategory(newCategoryName)}
-                    className="mt-3"
-                >Add</Button>
-            </div>
+
             {/* Associate with a category*/}
-            <div className="space-y-3 mt-3">
-                {categories?.length > 0 ? (
-                    <RadioGroup defaultValue={editingPrompt?.category?.id || 'no-category'} name="prompt-category" id="prompt-category">
-                        <div className="flex items-center space-x-2">
-                            <RadioGroupItem value='no-category' id='no-category' />
-                            <Label htmlFor='no-category'>None</Label>
-                        </div>
-                        {categories.map((category: PromptCategory) => (
-                            <div key={category.id} className="flex items-center space-x-2">
-                                <RadioGroupItem value={category.id} id={category.name} />
-                                <Label htmlFor={category.name}>{category.name}</Label>
-                            </div>
-                        ))}
-                    </RadioGroup>
-                ) : (
-                    <p className="text-sm text-center">No Categories Made</p>
-                )}
-            </div>
+            <CategorySection 
+                newCategoryName={newCategoryName}
+                setNewCategoryName={setNewCategoryName}
+                handleAddCategory={handleAddCategory}
+                setCategories={setCategories}
+                categories={categories}
+                editingPrompt={editingPrompt as Prompt}
+            />
 
             {/* Assign to a classroom */}
             <div className="space-y-3 mt-5">

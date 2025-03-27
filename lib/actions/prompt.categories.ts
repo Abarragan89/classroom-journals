@@ -43,3 +43,24 @@ export async function getAllPromptCategories(userId: string) {
     }
 }
 
+
+// Delete Prompt Category
+export async function deletePromptCategory(id: string) {
+    try {
+
+        await prisma.promptCategory.delete({
+            where: {id}
+        })
+        return { success: true, message: 'Error deleting categories. Try again.' };
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log('Error adding category:', error.message);
+            console.error(error.stack);
+        } else {
+            console.error('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error deleting categories. Try again.' };
+    }
+}
+

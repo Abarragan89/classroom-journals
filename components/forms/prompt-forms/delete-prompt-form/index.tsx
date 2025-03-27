@@ -53,9 +53,9 @@ export default function DeletePromptForm({
         <form action={action} className="space-y-5">
             <div className="grid items-center gap-4">
                 <Label htmlFor="year" className="text-center mx-auto mt-1 px-5 leading-normal">
-                    <p>Are you sure you want to delete</p>
-                    <span className="text-destructive py-3">{promptTitle}</span>
-                    <p>from your library?</p>
+                    <p className="font-bold mb-2">Are you sure you want to delete:</p>
+                    <span className="text-destructive text-center italic line-clamp-4">"{promptTitle}"</span>
+                    <p className="font-bold mt-2">from your library?</p>
                 </Label>
                 <input
                     hidden
