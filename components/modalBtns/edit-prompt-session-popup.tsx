@@ -1,5 +1,5 @@
 'use client'
-import { Circle, Ellipsis, Trash2Icon, X } from 'lucide-react'
+import { Circle, Edit, Edit2Icon, Ellipsis, Trash2Icon, X } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import { useState } from 'react'
 import { ResponsiveDialog } from '../responsive-dialog'
@@ -25,8 +25,6 @@ export default function EditPromptSessionPopUp({
         setIsEditModalOpen(false)
     }
     const statusCapitalized = promptSessionStatus === 'open' ? 'Close' : 'Open'
-
-    console.log('prompttype ', promptSessionType)
 
     return (
         <>
@@ -76,7 +74,7 @@ export default function EditPromptSessionPopUp({
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         {/* Ellipse */}
-                        <Ellipsis size={33} className="hover:cursor-pointer text-foreground" />
+                        <Edit size={22} className="top-0 hover:cursor-pointer text-foreground" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className='mr-[2.5rem]'>
                         {/* Only show open and close discussions for blogs (i.e. single question) */}

@@ -10,7 +10,7 @@ import { prisma } from '@/db/prisma';
 import Link from 'next/link';
 import { formatDateShort } from '@/lib/utils';
 import { decryptText } from "@/lib/utils";
-import { ClipboardCheckIcon, Ellipsis } from "lucide-react";
+import { ClipboardCheckIcon } from "lucide-react";
 import { ResponseData, User } from "@/types";
 import { PromptSession } from "@/types";
 import { getAllStudents } from "@/lib/actions/classroom.actions";

@@ -54,6 +54,7 @@ export interface Question {
 export type Prompt = z.infer<typeof promptSchema> & {
     id: string;
     createdAt: Date;
+    category: PromptCategory;
     updatedAt: Date;
     teacherId: string;
     classes?: Classroom[]
@@ -173,4 +174,12 @@ export interface UserNotification {
     response: Response;
     createdAt: Date;
     isRead: boolean;
+}
+
+export interface PromptCategory {
+    id: string;
+    name: string;
+    userId: string;
+    user?: User;
+    prompts?: Prompt[];
 }

@@ -18,7 +18,6 @@ export default function ToggleBlogStatus({
     closeModal: () => void,
 }) {
 
-    console.log('prompt session status ', promptSessionStatus)
     const [state, action] = useActionState(toggleBlogStatus, {
         success: false,
         message: ''

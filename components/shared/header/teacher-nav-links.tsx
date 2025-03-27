@@ -20,7 +20,7 @@ export default function TeacherNavLinks() {
             flex-center hover:cursor-pointer hover:text-primary
             ${pathname.includes('prompt') ? 'text-primary underline' : 'text-ring'}  
             `}>
-                <PenTool size={16} className='mr-1' />Jots
+                <PenTool size={16} className='mr-1' />My Jots
             </Link>
         </>
     )

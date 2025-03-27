@@ -59,7 +59,7 @@ export default function Menu({
 
     return (
         <div className="flex justify-end gap-3">
-            <nav className="hidden sm:flex-center w-full max-w-md gap-4">
+            <nav className="hidden sm:flex-center w-full max-w-md gap-5">
                 {renderMenuOptions()}
             </nav>
 

@@ -63,8 +63,6 @@ export default async function StudentDashboard() {
 
     const username = decryptText(session?.user?.name as string, session?.iv as string)
 
-    console.log('tasks to do ', tasksToDo)
-
     return (
         <>
             <Header session={session} studentId={studentId} />

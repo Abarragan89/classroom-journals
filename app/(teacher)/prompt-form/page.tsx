@@ -1,10 +1,10 @@
 import { auth } from "@/auth";
 import { notFound } from "next/navigation";
 import Header from "@/components/shared/header";
-import AddSinglePromptForm from "@/components/forms/prompt-forms/add-single-prompt-form";
+import SinglePromptForm from "@/components/forms/prompt-forms/single-prompt-form";
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
-import AddMultiPromptForm from "@/components/forms/prompt-forms/add-multi-prompt-form";
+import MultiPromptForm from "@/components/forms/prompt-forms/multi-prompt-form";
 import { Session } from "@/types";
 
 export default async function CreatePrompt({
@@ -32,14 +32,14 @@ export default async function CreatePrompt({
                     <>
                         <h1 className="h1-bold mt-5">New Blog Prompt</h1>
                         <div className="max-w-[600px] mx-auto mt-5">
-                            <AddSinglePromptForm teacherId={teacherId} />
+                            <SinglePromptForm teacherId={teacherId} />
                         </div>
                     </>
                 ) : type === 'multi-question' ? (
                     <>
                         <h1 className="h1-bold mt-5">New Multi-Question</h1>
                         <div className="max-w-[600px] mx-auto mt-5">
-                            <AddMultiPromptForm teacherId={teacherId} />
+                            <MultiPromptForm teacherId={teacherId} />
                         </div>
                     </>
                 ) : (

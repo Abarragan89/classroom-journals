@@ -82,7 +82,7 @@ CREATE TABLE "ClassUser" (
 CREATE TABLE "Notification" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "userId" UUID NOT NULL,
-    "postId" UUID NOT NULL,
+    "responseId" UUID NOT NULL,
     "url" TEXT NOT NULL,
     "message" TEXT NOT NULL,
     "commentText" TEXT,
@@ -93,38 +93,26 @@ CREATE TABLE "Notification" (
 );
 
 -- CreateTable
-CREATE TABLE "Post" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "text" TEXT NOT NULL,
-    "likeCount" INTEGER NOT NULL DEFAULT 0,
-    "publishedDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "userId" UUID NOT NULL,
-    "isPublished" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Comment" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "text" VARCHAR(1000) NOT NULL,
     "likeCount" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" UUID NOT NULL,
-    "postId" UUID NOT NULL,
+    "responseId" UUID NOT NULL,
     "parentId" UUID,
 
     CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "PostLike" (
+CREATE TABLE "ResponseLike" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "userId" UUID NOT NULL,
-    "postId" UUID NOT NULL,
+    "responseId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "PostLike_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "ResponseLike_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -145,8 +133,18 @@ CREATE TABLE "Prompt" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "questions" JSONB NOT NULL,
+    "categoryId" UUID,
 
     CONSTRAINT "Prompt_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "PromptCategory" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "name" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
+
+    CONSTRAINT "PromptCategory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -155,9 +153,10 @@ CREATE TABLE "PromptSession" (
     "promptId" UUID,
     "title" TEXT NOT NULL,
     "questions" JSONB NOT NULL,
+    "promptType" TEXT NOT NULL,
     "assignedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "classId" UUID NOT NULL,
-    "status" TEXT NOT NULL DEFAULT 'active',
+    "status" TEXT NOT NULL DEFAULT 'open',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -171,6 +170,7 @@ CREATE TABLE "Response" (
     "studentId" UUID NOT NULL,
     "response" JSONB NOT NULL,
     "submittedAt" TIMESTAMP(3) NOT NULL,
+    "likeCount" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "Response_pkey" PRIMARY KEY ("id")
 );
@@ -196,7 +196,7 @@ CREATE UNIQUE INDEX "Classroom_classCode_key" ON "Classroom"("classCode");
 CREATE INDEX "Comment_parentId_idx" ON "Comment"("parentId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "PostLike_userId_postId_key" ON "PostLike"("userId", "postId");
+CREATE UNIQUE INDEX "ResponseLike_userId_responseId_key" ON "ResponseLike"("userId", "responseId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "CommentLike_userId_commentId_key" ON "CommentLike"("userId", "commentId");
@@ -220,25 +220,22 @@ ALTER TABLE "ClassUser" ADD CONSTRAINT "ClassUser_classId_fkey" FOREIGN KEY ("cl
 ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Notification" ADD CONSTRAINT "Notification_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Post" ADD CONSTRAINT "Post_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_responseId_fkey" FOREIGN KEY ("responseId") REFERENCES "Response"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_responseId_fkey" FOREIGN KEY ("responseId") REFERENCES "Response"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "Comment"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PostLike" ADD CONSTRAINT "PostLike_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "ResponseLike" ADD CONSTRAINT "ResponseLike_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PostLike" ADD CONSTRAINT "PostLike_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "ResponseLike" ADD CONSTRAINT "ResponseLike_responseId_fkey" FOREIGN KEY ("responseId") REFERENCES "Response"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "CommentLike" ADD CONSTRAINT "CommentLike_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -248,6 +245,12 @@ ALTER TABLE "CommentLike" ADD CONSTRAINT "CommentLike_commentId_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "Prompt" ADD CONSTRAINT "Prompt_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Prompt" ADD CONSTRAINT "Prompt_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "PromptCategory"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PromptCategory" ADD CONSTRAINT "PromptCategory_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "PromptSession" ADD CONSTRAINT "PromptSession_promptId_fkey" FOREIGN KEY ("promptId") REFERENCES "Prompt"("id") ON DELETE SET NULL ON UPDATE CASCADE;

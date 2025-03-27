@@ -9,26 +9,27 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  googleId      String?        @unique // Optional, only for students with Google IDs
-  name          String?        @default("NO_NAME")
-  username      String?
-  email         String?        @unique(map: "user_email_idx")
-  emailVerified DateTime?      @db.Timestamp(6)
-  image         String?
-  password      String? // this password is only for student accounts and needs to be accessible to teacher
-  iv            String? // this is used to encrypt student names, ensures no duplicates when same input is given
-  sessions      Session[]
-  accounts      Account[]
-  createdAt     DateTime       @default(now()) @db.Timestamp(6)
-  updatedAt     DateTime       @updatedAt
-  comments      Comment[]
-  responseLikes ResponseLike[]
-  commentLikes  CommentLike[]
-  responses     Response[]
-  notifications Notification[]
-  classes       ClassUser[]
-  prompts       Prompt[] // Prompts are for teachers
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  googleId       String?          @unique // Optional, only for students with Google IDs
+  name           String?          @default("NO_NAME")
+  username       String?
+  email          String?          @unique(map: "user_email_idx")
+  emailVerified  DateTime?        @db.Timestamp(6)
+  image          String?
+  password       String? // this password is only for student accounts and needs to be accessible to teacher
+  iv             String? // this is used to encrypt student names, ensures no duplicates when same input is given
+  sessions       Session[]
+  accounts       Account[]
+  createdAt      DateTime         @default(now()) @db.Timestamp(6)
+  updatedAt      DateTime         @updatedAt
+  comments       Comment[]
+  responseLikes  ResponseLike[]
+  commentLikes   CommentLike[]
+  responses      Response[]
+  notifications  Notification[]
+  classes        ClassUser[]
+  prompts        Prompt[] // Prompts are for teachers
+  PromptCategory PromptCategory[]
 }
 
 model Account {
@@ -147,13 +148,23 @@ model Prompt {
   id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title         String
   teacherId     String          @db.Uuid
-  promptType    String // single-question or multi-question
+  promptType    String // "single-question" or "multi-question"
   teacher       User            @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   questions     Json
   classes       Classroom[]     @relation("PromptClass") // this is for prompt organization
   promptSession PromptSession[]
+  categoryId    String?         @db.Uuid
+  category      PromptCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull) // Each prompt has one category
+}
+
+model PromptCategory {
+  id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name    String
+  userId  String   @db.Uuid
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  prompts Prompt[]
 }
 
 model PromptSession {
@@ -184,6 +195,6 @@ model Response {
   notifications   Notification[]
   comments        Comment[]
   // Relationship
-  promptSession PromptSession @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
-  student       User          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  promptSession   PromptSession  @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
+  student         User           @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }

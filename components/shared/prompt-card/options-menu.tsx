@@ -86,7 +86,7 @@ export default function OptionsMenu({
                         <DropdownMenuItem onClick={() => setIsAssignModalOpen(true)} className="hover:cursor-pointer rounded-md">
                         <Pin />Assign
                         </DropdownMenuItem>
-                        <Link href={`/edit-prompt/${promptData.id}?type=${promptData.promptType}`}>
+                        <Link href={`/prompt-form/?type=${promptData.promptType}&edit=${promptData.id}`}>
                             <DropdownMenuItem className="hover:cursor-pointer rounded-md">
                                 <Edit />Edit
                             </DropdownMenuItem>

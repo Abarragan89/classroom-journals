@@ -30,12 +30,12 @@ export default function PromptCard({
                 classroomData={classroomData}
             />
             {promptData.promptType === 'multi-question' ? (
-                <p className="text-xs w-fit text-accent-foreground bg-accent rounded-md py-[3px] px-2 mt-3 ml-3">Assessment</p>
+                <p className="text-xs w-fit text-accent-foreground bg-accent rounded-md py-[3px] px-2 mt-3 ml-3">{promptData?.category?.name} Assessment</p>
             ) : (
-                <p className="text-xs w-fit text-card bg-card-foreground rounded-md py-[3px] px-2 mt-3 ml-3">Blog</p>
+                <p className="text-xs w-fit text-card bg-card-foreground rounded-md py-[3px] px-2 mt-3 ml-3">{promptData?.category?.name} Blog</p>
             )}
 
-            <CardHeader className="flex flex-row justify-between text-sm h-[200px] overflow-hidden mt-1">
+            <CardHeader className="flex flex-row justify-between text-sm h-[200px] overflow-hidden">
                 <div className="w-[95%]">
                     <CardTitle className="tracking-wide leading-5 line-clamp-[7]">
                         {promptData.title}

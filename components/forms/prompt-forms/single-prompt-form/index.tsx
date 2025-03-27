@@ -1,0 +1,232 @@
+'use client';
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { useActionState, useState, useEffect } from "react";
+import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner"
+import { createNewPrompt, getSinglePrompt, updateAPrompt } from "@/lib/actions/prompt.actions";
+import { Separator } from "@/components/ui/separator";
+import { Checkbox } from "@/components/ui/checkbox"
+import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
+import { Classroom, Prompt, PromptCategory } from "@/types";
+import { addPromptCategory, getAllPromptCategories } from "@/lib/actions/prompt.categories";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useSearchParams } from "next/navigation";
+
+interface Question {
+    name: string;
+    label: string;
+    value: string;
+}
+
+
+export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
+
+    const searchParams = useSearchParams()
+    const existingPromptId = searchParams.get('edit')
+
+    const actionFunction = existingPromptId ? updateAPrompt : createNewPrompt
+
+    const [state, action] = useActionState(actionFunction, {
+        success: false,
+        message: ''
+    })
+
+    const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+    const [categories, setCategories] = useState<PromptCategory[]>([]);
+    const [newCategoryName, setNewCategoryName] = useState<string>('');
+    const [isLoaded, setIsLoaded] = useState<boolean>(false)
+    const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null)
+    const [questions, setQuestions] = useState<Question[]>([
+        { name: "question1", label: "Prompt", value: "" }
+    ]);
+
+    const router = useRouter()
+
+    // Reset state when navigating to the same page with different query params
+    useEffect(() => {
+        setEditingPrompt(null);
+        setQuestions([{ name: "question1", label: "Prompt", value: "" }]);
+    }, [existingPromptId]);
+
+    useEffect(() => {
+        const fetchClassrooms = async () => {
+            if (teacherId) {
+                const classes = await getAllClassroomIds(teacherId); // Fetch classroom IDs
+                const categoryData = await getAllPromptCategories(teacherId) as PromptCategory[]
+                setCategories(categoryData)
+                setClassrooms(classes as Classroom[]);
+
+                if (existingPromptId) {
+                    const promptData = await getSinglePrompt(existingPromptId) as unknown as Prompt
+                    setQuestions([{ name: "question1", label: "Prompt", value: promptData.title }])
+                    setEditingPrompt(promptData)
+                }
+                setIsLoaded(true)
+            }
+        };
+        fetchClassrooms();
+    }, [teacherId, existingPromptId]);
+
+    // redirect if the state is success
+    useEffect(() => {
+        if (state.success) {
+            toast('Jot Added!');
+            router.push('/prompt-library'); // Navigates without losing state instantly
+        }
+    }, [state, router])
+
+    const handleChange = (index: number, newValue: string) => {
+        setQuestions(prevQuestions =>
+            prevQuestions.map((q, i) => (i === index ? { ...q, value: newValue } : q))
+        );
+    };
+
+
+    async function handleAddCategory(categoryName: string) {
+        try {
+            if (!categoryName) return
+            const newCategory = await addPromptCategory(categoryName, teacherId) as PromptCategory
+            setCategories(prev => [newCategory, ...prev])
+            setNewCategoryName('')
+        } catch (error) {
+            console.log('error adding category ', error)
+        }
+    }
+
+    const buttonText = existingPromptId ? 'Update Jot' : 'Create Jot'
+    const buttonVerb = existingPromptId ? 'Updating...' : 'Creating...'
+
+    const CreateButton = () => {
+        const { pending } = useFormStatus();
+        return <Button disabled={pending} type="submit" className="mx-auto mt-5">{pending ? buttonVerb : buttonText}</Button>;
+    };
+
+    if (!isLoaded) {
+        return (
+            <div className="min-h-full flex-center">
+                Loading...
+            </div>
+        )
+    }
+
+    return (
+        <form action={action} className="grid relative">
+            {questions.map((question, index) => (
+                <div key={question.name}>
+                    <div className="mt-4">
+                        <Label htmlFor={question.name} className="text-md font-bold">
+                            {question.label}
+                        </Label>
+                        <Textarea
+                            id={question.name}
+                            className="col-span-3"
+                            name={question.name}
+                            value={question.value} // Keep text state for deletion
+                            onChange={(e) => handleChange(index, e.target.value)}
+                            required
+                            rows={5}
+                        />
+                    </div>
+                </div>
+            ))}
+
+            <Separator className="mt-10 mb-5" />
+            <p className="text-md font-bold">Category <span className="text-sm font-normal">(optional)</span></p>
+            {/* Add category form */}
+            <div className="flex-start">
+                <Input
+                    type="text"
+                    placeholder="add new category"
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    className="mr-3 mt-3"
+                />
+                <Button
+                    type="button"
+                    onClick={() => handleAddCategory(newCategoryName)}
+                    className="mt-3"
+                >Add</Button>
+            </div>
+            {/* Associate with a category*/}
+            <div className="space-y-3 mt-3">
+                {categories?.length > 0 ? (
+                    <RadioGroup defaultValue={editingPrompt?.category?.id || 'no-category'} name="prompt-category" id="prompt-category">
+                        <div className="flex items-center space-x-2">
+                            <RadioGroupItem value='no-category' id='no-category' />
+                            <Label htmlFor='no-category'>None</Label>
+                        </div>
+                        {categories.map((category: PromptCategory) => (
+                            <div key={category.id} className="flex items-center space-x-2">
+                                <RadioGroupItem value={category.id} id={category.name} />
+                                <Label htmlFor={category.name}>{category.name}</Label>
+                            </div>
+                        ))}
+                    </RadioGroup>
+                ) : (
+                    <p className="text-sm text-center">No Categories Made</p>
+                )}
+            </div>
+
+            {/* Assign to a classroom */}
+            <div className="space-y-3 mt-5">
+                <Separator />
+                <p className="text-md font-bold">Assign <span className="text-sm font-normal">(optional)</span></p>
+                {classrooms?.length > 0 && (
+                    <>
+                        {classrooms.map((classroom: Classroom) => (
+                            <div key={`classroom-assign-${classroom.id}`} className="flex items-center space-x-2">
+                                <Checkbox id={`classroom-assign-${classroom.id}`} value={classroom.id} name={`classroom-assign-${classroom.id}`} />
+                                <label
+                                    htmlFor={`classroom-assign-${classroom.id}`}
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                    {classroom.name}
+                                </label>
+                            </div>
+                        ))}
+                    </>
+                )}
+            </div>
+            <input
+                type="hidden"
+                name="teacherId"
+                defaultValue={teacherId}
+            />
+            <input
+                id="title"
+                value={questions[0].value}
+                name="title"
+                required
+                hidden
+                readOnly
+            />
+            <input
+                id="prompt-type"
+                defaultValue='single-question'
+                name="prompt-type"
+                required
+                hidden
+            />
+            {existingPromptId &&
+                <input
+                    id="promptId"
+                    defaultValue={existingPromptId}
+                    name="promptId"
+                    required
+                    hidden
+                />
+            }
+
+            {state && !state.success && (
+                <p className="text-center text-destructive mt-3">{state.message}</p>
+            )}
+            <div className="flex-center">
+                <CreateButton />
+            </div>
+        </form>
+    )
+}

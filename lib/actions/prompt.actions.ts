@@ -15,7 +15,6 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         }
         const questions: Question[] = [];
         const classesAssignTo: string[] = []
-        const classesOrganizeTo: string[] = []
 
         // Extract all questions from formData & dump into questions[]
         formData.forEach((value, key) => {
@@ -25,13 +24,16 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             if (key.startsWith("classroom-assign")) {
                 classesAssignTo.push(value as string)
             }
-            if (key.startsWith("classroom-organize")) {
-                classesOrganizeTo.push(value as string)
-            }
         });
 
         // Get title for prompt(only searchable text)
         const title = formData.get("title")?.toString().trim() || "";
+        let categoryId = formData.get("prompt-category") as string | null;
+
+        if (categoryId === "no-category" || categoryId === undefined) {
+            categoryId = null;
+        }
+
         if (!title) {
             return { success: false, message: "Title is required" };
         }
@@ -65,9 +67,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                     title: title.trim(),
                     teacherId,
                     promptType,
-                    classes: {
-                        connect: classesOrganizeTo.map((classId) => ({ id: classId })), // Connect multiple classrooms
-                    },
+                    categoryId,
                     questions: questions as unknown as Prisma.InputJsonValue,
                 },
             });
@@ -117,7 +117,6 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
 
         const questions: Question[] = [];
         const classesAssignTo: string[] = []
-        const classesOrganizeTo: string[] = []
 
         // Extract all questions from formData & dump into questions[]
         formData.forEach((value, key) => {
@@ -127,13 +126,17 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
             if (key.startsWith("classroom-assign")) {
                 classesAssignTo.push(value as string)
             }
-            if (key.startsWith("classroom-organize")) {
-                classesOrganizeTo.push(value as string)
-            }
         });
 
         // Get & Validate Prompt Title
         const title = formData.get("title")?.toString().trim() || "";
+
+        let categoryId = formData.get("prompt-category") as string | null;
+
+        if (categoryId === "no-category" || categoryId === undefined) {
+            categoryId = null;
+        }
+
         if (!title) {
             return { success: false, message: "Title is required" };
         }
@@ -161,10 +164,6 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
             return { success: false, message: "Prompt not found" };
         }
 
-        // Find classrooms to disconnect
-        const currentClassIds = existingPrompt.classes.map(c => c.id);
-        const classesToDisconnect = currentClassIds.filter(id => !classesOrganizeTo.includes(id));
-
         // Perform update
         await prisma.$transaction(async (prisma) => {
             const updatedPrompt = await prisma.prompt.update({
@@ -172,10 +171,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
                 data: {
                     title: title.trim(),
                     teacherId,
-                    classes: {
-                        connect: classesOrganizeTo.map(id => ({ id })), // Connect new classrooms
-                        disconnect: classesToDisconnect.map(id => ({ id })), // Disconnect removed classrooms
-                    },
+                    categoryId,
                     questions: questions as unknown as Prisma.InputJsonValue,
                 },
             });
@@ -202,7 +198,6 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error updating prompt:', error.message)
             console.error('Error updating prompt:', error.message);
             console.error(error.stack);
         } else {
@@ -225,6 +220,11 @@ export async function getAllTeacherPrompts(teacherId: string) {
                 updatedAt: true,
                 questions: true,
                 classes: true, // Assuming you want to include this relation
+                category: {
+                    select: {
+                        name: true,
+                    }
+                },
                 promptSession: {
                     select: {
                         assignedAt: true,
@@ -264,6 +264,12 @@ export async function getSinglePrompt(promptId: string) {
             where: { id: promptId },
             include: {
                 classes: true,
+                category: {
+                    select: {
+                        name: true,
+                        id: true,
+                    }
+                },
                 promptSession: {
                     select: {
                         assignedAt: true,
