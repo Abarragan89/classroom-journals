@@ -10,10 +10,8 @@ import { useParams } from "next/navigation"
 
 export default function DeletePromptSessionForm({
     promptSessionId,
-    closeModal,
 }: {
     promptSessionId: string,
-    closeModal: () => void,
 }) {
 
     const router = useRouter();

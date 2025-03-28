@@ -16,9 +16,6 @@ export default function JotTypeModal({
 
     const pathname = usePathname();
 
-    console.log('pathname ', pathname)
-
-
     return (
         <ResponsiveDialog
             isOpen={isModalOpen}

@@ -7,7 +7,7 @@ export default function ScoreJournalForm({
     currentScore,
     responseId
 }: {
-    currentScore: number,
+    currentScore: number | string,
     responseId: string
 }) {
 

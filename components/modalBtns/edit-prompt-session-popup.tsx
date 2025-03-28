@@ -1,5 +1,5 @@
 'use client'
-import { Circle, Edit, Edit2Icon, Ellipsis, Trash2Icon, X } from 'lucide-react'
+import { Circle, Edit, Trash2Icon, X } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import { useState } from 'react'
 import { ResponsiveDialog } from '../responsive-dialog'
@@ -37,7 +37,6 @@ export default function EditPromptSessionPopUp({
             >
                 <DeletePromptSessionForm
                     promptSessionId={promptSessionId}
-                    closeModal={closeModal}
                 />
             </ResponsiveDialog>
 

@@ -1,6 +1,8 @@
 "use server";
 import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
+import { ResponseData } from "@/types";
+import { JsonArray } from "@prisma/client/runtime/library";
 
 export async function createStudentResponse(prevState: unknown, formData: FormData) {
     try {
@@ -150,7 +152,8 @@ export async function getSingleResponse(responseId: string) {
                 },
                 promptSession: {
                     select: {
-                        status: true
+                        status: true,
+                        promptType: true,
                     }
                 }
             }
@@ -180,6 +183,75 @@ export async function getSingleResponse(responseId: string) {
             }))
         }
         return formattedResponse
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+        return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
+
+
+// Get all responses user's names and score for combobox in single Response
+export async function getAllResponsesFromPompt(promptSessionId: string) {
+    try {
+        if (!promptSessionId) {
+            return { success: false, message: "Response Id required." }
+        }
+        const responses = await prisma.response.findMany({
+            where: { promptSessionId: promptSessionId },
+            select: {
+                id: true,
+                response: true,
+                student: {
+                    select: {
+                        id: true,
+                        username: true,
+                        name: true,
+                        iv: true,
+                    }
+                },
+                promptSession: {
+                    select: {
+                        promptType: true,
+                    }
+                }
+            }
+        })
+
+        const withDecodedNames = [...responses.map(response => {
+            // Calculate Percentage score
+            let responsesArr = (response?.response as unknown as ResponseData[])
+            let score = "Not Graded"
+            const isMultiQuestion = response.promptSession.promptType === 'multi-question'
+
+            if (isMultiQuestion) {
+                const numberScore = responsesArr?.reduce((accum, currVal) => currVal?.score + accum, 0)
+                if (isNaN(numberScore)) {
+                    score = 'Not Graded'
+                } else if (numberScore === 0) {
+                    score = '0%'
+                } else {
+                    score = ((parseFloat((numberScore / responsesArr.length).toFixed(2)) * 100).toString() + '%');
+                }
+            } else {
+                const isItScored = (responsesArr?.[0].score)?.toString()
+                score = isItScored ? isItScored + '%' : 'Not Graded'
+            }
+            return (
+                {
+                    id: response.id,
+                    score,
+                    student: {
+                        name: decryptText(response?.student?.name as string, response?.student?.iv as string)
+                    }
+                }
+            )
+        })]
+        return withDecodedNames
     } catch (error) {
         if (error instanceof Error) {
             console.log("Error fetching prompts:", error.message);

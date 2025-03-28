@@ -44,8 +44,6 @@ export default function DeleteStudentForm({
 
     const [userText, setUserText] = useState<string>('')
 
-    console.log(studentInfo)
-
     function DeleteButton() {
         const { pending } = useFormStatus();
         return (

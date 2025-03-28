@@ -6,7 +6,8 @@ import { Separator } from '@/components/ui/separator';
 import { formatDateShort } from '@/lib/utils';
 import Image from 'next/image';
 import { Response, ResponseComment, ResponseData } from '@/types';
-import { getSingleResponse } from '@/lib/actions/response.action';
+import { getAllResponsesFromPompt, getSingleResponse } from '@/lib/actions/response.action';
+import { StudentComboBox } from './student-combobox';
 
 
 export default async function SingleResponse({
@@ -21,19 +22,23 @@ export default async function SingleResponse({
     }
 
     const response = await getSingleResponse(responseId) as unknown as Response
+    const classRosterAndScores = await getAllResponsesFromPompt(sessionId) as unknown as Response[]
 
     if (!response) {
         return <div>Response not found</div>;
     }
 
-    const questionsAndAnswers = response.response as unknown as ResponseData[]
+    const questionsAndAnswers = response?.response as unknown as ResponseData[]
     const isMultiQuestion = response?.promptSession?.promptType === 'multi-question';
 
     return (
         <div className='mb-10'>
             <div className="mb-10 space-y-1">
-                <h2 className="text-2xl lg:text-3xl mt-2">Response By: {response?.student?.name}</h2>
-                <p>Submitted: {formatDateShort(response.submittedAt)}</p>
+
+                <StudentComboBox
+                    responses={classRosterAndScores}
+                />
+                <p className='text-input'>Submitted: {formatDateShort(response?.submittedAt)}</p>
             </div>
             <div className="flex flex-wrap justify-start gap-10 max-w-[1200px] mx-auto">
                 {isMultiQuestion ? (
@@ -44,14 +49,10 @@ export default async function SingleResponse({
                 ) : (
                     <div className='relative w-full'>
                         <ScoreJournalForm
-                            responseId={response.id}
-                            currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? 0}
+                            responseId={response?.id}
+                            currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
                         />
                         <p className='text-md font-bold'>{response.promptSession?.title}</p>
-                        {/* <p className='mt-10 bg-card p-5 rounded-md'>
-                            {(response?.response as { answer?: string }[] | undefined)?.[0]?.answer ?? ''}
-                        </p> */}
-                        {/* Student Blog */}
 
                         <div className="max-w-[700px] px-3 mx-auto">
                             <BlogMetaDetails
@@ -60,7 +61,7 @@ export default async function SingleResponse({
                             />
 
                             <Image
-                                src={(response?.response as { answer: string }[])?.[2]?.answer}
+                                src={(response?.response as { answer: string }[])?.[2]?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
                                 width={700}
                                 height={394}
                                 alt={'blog cover photo'}

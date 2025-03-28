@@ -307,7 +307,6 @@ export async function getSinglePrompt(promptId: string) {
 
 // Get prompts based on filtered options
 export async function getFilterPrompts(filterOptions: SearchOptions) {
-    console.log('filetered options ', filterOptions)
     try {
         const allPrompts = await prisma.prompt.findMany({
             where: {

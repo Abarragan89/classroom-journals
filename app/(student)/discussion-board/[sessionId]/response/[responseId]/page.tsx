@@ -32,7 +32,7 @@ export default async function SingleResponse({
             />
 
             <Image
-                src={(response?.response as { answer: string }[])?.[2]?.answer}
+                src={(response?.response as { answer: string }[])?.[2]?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
                 width={700}
                 height={394}
                 alt={'blog cover photo'}

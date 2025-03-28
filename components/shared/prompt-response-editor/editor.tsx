@@ -1,5 +1,3 @@
-import { useState, useRef } from "react";
-
 export default function Editor({
     journalText,
     setJournalText,
