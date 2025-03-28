@@ -1,4 +1,4 @@
-import { Prompt, Question } from "@/types";
+import { Prompt } from "@/types";
 import {
     Popover,
     PopoverContent,

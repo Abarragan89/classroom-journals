@@ -19,16 +19,6 @@ export default function AssignedToPopUp({ classesData }: { classesData: PromptSe
         return acc;
     }, {} as Record<string, PromptSession>))
 
-    // Determine the text of the 
-    function assignedText() {
-        switch (assignedClasses.length) {
-            case 1:
-                return `Assigned to 1 Class`
-            default:
-                return `Assigned to ${assignedClasses.length} Classes`
-        }
-    }
-
     return (
         <>
             {classesData?.length > 0 ? (

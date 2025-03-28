@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import Header from "@/components/shared/header";
-import { prisma } from "@/db/prisma";
+// import { prisma } from "@/db/prisma";
 import { Session } from "@/types";
 import { notFound } from "next/navigation";
 
@@ -16,6 +16,7 @@ export default async function StudentDashboard() {
     }
 
     const classroomId = session?.classroomId
+    console.log('classroomId', classroomId)
 
 
 

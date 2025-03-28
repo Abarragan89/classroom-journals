@@ -57,7 +57,7 @@ export default function NotificationsCarousel({
                                         className="h-[70px] text-xs flex flex-col justify-between items-center opacity-80 hover:opacity-100"
                                     >
                                         <p>{notification.message}</p>
-                                        <p className="text-sm text-center line-clamp-1 italic font-bold text-foreground">"{notification.commentText}"</p>
+                                        <p className="text-sm text-center line-clamp-1 italic font-bold text-foreground">&rldquo;{notification.commentText}&rdquo;</p>
                                         <p>on: {formatDateLong(notification.createdAt)}</p>
                                     </Link>
 

@@ -13,7 +13,6 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox"
 import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
 import { Classroom, Prompt, PromptCategory } from "@/types";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { addPromptCategory, getAllPromptCategories } from "@/lib/actions/prompt.categories";
 import CategorySection from "../single-prompt-form/category-section";
 

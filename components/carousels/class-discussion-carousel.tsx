@@ -12,10 +12,8 @@ import { formatDateLong } from "@/lib/utils";
 
 export default function ClassDiscussionCarousel({
     blogPrompts,
-    studentId,
 }: {
     blogPrompts: PromptSession[],
-    studentId: string
 }) {
     return (
         <>

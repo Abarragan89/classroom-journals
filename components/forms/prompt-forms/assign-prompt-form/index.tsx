@@ -55,7 +55,7 @@ export default function AssignPromptForm({
         <form action={action} className="space-y-2">
             <div className="grid items-center gap-3">
                 <p className="text-center italic line-clamp-4 text-primary">
-                    "{promptTitle}"
+                &ldquo;{promptTitle}&rdquo;
                 </p>
                 <Separator />
                 <div className="space-y-3">

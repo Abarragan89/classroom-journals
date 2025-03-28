@@ -60,7 +60,7 @@ export default function CategorySection({
             >
                 <div className="items-center space-y-4 px-3 pb-2">
                     <p className="text-center"><span className="text-destructive font-bold">Important! </span>Deleting this category will de-categorize all Jots associated with it. You will have to re-categorize them manually.</p>
-                    <p className="text-sm font-bold m-0 p-0">Type: "delete {promptName.toLowerCase()}" to confirm</p>
+                    <p className="text-sm font-bold m-0 p-0">Type: &ldquo;delete {promptName.toLowerCase()}&rdquo; to confirm</p>
                     <Input
                         type="text"
                         value={userText}

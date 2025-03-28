@@ -6,7 +6,6 @@ import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import Link from "next/link";
 import { toggleResponseLike } from "@/lib/actions/response.action";
-import Image from "next/image";
 import { formatDateMonthDayYear } from "@/lib/utils";
 
 interface Props {

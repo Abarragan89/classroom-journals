@@ -54,7 +54,7 @@ export default function DeletePromptForm({
             <div className="grid items-center gap-4">
                 <Label htmlFor="year" className="text-center mx-auto mt-1 px-5 leading-normal">
                     <p className="font-bold mb-2">Are you sure you want to delete:</p>
-                    <span className="text-destructive text-center italic line-clamp-4">"{promptTitle}"</span>
+                    <span className="text-destructive text-center italic line-clamp-4">&ldquo;{promptTitle}&rdquo;</span>
                     <p className="font-bold mt-2">from your library?</p>
                 </Label>
                 <input

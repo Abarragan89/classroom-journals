@@ -15,7 +15,7 @@ export default async function PromptLibrary({
 }) {
 
     const allPrompts = await getAllTeacherPrompts(teacherId) as unknown as Prompt[]
-    let allClassroomIds = await getAllClassroomIds(teacherId) as Classroom[]
+    const allClassroomIds = await getAllClassroomIds(teacherId) as Classroom[]
     let allPromptCategories = await getAllPromptCategories(teacherId) as PromptCategory[]
     // Add default value to beginning fo drop down for searchbar
     allPromptCategories = [{ id: '', name: 'All Categories...' }, ...allPromptCategories]

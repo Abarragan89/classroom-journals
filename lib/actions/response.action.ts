@@ -2,7 +2,6 @@
 import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
 import { ResponseData } from "@/types";
-import { JsonArray } from "@prisma/client/runtime/library";
 
 export async function createStudentResponse(prevState: unknown, formData: FormData) {
     try {
@@ -224,7 +223,7 @@ export async function getAllResponsesFromPompt(promptSessionId: string) {
 
         const withDecodedNames = [...responses.map(response => {
             // Calculate Percentage score
-            let responsesArr = (response?.response as unknown as ResponseData[])
+            const responsesArr = (response?.response as unknown as ResponseData[])
             let score = "Not Graded"
             const isMultiQuestion = response.promptSession.promptType === 'multi-question'
 

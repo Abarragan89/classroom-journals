@@ -93,7 +93,6 @@ export default async function StudentDashboard() {
                             <h2 className="text-lg lg:text-xl ml-2 mb-2">Blog Discussions</h2>
                             <ClassDiscussionCarousel
                                 blogPrompts={blogPrompts as unknown as PromptSession[]}
-                                studentId={studentId}
                             />
                         </article>
                         <article>
