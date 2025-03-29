@@ -11,10 +11,11 @@ import Link from 'next/link';
 import { formatDateShort } from '@/lib/utils';
 import { decryptText } from "@/lib/utils";
 import { ClipboardCheckIcon } from "lucide-react";
-import { ResponseData, User } from "@/types";
+import { Response, ResponseData, User } from "@/types";
 import { PromptSession } from "@/types";
 import { getAllStudents } from "@/lib/actions/classroom.actions";
 import EditPromptSessionPopUp from "@/components/modalBtns/edit-prompt-session-popup";
+import { StudentDataBarChart } from "./student-data-bar-chart";
 
 export default async function SinglePromptSession({
     params
@@ -95,6 +96,7 @@ export default async function SinglePromptSession({
     }
 
     function responsePercentage(response: ResponseData[]) {
+        // Dont get percentage if not all responses are not graded. 
         const isGraded = response.every(entry => entry.score !== undefined)
         if (!isGraded) {
             return (
@@ -107,14 +109,57 @@ export default async function SinglePromptSession({
         }
     }
 
+    function calculateClassAverageAssessment() {
+        let classTotal = 0;
+        let totalResponses = 0
+        promptSession?.responses?.forEach((response: Response) => {
+            const newAverage = responsePercentage(response.response as unknown as ResponseData[])
+            if (newAverage !== 'N/A') {
+                classTotal += parseInt(newAverage)
+                totalResponses += 1;
+            }
+        })
+        return totalResponses === 0 ? 'N/A' : `${Math.round(classTotal / totalResponses)}%`
+    }
+
+    function calculateClassAverageBlog() {
+        let classTotal = 0;
+        let totalResponses = 0
+        promptSession?.responses?.forEach((response: Response) => {
+            if ((response.response as unknown as ResponseData[])[0].score) {
+                classTotal += (response.response as unknown as ResponseData[])[0].score;
+                totalResponses += 1
+            }
+        })
+        return totalResponses === 0 ? 'N/A' : `${Math.round(classTotal / totalResponses)}%`
+    }
+
+
+    const classAverage = promptSession?.promptType === 'multi-question' ?
+        calculateClassAverageAssessment()
+        :
+        calculateClassAverageBlog()
+
     return (
         <div>
-            <h2 className="text-1xl lg:text-2xl line-clamp-3 mt-5">{promptSession?.prompt?.title}</h2>
+            <h2 className="text-xl lg:text-2xl line-clamp-3 mt-5">{promptSession?.prompt?.title}</h2>
+
             <EditPromptSessionPopUp
-                promptSessionType={promptSession.promptType}
-                promptSessionId={promptSession.id}
-                initialStatus={promptSession.status}
+                promptSessionType={promptSession?.promptType}
+                promptSessionId={promptSession?.id}
+                initialStatus={promptSession?.status}
+                classAverage={classAverage}
             />
+
+            <p className="text-input">Class Average: {classAverage}</p>
+
+            {/* Bar chart */}
+            {promptSession?.promptType === 'multi-question' &&
+                <StudentDataBarChart
+                    responses={promptSession?.responses as Response[]}
+                />
+            }
+
             {promptSession.promptType === 'multi-question' ? (
                 <Table className="mt-5">
                     <TableHeader>

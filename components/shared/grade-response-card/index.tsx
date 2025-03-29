@@ -34,7 +34,7 @@ export default function GradeResponseCard({
                 );
             case 0.5:
                 return (
-                    <span className="text-yellow-500 font-bold ml-1">Half Credit</span>
+                    <span className="text-warning font-bold ml-1">Half Credit</span>
                 );
             case 1:
                 return (

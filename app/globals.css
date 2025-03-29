@@ -1,4 +1,4 @@
- @tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -19,7 +19,9 @@
     --border: hsl(206, 15%, 43%);
     --input: hsl(0, 1%, 47%);
     --ring: hsl(230, 76%, 19%);
-    --destructive: hsl(0, 70%, 45%);
+    --destructive: hsl(0, 79%, 41%);
+    --warning: hsl(53, 94%, 45%);
+    --warning-foreground: hsl(0, 0%, 7%);
     --destructive-foreground: hsl(0, 0%, 100%);
     --popover: hsl(0, 0%, 100%);
     --popover-foreground: hsl(0, 0%, 20%);
@@ -32,6 +34,11 @@
     --sidebar-border: hsl(240 3.7% 15.9%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 72%, 31%);
+    --chart-1: hsl(12 76% 61%);
+    --chart-2: hsl(173 58% 39%);
+    --chart-3: hsl(116, 37%, 24%);
+    --chart-4: hsl(43 74% 66%);
+    --chart-5: hsl(27 87% 67%);
   }
   .dark {
     --background: hsl(222.2 84% 4.9%);
@@ -49,7 +56,9 @@
     --border: hsl(212, 44%, 18%);
     --input: hsl(215.4 16.3% 46.9%);
     --ring: hsl(215.4 16.3% 46.9%);
-    --destructive: hsl(0 84.2% 60.2%);
+    --destructive: hsl(0, 100%, 50%);
+    --warning: hsl(50, 98%, 43%);
+    --warning-foreground: hsl(0, 0%, 7%);
     --destructive-foreground: hsl(210 40% 98%);
     --popover: hsl(215.3 25% 26.7%);
     --popover-foreground: hsl(220 13% 91%);
@@ -61,7 +70,12 @@
     --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
     --sidebar-border: hsl(140, 4%, 16%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
-    --success: hsl(129, 80%, 43%);
+    --success: hsl(129, 73%, 39%);
+    --chart-1: hsl(220 70% 50%);
+    --chart-2: hsl(160 60% 45%);
+    --chart-3: hsl(30 80% 55%);
+    --chart-4: hsl(280 65% 60%);
+    --chart-5: hsl(340 75% 55%);
   }
 
   .tech {
@@ -81,6 +95,8 @@
     --input: hsl(210, 15%, 28%);
     --ring: hsl(113, 93%, 35%);
     --destructive: hsl(0, 100%, 50%);
+    --warning: hsl(49, 84%, 48%);
+    --warning-foreground: hsl(0, 0%, 7%);
     --destructive-foreground: hsl(0, 0%, 100%);
     --popover: hsl(220, 15%, 15%);
     --popover-foreground: hsl(210, 20%, 85%);
@@ -93,6 +109,11 @@
     --sidebar-border: hsl(240 3.7% 15.9%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 80%, 43%);
+    --chart-1: hsl(220 70% 50%);
+    --chart-2: hsl(160 60% 45%);
+    --chart-3: hsl(30 80% 55%);
+    --chart-4: hsl(280 65% 60%);
+    --chart-5: hsl(340 75% 55%);
   }
 }
 

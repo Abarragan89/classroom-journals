@@ -25,6 +25,10 @@ export default {
 					DEFAULT: 'var(--destructive)',
 					foreground: 'var(--destructive-foreground)'
 				},
+				warning: {
+					DEFAULT: 'var(--warning)',
+					foreground: 'var(--warning-foreground)'
+				},
 				card: {
 					DEFAULT: 'var(--card)',
 					foreground: 'var(--card-foreground)'
@@ -44,6 +48,13 @@ export default {
 				border: 'var(--border)',
 				input: 'var(--input)',
 				ring: 'var(--ring)',
+				chart: {
+					'1': 'hsl(var(--chart-1))',
+					'2': 'hsl(var(--chart-2))',
+					'3': 'hsl(var(--chart-3))',
+					'4': 'hsl(var(--chart-4))',
+					'5': 'hsl(var(--chart-5))'
+				},
 				sidebar: {
 					DEFAULT: 'var(--sidebar-background)',
 					foreground: 'var(--sidebar-foreground)',

@@ -53,7 +53,7 @@ export default function GradingPanel({
                         className={`bg-destructive ${iconStyles} ${currentScoreState === 0 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`} />
                     <p
                         onClick={() => { if (currentScore !== 0.5) updateResponseScore(0.5) }}
-                        className={`bg-yellow-500 text-[.93rem] ${iconStyles} ${currentScoreState === 0.5 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`}
+                        className={`bg-warning text-[.93rem] ${iconStyles} ${currentScoreState === 0.5 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 50 50">
                             <text x="37%" y="30%" dominantBaseline="middle" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="26" fontWeight={600} fill="black">1</text>

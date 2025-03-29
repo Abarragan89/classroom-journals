@@ -11,10 +11,12 @@ export default function EditPromptSessionPopUp({
     promptSessionType,
     promptSessionId,
     initialStatus,
+    classAverage,
 }: {
     promptSessionType: string,
     promptSessionId: string,
-    initialStatus: string
+    initialStatus: string,
+    classAverage: string
 }) {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
@@ -56,8 +58,8 @@ export default function EditPromptSessionPopUp({
             </ResponsiveDialog>
 
             {/* Options Menu */}
-            <div className=' flex-between relative mt-5 z-10'>
-                {promptSessionType === 'single-question' ? (
+            <div className={`${promptSessionType === 'single-question' ? 'flex-between' : 'flex-end'} relative mt-5 z-10`}>
+                {promptSessionType === 'single-question' && (
                     <p className='text-input'>Discussion:
                         {
                             promptSessionStatus === 'open' ? (
@@ -67,16 +69,12 @@ export default function EditPromptSessionPopUp({
                             )
                         }
                     </p>
-                ) : (
-                    <p>&nbsp;</p>
                 )}
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        {/* Ellipse */}
                         <Edit size={22} className="top-0 hover:cursor-pointer text-foreground" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className='mr-[2.5rem]'>
-                        {/* Only show open and close discussions for blogs (i.e. single question) */}
                         {promptSessionType === 'single-question' &&
                             <DropdownMenuItem onClick={() => setIsEditModalOpen(true)} className="hover:cursor-pointer rounded-md">
                                 {promptSessionStatus === 'open' ? (

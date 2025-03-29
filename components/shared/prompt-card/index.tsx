@@ -22,7 +22,7 @@ export default function PromptCard({
 }) {
 
     return (
-        <Card className="w-[100%] sm:w-[275px] relative">
+        <Card className="w-[100%] sm:w-[265px] relative">
             {/* Absolutely positions options menu, type, and class colors with responsive dialogs */}
             <OptionsMenu
                 promptData={promptData}
