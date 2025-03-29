@@ -1,6 +1,6 @@
 
 import { PromptCategory, SearchOptions } from "@/types"
-import ClassFilterCombobox from "./class-filter-combobox"
+import ClassFilterCombobox from "./category-filter-combobox"
 import PromptSearchBar from "./prompt-search-bar"
 import TraitFilterCombobox from "./trait-filter-combobox"
 

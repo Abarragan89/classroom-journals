@@ -28,8 +28,8 @@ export function formatDateShort(date: Date): string {
   return `${month}/${day}/${year}`;
 }
 
-export function formatDateLong(date: Date): string {
-  const options: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'long', day: 'numeric' };
+export function formatDateLong(date: Date, weekdayLength: 'long' | 'short' = 'long'): string {
+  const options: Intl.DateTimeFormatOptions = { weekday: weekdayLength, month: 'long', day: 'numeric' };
   return date.toLocaleDateString('en-US', options);
 }
 

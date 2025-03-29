@@ -23,7 +23,7 @@ export default function JotTypeModal({
             title={`Choose Jot Type`}
             description='Choose between blog prompt or mulit-question assessment'
         >
-            <div className="flex flex-col justify-center space-y-6 mx-auto mt-4">
+            <div className="flex flex-col justify-center space-y-6 mx-auto my-5">
                 <Button asChild>
                     <Link onClick={closeModal} href={`/prompt-form?type=single-question&callbackUrl=${pathname}`}>
                         Blog Prompt
@@ -35,7 +35,6 @@ export default function JotTypeModal({
                     </Link>
                 </Button>
             </div>
-            <p className="text-sm my-2 text-center italic w-3/4 mx-auto">All prompt types can be scored and commented</p>
         </ResponsiveDialog>
     )
 }

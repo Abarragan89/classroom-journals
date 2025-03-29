@@ -28,7 +28,8 @@ export async function getAllPromptCategories(userId: string) {
     try {
 
         const allCategories = await prisma.promptCategory.findMany({
-            where: { userId }
+            where: { userId },
+            select: { id: true, name: true }
         })
 
         return allCategories;
@@ -49,7 +50,7 @@ export async function deletePromptCategory(id: string) {
     try {
 
         await prisma.promptCategory.delete({
-            where: {id}
+            where: { id }
         })
         return { success: true, message: 'Error deleting categories. Try again.' };
 

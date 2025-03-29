@@ -1,6 +1,7 @@
 "use server"
 import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
+import { SearchOptions } from "@/types";
 
 export async function getAllSessionsInClass(classId: string) {
     try {
@@ -24,7 +25,8 @@ export async function getAllSessionsInClass(classId: string) {
                         }
                     }
                 }
-            }
+            },
+            take: 50
         })
         return allPromptSession
     } catch (error) {
@@ -115,7 +117,7 @@ export async function deletePromptSession(prevState: unknown, formData: FormData
     }
 }
 
-// Delete Prompt
+// Toggle Blog Status
 export async function toggleBlogStatus(prevState: unknown, formData: FormData) {
     try {
         const promptStatus = formData.get('promptStatus') as string
@@ -140,4 +142,50 @@ export async function toggleBlogStatus(prevState: unknown, formData: FormData) {
     }
 }
 
+// Filter through promptsessions on classroom homepage
+// Get prompts based on filtered options
+export async function getFilteredPromptSessions(filterOptions: SearchOptions) {
+    try {
+        const allPrompts = await prisma.promptSession.findMany({
+            where: {
+                // 1️ Filter by classroom if specified
+                prompt: {
+                    categoryId: filterOptions.category
+                        ? filterOptions.category
+                        : undefined,
+                },
+                // 2️ Filter by keywords in the title
+                title: filterOptions.searchWords
+                    ? { contains: filterOptions.searchWords, mode: "insensitive" }
+                    : undefined,
+                promptType: filterOptions.filter === 'single-question' || filterOptions.filter === 'multi-question'
+                    ? filterOptions.filter
+                    : undefined
+            },
+            include: {
+                prompt: {
+                    select: {
+                        category: true,
+                    }
+                },
+            },
+            take: 15,
+            orderBy: {
+                updatedAt: filterOptions.filter === 'asc' ? 'asc' : 'desc'
+            },
+            skip: filterOptions.paginationSkip, // pagination filter
+        });
+
+        return allPrompts;
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+
+        return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
 
