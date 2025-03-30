@@ -29,7 +29,6 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         // Get title for prompt(only searchable text)
         const title = formData.get("title")?.toString().trim() || "";
         const isPublic = formData.get('is-public');
-        console.log('is Public in server ', isPublic)
         let categoryId = formData.get("prompt-category") as string | null;
 
         if (categoryId === "no-category" || categoryId === undefined) {

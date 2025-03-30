@@ -188,7 +188,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                                 <CiCircleQuestion size={20} />
                             </TooltipTrigger>
                             <TooltipContent>
-                                <p>If public, students can view and comment on each other's blog posts.</p>
+                                <p>Responses are visible to everyone</p>
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider>

@@ -26,6 +26,7 @@ export default async function SinglePromptSession({
             status: true,
             id: true,
             promptType: true,
+            isPublic: true,
             responses: {
                 select: {
                     id: true,
@@ -131,25 +132,24 @@ export default async function SinglePromptSession({
         :
         calculateClassAverageBlog()
 
+
     return (
         <div>
             <h2 className="text-xl lg:text-2xl line-clamp-3 mt-5">{promptSession?.prompt?.title}</h2>
-
             <EditPromptSessionPopUp
                 promptSessionType={promptSession?.promptType}
                 promptSessionId={promptSession?.id}
                 initialStatus={promptSession?.status}
-                classAverage={classAverage}
+                initialPublicStatus={promptSession?.isPublic}
+                isPublic={promptSession?.isPublic}
             />
-
             <p className="text-input">Class Average: {classAverage}</p>
-
             {/* Bar chart */}
             {promptSession?.promptType === 'multi-question' &&
                 <StudentDataBarChart
                     responses={promptSession?.responses as Response[]}
                 />
-                
+
             }
 
             {promptSession.promptType === 'multi-question' ? (
@@ -170,8 +170,6 @@ export default async function SinglePromptSession({
                     promptSessionId={promptSession.id}
                     classId={classId}
                     notSubmitted={notSubmitted}
-                    responseScore={responseScore}
-                    responsePercentage={responsePercentage}
                 />
             )}
         </div>

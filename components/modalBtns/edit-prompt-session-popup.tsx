@@ -5,28 +5,35 @@ import { useState } from 'react'
 import { ResponsiveDialog } from '../responsive-dialog'
 import DeletePromptSessionForm from '../forms/prompt-session-forms/delete-prompt-session-form'
 import ToggleBlogStatus from '../forms/prompt-session-forms/toggle-blog-status'
+import TogglePrivatePublicStatus from '../forms/prompt-session-forms/toggle-private-public-status'
 
 
 export default function EditPromptSessionPopUp({
     promptSessionType,
     promptSessionId,
     initialStatus,
-    classAverage,
+    initialPublicStatus,
+    isPublic
 }: {
     promptSessionType: string,
     promptSessionId: string,
     initialStatus: string,
-    classAverage: string
+    initialPublicStatus: boolean,
+    isPublic: boolean
 }) {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+    const [isPublicModal, setisPublicModal] = useState<boolean>(false);
+    const [isDiscussionOpenModal, setIsDiscussionOpenModal] = useState<boolean>(false);
     const [promptSessionStatus, setPromptSessionStatus] = useState<string>(initialStatus)
+    const [isSessionPublic, setIsSessionPublic] = useState<boolean>(initialPublicStatus)
 
     function closeModal() {
         setIsDeleteModalOpen(false)
-        setIsEditModalOpen(false)
+        setIsDiscussionOpenModal(false)
+        setisPublicModal(false);
     }
     const statusCapitalized = promptSessionStatus === 'open' ? 'Close' : 'Open'
+    const publicCapitalized = isSessionPublic ? 'private' : 'public'
 
     return (
         <>
@@ -42,10 +49,10 @@ export default function EditPromptSessionPopUp({
                 />
             </ResponsiveDialog>
 
-            {/* Edit Prompt Modal */}
+            {/* Open/Close Discussion Prompt Modal */}
             <ResponsiveDialog
-                isOpen={isEditModalOpen}
-                setIsOpen={setIsEditModalOpen}
+                isOpen={isDiscussionOpenModal}
+                setIsOpen={setIsDiscussionOpenModal}
                 title={`${statusCapitalized} Discussion`}
                 description='toggle the status of your blog'
             >
@@ -57,9 +64,24 @@ export default function EditPromptSessionPopUp({
                 />
             </ResponsiveDialog>
 
+            {/* Public/Private Prompt Modal */}
+            <ResponsiveDialog
+                isOpen={isPublicModal}
+                setIsOpen={setisPublicModal}
+                title={`Make responses ${publicCapitalized} `}
+                description='toggle the status of your blog'
+            >
+                <TogglePrivatePublicStatus
+                    promptSessionId={promptSessionId}
+                    isPublic={isSessionPublic}
+                    setPromptSessionStatus={setIsSessionPublic}
+                    closeModal={closeModal}
+                />
+            </ResponsiveDialog>
+
             {/* Options Menu */}
             <div className={`${promptSessionType === 'single-question' ? 'flex-between' : 'flex-end'} relative mt-5 z-10`}>
-                {promptSessionType === 'single-question' && (
+                {promptSessionType === 'single-question' && isSessionPublic ? (
                     <p className='text-input'>Discussion:
                         {
                             promptSessionStatus === 'open' ? (
@@ -69,14 +91,16 @@ export default function EditPromptSessionPopUp({
                             )
                         }
                     </p>
+                ) : (
+                    <p>Private</p>
                 )}
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Edit size={22} className="top-0 hover:cursor-pointer text-foreground" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className='mr-[2.5rem]'>
-                        {promptSessionType === 'single-question' &&
-                            <DropdownMenuItem onClick={() => setIsEditModalOpen(true)} className="hover:cursor-pointer rounded-md">
+                        {promptSessionType === 'single-question' && isSessionPublic &&
+                            <DropdownMenuItem onClick={() => setIsDiscussionOpenModal(true)} className="hover:cursor-pointer rounded-md">
                                 {promptSessionStatus === 'open' ? (
                                     <>
                                         <X />{`${statusCapitalized} Discussion`}
@@ -84,6 +108,19 @@ export default function EditPromptSessionPopUp({
                                 ) : (
                                     <>
                                         <Circle />{`${statusCapitalized} Discussion`}
+                                    </>
+                                )}
+                            </DropdownMenuItem>
+                        }
+                        {promptSessionType === 'single-question' &&
+                            <DropdownMenuItem onClick={() => setisPublicModal(true)} className="hover:cursor-pointer rounded-md">
+                                {isSessionPublic ? (
+                                    <>
+                                        <X />{`Make Private`}
+                                    </>
+                                ) : (
+                                    <>
+                                        <Circle />{`Make Public`}
                                     </>
                                 )}
                             </DropdownMenuItem>

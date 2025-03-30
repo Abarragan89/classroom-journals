@@ -144,6 +144,31 @@ export async function toggleBlogStatus(prevState: unknown, formData: FormData) {
     }
 }
 
+// Toggle Blog Status
+export async function togglePublicPrivateStatus(prevState: unknown, formData: FormData) {
+    try {
+        const promptStatus = formData.get('promptStatus') as string
+        const promptId = formData.get('promptId') as string
+
+        await prisma.promptSession.update({
+            where: { id: promptId },
+            data: {
+                isPublic: promptStatus === 'private' ? false : true
+            }
+        })
+        return { success: true, message: 'Prompt Updated!', promptId };
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log('Error updating prompt:', error.message);
+            console.error(error.stack);
+        } else {
+            console.error('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error updating prompt. Try again.' };
+    }
+}
+
 // Filter through promptsessions on classroom homepage
 // Get prompts based on filtered options
 export async function getFilteredPromptSessions(filterOptions: SearchOptions) {

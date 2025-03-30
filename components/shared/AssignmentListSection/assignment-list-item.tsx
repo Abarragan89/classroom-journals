@@ -30,21 +30,21 @@ export default function AssignmentListItem({
                     <TooltipTrigger asChild>
                         <Link className='block relative' href={`/classroom/${classId}/${teacherId}/single-prompt-session/${jotData.id}`}>
                             {/* only show public or private if it is a blog, otherwise don't render */}
-                            <p
-                                className='absolute top-2 right-5 italic text-primary text-xs'
-                            >
-                                {jotData.isPublic && type === 'Blog' && 'public'}
-                                {!jotData.isPublic && type === 'Blog' && 'private'}
-                            </p>
                             <article className='bg-card flex-start opacity-80 px-5 py-4 rounded-lg mb-4 border border-border hover:cursor-pointer hover:opacity-100'>
+                                {/* <p
+                                    className='absolute top-2 right-5 italic text-input text-xs'
+                                >
+                                    {jotData.isPublic && type === 'Blog' && 'public'}
+                                    {!jotData.isPublic && type === 'Blog' && 'private'}
+                                </p> */}
                                 <p
                                     className='text-2xl bg-input p-2 px-4 rounded-full mr-3'
                                 >
                                     {type.charAt(0)}
                                 </p>
                                 <div className="flex flex-col relative">
-                                    <p className='text-sm font-bold line-clamp-1 text-foreground'>{jotData.title}</p>
-                                    <div className="relative top-[11px] flex-between text-xs">
+                                    <p className='text-md font-bold line-clamp-1 text-foreground'>{jotData.title}</p>
+                                    <div className="relative top-[11px] flex-between text-xs text-input">
                                         <p>{formatDateLong(jotData.createdAt, 'short')}</p>
                                     </div>
                                 </div>
@@ -58,12 +58,15 @@ export default function AssignmentListItem({
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
-            <div className="text-xs absolute text-card-foreground right-3 bottom-3">
+            <div className="text-xs absolute text-input right-3 bottom-3">
                 {jotData.promptType === 'multi-question' ? (
                     <QuestionPopup promptQuestions={jotData as unknown as Prompt} />
                 ) : (
-                    <p>Discussion: <span className={`font-bold pr-2 ${jotData.status === 'open' ? 'text-success' : 'text-destructive'}`}>{jotData.status}</span></p>
-                )}
+                    jotData.isPublic && jotData.promptType === 'single-question' ? (
+                        <p>Discussion: <span className={`font-bold pr-2 ${jotData.status === 'open' ? 'text-success' : 'text-destructive'}`}>{jotData.status}</span></p>
+                    ) : (
+                        <p>Private</p>
+                    ))}
             </div>
         </div>
     )

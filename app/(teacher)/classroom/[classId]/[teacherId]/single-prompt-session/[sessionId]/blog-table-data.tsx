@@ -17,16 +17,13 @@ export default function BlogTableData({
     classId,
     teacherId,
     notSubmitted,
-    responseScore,
-    responsePercentage
 }: {
     studentSubmittedWithFormattedNamed: Response[];
     promptSessionId: string;
     classId: string;
     teacherId: string;
     notSubmitted: User[];
-    responseScore: (response: ResponseData[]) => string;
-    responsePercentage: (response: ResponseData[]) => string;
+
 }) {
     return (
         <Table className="mt-5">
