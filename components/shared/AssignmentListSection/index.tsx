@@ -6,6 +6,7 @@ import { getFilteredPromptSessions } from "@/lib/actions/prompt.session.actions"
 import PromptSearchBar from "../prompt-filter-options/prompt-search-bar"
 import TraitFilterCombobox from "../prompt-filter-options/trait-filter-combobox"
 import CategoryFilterCombobox from "../prompt-filter-options/category-filter-combobox"
+import PaginationList from "../prompt-filter-options/pagination-list"
 
 
 interface Props {
@@ -13,7 +14,8 @@ interface Props {
     initialPrompts: PromptSession[];
     studentCount: number;
     classId: string;
-    teacherId: string
+    teacherId: string;
+    promptCountTotal: number
 }
 export default function AssignmentListSection({
     categories,
@@ -21,6 +23,7 @@ export default function AssignmentListSection({
     studentCount,
     classId,
     teacherId,
+    promptCountTotal
 }: Props) {
 
     const [fetchedPrompts, setFetchedPrompts] = useState<PromptSession[]>(initialPrompts)
@@ -53,6 +56,12 @@ export default function AssignmentListSection({
                                 classSize={studentCount}
                             />
                         ))}
+                        <PaginationList
+                            searchOptionsRef={promptSearchOptions}
+                            getFilteredSearch={getFilteredSearch}
+                            totalItems={promptCountTotal}
+                            itemsPerPage={30}
+                        />
                     </div>
                 )}
                 <div className="flex-1 sticky top-5 mb-5 w-full flex flex-wrap md:flex-col lg:flex-col items-stretch lg:min-w-[280px] gap-3">
@@ -81,7 +90,6 @@ export default function AssignmentListSection({
                     </div>
                 </div>
             </div >
-
         </>
     )
 }

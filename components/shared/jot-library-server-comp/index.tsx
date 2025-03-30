@@ -14,7 +14,7 @@ export default async function PromptLibrary({
     inClassroom?: boolean
 }) {
 
-    const allPrompts = await getAllTeacherPrompts(teacherId) as unknown as Prompt[]
+    const allPrompts = await getAllTeacherPrompts(teacherId) as unknown as { prompts: Prompt[], totalCount: number }
     const allClassroomIds = await getAllClassroomIds(teacherId) as Classroom[]
     let allPromptCategories = await getAllPromptCategories(teacherId) as PromptCategory[]
     // Add default value to beginning fo drop down for searchbar
@@ -30,9 +30,10 @@ export default async function PromptLibrary({
                     </div>
                 </div>
                 <JotSearchArea
-                    initialPrompts={allPrompts}
+                    initialPrompts={allPrompts.prompts}
                     classroomData={allClassroomIds}
                     categories={allPromptCategories}
+                    totalPromptCount={allPrompts.totalCount}
                 />
             </main>
         </>

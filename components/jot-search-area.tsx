@@ -6,15 +6,18 @@ import PromptCard from "./shared/prompt-card"
 import { SearchOptions } from "@/types"
 import { getFilterPrompts } from "@/lib/actions/prompt.actions"
 import { Classroom } from "@/types"
+import PaginationList from "./shared/prompt-filter-options/pagination-list"
 
 export default function JotSearchArea({
     initialPrompts,
     classroomData,
     categories,
+    totalPromptCount
 }: {
     initialPrompts: Prompt[],
     classroomData: Classroom[],
-    categories: PromptCategory[]
+    categories: PromptCategory[],
+    totalPromptCount: number
 }) {
 
     const [fetchedPrompts, setFetchedPrompts] = useState<Prompt[]>(initialPrompts)
@@ -49,6 +52,12 @@ export default function JotSearchArea({
                     />
                 ))}
             </div>
+            <PaginationList
+                searchOptionsRef={promptSearchOptions}
+                getFilteredSearch={getFilteredSearch}
+                totalItems={totalPromptCount}
+                itemsPerPage={20}
+            />
         </div>
     )
 }

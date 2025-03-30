@@ -5,31 +5,36 @@ import { SearchOptions } from "@/types";
 
 export async function getAllSessionsInClass(classId: string) {
     try {
-        const allPromptSession = await prisma.promptSession.findMany({
-            where: { classId: classId },
-            orderBy: { createdAt: 'desc' },
-            select: {
-                id: true,
-                responses: true,
-                isPublic: true,
-                createdAt: true,
-                promptType: true,
-                title: true,
-                status: true,
-                questions: true,
-                prompt: {
-                    select: {
-                        category: {
-                            select: {
-                                name: true
+        const [totalCount, paginatedPrompts] = await Promise.all([
+            prisma.promptSession.count({ where: { classId } }),
+            prisma.promptSession.findMany({
+                where: { classId: classId },
+                orderBy: { createdAt: 'desc' },
+                select: {
+                    id: true,
+                    responses: true,
+                    isPublic: true,
+                    createdAt: true,
+                    promptType: true,
+                    title: true,
+                    status: true,
+                    questions: true,
+                    prompt: {
+                        select: {
+                            category: {
+                                select: {
+                                    name: true
+                                }
                             }
                         }
                     }
-                }
-            },
-            take: 50
-        })
-        return allPromptSession
+                },
+                take: 30
+            })
+
+        ])
+        return { totalCount, prompts: paginatedPrompts };
+
     } catch (error) {
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);
@@ -196,13 +201,14 @@ export async function getFilteredPromptSessions(filterOptions: SearchOptions) {
                 createdAt: true,
                 title: true,
                 promptType: true,
+                questions: true,
                 prompt: {
                     select: {
                         category: true,
                     }
                 },
             },
-            take: 15,
+            take: 30,
             orderBy: {
                 updatedAt: filterOptions.filter === 'asc' ? 'asc' : 'desc'
             },

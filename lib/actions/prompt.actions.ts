@@ -221,39 +221,32 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
 // Get all prompts of Teacher
 export async function getAllTeacherPrompts(teacherId: string) {
     try {
-        const allPrompts = await prisma.prompt.findMany({
-            where: { teacherId },
-            select: {
-                id: true,
-                title: true,
-                promptType: true, // ✅ Now using select, not include
-                createdAt: true,
-                updatedAt: true,
-                questions: true,
-                classes: true, // Assuming you want to include this relation
-                category: {
-                    select: {
-                        name: true,
-                    }
+        const [totalCount, paginatedPrompts] = await Promise.all([
+            prisma.prompt.count({ where: { teacherId } }), // Get total count
+            prisma.prompt.findMany({
+                where: { teacherId },
+                select: {
+                    id: true,
+                    title: true,
+                    promptType: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    questions: true,
+                    classes: true,
+                    category: { select: { name: true } },
+                    promptSession: {
+                        select: {
+                            assignedAt: true,
+                            class: { select: { id: true, name: true } },
+                        },
+                    },
                 },
-                promptSession: {
-                    select: {
-                        assignedAt: true,
-                        class: {
-                            select: {
-                                id: true,
-                                name: true
-                            },
-                        }
-                    }
-                }
-            },
-            orderBy: {
-                updatedAt: 'desc'
-            },
-            take: 15
-        })
-        return allPrompts
+                orderBy: { updatedAt: 'desc' },
+                take: 20
+            }),
+        ]);
+
+        return { totalCount, prompts: paginatedPrompts };
 
     } catch (error) {
         // Improved error logging
@@ -342,7 +335,7 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
                     },
                 }
             },
-            take: 15,
+            take: 20,
             orderBy: {
                 updatedAt: filterOptions.filter === 'asc' ? 'asc' : 'desc'
             },
