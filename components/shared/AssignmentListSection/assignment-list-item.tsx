@@ -2,7 +2,6 @@ import { Prompt, PromptSession } from '@/types'
 import { formatDateLong } from '@/lib/utils'
 import Link from 'next/link'
 import QuestionPopup from '../prompt-card/question-popup'
-import { Button } from "@/components/ui/button"
 import {
     Tooltip,
     TooltipContent,
@@ -29,7 +28,14 @@ export default function AssignmentListItem({
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Link className='block' href={`/classroom/${classId}/${teacherId}/single-prompt-session/${jotData.id}`}>
+                        <Link className='block relative' href={`/classroom/${classId}/${teacherId}/single-prompt-session/${jotData.id}`}>
+                            {/* only show public or private if it is a blog, otherwise don't render */}
+                            <p
+                                className='absolute top-2 right-5 italic text-primary text-xs'
+                            >
+                                {jotData.isPublic && type === 'Blog' && 'public'}
+                                {!jotData.isPublic && type === 'Blog' && 'private'}
+                            </p>
                             <article className='bg-card flex-start opacity-80 px-5 py-4 rounded-lg mb-4 border border-border hover:cursor-pointer hover:opacity-100'>
                                 <p
                                     className='text-2xl bg-input p-2 px-4 rounded-full mr-3'
@@ -39,14 +45,14 @@ export default function AssignmentListItem({
                                 <div className="flex flex-col relative">
                                     <p className='text-sm font-bold line-clamp-1 text-foreground'>{jotData.title}</p>
                                     <div className="relative top-[11px] flex-between text-xs">
-                                        <p>{formatDateLong(jotData.createdAt)}</p>
+                                        <p>{formatDateLong(jotData.createdAt, 'short')}</p>
                                     </div>
                                 </div>
                             </article>
                         </Link>
                     </TooltipTrigger>
                     <TooltipContent className='min-w-[200px] space-y-1 p-2'>
-                        <p className='text-center underline mb-2'>{type}</p>
+                        {/* <p className='text-center underline mb-2'>{jotData.isPublic ? 'Public' : 'Private'} {type}</p> */}
                         <p><span className="font-bold">Category: </span> {jotData?.prompt?.category?.name ? jotData?.prompt?.category?.name : 'No Category'}</p>
                         <p><span className="font-bold">Submissions: </span>{jotData?.responses?.length} / {classSize}</p>
                     </TooltipContent>

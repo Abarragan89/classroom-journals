@@ -1,21 +1,12 @@
-import {
-    Table,
-    TableBody,
-    TableHead,
-    TableHeader,
-    TableRow,
-    TableCell
-} from "@/components/ui/table"
 import { prisma } from '@/db/prisma';
-import Link from 'next/link';
-import { formatDateShort } from '@/lib/utils';
 import { decryptText } from "@/lib/utils";
-import { ClipboardCheckIcon } from "lucide-react";
 import { Response, ResponseData, User } from "@/types";
 import { PromptSession } from "@/types";
 import { getAllStudents } from "@/lib/actions/classroom.actions";
 import EditPromptSessionPopUp from "@/components/modalBtns/edit-prompt-session-popup";
 import { StudentDataBarChart } from "./student-data-bar-chart";
+import AssessmentTableData from "./assessment-table-data";
+import BlogTableData from "./blog-table-data";
 
 export default async function SinglePromptSession({
     params
@@ -71,12 +62,12 @@ export default async function SinglePromptSession({
         return <div>Prompt session not found</div>;
     }
 
-    const studentSubmittedWithFormattedNamed = promptSession?.responses?.map(response => ({
+    const studentSubmittedWithFormattedNamed = promptSession?.responses?.map((response: Response) => ({
         ...response,
         student: {
             name: decryptText(response.student.name as string, response.student.iv as string)
         }
-    }));
+    })) as Response[];
 
     // Get student list to show which students have not submitted
     const classRoster = await getAllStudents(classId) as User[]
@@ -158,110 +149,30 @@ export default async function SinglePromptSession({
                 <StudentDataBarChart
                     responses={promptSession?.responses as Response[]}
                 />
+                
             }
 
             {promptSession.promptType === 'multi-question' ? (
-                <Table className="mt-5">
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="text-right">&nbsp;</TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Score</TableHead>
-                            <TableHead>Percentage</TableHead>
-                            <TableHead>Submitted</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell colSpan={6} className="text-center font-bold bg-background text-success">Submitted</TableCell>
-                        </TableRow>
-                        {(studentSubmittedWithFormattedNamed ?? []).sort((a, b) => {
-                            const lastNameA = a.student.name?.split(" ")[1] ?? "";
-                            const lastNameB = b.student.name?.split(" ")[1] ?? "";
-                            return lastNameA.localeCompare(lastNameB);
-                        }).map((response) => (
-                            <TableRow key={response.id}>
-                                <TableCell>
-                                    <Link
-                                        className="hover:cursor-pointer hover:text-accent"
-                                        href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSession.id}/single-response/${response.id}`}>
-                                        <ClipboardCheckIcon />
-                                    </Link>
-                                </TableCell>
-                                <TableCell className="font-medium">
-                                    {response.student.name}
-                                </TableCell>
-                                <TableCell>{responseScore(response.response as unknown as ResponseData[])}</TableCell>
-                                <TableCell>{responsePercentage(response.response as unknown as ResponseData[])}</TableCell>
-                                <TableCell>{formatDateShort(response.submittedAt)}</TableCell>
-                            </TableRow>
-                        ))}
-                        <TableRow>
-                            <TableCell colSpan={6} className="text-center font-bold bg-background text-destructive">Not Submitted</TableCell>
-                        </TableRow>
-                        {notSubmitted?.length > 0 && notSubmitted.map((user) => (
-                            <TableRow key={user.id}>
-                                <TableCell>&nbsp;</TableCell>
-                                <TableCell className="font-medium">{user.name}</TableCell>
-                                <TableCell>-</TableCell>
-                                <TableCell>-</TableCell>
-                                <TableCell>-</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                <AssessmentTableData
+                    studentSubmittedWithFormattedNamed={studentSubmittedWithFormattedNamed as unknown as Response[]}
+                    teacherId={teacherId}
+                    promptSessionId={promptSession.id}
+                    classId={classId}
+                    notSubmitted={notSubmitted}
+                    responseScore={responseScore}
+                    responsePercentage={responsePercentage}
+                />
             ) : (
                 // Journal Table
-                <Table className="mt-5">
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="text-right">&nbsp;</TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Score</TableHead>
-                            <TableHead>Comments</TableHead>
-                            <TableHead>Submitted</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell colSpan={6} className="text-center font-bold bg-background text-success">Submitted</TableCell>
-                        </TableRow>
-                        {(studentSubmittedWithFormattedNamed ?? []).sort((a, b) => {
-                            const lastNameA = a.student.name?.split(" ")[1] ?? "";
-                            const lastNameB = b.student.name?.split(" ")[1] ?? "";
-                            return lastNameA.localeCompare(lastNameB);
-                        }).map((response) => (
-                            <TableRow key={response.id}>
-                                <TableCell>
-                                    <Link
-                                        className="hover:cursor-pointer hover:text-accent"
-                                        href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSession.id}/single-response/${response.id}`}>
-                                        <ClipboardCheckIcon />
-                                    </Link>
-                                </TableCell>
-                                <TableCell className="font-medium">
-                                    {response.student.name}
-                                </TableCell>
-                                <TableCell>{(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? '-'}%</TableCell>
-                                <TableCell>{response?._count?.comments || 0}</TableCell>
-                                <TableCell>{formatDateShort(response.submittedAt)}</TableCell>
-                            </TableRow>
-                        ))}
-                        <TableRow>
-                            <TableCell colSpan={6} className="text-center font-bold bg-background text-destructive">Not Submitted</TableCell>
-                        </TableRow>
-                        {notSubmitted?.length > 0 && notSubmitted.map((user) => (
-                            <TableRow key={user.id}>
-                                <TableCell>&nbsp;</TableCell>
-                                <TableCell className="font-medium">{user.name}</TableCell>
-                                <TableCell>-</TableCell>
-                                <TableCell>-</TableCell>
-                                <TableCell>-</TableCell>
-                                <TableCell>-</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                <BlogTableData
+                    studentSubmittedWithFormattedNamed={studentSubmittedWithFormattedNamed as unknown as Response[]}
+                    teacherId={teacherId}
+                    promptSessionId={promptSession.id}
+                    classId={classId}
+                    notSubmitted={notSubmitted}
+                    responseScore={responseScore}
+                    responsePercentage={responsePercentage}
+                />
             )}
         </div>
     );

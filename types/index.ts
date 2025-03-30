@@ -68,6 +68,7 @@ export type PromptSession = {
     title: string;
     questions: JsonValue;
     assignedAt: Date;
+    isPublic: Boolean;
     promptType: string;
     category: PromptCategory;
     prompt?: Prompt;

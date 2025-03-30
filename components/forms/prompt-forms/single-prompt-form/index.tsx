@@ -14,6 +14,11 @@ import { Classroom, Prompt, PromptCategory } from "@/types";
 import { addPromptCategory, getAllPromptCategories } from "@/lib/actions/prompt.categories";
 import { useSearchParams } from "next/navigation";
 import CategorySection from "./category-section";
+import { Switch } from "@/components/ui/switch"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { CiCircleQuestion } from "react-icons/ci";
+
+
 
 interface Question {
     name: string;
@@ -39,6 +44,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     const [categories, setCategories] = useState<PromptCategory[]>([]);
     const [newCategoryName, setNewCategoryName] = useState<string>('');
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
+    const [isPublic, setIsPublic] = useState<boolean>(true);
     const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null)
     const [questions, setQuestions] = useState<Question[]>([
         { name: "question1", label: "Prompt", value: "" }
@@ -134,6 +140,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                 </div>
             ))}
 
+
             <Separator className="mt-10 mb-5" />
 
             {/* Associate with a category*/}
@@ -165,6 +172,34 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                         ))}
                     </>
                 )}
+                <div className="flex items-center space-x-2">
+                    <Switch
+                        onCheckedChange={(e) => setIsPublic(e)}
+                        checked={isPublic}
+                    />
+                    <Label
+                        className="text-md ml-2"
+                    >
+                        Public
+                    </Label>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <CiCircleQuestion size={20} />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>If public, students can view and comment on each other's blog posts.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                    <input
+                        type='hidden'
+                        readOnly
+                        name='is-public'
+                        id='is-public'
+                        value={isPublic.toString()}
+                    />
+                </div>
             </div>
             <input
                 type="hidden"

@@ -11,6 +11,7 @@ export async function getAllSessionsInClass(classId: string) {
             select: {
                 id: true,
                 responses: true,
+                isPublic: true,
                 createdAt: true,
                 promptType: true,
                 title: true,
@@ -49,6 +50,7 @@ export async function getSinglePromptSession(promptId: string) {
                 id: true,
                 questions: true,
                 assignedAt: true,
+                isPublic: true,
                 responses: {
                     select: {
                         notifications: true,
@@ -162,7 +164,13 @@ export async function getFilteredPromptSessions(filterOptions: SearchOptions) {
                     ? filterOptions.filter
                     : undefined
             },
-            include: {
+            select: {
+                isPublic: true,
+                id: true,
+                updatedAt: true,
+                createdAt: true,
+                title: true,
+                promptType: true,
                 prompt: {
                     select: {
                         category: true,

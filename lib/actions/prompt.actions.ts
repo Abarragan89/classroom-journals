@@ -28,6 +28,8 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
 
         // Get title for prompt(only searchable text)
         const title = formData.get("title")?.toString().trim() || "";
+        const isPublic = formData.get('is-public');
+        console.log('is Public in server ', isPublic)
         let categoryId = formData.get("prompt-category") as string | null;
 
         if (categoryId === "no-category" || categoryId === undefined) {
@@ -78,6 +80,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                     promptId: createdPrompt.id,
                     title: createdPrompt.title,
                     promptType: createdPrompt.promptType,
+                    isPublic: isPublic === 'true' ? true : false,
                     questions: createdPrompt.questions as Prisma.InputJsonValue,
                     assignedAt: new Date(),
                     classId: classId,
@@ -130,7 +133,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
 
         // Get & Validate Prompt Title
         const title = formData.get("title")?.toString().trim() || "";
-
+        const isPublic = formData.get('is-public');
         let categoryId = formData.get("prompt-category") as string | null;
 
         if (categoryId === "no-category" || categoryId === undefined) {
@@ -189,6 +192,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
                     promptId: updatedPrompt.id,
                     title: updatedPrompt.title,
                     promptType: updatedPrompt.promptType,
+                    isPublic: isPublic === 'true' ? true : false,
                     questions: updatedPrompt.questions as Prisma.InputJsonValue,
                     assignedAt: new Date(),
                     classId: classId,
@@ -376,7 +380,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
         if (classesAssignTo.length < 1) {
             return { success: false, message: 'At least one class needs to be selected.' }
         }
-
+        const isPublic = formData.get('is-public');
         // find the prompt
         const currentPrompt = await prisma.prompt.findUnique({
             where: { id: promptId },
@@ -399,6 +403,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
                 promptId: currentPrompt.id,
                 title: currentPrompt.title,
                 promptType: currentPrompt.promptType,
+                isPublic: isPublic === 'true' ? true : false,
                 questions: currentPrompt.questions as Prisma.InputJsonValue,
                 assignedAt: new Date(),
                 classId: classId,

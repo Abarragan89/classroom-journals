@@ -55,7 +55,7 @@ export default async function StudentDashboard() {
     ) as unknown as PromptSession[];
 
     // Get the blog sessions to display to link to discussion board
-    const blogPrompts = classroomData?.PromptSession.filter(singleSession => singleSession.promptType === 'single-question') as unknown as PromptSession[]
+    const blogPrompts = classroomData?.PromptSession.filter(singleSession => singleSession.promptType === 'single-question' && singleSession.isPublic) as unknown as PromptSession[]
 
     if (!classroomData) return;
 
@@ -69,9 +69,9 @@ export default async function StudentDashboard() {
             <main className="wrapper relative">
                 <h1 className="h1-bold mt-2 line-clamp-1">{classroomData?.name}</h1>
                 <h1 className="h2-bold mt-2 line-clamp-1">Hi, {username}</h1>
-                    <Button
+                <Button
                     className="absolute right-10"
-                    ><Plus /> Request</Button>
+                ><Plus /> Request</Button>
                 {/* Show prompt sessions if they exist */}
                 {tasksToDo?.length > 0 ? (
                     <section>

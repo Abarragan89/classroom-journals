@@ -12,7 +12,7 @@ model User {
   id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   googleId       String?          @unique // Optional, only for students with Google IDs
   name           String?          @default("NO_NAME")
-  username       String?          
+  username       String?
   email          String?          @unique(map: "user_email_idx")
   emailVerified  DateTime?        @db.Timestamp(6)
   image          String?
@@ -173,6 +173,7 @@ model PromptSession {
   title      String
   questions  Json // Single array of question objects
   promptType String // single-question or multi-question
+  isPublic   Boolean    @default(true)
   assignedAt DateTime   @default(now())
   classId    String     @db.Uuid // relate it to which side it is attached to
   status     String     @default("open") // e.g., "open", "closed"

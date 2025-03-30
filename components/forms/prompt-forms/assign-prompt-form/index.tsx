@@ -1,5 +1,5 @@
 'use client'
-import { useActionState, useEffect } from "react"
+import { useActionState, useEffect, useState } from "react"
 import { useFormStatus } from "react-dom"
 import { Button } from "@/components/ui/button"
 import { assignPrompt } from "@/lib/actions/prompt.actions"
@@ -7,6 +7,10 @@ import { toast } from 'sonner'
 import { Classroom, Prompt } from "@/types"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { CiCircleQuestion } from "react-icons/ci"
 
 export default function AssignPromptForm({
     promptId,
@@ -21,6 +25,7 @@ export default function AssignPromptForm({
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>,
     classroomData: Classroom[],
 }) {
+    const [isPublic, setIsPublic] = useState<boolean>(true);
 
     const [state, action] = useActionState(assignPrompt, {
         success: false,
@@ -55,7 +60,7 @@ export default function AssignPromptForm({
         <form action={action} className="space-y-2">
             <div className="grid items-center gap-3">
                 <p className="text-center italic line-clamp-4 text-primary">
-                &ldquo;{promptTitle}&rdquo;
+                    &ldquo;{promptTitle}&rdquo;
                 </p>
                 <Separator />
                 <div className="space-y-3">
@@ -84,6 +89,34 @@ export default function AssignPromptForm({
                     readOnly
                     hidden
                 />
+                <div className="flex items-center space-x-2">
+                    <Switch
+                        onCheckedChange={(e) => setIsPublic(e)}
+                        checked={isPublic}
+                    />
+                    <Label
+                        className="text-md ml-2"
+                    >
+                        Public
+                    </Label>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <CiCircleQuestion size={20} />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>If public, students can view and comment on each other's blog posts.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                    <input
+                        type='hidden'
+                        readOnly
+                        name='is-public'
+                        id='is-public'
+                        value={isPublic.toString()}
+                    />
+                </div>
                 <AssignButton />
                 {state && !state.success && (
                     <p className="text-center text-destructive">{state.message}</p>
