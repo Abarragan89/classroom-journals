@@ -23,9 +23,11 @@ export default async function PromptLibrary({
     return (
         <>
             <main className={`${inClassroom ? '' : 'wrapper'} mx-auto relative`}>
-                <div className="flex-between">
+                <div className="flex-between relative">
                     <h1 className={`${inClassroom ? 'text-2xl lg:text-3xl mt-2' : 'h1-bold'}`}>Jot Library</h1>
-                    <CreateNewJot />
+                    <div className="absolute top-[40px] right-0">
+                        <CreateNewJot />
+                    </div>
                 </div>
                 <JotSearchArea
                     initialPrompts={allPrompts}

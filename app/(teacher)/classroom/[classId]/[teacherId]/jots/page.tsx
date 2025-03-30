@@ -7,11 +7,9 @@ export default async function Jots({
 }) {
     const { teacherId } = await params
     return (
-        <div>
             <PromptLibrary
                 teacherId={teacherId}
                 inClassroom={true}
             />
-        </div>
     )
 }

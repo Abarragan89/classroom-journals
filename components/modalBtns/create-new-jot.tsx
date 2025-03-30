@@ -9,7 +9,7 @@ export default function CreateNewJot() {
     return (
         <>
             <JotTypeModal closeModal={undefined} setIsModalOpen={setIsJotTypeModalOpen} isModalOpen={isJotTypeModalOpen} />
-            <Button onClick={() => setIsJotTypeModalOpen(true)} variant='outline'>
+            <Button onClick={() => setIsJotTypeModalOpen(true)} variant='secondary'>
                 <Plus />Create Jot
             </Button>
         </>

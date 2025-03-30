@@ -31,12 +31,6 @@ export default function AssignmentListItem({
                         <Link className='block relative' href={`/classroom/${classId}/${teacherId}/single-prompt-session/${jotData.id}`}>
                             {/* only show public or private if it is a blog, otherwise don't render */}
                             <article className='bg-card flex-start opacity-80 px-5 py-4 rounded-lg mb-4 border border-border hover:cursor-pointer hover:opacity-100'>
-                                {/* <p
-                                    className='absolute top-2 right-5 italic text-input text-xs'
-                                >
-                                    {jotData.isPublic && type === 'Blog' && 'public'}
-                                    {!jotData.isPublic && type === 'Blog' && 'private'}
-                                </p> */}
                                 <p
                                     className='text-2xl bg-input p-2 px-4 rounded-full mr-3'
                                 >

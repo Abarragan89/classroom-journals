@@ -19,7 +19,7 @@ import { SearchOptions } from "@/types"
 const frameworks = [
     {
         value: "multi-question",
-        label: "Multi-Question",
+        label: "Assessments",
     },
     {
         value: "single-question",

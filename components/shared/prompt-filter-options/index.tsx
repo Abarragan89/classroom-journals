@@ -1,6 +1,6 @@
 
 import { PromptCategory, SearchOptions } from "@/types"
-import ClassFilterCombobox from "./category-filter-combobox"
+import CategoryFilterCombobox from "./category-filter-combobox"
 import PromptSearchBar from "./prompt-search-bar"
 import TraitFilterCombobox from "./trait-filter-combobox"
 
@@ -26,7 +26,7 @@ export default function PromptFilterOptions({
                 searchOptionsRef={searchOptionsRef}
                 getFilteredSearch={getFilteredSearch}
             />
-            <ClassFilterCombobox
+            <CategoryFilterCombobox
                 searchOptionsRef={searchOptionsRef}
                 categories={categories}
                 getFilteredSearch={getFilteredSearch}

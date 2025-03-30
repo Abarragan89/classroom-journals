@@ -32,13 +32,13 @@ export default function JotSearchArea({
     }
 
     return (
-        <>
+        <div className="mt-16">
             <PromptFilterOptions
                 searchOptionsRef={promptSearchOptions}
                 getFilteredSearch={getFilteredSearch}
                 categories={categories}
             />
-            <div className="mt-10 flex flex-wrap items-start  gap-10 mb-10">
+            <div className="mt-10 flex flex-wrap items-start gap-10 mb-10">
                 {/* Insert all the prompt jot cards here */}
                 {fetchedPrompts?.length > 0 && fetchedPrompts.map((prompt: Prompt) => (
                     <PromptCard
@@ -49,6 +49,6 @@ export default function JotSearchArea({
                     />
                 ))}
             </div>
-        </>
+        </div>
     )
 }

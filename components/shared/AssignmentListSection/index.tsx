@@ -5,7 +5,7 @@ import AssignmentListItem from "@/components/shared/AssignmentListSection/assign
 import { getFilteredPromptSessions } from "@/lib/actions/prompt.session.actions"
 import PromptSearchBar from "../prompt-filter-options/prompt-search-bar"
 import TraitFilterCombobox from "../prompt-filter-options/trait-filter-combobox"
-import ClassFilterCombobox from "../prompt-filter-options/category-filter-combobox"
+import CategoryFilterCombobox from "../prompt-filter-options/category-filter-combobox"
 
 
 interface Props {
@@ -37,11 +37,12 @@ export default function AssignmentListSection({
         setFetchedPrompts(filterPrompts)
     }
 
-
     return (
         <>
-            {fetchedPrompts?.length > 0 ?
-                <div className="flex flex-col-reverse items-end lg:flex-row lg:items-start justify-between">
+            < div className="flex flex-col-reverse items-end lg:flex-row lg:items-start justify-between">
+                {fetchedPrompts?.length <= 0 ? (
+                    <p className="flex-1">No Assignments</p>
+                ) : (
                     <div className="flex-2 w-full lg:mr-10">
                         {fetchedPrompts.map((prompt: PromptSession) => (
                             <AssignmentListItem
@@ -53,35 +54,34 @@ export default function AssignmentListSection({
                             />
                         ))}
                     </div>
-                    <div className="flex-1 mb-5 w-full flex flex-wrap md:flex-col lg:flex-col items-stretch lg:min-w-[280px] gap-3">
-                        {/* Search Bar (always full width) */}
-                        <div className="w-full">
-                            <PromptSearchBar
+                )}
+                <div className="flex-1 sticky top-5 mb-5 w-full flex flex-wrap md:flex-col lg:flex-col items-stretch lg:min-w-[280px] gap-3">
+                    {/* Search Bar (always full width) */}
+                    <div className="w-full">
+                        <PromptSearchBar
+                            searchOptionsRef={promptSearchOptions}
+                            getFilteredSearch={getFilteredSearch}
+                        />
+                    </div>
+                    {/* Wrapper for combo boxes */}
+                    <div className="flex w-full gap-4 lg:flex-col">
+                        <div className="flex-1 w-full">
+                            <TraitFilterCombobox
                                 searchOptionsRef={promptSearchOptions}
                                 getFilteredSearch={getFilteredSearch}
                             />
                         </div>
-                        {/* Wrapper for combo boxes */}
-                        <div className="flex w-full gap-4 lg:flex-col">
-                            <div className="flex-1 w-full">
-                                <TraitFilterCombobox
-                                    searchOptionsRef={promptSearchOptions}
-                                    getFilteredSearch={getFilteredSearch}
-                                />
-                            </div>
-                            <div className="flex-1 w-full">
-                                <ClassFilterCombobox
-                                    searchOptionsRef={promptSearchOptions}
-                                    categories={categories}
-                                    getFilteredSearch={getFilteredSearch}
-                                />
-                            </div>
+                        <div className="flex-1 w-full">
+                            <CategoryFilterCombobox
+                                searchOptionsRef={promptSearchOptions}
+                                categories={categories}
+                                getFilteredSearch={getFilteredSearch}
+                            />
                         </div>
                     </div>
                 </div>
-                : (
-                    <p>No Assignments posted</p>
-                )}
+            </div >
+
         </>
     )
 }

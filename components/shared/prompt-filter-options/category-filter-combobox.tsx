@@ -23,7 +23,7 @@ interface Props {
 
 }
 
-export default function ClassFilterCombobox({
+export default function CategoryFilterCombobox({
     searchOptionsRef,
     getFilteredSearch,
     categories
