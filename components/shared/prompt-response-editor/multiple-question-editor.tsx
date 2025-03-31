@@ -26,7 +26,6 @@ export default function MultipleQuestionEditor({
     const { promptSessionId } = useParams();
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);
-
     const [journalText, setJournalText] = useState<string>("");
     const [cursorIndex, setCursorIndex] = useState<number>(0);
     const [allQuestions, setAllQuestions] = useState<Question[]>(questions);
@@ -57,6 +56,7 @@ export default function MultipleQuestionEditor({
     async function getSavedText() {
         try {
             const savedResponse = await getFormData(promptSessionId as string)
+            console.log('get form data from indexeddb?', savedResponse)
             const isThereResponse = savedResponse.questions[Number(questionNumber)].answer
             const savedText = savedResponse.questions[Number(questionNumber)].answer || "";
             setCursorIndex(savedText.length);
@@ -129,9 +129,9 @@ export default function MultipleQuestionEditor({
         try {
             await handleSaveResponses();
             const nextQuestion = (Number(questionNumber) + 1).toString()
-            setJournalText('');
             router.push(`/jot-response/${promptSessionId}?q=${nextQuestion}`)
             inputRef.current?.focus()
+            setJournalText('');
         } catch (error) {
             console.log('error saving and continuing ', error)
         }

@@ -68,7 +68,7 @@ export async function getSinglePromptSession(promptId: string) {
                             }
                         }
                     }
-                }
+                },
             }
         })
 

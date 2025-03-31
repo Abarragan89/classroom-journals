@@ -92,6 +92,7 @@ export default function EditPromptSessionPopUp({
                         }
                     </p>
                 ) : (
+                    !isSessionPublic && promptSessionType !== 'multi-question' &&
                     <p>Private</p>
                 )}
                 <DropdownMenu>

@@ -28,7 +28,6 @@ export default function SinglePromptEditor({
     const { promptSessionId } = useParams();
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);
-
     const [journalText, setJournalText] = useState<string>("");
     const [cursorIndex, setCursorIndex] = useState<number>(0);
     const [allQuestions, setAllQuestions] = useState<Question[]>(questions);
@@ -37,7 +36,6 @@ export default function SinglePromptEditor({
     const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
     const [isTyping, setIsTyping] = useState(false);
     const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-    // const [currentPhotoUrl, setCurrentPhotoUrl] = useState<string>('https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png')
 
     const [state, action] = useActionState(createStudentResponse, {
         success: false,
@@ -136,9 +134,9 @@ export default function SinglePromptEditor({
         try {
             await handleSaveResponses();
             const nextQuestion = (Number(questionNumber) + 1).toString()
-            setJournalText('');
             router.push(`/jot-response/${promptSessionId}?q=${nextQuestion}`)
             inputRef.current?.focus()
+            setJournalText('');
         } catch (error) {
             console.log('error saving and continuing ', error)
         }

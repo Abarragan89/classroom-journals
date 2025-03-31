@@ -1,12 +1,14 @@
 import { prisma } from '@/db/prisma';
 import { decryptText } from "@/lib/utils";
-import { Response, ResponseData, User } from "@/types";
+import { Question, Response, ResponseData, User } from "@/types";
 import { PromptSession } from "@/types";
 import { getAllStudents } from "@/lib/actions/classroom.actions";
 import EditPromptSessionPopUp from "@/components/modalBtns/edit-prompt-session-popup";
 import { StudentDataBarChart } from "./student-data-bar-chart";
 import AssessmentTableData from "./assessment-table-data";
 import BlogTableData from "./blog-table-data";
+import QuestionCarousel from './question-accordion';
+import DataClientWrapper from './data-client-wrapper';
 
 export default async function SinglePromptSession({
     params
@@ -26,6 +28,7 @@ export default async function SinglePromptSession({
             status: true,
             id: true,
             promptType: true,
+            questions: true,
             isPublic: true,
             responses: {
                 select: {
@@ -132,7 +135,6 @@ export default async function SinglePromptSession({
         :
         calculateClassAverageBlog()
 
-
     return (
         <div>
             <h2 className="text-xl lg:text-2xl line-clamp-3 mt-5">{promptSession?.prompt?.title}</h2>
@@ -146,10 +148,10 @@ export default async function SinglePromptSession({
             <p className="text-input">Class Average: {classAverage}</p>
             {/* Bar chart */}
             {promptSession?.promptType === 'multi-question' &&
-                <StudentDataBarChart
-                    responses={promptSession?.responses as Response[]}
+                <DataClientWrapper
+                    questions={(promptSession?.questions as unknown as Question[]) as unknown as Question[]}
+                    responses={promptSession?.responses as unknown as Response[]}
                 />
-
             }
 
             {promptSession.promptType === 'multi-question' ? (
