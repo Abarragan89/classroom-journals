@@ -50,6 +50,9 @@ export default function ModeToggle() {
                     <DropdownMenuCheckboxItem checked={theme === 'light'} onClick={() => setTheme('light')}>
                         Light
                     </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem checked={theme === 'silva'} onClick={() => setTheme('silva')}>
+                        Silva
+                    </DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>

@@ -34,11 +34,6 @@
     --sidebar-border: hsl(240 3.7% 15.9%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 72%, 31%);
-    --chart-1: hsl(12 76% 61%);
-    --chart-2: hsl(173 58% 39%);
-    --chart-3: hsl(116, 37%, 24%);
-    --chart-4: hsl(43 74% 66%);
-    --chart-5: hsl(27 87% 67%);
   }
   .dark {
     --background: hsl(222.2 84% 4.9%);
@@ -71,11 +66,6 @@
     --sidebar-border: hsl(140, 4%, 16%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 73%, 39%);
-    --chart-1: hsl(220 70% 50%);
-    --chart-2: hsl(160 60% 45%);
-    --chart-3: hsl(30 80% 55%);
-    --chart-4: hsl(280 65% 60%);
-    --chart-5: hsl(340 75% 55%);
   }
 
   .tech {
@@ -109,11 +99,38 @@
     --sidebar-border: hsl(240 3.7% 15.9%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 80%, 43%);
-    --chart-1: hsl(220 70% 50%);
-    --chart-2: hsl(160 60% 45%);
-    --chart-3: hsl(30 80% 55%);
-    --chart-4: hsl(280 65% 60%);
-    --chart-5: hsl(340 75% 55%);
+  }
+  .silva {
+    --background: hsl(330, 50%, 95%);
+    --foreground: hsl(0, 0%, 20%);
+    --primary: hsl(340, 80%, 60%); /* Hot Pink */
+    --primary-foreground: hsl(0, 0%, 100%);
+    --secondary: hsl(330, 60%, 70%); /* Soft Pink */
+    --secondary-foreground: hsl(0, 0%, 10%);
+    --muted: hsl(330, 20%, 75%);
+    --muted-foreground: hsl(0, 0%, 40%);
+    --card: hsl(340, 80%, 90%);
+    --card-foreground: hsl(0, 0%, 15%);
+    --accent: hsl(320, 90%, 50%); /* Vibrant Pink */
+    --accent-foreground: hsl(0, 0%, 100%);
+    --border: hsl(330, 40%, 60%);
+    --input: hsl(330, 30%, 50%);
+    --ring: hsl(340, 80%, 60%);
+    --destructive: hsl(0, 79%, 50%);
+    --warning: hsl(37, 95%, 45%);
+    --warning-foreground: hsl(0, 0%, 10%);
+    --destructive-foreground: hsl(0, 0%, 100%);
+    --popover: hsl(330, 50%, 90%);
+    --popover-foreground: hsl(0, 0%, 20%);
+    --sidebar-background: hsl(330, 50%, 20%);
+    --sidebar-foreground: hsl(330, 80%, 95%);
+    --sidebar-primary: hsl(340, 80%, 60%);
+    --sidebar-primary-foreground: hsl(0, 0%, 100%);
+    --sidebar-accent: hsl(330, 70%, 80%);
+    --sidebar-accent-foreground: hsl(330, 20%, 20%);
+    --sidebar-border: hsl(330, 40%, 50%);
+    --sidebar-ring: hsl(340, 80%, 50%);
+    --success: hsl(129, 72%, 31%);
   }
 }
 
