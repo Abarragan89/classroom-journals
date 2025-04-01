@@ -100,7 +100,8 @@ export async function createClassroomWithGoogle(classroom: GoogleClassroom, teac
                         name: encryptedName, // Store the encrypted name
                         username: encryptedNickName,
                         iv: iv.toString('hex'), // Store the IV (Initialization Vector) used for encryption
-                        password
+                        password,
+                        commentCoolDown: 20
                     };
                 });
 
@@ -197,7 +198,8 @@ export async function populateStudentRosterFromGoogle(classroom: GoogleClassroom
                     name: encryptedName, // Store the encrypted name
                     username: encryptedNickName,
                     iv: iv.toString('hex'), // Store the IV (Initialization Vector) used for encryption
-                    password
+                    password,
+                    commentCoolDown: 20
                 };
             });
 
@@ -240,7 +242,7 @@ export async function populateStudentRosterFromGoogle(classroom: GoogleClassroom
     } catch (error) {
         if (error instanceof Error) {
             console.log("Error fetching prompts:", error.message);
-            // // console.error(error.stack);
+            console.error(error.stack);
         } else {
             console.log("Unexpected error:", error);
         }

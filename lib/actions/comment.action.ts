@@ -10,6 +10,26 @@ export async function addComment(responseId: string, text: string, userId: strin
             return { success: false, message: "Missing required fields" };
         }
 
+        // determine if cool down period has been reached
+        const currentUser = await prisma.user.findUnique({
+            where: { id: userId },
+            select: {
+                commentCoolDown: true,
+                lastComment: true,
+            }
+        })
+
+        const currentTime = new Date();
+        if (currentUser?.lastComment) {
+            const cooldownEnd = new Date(currentUser.lastComment.getTime() + (currentUser.commentCoolDown * 1000));
+            const remainingTime = Math.ceil((cooldownEnd.getTime() - currentTime.getTime()) / 1000); // Convert to seconds
+
+            if (currentTime < cooldownEnd) {
+                throw new Error(`Cooldown in progress. Please wait ${remainingTime} seconds.`);
+            }
+        }
+
+
         const result = await prisma.$transaction(async (prisma) => {
             // Create the new comment
             const newComment = await prisma.comment.create({
@@ -87,6 +107,13 @@ export async function addComment(responseId: string, text: string, userId: strin
 
             await prisma.notification.createMany({ data: notifications });
 
+            // update user's last comment time
+            await prisma.user.update({
+                where: { id: userId },
+                data: {
+                    lastComment: new Date()
+                }
+            })
 
             return formattedComment;
         });
@@ -94,13 +121,14 @@ export async function addComment(responseId: string, text: string, userId: strin
         return result;
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.log("Error adding comments:", error.message);
             console.error(error.stack);
+            return { success: false, message: "Error fetching prompts. Try again.", error: error.message };
         } else {
             console.log("Unexpected error:", error);
+            return { success: false, message: "Error fetching prompts. Try again." };
         }
 
-        return { success: false, message: "Error fetching prompts. Try again." };
     }
 }
 
@@ -108,6 +136,25 @@ export async function replyComment(responseId: string, parentId: string, text: s
     try {
         if (!parentId || !text || !userId || !responseId) {
             return { success: false, message: "Missing required fields" };
+        }
+
+        // determine if cool down period has been reached
+        const currentUser = await prisma.user.findUnique({
+            where: { id: userId },
+            select: {
+                commentCoolDown: true,
+                lastComment: true,
+            }
+        })
+
+        const currentTime = new Date();
+        if (currentUser?.lastComment) {
+            const cooldownEnd = new Date(currentUser.lastComment.getTime() + (currentUser.commentCoolDown * 1000));
+            const remainingTime = Math.ceil((cooldownEnd.getTime() - currentTime.getTime()) / 1000); // Convert to seconds
+
+            if (currentTime < cooldownEnd) {
+                throw new Error(`Cooldown in progress. Please wait ${remainingTime} seconds.`);
+            }
         }
 
         const result = await prisma.$transaction(async (prisma) => {
@@ -205,6 +252,14 @@ export async function replyComment(responseId: string, parentId: string, text: s
 
             await prisma.notification.createMany({ data: notifications });
 
+            // update user's last comment time
+            await prisma.user.update({
+                where: { id: userId },
+                data: {
+                    lastComment: new Date()
+                }
+            })
+
             return formattedComment;
         });
 
@@ -213,10 +268,10 @@ export async function replyComment(responseId: string, parentId: string, text: s
         if (error instanceof Error) {
             console.log("Error replying to comment:", error.message);
             console.error(error.stack);
+            return { success: false, message: "Error fetching prompts. Try again.", error: error.message };
         } else {
             console.log("Unexpected error:", error);
         }
-
         return { success: false, message: "Error replying to comment. Try again." };
     }
 }

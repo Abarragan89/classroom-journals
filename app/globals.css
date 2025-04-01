@@ -42,8 +42,8 @@
     --primary-foreground: hsl(222.2 84% 4.9%);
     --secondary: hsl(206, 68%, 20%);
     --secondary-foreground: hsl(210 40% 98%);
-    --muted: hsl(228, 14%, 28%);
-    --muted-foreground: hsl(0, 0%, 59%);
+    --muted: hsl(227, 15%, 55%);
+    --muted-foreground: hsl(0, 2%, 19%);
     --card: hsl(220.9 39.3% 11%);
     --card-foreground: hsl(212.7 26.8% 83.9%);
     --accent: hsl(216, 3%, 28%);
@@ -75,7 +75,7 @@
     --primary-foreground: hsl(0, 0%, 0%);
     --secondary: hsl(73, 59%, 54%);
     --secondary-foreground: hsl(180, 3%, 6%);
-    --muted: hsla(135, 16%, 25%, 0.833);
+    --muted: hsla(135, 37%, 27%, 0.833);
     --muted-foreground: hsl(0, 0%, 59%);
     --card: hsl(0, 0%, 0%);
     --card-foreground: hsl(210, 20%, 85%);
@@ -101,13 +101,14 @@
     --success: hsl(129, 80%, 43%);
   }
   .silva {
-    --background: hsl(330, 50%, 95%);
-    --foreground: hsl(0, 0%, 20%);
-    --primary: hsl(340, 80%, 60%); /* Hot Pink */
+    --background: hsl(329, 49%, 90%);
+    /* --background: hsl(330, 50%, 95%); */
+    --foreground: hsl(0, 72%, 27%);
+    --primary: hsl(340, 65%, 48%); /* Hot Pink */
     --primary-foreground: hsl(0, 0%, 100%);
     --secondary: hsl(330, 60%, 70%); /* Soft Pink */
     --secondary-foreground: hsl(0, 0%, 10%);
-    --muted: hsl(330, 20%, 75%);
+    --muted: hsl(331, 61%, 52%);
     --muted-foreground: hsl(0, 0%, 40%);
     --card: hsl(340, 80%, 90%);
     --card-foreground: hsl(0, 0%, 15%);

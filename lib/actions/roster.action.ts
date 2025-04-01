@@ -42,8 +42,9 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
             data: {
                 name: encryptedName,
                 username: encryptedNickName,
+                commentCoolDown: 20,
                 iv: iv.toString('hex'),
-                password
+                password,
             }
         })
 
@@ -72,9 +73,10 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
 export async function editStudent(prevState: unknown, formData: FormData) {
     try {
 
-        const { name, username } = newStudentSchema.parse({
+        const { name, username, commentCoolDown } = newStudentSchema.parse({
             name: formData.get('name'),
-            username: formData.get('username')
+            username: formData.get('username'),
+            commentCoolDown: formData.get('comment-cool-down')
         })
 
         // Get classId and StudentId
@@ -86,6 +88,7 @@ export async function editStudent(prevState: unknown, formData: FormData) {
         const iv = crypto.randomBytes(16); // Generate a random IV
         const { encryptedData: encryptedName } = encryptText(name.trim(), iv);
         const { encryptedData: encryptedNickName } = encryptText(username?.trim() as string, iv);
+        const coolDownNumber = Number(commentCoolDown)
 
         await prisma.$transaction(async (prisma) => {
             // delete the student
@@ -94,6 +97,7 @@ export async function editStudent(prevState: unknown, formData: FormData) {
                 data: {
                     name: encryptedName,
                     username: encryptedNickName,
+                    commentCoolDown: coolDownNumber,
                     iv: iv.toString('hex')
                 }
             })
@@ -104,7 +108,7 @@ export async function editStudent(prevState: unknown, formData: FormData) {
     } catch (error) {
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);
-            // console.error(error.stack); // Log stack trace for better debugging
+            console.error(error.stack); // Log stack trace for better debugging
         } else {
             console.log('Unexpected error:', error);
         }
@@ -131,7 +135,7 @@ export async function deleteStudent(prevState: unknown, formData: FormData) {
     } catch (error) {
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);
-            // console.error(error.stack); // Log stack trace for better debugging
+            console.error(error.stack); // Log stack trace for better debugging
         } else {
             console.log('Unexpected error:', error);
         }

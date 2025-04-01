@@ -17,6 +17,8 @@ export type User = {
     createdAt: Date;
     updatedAt: Date;
     // classes: ClassUser[];
+    commentCoolDown: number;
+    lastComment: Date;
 };
 
 export type Class = z.infer<typeof classSchema> & {

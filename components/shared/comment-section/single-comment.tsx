@@ -49,6 +49,12 @@ export default function SingleComment({
         try {
             setIsLoading(true)
             const replyCommentData = await replyComment(responseId, commentData.id, replyText.trim(), studentId, sessionId)
+            if ("error" in replyCommentData && replyCommentData.error) {
+                toast.error(replyCommentData.error, {
+                    style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
+                })
+                throw new Error('cool down period')
+            }
             setShowReplies(true)
             setReplyCommentState(prev => [replyCommentData as ResponseComment, ...prev])
             setTotalReplies(prev => prev + 1)
@@ -85,25 +91,25 @@ export default function SingleComment({
     }
 
     return (
-        <div className="mb-32 mx-4">
+        <div className="mb-10 mx-4">
             <div className="flex items-center">
                 <p className="relative w-9 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center mr-2">
                     {commentData?.user?.username?.charAt(0).toUpperCase()}
                 </p>
                 <div className="flex justify-between items-center w-full">
                     <div>
-                        <p className="leading-0 text-[.95rem] text-primary">{commentData.user.username}</p>
-                        <p className="leading-none text-[.95rem] text-input">{formatDateMonthDayYear(commentData.createdAt)}</p>
+                        <p className="leading-0 text-[.95rem] text-primary">{commentData?.user?.username}</p>
+                        <p className="leading-none text-[.95rem] text-input">{formatDateMonthDayYear(commentData?.createdAt)}</p>
                     </div>
                     <div className="flex items-center text-primary">
                         {isLikedByUser ?
                             <FaHeart
-                                onClick={() => toggleCommentLikeHandler('remove', commentData.id, studentId)}
+                                onClick={() => toggleCommentLikeHandler('remove', commentData?.id, studentId)}
                                 size={20}
                                 className="hover:cursor-pointer text-sidebar-primary" />
                             :
                             <FaRegHeart
-                                onClick={() => toggleCommentLikeHandler('add', commentData.id, studentId)}
+                                onClick={() => toggleCommentLikeHandler('add', commentData?.id, studentId)}
                                 size={20}
                                 className="hover:cursor-pointer" />
                         }
@@ -162,7 +168,7 @@ export default function SingleComment({
                     <p className="text-[.9rem] ml-[4px]">{totalReplies}</p>
                     {showReplies ? <ChevronLeft size={18} /> : <ChevronDown size={18} />}
                 </div>
-                {showReplyTextarea  ?
+                {showReplyTextarea ?
                     <p
                         onClick={() => setShowReplyTextarea(false)}
                         className="hover:cursor-pointer text-[.95rem] underline text-primary opacity-[0.7] hover:opacity-[1]"

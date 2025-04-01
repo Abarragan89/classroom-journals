@@ -10,7 +10,7 @@ import {
     DropdownMenuCheckboxItem
 } from "@/components/ui/dropdown-menu"
 import { useTheme } from "next-themes"
-import { SunIcon, MoonIcon, ComputerIcon } from 'lucide-react'
+import { SunIcon, MoonIcon, ComputerIcon, Heart } from 'lucide-react'
 
 export default function ModeToggle() {
     const [mounted, setMounted] = useState(false)
@@ -35,7 +35,11 @@ export default function ModeToggle() {
                             <ComputerIcon />
                         ) : theme === 'dark' ? (
                             <MoonIcon />
-                        ) : <SunIcon />}
+                        ) : theme === 'silva' ?
+                            <Heart />
+                            :
+                            <SunIcon />
+                        }
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

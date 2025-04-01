@@ -31,6 +31,13 @@ export default function CommentSection({
         try {
             setIsLoading(true)
             const newComment = await addComment(responseId, commentText, studentId, sessionId)
+
+            if ("error" in newComment && newComment.error) {
+                toast.error(newComment.error, {
+                    style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
+                })
+                throw new Error('cool down period')
+            }
             setAllComments(prev => [newComment as ResponseComment, ...prev])
             setCommentText('')
             toast('Comment Added!')
@@ -40,6 +47,8 @@ export default function CommentSection({
             setIsLoading(false)
         }
     }
+
+    console.log('all comment s', allComments)
 
     return (
         <section className="relative mx-auto" id="comment-section-main">
