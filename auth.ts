@@ -5,7 +5,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { User } from "./types";
-import { encryptText } from "./lib/utils";
+import { decryptText, encryptText } from "./lib/utils";
 import crypto from 'crypto';
 
 declare module "next-auth" {
@@ -128,7 +128,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 // @ts-expect-error: let there be any here
                 session.user.role = token?.email ? 'teacher' : 'student';
                 session.user.name = token.name;
-                session.iv = user?.iv ? user.iv : token.iv
+                // session.iv = user?.iv ? user.iv : token.iv
 
                 // Setting the classroomId is only needed or student login
                 if (token?.classroomId) {
@@ -165,21 +165,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     const iv = crypto.randomBytes(16);
                     // Encrypt the user name
                     const { encryptedData } = encryptText(user.name!, iv);
-                    token.name = encryptedData;
+                    token.name = user.name;
                     token.iv = iv.toString('hex');
 
                     await prisma.user.update({
                         where: { id: user.id },
                         data: {
-                            name: token.name,
-                            username: token.name,
+                            name: encryptedData,
+                            username: encryptedData,
                             iv: token.iv as string
                         }
                     })
                 } else if (trigger === 'signIn') {
                     // If signing back in, just set the token to the user name that is already encyrpted
-                    token.name = user.name;
-                    token.iv = user.iv
+                    token.name = decryptText(user.name as string, user.iv as string)
                 }
             }
             return token

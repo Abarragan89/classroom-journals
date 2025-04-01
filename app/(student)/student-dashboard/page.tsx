@@ -61,14 +61,12 @@ export default async function StudentDashboard() {
 
     const userNotifications = await getUserNotifications(studentId) as unknown as UserNotification[]
 
-    const username = decryptText(session?.user?.name as string, session?.iv as string)
-
     return (
         <>
             <Header session={session} studentId={studentId} />
             <main className="wrapper relative">
                 <h1 className="h1-bold mt-2 line-clamp-1">{classroomData?.name}</h1>
-                <h1 className="h2-bold mt-2 line-clamp-1">Hi, {username}</h1>
+                <h1 className="h2-bold mt-2 line-clamp-1">Hi, {session?.user?.name}</h1>
                 <Button
                     className="absolute right-10"
                 ><Plus /> Request</Button>

@@ -56,7 +56,6 @@ export default function MultipleQuestionEditor({
     async function getSavedText() {
         try {
             const savedResponse = await getFormData(promptSessionId as string)
-            console.log('get form data from indexeddb?', savedResponse)
             const isThereResponse = savedResponse.questions[Number(questionNumber)].answer
             const savedText = savedResponse.questions[Number(questionNumber)].answer || "";
             setCursorIndex(savedText.length);

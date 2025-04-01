@@ -29,10 +29,7 @@ export default async function UserButton({
         )
     }
 
-    // decrypt encoded name
-    const username = decryptText(session?.user?.name as string, session?.iv as string)
-
-    const firstInitial = username.charAt(0).toUpperCase() ?? 'U'
+    const firstInitial = session?.user?.name?.charAt(0).toUpperCase() ?? 'U'
 
     return (
         <div className="flex gap-2 items-center">
@@ -60,7 +57,7 @@ export default async function UserButton({
                     <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
                             <div className="text-sm font-medium leading-none">
-                                {username}
+                                {session?.user?.name}
                             </div>
                         </div>
                     </DropdownMenuLabel>

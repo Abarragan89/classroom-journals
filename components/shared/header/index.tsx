@@ -15,7 +15,7 @@ export default function Header({
 }) {
 
     return (
-        <header className='w-full border-b'>
+        <header className='w-full border-b print:hidden'>
             <div className="py-3 px-5  flex-between">
                 <div className="flex-start">
                     <Link

@@ -4,10 +4,8 @@ import { Question, Response, ResponseData, User } from "@/types";
 import { PromptSession } from "@/types";
 import { getAllStudents } from "@/lib/actions/classroom.actions";
 import EditPromptSessionPopUp from "@/components/modalBtns/edit-prompt-session-popup";
-import { StudentDataBarChart } from "./student-data-bar-chart";
 import AssessmentTableData from "./assessment-table-data";
 import BlogTableData from "./blog-table-data";
-import QuestionCarousel from './question-accordion';
 import DataClientWrapper from './data-client-wrapper';
 
 export default async function SinglePromptSession({
@@ -40,6 +38,7 @@ export default async function SinglePromptSession({
                             id: true,
                             name: true,
                             iv: true,
+                            username: true,
                         }
                     },
                     _count: {
@@ -65,6 +64,21 @@ export default async function SinglePromptSession({
     if (!promptSession) {
         return <div>Prompt session not found</div>;
     }
+
+    // Ensure that responses exist before mapping
+    const decryptedResponses = promptSession.responses?.map((response) => ({
+        ...response,
+        student: {
+            ...response.student,
+            username: decryptText(response.student.username as string, response.student.iv as string),
+        }
+    }));
+
+    // Keep the rest of the promptSession unchanged
+    const updatedPromptSession = {
+        ...promptSession,
+        responses: decryptedResponses,
+    };
 
     const studentSubmittedWithFormattedNamed = promptSession?.responses?.map((response: Response) => ({
         ...response,
@@ -149,8 +163,8 @@ export default async function SinglePromptSession({
             {/* Bar chart */}
             {promptSession?.promptType === 'multi-question' &&
                 <DataClientWrapper
-                    questions={(promptSession?.questions as unknown as Question[]) as unknown as Question[]}
-                    responses={promptSession?.responses as unknown as Response[]}
+                    questions={(updatedPromptSession?.questions as unknown as Question[]) as unknown as Question[]}
+                    responses={updatedPromptSession?.responses as unknown as Response[]}
                 />
             }
 

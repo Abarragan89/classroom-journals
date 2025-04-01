@@ -49,7 +49,6 @@ export default function QuestionAccordion({
                 (stuResp?.response as unknown as ResponseData[]).forEach(
                     (responseData: ResponseData) => {
                         const { question, score, answer } = responseData;
-
                         if (!responseObj[question]) {
                             responseObj[question] = { 0: [], 0.5: [], 1: [] };
                         }
@@ -74,27 +73,40 @@ export default function QuestionAccordion({
 
     const circleBtnStyles = "text-background rounded-lg w-16 h-8 flex-center opacity-70 hover:cursor-pointer hover:opacity-100";
 
-    console.log('quesitons ', questions)
-    console.log('responses ', responses)
 
     return (
         <>
             <ResponsiveDialog
-                title="Review Responses"
+                title={``}
                 isOpen={isResponseViewModalOpen}
                 setIsOpen={setIsResponseViewModalOpen}
             >
-                <div>
-                    {currentResponseData?.[currentSubQuery.current.question]?.[
-                        currentSubQuery.current.score
-                    ]?.map((data, index) => (
-                        <p key={index}>{data.answer}</p>
+                {/* show currrent question and the current score for responses */}
+                <p className="text-center font-bold">{currentSubQuery.current.question}</p>
+
+                {currentSubQuery.current.score === 1 ?
+                    <p className="font-bold text-success text-center mt-[-15px] text-sm">Correct Responses</p>
+                    :
+                    currentSubQuery.current.score === 0.5 ?
+                        <p className="font-bold text-warning text-center mt-[-15px] text-sm">Half Credit Responses</p>
+                        :
+                        <p className="font-bold text-destructive text-center mt-[-15px] text-sm">Wrong Responses</p>
+                }
+                <div className="max-h-[500px] overflow-y-auto custom-scrollbar">
+                    {currentResponseData?.[currentSubQuery.current.question]?.[currentSubQuery.current.score]?.map((data, index) => (
+                        <div key={index} className="relative">
+                            <p
+                                className="bg-card px-5 mx-3 pt-3 pb-5 my-4 rounded-md text-sm">
+                                {data.answer}
+                            </p>
+                            <span className="absolute bottom-1 right-5 text-input text-xs">-{data.studName}</span>
+                        </div>
                     ))}
                 </div>
             </ResponsiveDialog>
 
             <Accordion type="single" collapsible>
-                {/* <h3 className="text-md text-center">View responses by question</h3> */}
+                {/* <h3 className="text-sm font-bold text-center">View responses by question</h3> */}
                 {questions?.length > 0 &&
                     questions?.slice(startRange, endRange)?.map((question: Question, index: number) => (
                         <AccordionItem key={index} value={question.question}>

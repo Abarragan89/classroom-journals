@@ -51,18 +51,16 @@ export default async function DashboardLayout({
             <AppSidebar classes={teacherClasses as Classroom[]} />
             <SidebarInset>
                 <Header teacherId={teacherId} session={session as Session} />
-                <div className="flex h-10 shrink-0 items-center gap-2 border-b px-4">
+                <div className="flex h-10 shrink-0 items-center gap-2 border-b px-4 print:hidden">
                     <SidebarTrigger size='sm' className="-ml-1" />
                     <Separator orientation="vertical" className="mr-2 h-4" />
                 </div>
                 <main className="wrapper">
-
                     <DynamicHeader
                         classId={classId}
                         teacherId={teacherId}
                     />
-
-                    <h1 className="h1-bold mt-2 line-clamp-1">{classroomData.name}</h1>
+                    <h1 className="h1-bold mt-2 line-clamp-1 print:hidden">{classroomData.name}</h1>
                     {children}
                 </main>
             </SidebarInset>
