@@ -84,17 +84,15 @@ export default function SinglePromptEditor({
 
     /** Auto-save logic */
     useEffect(() => {
-        console.log('hi')
         if (!isTyping) return
         if (isTyping) {
             if (typingTimeoutRef.current) {
-                // clearTimeout(typingTimeoutRef.current);
-                console.log('hey there')
+                clearTimeout(typingTimeoutRef.current);
             }
-            // typingTimeoutRef.current = setTimeout(() => {
-            //     handleSaveResponses();
-            //     setIsTyping(false);
-            // }, 5000); // Save after 5 seconds of inactivity
+            typingTimeoutRef.current = setTimeout(() => {
+                handleSaveResponses();
+                setIsTyping(false);
+            }, 5000); // Save after 5 seconds of inactivity
         }
         return () => clearTimeout(typingTimeoutRef.current);
     }, [journalText, isTyping, questionNumber]);
@@ -120,6 +118,7 @@ export default function SinglePromptEditor({
             // Save immediately after updating questions
             setAllQuestions(updatedQuestions);
             await saveFormData(updatedQuestions, promptSessionId);
+            if (typingTimeoutRef?.current) clearTimeout(typingTimeoutRef.current);
         } catch (error) {
             console.log('error saving to indexed db', error);
         } finally {
@@ -138,6 +137,7 @@ export default function SinglePromptEditor({
             const nextQuestion = (Number(questionNumber) + 1).toString()
             router.push(`/jot-response/${promptSessionId}?q=${nextQuestion}`)
             inputRef.current?.focus()
+            if (typingTimeoutRef?.current) clearTimeout(typingTimeoutRef.current);
             setJournalText('');
         } catch (error) {
             console.log('error saving and continuing ', error)
