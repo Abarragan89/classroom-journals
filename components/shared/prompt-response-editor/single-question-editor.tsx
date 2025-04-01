@@ -85,18 +85,19 @@ export default function SinglePromptEditor({
     /** Auto-save logic */
     useEffect(() => {
         console.log('hi')
-        // if (!isTyping) return
-        // if (isTyping) {
-        //     if (typingTimeoutRef.current) {
-        //         clearTimeout(typingTimeoutRef.current);
-        //     }
-        //     typingTimeoutRef.current = setTimeout(() => {
-        //         handleSaveResponses();
-        //         setIsTyping(false);
-        //     }, 5000); // Save after 5 seconds of inactivity
-        // }
-        // return () => clearTimeout(typingTimeoutRef.current);
-    }, [journalText, isTyping]);
+        if (!isTyping) return
+        if (isTyping) {
+            if (typingTimeoutRef.current) {
+                // clearTimeout(typingTimeoutRef.current);
+                console.log('hey there')
+            }
+            // typingTimeoutRef.current = setTimeout(() => {
+            //     handleSaveResponses();
+            //     setIsTyping(false);
+            // }, 5000); // Save after 5 seconds of inactivity
+        }
+        return () => clearTimeout(typingTimeoutRef.current);
+    }, [journalText, isTyping, questionNumber]);
 
     // Go into fullscreen mode
     useEffect(() => {
