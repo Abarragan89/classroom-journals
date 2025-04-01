@@ -8,7 +8,7 @@ interface Props {
 
 export default function SaveAndContinueBtns({ submitHandler, isSaving }: Props) {
     return (
-        <div className="flex justify-between w-[270px] mx-auto pb-[100px]">
+        <div className="flex justify-between w-[280px] mx-auto pb-[100px]">
             <Button
                 variant='secondary'
                 type="button"

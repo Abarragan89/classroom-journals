@@ -157,7 +157,7 @@ export default function SinglePromptEditor({
         <div className="w-full max-w-[900px] mx-auto relative px-10">
             <p className="absolute -top-10 right-0 text-sm">Blog Post</p>
             <ArrowBigLeft className="absolute -top-10 left-0 text-sm hover:cursor-pointer hover:text-accent" onClick={() => router.back()} />
-            <p className="h2-bold mt-16 mb-5 w-full mx-auto text-center">{currentQuestion}</p>
+            <p className="h3-bold mt-16 mb-5 w-full mx-auto text-center">{currentQuestion}</p>
             {/*  Show question if answer question */}
             {questionNumber === '0' && (
                 <>
@@ -195,7 +195,7 @@ export default function SinglePromptEditor({
                         characterLimit={70}
                     />
                     <div className="flex flex-col justify-center items-center mb-20">
-                        <form onSubmit={(e) => saveAndContinue(e)}>
+                        <form  onSubmit={(e) => saveAndContinue(e)}>
                             <SaveAndContinueBtns
                                 isSaving={isSaving}
                                 submitHandler={() => { handleSaveResponses(); toast('Answers Saved!') }}

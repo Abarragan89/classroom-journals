@@ -55,18 +55,18 @@ export default function CommentReplySection({
                 </p>
                 <div className="flex justify-between items-center w-full ml-3">
                     <div>
-                        <p className="leading-none text-[.95rem] mb-1 text-primary">{replyCommentData.user.username}</p>
-                        <p className="leading-none text-[.95rem] text-input">{formatDateMonthDayYear(replyCommentData.createdAt)}</p>
+                        <p className="leading-none text-[.95rem] mb-1 text-primary">{replyCommentData?.user?.username}</p>
+                        <p className="leading-none text-[.95rem] text-input">{formatDateMonthDayYear(replyCommentData?.createdAt)}</p>
                     </div>
                     <div className="flex items-center text-primary">
                         {isLikedByUser ?
                             <FaHeart
-                                onClick={() => toggleCommentLikeHandler('remove', replyCommentData.id)}
+                                onClick={() => toggleCommentLikeHandler('remove', replyCommentData?.id)}
                                 size={20}
                                 className="hover:cursor-pointer text-sidebar-primary" />
                             :
                             <FaRegHeart
-                                onClick={() => toggleCommentLikeHandler('add', replyCommentData.id)}
+                                onClick={() => toggleCommentLikeHandler('add', replyCommentData?.id)}
                                 size={20}
                                 className="hover:cursor-pointer" />
                         }
@@ -74,7 +74,7 @@ export default function CommentReplySection({
                     </div>
                 </div>
             </div>
-            <p className="px-[45px] whitespace-pre mt-1">{replyCommentData.text}</p>
+            <p className="px-[45px] whitespace-pre mt-1">{replyCommentData?.text}</p>
         </div>
     )
 }

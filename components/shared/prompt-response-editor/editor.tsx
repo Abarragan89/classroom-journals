@@ -75,12 +75,12 @@ export default function Editor({
         setIsTyping(true);
     };
     return (
-        <div className="mb-10 w-full mx-auto flex flex-col items-center">
+        <div className="mb-5 w-full mx-auto flex flex-col items-center">
             <div
                 ref={inputRef}
                 tabIndex={0}
                 onKeyDown={handleKeyDown}
-                className={`mx-auto ${jotType === 'single-question' ? 'min-h-96 ' : ''} w-full border-2 border-bg-accent rounded-md outline-none`}
+                className={`mx-auto ${jotType === 'single-question' ? 'min-h-48 ' : ''} w-full border-2 border-bg-accent rounded-md outline-none`}
             >
                 <pre className="text-lg w-full p-5 whitespace-pre-wrap">
                     {journalText.slice(0, cursorIndex)}

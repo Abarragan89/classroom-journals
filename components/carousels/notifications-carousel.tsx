@@ -54,10 +54,10 @@ export default function NotificationsCarousel({
                             <Card className="relative max-w-[350px] mx-auto">
                                 <CardContent className="flex items-center justify-center">
                                     <Link key={notification.id} href={notification.url}
-                                        className="h-[70px] text-xs flex flex-col justify-between items-center opacity-80 hover:opacity-100"
+                                        className="h-[80px] text-xs flex flex-col justify-between items-center opacity-80 hover:opacity-100"
                                     >
-                                        <p>{notification.message}</p>
-                                        <p className="text-sm text-center line-clamp-1 italic font-bold text-foreground">&rldquo;{notification.commentText}&rdquo;</p>
+                                        <p className="text-center">{notification.message}</p>
+                                        <p className="text-sm text-center line-clamp-1 overflow-x-clip italic font-bold text-foreground">&ldquo;{notification?.commentText?.slice(0, 25)}&rdquo;</p>
                                         <p>on: {formatDateLong(notification.createdAt)}</p>
                                     </Link>
 
