@@ -32,7 +32,7 @@ export function StudentDataBarChart({
 }) {
 
     // Populate the chart data with the questions first
-    let chartData = [...(responses[0]?.response as unknown as ResponseData[])?.slice(startRange, endRange)?.map((response: ResponseData, index: number) => {
+    const chartData = [...(responses[0]?.response as unknown as ResponseData[])?.slice(startRange, endRange)?.map((response: ResponseData, index: number) => {
         return (
             {
                 question: `Q: ${startRange + index + 1}`,

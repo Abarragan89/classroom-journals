@@ -50,8 +50,8 @@ export default function PaginationList({
                 pages.push("ellipsis-start"); // Ellipsis before middle pages
             }
 
-            let start = Math.max(2, currentPage - 1);
-            let end = Math.min(totalPages - 1, currentPage + 1);
+            const start = Math.max(2, currentPage - 1);
+            const end = Math.min(totalPages - 1, currentPage + 1);
 
             for (let i = start; i <= end; i++) {
                 pages.push(i);

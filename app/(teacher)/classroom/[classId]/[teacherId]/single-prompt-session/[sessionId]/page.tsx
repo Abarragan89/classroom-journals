@@ -157,7 +157,6 @@ export default async function SinglePromptSession({
                 promptSessionId={promptSession?.id}
                 initialStatus={promptSession?.status}
                 initialPublicStatus={promptSession?.isPublic}
-                isPublic={promptSession?.isPublic}
             />
             <p className="text-input">Class Average: {classAverage}</p>
             {/* Bar chart */}

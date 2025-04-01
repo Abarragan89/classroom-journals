@@ -10,7 +10,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { UserIcon } from "lucide-react";
 import Image from "next/image";
-import { decryptText } from "@/lib/utils";
 import { Session } from "@/types";
 
 export default async function UserButton({

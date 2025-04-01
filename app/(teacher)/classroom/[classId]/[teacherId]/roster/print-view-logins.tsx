@@ -12,7 +12,7 @@ export default function PrintViewLogins({
             <h2 className='h1-bold text-center mb-10'>Student Logins</h2>
             <div className='flex-between flex-wrap gap-x-5'>
                 {studentRoster.map(student => (
-                    <div className='border border-gray-950 mb-14 rounded-lg w-[290px] break-inside-avoid'>
+                    <div key={student.id} className='border border-gray-950 mb-14 rounded-lg w-[290px] break-inside-avoid'>
                         <p className='text-center font-bold text-md p-2'>www.jotterblog.com</p>
                         <div className="border-y border-gray-950 p-4 space-y-2">
                             <p className='font-bold'>Username: <span className='font-normal'>{student.username}</span></p>

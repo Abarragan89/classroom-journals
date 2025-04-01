@@ -9,7 +9,6 @@ import { getUserNotifications } from "@/lib/actions/notifications.action";
 import { UserNotification } from "@/types";
 import ClassDiscussionCarousel from "@/components/carousels/class-discussion-carousel";
 import NotificationsCarousel from "@/components/carousels/notifications-carousel";
-import { decryptText } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 

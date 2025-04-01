@@ -7,7 +7,7 @@ import {
     TableCell
 } from "@/components/ui/table"
 import { formatDateShort } from "@/lib/utils";
-import { Response, ResponseData, User } from "@/types";
+import { Response, User } from "@/types";
 import { ClipboardCheckIcon } from "lucide-react";
 import Link from "next/link";
 

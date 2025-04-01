@@ -13,13 +13,11 @@ export default function EditPromptSessionPopUp({
     promptSessionId,
     initialStatus,
     initialPublicStatus,
-    isPublic
 }: {
     promptSessionType: string,
     promptSessionId: string,
     initialStatus: string,
     initialPublicStatus: boolean,
-    isPublic: boolean
 }) {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
     const [isPublicModal, setisPublicModal] = useState<boolean>(false);
