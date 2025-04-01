@@ -48,8 +48,6 @@ export default function CommentSection({
         }
     }
 
-    console.log('all comment s', allComments)
-
     return (
         <section className="relative mx-auto" id="comment-section-main">
             <h3 className="h3-bold text-center pb-3">Comments</h3>
