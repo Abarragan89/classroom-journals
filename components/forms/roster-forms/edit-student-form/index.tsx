@@ -36,9 +36,6 @@ export default function EditStudentForm({
     })
     const pathname = usePathname()
     const router = useRouter();
-    const [open, setOpen] = useState(false)
-    const [value, setValue] = useState("")
-
 
     //redirect if the state is success
     useEffect(() => {

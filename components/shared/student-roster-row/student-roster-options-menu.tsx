@@ -65,7 +65,6 @@ export default function StudentRosterOptionsMenu({
             <ResponsiveDialog
                 isOpen={isDeleteModalOpen}
                 setIsOpen={setIsDeleteModalOpen}
-                // title={`Delete ${classData.name}`}
                 title={`Delete ${studentInfo.name}`}
                 description='Confirm class deletion'
             >
