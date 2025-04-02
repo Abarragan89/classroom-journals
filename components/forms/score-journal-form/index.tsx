@@ -23,7 +23,7 @@ export default function ScoreJournalForm({
     }
 
     return (
-        <div className="flex-end w-1/4 absolute right-10 -top-12">
+        <div className="flex-end w-1/4 absolute right-10 -top-8">
             <Input
                 type="text"
                 name="journalScore"

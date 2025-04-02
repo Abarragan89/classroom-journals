@@ -57,7 +57,7 @@ export default async function SingleResponse({
                 studentId={studentId}
                 sessionId={sessionId}
                 discussionStatus={promptStatus as string}
-                commentCoolDown={Number(commentCoolDown)}
+                commentCoolDown={commentCoolDown}
             />
         </div>
     )

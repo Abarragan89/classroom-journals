@@ -31,7 +31,7 @@ model User {
   prompts         Prompt[] // Prompts are for teachers
   PromptCategory  PromptCategory[]
   // These are only related to students
-  commentCoolDown Int              @default(0)
+  commentCoolDown Int?              @default(0)
 }
 
 model Account {

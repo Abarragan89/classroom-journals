@@ -24,6 +24,12 @@ export default async function SingleResponse({
     const response = await getSingleResponse(responseId) as unknown as Response
     const classRosterAndScores = await getAllResponsesFromPompt(sessionId) as unknown as Response[]
 
+    const rosterAlphabetized = classRosterAndScores.sort((a, b) => {
+        const lastNameA = a?.student?.name?.split(" ")[1] as string; // Get second word (last name)
+        const lastNameB = b?.student?.name?.split(" ")[1] as string;
+        return lastNameA.localeCompare(lastNameB); // Sort alphabetically
+    });
+
     if (!response) {
         return <div>Response not found</div>;
     }
@@ -36,7 +42,7 @@ export default async function SingleResponse({
             <div className="mb-10 space-y-1">
 
                 <StudentComboBox
-                    responses={classRosterAndScores}
+                    responses={rosterAlphabetized}
                 />
                 <p className='text-input'>Submitted: {formatDateShort(response?.submittedAt)}</p>
             </div>

@@ -73,11 +73,38 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
 export async function editStudent(prevState: unknown, formData: FormData) {
     try {
 
-        const { name, username, commentCoolDown } = newStudentSchema.parse({
+        const { name, username, commentCoolDown, password } = newStudentSchema.parse({
             name: formData.get('name'),
             username: formData.get('username'),
-            commentCoolDown: formData.get('comment-cool-down')
+            password: formData.get('password'),
+            commentCoolDown: formData.get('comment-cool-down'),
         })
+
+
+        // check to make sure password is not already in use
+        const classId = formData.get('classId') as string
+        const currentPassword = formData.get('current-password') as string
+        // only do the following if they are trying to update the password
+        if (password !== currentPassword) {
+            const allStudents = await prisma.classUser.findMany({
+                where: {
+                    classId,
+                    role: 'student'
+                },
+                select: {
+                    user: {
+                        select: {
+                            password: true
+                        }
+                    }
+                }
+            })
+            const allStudentPasswords = allStudents.map(user => user.user.password)
+            // Password is already in use
+            if (allStudentPasswords.includes(password as string)) {
+                return { success: false, message: 'Password already in use' }
+            }
+        }
 
         // Get classId and StudentId
         const studentId = formData.get('studentId')
@@ -88,7 +115,7 @@ export async function editStudent(prevState: unknown, formData: FormData) {
         const iv = crypto.randomBytes(16); // Generate a random IV
         const { encryptedData: encryptedName } = encryptText(name.trim(), iv);
         const { encryptedData: encryptedNickName } = encryptText(username?.trim() as string, iv);
-        const coolDownNumber = Number(commentCoolDown)
+        const coolDownNumber = commentCoolDown === 'disabled' ? null : Number(commentCoolDown)
 
         await prisma.$transaction(async (prisma) => {
             // delete the student
@@ -98,6 +125,7 @@ export async function editStudent(prevState: unknown, formData: FormData) {
                     name: encryptedName,
                     username: encryptedNickName,
                     commentCoolDown: coolDownNumber,
+                    password: password,
                     iv: iv.toString('hex')
                 }
             })

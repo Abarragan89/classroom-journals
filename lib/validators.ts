@@ -31,5 +31,6 @@ export const promptSchema = z.object({
 export const newStudentSchema = z.object({
     name: z.string().min(1, 'name is required'),
     username: z.string().optional(),
-    commentCoolDown: z.string().optional()
+    commentCoolDown: z.string().optional(),
+    password: z.string().optional()
 })

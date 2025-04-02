@@ -34,10 +34,16 @@ export default function CommentSection({
     async function addCommentHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         // Check cool down time
+        if (commentCoolDown === null) {
+            toast.error(`Commenting has been disabled for you account`, {
+                style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
+            })
+            return;
+        }
         if (commentCoolDown) {
-            const remainingTime = checkCommentCoolDown(commentCoolDown)
-            if (remainingTime > 0) {
-                toast.error(`Cooldown in progress. dfsPlease wait ${remainingTime} seconds.`, {
+            const response = checkCommentCoolDown(commentCoolDown) as { remaining: string, isDisabled: boolean }
+            if (response.isDisabled) {
+                toast.error(`Cooldown in progress. Please wait ${response.remaining} seconds.`, {
                     style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
                 })
                 return;
@@ -70,7 +76,7 @@ export default function CommentSection({
                 })
             }
         } catch (error) {
-            console.log('error deleting comment')
+            console.log('error deleting comment', error)
         }
     }
 

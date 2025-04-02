@@ -96,6 +96,14 @@ export function checkCommentCoolDown(commentCoolDown: number) {
   if (!lastComment) return 0
   lastComment = new Date(lastComment)
   const cooldownEnd = new Date(lastComment.getTime() + (commentCoolDown * 1000));
-  const remainingTime = Math.ceil((cooldownEnd.getTime() - currentTime.getTime()) / 1000); // Convert to seconds
-  return remainingTime
+  let remainingTime = Math.ceil((cooldownEnd.getTime() - currentTime.getTime()) / 1000); // Convert to seconds
+
+  if (remainingTime <= 0) {
+    return { remaining: ``, isDisabled: false }
+  } else if (remainingTime > 60) {
+    remainingTime = Math.floor(remainingTime / 60)
+    return { remaining: `${remainingTime} minutes`, isDisabled: true }
+  } else if (remainingTime < 60) {
+    return { remaining: `${remainingTime} seconds`, isDisabled: true }
+  }
 }

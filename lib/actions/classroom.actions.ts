@@ -177,7 +177,8 @@ export async function getAllStudents(classId: string) {
                         iv: true,
                         updatedAt: true,
                         username: true,
-                        password: true
+                        password: true,
+                        commentCoolDown: true,
                     }
                 }
             }
@@ -189,6 +190,7 @@ export async function getAllStudents(classId: string) {
             .map(({ user }) => ({ // Destructure `user` from `studentObj`
                 id: user.id,
                 updatedAt: user.updatedAt,
+                commentCoolDown: user.commentCoolDown,
                 username: decryptText(user.username as string, user.iv as string),
                 password: user.password,
                 name: decryptText(user.name as string, user.iv as string) // Decrypt name
