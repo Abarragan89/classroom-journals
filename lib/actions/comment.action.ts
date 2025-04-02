@@ -85,15 +85,6 @@ export async function addComment(responseId: string, text: string, userId: strin
             });
 
             await prisma.notification.createMany({ data: notifications });
-
-            // update user's last comment time
-            await prisma.user.update({
-                where: { id: userId },
-                data: {
-                    lastComment: new Date()
-                }
-            })
-
             return formattedComment;
         });
 
@@ -210,15 +201,6 @@ export async function replyComment(responseId: string, parentId: string, text: s
             });
 
             await prisma.notification.createMany({ data: notifications });
-
-            // update user's last comment time
-            await prisma.user.update({
-                where: { id: userId },
-                data: {
-                    lastComment: new Date()
-                }
-            })
-
             return formattedComment
         });
 

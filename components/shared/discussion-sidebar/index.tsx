@@ -53,12 +53,15 @@ export function DiscussionSidebar({ ...props }: React.ComponentProps<typeof Side
                                             <Tooltip>
                                                 <TooltipTrigger asChild>
                                                     <SidebarMenuItem>
-                                                        <SidebarMenuButton isActive={currentResponseId === response.id}>
-                                                            <Link href={`${response.id}`} className="flex items-center gap-2 text-sidebar-accent-foreground">
-                                                                <p className="text-xl w-7 border-r border-input mr-3">{response?.student?.username?.charAt(0)}</p>
-                                                                {response?.student?.username}
-                                                            </Link>
-                                                        </SidebarMenuButton>
+                                                        <Link href={`${response.id}`} className="flex items-center gap-2 text-sidebar-accent-foreground">
+
+                                                            <SidebarMenuButton isActive={currentResponseId === response.id}>
+                                                                <span className="flex items-center gap-2 text-sidebar-accent-foreground">
+                                                                    <p className="text-xl w-7  mr-3">{response?.student?.username?.charAt(0)}</p>
+                                                                    {response?.student?.username}
+                                                                </span>
+                                                            </SidebarMenuButton>
+                                                        </Link>
                                                     </SidebarMenuItem>
                                                 </TooltipTrigger>
                                                 <TooltipContent>
