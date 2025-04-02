@@ -6,20 +6,23 @@ import { SendHorizonalIcon } from "lucide-react";
 import { ResponseComment } from "@/types";
 import { addComment } from "@/lib/actions/comment.action";
 import SingleComment from "./single-comment";
-import { toast } from "sonner";;
+import { toast } from "sonner";
+import { checkCommentCoolDown } from "@/lib/utils";
 
 export default function CommentSection({
     comments,
     studentId,
     responseId,
     sessionId,
-    discussionStatus
+    discussionStatus,
+    commentCoolDown,
 }: {
     comments: ResponseComment[],
     studentId: string,
     responseId: string,
     sessionId: string,
-    discussionStatus: string
+    discussionStatus: string,
+    commentCoolDown?: number
 }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -28,19 +31,26 @@ export default function CommentSection({
 
     async function addCommentHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        // Check cool down time
+        if (commentCoolDown) {
+            const remainingTime = checkCommentCoolDown(commentCoolDown)
+            if (remainingTime > 0) {
+                toast.error(`Cooldown in progress. dfsPlease wait ${remainingTime} seconds.`, {
+                    style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
+                })
+                return;
+            }
+        }
         try {
             setIsLoading(true)
             const newComment = await addComment(responseId, commentText, studentId, sessionId)
+            setAllComments(prev => [newComment as unknown as ResponseComment, ...prev])
+            setCommentText('');
+            toast('Comment Added!');
 
-            if ("error" in newComment && newComment.error) {
-                toast.error(newComment.error, {
-                    style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
-                })
-                throw new Error('cool down period')
-            }
-            setAllComments(prev => [newComment as ResponseComment, ...prev])
-            setCommentText('')
-            toast('Comment Added!')
+            // Update the time stamp in the local storage
+            const lastCommentStamp = new Date();
+            localStorage.setItem('lastCommentDate', lastCommentStamp.toString())
         } catch (error) {
             console.log('error adding comment ', error)
         } finally {
@@ -90,12 +100,13 @@ export default function CommentSection({
             }
             {allComments?.length > 0 && allComments.map((comment: ResponseComment) => (
                 <SingleComment
-                    key={comment.id}
+                    key={comment?.id}
                     commentData={comment as ResponseComment}
                     responseId={responseId}
                     studentId={studentId}
                     sessionId={sessionId}
                     discussionStatus={discussionStatus}
+                    commentCoolDown={commentCoolDown}
                 />
             ))}
         </section>

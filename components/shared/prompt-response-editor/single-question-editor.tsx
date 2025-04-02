@@ -89,10 +89,10 @@ export default function SinglePromptEditor({
             if (typingTimeoutRef.current) {
                 clearTimeout(typingTimeoutRef.current);
             }
-            typingTimeoutRef.current = setTimeout(() => {
-                handleSaveResponses();
-                setIsTyping(false);
-            }, 5000); // Save after 5 seconds of inactivity
+            // typingTimeoutRef.current = setTimeout(() => {
+            //     handleSaveResponses();
+            //     setIsTyping(false);
+            // }, 5000); // Save after 5 seconds of inactivity
         }
         return () => clearTimeout(typingTimeoutRef.current);
     }, [journalText, isTyping, questionNumber]);

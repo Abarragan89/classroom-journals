@@ -5,7 +5,7 @@ import { FaRegHeart } from "react-icons/fa6";
 import { BarLoader } from "react-spinners";
 import { ResponseComment } from "@/types";
 import { Textarea } from "@/components/ui/textarea";
-import { formatDateMonthDayYear } from "@/lib/utils";
+import { checkCommentCoolDown, formatDateMonthDayYear } from "@/lib/utils";
 import { ChevronLeft, ChevronDown, SendHorizonalIcon } from "lucide-react";
 import { replyComment, toggleCommentLike } from "@/lib/actions/comment.action";
 import CommentReplySection from "./comment-reply-section";
@@ -16,13 +16,15 @@ export default function SingleComment({
     responseId,
     studentId,
     sessionId,
-    discussionStatus
+    discussionStatus,
+    commentCoolDown,
 }: {
     commentData: ResponseComment,
     responseId: string,
     studentId: string,
     sessionId: string,
-    discussionStatus: string
+    discussionStatus: string,
+    commentCoolDown?: number,
 }) {
 
     const [showReplies, setShowReplies] = useState<boolean>(false)
@@ -46,20 +48,29 @@ export default function SingleComment({
 
     async function addCommentReplyHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
+        // Check cool down time
+        if (commentCoolDown) {
+            const remainingTime = checkCommentCoolDown(commentCoolDown)
+            console.log('reminig time', remainingTime)
+            if (remainingTime > 0) {
+                toast.error(`Cooldown in progress. dfsPlease wait ${remainingTime} seconds.`, {
+                    style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
+                })
+                return;
+            }
+        }
         try {
             setIsLoading(true)
             const replyCommentData = await replyComment(responseId, commentData.id, replyText.trim(), studentId, sessionId)
-            if ("error" in replyCommentData && replyCommentData.error) {
-                toast.error(replyCommentData.error, {
-                    style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
-                })
-                throw new Error('cool down period')
-            }
             setShowReplies(true)
             setReplyCommentState(prev => [replyCommentData as ResponseComment, ...prev])
             setTotalReplies(prev => prev + 1)
             setReplyText('')
             toast('Reply Added!')
+
+            // Update the time stamp in the local storage
+            const lastCommentStamp = new Date();
+            localStorage.setItem('lastCommentDate', lastCommentStamp.toString())
         } catch (error) {
             console.log('error adding comment ', error)
         } finally {

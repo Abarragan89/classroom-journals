@@ -2,7 +2,6 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge";
 import crypto from 'crypto';
 
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -82,4 +81,21 @@ export function generateRandom5DigitNumber(excludeArr: string[]) {
   } else {
     return randomNumber
   }
+}
+
+export function saveCoolDownToLocalStorage(cooldownTime: number) {
+  const cooldownEnd = Date.now() + cooldownTime * 1000; // Convert seconds to milliseconds
+  localStorage.setItem(`commentCoolDown`, cooldownEnd.toString());
+}
+
+export function checkCommentCoolDown(commentCoolDown: number) {
+  // Determine remainingTime for Cooldown
+  const currentTime = new Date();
+  let lastComment = localStorage.getItem('lastCommentDate') as string | Date;
+  // If no last comment time stamp, then let student comment
+  if (!lastComment) return 0
+  lastComment = new Date(lastComment)
+  const cooldownEnd = new Date(lastComment.getTime() + (commentCoolDown * 1000));
+  const remainingTime = Math.ceil((cooldownEnd.getTime() - currentTime.getTime()) / 1000); // Convert to seconds
+  return remainingTime
 }

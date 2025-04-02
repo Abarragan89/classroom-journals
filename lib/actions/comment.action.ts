@@ -10,26 +10,6 @@ export async function addComment(responseId: string, text: string, userId: strin
             return { success: false, message: "Missing required fields" };
         }
 
-        // determine if cool down period has been reached
-        const currentUser = await prisma.user.findUnique({
-            where: { id: userId },
-            select: {
-                commentCoolDown: true,
-                lastComment: true,
-            }
-        })
-
-        const currentTime = new Date();
-        if (currentUser?.lastComment) {
-            const cooldownEnd = new Date(currentUser.lastComment.getTime() + (currentUser.commentCoolDown * 1000));
-            const remainingTime = Math.ceil((cooldownEnd.getTime() - currentTime.getTime()) / 1000); // Convert to seconds
-
-            if (currentTime < cooldownEnd) {
-                throw new Error(`Cooldown in progress. Please wait ${remainingTime} seconds.`);
-            }
-        }
-
-
         const result = await prisma.$transaction(async (prisma) => {
             // Create the new comment
             const newComment = await prisma.comment.create({
@@ -85,7 +65,6 @@ export async function addComment(responseId: string, text: string, userId: strin
             const formattedComment = {
                 ...newComment,
                 user: {
-                    ...newComment.user,
                     username: decryptText(newComment.user.username as string, newComment.user.iv as string)
                 }
             };
@@ -136,25 +115,6 @@ export async function replyComment(responseId: string, parentId: string, text: s
     try {
         if (!parentId || !text || !userId || !responseId) {
             return { success: false, message: "Missing required fields" };
-        }
-
-        // determine if cool down period has been reached
-        const currentUser = await prisma.user.findUnique({
-            where: { id: userId },
-            select: {
-                commentCoolDown: true,
-                lastComment: true,
-            }
-        })
-
-        const currentTime = new Date();
-        if (currentUser?.lastComment) {
-            const cooldownEnd = new Date(currentUser.lastComment.getTime() + (currentUser.commentCoolDown * 1000));
-            const remainingTime = Math.ceil((cooldownEnd.getTime() - currentTime.getTime()) / 1000); // Convert to seconds
-
-            if (currentTime < cooldownEnd) {
-                throw new Error(`Cooldown in progress. Please wait ${remainingTime} seconds.`);
-            }
         }
 
         const result = await prisma.$transaction(async (prisma) => {
@@ -226,7 +186,6 @@ export async function replyComment(responseId: string, parentId: string, text: s
             const formattedComment = {
                 ...newComment,
                 user: {
-                    ...newComment.user,
                     username: decryptText(newComment.user.username as string, newComment.user.iv as string)
                 }
             };
@@ -260,7 +219,7 @@ export async function replyComment(responseId: string, parentId: string, text: s
                 }
             })
 
-            return formattedComment;
+            return formattedComment
         });
 
         return result;

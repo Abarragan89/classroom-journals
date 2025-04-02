@@ -31,7 +31,6 @@ model User {
   prompts         Prompt[] // Prompts are for teachers
   PromptCategory  PromptCategory[]
   // These are only related to students
-  lastComment     DateTime?
   commentCoolDown Int              @default(0)
 }
 

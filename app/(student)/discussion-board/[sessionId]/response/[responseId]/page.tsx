@@ -6,6 +6,7 @@ import { getSingleResponse } from "@/lib/actions/response.action"
 import { Response, ResponseComment, ResponseData, Session } from "@/types";
 import { auth } from "@/auth";
 import { notFound } from "next/navigation";
+import { prisma } from "@/db/prisma";
 
 
 export default async function SingleResponse({
@@ -23,6 +24,16 @@ export default async function SingleResponse({
     const response = await getSingleResponse(responseId) as unknown as Response
 
     const promptStatus = response?.promptSession?.status
+
+    // Get Data to find out if cooldown time is in effect
+    const { commentCoolDown, lastComment } = await prisma.user.findUnique({
+        where: { id: studentId },
+        select: {
+            commentCoolDown: true,
+            lastComment: true
+        }
+    }) as { commentCoolDown: number, lastComment: Date };
+
 
     return (
         <div className="max-w-[700px] px-3 mx-auto">
@@ -47,6 +58,7 @@ export default async function SingleResponse({
                 studentId={studentId}
                 sessionId={sessionId}
                 discussionStatus={promptStatus as string}
+                commentCoolDown={Number(commentCoolDown)}
             />
         </div>
     )
