@@ -8,9 +8,13 @@ import { FaRegHeart } from "react-icons/fa6";
 export default function CommentReplySection({
     replyCommentData,
     studentId,
+    isTeacherView,
+    deleteCommentHandler
 }: {
     replyCommentData: ResponseComment,
-    studentId: string
+    studentId: string,
+    isTeacherView: boolean,
+    deleteCommentHandler: (commentId: string) => void
 }) {
 
     const [isLikedByUser, setIsLikeByUser] = useState<boolean>(false)
@@ -59,6 +63,15 @@ export default function CommentReplySection({
                         <p className="leading-none text-[.95rem] text-input">{formatDateMonthDayYear(replyCommentData?.createdAt)}</p>
                     </div>
                     <div className="flex items-center text-primary">
+                        {isTeacherView &&
+                            <p
+                                onClick={() => deleteCommentHandler(replyCommentData.id)}
+                                className="text-destructive mr-3 text-sm hover:cursor-pointer hover:underline"
+                            >
+                                Delete
+                            </p>
+
+                        }
                         {isLikedByUser ?
                             <FaHeart
                                 onClick={() => toggleCommentLikeHandler('remove', replyCommentData?.id)}

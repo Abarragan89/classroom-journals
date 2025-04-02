@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { BarLoader } from "react-spinners";
 import { SendHorizonalIcon } from "lucide-react";
 import { ResponseComment } from "@/types";
-import { addComment } from "@/lib/actions/comment.action";
+import { addComment, deleteComment } from "@/lib/actions/comment.action";
 import SingleComment from "./single-comment";
 import { toast } from "sonner";
 import { checkCommentCoolDown } from "@/lib/utils";
@@ -16,13 +16,15 @@ export default function CommentSection({
     sessionId,
     discussionStatus,
     commentCoolDown,
+    isTeacherView = false
 }: {
     comments: ResponseComment[],
     studentId: string,
     responseId: string,
     sessionId: string,
     discussionStatus: string,
-    commentCoolDown?: number
+    commentCoolDown?: number,
+    isTeacherView?: boolean
 }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -57,6 +59,21 @@ export default function CommentSection({
             setIsLoading(false)
         }
     }
+
+    async function deleteCommentHandler(commendId: string) {
+        try {
+            const response = await deleteComment(commendId)
+            if (response.success) {
+                setAllComments(prev => prev.filter(comment => comment.id !== commendId))
+                toast.error(`Comment Deleted`, {
+                    style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
+                })
+            }
+        } catch (error) {
+            console.log('error deleting comment')
+        }
+    }
+
 
     return (
         <section className="relative mx-auto" id="comment-section-main">
@@ -107,6 +124,8 @@ export default function CommentSection({
                     sessionId={sessionId}
                     discussionStatus={discussionStatus}
                     commentCoolDown={commentCoolDown}
+                    deleteCommentHandler={deleteCommentHandler}
+                    isTeacherView={isTeacherView}
                 />
             ))}
         </section>

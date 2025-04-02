@@ -283,3 +283,26 @@ export async function toggleCommentLike(commentId: string, userId: string) {
         return { success: false, message: "Error fetching prompts. Try again." };
     }
 }
+
+// Delete a comment
+export async function deleteComment(commentId: string) {
+    try {
+        if (!commentId) {
+            throw new Error('comment id is required')
+        }
+
+        await prisma.comment.delete({
+            where: { id: commentId }
+        })
+
+        return { success: true, message: "comment deleted" };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+        return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}

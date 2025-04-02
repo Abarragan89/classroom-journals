@@ -7,7 +7,7 @@ import { ResponseComment } from "@/types";
 import { Textarea } from "@/components/ui/textarea";
 import { checkCommentCoolDown, formatDateMonthDayYear } from "@/lib/utils";
 import { ChevronLeft, ChevronDown, SendHorizonalIcon } from "lucide-react";
-import { replyComment, toggleCommentLike } from "@/lib/actions/comment.action";
+import { deleteComment, replyComment, toggleCommentLike } from "@/lib/actions/comment.action";
 import CommentReplySection from "./comment-reply-section";
 import { toast } from "sonner";
 
@@ -18,6 +18,8 @@ export default function SingleComment({
     sessionId,
     discussionStatus,
     commentCoolDown,
+    isTeacherView,
+    deleteCommentHandler
 }: {
     commentData: ResponseComment,
     responseId: string,
@@ -25,6 +27,8 @@ export default function SingleComment({
     sessionId: string,
     discussionStatus: string,
     commentCoolDown?: number,
+    isTeacherView: boolean,
+    deleteCommentHandler: (commentId: string) => void
 }) {
 
     const [showReplies, setShowReplies] = useState<boolean>(false)
@@ -100,6 +104,21 @@ export default function SingleComment({
         }
     }
 
+    async function deleteReplyCommentHandler(commendId: string) {
+        try {
+            const response = await deleteComment(commendId)
+            if (response.success) {
+                setReplyCommentState(prev => prev.filter(comment => comment.id !== commendId))
+                toast.error(`Comment Deleted`, {
+                    style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
+                })
+            }
+        } catch (error) {
+            console.log('error deleting comment')
+        }
+    }
+
+
     return (
         <div className="mb-10 mx-4">
             <div className="flex items-center">
@@ -112,6 +131,15 @@ export default function SingleComment({
                         <p className="leading-none text-[.95rem] text-input">{formatDateMonthDayYear(commentData?.createdAt)}</p>
                     </div>
                     <div className="flex items-center text-primary">
+                        {isTeacherView &&
+                            <p
+                                onClick={() => deleteCommentHandler(commentData.id)}
+                                className="text-destructive mr-3 text-sm hover:cursor-pointer hover:underline"
+                            >
+                                Delete
+                            </p>
+
+                        }
                         {isLikedByUser ?
                             <FaHeart
                                 onClick={() => toggleCommentLikeHandler('remove', commentData?.id, studentId)}
@@ -206,6 +234,8 @@ export default function SingleComment({
                             key={index}
                             replyCommentData={reply}
                             studentId={studentId}
+                            isTeacherView={isTeacherView}
+                            deleteCommentHandler={deleteReplyCommentHandler}
                         />
                     ))}
                 </div>
