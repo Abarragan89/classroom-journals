@@ -51,7 +51,6 @@ export default function SingleComment({
         // Check cool down time
         if (commentCoolDown) {
             const remainingTime = checkCommentCoolDown(commentCoolDown)
-            console.log('reminig time', remainingTime)
             if (remainingTime > 0) {
                 toast.error(`Cooldown in progress. dfsPlease wait ${remainingTime} seconds.`, {
                     style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }

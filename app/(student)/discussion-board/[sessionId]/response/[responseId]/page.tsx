@@ -26,13 +26,12 @@ export default async function SingleResponse({
     const promptStatus = response?.promptSession?.status
 
     // Get Data to find out if cooldown time is in effect
-    const { commentCoolDown, lastComment } = await prisma.user.findUnique({
+    const { commentCoolDown } = await prisma.user.findUnique({
         where: { id: studentId },
         select: {
             commentCoolDown: true,
-            lastComment: true
         }
-    }) as { commentCoolDown: number, lastComment: Date };
+    }) as { commentCoolDown: number };
 
 
     return (
