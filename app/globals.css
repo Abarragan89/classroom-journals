@@ -43,7 +43,7 @@
     --secondary: hsl(206, 68%, 20%);
     --secondary-foreground: hsl(210 40% 98%);
     --muted: hsl(227, 15%, 55%);
-    --muted-foreground: hsl(0, 2%, 19%);
+    --muted-foreground: hsl(0, 0%, 59%);
     --card: hsl(220.9 39.3% 11%);
     --card-foreground: hsl(212.7 26.8% 83.9%);
     --accent: hsl(216, 3%, 28%);
@@ -127,8 +127,8 @@
     --sidebar-foreground: hsl(330, 80%, 95%);
     --sidebar-primary: hsl(340, 80%, 60%);
     --sidebar-primary-foreground: hsl(0, 0%, 100%);
-    --sidebar-accent: hsl(330, 70%, 80%);
-    --sidebar-accent-foreground: hsl(330, 20%, 20%);
+    --sidebar-accent: hsl(322, 94%, 27%);
+    --sidebar-accent-foreground: hsl(330, 46%, 64%);
     --sidebar-border: hsl(330, 40%, 50%);
     --sidebar-ring: hsl(340, 80%, 50%);
     --success: hsl(129, 72%, 31%);
