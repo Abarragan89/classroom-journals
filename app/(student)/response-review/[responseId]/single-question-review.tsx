@@ -52,7 +52,7 @@ export default function SingleQuestionReview({
     console.log("allquesitons", allQuestions)
 
     return (
-        <div className="w-full max-w-[900px] mx-auto relative px-10 mt-10">
+        <div className="w-full max-w-[900px] mx-auto relative px-5 mt-10">
             {isSubmittable &&
                 <Button
                     onClick={() => updateResponsesHandler(allQuestions)}

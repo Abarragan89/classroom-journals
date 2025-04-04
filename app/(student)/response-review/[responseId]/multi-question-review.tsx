@@ -55,7 +55,7 @@ export default function MultiQuestionReview({
     };
 
     return (
-        <div className="w-full max-w-[900px] mx-auto relative px-10">
+        <div className="w-full max-w-[900px] mx-auto relative px-5">
             <div className="flex-between mt-5">
                 {showGrades && (
                     <p className='font-bold text-right'>Grade: <span className="text-success">{responsePercentage(allQuestions)}</span></p>
