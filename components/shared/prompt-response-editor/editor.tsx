@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import { KeyboardIcon } from "lucide-react";
 import { useRef } from "react";
 
 export default function Editor({
@@ -81,6 +83,7 @@ export default function Editor({
         setCursorIndex(updatedCursor);
         // setIsTyping(true);
     };
+
     return (
         <div className={`${isInReview ? '' : 'mb-5'} w-full mx-auto flex flex-col items-center relative`}>
             <div
@@ -104,10 +107,8 @@ export default function Editor({
                 </pre>
             </div>
             {!isInReview && (
-                <div
-                    onClick={handleEditorClick}
-                    className="absolute top-0 left-0 right-0 bottom-0"
-                >
+                <div>
+                    <Button onClick={handleEditorClick}><KeyboardIcon /></Button>
                     <p className="text-sm text-center mt-2 italic">click in the box to start typing</p>
                     <input
                         autoCapitalize="none"
