@@ -1,4 +1,10 @@
 import { useRef } from "react";
+import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
+import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import { MdOutlineSubdirectoryArrowLeft } from "react-icons/md";
+
 
 export default function Editor({
     journalText,
@@ -29,6 +35,7 @@ export default function Editor({
             return;
         }
 
+        console.log('last jorunal text', journalText.slice(-1))
         let updatedText = journalText;
         let updatedCursor = cursorIndex;
 
@@ -38,7 +45,7 @@ export default function Editor({
         } else if (e.key === "Backspace" && cursorIndex > 0) {
             updatedText = journalText.slice(0, cursorIndex - 1) + journalText.slice(cursorIndex);
             updatedCursor--;
-        } else if (e.key === "Enter") {
+        } else if (e.key === "Enter" && !journalText.endsWith("\n\n")) {
             updatedText = journalText.slice(0, cursorIndex) + "\n\n" + journalText.slice(cursorIndex);
             updatedCursor += 2;
         } else if (e.key === "ArrowLeft" && cursorIndex > 0) {
@@ -48,32 +55,46 @@ export default function Editor({
         } else {
             return;
         }
-
+        console.log('journal text ', journalText)
         setJournalText(updatedText);
         setCursorIndex(updatedCursor);
     };
 
-    // Handle mobile input (captures text input)
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setJournalText(e.target.value);
-        setCursorIndex(e.target.value.length);
-    };
+    function moveCursor(spaces: number, direction: string) {
+        if (direction === 'back' && cursorIndex > 0) {
+            setCursorIndex(prev => prev - spaces >= 0 ? prev - spaces : 0)
+        } else if (direction === 'forward' && cursorIndex < journalText.length) {
+            setCursorIndex(prev => prev + spaces <= journalText.length ? prev + spaces : journalText.length)
+        }
+        hiddenInputRef?.current?.focus()
+    }
+
+    function makeNewParagraph() {
+        let updatedText = journalText;
+        let updatedCursor = cursorIndex;
+        if (!journalText.endsWith("\n\n")) {
+            updatedText = journalText.slice(0, cursorIndex) + "\n\n" + journalText.slice(cursorIndex);
+            updatedCursor += 2;
+        }
+        setJournalText(updatedText);
+        setCursorIndex(updatedCursor);
+        hiddenInputRef?.current?.focus()
+    }
 
     return (
-        <div className={`${isInReview ? '' : 'mb-5'} w-full mx-auto flex flex-col items-center`}>
+        <div className={`${isInReview ? '' : 'mb-5'} w-full mx-auto flex flex-col items-center relative`}>
             <div
                 ref={inputRef}
                 tabIndex={0}
-                onKeyDown={handleKeyDown}
                 onClick={() => hiddenInputRef.current?.focus()} // Focus input when div is clicked
-                className={`mx-auto w-full rounded-md outline-none
+                className={`mx-auto w-full rounded-md outline-none mt-5
                     ${jotType === 'single-question' ? 'min-h-48 ' : ''}
-                    ${isInReview ? '' : 'border-2 border-bg-accent '}
+                    ${isInReview ? '' : 'border-2 border-bg-accent'}
                 `}
             >
-                <pre className="whitespace-pre-wrap w-full text-lg p-5">
+                <pre className="whitespace-pre-wrap w-full p-5">
                     {journalText.slice(0, cursorIndex)}
-                    <span className="bg-transparent border-b border-b-primary">
+                    <span className="bg-transparent border-b-2 border-b-primary">
                         {journalText[cursorIndex] === "\n" ? "\n\u00A0" : journalText[cursorIndex] || "\u00A0"}
                     </span>
                     {journalText.slice(cursorIndex + 1)}
@@ -83,15 +104,48 @@ export default function Editor({
             <input
                 ref={hiddenInputRef}
                 type="text"
-                value={journalText}
-                onChange={handleInputChange}
+                onKeyDown={handleKeyDown} // ← use this
                 autoComplete="off"
                 autoCorrect="off"
                 spellCheck="false"
                 className="absolute opacity-0 pointer-events-none"
             />
+            {!isInReview && <p className="text-xs text-center mt-1 italic absolute">Click in the box to start typing</p>}
+            {!isInReview && <p className="text-xs mt-1 flex">Use ARROW keys to move cursor (Mobile controls below):</p>}
+            <div className="flex-between mt-2 w-full">
+                <div className="flex">
+                    <div className="flex-start">
+                        <MdKeyboardDoubleArrowLeft
+                            onClick={() => moveCursor(10, 'back')}
+                            size={25}
+                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-input"
+                        />
+                        <MdKeyboardArrowLeft
+                            onClick={() => moveCursor(1, 'back')}
+                            size={25}
+                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-input"
+                        />
+                    </div>
+                    <div className="flex-start">
+                        <MdKeyboardArrowRight
+                            onClick={() => moveCursor(1, 'forward')}
+                            size={25}
+                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-input"
+                        />
+                        <MdKeyboardDoubleArrowRight
+                            onClick={() => moveCursor(10, 'forward')}
+                            size={25}
+                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-input"
+                        />
+                    </div>
+                </div>
+                <MdOutlineSubdirectoryArrowLeft
+                    onClick={makeNewParagraph}
+                    className="border border-border rounded-sm mx-3 w-20 hover:cursor-pointer hover:text-input"
+                    size={25}
+                />
+            </div>
 
-            {!isInReview && <p className="text-sm text-center mt-2 italic">Click in the box to start typing</p>}
         </div>
     );
 }

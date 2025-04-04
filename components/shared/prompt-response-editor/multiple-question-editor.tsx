@@ -159,7 +159,7 @@ export default function MultipleQuestionEditor({
         <div className="w-full max-w-[900px] mx-auto relative px-5">
             <p className="absolute -top-16 right-0 text-sm">Question: {Number(questionNumber) + 1} / {questions.length}</p>
             <ArrowBigLeft className="absolute -top-16 left-0 text-sm hover:cursor-pointer hover:text-accent" onClick={() => router.back()} />
-            <p className="h3-bold mt-20 mb-12 w-full mx-auto text-center">{currentQuestion}</p>
+            <p className="h3-bold mt-16 mb-5 w-full mx-auto text-center">{currentQuestion}</p>
             <Editor
                 setJournalText={setJournalText}
                 journalText={journalText}

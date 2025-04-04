@@ -47,7 +47,7 @@ export default async function MyWork() {
                                 {/* only show public or private if it is a blog, otherwise don't render */}
                                 <article className='bg-card flex-start opacity-80 px-5 py-4 rounded-lg mb-4 border border-border hover:cursor-pointer hover:opacity-100'>
                                     <p
-                                        className='text-2xl bg-input text-background p-2 px-4 rounded-full mr-3'
+                                        className='text-2xl font-bold bg-input text-background p-1 px-3 rounded-full mr-3'
                                     >
                                         {response?.promptSession?.promptType === 'single-question' ? 'B' : 'A'}
                                     </p>

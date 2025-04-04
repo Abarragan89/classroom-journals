@@ -28,7 +28,7 @@ export default function MultiQuestionReview({
     // Store full question objects, modifying only answers
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
     const [cursorIndexes, setCursorIndexes] = useState<Record<number, number>>(() =>
-        Object.fromEntries(questions.map((q, i) => [i, (q.answer || "").length]))
+        Object.fromEntries(questions?.map((q, i) => [i, (q.answer || "").length]))
     );
 
     async function updateResponsesHandler(responseData: ResponseData[]) {
