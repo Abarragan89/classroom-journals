@@ -4,7 +4,7 @@ import Header from "@/components/shared/header";
 import { Session } from "@/types";
 import { notFound } from "next/navigation";
 
-export default async function StudentDashboard() {
+export default async function StudentGrades() {
 
     const session = await auth() as Session
 

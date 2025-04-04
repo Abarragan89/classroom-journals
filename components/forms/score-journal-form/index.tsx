@@ -5,10 +5,10 @@ import { toast } from "sonner";
 
 export default function ScoreJournalForm({
     currentScore,
-    responseId
+    responseId,
 }: {
     currentScore: number | string,
-    responseId: string
+    responseId: string,
 }) {
 
 
@@ -23,7 +23,7 @@ export default function ScoreJournalForm({
     }
 
     return (
-        <div className="flex-end w-1/4 absolute right-10 -top-8">
+        <div className="flex-end w-1/4 absolute right-3 -top-8">
             <Input
                 type="text"
                 name="journalScore"
@@ -34,7 +34,7 @@ export default function ScoreJournalForm({
                 onBlur={(e) => updateResponseScore(parseInt(e.target.value))}
             />
             <p className="mx-2 text-md">/</p>
-            <p className="text-md">100 </p>
+            <p className="text-md mr-5">100 </p>
         </div>
     )
 }

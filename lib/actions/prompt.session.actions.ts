@@ -59,6 +59,12 @@ export async function getSinglePromptSession(promptId: string) {
                 responses: {
                     select: {
                         notifications: true,
+                        likeCount: true,
+                        _count: {
+                            select: {
+                                comments: true
+                            }
+                        },
                         id: true,
                         student: {
                             select: {

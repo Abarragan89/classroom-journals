@@ -7,10 +7,10 @@ import { ResponseData } from "@/types"
 
 export default function GradeResponseCard({
     questionsAndAnswers,
-    responseId
+    responseId,
 }: {
     questionsAndAnswers: ResponseData[],
-    responseId: string
+    responseId: string,
 }) {
 
     const [responseArr, setResponseArr] = useState<ResponseData[]>(questionsAndAnswers)
@@ -49,29 +49,31 @@ export default function GradeResponseCard({
 
     return (
         <>
-            {responseArr?.length > 0 && responseArr.map((responseData: ResponseData, index: number) => (
-                <Card className='w-full p-4 space-y-2 max-w-[700px] mx-auto' key={index}>
-                    <div className="flex-between text-sm">
-                        <p className='ml-2'> Marked As:
-                            {renderScoreUIText(responseData.score)}
-                        </p>
-                        <GradingPanel
-                            currentScore={responseData.score}
-                            responseId={responseId}
-                            questionNumber={index}
-                            updateScoreUIHandler={updateScoreUIHandler}
-                        />
-                    </div>
-                    <Separator />
-                    <CardTitle className='p-2 leading-snug text-center'>{responseData.question}</CardTitle>
-                    <CardContent className='p-3 pt-0'>
-                        <p className='ml-1 text-sm'>Answer:</p>
-                        <div className='bg-background p-2 m-0 rounded-md'>
-                            {responseData.answer}
+            <div className="mt-8 flex flex-wrap justify-start gap-10">
+                {responseArr?.length > 0 && responseArr.map((responseData: ResponseData, index: number) => (
+                    <Card className='w-full p-4 space-y-2 max-w-[700px] mx-auto' key={index}>
+                        <div className="flex-between text-sm">
+                            <p className='ml-2'> Marked As:
+                                {renderScoreUIText(responseData.score)}
+                            </p>
+                            <GradingPanel
+                                currentScore={responseData.score}
+                                responseId={responseId}
+                                questionNumber={index}
+                                updateScoreUIHandler={updateScoreUIHandler}
+                            />
                         </div>
-                    </CardContent>
-                </Card>
-            ))}
+                        <Separator />
+                        <CardTitle className='p-2 leading-snug text-center'>{responseData.question}</CardTitle>
+                        <CardContent className='p-3 pt-0'>
+                            <p className='ml-1 mb-1 text-sm font-bold'>Answer:</p>
+                            <div className='bg-background px-4  py-3 m-0 rounded-md'>
+                                {responseData.answer}
+                            </div>
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
         </>
     )
 }

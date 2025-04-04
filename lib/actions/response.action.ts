@@ -2,6 +2,7 @@
 import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
 import { ResponseData } from "@/types";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 export async function createStudentResponse(prevState: unknown, formData: FormData) {
     try {
@@ -73,7 +74,7 @@ export async function gradeStudentResponse(responseId: string, question: number,
     }
 }
 
-// Get a single response with comments
+// Get a single response with comments for blog Display
 export async function getSingleResponse(responseId: string) {
     try {
         if (!responseId) {
@@ -87,6 +88,7 @@ export async function getSingleResponse(responseId: string) {
                 likeCount: true,
                 submittedAt: true,
                 response: true,
+                isSubmittable: true,
                 _count: {
                     select: { comments: true }
                 },
@@ -299,6 +301,150 @@ export async function toggleResponseLike(responseId: string, userId: string) {
                 });
             }
         });
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+
+        return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
+
+// Get All responses from a single student
+export async function getSingleStudentResponses(studentId: string) {
+    try {
+        const studentResponses = await prisma.response.findMany({
+            where: {
+                studentId
+            },
+            select: {
+                id: true,
+                response: true,
+                submittedAt: true,
+                likeCount: true,
+                _count: {
+                    select: {
+                        comments: true,
+                    }
+                },
+                isSubmittable: true,
+                promptSession: {
+                    select: {
+                        promptType: true,
+                        title: true,
+                        areGradesVisible: true,
+                    }
+                }
+            },
+            orderBy: [
+                { isSubmittable: 'desc' }, // Puts submittable responses (true) first
+                { submittedAt: 'desc' }    // Orders by submittedAt date (latest first)
+            ]
+        })
+
+        return studentResponses
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+
+        return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
+
+// Get Single Response for Resubmission
+export async function getSingleResponseForReview(responseId: string) {
+    try {
+        const studentResponse = await prisma.response.findUnique({
+            where: { id: responseId },
+            select: {
+                id: true,
+                response: true,
+                isSubmittable: true,
+                promptSession: {
+                    select: {
+                        promptType: true,
+                        questions: true,
+                        areGradesVisible: true,
+                        title: true
+                    }
+                }
+            }
+        })
+        return studentResponse
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+        return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
+
+// Get Single Response for Resubmission
+export async function updateASingleResponse(responseId: string, responseData: ResponseData[], submittedAt: Date) {
+    try {
+        await prisma.response.update({
+            where: { id: responseId },
+            data: {
+                response: responseData as unknown as JsonValue[],
+                isSubmittable: false,
+                submittedAt
+            }
+        })
+        return { success: true, message: "Error fetching prompts. Try again." };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+
+        return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
+
+// Get toggle return state of a single response
+export async function toggleReturnStateStatus(responseId: string, isSubmittable: boolean) {
+    try {
+        await prisma.response.update({
+            where: { id: responseId },
+            data: {
+                isSubmittable: isSubmittable
+            }
+        })
+        return { success: true, message: "Error fetching prompts. Try again." };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+
+        return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
+
+// Get toggle return state of a single response
+export async function toggleHideShowGrades(promptSessionId: string, areGradesVisible: boolean) {
+    try {
+        await prisma.promptSession.update({
+            where: { id: promptSessionId },
+            data: {
+                areGradesVisible
+            }
+        })
+        return { success: true, message: "Error toggling show/hide grades update. Try again." };
     } catch (error) {
         if (error instanceof Error) {
             console.log("Error fetching prompts:", error.message);

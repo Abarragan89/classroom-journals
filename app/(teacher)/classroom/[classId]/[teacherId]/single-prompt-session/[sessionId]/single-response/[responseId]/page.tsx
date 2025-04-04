@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { Response, ResponseComment, ResponseData } from '@/types';
 import { getAllResponsesFromPompt, getSingleResponse } from '@/lib/actions/response.action';
 import { StudentComboBox } from './student-combobox';
+import HandleToggleReturnStateBtn from '@/components/buttons/handle-toggle-return-state-btn';
 
 
 export default async function SingleResponse({
@@ -21,7 +22,7 @@ export default async function SingleResponse({
         return <div>No response ID provided</div>;
     }
 
-    const response = await getSingleResponse(responseId) as unknown as Response
+    const response = await getSingleResponse(responseId) as unknown as Response;
     const classRosterAndScores = await getAllResponsesFromPompt(sessionId) as unknown as Response[]
 
     const rosterAlphabetized = classRosterAndScores.sort((a, b) => {
@@ -39,14 +40,18 @@ export default async function SingleResponse({
 
     return (
         <div className='mb-10'>
-            <div className="mb-10 space-y-1">
+            <div className="mb-5 space-y-3">
 
                 <StudentComboBox
                     responses={rosterAlphabetized}
                 />
                 <p className='text-input'>Submitted: {formatDateShort(response?.submittedAt)}</p>
+                <HandleToggleReturnStateBtn
+                    responseId={responseId}
+                    initialSubmitStatus={response?.isSubmittable}
+                />
             </div>
-            <div className="flex flex-wrap justify-start gap-10 max-w-[1200px] mx-auto">
+            <div className="max-w-[1200px] mx-auto relative">
                 {isMultiQuestion ? (
                     <GradeResponseCard
                         questionsAndAnswers={questionsAndAnswers}

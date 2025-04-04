@@ -37,7 +37,7 @@ export default async function CreatePrompt({
                     </>
                 ) : type === 'multi-question' ? (
                     <>
-                        <h1 className="h1-bold mt-5">New Multi-Question</h1>
+                        <h1 className="h1-bold mt-5">New Assessment</h1>
                         <div className="max-w-[600px] mx-auto mt-5">
                             <MultiPromptForm teacherId={teacherId} />
                         </div>

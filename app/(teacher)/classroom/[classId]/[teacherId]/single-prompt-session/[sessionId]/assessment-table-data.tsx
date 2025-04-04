@@ -10,6 +10,7 @@ import { formatDateShort } from "@/lib/utils";
 import { Response, ResponseData, User } from "@/types";
 import { ClipboardCheckIcon } from "lucide-react";
 import Link from "next/link";
+import { responsePercentage, responseScore } from "@/lib/utils";
 
 export default function AssessmentTableData({
     studentSubmittedWithFormattedNamed,
@@ -17,19 +18,15 @@ export default function AssessmentTableData({
     classId,
     teacherId,
     notSubmitted,
-    responseScore,
-    responsePercentage
 }: {
     studentSubmittedWithFormattedNamed: Response[];
     promptSessionId: string;
     classId: string;
     teacherId: string;
     notSubmitted: User[];
-    responseScore: (response: ResponseData[]) => string;
-    responsePercentage: (response: ResponseData[]) => string;
 }) {
     return (
-        <Table className="mt-5">
+        <Table className="mt-3">
             <TableHeader>
                 <TableRow>
                     <TableHead className="text-right">&nbsp;</TableHead>

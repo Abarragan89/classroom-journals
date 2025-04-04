@@ -161,7 +161,7 @@ export default function MultipleQuestionEditor({
             <Editor
                 setJournalText={setJournalText}
                 journalText={journalText}
-                setIsTyping={setIsTyping}
+                // setIsTyping={setIsTyping}
                 cursorIndex={cursorIndex}
                 setCursorIndex={setCursorIndex}
                 inputRef={inputRef}

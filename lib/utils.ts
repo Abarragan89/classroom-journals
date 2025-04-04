@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge";
 import crypto from 'crypto';
+import { ResponseData } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -106,4 +107,30 @@ export function checkCommentCoolDown(commentCoolDown: number) {
   } else if (remainingTime < 60) {
     return { remaining: `${remainingTime} seconds`, isDisabled: true }
   }
+}
+
+export function responsePercentage(response: ResponseData[]) {
+  // Dont get percentage if not all responses are not graded. 
+  const isGraded = response.every(entry => entry.score !== undefined)
+  if (!isGraded) {
+    return (
+      'N/A'
+    )
+  } else {
+    const totalQuestions = response.length
+    const score = response.reduce((accum, currVal) => currVal.score + accum, 0)
+    return `${(Math.round((score / totalQuestions) * 100)).toString()}%`
+  }
+}
+
+export function responseScore(response: ResponseData[]) {
+  const isGraded = response.every(entry => entry.score !== undefined)
+  if (!isGraded) {
+    return (
+      'Not Graded'
+    )
+  }
+  const totalQuestions = response.length
+  const score = response.reduce((accum, currVal) => currVal.score + accum, 0)
+  return `${score} / ${totalQuestions}`
 }

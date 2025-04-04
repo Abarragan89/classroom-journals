@@ -16,7 +16,7 @@
     --card-foreground: hsl(24, 85%, 11%);
     --accent: hsl(203, 38%, 36%);
     --accent-foreground: hsl(0, 0%, 100%);
-    --border: hsl(206, 15%, 43%);
+    --border: hsla(192, 31%, 25%, 0.281);
     --input: hsl(70, 4%, 29%);
     --ring: hsl(230, 76%, 19%);
     --destructive: hsl(0, 79%, 41%);
@@ -29,8 +29,8 @@
     --sidebar-foreground: hsl(240 4.8% 95.9%);
     --sidebar-primary: hsl(224, 44%, 46%);
     --sidebar-primary-foreground: hsl(0 0% 100%);
-    --sidebar-accent: hsl(60, 2%, 79%);
-    --sidebar-accent-foreground: hsl(240, 74%, 15%);
+    --sidebar-accent: hsl(60, 5%, 55%);
+    --sidebar-accent-foreground: hsl(67, 54%, 91%);
     --sidebar-border: hsl(240 3.7% 15.9%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 72%, 31%);
@@ -101,7 +101,7 @@
     --success: hsl(129, 80%, 43%);
   }
   .silva {
-    --background: hsl(329, 49%, 90%);
+    --background: hsl(330, 60%, 94%);
     /* --background: hsl(330, 50%, 95%); */
     --foreground: hsl(0, 72%, 27%);
     --primary: hsl(340, 65%, 48%); /* Hot Pink */

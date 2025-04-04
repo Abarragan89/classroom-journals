@@ -31,7 +31,8 @@ model User {
   prompts         Prompt[] // Prompts are for teachers
   PromptCategory  PromptCategory[]
   // These are only related to students
-  commentCoolDown Int?              @default(0)
+  lastComment     DateTime?
+  commentCoolDown Int?             @default(0)
 }
 
 model Account {
@@ -170,33 +171,35 @@ model PromptCategory {
 }
 
 model PromptSession {
-  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  promptId   String?    @db.Uuid
-  title      String
-  questions  Json // Single array of question objects
-  promptType String // single-question or multi-question
-  isPublic   Boolean    @default(true)
-  assignedAt DateTime   @default(now())
-  classId    String     @db.Uuid // relate it to which side it is attached to
-  status     String     @default("open") // e.g., "open", "closed"
-  responses  Response[]
+  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  promptId         String?    @db.Uuid
+  title            String
+  questions        Json // Single array of question objects
+  promptType       String // single-question or multi-question
+  isPublic         Boolean    @default(true)
+  assignedAt       DateTime   @default(now())
+  areGradesVisible Boolean    @default(false)
+  classId          String     @db.Uuid // relate it to which side it is attached to
+  status           String     @default("open") // e.g., "open", "closed"
+  responses        Response[]
   // Relationship
-  prompt     Prompt?    @relation(fields: [promptId], references: [id], onDelete: SetNull)
-  class      Classroom  @relation(fields: [classId], references: [id], onDelete: Cascade)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  prompt           Prompt?    @relation(fields: [promptId], references: [id], onDelete: SetNull)
+  class            Classroom  @relation(fields: [classId], references: [id], onDelete: Cascade)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 }
 
 model Response {
   id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   promptSessionId String         @db.Uuid
   studentId       String         @db.Uuid
-  response        Json //stores questions, answers, and score (score is Correct, 1/2 or wrong)
+  response        Json //stores questions, answers, and score (score is Correct, 1/2 or wrong) Arrary of objects
   submittedAt     DateTime // Nullable in case they haven't submitted yet
   likeCount       Int            @default(0)
   likes           ResponseLike[]
   notifications   Notification[]
   comments        Comment[]
+  isSubmittable   Boolean        @default(true)
   // Relationship
   promptSession   PromptSession  @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
   student         User           @relation(fields: [studentId], references: [id], onDelete: Cascade)

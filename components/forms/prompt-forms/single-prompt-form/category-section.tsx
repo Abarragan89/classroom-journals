@@ -5,9 +5,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Prompt, PromptCategory } from "@/types"
-import { Delete } from "lucide-react"
+import { Edit, Trash2Icon, X } from "lucide-react"
 import { useState } from "react"
-import { deletePromptCategory } from "@/lib/actions/prompt.categories"
+import { deletePromptCategory, editPromptCategory } from "@/lib/actions/prompt.categories"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 
 export default function CategorySection({
@@ -27,9 +28,11 @@ export default function CategorySection({
 }) {
 
     const [showDeleteCategoryModal, setShowDeleteCategoryModal] = useState<boolean>(false);
+    const [showEditCategoryModal, setShowEditCategoryModal] = useState<boolean>(false);
     const [promptId, setPromptId] = useState<string>('');
     const [promptName, setPromptName] = useState<string>('');
     const [userText, setUserText] = useState<string>('')
+    const [renamedCategory, setRenamedCategory] = useState<string>('')
 
     async function deleteCategoryHandler() {
         try {
@@ -42,8 +45,25 @@ export default function CategorySection({
         }
     }
 
-    function showModalHandler(id: string, name: string) {
+    async function editCategoryHandler() {
+        try {
+            await editPromptCategory(promptId, renamedCategory)
+            setCategories(prev => [...prev.map(category => category.id === promptId ? {...category, name: renamedCategory} : category)])
+            setPromptId('')
+            setShowEditCategoryModal(false)
+        } catch (error) {
+            console.log('error deleting category ', error)
+        }
+    }
+
+    function showDeleteModalHandler(id: string, name: string) {
         setShowDeleteCategoryModal(true);
+        setPromptId(id);
+        setPromptName(name)
+    }
+
+    function showEditModalHandler(id: string, name: string) {
+        setShowEditCategoryModal(true);
         setPromptId(id);
         setPromptName(name)
     }
@@ -51,7 +71,6 @@ export default function CategorySection({
     return (
         <>
             {/* Modal to confirm DELETE category */}
-
             <ResponsiveDialog
                 setIsOpen={setShowDeleteCategoryModal}
                 isOpen={showDeleteCategoryModal}
@@ -76,8 +95,36 @@ export default function CategorySection({
                         </Button>
                     </div>
                 </div>
-
             </ResponsiveDialog>
+
+            {/* Edit Category Modal */}
+            <ResponsiveDialog
+                setIsOpen={setShowEditCategoryModal}
+                isOpen={showEditCategoryModal}
+                title={`Edit Category Name`}
+                description="Confirm you want to edit this category"
+            >
+                <div className="items-center space-y-4 px-3 pb-2">
+                    <Input
+                        name="new-category-name"
+                        id="new-category-name"
+                        type="text"
+                        defaultValue={promptName}
+                        onChange={(e) => setRenamedCategory(e.target.value)}
+                    />
+                    <div className="flex-center">
+                        <Button
+                            disabled={renamedCategory === ``}
+
+                            onClick={editCategoryHandler}
+                        >
+                            Update Category
+                        </Button>
+                    </div>
+                </div>
+            </ResponsiveDialog>
+
+
 
             <p className="text-md font-bold">Category <span className="text-sm font-normal">(optional)</span></p>
             {/* Add category form */}
@@ -106,10 +153,21 @@ export default function CategorySection({
                             <div key={category.id} className="flex items-center space-x-2">
                                 <RadioGroupItem value={category.id} id={category.name} />
                                 <Label htmlFor={category.name}>{category.name}</Label>
-                                <Delete
-                                    onClick={() => showModalHandler(category.id, category.name)}
-                                    className="text-input hover:text-destructive hover:cursor-pointer"
-                                />
+
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        {/* Ellipse */}
+                                        <Edit className="hover:text-input hover:cursor-pointer" size={15} />
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuItem onClick={() => showEditModalHandler(category.id, category.name)} className="hover:cursor-pointer rounded-md">
+                                            <Edit />Edit
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => showDeleteModalHandler(category.id, category.name)} className="hover:cursor-pointer text-destructive rounded-md">
+                                            <Trash2Icon />Delete
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </div>
                         ))}
                     </RadioGroup>

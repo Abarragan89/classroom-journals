@@ -1,31 +1,38 @@
+import { useRef } from "react";
+
 export default function Editor({
     journalText,
     setJournalText,
-    setIsTyping,
+    // setIsTyping,
     cursorIndex,
     setCursorIndex,
     inputRef,
     jotType,
-    characterLimit
+    characterLimit,
+    isInReview = false
 }: {
     journalText: string;
     setJournalText: React.Dispatch<React.SetStateAction<string>>;
-    setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
+    // setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
     cursorIndex: number;
     setCursorIndex: React.Dispatch<React.SetStateAction<number>>;
     inputRef: React.RefObject<HTMLDivElement | null>;
     jotType?: string;
-    characterLimit?: number
+    characterLimit?: number,
+    isInReview?: boolean
 }) {
 
+    const keyboardInputRef = useRef<HTMLInputElement>(null);
+
     function removeExtraReturns(userText: string): string {
-        // I need to turn into array  `
-        for (const char of userText) {
-            if (char === '\n') {
-            }
-        }
-        return userText
+        return userText.replace(/\n{3,}/g, '\n\n');
     }
+
+    const handleEditorClick = () => {
+        if (!isInReview) {
+            keyboardInputRef.current?.focus();
+        }
+    };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         e.preventDefault(); // Prevent default behavior
@@ -72,17 +79,23 @@ export default function Editor({
         const formatteedText = removeExtraReturns(updatedText)
         setJournalText(formatteedText);
         setCursorIndex(updatedCursor);
-        setIsTyping(true);
+        // setIsTyping(true);
     };
     return (
-        <div className="mb-5 w-full mx-auto flex flex-col items-center">
+        <div className={`${isInReview ? '' : 'mb-5'} w-full mx-auto flex flex-col items-center relative`}>
             <div
                 ref={inputRef}
                 tabIndex={0}
                 onKeyDown={handleKeyDown}
-                className={`mx-auto ${jotType === 'single-question' ? 'min-h-48 ' : ''} w-full border-2 border-bg-accent rounded-md outline-none`}
+                className={`mx-auto w-full rounded-md outline-none
+                    ${jotType === 'single-question' ? 'min-h-48 ' : ''}
+                    ${isInReview ? '' : 'border-2 border-bg-accent '}
+                    `}
             >
-                <pre className="text-lg w-full p-5 whitespace-pre-wrap">
+                <pre className=
+                    {`whitespace-pre-wrap w-full
+                    ${isInReview ? 'text-md' : 'text-lg  p-5 '}
+                    `}>
                     {journalText.slice(0, cursorIndex)}
                     <span className="bg-transparent border-b border-b-primary">
                         {journalText[cursorIndex] === "\n" && journalText[cursorIndex] === "\n" ? "\n\u00A0" : journalText[cursorIndex] || "\u00A0"}
@@ -90,7 +103,21 @@ export default function Editor({
                     {journalText.slice(cursorIndex + 1)}
                 </pre>
             </div>
-            <p className="text-sm text-center mt-2 italic">click in the box to start typing</p>
+            {!isInReview && (
+                <div
+                    onClick={handleEditorClick}
+                >
+                    <p className="text-sm text-center mt-2 italic">click in the box to start typing</p>
+                    <input
+                        autoCapitalize="none"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        spellCheck={false}
+                        className="absolute opacity-0"
+                    />
+                </div>
+            )
+            }
         </div>
     )
 }

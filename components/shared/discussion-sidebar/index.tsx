@@ -12,17 +12,11 @@ import {
     SidebarSeparator,
 } from "@/components/ui/sidebar"
 
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip"
-
 import Link from "next/link"
 import { PromptSession } from "@/types"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
+import { Heart, MessageCircle } from "lucide-react"
 
 export function DiscussionSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & { prompt_data: PromptSession }) {
 
@@ -39,36 +33,29 @@ export function DiscussionSidebar({ ...props }: React.ComponentProps<typeof Side
 
     return (
         <Sidebar
-            collapsible='icon'
+            collapsible='offcanvas'
             {...props}>
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupLabel className="opacity-70">Bloggers</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {responses && responses?.map((response) => {
+                            {responses && responses?.sort((a, b) => b.likeCount - a.likeCount)?.map((response) => {
                                 return (
                                     <div key={response.id}>
-                                        <TooltipProvider>
-                                            <Tooltip>
-                                                <TooltipTrigger asChild>
-                                                    <SidebarMenuItem>
-                                                        <Link href={`${response.id}`} className="flex items-center gap-2 text-sidebar-accent-foreground">
-
-                                                            <SidebarMenuButton isActive={currentResponseId === response.id}>
-                                                                <span className="flex items-center gap-2 text-sidebar-accent-foreground">
-                                                                    <p className="text-xl w-7  mr-3">{response?.student?.username?.charAt(0)}</p>
-                                                                    {response?.student?.username}
-                                                                </span>
-                                                            </SidebarMenuButton>
-                                                        </Link>
-                                                    </SidebarMenuItem>
-                                                </TooltipTrigger>
-                                                <TooltipContent>
-                                                    <p>{response?.student?.username}</p>
-                                                </TooltipContent>
-                                            </Tooltip>
-                                        </TooltipProvider>
+                                        <SidebarMenuItem>
+                                            <Link href={`${response.id}`} className="flex items-center gap-2 text-sidebar-accent-foreground">
+                                                <SidebarMenuButton isActive={currentResponseId === response.id}>
+                                                    <span className="flex justify-between items-center gap-2">
+                                                        {response?.student?.username}
+                                                        <div className="flex items-baseline justify-between text-xs text-input space-x-2">
+                                                            <span className="flex">{response?.likeCount} <Heart className="ml-1" size={15} /></span>
+                                                            <span className="flex">{response?._count?.comments} <MessageCircle className="ml-1" size={13} /></span>
+                                                        </div>
+                                                    </span>
+                                                </SidebarMenuButton>
+                                            </Link>
+                                        </SidebarMenuItem>
                                     </div>
                                 );
                             })}

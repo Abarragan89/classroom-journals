@@ -26,7 +26,7 @@ export default function BlogTableData({
 
 }) {
     return (
-        <Table className="mt-5">
+        <Table className="mt-3">
             <TableHeader>
                 <TableRow>
                     <TableHead className="text-right">&nbsp;</TableHead>

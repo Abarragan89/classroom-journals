@@ -42,7 +42,7 @@ export default function DataClientWrapper({
                 </p>
                 <p className={chevronStyles} onClick={nextQuestionSet}>
                     < BiChevronRight size={25} />
-                </p>
+                </p> 
             </div>
             <div className="flex flex-col lg:flex-row lg:items-start ">
                 <div className="flex-1 w-[95%] mx-auto">

@@ -46,7 +46,6 @@ export default function AssignmentListItem({
                         </Link>
                     </TooltipTrigger>
                     <TooltipContent className='min-w-[200px] space-y-1 p-2'>
-                        {/* <p className='text-center underline mb-2'>{jotData.isPublic ? 'Public' : 'Private'} {type}</p> */}
                         <p><span className="font-bold">Category: </span> {jotData?.prompt?.category?.name ? jotData?.prompt?.category?.name : 'No Category'}</p>
                         <p><span className="font-bold">Submissions: </span>{jotData?.responses?.length} / {classSize}</p>
                     </TooltipContent>

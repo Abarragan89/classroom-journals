@@ -17,13 +17,15 @@ export default function AssignPromptForm({
     promptTitle,
     closeModal,
     updatePromptData,
-    classroomData
+    classroomData,
+    promptType,
 }: {
     promptId: string,
     promptTitle: string,
     closeModal: () => void,
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>,
     classroomData: Classroom[],
+    promptType: string
 }) {
     const [isPublic, setIsPublic] = useState<boolean>(true);
 
@@ -55,6 +57,8 @@ export default function AssignPromptForm({
             </Button>
         );
     }
+
+    console.log('pormpt data ', prompt)
 
     return (
         <form action={action} className="space-y-2">
@@ -89,34 +93,36 @@ export default function AssignPromptForm({
                     readOnly
                     hidden
                 />
-                <div className="flex items-center space-x-2">
-                    <Switch
-                        onCheckedChange={(e) => setIsPublic(e)}
-                        checked={isPublic}
-                    />
-                    <Label
-                        className="text-md ml-2"
-                    >
-                        Public
-                    </Label>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <CiCircleQuestion size={20} />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Responses are visible to everyone</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                    <input
-                        type='hidden'
-                        readOnly
-                        name='is-public'
-                        id='is-public'
-                        value={isPublic.toString()}
-                    />
-                </div>
+                {promptType === 'single-question' &&
+                    <div className="flex items-center space-x-2">
+                        <Switch
+                            onCheckedChange={(e) => setIsPublic(e)}
+                            checked={isPublic}
+                        />
+                        <Label
+                            className="text-md ml-2"
+                        >
+                            Public
+                        </Label>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <CiCircleQuestion size={20} />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Responses are visible to everyone</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                        <input
+                            type='hidden'
+                            readOnly
+                            name='is-public'
+                            id='is-public'
+                            value={isPublic.toString()}
+                        />
+                    </div>
+                }
                 <AssignButton />
                 {state && !state.success && (
                     <p className="text-center text-destructive">{state.message}</p>

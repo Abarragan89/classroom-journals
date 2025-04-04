@@ -70,8 +70,9 @@ export default function OptionsMenu({
                 description='Select which classes to assign to'
             >
                 <AssignPromptForm
-                    promptId={promptData.id}
-                    promptTitle={promptData.title}
+                    promptId={promptData?.id}
+                    promptTitle={promptData?.title}
+                    promptType={promptData?.promptType as string}
                     closeModal={closeModal}
                     updatePromptData={updatePromptData}
                     classroomData={classroomData}

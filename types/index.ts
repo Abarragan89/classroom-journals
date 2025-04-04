@@ -73,6 +73,7 @@ export type PromptSession = {
     promptType: string;
     category: PromptCategory;
     prompt?: Prompt;
+    areGradesVisible: boolean;
     classId: string;
     status: string;
     responses?: Response[];
@@ -92,7 +93,8 @@ export interface Response {
     response: JsonValue;
     promptSession?: PromptSession;
     score: number;
-    comments: ResponseComment[]
+    comments: ResponseComment[];
+    isSubmittable: boolean;
     submittedAt: Date;
     student: User;
 }

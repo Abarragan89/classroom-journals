@@ -1,5 +1,5 @@
 import { prisma } from '@/db/prisma';
-import { decryptText } from "@/lib/utils";
+import { decryptText, responsePercentage, responseScore } from "@/lib/utils";
 import { Question, Response, ResponseData, User } from "@/types";
 import { PromptSession } from "@/types";
 import { getAllStudents } from "@/lib/actions/classroom.actions";
@@ -7,6 +7,7 @@ import EditPromptSessionPopUp from "@/components/modalBtns/edit-prompt-session-p
 import AssessmentTableData from "./assessment-table-data";
 import BlogTableData from "./blog-table-data";
 import DataClientWrapper from './data-client-wrapper';
+import ToggleGradesVisible from './single-response/toggle-grades-visible';
 
 export default async function SinglePromptSession({
     params
@@ -28,6 +29,7 @@ export default async function SinglePromptSession({
             promptType: true,
             questions: true,
             isPublic: true,
+            areGradesVisible: true,
             responses: {
                 select: {
                     id: true,
@@ -92,31 +94,7 @@ export default async function SinglePromptSession({
     const studentSubmittedIds = promptSession?.responses?.map(user => user.student.id)
     const notSubmitted = classRoster.filter(student => !studentSubmittedIds?.includes(student.id))
 
-    function responseScore(response: ResponseData[]) {
-        const isGraded = response.every(entry => entry.score !== undefined)
-        if (!isGraded) {
-            return (
-                'Not Graded'
-            )
-        }
-        const totalQuestions = response.length
-        const score = response.reduce((accum, currVal) => currVal.score + accum, 0)
-        return `${score} / ${totalQuestions}`
-    }
 
-    function responsePercentage(response: ResponseData[]) {
-        // Dont get percentage if not all responses are not graded. 
-        const isGraded = response.every(entry => entry.score !== undefined)
-        if (!isGraded) {
-            return (
-                'N/A'
-            )
-        } else {
-            const totalQuestions = response.length
-            const score = response.reduce((accum, currVal) => currVal.score + accum, 0)
-            return `${(Math.round((score / totalQuestions) * 100)).toString()}%`
-        }
-    }
 
     function calculateClassAverageAssessment() {
         let classTotal = 0;
@@ -158,15 +136,25 @@ export default async function SinglePromptSession({
                 initialStatus={promptSession?.status}
                 initialPublicStatus={promptSession?.isPublic}
             />
-            <p className="text-input">Class Average: {classAverage}</p>
+            <div className='space-y-2'>
+                <p className="text-input">Class Average: {classAverage}</p>
+                <ToggleGradesVisible
+                    promptSessionId={promptSession?.id}
+                    gradesVisibility={promptSession?.areGradesVisible}
+                    />
+            </div>
             {/* Bar chart */}
             {promptSession?.promptType === 'multi-question' &&
                 <DataClientWrapper
-                    questions={(updatedPromptSession?.questions as unknown as Question[]) as unknown as Question[]}
-                    responses={updatedPromptSession?.responses as unknown as Response[]}
+                questions={(updatedPromptSession?.questions as unknown as Question[]) as unknown as Question[]}
+                responses={updatedPromptSession?.responses as unknown as Response[]}
                 />
             }
 
+            {/* <ToggleGradesVisible
+                promptSessionId={promptSession?.id}
+                gradesVisibility={promptSession?.areGradesVisible}
+            /> */}
             {promptSession.promptType === 'multi-question' ? (
                 <AssessmentTableData
                     studentSubmittedWithFormattedNamed={studentSubmittedWithFormattedNamed as unknown as Response[]}
@@ -174,8 +162,6 @@ export default async function SinglePromptSession({
                     promptSessionId={promptSession.id}
                     classId={classId}
                     notSubmitted={notSubmitted}
-                    responseScore={responseScore}
-                    responsePercentage={responsePercentage}
                 />
             ) : (
                 // Journal Table
