@@ -1,7 +1,7 @@
 import { auth } from '@/auth'
 import Header from '@/components/shared/header'
 import { getSingleResponseForReview } from '@/lib/actions/response.action'
-import { Question, Response, ResponseData, Session } from '@/types'
+import { Response, ResponseData, Session } from '@/types'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import MultiQuestionReview from './multi-question-review'

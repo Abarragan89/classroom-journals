@@ -1,5 +1,5 @@
 import { prisma } from '@/db/prisma';
-import { decryptText, responsePercentage, responseScore } from "@/lib/utils";
+import { decryptText, responsePercentage } from "@/lib/utils";
 import { Question, Response, ResponseData, User } from "@/types";
 import { PromptSession } from "@/types";
 import { getAllStudents } from "@/lib/actions/classroom.actions";

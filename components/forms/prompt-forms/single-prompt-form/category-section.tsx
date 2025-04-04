@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Prompt, PromptCategory } from "@/types"
-import { Edit, Trash2Icon, X } from "lucide-react"
+import { Edit, Trash2Icon } from "lucide-react"
 import { useState } from "react"
 import { deletePromptCategory, editPromptCategory } from "@/lib/actions/prompt.categories"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -48,7 +48,7 @@ export default function CategorySection({
     async function editCategoryHandler() {
         try {
             await editPromptCategory(promptId, renamedCategory)
-            setCategories(prev => [...prev.map(category => category.id === promptId ? {...category, name: renamedCategory} : category)])
+            setCategories(prev => [...prev.map(category => category.id === promptId ? { ...category, name: renamedCategory } : category)])
             setPromptId('')
             setShowEditCategoryModal(false)
         } catch (error) {
