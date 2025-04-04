@@ -218,7 +218,7 @@ export default function SinglePromptEditor({
                             className="rounded-md max-h-[300px]"
                         />
                         <h3 className="h3-bold text-center mt-5">Photo Library</h3>
-                        <div className="max-h-[300px] w-[500px] mx-auto mb-10 overflow-y-scroll bg-card flex-center flex-wrap gap-10 mt-5 rounded-md py-10 custom-scrollbar">
+                        <div className="max-h-[300px] w-[500px] mx-auto mb-10 overflow-y-scroll bg-card flex-center flex-wrap gap-10 mt-3 rounded-md py-10 custom-scrollbar">
                             {imageUrls.map((img) => (
                                 <Image
                                     key={img}

@@ -16,7 +16,7 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
                 promptSessionId,
                 studentId,
                 response,
-                submittedAt: new Date()
+                submittedAt: new Date(),
             }
         })
 

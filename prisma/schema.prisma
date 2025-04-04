@@ -199,7 +199,7 @@ model Response {
   likes           ResponseLike[]
   notifications   Notification[]
   comments        Comment[]
-  isSubmittable   Boolean        @default(true)
+  isSubmittable   Boolean        @default(false)
   // Relationship
   promptSession   PromptSession  @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
   student         User           @relation(fields: [studentId], references: [id], onDelete: Cascade)
