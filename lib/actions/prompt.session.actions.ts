@@ -208,6 +208,7 @@ export async function getFilteredPromptSessions(filterOptions: SearchOptions) {
                 title: true,
                 promptType: true,
                 questions: true,
+                status: true,
                 prompt: {
                     select: {
                         category: true,

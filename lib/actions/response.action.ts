@@ -11,6 +11,33 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
         const responseData = formData.get('responseData') as string;
         const response = JSON.parse(responseData);
 
+        // Check to see if submission from student ahs already been made. 
+        const existingResponses = await prisma.promptSession.findUnique({
+            where: { id: promptSessionId },
+            select: {
+                responses: {
+                    select: {
+                        student: {
+                            select: {
+                                id: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        // Check if the studentId already exists
+        const hasSubmitted = existingResponses?.responses.some(
+            (res) => res.student.id === studentId
+        );
+
+        if (hasSubmitted) {
+            return {
+                success: false,
+                message: "You have already submitted your responses."
+            };
+        }
+
         await prisma.response.create({
             data: {
                 promptSessionId,
@@ -454,5 +481,30 @@ export async function toggleHideShowGrades(promptSessionId: string, areGradesVis
         }
 
         return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
+
+// Delete Response
+export async function deleteResponse(prevState: unknown, formData: FormData) {
+    try {
+        const responseId = formData.get('response-id') as string;
+
+        if (!responseId) {
+            return { success: false, message: 'Error deleting prompt. Try again.' };
+        }
+
+        await prisma.response.delete({
+            where: { id: responseId }
+        })
+        return { success: true, message: 'Prompt Updated!', responseId };
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log('Error deleting prompt:', error.message);
+            console.error(error.stack);
+        } else {
+            console.error('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error deleting prompt. Try again.' };
     }
 }

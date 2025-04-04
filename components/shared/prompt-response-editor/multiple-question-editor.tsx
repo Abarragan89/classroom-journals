@@ -52,8 +52,6 @@ export default function MultipleQuestionEditor({
         }
     }, [state.success])
 
-
-
     async function getSavedText() {
         try {
             const savedResponse = await getFormData(promptSessionId as string)
@@ -143,7 +141,7 @@ export default function MultipleQuestionEditor({
     const SubmitFormBtn = () => {
         const { pending } = useFormStatus()
         return (
-            <Button disabled={pending} className="w-full" variant='default'>
+            <Button disabled={pending} className="w-full" variant='default' type="submit">
                 {pending ? 'Submitting...' : 'Confirm Submission'}
             </Button>
         )

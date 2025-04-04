@@ -22,12 +22,15 @@ export default function SingleQuestionReview({
     const inputRef = useRef<HTMLDivElement>(null);
     // Store full question objects, modifying only answers
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [cursorIndexes, setCursorIndexes] = useState<Record<number, number>>(() =>
         Object.fromEntries(questions?.map((q, i) => [i, (q.answer || "").length]))
     );
 
     async function updateResponsesHandler(responseData: ResponseData[]) {
+        if (isLoading) return 
         try {
+            setIsLoading(true)
             const submittedAt = new Date()
             const updatedResponse = await updateASingleResponse(responseId, responseData, submittedAt)
             if (updatedResponse.success) {
@@ -36,6 +39,8 @@ export default function SingleQuestionReview({
             }
         } catch (error) {
             console.log('error updating responses', error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -48,8 +53,6 @@ export default function SingleQuestionReview({
         );
         setCursorIndexes(prev => ({ ...prev, [index]: newAnswer.length })); // Keep cursor at the end
     };
-
-    console.log("allquesitons", allQuestions)
 
     return (
         <div className="w-full max-w-[900px] mx-auto relative px-5 mt-10">
@@ -88,7 +91,6 @@ export default function SingleQuestionReview({
                                 <p>{responseData.answer}</p>
                             </div>
                         )}
-
                     </CardContent>
                 </Card>
             ))}
