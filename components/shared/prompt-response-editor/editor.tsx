@@ -106,6 +106,7 @@ export default function Editor({
             {!isInReview && (
                 <div
                     onClick={handleEditorClick}
+                    className="absolute top-0 left-0 right-0 bottom-0"
                 >
                     <p className="text-sm text-center mt-2 italic">click in the box to start typing</p>
                     <input
