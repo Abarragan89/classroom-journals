@@ -43,8 +43,9 @@ export default function MultipleQuestionEditor({
     useEffect(() => {
         if (state?.success) {
             async function finishResponseHandler() {
+                // deleltes row in indexedDB
                 await deleteRow(promptSessionId as string)
-                router.push('/')
+                router.replace('/')
                 toast('Answers Submitted!')
             }
             finishResponseHandler()

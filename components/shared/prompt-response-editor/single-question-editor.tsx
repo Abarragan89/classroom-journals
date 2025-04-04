@@ -46,7 +46,7 @@ export default function SinglePromptEditor({
         if (state?.success) {
             async function finishResponseHandler() {
                 await deleteRow(promptSessionId as string)
-                router.push('/')
+                router.replace('/')
                 toast('Blog Posted!')
             }
             finishResponseHandler()
