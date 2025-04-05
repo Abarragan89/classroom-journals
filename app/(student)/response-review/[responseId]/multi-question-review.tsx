@@ -3,37 +3,43 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { ResponseData } from '@/types'
 import Editor from '@/components/shared/prompt-response-editor/editor'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { updateASingleResponse } from '@/lib/actions/response.action';
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { responsePercentage } from '@/lib/utils'
 
 export default function MultiQuestionReview({
-    questions,
+    allQuestions,
     isSubmittable,
+    setAllQuestions,
     responseId,
     showGrades,
-    promptTitle
+    promptTitle,
 }: {
-    questions: ResponseData[],
+    allQuestions: ResponseData[],
+    setAllQuestions: React.Dispatch<React.SetStateAction<ResponseData[]>>
     isSubmittable: boolean,
-    responseId: string,
+    // if there is a responseId, then it's been given back to student
+    // and needs the submit button here to update
+    responseId?: string,
     showGrades: boolean
     promptTitle: string
 }) {
 
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);
-    // Store full question objects, modifying only answers
-    const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [cursorIndexes, setCursorIndexes] = useState<Record<number, number>>(() =>
-        Object.fromEntries(questions?.map((q, i) => [i, (q.answer || "").length]))
-    );
+    const [cursorIndexes, setCursorIndexes] = useState<Record<number, number> | undefined>(undefined);
+
+    useEffect(() => {
+        if (allQuestions?.length > 0) {
+            setCursorIndexes(Object.fromEntries(allQuestions?.map((q: ResponseData, i: number) => [i, (q.answer || "").length])))
+        }
+    }, [allQuestions])
 
     async function updateResponsesHandler(responseData: ResponseData[]) {
-        if (isLoading) return
+        if (isLoading || !responseId) return
         try {
             setIsLoading(true)
             const submittedAt = new Date()
@@ -65,7 +71,7 @@ export default function MultiQuestionReview({
                 {showGrades && (
                     <p className='font-bold text-right'>Grade: <span className="text-success">{responsePercentage(allQuestions)}</span></p>
                 )}
-                {isSubmittable &&
+                {isSubmittable && responseId &&
                     <Button
                         onClick={() => updateResponsesHandler(allQuestions)}
                         className="mr-0 block"
@@ -73,7 +79,7 @@ export default function MultiQuestionReview({
                 }
             </div>
             <p className="h2-bold text-center mb-5">{promptTitle}</p>
-            {allQuestions.map((responseData, index) => (
+            {allQuestions?.map((responseData, index) => (
                 <Card className="w-full p-4 space-y-2 max-w-[700px] mx-auto mb-10 relative" key={index}>
                     {showGrades && (
                         <p className='absolute right-5 top-3 text-sm'>Score: {responseData.score}</p>
@@ -90,7 +96,7 @@ export default function MultiQuestionReview({
                                         setJournalText={(newText) => handleTextChange(index, newText as string)}
                                         journalText={responseData.answer}
                                         // setIsTyping={setIsTyping}
-                                        cursorIndex={cursorIndexes[index] ?? 0}
+                                        cursorIndex={cursorIndexes?.[index] ?? 0}
                                         setCursorIndex={(newCursor) =>
                                             setCursorIndexes(prev => ({ ...prev, [index]: newCursor as number }))
                                         }

@@ -35,7 +35,6 @@ export default function Editor({
             return;
         }
 
-        console.log('last jorunal text', journalText.slice(-1))
         let updatedText = journalText;
         let updatedCursor = cursorIndex;
 
@@ -55,7 +54,6 @@ export default function Editor({
         } else {
             return;
         }
-        console.log('journal text ', journalText)
         setJournalText(updatedText);
         setCursorIndex(updatedCursor);
     };
@@ -73,7 +71,7 @@ export default function Editor({
         let updatedText = journalText;
         let updatedCursor = cursorIndex;
         if (!journalText.endsWith("\n\n")) {
-            updatedText = journalText.slice(0, cursorIndex) + "\n\n" + journalText.slice(cursorIndex);
+            updatedText = journalText?.slice(0, cursorIndex) + "\n\n" + journalText.slice(cursorIndex);
             updatedCursor += 2;
         }
         setJournalText(updatedText);
@@ -93,11 +91,11 @@ export default function Editor({
                 `}
             >
                 <pre className="whitespace-pre-wrap w-full p-5">
-                    {journalText.slice(0, cursorIndex)}
+                    {journalText?.slice(0, cursorIndex)}
                     <span className="bg-transparent border-b-2 border-b-primary">
                         {journalText[cursorIndex] === "\n" ? "\n\u00A0" : journalText[cursorIndex] || "\u00A0"}
                     </span>
-                    {journalText.slice(cursorIndex + 1)}
+                    {journalText?.slice(cursorIndex + 1)}
                 </pre>
             </div>
             {/* Hidden input to capture mobile text input */}

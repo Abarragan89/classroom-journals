@@ -4,10 +4,10 @@ import { getSingleResponseForReview } from '@/lib/actions/response.action'
 import { Response, ResponseData, Session } from '@/types'
 import { notFound } from 'next/navigation'
 import React from 'react'
-import MultiQuestionReview from './multi-question-review'
 import SingleQuestionReview from './single-question-review'
 import Link from 'next/link'
 import { ArrowLeftIcon } from 'lucide-react'
+import ReviewWrapper from './review-wrapper'
 
 export default async function ResponseReview({
     params
@@ -40,8 +40,8 @@ export default async function ResponseReview({
                 </Link>
                 <h1 className="h1-bold mt-2 line-clamp-1">{h1Heading}</h1>
                 {singleResponse?.promptSession?.promptType === 'multi-question' ?
-                    <MultiQuestionReview
-                        questions={singleResponse?.response as unknown as ResponseData[]}
+                    <ReviewWrapper
+                        allQuestions={singleResponse?.response as unknown as ResponseData[]}
                         isSubmittable={singleResponse?.isSubmittable}
                         responseId={singleResponse?.id}
                         showGrades={singleResponse?.promptSession?.areGradesVisible}

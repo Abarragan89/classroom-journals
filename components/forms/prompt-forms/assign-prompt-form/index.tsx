@@ -58,8 +58,6 @@ export default function AssignPromptForm({
         );
     }
 
-    console.log('pormpt data ', prompt)
-
     return (
         <form action={action} className="space-y-2">
             <div className="grid items-center gap-3">

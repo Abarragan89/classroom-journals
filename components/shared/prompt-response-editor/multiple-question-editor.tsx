@@ -1,5 +1,5 @@
 "use client";
-import { Question } from "@/types";
+import { ResponseData } from "@/types";
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams, useParams } from "next/navigation";
 import SaveAndContinueBtns from "@/components/buttons/save-and-continue";
@@ -12,12 +12,13 @@ import { useFormStatus } from "react-dom";
 import { createStudentResponse } from "@/lib/actions/response.action";
 import { toast } from "sonner";
 import Editor from "./editor";
+import MultiQuestionReview from "@/app/(student)/response-review/[responseId]/multi-question-review";
 
 export default function MultipleQuestionEditor({
     questions,
     studentId,
 }: {
-    questions: Question[],
+    questions: ResponseData[],
     studentId: string,
 }) {
 
@@ -28,10 +29,9 @@ export default function MultipleQuestionEditor({
     const inputRef = useRef<HTMLDivElement>(null);
     const [journalText, setJournalText] = useState<string>("");
     const [cursorIndex, setCursorIndex] = useState<number>(0);
-    const [allQuestions, setAllQuestions] = useState<Question[]>(questions);
+    const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
-    const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
     // const [isTyping, setIsTyping] = useState(false);
     const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
@@ -54,24 +54,28 @@ export default function MultipleQuestionEditor({
 
     async function getSavedText() {
         try {
-            const savedResponse = await getFormData(promptSessionId as string)
-            const isThereResponse = savedResponse.questions[Number(questionNumber)].answer
-            const savedText = savedResponse.questions[Number(questionNumber)].answer || "";
-            setCursorIndex(savedText.length);
 
-            if (!savedResponse || !isThereResponse) {
-                return
-            }
+            const savedResponse = await getFormData(promptSessionId as string)
             setAllQuestions(savedResponse.questions)
-            setJournalText(savedResponse.questions[Number(questionNumber)].answer);
+            // Dont run if on review page
+            if (Number(questionNumber) !== questions?.length) {
+                const isThereResponse = savedResponse.questions[Number(questionNumber)]?.answer
+                const savedText = savedResponse.questions[Number(questionNumber)]?.answer || "";
+                setCursorIndex(savedText.length);
+                if (!savedResponse || !isThereResponse) {
+                    return
+                }
+                setJournalText(savedResponse.questions?.[Number(questionNumber)]?.answer);
+            }
         } catch (error) {
             console.log('error getting saved data in indexedb', error)
         }
     }
+
     // This runs on every new page
     useEffect(() => {
         if (questionNumber && questions) {
-            setCurrentQuestion(questions[Number(questionNumber)]?.question)
+            setCurrentQuestion(questions?.[Number(questionNumber)]?.question)
             getSavedText()
             setJournalText('')
             inputRef.current?.focus()
@@ -114,9 +118,10 @@ export default function MultipleQuestionEditor({
                     : q
             );
             // Save immediately after updating questions
-            setAllQuestions(updatedQuestions);
+            setAllQuestions(updatedQuestions as ResponseData[]);
             await saveFormData(updatedQuestions, promptSessionId);
             if (typingTimeoutRef?.current) clearTimeout(typingTimeoutRef.current);
+            toast('Answers Saved')
         } catch (error) {
             console.log('error saving to indexed db', error);
         } finally {
@@ -130,11 +135,12 @@ export default function MultipleQuestionEditor({
             await handleSaveResponses();
             const nextQuestion = (Number(questionNumber) + 1).toString()
             router.push(`/jot-response/${promptSessionId}?q=${nextQuestion}`)
-            inputRef.current?.focus()
             if (typingTimeoutRef?.current) clearTimeout(typingTimeoutRef.current);
             setJournalText('');
         } catch (error) {
             console.log('error saving and continuing ', error)
+        } finally {
+            inputRef?.current?.focus()
         }
     }
 
@@ -142,7 +148,7 @@ export default function MultipleQuestionEditor({
         const { pending } = useFormStatus()
         return (
             <Button disabled={pending} className="w-full" variant='default' type="submit">
-                {pending ? 'Submitting...' : 'Confirm Submission'}
+                {pending ? 'Submitting...' : 'Submit'}
             </Button>
         )
     }
@@ -154,26 +160,24 @@ export default function MultipleQuestionEditor({
     }
 
     return (
-        <div className="w-full max-w-[900px] mx-auto relative px-5">
-            <p className="absolute -top-16 right-0 text-sm">Question: {Number(questionNumber) + 1} / {questions.length}</p>
-            <ArrowBigLeft className="absolute -top-16 left-0 text-sm hover:cursor-pointer hover:text-accent" onClick={() => router.back()} />
-            <p className="h3-bold mt-16 mb-5 w-full mx-auto text-center">{currentQuestion}</p>
-            <Editor
-                setJournalText={setJournalText}
-                journalText={journalText}
-                // setIsTyping={setIsTyping}
-                cursorIndex={cursorIndex}
-                setCursorIndex={setCursorIndex}
-                inputRef={inputRef}
-            />
-
-            {/* Save and Submit Buttons */}
-            {/* Check to see if user is on last page */}
-            {Number(questionNumber) === questions.length - 1 ? (
-                // If last question and user is 
-                confirmSubmission ? (
+        <div className="w-full max-w-[900px] mx-auto relative px-5 mb-32">
+            {/* If finished the last question, show answer review */}
+            <div className="flex-start absolute -top-16 left-0 hover:cursor-pointer hover:text-accent" onClick={() => router.back()}>
+                <ArrowBigLeft className="" />
+                <p className="ml-1 text-md">Back</p>
+            </div>
+            {Number(questionNumber) === questions.length ? (
+                <div className="mt-16">
+                    <MultiQuestionReview
+                        allQuestions={allQuestions as ResponseData[]}
+                        setAllQuestions={setAllQuestions}
+                        isSubmittable={true}
+                        showGrades={false}
+                        promptTitle="Review Answers"
+                    />
                     <div className="flex flex-col justify-center items-center">
-                        <p className="text-center text-destructive font-bold">Are you sure you want to submit all your answers?</p>
+                        <p className="text-center font-bold">Ready to Submit?</p>
+                        {/* Final form to submit responses to database */}
                         <form action={action} className="mt-5">
                             <input
                                 id="studentId"
@@ -197,29 +201,33 @@ export default function MultipleQuestionEditor({
                                 readOnly
                             />
                             <div className="flex-center gap-x-7">
-                                <Button variant='secondary' type="button">Cancel</Button>
+                                <Button onClick={handleSaveResponses} variant='secondary' type="button">Save</Button>
                                 <SubmitFormBtn />
                             </div>
                         </form>
                     </div>
 
-                ) : (
-                    <div className="flex flex-col justify-center items-center">
-                        <p className="text-center mb-3 font-bold">Ready to submit?</p>
-                        <div className="flex-center gap-5">
-                            <Button variant='secondary' onClick={() => { handleSaveResponses(); toast('Answers Saved!') }} className="flex justify-center mx-auto">Save</Button>
-                            <Button onClick={() => { setConfirmSubmission(true); handleSaveResponses() }}>Submit Responses</Button>
-                        </div>
-                    </div>
-                )
+                </div>
             ) : (
-                <form onSubmit={(e) => saveAndContinue(e)}>
-                    <SaveAndContinueBtns
-                        isSaving={isSaving}
-                        submitHandler={() => { handleSaveResponses(); toast('Answers Saved!') }}
+                // IF not final question, just show the editor and question with continue buttons
+                <>
+                    <p className="absolute -top-16 right-0 text-sm">Question: {Number(questionNumber) + 1} / {questions.length}</p>
+                    <p className="h3-bold mt-16 mb-5 w-full mx-auto text-center">{currentQuestion}</p>
+                    <Editor
+                        setJournalText={setJournalText}
+                        journalText={journalText}
+                        // setIsTyping={setIsTyping}
+                        cursorIndex={cursorIndex}
+                        setCursorIndex={setCursorIndex}
+                        inputRef={inputRef}
                     />
-                </form>
-
+                    <form onSubmit={(e) => saveAndContinue(e)}>
+                        <SaveAndContinueBtns
+                            isSaving={isSaving}
+                            submitHandler={() => { handleSaveResponses(); toast('Answers Saved!') }}
+                        />
+                    </form>
+                </>
             )}
         </div>
     );
