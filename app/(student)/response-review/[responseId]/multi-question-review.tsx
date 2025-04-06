@@ -32,6 +32,7 @@ export default function MultiQuestionReview({
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [cursorIndexes, setCursorIndexes] = useState<Record<number, number> | undefined>(undefined);
 
+    console.log('all questions in the multi', allQuestions)
     useEffect(() => {
         if (allQuestions?.length > 0) {
             setCursorIndexes(Object.fromEntries(allQuestions?.map((q: ResponseData, i: number) => [i, (q.answer || "").length])))
@@ -98,7 +99,7 @@ export default function MultiQuestionReview({
                                         // setIsTyping={setIsTyping}
                                         cursorIndex={cursorIndexes?.[index] ?? 0}
                                         setCursorIndex={(newCursor) =>
-                                            setCursorIndexes(prev => ({ ...prev, [index]: newCursor as number }))
+                                            setCursorIndexes(Object.fromEntries(allQuestions?.map((q: ResponseData, i: number) => [i, (q.answer || "").length])))
                                         }
                                         inputRef={inputRef}
                                         isInReview={true}

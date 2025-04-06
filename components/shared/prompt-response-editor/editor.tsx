@@ -59,13 +59,17 @@ export default function Editor({
     };
 
     function moveCursor(spaces: number, direction: string) {
+        console.log('cursor index ', cursorIndex)
         if (direction === 'back' && cursorIndex > 0) {
-            setCursorIndex(prev => prev - spaces >= 0 ? prev - spaces : 0)
+            setCursorIndex((prev) => prev - spaces >= 0 ? prev - spaces : 0)
         } else if (direction === 'forward' && cursorIndex < journalText.length) {
-            setCursorIndex(prev => prev + spaces <= journalText.length ? prev + spaces : journalText.length)
+            setCursorIndex((prev) => prev + spaces <= journalText.length ? prev + spaces : journalText.length)
         }
         hiddenInputRef?.current?.focus()
     }
+    
+    
+    console.log('cursor index ', cursorIndex)
 
     function makeNewParagraph() {
         let updatedText = journalText;
