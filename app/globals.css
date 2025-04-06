@@ -69,7 +69,7 @@
   }
 
   .tech {
-    --background: hsl(120, 13%, 5%);
+    --background: hsl(120, 18%, 7%);
     --foreground: hsl(210, 20%, 85%);
     --primary: hsl(107, 89%, 48%);
     --primary-foreground: hsl(0, 0%, 0%);
@@ -102,9 +102,8 @@
   }
   .silva {
     --background: hsl(330, 60%, 94%);
-    /* --background: hsl(330, 50%, 95%); */
     --foreground: hsl(0, 72%, 27%);
-    --primary: hsl(340, 65%, 48%); /* Hot Pink */
+    --primary: hsl(340, 72%, 48%); /* Hot Pink */
     --primary-foreground: hsl(0, 0%, 100%);
     --secondary: hsl(330, 60%, 70%); /* Soft Pink */
     --secondary-foreground: hsl(0, 0%, 10%);

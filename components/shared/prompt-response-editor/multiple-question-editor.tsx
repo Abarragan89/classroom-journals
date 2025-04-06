@@ -28,7 +28,6 @@ export default function MultipleQuestionEditor({
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);
     const [journalText, setJournalText] = useState<string>("");
-    const [cursorIndex, setCursorIndex] = useState<number>(0);
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -54,18 +53,15 @@ export default function MultipleQuestionEditor({
 
     async function getSavedText() {
         try {
-
             const savedResponse = await getFormData(promptSessionId as string)
             setAllQuestions(savedResponse.questions)
             // Dont run if on review page
             if (Number(questionNumber) !== questions?.length) {
-                const isThereResponse = savedResponse.questions[Number(questionNumber)]?.answer
-                const savedText = savedResponse.questions[Number(questionNumber)]?.answer || "";
-                setCursorIndex(savedText.length);
+                const isThereResponse = savedResponse?.questions[Number(questionNumber)]?.answer
                 if (!savedResponse || !isThereResponse) {
                     return
                 }
-                setJournalText(savedResponse.questions?.[Number(questionNumber)]?.answer);
+                setJournalText(isThereResponse);
             }
         } catch (error) {
             console.log('error getting saved data in indexedb', error)
@@ -216,9 +212,6 @@ export default function MultipleQuestionEditor({
                     <Editor
                         setJournalText={setJournalText}
                         journalText={journalText}
-                        // setIsTyping={setIsTyping}
-                        cursorIndex={cursorIndex}
-                        setCursorIndex={setCursorIndex}
                         inputRef={inputRef}
                     />
                     <form onSubmit={(e) => saveAndContinue(e)}>

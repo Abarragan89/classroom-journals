@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { MdKeyboardArrowLeft } from "react-icons/md";
@@ -9,9 +9,6 @@ import { MdOutlineSubdirectoryArrowLeft } from "react-icons/md";
 export default function Editor({
     journalText,
     setJournalText,
-    // setIsTyping,
-    cursorIndex,
-    setCursorIndex,
     inputRef,
     jotType,
     characterLimit,
@@ -19,9 +16,6 @@ export default function Editor({
 }: {
     journalText: string;
     setJournalText: React.Dispatch<React.SetStateAction<string>>;
-    // setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
-    cursorIndex: number;
-    setCursorIndex: React.Dispatch<React.SetStateAction<number>>;
     inputRef: React.RefObject<HTMLDivElement | null>;
     jotType?: string;
     characterLimit?: number,
@@ -29,15 +23,28 @@ export default function Editor({
 }) {
     const hiddenInputRef = useRef<HTMLInputElement>(null);
 
+    const [cursorIndex, setCursorIndex] = useState<number>(journalText?.length);
+    const [isFocused, setIsFocused] = useState(false);
+
+    useEffect(() => {
+        if (isFocused) {
+            hiddenInputRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }, [isFocused])
+
+    useEffect(() => {
+        if (journalText.length > 0) {
+            setCursorIndex(journalText.length)
+        }
+    }, [journalText])
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         e.preventDefault(); // Prevent default behavior
         if (characterLimit && characterLimit <= cursorIndex && e.key !== "Backspace") {
             return;
         }
-
         let updatedText = journalText;
         let updatedCursor = cursorIndex;
-
         if (e.key.length === 1) {
             updatedText = journalText.slice(0, cursorIndex) + e.key + journalText.slice(cursorIndex);
             updatedCursor++;
@@ -59,7 +66,6 @@ export default function Editor({
     };
 
     function moveCursor(spaces: number, direction: string) {
-        console.log('cursor index ', cursorIndex)
         if (direction === 'back' && cursorIndex > 0) {
             setCursorIndex((prev) => prev - spaces >= 0 ? prev - spaces : 0)
         } else if (direction === 'forward' && cursorIndex < journalText.length) {
@@ -67,9 +73,6 @@ export default function Editor({
         }
         hiddenInputRef?.current?.focus()
     }
-    
-    
-    console.log('cursor index ', cursorIndex)
 
     function makeNewParagraph() {
         let updatedText = journalText;
@@ -85,13 +88,15 @@ export default function Editor({
 
     return (
         <div className={`${isInReview ? '' : 'mb-5'} w-full mx-auto flex flex-col items-center relative`}>
+            {characterLimit && <p className="text-sm text-right mr-2">{cursorIndex} / {characterLimit}</p>}
             <div
                 ref={inputRef}
                 tabIndex={0}
                 onClick={() => hiddenInputRef.current?.focus()} // Focus input when div is clicked
-                className={`mx-auto w-full rounded-md outline-none mt-5
-                    ${jotType === 'single-question' ? 'min-h-48 ' : ''}
-                    ${isInReview ? '' : 'border-2 border-bg-accent'}
+                className=
+                {`mx-auto w-full rounded-md outline-none border bg-background
+                    ${jotType === 'single-question' ? 'min-h-48' : ''}
+                    ${isFocused ? 'border-primary' : 'border-bg-accent'}
                 `}
             >
                 <pre className="whitespace-pre-wrap w-full p-5">
@@ -107,12 +112,14 @@ export default function Editor({
                 ref={hiddenInputRef}
                 type="text"
                 onKeyDown={handleKeyDown} // ← use this
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
                 autoComplete="off"
                 autoCorrect="off"
                 spellCheck="false"
                 className="absolute opacity-0 pointer-events-none"
             />
-            {!isInReview && <p className="text-xs text-center mt-1 italic absolute">Click in the box to start typing</p>}
+            {/* {!isInReview && <p className="text-xs text-center mt-1 italic absolute">Click in the box to start typing</p>} */}
             {!isInReview && <p className="text-xs mt-1 flex">Use ARROW keys to move cursor (Mobile controls below):</p>}
             <div className="flex-between mt-2 w-full">
                 <div className="flex">

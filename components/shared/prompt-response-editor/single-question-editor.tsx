@@ -29,7 +29,6 @@ export default function SinglePromptEditor({
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);
     const [journalText, setJournalText] = useState<string>("");
-    const [cursorIndex, setCursorIndex] = useState<number>(0);
     const [allQuestions, setAllQuestions] = useState<Question[]>(questions);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -57,14 +56,11 @@ export default function SinglePromptEditor({
         try {
             const savedResponse = await getFormData(promptSessionId as string)
             const isThereResponse = savedResponse.questions[Number(questionNumber)].answer
-            const savedText = savedResponse.questions[Number(questionNumber)].answer || "";
-            setCursorIndex(savedText.length);
-
             if (!savedResponse || !isThereResponse) {
                 return
             }
             setAllQuestions(savedResponse.questions)
-            setJournalText(savedResponse.questions[Number(questionNumber)].answer);
+            setJournalText(isThereResponse);
         } catch (error) {
             console.log('error getting saved data in indexedb', error)
         }
@@ -164,9 +160,6 @@ export default function SinglePromptEditor({
                     <Editor
                         setJournalText={setJournalText}
                         journalText={journalText}
-                        // setIsTyping={setIsTyping}
-                        cursorIndex={cursorIndex}
-                        setCursorIndex={setCursorIndex}
                         inputRef={inputRef}
                         jotType='single-question'
                     />
@@ -184,18 +177,15 @@ export default function SinglePromptEditor({
             {/* show Blog title input */}
             {questionNumber === '1' && (
                 <>
-                    <p className="text-sm text-right mr-2">{cursorIndex} / 70</p>
+                    
                     <Editor
                         setJournalText={setJournalText}
                         journalText={journalText}
-                        // setIsTyping={setIsTyping}
-                        cursorIndex={cursorIndex}
-                        setCursorIndex={setCursorIndex}
                         inputRef={inputRef}
                         characterLimit={70}
                     />
                     <div className="flex flex-col justify-center items-center mb-20">
-                        <form  onSubmit={(e) => saveAndContinue(e)}>
+                        <form onSubmit={(e) => saveAndContinue(e)}>
                             <SaveAndContinueBtns
                                 isSaving={isSaving}
                                 submitHandler={() => { handleSaveResponses(); toast('Answers Saved!') }}

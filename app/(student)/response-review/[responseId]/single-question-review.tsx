@@ -23,12 +23,9 @@ export default function SingleQuestionReview({
     // Store full question objects, modifying only answers
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [cursorIndexes, setCursorIndexes] = useState<Record<number, number>>(() =>
-        Object.fromEntries(questions?.map((q, i) => [i, (q.answer || "").length]))
-    );
 
     async function updateResponsesHandler(responseData: ResponseData[]) {
-        if (isLoading) return 
+        if (isLoading) return
         try {
             setIsLoading(true)
             const submittedAt = new Date()
@@ -51,7 +48,6 @@ export default function SingleQuestionReview({
                 i === index ? { ...q, answer: newAnswer } : q
             )
         );
-        setCursorIndexes(prev => ({ ...prev, [index]: newAnswer.length })); // Keep cursor at the end
     };
 
     return (
@@ -75,11 +71,6 @@ export default function SingleQuestionReview({
                                     <Editor
                                         setJournalText={(newText) => handleTextChange(index, newText as string)}
                                         journalText={responseData.answer}
-                                        // setIsTyping={setIsTyping}
-                                        cursorIndex={cursorIndexes[index] ?? 0}
-                                        setCursorIndex={(newCursor) =>
-                                            setCursorIndexes(prev => ({ ...prev, [index]: newCursor as number }))
-                                        }
                                         inputRef={inputRef}
                                         isInReview={true}
                                     />

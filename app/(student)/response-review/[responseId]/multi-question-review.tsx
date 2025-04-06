@@ -30,14 +30,7 @@ export default function MultiQuestionReview({
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [cursorIndexes, setCursorIndexes] = useState<Record<number, number> | undefined>(undefined);
 
-    console.log('all questions in the multi', allQuestions)
-    useEffect(() => {
-        if (allQuestions?.length > 0) {
-            setCursorIndexes(Object.fromEntries(allQuestions?.map((q: ResponseData, i: number) => [i, (q.answer || "").length])))
-        }
-    }, [allQuestions])
 
     async function updateResponsesHandler(responseData: ResponseData[]) {
         if (isLoading || !responseId) return
@@ -63,7 +56,6 @@ export default function MultiQuestionReview({
                 i === index ? { ...q, answer: newAnswer } : q
             )
         );
-        setCursorIndexes(prev => ({ ...prev, [index]: newAnswer.length })); // Keep cursor at the end
     };
 
     return (
@@ -92,20 +84,12 @@ export default function MultiQuestionReview({
                         <p className="ml-1 mb-1 text-sm font-bold">Answer:</p>
                         {isSubmittable ? (
                             <>
-                                <div className='bg-background px-4  py-3 m-0 rounded-md'>
-                                    <Editor
-                                        setJournalText={(newText) => handleTextChange(index, newText as string)}
-                                        journalText={responseData.answer}
-                                        // setIsTyping={setIsTyping}
-                                        cursorIndex={cursorIndexes?.[index] ?? 0}
-                                        setCursorIndex={(newCursor) =>
-                                            setCursorIndexes(Object.fromEntries(allQuestions?.map((q: ResponseData, i: number) => [i, (q.answer || "").length])))
-                                        }
-                                        inputRef={inputRef}
-                                        isInReview={true}
-                                    />
-                                </div>
-                                <p className="text-sm text-center mt-2 italic">click in the box to start typing</p>
+                                <Editor
+                                    setJournalText={(newText) => handleTextChange(index, newText as string)}
+                                    journalText={responseData.answer}
+                                    inputRef={inputRef}
+                                    isInReview={true}
+                                />
                             </>
                         ) : (
                             <div className='bg-background px-4  py-3 m-0 rounded-md'>
