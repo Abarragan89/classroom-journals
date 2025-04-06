@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { ResponseData } from '@/types'
 import Editor from '@/components/shared/prompt-response-editor/editor'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { updateASingleResponse } from '@/lib/actions/response.action';
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
