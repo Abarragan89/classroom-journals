@@ -22,7 +22,7 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
                     {
                         "type": "input_text",
                         "text": `
-                        Grade the following answers on a ${gradeLevel} grade level using only one of these values: 0 (wrong), 0.5 (partial), or 1 (correct). Do not explain your reasoning. Reply with only the score. Return the scores of each question in a array in the order they were given. If you do not know the answer to the question, return undefined. 
+                        Grade the following answers on a ${gradeLevel} grade level using only one of these values: 0 (wrong), 0.5 (partial), or 1 (correct). Do not explain your reasoning. Reply with only the score. Return the scores of each question in a array in the order they were given. If you are unsure what the question is asking, return null. Spell check responses before grading. 
                         Questions: ${questions}
                         Answers: ${answers}
                         : 
