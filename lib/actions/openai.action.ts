@@ -7,26 +7,23 @@ const openai = new OpenAI({
 });
 
 export async function gradeResponseWithAI(gradeLevel: string, responseData: ResponseData[]) {
-    const questions = responseData.map(response => {
-        return `1. ${response.question}`
+    const questions = responseData.map((response, index) => {
+        return `${index + 1}. ${response.question}`
     })
-    const answers = responseData.map(response => {
-        return `1. ${response.answer}`
+    const answers = responseData.map((response, index) => {
+        return `${index + 1}. ${response.answer}`
     })
     const response = await openai.responses.create({
         model: "gpt-4o-mini",
+        instructions: `Grade the following answers on a ${gradeLevel} grade level using only one of these values: 0 (wrong), 0.5 (partial), or 1 (correct). Do not explain your reasoning. Reply with only the score. Return the scores of each question in a array in the order they were given. If you are unsure what the question is asking, return null. Spell check responses before grading. 
+        Questions: ${questions}`,
         input: [
             {
-                "role": "system",
+                "role": "developer",
                 "content": [
                     {
                         "type": "input_text",
-                        "text": `
-                        Grade the following answers on a ${gradeLevel} grade level using only one of these values: 0 (wrong), 0.5 (partial), or 1 (correct). Do not explain your reasoning. Reply with only the score. Return the scores of each question in a array in the order they were given. If you are unsure what the question is asking, return null. Spell check responses before grading. 
-                        Questions: ${questions}
-                        Answers: ${answers}
-                        : 
-                        `
+                        "text": `Answers: ${answers}`
                     }
                 ]
             }
@@ -36,12 +33,8 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
                 "type": "text"
             }
         },
-        reasoning: {},
-        tools: [],
-        temperature: 0,
+        temperature: 0.2,
         max_output_tokens: 16,
-        top_p: 1,
-        store: true
     });
 
     return response

@@ -45,8 +45,8 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
             let { output_text: scores } = await gradeResponseWithAI('5th', response)
             scores = JSON.parse(scores)
             response = response.map((res: ResponseData, index: number) => {
-                if (isNaN(parseInt(scores[index]))) {
-                    return ({...res})
+                if ((scores[index]) === null) {
+                    return ({ ...res })
                 } else {
                     return ({ ...res, score: parseInt(scores[index]) })
                 }
