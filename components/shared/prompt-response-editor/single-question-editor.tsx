@@ -177,7 +177,6 @@ export default function SinglePromptEditor({
             {/* show Blog title input */}
             {questionNumber === '1' && (
                 <>
-
                     <Editor
                         setJournalText={setJournalText}
                         journalText={journalText}

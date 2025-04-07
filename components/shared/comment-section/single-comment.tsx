@@ -161,7 +161,7 @@ export default function SingleComment({
                     </div>
                 </div>
             </div>
-            <p className="text-[1rem] mt-0 whitespace-pre ml-[45px]">{commentData?.text}</p>
+            <p className="text-[1rem] mt-0 whitespace-pre-wrap break-words ml-[45px]">{commentData?.text}</p>
 
             {/* Conditionally render reply form */}
             {showReplyTextarea && discussionStatus === 'open' &&

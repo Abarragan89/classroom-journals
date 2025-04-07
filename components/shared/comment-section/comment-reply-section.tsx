@@ -87,7 +87,7 @@ export default function CommentReplySection({
                     </div>
                 </div>
             </div>
-            <p className="px-[45px] whitespace-pre mt-1">{replyCommentData?.text}</p>
+            <p className="px-[45px] whitespace-pre-wrap break-words mt-1">{replyCommentData?.text}</p>
         </div>
     )
 }

@@ -51,7 +51,7 @@ export default function AssignmentListItem({
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
-            <div className="text-xs absolute text-input right-3 bottom-3">
+            <div className="text-xs absolute text-input right-3 bottom-[6px]">
                 {jotData.promptType === 'multi-question' ? (
                     <QuestionPopup promptQuestions={jotData as unknown as Prompt} />
                 ) : (
