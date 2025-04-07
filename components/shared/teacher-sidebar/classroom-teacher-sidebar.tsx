@@ -64,6 +64,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
 
                 {/* GET S3 BUCKET URLS BUTTON */}
                 {/* <Button onClick={listS3Urls}>GetUrls</Button> */}
+                {/* <Button onClick={getBedtimeStory}>TriggerChatGPT</Button> */}
 
                 {item.items.map((item) => {
                   const Icon = item.icon;

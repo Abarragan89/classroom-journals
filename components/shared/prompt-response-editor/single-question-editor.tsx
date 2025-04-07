@@ -177,7 +177,7 @@ export default function SinglePromptEditor({
             {/* show Blog title input */}
             {questionNumber === '1' && (
                 <>
-                    
+
                     <Editor
                         setJournalText={setJournalText}
                         journalText={journalText}
@@ -243,6 +243,13 @@ export default function SinglePromptEditor({
                                         id="blogImage"
                                         name="blogImage"
                                         value={journalText}
+                                        hidden
+                                        readOnly
+                                    />
+                                    <input
+                                        id="promptType"
+                                        name="promptType"
+                                        value='single-question'
                                         hidden
                                         readOnly
                                     />

@@ -3,13 +3,15 @@ import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
 import { ResponseData } from "@/types";
 import { JsonValue } from "@prisma/client/runtime/library";
+import { gradeResponseWithAI } from "./openai.action";
 
 export async function createStudentResponse(prevState: unknown, formData: FormData) {
     try {
         const studentId = formData.get('studentId') as string;
         const promptSessionId = formData.get('promptSessionId') as string;
         const responseData = formData.get('responseData') as string;
-        const response = JSON.parse(responseData);
+        const promptType = formData.get('promptType') as string
+        let response = JSON.parse(responseData);
 
         // Check to see if submission from student ahs already been made. 
         const existingResponses = await prisma.promptSession.findUnique({
@@ -36,6 +38,19 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
                 success: false,
                 message: "You have already submitted your responses."
             };
+        }
+
+        // Grade it with AI Only if premium member
+        if (promptType === 'multi-question') {
+            let { output_text: scores } = await gradeResponseWithAI('5th', response)
+            scores = JSON.parse(scores)
+            response = response.map((res: ResponseData, index: number) => {
+                if (isNaN(parseInt(scores[index]))) {
+                    return ({...res})
+                } else {
+                    return ({ ...res, score: parseInt(scores[index]) })
+                }
+            })
         }
 
         await prisma.response.create({

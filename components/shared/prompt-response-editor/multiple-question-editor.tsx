@@ -190,6 +190,13 @@ export default function MultipleQuestionEditor({
                                 readOnly
                             />
                             <input
+                                id="promptType"
+                                name="promptType"
+                                value='multi-question'
+                                hidden
+                                readOnly
+                            />
+                            <input
                                 id="responseData"
                                 name="responseData"
                                 value={JSON.stringify(allQuestions)}
