@@ -48,7 +48,7 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
                 if ((scores[index]) === null) {
                     return ({ ...res })
                 } else {
-                    return ({ ...res, score: parseInt(scores[index]) })
+                    return ({ ...res, score: parseFloat(scores[index]) })
                 }
             })
         }

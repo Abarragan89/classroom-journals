@@ -32,7 +32,6 @@ export default function MultipleQuestionEditor({
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
     // const [isTyping, setIsTyping] = useState(false);
-    const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     const [state, action] = useActionState(createStudentResponse, {
         success: false,
@@ -116,7 +115,6 @@ export default function MultipleQuestionEditor({
             // Save immediately after updating questions
             setAllQuestions(updatedQuestions as ResponseData[]);
             await saveFormData(updatedQuestions, promptSessionId);
-            if (typingTimeoutRef?.current) clearTimeout(typingTimeoutRef.current);
             toast('Answers Saved')
         } catch (error) {
             console.log('error saving to indexed db', error);
@@ -127,11 +125,14 @@ export default function MultipleQuestionEditor({
 
     async function saveAndContinue(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        if (journalText === '') {
+            toast('Add some text')
+            return
+        }
         try {
             await handleSaveResponses();
             const nextQuestion = (Number(questionNumber) + 1).toString()
             router.push(`/jot-response/${promptSessionId}?q=${nextQuestion}`)
-            if (typingTimeoutRef?.current) clearTimeout(typingTimeoutRef.current);
             setJournalText('');
         } catch (error) {
             console.log('error saving and continuing ', error)

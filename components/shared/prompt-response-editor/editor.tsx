@@ -88,7 +88,7 @@ export default function Editor({
 
     return (
         <div className={`${isInReview ? '' : 'mb-5'} w-full mx-auto flex flex-col items-center relative`}>
-            {characterLimit && <p className="text-sm text-right mr-2">{cursorIndex} / {characterLimit}</p>}
+            {characterLimit && <p className="text-sm absolute right-2 top-[-20px]">{cursorIndex} / {characterLimit}</p>}
             <div
                 ref={inputRef}
                 tabIndex={0}

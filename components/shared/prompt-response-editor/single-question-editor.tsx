@@ -34,7 +34,6 @@ export default function SinglePromptEditor({
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
     // const [isTyping, setIsTyping] = useState(false);
-    const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     const [state, action] = useActionState(createStudentResponse, {
         success: false,
@@ -114,7 +113,6 @@ export default function SinglePromptEditor({
             // Save immediately after updating questions
             setAllQuestions(updatedQuestions);
             await saveFormData(updatedQuestions, promptSessionId);
-            if (typingTimeoutRef?.current) clearTimeout(typingTimeoutRef.current);
         } catch (error) {
             console.log('error saving to indexed db', error);
         } finally {
@@ -133,7 +131,6 @@ export default function SinglePromptEditor({
             const nextQuestion = (Number(questionNumber) + 1).toString()
             router.push(`/jot-response/${promptSessionId}?q=${nextQuestion}`)
             inputRef.current?.focus()
-            if (typingTimeoutRef?.current) clearTimeout(typingTimeoutRef.current);
             setJournalText('');
         } catch (error) {
             console.log('error saving and continuing ', error)

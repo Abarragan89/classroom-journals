@@ -7,25 +7,34 @@ const openai = new OpenAI({
 });
 
 export async function gradeResponseWithAI(gradeLevel: string, responseData: ResponseData[]) {
-    const questions = responseData.map((response, index) => {
-        return `${index + 1}. ${response.question}`
-    })
-    const answers = responseData.map((response, index) => {
-        return `${index + 1}. ${response.answer}`
-    })
+    const systemPrompt = `
+        You are a strict but fair grader. Grade the following answers based on a ${gradeLevel} grade level. 
+
+        Return an array of scores (only numbers), one for each question in order.
+
+        - Use only these values: 0 (wrong), 0.5 (partially correct), or 1 (fully correct)
+        - Do not explain the answers
+        - Accept spelling errors if the intent is clear
+        - Accept any answer that is factually correct, even if it's not the most common one
+        - Return null if you cannot understand the answer at all
+
+        ONLY return the array of numbers like: [1, 0.5, 0]
+    `
+    const questions = responseData.map((r, i) => `${i + 1}. ${r.question}`).join('\n');
+    const answers = responseData.map((r, i) => `${i + 1}. ${r.answer}`).join('\n');
+
     const response = await openai.responses.create({
         model: "gpt-4o-mini",
-        instructions: `Grade the following answers on a ${gradeLevel} grade level using only one of these values: 0 (wrong), 0.5 (partial), or 1 (correct). Do not explain your reasoning. Reply with only the score. Return the scores of each question in a array in the order they were given. If you are unsure what the question is asking, return null. Spell check responses before grading. 
+        instructions: `Grade the following answers on a ${gradeLevel} grade level using only one of these values: 0 (wrong), 0.5 (partial), or 1 (correct). Do not explain your reasoning. Reply with only the score. Return the scores of each question in a array in the order they were given. If you are unsure what the question is asking, return null. If the spelling is close enough to the acutal answer, mark it correct. 
         Questions: ${questions}`,
         input: [
             {
-                "role": "developer",
-                "content": [
-                    {
-                        "type": "input_text",
-                        "text": `Answers: ${answers}`
-                    }
-                ]
+                "role": "system",
+                "content": systemPrompt
+            },
+            {
+                "role": "user",
+                "content": `Questions:\n${questions}\n\nAnswers:\n${answers}`
             }
         ],
         text: {
@@ -36,6 +45,8 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
         temperature: 0.2,
         max_output_tokens: 16,
     });
+
+    console.log('response ', response)
 
     return response
 }

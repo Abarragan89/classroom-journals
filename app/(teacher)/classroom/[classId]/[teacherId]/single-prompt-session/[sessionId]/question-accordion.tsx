@@ -8,11 +8,13 @@ import {
 } from "@/components/ui/accordion";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Question, Response, ResponseData } from "@/types";
+import GradingPanel from "@/components/grading-panel";
 
 interface ResponseDetail {
     answer: string;
     studId: string;
     studName?: string;
+    responseId: string;
 }
 
 type ScoreGroup = {
@@ -35,9 +37,10 @@ export default function QuestionAccordion({
     endRange: number;
 }) {
     const [currentResponseData, setCurrentResponseData] = useState<OrganizedResponses>({});
-    const currentSubQuery = useRef<{ question: string; score: number }>({
+    const currentSubQuery = useRef<{ question: string; score: number, questionNumber: number }>({
         question: "",
         score: 0,
+        questionNumber: 0
     });
 
     const [isResponseViewModalOpen, setIsResponseViewModalOpen] = useState<boolean>(false);
@@ -46,18 +49,18 @@ export default function QuestionAccordion({
         function organizeQuestionResponses() {
             const responseObj: OrganizedResponses = {};
             responses?.forEach((stuResp: Response) => {
-                (stuResp?.response as unknown as ResponseData[]).forEach(
-                    (responseData: ResponseData) => {
-                        const { question, score, answer } = responseData;
-                        if (!responseObj[question]) {
-                            responseObj[question] = { 0: [], 0.5: [], 1: [] };
-                        }
-                        responseObj[question][score]?.push({
-                            answer: answer,
-                            studId: stuResp.student.id,
-                            studName: stuResp.student.username,
-                        });
+                (stuResp?.response as unknown as ResponseData[]).forEach((responseData: ResponseData) => {
+                    const { question, score, answer } = responseData;
+                    if (!responseObj[question]) {
+                        responseObj[question] = { 0: [], 0.5: [], 1: [] };
                     }
+                    responseObj[question][score]?.push({
+                        responseId: stuResp.id,
+                        answer: answer,
+                        studId: stuResp.student.id,
+                        studName: stuResp.student.username,
+                    });
+                }
                 );
             });
             setCurrentResponseData(responseObj);
@@ -66,9 +69,60 @@ export default function QuestionAccordion({
         organizeQuestionResponses();
     }, [responses]); // Dependency array ensures this runs when 'responses' change
 
-    function handleShowModal(question: string, score: number) {
-        currentSubQuery.current = { question, score };
+    function handleShowModal(question: string, score: number, questionNumber: number) {
+        currentSubQuery.current = { question, score, questionNumber };
         setIsResponseViewModalOpen(true);
+    }
+
+
+    // Update the UI when updating grades in the modal
+    function handleScoreUpdateUI(
+        responseId: string,
+        oldScore: number,
+        question: string,
+        newScore: number,
+    ) {
+        setCurrentResponseData((prev) => {
+            // Clone previous state to avoid direct mutation
+            const updated = { ...prev };
+
+            // Defensive check
+            if (!updated[question]) {
+                console.log('nothing happeneing')
+                return prev
+            };
+
+            console.log('new score ', newScore)
+            // Clone the score groups
+            const questionScores = { ...updated[question] };
+
+            // Remove the response from the old score group
+            questionScores[oldScore] = questionScores[oldScore].filter(
+                (resp) => resp.responseId !== responseId
+            );
+
+            // Find the response object to move
+            const allResponses = Object.values(prev[question]).flat();
+            const responseToMove = allResponses.find((resp) => resp.responseId === responseId);
+
+            // If found, push it to the new score group
+            if (responseToMove) {
+                if (!questionScores[newScore]) {
+                    questionScores[newScore] = [];
+                }
+                const alreadyExists = questionScores[newScore].some(
+                    (resp) => resp.responseId === responseId
+                );
+
+                if (!alreadyExists) {
+                    questionScores[newScore].push(responseToMove);
+                }
+            }
+            return {
+                ...prev,
+                [question]: questionScores,
+            };
+        });
     }
 
     const circleBtnStyles = "text-background rounded-lg w-16 h-8 flex-center opacity-70 hover:cursor-pointer hover:opacity-100";
@@ -94,12 +148,27 @@ export default function QuestionAccordion({
                 }
                 <div className="max-h-[500px] overflow-y-auto custom-scrollbar">
                     {currentResponseData?.[currentSubQuery.current.question]?.[currentSubQuery.current.score]?.map((data, index) => (
-                        <div key={index} className="relative">
+                        <div key={index} className="bg-card px-5 mx-3 pt-3 pb-14 my-4 rounded-md text-sm relative">
                             <p
-                                className="bg-card px-5 mx-3 pt-3 pb-5 my-4 rounded-md text-sm">
+                                className="">
                                 {data.answer}
                             </p>
                             <span className="absolute bottom-1 right-5 text-input text-xs">-{data.studName}</span>
+                            <div className="absolute bottom-1 left-5">
+                                <GradingPanel
+                                    responseId={data.responseId}
+                                    questionNumber={currentSubQuery.current.questionNumber}
+                                    currentScore={currentSubQuery.current.score}
+                                    updateUIQuestionAccordion={(newScore) =>
+                                        handleScoreUpdateUI(
+                                            data.responseId,
+                                            currentSubQuery.current.score,
+                                            currentSubQuery.current.question,
+                                            newScore
+                                        )
+                                    }
+                                />
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -116,19 +185,19 @@ export default function QuestionAccordion({
                             <AccordionContent>
                                 <div className="flex justify-around text-xl mt-3">
                                     <div
-                                        onClick={() => handleShowModal(question.question, 0)}
+                                        onClick={() => handleShowModal(question.question, 0, startRange + index)}
                                         className={`bg-destructive ${circleBtnStyles}`}
                                     >
                                         <p>{currentResponseData[question.question]?.[0]?.length}</p>
                                     </div>
                                     <div
-                                        onClick={() => handleShowModal(question.question, 0.5)}
+                                        onClick={() => handleShowModal(question.question, 0.5, startRange + index)}
                                         className={`bg-warning ${circleBtnStyles}`}
                                     >
                                         <p>{currentResponseData[question.question]?.[0.5]?.length}</p>
                                     </div>
                                     <div
-                                        onClick={() => handleShowModal(question.question, 1)}
+                                        onClick={() => handleShowModal(question.question, 1, startRange + index)}
                                         className={`bg-success ${circleBtnStyles}`}
                                     >
                                         <p>{currentResponseData[question.question]?.[1]?.length}</p>

@@ -13,10 +13,10 @@ export default function DataClientWrapper({
     responses: Response[];
 }) {
 
-    const [currrentQuestions, setCurrentQuestions] = useState<{ start: number, end: number }>({ start: 0, end: questions.length >= 4 ? 4 : questions.length })
+    const [currentQuestions, setCurrentQuestions] = useState<{ start: number, end: number }>({ start: 0, end: questions.length >= 4 ? 4 : questions.length })
 
     function nextQuestionSet() {
-        if (currrentQuestions.end >= questions.length) return
+        if (currentQuestions.end >= questions.length) return
         setCurrentQuestions(prev => ({
             start: prev.end,
             end: prev.end + 4 > questions.length ? questions.length : prev.end + 4
@@ -24,7 +24,7 @@ export default function DataClientWrapper({
     }
 
     function backQuestionSet() {
-        if (currrentQuestions.start <= 0) return
+        if (currentQuestions.start <= 0) return
         setCurrentQuestions(prev => ({
             start: prev.start - 4 <= 0 ? 0 : prev.start - 4,
             end: prev.end - 4
@@ -36,7 +36,7 @@ export default function DataClientWrapper({
     return (
         <div className="mb-10">
             <div className="flex-start mt-5 gap-x-5 mb-3">
-                <p className="font-bold">Questions: {currrentQuestions.start + 1} - {currrentQuestions.end}</p>
+                <p className="font-bold">Questions: {currentQuestions.start + 1} - {currentQuestions.end}</p>
                 <p className={chevronStyles} onClick={backQuestionSet}>
                     <BiChevronLeft size={25} />
                 </p>
@@ -48,16 +48,16 @@ export default function DataClientWrapper({
                 <div className="flex-1 w-[95%] mx-auto">
                     <StudentDataBarChart
                         responses={responses as Response[]}
-                        startRange={currrentQuestions.start}
-                        endRange={currrentQuestions.end}
+                        startRange={currentQuestions.start}
+                        endRange={currentQuestions.end}
                     />
                 </div>
                 <div className="flex-1 p-0 w-[95%] mt-10 sm:px-5 mx-auto lg:mt-0">
                     <QuestionAccordion
                         questions={(questions as unknown as Question[]) as unknown as Question[]}
                         responses={responses as unknown as Response[]}
-                        startRange={currrentQuestions.start}
-                        endRange={currrentQuestions.end}
+                        startRange={currentQuestions.start}
+                        endRange={currentQuestions.end}
                     />
                 </div>
             </div>

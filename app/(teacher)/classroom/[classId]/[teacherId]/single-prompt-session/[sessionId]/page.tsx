@@ -71,7 +71,7 @@ export default async function SinglePromptSession({
     const decryptedResponses = promptSession.responses?.map((response) => ({
         ...response,
         student: {
-            ...response.student,
+            id: response.id,
             username: decryptText(response.student.username as string, response.student.iv as string),
         }
     }));
@@ -141,20 +141,16 @@ export default async function SinglePromptSession({
                 <ToggleGradesVisible
                     promptSessionId={promptSession?.id}
                     gradesVisibility={promptSession?.areGradesVisible}
-                    />
+                />
             </div>
             {/* Bar chart */}
             {promptSession?.promptType === 'multi-question' &&
                 <DataClientWrapper
-                questions={(updatedPromptSession?.questions as unknown as Question[]) as unknown as Question[]}
-                responses={updatedPromptSession?.responses as unknown as Response[]}
+                    questions={(updatedPromptSession?.questions as unknown as Question[]) as unknown as Question[]}
+                    responses={updatedPromptSession?.responses as unknown as Response[]}
                 />
             }
 
-            {/* <ToggleGradesVisible
-                promptSessionId={promptSession?.id}
-                gradesVisibility={promptSession?.areGradesVisible}
-            /> */}
             {promptSession.promptType === 'multi-question' ? (
                 <AssessmentTableData
                     studentSubmittedWithFormattedNamed={studentSubmittedWithFormattedNamed as unknown as Response[]}

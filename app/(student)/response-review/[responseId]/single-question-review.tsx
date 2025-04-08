@@ -67,15 +67,13 @@ export default function SingleQuestionReview({
                         <p className="ml-1 mb-1 text-sm font-bold">Response:</p>
                         {isSubmittable ? (
                             <>
-                                <div className='bg-background px-4  py-3 m-0 rounded-md'>
-                                    <Editor
-                                        setJournalText={(newText) => handleTextChange(index, newText as string)}
-                                        journalText={responseData.answer}
-                                        inputRef={inputRef}
-                                        isInReview={true}
-                                    />
-                                </div>
-                                <p className="text-sm text-center mt-2 italic">click in the box to start typing</p>
+                                <Editor
+                                    setJournalText={(newText) => handleTextChange(index, newText as string)}
+                                    journalText={responseData.answer}
+                                    inputRef={inputRef}
+                                    isInReview={true}
+                                    characterLimit={index === 1 ? 70 : undefined}
+                                />
                             </>
                         ) : (
                             <div className='bg-background px-4  py-3 m-0 rounded-md'>
