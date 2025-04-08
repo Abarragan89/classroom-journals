@@ -22,7 +22,6 @@ export default function GradingPanel({
     const [currentScoreState, setCurrentScoreState] = useState<number>(currentScore)
 
     async function updateResponseScore(score: number) {
-        console.log('updated score ', score)
         try {
             setIsGrading(true)
             await gradeStudentResponse(responseId, questionNumber, score)

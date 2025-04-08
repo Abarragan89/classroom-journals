@@ -8,6 +8,7 @@ import { updateASingleResponse } from '@/lib/actions/response.action';
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { responsePercentage } from '@/lib/utils'
+import { Separator } from '@/components/ui/separator'
 
 export default function MultiQuestionReview({
     allQuestions,
@@ -58,11 +59,32 @@ export default function MultiQuestionReview({
         );
     };
 
+    function displayGradeUI(score: number) {
+        switch (score) {
+            case 0:
+                return 'Wrong';
+                break;
+            case 0.5:
+                return 'Half Credit';
+                break;
+            case 1:
+                return 'Correct';
+                break
+
+        }
+    }
+
+    const gradePercentage = responsePercentage(allQuestions)
     return (
-        <div className="w-full max-w-[900px] mx-auto relative px-5">
-            <div className="flex-between mt-5">
+        <div className="w-full relative">
+            <p className="h2-bold">{promptTitle}</p>
+            <div className="flex-between">
                 {showGrades && (
-                    <p className='font-bold text-right'>Grade: <span className="text-success">{responsePercentage(allQuestions)}</span></p>
+                    <p className='font-bold text-lg text-input ml-0 text-right mb-10'>Grade: <span
+                        className={`
+                        ${parseInt(gradePercentage) >= 90 ? 'text-success' : parseInt(gradePercentage) >= 70 ? 'text-warning' : 'text-destructive'}
+                        `}
+                    >{gradePercentage}</span></p>
                 )}
                 {isSubmittable && responseId &&
                     <Button
@@ -71,13 +93,20 @@ export default function MultiQuestionReview({
                     >Submit</Button>
                 }
             </div>
-            <p className="h2-bold text-center mb-5">{promptTitle}</p>
             {allQuestions?.map((responseData, index) => (
-                <Card className="w-full p-4 space-y-2 max-w-[700px] mx-auto mb-10 relative" key={index}>
-                    {showGrades && (
-                        <p className='absolute right-5 top-3 text-sm'>Score: {responseData.score}</p>
-                    )}
-                    <CardTitle className="p-2 leading-snug text-center">
+                <Card className="w-full max-w-[500px] p-4 space-y-2  mx-auto mb-10 relative" key={index}>
+                    <div className="flex-between left-5 right-5 absolute top-2 text-sm">
+                        <p className='text-accent font-bold'>Question {index + 1}</p>
+                        {showGrades && (
+                            <p className={`
+                                font-bold
+                                ${responseData.score === 1 ? 'text-success' : responseData.score === 0 ? 'text-destructive' : 'text-warning'}
+                                `}
+                            >{displayGradeUI(responseData?.score)}</p>
+                        )}
+                    </div>
+                    <CardTitle className="p-2 leading-snug text-center font-normal italic">
+                    <Separator className='mb-5 mt-2'/>
                         {responseData.question}
                     </CardTitle>
                     <CardContent className="p-3 pt-0">

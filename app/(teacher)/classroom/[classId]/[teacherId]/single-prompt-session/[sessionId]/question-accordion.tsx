@@ -87,12 +87,8 @@ export default function QuestionAccordion({
             const updated = { ...prev };
 
             // Defensive check
-            if (!updated[question]) {
-                console.log('nothing happeneing')
-                return prev
-            };
+            if (!updated[question]) return prev
 
-            console.log('new score ', newScore)
             // Clone the score groups
             const questionScores = { ...updated[question] };
 
@@ -104,16 +100,16 @@ export default function QuestionAccordion({
             // Find the response object to move
             const allResponses = Object.values(prev[question]).flat();
             const responseToMove = allResponses.find((resp) => resp.responseId === responseId);
-
+            
             // If found, push it to the new score group
             if (responseToMove) {
                 if (!questionScores[newScore]) {
                     questionScores[newScore] = [];
                 }
+                // prevents duplicates
                 const alreadyExists = questionScores[newScore].some(
                     (resp) => resp.responseId === responseId
                 );
-
                 if (!alreadyExists) {
                     questionScores[newScore].push(responseToMove);
                 }

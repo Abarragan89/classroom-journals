@@ -136,7 +136,7 @@ export default async function SinglePromptSession({
                 initialStatus={promptSession?.status}
                 initialPublicStatus={promptSession?.isPublic}
             />
-            <div className='space-y-2'>
+            <div className='space-y-4'>
                 <p className="text-input">Class Average: {classAverage}</p>
                 <ToggleGradesVisible
                     promptSessionId={promptSession?.id}

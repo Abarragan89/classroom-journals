@@ -45,9 +45,7 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
         temperature: 0.2,
         max_output_tokens: 16,
     });
-
-    console.log('response ', response)
-
+    
     return response
 }
 
