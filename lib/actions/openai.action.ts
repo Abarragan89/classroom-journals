@@ -25,7 +25,7 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
 
     const response = await openai.responses.create({
         model: "gpt-4o-mini",
-        instructions: `Grade the following answers on a ${gradeLevel} grade level using only one of these values: 0 (wrong), 0.5 (partial), or 1 (correct). Do not explain your reasoning. Reply with only the score. Return the scores of each question in a array in the order they were given. If you are unsure what the question is asking, return null. If the spelling is close enough to the acutal answer, mark it correct. 
+        instructions: `Grade the following answers on a ${gradeLevel} grade level using only one of these values: 0 (wrong), 0.5 (partial), or 1 (correct). Do not explain your reasoning. Reply with only the score. Return the scores of each question in an array in the order they were given. If you are unsure what the question is asking, return null. If the spelling is close enough to the acutal answer, mark it correct. 
         Questions: ${questions}`,
         input: [
             {
@@ -43,9 +43,8 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
             }
         },
         temperature: 0.2,
-        max_output_tokens: 16,
+        max_output_tokens: 100,
     });
-    
     return response
 }
 

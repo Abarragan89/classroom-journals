@@ -31,17 +31,17 @@ export function StudentDataBarChart({
     endRange: number;
 }) {
 
+    const responseArray = (responses[0]?.response ?? []) as unknown as ResponseData[];
+
     // Populate the chart data with the questions first
-    const chartData = [...(responses[0]?.response as unknown as ResponseData[])?.slice(startRange, endRange)?.map((response: ResponseData, index: number) => {
-        return (
-            {
-                question: `Q: ${startRange + index + 1}`,
-                correct: 0,
-                half: 0,
-                wrong: 0,
-            }
-        )
-    })]
+    const chartData = responseArray
+        .slice(startRange, endRange)
+        .map((response: ResponseData, index: number) => ({
+            question: `Q: ${startRange + index + 1}`,
+            correct: 0,
+            half: 0,
+            wrong: 0,
+        }));
 
     // add scores to the chart data
     responses.forEach((response) => (response?.response as unknown as ResponseData[])?.slice(startRange, endRange)?.forEach((responseData: ResponseData, index: number) => {

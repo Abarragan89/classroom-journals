@@ -39,6 +39,7 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
                 message: "You have already submitted your responses."
             };
         }
+        console.log('befor ai')
 
         // Grade it with AI Only if premium member
         if (promptType === 'multi-question') {
