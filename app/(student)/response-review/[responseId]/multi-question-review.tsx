@@ -16,7 +16,6 @@ export default function MultiQuestionReview({
     setAllQuestions,
     responseId,
     showGrades,
-    promptTitle,
 }: {
     allQuestions: ResponseData[],
     setAllQuestions: React.Dispatch<React.SetStateAction<ResponseData[]>>
@@ -25,7 +24,6 @@ export default function MultiQuestionReview({
     // and needs the submit button here to update
     responseId?: string,
     showGrades: boolean
-    promptTitle: string
 }) {
 
     const router = useRouter();
@@ -62,23 +60,20 @@ export default function MultiQuestionReview({
     function displayGradeUI(score: number) {
         switch (score) {
             case 0:
-                return 'Wrong';
-                break;
-            case 0.5:
-                return 'Half Credit';
-                break;
-            case 1:
-                return 'Correct';
-                break
-
+                return <p className='text-destructive'>Wrong</p>;
+                case 0.5:
+                return <p className='text-warning'>Half Credit</p>;
+                case 1:
+                return <p className='text-success'>Correct</p>;
         }
     }
 
     const gradePercentage = responsePercentage(allQuestions)
+    
     return (
         <div className="w-full relative">
-            <p className="h2-bold">{promptTitle}</p>
-            <div className="flex-between">
+            <p className="h2-bold text-input">Assessment</p>
+            <div className="flex-between mt-5">
                 {showGrades && (
                     <p className='font-bold text-lg text-input ml-0 text-right mb-10'>Grade: <span
                         className={`
@@ -94,22 +89,18 @@ export default function MultiQuestionReview({
                 }
             </div>
             {allQuestions?.map((responseData, index) => (
-                <Card className="w-full max-w-[500px] p-4 space-y-2  mx-auto mb-10 relative" key={index}>
+                <Card className="w-full max-w-[650px] p-4 space-y-2  mx-auto mb-10 relative" key={index}>
                     <div className="flex-between left-5 right-5 absolute top-2 text-sm">
                         <p className='text-accent font-bold'>Question {index + 1}</p>
                         {showGrades && (
-                            <p className={`
-                                font-bold
-                                ${responseData.score === 1 ? 'text-success' : responseData.score === 0 ? 'text-destructive' : 'text-warning'}
-                                `}
-                            >{displayGradeUI(responseData?.score)}</p>
+                            displayGradeUI(responseData?.score)
                         )}
                     </div>
-                    <CardTitle className="p-2 leading-snug text-center font-normal italic">
-                    <Separator className='mb-5 mt-2'/>
+                    <CardTitle className="p-4 leading-snug text-center font-normal italic">
+                    <Separator className='mb-5'/>
                         {responseData.question}
                     </CardTitle>
-                    <CardContent className="p-3 pt-0">
+                    <CardContent className="p-3 pt-0 mt-0">
                         <p className="ml-1 mb-1 text-sm font-bold">Answer:</p>
                         {isSubmittable ? (
                             <>

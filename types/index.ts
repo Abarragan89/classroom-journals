@@ -68,9 +68,12 @@ export type PromptSession = {
     promptId: string | null;
     title: string;
     questions: JsonValue;
+    isCompleted?: boolean // only exists on the client not DB
+    isSubmittable?: boolean; // only exists on the client not DB
     assignedAt: Date;
     isPublic: boolean;
     promptType: string;
+    studentResponseId?: string;
     category: PromptCategory;
     prompt?: Prompt;
     areGradesVisible: boolean;
@@ -110,6 +113,7 @@ export interface SearchOptions {
     filter: string;
     paginationSkip: number,
     searchWords: string
+    status?: string
 }
 
 

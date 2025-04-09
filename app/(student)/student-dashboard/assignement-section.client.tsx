@@ -1,34 +1,31 @@
 'use client'
-import { PromptCategory, PromptSession, SearchOptions } from "@/types"
+import { PromptSession, SearchOptions } from "@/types"
 import { useRef, useState } from "react"
-import AssignmentListItem from "@/components/shared/AssignmentListSection/assignment-list-item"
 import { getFilteredPromptSessions } from "@/lib/actions/prompt.session.actions"
-import PromptSearchBar from "../prompt-filter-options/prompt-search-bar"
-import TraitFilterCombobox from "../prompt-filter-options/trait-filter-combobox"
-import PaginationList from "../prompt-filter-options/pagination-list"
-
+import PromptSearchBar from "@/components/shared/prompt-filter-options/prompt-search-bar"
+import TraitFilterCombobox from "@/components/shared/prompt-filter-options/trait-filter-combobox"
+import PaginationList from "@/components/shared/prompt-filter-options/pagination-list"
+import StudentAssignmentListItem from "./student-assignment-list-item"
+import { PromptCategory } from "@/types"
 
 interface Props {
-    categories: PromptCategory[];
     initialPrompts: PromptSession[];
-    studentCount: number;
     classId: string;
-    teacherId: string;
     promptCountTotal: number
+    categories: PromptCategory[]
 }
-export default function AssignmentListSection({
-    categories,
+export default function AssignmentSectionClient({
     initialPrompts,
-    studentCount,
     classId,
-    teacherId,
-    promptCountTotal
+    promptCountTotal,
+    categories
 }: Props) {
 
     const [fetchedPrompts, setFetchedPrompts] = useState<PromptSession[]>(initialPrompts)
 
     const promptSearchOptions = useRef<SearchOptions>({
         category: '',
+        status: '',
         filter: '',
         paginationSkip: 0,
         searchWords: ''
@@ -41,12 +38,8 @@ export default function AssignmentListSection({
 
     const traitFilterOptions = [
         {
-            value: "desc",
-            label: "Newest",
-        },
-        {
-            value: "asc",
-            label: "Oldest",
+            value: " ",
+            label: "All Assignments",
         },
         {
             value: "multi-question",
@@ -55,31 +48,29 @@ export default function AssignmentListSection({
         {
             value: "single-question",
             label: "Blog Prompts",
-        },
+        }
     ]
-
-    // const categoryFilterOptions
 
     const categoryFilterOptions = categories.map(category => ({
         value: category.id,
         label: category.name
     }))
+    
+    categoryFilterOptions.unshift({value: " ", label: "All Categories"})
 
 
     return (
         <>
-            < div className="flex flex-col-reverse items-end lg:flex-row lg:items-start justify-between">
+            < div className="flex flex-col-reverse items-end md:flex-row md:items-start justify-between">
                 {fetchedPrompts?.length <= 0 ? (
                     <p className="flex-1">No Assignments</p>
                 ) : (
-                    <div className="flex-2 w-full lg:mr-10">
+                    <div className="flex-2 w-full md:mr-10">
                         {fetchedPrompts.map((prompt: PromptSession) => (
-                            <AssignmentListItem
+                            <StudentAssignmentListItem
                                 key={prompt.id}
                                 jotData={prompt}
                                 classId={classId}
-                                teacherId={teacherId}
-                                classSize={studentCount}
                             />
                         ))}
                         <PaginationList
@@ -90,7 +81,7 @@ export default function AssignmentListSection({
                         />
                     </div>
                 )}
-                <div className="flex-1 sticky top-5 mb-5 w-full flex flex-wrap md:flex-col lg:flex-col items-stretch lg:min-w-[280px] gap-3">
+                <div className="flex-1 sticky top-5 mb-5 w-full flex flex-wrap md:flex-col items-stretch md:min-w-[280px] gap-3">
                     {/* Search Bar (always full width) */}
                     <div className="w-full">
                         <PromptSearchBar
@@ -99,23 +90,21 @@ export default function AssignmentListSection({
                         />
                     </div>
                     {/* Wrapper for combo boxes */}
-                    <div className="flex w-full gap-4 lg:flex-col">
+                    <div className="flex w-full gap-4 md:flex-col">
                         <div className="flex-1 w-full">
-                            {/* Trait Combo */}
                             <TraitFilterCombobox
                                 searchOptionsRef={promptSearchOptions}
-                                getFilteredSearch={getFilteredSearch}
                                 options={traitFilterOptions}
-                                field={'filter'}
+                                field='filter'
+                                getFilteredSearch={getFilteredSearch}
                             />
                         </div>
                         <div className="flex-1 w-full">
-                            {/* Category Combo */}
                             <TraitFilterCombobox
                                 searchOptionsRef={promptSearchOptions}
-                                getFilteredSearch={getFilteredSearch}
                                 options={categoryFilterOptions}
-                                field={'category'}
+                                field='category'
+                                getFilteredSearch={getFilteredSearch}
                             />
                         </div>
                     </div>

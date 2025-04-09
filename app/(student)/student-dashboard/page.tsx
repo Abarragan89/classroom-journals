@@ -1,9 +1,7 @@
 import { auth } from "@/auth";
 import Header from "@/components/shared/header";
-import { prisma } from "@/db/prisma";
-import { Session } from "@/types";
+import { PromptCategory, Response, Session } from "@/types";
 import { notFound } from "next/navigation";
-import StudentTaskListItem from "@/components/student-task-list-item";
 import { PromptSession } from "@/types";
 import { getUserNotifications } from "@/lib/actions/notifications.action";
 import { UserNotification } from "@/types";
@@ -11,6 +9,10 @@ import ClassDiscussionCarousel from "@/components/carousels/class-discussion-car
 import NotificationsCarousel from "@/components/carousels/notifications-carousel";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getAllSessionsInClass } from "@/lib/actions/prompt.session.actions";
+import AssignmentSectionClient from "./assignement-section.client";
+import { getAllPromptCategories } from "@/lib/actions/prompt.categories";
+import { prisma } from "@/db/prisma";
 
 export default async function StudentDashboard() {
 
@@ -25,38 +27,51 @@ export default async function StudentDashboard() {
 
     const classroomId = session?.classroomId
 
-    const classroomData = await prisma.classroom.findUnique({
-        where: { id: classroomId },
-        include: {
-            users: {
-                include: {
-                    user: {
-                        select: { id: true, username: true }
-                    }
-                },
-            },
-            PromptSession: {
-                include: {
-                    responses: {
-                        select: { studentId: true, id: true }
-                    }
-                },
-                orderBy: {
-                    createdAt: 'desc'
-                }
-            }
+    if (!classroomId) notFound()
+
+    // Get Class categories for filtering
+    const { userId: teacherId } = await prisma.classUser.findFirst({
+        where: {
+            classId: classroomId,
+            role: 'teacher'
+        },
+        select: {
+            userId: true
         }
-    });
+    }) as { userId: string }
+    let allPromptCategories = await getAllPromptCategories(teacherId) as unknown as PromptCategory[]
+
+    // Get all Sessions from class and add meta data
+    const allPromptSessions = await getAllSessionsInClass(classroomId) as unknown as { prompts: PromptSession[], totalCount: number }
+    const promptSessionWithMetaData = allPromptSessions?.prompts?.map(session => {
+        // Determine if assignment is completed
+        const isCompleted = session?.responses?.some(response => response.studentId === studentId)
+        let studentResponseId: string | null = null
+        let isSubmittable: boolean = false;
+        if (isCompleted) {
+            // if completed, get their responseID so we can navigate them to their '/review-reponse/${responseID}'
+            const { id, isSubmittable: isReturned } = session?.responses?.find(res => res.studentId === studentId) as unknown as Response
+            studentResponseId = id;
+            isSubmittable = isReturned
+        }
+        // Add fields is completed, and their specific responseID to the promptSession
+        return ({
+            ...session,
+            isCompleted,
+            isSubmittable,
+            studentResponseId,
+        })
+    }) as unknown as PromptSession[]
+
+
 
     // Extract the student IDs from responses and filter PromptSessions
-    const tasksToDo = classroomData?.PromptSession.filter(singleSession =>
-        !singleSession.responses.some(response => response.studentId === studentId)
+    const tasksToDo = promptSessionWithMetaData?.filter(singleSession =>
+        !singleSession?.responses?.some(response => response.studentId === studentId)
     ) as unknown as PromptSession[];
 
     // Get the blog sessions to display to link to discussion board
-    const blogPrompts = classroomData?.PromptSession.filter(singleSession => singleSession.promptType === 'single-question' && singleSession.isPublic) as unknown as PromptSession[]
-
-    if (!classroomData) return;
+    // const blogPrompts = promptSessionWithMetaData?.filter(singleSession => singleSession.promptType === 'single-question' && singleSession.isPublic) as unknown as PromptSession[]
 
     const userNotifications = await getUserNotifications(studentId) as unknown as UserNotification[]
 
@@ -64,13 +79,16 @@ export default async function StudentDashboard() {
         <>
             <Header session={session} studentId={studentId} />
             <main className="wrapper relative">
-                <h1 className="h1-bold mt-2 line-clamp-1">{classroomData?.name}</h1>
-                <h1 className="h2-bold mt-2 line-clamp-1">Hi, {session?.user?.name}</h1>
-                <Button
-                    className="absolute right-10"
-                ><Plus /> Request</Button>
+                {/* <h1 className="h1-bold mt-2 line-clamp-1">{allPromptSessions?.prompts?.name}</h1> */}
+                <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {session?.user?.name}</h1>
+                <div className="flex-end mb-5">
+                    <Button
+                    >
+                        <Plus /> Request
+                    </Button>
+                </div>
                 {/* Show prompt sessions if they exist */}
-                {tasksToDo?.length > 0 ? (
+                {/* {tasksToDo?.length > 0 ? (
                     <section>
                         <h2 className="h3-bold my-5">Assignments</h2>
                         <div className="flex-start flex-wrap gap-10">
@@ -100,7 +118,17 @@ export default async function StudentDashboard() {
                             />
                         </article>
                     </section>
-                )}
+                )} */}
+
+
+                
+                <h3 className="h3-bold mb-2 ml-1">Assignments</h3>
+                <AssignmentSectionClient
+                    initialPrompts={promptSessionWithMetaData}
+                    classId={classroomId}
+                    promptCountTotal={allPromptSessions.totalCount}
+                    categories={allPromptCategories}
+                />
             </main>
         </>
     )

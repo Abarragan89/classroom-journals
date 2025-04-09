@@ -12,7 +12,13 @@ export async function getAllSessionsInClass(classId: string) {
                 orderBy: { createdAt: 'desc' },
                 select: {
                     id: true,
-                    responses: true,
+                    responses: {
+                        select: {
+                            id: true,
+                            studentId: true,
+                            isSubmittable: true
+                        }
+                    },
                     isPublic: true,
                     createdAt: true,
                     promptType: true,
@@ -217,7 +223,7 @@ export async function getFilteredPromptSessions(filterOptions: SearchOptions) {
             },
             take: 30,
             orderBy: {
-                updatedAt: filterOptions.filter === 'asc' ? 'asc' : 'desc'
+                createdAt: filterOptions.filter === 'asc' ? 'asc' : 'desc'
             },
             skip: filterOptions.paginationSkip, // pagination filter
         });

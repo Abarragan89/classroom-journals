@@ -16,6 +16,29 @@ export default function PromptFilterOptions({
 
 }: Props) {
 
+    const traitFilterOptions = [
+        {
+            value: "multi-question",
+            label: "Assessments",
+        },
+        {
+            value: "single-question",
+            label: "Blog Prompts",
+        },
+        {
+            value: "never-assigned",
+            label: "Never Assigned",
+        },
+        {
+            value: "asc",
+            label: "Oldest",
+        },
+        {
+            value: "desc",
+            label: "Newest",
+        },
+    ]
+
     return (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-5 mt-10">
             <PromptSearchBar
@@ -23,6 +46,7 @@ export default function PromptFilterOptions({
                 getFilteredSearch={getFilteredSearch}
             />
             <TraitFilterCombobox
+                options={traitFilterOptions}
                 searchOptionsRef={searchOptionsRef}
                 getFilteredSearch={getFilteredSearch}
             />

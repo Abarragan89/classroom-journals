@@ -123,7 +123,9 @@ export default function SinglePromptEditor({
     async function saveAndContinue(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (journalText.trim() === '') {
-            toast('Add some text!')
+            toast.error('Add Some Text!', {
+                style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
+            });
             return
         }
         try {

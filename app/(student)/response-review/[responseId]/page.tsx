@@ -38,20 +38,20 @@ export default async function ResponseReview({
                     <ArrowLeftIcon className="mr-1" size={20} />
                     Back to My Work
                 </Link>
-                <h1 className="h1-bold mt-2 line-clamp-1">{h1Heading}</h1>
+                <h1 className="h2-bold mt-2 ">{singleResponse?.promptSession?.title}</h1>
                 {singleResponse?.promptSession?.promptType === 'multi-question' ?
                     <ReviewWrapper
                         allQuestions={singleResponse?.response as unknown as ResponseData[]}
                         isSubmittable={singleResponse?.isSubmittable}
                         responseId={singleResponse?.id}
                         showGrades={singleResponse?.promptSession?.areGradesVisible}
-                        promptTitle={singleResponse?.promptSession?.title}
                     />
                     :
                     <SingleQuestionReview
                         questions={singleResponse?.response as unknown as ResponseData[]}
                         isSubmittable={singleResponse?.isSubmittable}
                         responseId={singleResponse?.id}
+                        showGrades={singleResponse?.promptSession?.areGradesVisible as boolean}
                     />
                 }
             </main>

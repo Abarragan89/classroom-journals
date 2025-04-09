@@ -13,12 +13,12 @@ export default function AssignmentListItem({
     jotData,
     classId,
     teacherId,
-    classSize
+    classSize,
 }: {
     jotData: PromptSession,
     classId: string,
     teacherId?: string,
-    classSize?: number
+    classSize?: number,
 }) {
 
     const type = jotData.promptType === 'multi-question' ? 'Assessment' : 'Blog';
@@ -51,6 +51,7 @@ export default function AssignmentListItem({
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
+            {/* This needs to outside the Link so user can click on questionPopup without linking  */}
             <div className="text-xs absolute text-input right-3 bottom-[6px]">
                 {jotData.promptType === 'multi-question' ? (
                     <QuestionPopup promptQuestions={jotData as unknown as Prompt} />

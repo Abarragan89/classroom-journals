@@ -11,11 +11,13 @@ import { toast } from 'sonner'
 export default function SingleQuestionReview({
     questions,
     isSubmittable,
-    responseId
+    responseId,
+    showGrades
 }: {
     questions: ResponseData[],
     isSubmittable: boolean,
-    responseId: string
+    responseId: string,
+    showGrades: boolean
 }) {
 
     const router = useRouter();
@@ -50,14 +52,25 @@ export default function SingleQuestionReview({
         );
     };
 
+    const gradePercentage = `${questions?.[0]?.score}%`
+
     return (
-        <div className="w-full max-w-[900px] mx-auto relative px-5 mt-10">
-            {isSubmittable &&
-                <Button
-                    onClick={() => updateResponsesHandler(allQuestions)}
-                    className="mr-0 block mt-5 mb-10"
-                >Submit</Button>
-            }
+        <div className="w-full relative">
+            <div className="flex-between mt-5">
+                {showGrades && (
+                    <p className='font-bold text-lg text-input ml-0 text-right mb-10'>Grade: <span
+                        className={`
+                        ${parseInt(gradePercentage) >= 90 ? 'text-success' : parseInt(gradePercentage) >= 70 ? 'text-warning' : 'text-destructive'}
+                        `}
+                    >{gradePercentage}</span></p>
+                )}
+                {isSubmittable &&
+                    <Button
+                        onClick={() => updateResponsesHandler(allQuestions)}
+                        className="mr-0 block mt-5 mb-10"
+                    >Submit</Button>
+                }
+            </div>
             {allQuestions.slice(0, 2).map((responseData, index) => (
                 <Card className="w-full p-4 space-y-2 max-w-[700px] mx-auto mb-10" key={index}>
                     <CardTitle className="p-2 leading-snug text-center">

@@ -16,48 +16,29 @@ import {
 } from "@/components/ui/popover"
 import { SearchOptions } from "@/types"
 
-const frameworks = [
-    {
-        value: "multi-question",
-        label: "Assessments",
-    },
-    {
-        value: "single-question",
-        label: "Blog Prompts",
-    },
-    {
-        value: "never-assigned",
-        label: "Never Assigned",
-    },
-    {
-        value: "asc",
-        label: "Oldest",
-    },
-    {
-        value: "desc",
-        label: "Newest",
-    },
-]
-
 interface Props {
     searchOptionsRef: React.RefObject<SearchOptions>;
+    field: string,
+    options: { value: string; label: string }[]
     getFilteredSearch: (filterOptions: SearchOptions) => void;
 }
 
 export default function TraitFilterCombobox({
     searchOptionsRef,
-    getFilteredSearch
+    field,
+    getFilteredSearch,
+    options
 }: Props) {
 
 
     const [open, setOpen] = useState<boolean>(false)
-    const [value, setValue] = useState<string>("desc")
+    const [value, setValue] = useState<string>(options?.[0].value)
 
     const handlePromptTraitChange = (value: string) => {
         // Update the ref object directly
         searchOptionsRef.current = {
             ...searchOptionsRef.current,
-            filter: value
+            [field]: value
         };
         // Call getFilteredSearch with the updated options
         getFilteredSearch(searchOptionsRef.current);
@@ -73,7 +54,7 @@ export default function TraitFilterCombobox({
                     className="justify-between truncate relative overflow-hidden"
                 >
                     <span className="block truncate max-w-[140px]">{value
-                        ? frameworks.find((framework) => framework.value === value)?.label
+                        ? options.find((option) => option.value === value)?.label
                         : "All Classes..."}</span>
                     <div className="absolute right-6 top-0 bottom-0 w-8 pointer-events-none"></div>
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -83,10 +64,10 @@ export default function TraitFilterCombobox({
                 <Command>
                     <CommandList>
                         <CommandGroup>
-                            {frameworks.map((framework) => (
+                            {options.map((option) => (
                                 <CommandItem
-                                    key={framework.value}
-                                    value={framework.value}
+                                    key={option.value}
+                                    value={option.value}
                                     onSelect={(currentValue) => {
                                         setValue(currentValue === value ? "" : currentValue)
                                         setOpen(false)
@@ -96,10 +77,10 @@ export default function TraitFilterCombobox({
                                     <Check
                                         className={cn(
                                             "mr-2 h-4 w-4",
-                                            value === framework.value ? "opacity-100" : "opacity-0"
+                                            value === option.value ? "opacity-100" : "opacity-0"
                                         )}
                                     />
-                                    {framework.label}
+                                    {option.label}
                                 </CommandItem>
                             ))}
                         </CommandGroup>

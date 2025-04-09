@@ -67,7 +67,7 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.log("Error creating student response:", error.message);
             console.error(error.stack);
         } else {
             console.log("Unexpected error:", error);
