@@ -58,8 +58,7 @@ export default function AssignmentListSection({
         },
     ]
 
-    // const categoryFilterOptions
-
+    // convert categories data into consumable combobox data
     const categoryFilterOptions = categories.map(category => ({
         value: category.id,
         label: category.name

@@ -1,6 +1,5 @@
 import { auth } from "@/auth";
 import Header from "@/components/shared/header";
-// import { prisma } from "@/db/prisma";
 import { Session } from "@/types";
 import { notFound } from "next/navigation";
 

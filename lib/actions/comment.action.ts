@@ -15,7 +15,7 @@ export async function addComment(responseId: string, text: string, userId: strin
             const newComment = await prisma.comment.create({
                 data: {
                     responseId,
-                    text,
+                    text: text.trim(),
                     userId
                 },
                 select: {
@@ -114,7 +114,7 @@ export async function replyComment(responseId: string, parentId: string, text: s
                 data: {
                     responseId,
                     parentId,
-                    text,
+                    text: text.trim(),
                     userId
                 },
                 select: {

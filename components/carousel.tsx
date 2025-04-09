@@ -1,12 +1,12 @@
 'use client'
 import React, { useCallback } from 'react'
 import useEmblaCarousel from 'embla-carousel-react';
-import Autoplay from 'embla-carousel-autoplay'
+import AutoScroll from 'embla-carousel-auto-scroll'
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 
 export default function Carousel({ children }: { children: React.ReactNode }) {
-    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, })
+    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, }, [AutoScroll({ playOnInit: true , speed: 0.4})])
 
     const scrollPrev = useCallback(() => {
         if (emblaApi) emblaApi.scrollPrev()

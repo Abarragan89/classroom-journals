@@ -1,6 +1,4 @@
-
 import { PromptCategory, SearchOptions } from "@/types"
-import CategoryFilterCombobox from "./category-filter-combobox"
 import PromptSearchBar from "./prompt-search-bar"
 import TraitFilterCombobox from "./trait-filter-combobox"
 
@@ -39,6 +37,12 @@ export default function PromptFilterOptions({
         },
     ]
 
+    // convert categories data into consumable combobox data
+    const categoryFilterOptions = categories.map(category => ({
+        value: category.id,
+        label: category.name
+    }))
+
     return (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-5 mt-10">
             <PromptSearchBar
@@ -46,13 +50,15 @@ export default function PromptFilterOptions({
                 getFilteredSearch={getFilteredSearch}
             />
             <TraitFilterCombobox
-                options={traitFilterOptions}
                 searchOptionsRef={searchOptionsRef}
+                options={traitFilterOptions}
+                field='filter'
                 getFilteredSearch={getFilteredSearch}
             />
-            <CategoryFilterCombobox
+            <TraitFilterCombobox
                 searchOptionsRef={searchOptionsRef}
-                categories={categories}
+                options={categoryFilterOptions}
+                field='category'
                 getFilteredSearch={getFilteredSearch}
             />
         </div>
