@@ -3,7 +3,7 @@ import Header from "@/components/shared/header";
 import { PromptCategory, Response, ResponseData, Session } from "@/types";
 import { notFound } from "next/navigation";
 import { PromptSession } from "@/types";
-import { Plus, X } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getAllSessionsInClass } from "@/lib/actions/prompt.session.actions";
 import AssignmentSectionClient from "./assignement-section.client";
@@ -40,7 +40,7 @@ export default async function StudentDashboard() {
             userId: true
         }
     }) as { userId: string }
-    let allPromptCategories = await getAllPromptCategories(teacherId) as unknown as PromptCategory[]
+    const allPromptCategories = await getAllPromptCategories(teacherId) as unknown as PromptCategory[]
 
     // Get all Sessions from class and add meta data
     const allPromptSessions = await getAllSessionsInClass(classroomId) as unknown as { prompts: PromptSession[], totalCount: number }

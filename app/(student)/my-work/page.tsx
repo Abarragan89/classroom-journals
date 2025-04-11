@@ -31,7 +31,7 @@ export default async function MyWork() {
     const allPromptSessions = await getAllSessionsInClassForStudent(classroomId) as unknown as { prompts: PromptSession[], totalCount: number }
 
     // Determine Incomplete Tasks
-    let incompleteTasks = allPromptSessions?.prompts
+    const incompleteTasks = allPromptSessions?.prompts
         .filter(singleSession =>
             !singleSession?.responses?.some(response => response.studentId === studentId))
         .map(session => ({
@@ -42,7 +42,7 @@ export default async function MyWork() {
         })) as unknown as PromptSession[];
 
     // Determine Returned Work 
-    let returnedWork = studentResponses.map(response => {
+    const returnedWork = studentResponses.map(response => {
         if (response.isSubmittable) {
             return ({
                 id: response.id,
@@ -57,7 +57,7 @@ export default async function MyWork() {
         .sort((a, b) => new Date(b!.createdAt).getTime() - new Date(a!.createdAt).getTime()) as unknown as PromptSession[];
 
     // Completed Tasks
-    let completedTasks = studentResponses.map(response => {
+    const completedTasks = studentResponses.map(response => {
         // If it's submittable, then it has been returned and should not be on this table
         if (response.isSubmittable) return
         let score: string = 'N/A'

@@ -1,14 +1,11 @@
-import { Prompt, PromptSession } from '@/types'
+import { PromptSession } from '@/types'
 import { formatDateLong } from '@/lib/utils'
 import Link from 'next/link'
-import QuestionPopup from '@/components/shared/prompt-card/question-popup'
 
 export default function StudentAssignmentListItem({
     jotData,
-    classId,
 }: {
     jotData: PromptSession,
-    classId: string,
 }) {
 
     const type = jotData.promptType === 'multi-question' ? 'Assessment' : 'Blog';

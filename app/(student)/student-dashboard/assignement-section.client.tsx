@@ -77,7 +77,6 @@ export default function AssignmentSectionClient({
                             <StudentAssignmentListItem
                                 key={prompt.id}
                                 jotData={prompt}
-                                classId={classId}
                             />
                         ))}
                         <PaginationList

@@ -22,6 +22,8 @@ export default function BlogCard({
     author
 }: Props) {
 
+    console.log('blog dat ', date)
+
     return (
         <div className="embla__slide-inner flex-col h-full w-[300px] border pb-2 rounded-sm hover:cursor-pointer relative">
             {/* Your slide content here */}

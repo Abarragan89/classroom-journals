@@ -57,7 +57,7 @@ export default function NotificationSection({
                     </div>
                 </>
             ) : (
-                <h3 className="h3-bold text-accent italic text-center">No Notifications</h3>
+                <h3 className="text-2xl text-accent italic text-center">No Notifications</h3>
             )}
         </section>
     )
