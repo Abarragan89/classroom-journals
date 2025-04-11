@@ -376,6 +376,7 @@ export async function getSingleStudentResponses(studentId: string) {
                 isSubmittable: true,
                 promptSession: {
                     select: {
+                        id: true,
                         promptType: true,
                         title: true,
                         areGradesVisible: true,

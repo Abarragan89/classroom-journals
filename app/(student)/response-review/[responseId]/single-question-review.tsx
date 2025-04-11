@@ -56,7 +56,7 @@ export default function SingleQuestionReview({
 
     return (
         <div className="w-full relative">
-            <div className="flex-between mt-5">
+            <div className="flex-between mt-10">
                 {showGrades && (
                     <p className='font-bold text-lg text-input ml-0 text-right mb-10'>Grade: <span
                         className={`

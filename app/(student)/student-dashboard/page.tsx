@@ -94,7 +94,7 @@ export default async function StudentDashboard() {
     const featuredBlogs = await prisma.response.findMany({
         where: {
             studentId: { in: studentIdArray },
-            likeCount: { gt: 1 }
+            likeCount: { gt: 2 }
         },
         select: {
             id: true,
@@ -125,8 +125,8 @@ export default async function StudentDashboard() {
         take: 10,
     })
 
+    // format and sort featured blogs for display
     const today = new Date();
-
     const decryptedBlogNames = featuredBlogs
         .map((blog) => {
             const responseData = blog?.response as unknown as ResponseData[];
@@ -162,7 +162,6 @@ export default async function StudentDashboard() {
         <>
             <Header session={session} studentId={studentId} />
             <main className="wrapper relative">
-                {/* <h1 className="h1-bold mt-2 line-clamp-1">{allPromptSessions?.prompts?.name}</h1> */}
                 <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {session?.user?.name}</h1>
                 <div className="flex-end">
                     <Button
@@ -231,6 +230,7 @@ export default async function StudentDashboard() {
                         classId={classroomId}
                         promptCountTotal={allPromptSessions.totalCount}
                         categories={allPromptCategories}
+                        studentId={studentId}
                     />
                 </section>
             </main>

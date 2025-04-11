@@ -11,7 +11,7 @@
     --secondary: hsla(209, 38%, 21%, 0.959);
     --secondary-foreground: hsl(15, 40%, 98%);
     --muted: hsl(228, 19%, 35%);
-    --muted-foreground: hsl(0, 0%, 59%);
+    --muted-foreground: hsl(0, 3%, 40%);
     --card: hsla(60, 4%, 77%, 0.925);
     --card-foreground: hsl(24, 85%, 11%);
     --accent: hsl(203, 38%, 36%);
@@ -42,8 +42,8 @@
     --primary-foreground: hsl(222.2 84% 4.9%);
     --secondary: hsl(206, 68%, 20%);
     --secondary-foreground: hsl(210 40% 98%);
-    --muted: hsl(227, 15%, 55%);
-    --muted-foreground: hsl(220, 2%, 25%);
+    --muted: hsl(228, 10%, 19%);
+    --muted-foreground: hsl(240, 3%, 34%);
     --card: hsl(220.9 39.3% 11%);
     --card-foreground: hsl(212.7 26.8% 83.9%);
     --accent: hsl(217, 25%, 64%);

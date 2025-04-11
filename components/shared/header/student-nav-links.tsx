@@ -19,7 +19,7 @@ export default function StudentNavLinks() {
 
             <Link href={`/my-work`} className={`
                 flex-center hover:cursor-pointer hover:text-primary
-                ${pathname === 'student-grades' ? 'text-primary underline' : 'text-ring'}    
+                ${pathname === 'my-work' ? 'text-primary underline' : 'text-ring'}    
                 `}>
                 <ClipboardPen size={16} className='mr-1' />My Work
             </Link>

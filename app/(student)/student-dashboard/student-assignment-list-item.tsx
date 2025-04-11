@@ -6,11 +6,9 @@ import QuestionPopup from '@/components/shared/prompt-card/question-popup'
 export default function StudentAssignmentListItem({
     jotData,
     classId,
-    studentId,
 }: {
     jotData: PromptSession,
     classId: string,
-    studentId?: string,
 }) {
 
     const type = jotData.promptType === 'multi-question' ? 'Assessment' : 'Blog';
