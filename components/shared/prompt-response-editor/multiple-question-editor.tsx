@@ -172,7 +172,6 @@ export default function MultipleQuestionEditor({
                         setAllQuestions={setAllQuestions}
                         isSubmittable={true}
                         showGrades={false}
-                        promptTitle="Review Answers"
                     />
                     <div className="flex flex-col justify-center items-center">
                         <p className="text-center font-bold">Ready to Submit?</p>

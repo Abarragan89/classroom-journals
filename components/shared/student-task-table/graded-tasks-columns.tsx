@@ -24,7 +24,7 @@ export const gradedTasksColumns: ColumnDef<Response>[] = [
                     </div>)
             } else {
                 return (
-                    <div className="text-ring">
+                    <div className="text-ring font-bold">
                         {'N/A'}
                     </div>)
             }

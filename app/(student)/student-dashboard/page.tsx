@@ -3,9 +3,7 @@ import Header from "@/components/shared/header";
 import { PromptCategory, Response, ResponseData, Session } from "@/types";
 import { notFound } from "next/navigation";
 import { PromptSession } from "@/types";
-import { getUserNotifications } from "@/lib/actions/notifications.action";
-import { UserNotification } from "@/types";
-import { Plus } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getAllSessionsInClass } from "@/lib/actions/prompt.session.actions";
 import AssignmentSectionClient from "./assignement-section.client";
@@ -66,17 +64,7 @@ export default async function StudentDashboard() {
         })
     }) as unknown as PromptSession[]
 
-
-
-    // Extract the student IDs from responses and filter PromptSessions
-    // const tasksToDo = promptSessionWithMetaData?.filter(singleSession =>
-    //     !singleSession?.responses?.some(response => response.studentId === studentId)
-    // ) as unknown as PromptSession[];
-
-    // Get the blog sessions to display to link to discussion board
-    // const blogPrompts = promptSessionWithMetaData?.filter(singleSession => singleSession.promptType === 'single-question' && singleSession.isPublic) as unknown as PromptSession[]
-
-    const userNotifications = await getUserNotifications(studentId) as unknown as UserNotification[]
+    const lastestTaskToDo = promptSessionWithMetaData.find(session => !session.isCompleted)
 
     // Get all student Id
     const studentIds = await prisma.classUser.findMany({
@@ -163,46 +151,33 @@ export default async function StudentDashboard() {
             <Header session={session} studentId={studentId} />
             <main className="wrapper relative">
                 <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {session?.user?.name}</h1>
-                <div className="flex-end">
-                    <Button
+                {lastestTaskToDo && (
+                    <div
+                        className="border border-primary w-full px-5 py-2 rounded-lg relative mb-24"
                     >
-                        <Plus /> Request
-                    </Button>
-                </div>
-                {/* Show prompt sessions if they exist */}
-                {/* {tasksToDo?.length > 0 ? (
-                    <section>
-                        <h2 className="h3-bold my-5">Assignments</h2>
-                        <div className="flex-start flex-wrap gap-10">
-                            {tasksToDo.map((task: PromptSession) => (
-                                <div key={task.id}>
-                                    <StudentTaskListItem
-                                        jotData={task}
-                                    />
-                                </div>
-                            ))}
+                        <div className="flex-between">
+                            <div>
+                                <p className="h3-bold text-primary">Alert! New Assignment</p>
+                                <p className="text-md line-clamp-1">{lastestTaskToDo?.title}</p>
+                                <p className="text-sm text-ring">{lastestTaskToDo?.prompt?.category?.name}</p>
+                            </div>
+                            <Button asChild variant='secondary' className="text-secondary-foreground">
+                                <Link href={`jot-response/${lastestTaskToDo.id}?q=0`}>
+                                Complete
+                                </Link>
+                            </Button>
                         </div>
-                    </section>
-                    // Else show dashboard
-                ) : (
-                    <section className="mb-36">
-                        <article className="my-10">
-                            <h2 className="text-lg lg:text-xl ml-2 mb-2">Blog Discussions</h2>
-                            <ClassDiscussionCarousel
-                                blogPrompts={blogPrompts as unknown as PromptSession[]}
-                            />
-                        </article>
-                        <article>
-                            <h2 className="text-lg lg:text-xl ml-2 mb-2">Notifications</h2>
-                            <NotificationsCarousel
-                                notifications={userNotifications as UserNotification[]}
-                                studentId={studentId}
-                            />
-                        </article>
-                    </section>
-                )} */}
+                    </div>
+                )}
                 <section>
-                    <h3 className="h3-bold ml-1">Featured Blogs</h3>
+                    <div className="flex-between relative">
+                        <h3 className="h3-bold ml-1">Featured Blogs</h3>
+                        <Button
+                            className="relative top-[-50px]"
+                        >
+                            <Plus /> Request
+                        </Button>
+                    </div>
                     <Carousel>
                         {decryptedBlogNames.map((response) => (
                             <Link
@@ -222,7 +197,7 @@ export default async function StudentDashboard() {
                         ))}
                     </Carousel>
                 </section>
-                <Separator className="my-10" />
+                <Separator className="mt-20 mb-10" />
                 <section>
                     <h3 className="h3-bold mb-2 ml-1">Assignments</h3>
                     <AssignmentSectionClient

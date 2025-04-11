@@ -7,17 +7,22 @@ import { useRef, useState } from 'react'
 import { updateASingleResponse } from '@/lib/actions/response.action';
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import Link from 'next/link'
 
 export default function SingleQuestionReview({
     questions,
     isSubmittable,
     responseId,
-    showGrades
+    showGrades,
+    isPublic,
+    promptSessionId
 }: {
     questions: ResponseData[],
     isSubmittable: boolean,
     responseId: string,
-    showGrades: boolean
+    showGrades: boolean,
+    isPublic: boolean,
+    promptSessionId: string
 }) {
 
     const router = useRouter();
@@ -54,6 +59,8 @@ export default function SingleQuestionReview({
 
     const gradePercentage = `${questions?.[0]?.score}%`
 
+    console.log("jot data ")
+
     return (
         <div className="w-full relative">
             <div className="flex-between mt-10">
@@ -69,6 +76,20 @@ export default function SingleQuestionReview({
                         onClick={() => updateResponsesHandler(allQuestions)}
                         className="mr-0 block mt-5 mb-10"
                     >Submit</Button>
+                }
+                {isPublic && (
+                    <div className="flex-end w-full">
+                        <Button asChild
+                            className='mb-10'
+                        >
+                            <Link
+                                href={`/discussion-board/${promptSessionId}/response/${responseId}`}
+                            >
+                                View Discussion
+                            </Link>
+                        </Button>
+                    </div>
+                )
                 }
             </div>
             {allQuestions.slice(0, 2).map((responseData, index) => (

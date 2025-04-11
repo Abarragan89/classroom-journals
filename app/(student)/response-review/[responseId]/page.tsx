@@ -26,9 +26,7 @@ export default async function ResponseReview({
 
     const { responseId } = await params
 
-
     const singleResponse = await getSingleResponseForReview(responseId) as unknown as Response
-    const h1Heading = singleResponse?.promptSession?.promptType === 'single-question' ? 'Blog Response' : 'Assessment Response'
 
     return (
         <div>
@@ -52,6 +50,8 @@ export default async function ResponseReview({
                         isSubmittable={singleResponse?.isSubmittable}
                         responseId={singleResponse?.id}
                         showGrades={singleResponse?.promptSession?.areGradesVisible as boolean}
+                        isPublic={singleResponse?.promptSession?.isPublic as boolean}
+                        promptSessionId={singleResponse?.promptSession?.id as string}
                     />
                 }
             </main>

@@ -413,7 +413,9 @@ export async function getSingleResponseForReview(responseId: string) {
                 isSubmittable: true,
                 promptSession: {
                     select: {
+                        id: true,
                         promptType: true,
+                        isPublic: true,
                         questions: true,
                         areGradesVisible: true,
                         title: true

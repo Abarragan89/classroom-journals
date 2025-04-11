@@ -60,11 +60,11 @@ export default function MultiQuestionReview({
     function displayGradeUI(score: number) {
         switch (score) {
             case 0:
-                return <p className='text-destructive'>Wrong</p>;
+                return <p className='text-destructive font-bold'>Wrong</p>;
                 case 0.5:
-                return <p className='text-warning'>Half Credit</p>;
+                return <p className='text-warning font-bold'>Half Credit</p>;
                 case 1:
-                return <p className='text-success'>Correct</p>;
+                return <p className='text-success font-bold'>Correct</p>;
         }
     }
 
