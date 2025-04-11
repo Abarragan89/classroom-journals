@@ -16,7 +16,8 @@ export default function CommentSection({
     sessionId,
     discussionStatus,
     commentCoolDown,
-    isTeacherView = false
+    isTeacherView = false,
+    classroomId
 }: {
     comments: ResponseComment[],
     studentId: string,
@@ -24,7 +25,8 @@ export default function CommentSection({
     sessionId: string,
     discussionStatus: string,
     commentCoolDown?: number,
-    isTeacherView?: boolean
+    isTeacherView?: boolean,
+    classroomId: string
 }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -51,7 +53,7 @@ export default function CommentSection({
         }
         try {
             setIsLoading(true)
-            const newComment = await addComment(responseId, commentText, studentId, sessionId)
+            const newComment = await addComment(responseId, commentText, studentId, sessionId, classroomId)
             setAllComments(prev => [newComment as unknown as ResponseComment, ...prev])
             setCommentText('');
             toast('Comment Added!');
@@ -132,6 +134,7 @@ export default function CommentSection({
                     commentCoolDown={commentCoolDown}
                     deleteCommentHandler={deleteCommentHandler}
                     isTeacherView={isTeacherView}
+                    classroomId={classroomId}
                 />
             ))}
         </section>

@@ -15,8 +15,10 @@ import {
 import { ClassroomSwitcher } from "./classroom-switcher"
 import Link from "next/link"
 import { Classroom } from "@/types"
+import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { Home, User, FileText, Bell, ClipboardList, Settings } from "lucide-react"
+import { getUnreadUserNotifications } from "@/lib/actions/notifications.action"
 // import { listS3Urls } from "@/lib/actions/s3.download.action"
 // import { Button } from "@/components/ui/button"
 
@@ -27,7 +29,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
   const teacherId = pathname.split("/")[3];
   const currentRoute = pathname.split("/")[4];
   const selectedClassroom = props?.classes?.find(c => c.id === currentClassroomId) || props.classes[0];
+  const [notificationCount, setNotificationCount] = useState<number>(0)
 
+  useEffect(() => {
+    async function getNotifications() {
+      if (teacherId) {
+        const newNotificaitonCount = await getUnreadUserNotifications(teacherId)
+        setNotificationCount(newNotificaitonCount as number)
+      }
+    }
+    getNotifications();
+  }, [teacherId, pathname])
 
   const data = {
     navMain: [
@@ -75,6 +87,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
                           <Link href={`${item.slug}`} className="flex items-center gap-2">
                             {Icon && <Icon size={18} />}
                             {item.title}
+                            {item.title === 'Notifications' && notificationCount > 0 && (
+                              <p
+                                className="text-center min-w-6 p-[3px] rounded-full text-xs bg-destructive text-destructive-foreground"
+                              >
+                                {notificationCount}
+                              </p>
+                            )
+                            }
                           </Link>
                         </SidebarMenuButton>
                       ) : (

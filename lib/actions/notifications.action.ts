@@ -1,7 +1,5 @@
 "use server";
-
 import { prisma } from "@/db/prisma";
-import { decryptText } from "../utils";
 
 export async function getUserNotifications(userId: string) {
     try {
@@ -15,27 +13,14 @@ export async function getUserNotifications(userId: string) {
                 commentText: true,
                 createdAt: true,
                 isRead: true,
-                user: {
-                    select: {
-                        iv: true,
-                        username: true,
-                    }
-                }
             },
             orderBy: {
                 createdAt: 'desc'
-            }
+            },
+            take: 200
         });
 
-        // Decrypt each user's name and attach it to the notification object
-        const notificationsWithDecryptedNames = userNotifications.map(notification => ({
-            ...notification,
-            user: {
-                username: decryptText(notification.user.username as string, notification.user.iv as string)
-            }
-        }));
-
-        return notificationsWithDecryptedNames;
+        return userNotifications;
     } catch (error) {
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);
@@ -46,6 +31,44 @@ export async function getUserNotifications(userId: string) {
         return { success: false, message: 'Error updating student. Try again.' }
     }
 }
+
+export async function getUnreadUserNotifications(userId: string) {
+    try {
+        const notificationCount = await prisma.notification.count({
+            where: { userId, isRead: false },
+        });
+        return notificationCount;
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log('Error creating new prompt:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error updating student. Try again.' }
+    }
+}
+
+export async function markAllNotificationsAsRead(userId: string) {
+    try {
+        const notificationCount = await prisma.notification.updateMany({
+            where: { userId, isRead: false },
+            data: {
+                isRead: true,
+            }
+        });
+        return notificationCount;
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log('Error creating new prompt:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error updating student. Try again.' }
+    }
+}
+
 
 // Clear all user Notifications
 export async function clearAllNotifications(userId: string) {

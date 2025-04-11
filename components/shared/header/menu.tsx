@@ -27,14 +27,14 @@ export default function Menu({
     const renderTeacherHeader = () => (
         <>
             <TeacherNavLinks />
-            <ActionSubMenu teacherId={teacherId!} session={session as Session} />
+            <ActionSubMenu teacherId={teacherId as string} session={session as Session} />
             <ModeToggle />
             <UserButton session={session as Session} />
         </>
     );
     const renderStudentHeader = () => (
         <>
-            <StudentNavLinks />
+            <StudentNavLinks studentId={studentId as string}/>
             <ModeToggle />
             <UserButton session={session as Session} />
         </>

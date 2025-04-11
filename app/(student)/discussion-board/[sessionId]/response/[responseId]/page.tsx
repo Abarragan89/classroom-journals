@@ -17,9 +17,10 @@ export default async function SingleResponse({
 
     const session = await auth() as Session
     const studentId = session?.user?.id
+    const classroomId = session?.classroomId
 
-    if (!session || !studentId) notFound()
-
+    if (!session || !studentId || !classroomId) notFound()
+    
     const { responseId, sessionId } = await params;
     const response = await getSingleResponse(responseId) as unknown as Response
 
@@ -56,6 +57,7 @@ export default async function SingleResponse({
                 responseId={responseId}
                 studentId={studentId}
                 sessionId={sessionId}
+                classroomId={classroomId}
                 discussionStatus={promptStatus as string}
                 commentCoolDown={commentCoolDown}
             />

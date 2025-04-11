@@ -3,14 +3,33 @@ import { prisma } from "@/db/prisma"
 import { decryptText } from "../utils";
 
 // add a comment to Response
-export async function addComment(responseId: string, text: string, userId: string, sessionId: string) {
-
+export async function addComment(
+    responseId: string,
+    text: string,
+    userId: string,
+    sessionId: string,
+    classroomId: string
+) {
     try {
         if (!responseId || !text || !userId || !sessionId) {
             return { success: false, message: "Missing required fields" };
         }
 
         const result = await prisma.$transaction(async (prisma) => {
+            // Get teacher Id
+            const teacherData = await prisma.classUser.findFirst({
+                where: { classId: classroomId, role: 'teacher' },
+                select: {
+                    user: {
+                        select: {
+                            id: true
+                        }
+                    }
+                }
+            })
+
+            const teacherId = teacherData?.user?.id as string
+
             // Create the new comment
             const newComment = await prisma.comment.create({
                 data: {
@@ -60,6 +79,8 @@ export async function addComment(responseId: string, text: string, userId: strin
             if (response?.studentId && response.studentId !== userId) {
                 usersToNotify.add(response.studentId); // Add response author if they aren't the commenter
             }
+            // Add Teacher id so they get all notifications
+            usersToNotify.add(teacherId)
 
             // Decrypt username for the frontend response
             const formattedComment = {
@@ -72,11 +93,21 @@ export async function addComment(responseId: string, text: string, userId: strin
             // Create notifications for all users
             const notifications = Array.from(usersToNotify).map((notifyUserId) => {
                 const isAuthor = notifyUserId === response?.studentId;
-                const message = isAuthor
-                    ? `${formattedComment.user.username} added a comment to your blog:`
-                    : `${formattedComment.user.username} added to a blog you interacted with:`
+                const isTeacher = teacherId === notifyUserId
+                let message: string = '';
+                let notificationLink: string = '';
+                if (isTeacher) {
+                    message = `${formattedComment.user.username} added the following comment:`
+                    notificationLink = `/classroom/${classroomId}/${teacherId}/single-prompt-session/${sessionId}/single-response/${responseId}#comment-section-main`
+                } else if (!isAuthor) {
+                    message = `${formattedComment.user.username} added to a blog you interacted with:`
+                    notificationLink = `/discussion-board/${sessionId}/response/${responseId}#comment-section-main`
+                } else if (isAuthor) {
+                    notificationLink = `/discussion-board/${sessionId}/response/${responseId}#comment-section-main`
+                    message = `${formattedComment.user.username} added a comment to your blog:`
+                }
                 return {
-                    url: `discussion-board/${sessionId}/response/${responseId}#comment-section-main`, // Notification link
+                    url: notificationLink,
                     userId: notifyUserId,
                     responseId,
                     message,
@@ -102,13 +133,34 @@ export async function addComment(responseId: string, text: string, userId: strin
     }
 }
 
-export async function replyComment(responseId: string, parentId: string, text: string, userId: string, sessionId: string) {
+export async function replyComment(
+    responseId: string,
+    parentId: string,
+    text: string,
+    userId: string,
+    sessionId: string,
+    classroomId: string
+) {
     try {
         if (!parentId || !text || !userId || !responseId) {
             return { success: false, message: "Missing required fields" };
         }
 
         const result = await prisma.$transaction(async (prisma) => {
+            // Get teacher Id
+            const teacherData = await prisma.classUser.findFirst({
+                where: { classId: classroomId, role: 'teacher' },
+                select: {
+                    user: {
+                        select: {
+                            id: true
+                        }
+                    }
+                }
+            })
+
+            const teacherId = teacherData?.user?.id as string;
+
             // Create the new reply comment
             const newComment = await prisma.comment.create({
                 data: {
@@ -172,6 +224,8 @@ export async function replyComment(responseId: string, parentId: string, text: s
             if (response?.studentId && response.studentId !== userId) {
                 usersToNotify.add(response.studentId);
             }
+            // Add Teacher id so they get all notifications
+            usersToNotify.add(teacherId)
 
             // Decrypt username for the frontend response
             const formattedComment = {
@@ -184,15 +238,21 @@ export async function replyComment(responseId: string, parentId: string, text: s
             // Create notifications for all users
             const notifications = Array.from(usersToNotify).map((notifyUserId) => {
                 let message = `${formattedComment.user.username} commented on a blog you interacted with:`;
+                let notificationLink: string = '';
 
                 if (notifyUserId === response?.studentId) {
                     message = `${formattedComment.user.username} added a reply to your blog:`;
+                    notificationLink = `/discussion-board/${sessionId}/response/${responseId}#comment-section-main`
                 } else if (notifyUserId === parentComment?.userId) {
                     message = `${formattedComment.user.username} replied to your comment:`;
+                    notificationLink = `/discussion-board/${sessionId}/response/${responseId}#comment-section-main`
+                } else if (teacherId === notifyUserId) {
+                    message = `${formattedComment.user.username} added the following comment:`
+                    notificationLink = `/classroom/${classroomId}/${teacherId}/single-prompt-session/${sessionId}/single-response/${responseId}#comment-section-main`
                 }
 
                 return {
-                    url: `discussion-board/${sessionId}/response/${responseId}#comment-section-main`, // Notification link
+                    url: notificationLink,
                     userId: notifyUserId,
                     responseId,
                     message,

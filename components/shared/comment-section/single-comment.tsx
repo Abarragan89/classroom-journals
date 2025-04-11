@@ -19,7 +19,8 @@ export default function SingleComment({
     discussionStatus,
     commentCoolDown,
     isTeacherView,
-    deleteCommentHandler
+    deleteCommentHandler,
+    classroomId
 }: {
     commentData: ResponseComment,
     responseId: string,
@@ -28,6 +29,7 @@ export default function SingleComment({
     discussionStatus: string,
     commentCoolDown?: number,
     isTeacherView: boolean,
+    classroomId: string,
     deleteCommentHandler: (commentId: string) => void
 }) {
 
@@ -70,7 +72,7 @@ export default function SingleComment({
         }
         try {
             setIsLoading(true)
-            const replyCommentData = await replyComment(responseId, commentData.id, replyText.trim(), studentId, sessionId)
+            const replyCommentData = await replyComment(responseId, commentData.id, replyText.trim(), studentId, sessionId, classroomId)
             setShowReplies(true)
             setReplyCommentState(prev => [replyCommentData as ResponseComment, ...prev])
             setTotalReplies(prev => prev + 1)
