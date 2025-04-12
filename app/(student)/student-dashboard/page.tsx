@@ -14,6 +14,7 @@ import Link from "next/link";
 import BlogCard from "@/components/blog-card";
 import { decryptText, formatDateShort } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import CreateStudentRequest from "@/components/modalBtns/create-student-request";
 
 export default async function StudentDashboard() {
 
@@ -163,7 +164,7 @@ export default async function StudentDashboard() {
                             </div>
                             <Button asChild variant='secondary' className="text-secondary-foreground">
                                 <Link href={`jot-response/${lastestTaskToDo.id}?q=0`}>
-                                Complete
+                                    Complete
                                 </Link>
                             </Button>
                         </div>
@@ -172,11 +173,7 @@ export default async function StudentDashboard() {
                 <section>
                     <div className="flex-between relative">
                         <h3 className="h3-bold ml-1">Featured Blogs</h3>
-                        <Button
-                            className="relative top-[-50px]"
-                        >
-                            <Plus /> Request
-                        </Button>
+                        <CreateStudentRequest />
                     </div>
                     <Carousel>
                         {decryptedBlogNames.map((response) => (

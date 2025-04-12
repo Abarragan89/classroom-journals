@@ -34,3 +34,7 @@ export const newStudentSchema = z.object({
     commentCoolDown: z.string().optional(),
     password: z.string().optional()
 })
+
+export const requestNewUsernameSchema = z.object({
+    username: z.string().min(2).max(50),
+})
