@@ -151,7 +151,6 @@ export default async function StudentDashboard() {
     const studentRequests = await prisma.studentRequest.findMany({
         where: { studentId }
     }) as unknown as StudentRequest[]
-    console.log('student requeswt ', studentRequests)
 
     const hasSentUsernameRequest = studentRequests.some(req => req.type === 'username')
     const hasSentPromptRequest = studentRequests.some(req => req.type === 'prompt')

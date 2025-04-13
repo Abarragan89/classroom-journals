@@ -96,6 +96,7 @@ export default async function SingleResponse({
                                 sessionId={sessionId}
                                 discussionStatus={'open'}
                                 isTeacherView={true}
+                                classroomId={classId}
                             />
                         </div>
 
