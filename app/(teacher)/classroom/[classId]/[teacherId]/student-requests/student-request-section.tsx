@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { approveUsernameChange, declineUsernameChange } from '@/lib/actions/student-request';
+import { approveUsernameChange, declineStudentRequest, approveNewPrompt } from '@/lib/actions/student-request';
 import { StudentRequest } from '@/types';
 import { toast } from 'sonner';
 
@@ -16,21 +16,31 @@ export default function StudentRequestSection({
 
     const [allRequests, setAllRequests] = useState<StudentRequest[]>(studentRequests)
 
-    async function approveUsername(studentId: string, username: string, responseId: string) {
+    async function approveRequest(studentId: string, requestText: string, responseId: string, requestType: string) {
         try {
-            const response = await approveUsernameChange(studentId, username, responseId)
-            if (!response) {
-                throw new Error("error approving new username")
+            if (requestType === 'username') {
+                const response = await approveUsernameChange(studentId, requestText, responseId)
+                if (!response) {
+                    throw new Error("error approving new username")
+                }
+                setAllRequests(prev => prev.filter(request => request.id !== responseId))
+                toast('Username Approved');
+            } else {
+                const response = await approveNewPrompt(teacherId, requestText, responseId)
+                if (!response) {
+                    throw new Error("error approving new username")
+                }
+                setAllRequests(prev => prev.filter(request => request.id !== responseId))
+                toast('Prompt added to Library');
             }
-            setAllRequests(prev => prev.filter(request => request.id !== responseId))
-            toast('Username Approved');
         } catch (error) {
-            console.log('error approving username change ', error)
+            console.log('error approving student request', error)
         }
     }
-    async function declineUsername(responseId: string) {
+
+    async function declineRequest(responseId: string) {
         try {
-            const response = await declineUsernameChange(responseId)
+            const response = await declineStudentRequest(responseId)
             if (!response) {
                 throw new Error("error approving new username")
             }
@@ -44,7 +54,7 @@ export default function StudentRequestSection({
     }
 
     return (
-        <section className='flex flex-wrap gap-10 mt-10'>
+        <section className='gap-10 mt-10'>
             {allRequests.length > 0 ? (
                 allRequests.map((studentRequest: StudentRequest) => (
                     <Card
@@ -52,12 +62,12 @@ export default function StudentRequestSection({
                         className='bg-card'
                     >
                         <CardContent>
-                            <p className='font-bold text-md mb-5'>{studentRequest.student.username} is requesting a {studentRequest.type}:</p>
-                            <p className='text-center bg-background border border-border px-4 py-2 rounded-lg mx-auto'>{studentRequest.text}</p>
+                            <p className='text-md tracking-wider text-center mb-5'><span className="font-bold">{studentRequest.student.username}</span> is requesting a <span className="underline">{studentRequest.type}</span> :</p>
+                            <p className='text-center bg-background border border-border p-4 rounded-md mx-5 sm:mx-20'>{studentRequest.text}</p>
                         </CardContent>
                         <CardFooter className='flex-center gap-x-10'>
-                            <Button onClick={() => approveUsername(studentRequest.studentId, studentRequest.text, studentRequest.id)} className='bg-success'>Accept</Button>
-                            <Button onClick={() => declineUsername(studentRequest.id)} className='bg-destructive'>Decline</Button>
+                            <Button onClick={() => approveRequest(studentRequest.studentId, studentRequest.text, studentRequest.id, studentRequest.type)} className='bg-success'>Accept</Button>
+                            <Button onClick={() => declineRequest(studentRequest.id)} className='bg-destructive'>Decline</Button>
                             {/* <p>{formatDateMonthDayYear(studentRequest.createdAt)}</p> */}
                         </CardFooter>
                     </Card>

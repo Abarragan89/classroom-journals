@@ -10,7 +10,6 @@ import { PromptCategory } from "@/types"
 
 interface Props {
     initialPrompts: PromptSession[];
-    classId: string;
     promptCountTotal: number
     categories: PromptCategory[],
     studentId:string
@@ -18,7 +17,6 @@ interface Props {
 }
 export default function AssignmentSectionClient({
     initialPrompts,
-    classId,
     promptCountTotal,
     categories,
     studentId

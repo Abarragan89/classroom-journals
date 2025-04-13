@@ -147,8 +147,6 @@ export default async function StudentDashboard() {
         .filter(Boolean) // remove nulls
         .sort((a, b) => b!.priorityScore - a!.priorityScore); // descending
 
-    console.log('sessnion ', session)
-
     return (
         <>
             <Header session={session} studentId={studentId} />
@@ -208,7 +206,6 @@ export default async function StudentDashboard() {
                     <h3 className="h3-bold mb-2 ml-1">Assignments</h3>
                     <AssignmentSectionClient
                         initialPrompts={promptSessionWithMetaData}
-                        classId={classroomId}
                         promptCountTotal={allPromptSessions.totalCount}
                         categories={allPromptCategories}
                         studentId={studentId}

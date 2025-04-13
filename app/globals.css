@@ -42,8 +42,8 @@
     --primary-foreground: hsl(222.2 84% 4.9%);
     --secondary: hsl(206, 68%, 20%);
     --secondary-foreground: hsl(210 40% 98%);
-    --muted: hsl(228, 10%, 19%);
-    --muted-foreground: hsl(240, 3%, 34%);
+    --muted: hsl(231, 36%, 21%);
+    --muted-foreground: hsla(240, 37%, 68%, 0.791);
     --card: hsl(220.9 39.3% 11%);
     --card-foreground: hsl(212.7 26.8% 83.9%);
     --accent: hsl(217, 25%, 64%);
@@ -105,12 +105,10 @@
     --foreground: hsl(0, 72%, 27%);
     --primary: hsl(340, 72%, 48%); /* Hot Pink */
     --primary-foreground: hsl(0, 0%, 100%);
-    /* --secondary: hsl(330, 60%, 70%); */
     --secondary: hsl(330, 90%, 84%); 
-    /* --secondary-foreground: hsl(0, 0%, 100%); */
     --secondary-foreground: hsl(302, 90%, 34%);
     --muted: hsl(331, 61%, 52%);
-    --muted-foreground: hsl(0, 0%, 40%);
+    --muted-foreground: hsl(316, 70%, 26%);
     --card: hsl(340, 80%, 90%);
     --card-foreground: hsl(0, 0%, 15%);
     --accent: hsl(320, 90%, 50%); /* Vibrant Pink */

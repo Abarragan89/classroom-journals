@@ -1,6 +1,8 @@
 "use server"
 import { prisma } from "@/db/prisma"
 import { decryptText, encryptText } from "../utils"
+import { Question } from "@/types"
+import { Prisma } from "@prisma/client"
 
 export async function createStudentRequest(studentId: string, teacherId: string, text: string, type: string) {
     try {
@@ -137,7 +139,51 @@ export async function approveUsernameChange(studentId: string, username: string,
 }
 
 // This is for the students to see which requests they have made and their status
-export async function declineUsernameChange(responseId: string) {
+export async function approveNewPrompt(teacherId: string, requestText: string, responseId: string) {
+    try {
+        // build up the questions for the prompt Session
+        const questions: Question[] = [];
+        questions.push({ question: 'Add a Cover Photo' })
+        questions.push({ question: 'Add a Blog Title' })
+
+        // user only provides the initial question
+        questions.push({ question: requestText });
+
+
+        await prisma.$transaction(async (prisma) => {
+            await prisma.prompt.create({
+                data: {
+                    title: requestText.trim(),
+                    teacherId,
+                    promptType: 'single-question',
+                    questions: questions as unknown as Prisma.InputJsonValue,
+                },
+            });
+
+            // change the status of the request
+            await prisma.studentRequest.update({
+                where: { id: responseId },
+                data: {
+                    status: 'approved'
+                }
+            })
+        })
+
+        return { success: true, message: 'Error adding student. Try again.' }
+    } catch (error) {
+        // Improved error logging
+        if (error instanceof Error) {
+            console.log('Error creating new prompt:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error adding student. Try again.' }
+    }
+}
+
+// This is for the students to see which requests they have made and their status
+export async function declineStudentRequest(responseId: string) {
     try {
         // change the status of the request
         await prisma.studentRequest.update({
