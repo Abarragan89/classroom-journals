@@ -28,14 +28,6 @@ export type Class = z.infer<typeof classSchema> & {
 // This is needed for the form data that does not include Id
 export type ClassForm = Omit<Class, "id">;
 
-// export type ClassUser = {
-//     userId: string;
-//     classId: string;
-//     role: "teacher" | "student";
-//     user: User;
-//     class: Class;
-// }
-
 export interface Classroom {
     id: string;
     name: string,
@@ -191,4 +183,16 @@ export interface PromptCategory {
     userId?: string;
     user?: User;
     prompts?: Prompt[];
+}
+
+export interface StudentRequest {
+    id: string;
+    studentId: string;
+    teacherId: string;
+    type: string; // 'username' or 'prompt'
+    text: string;
+    createdAt: Date;
+    status: string;
+    student: User;
+    teacher: User;
 }

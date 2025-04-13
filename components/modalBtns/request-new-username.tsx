@@ -5,18 +5,33 @@ import { ResponsiveDialog } from '../responsive-dialog'
 import { useState } from 'react'
 import RequestNewUsernameForm from '../forms/student-request/request-new-username-form'
 
-export default function CreateStudentRequest() {
+export default function RequestNewUsername({
+    studentId,
+    teacherId
+}: {
+    studentId: string,
+    teacherId: string
+}) {
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+
+    function closeModal() {
+        setIsModalOpen(false)
+    }
 
     return (
         <>
             <ResponsiveDialog
                 isOpen={isModalOpen}
                 setIsOpen={setIsModalOpen}
-                title='New Request'
+                title='Request New Username'
+                description='Make a request for a new username'
             >
-                <RequestNewUsernameForm />
+                <RequestNewUsernameForm
+                    studentId={studentId}
+                    teacherId={teacherId}
+                    closeModal={closeModal}
+                />
             </ResponsiveDialog>
             <Button
                 onClick={() => setIsModalOpen(true)}

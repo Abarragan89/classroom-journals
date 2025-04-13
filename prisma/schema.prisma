@@ -157,6 +157,7 @@ model Prompt {
   teacher       User            @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+  author        String?
   questions     Json
   classes       Classroom[]     @relation("PromptClass") // this is for prompt organization
   promptSession PromptSession[]
@@ -205,11 +206,6 @@ model Response {
   // Relationship
   promptSession   PromptSession  @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
   student         User           @relation(fields: [studentId], references: [id], onDelete: Cascade)
-}
-
-enum RequestType {
-  USERNAME
-  PROMPT
 }
 
 model StudentRequest {

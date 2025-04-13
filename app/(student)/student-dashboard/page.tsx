@@ -3,7 +3,6 @@ import Header from "@/components/shared/header";
 import { PromptCategory, Response, ResponseData, Session } from "@/types";
 import { notFound } from "next/navigation";
 import { PromptSession } from "@/types";
-import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getAllSessionsInClass } from "@/lib/actions/prompt.session.actions";
 import AssignmentSectionClient from "./assignement-section.client";
@@ -14,7 +13,8 @@ import Link from "next/link";
 import BlogCard from "@/components/blog-card";
 import { decryptText, formatDateShort } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import CreateStudentRequest from "@/components/modalBtns/create-student-request";
+import RequestNewUsername from "@/components/modalBtns/request-new-username";
+import SuggestPrompt from "@/components/modalBtns/suggest-prompt";
 
 export default async function StudentDashboard() {
 
@@ -147,11 +147,13 @@ export default async function StudentDashboard() {
         .filter(Boolean) // remove nulls
         .sort((a, b) => b!.priorityScore - a!.priorityScore); // descending
 
+    console.log('sessnion ', session)
+
     return (
         <>
             <Header session={session} studentId={studentId} />
             <main className="wrapper relative">
-                <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {session?.user?.name}</h1>
+                <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {session?.user?.username}</h1>
                 {lastestTaskToDo && (
                     <div
                         className="border border-primary w-full px-5 py-2 rounded-lg relative mb-24"
@@ -173,7 +175,14 @@ export default async function StudentDashboard() {
                 <section>
                     <div className="flex-between relative">
                         <h3 className="h3-bold ml-1">Featured Blogs</h3>
-                        <CreateStudentRequest />
+                        <RequestNewUsername
+                            studentId={studentId}
+                            teacherId={teacherId}
+                        />
+                        <SuggestPrompt
+                            studentId={studentId}
+                            teacherId={teacherId}
+                        />
                     </div>
                     <Carousel>
                         {decryptedBlogNames.map((response) => (

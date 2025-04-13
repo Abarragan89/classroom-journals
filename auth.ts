@@ -15,9 +15,11 @@ declare module "next-auth" {
         refraccessTokenExpires?: string | unknown
         googleProviderId?: string | unknown
         iv?: Buffer | unknown
+        username?: string
     }
     interface User {
         iv?: string;
+        username?: string,
     }
 }
 
@@ -68,6 +70,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         }
                     }
                 });
+
+
 
                 const studentIds = classroom?.users.map(student => student.userId)
 
@@ -120,7 +124,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 session.refreshToken = token.refreshToken
                 session.refraccessTokenExpires = token.refraccessTokenExpires
                 // Set up the google classroom credentials for query 
-                session.googleProviderId = token.googleProviderID;
+                session.googleProviderId = token?.googleProviderID ?? '';
                 session.accessToken = token.accessToken;
                 // Set the user ID from the token
                 // @ts-expect-error: let there be any here
@@ -128,6 +132,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 // @ts-expect-error: let there be any here
                 session.user.role = token?.email ? 'teacher' : 'student';
                 session.user.name = token.name;
+                session.user.username = token.username as string;
                 // session.iv = user?.iv ? user.iv : token.iv
 
                 // Setting the classroomId is only needed or student login
@@ -144,44 +149,48 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             return session
         },
         async jwt({ token, user, trigger, account }) {
-            //assign user fields to the token
-            if (user) {
-
-                if (account) {
-                    // pass the accessToken and provierAccount ID to the token to pass to the session
-                    token.googleProviderID = account.providerAccountId;
-                    token.accessToken = account.access_token;
-                    token.refreshToken = account.refresh_token; // Store refresh token
-                    token.accessTokenExpires = Date.now() + account.expires_at! * 1000; // used to create a new token
-                    // @ts-expect-error: let there be any here
-                    if (user?.classroomId) {
+            try {
+                if (user) {
+                    if (account) {
+                        // pass the accessToken and provierAccount ID to the token to pass to the session
+                        token.googleProviderID = account?.providerAccountId;
+                        token.accessToken = account.access_token;
+                        token.refreshToken = account.refresh_token; // Store refresh token
+                        token.accessTokenExpires = Date.now() + account.expires_at! * 1000; // used to create a new token
                         // @ts-expect-error: let there be any here
-                        token.classroomId = user.classroomId
+                        if (user?.classroomId) {
+                            // @ts-expect-error: let there be any here
+                            token.classroomId = user.classroomId
+                        }
+                    }
+
+                    if (trigger === 'signUp') {
+                        // if signing up, encrypt name and save name and iv(random string) 
+                        const iv = crypto.randomBytes(16);
+                        // Encrypt the user name
+                        const { encryptedData } = encryptText(user.name!, iv);
+                        token.name = user.name;
+                        token.iv = iv.toString('hex');
+
+                        await prisma.user.update({
+                            where: { id: user.id },
+                            data: {
+                                name: encryptedData,
+                                username: encryptedData,
+                                iv: token.iv as string
+                            }
+                        })
+                    } else if (trigger === 'signIn') {
+                        // If signing back in, just set the token to the user name that is already encyrpted
+                        token.name = decryptText(user.name as string, user.iv as string)
+                        token.username = decryptText(user.username as string, user.iv as string)
                     }
                 }
-
-                if (trigger === 'signUp') {
-                    // if signing up, encrypt name and save name and iv(random string) 
-                    const iv = crypto.randomBytes(16);
-                    // Encrypt the user name
-                    const { encryptedData } = encryptText(user.name!, iv);
-                    token.name = user.name;
-                    token.iv = iv.toString('hex');
-
-                    await prisma.user.update({
-                        where: { id: user.id },
-                        data: {
-                            name: encryptedData,
-                            username: encryptedData,
-                            iv: token.iv as string
-                        }
-                    })
-                } else if (trigger === 'signIn') {
-                    // If signing back in, just set the token to the user name that is already encyrpted
-                    token.name = decryptText(user.name as string, user.iv as string)
-                }
+            } catch (error) {
+                console.log('erroring signing in ', error)
             }
             return token
+            //assign user fields to the token
         },
         async redirect({ url, baseUrl }) {
             // Ensure the user is redirected to a valid page after signing in

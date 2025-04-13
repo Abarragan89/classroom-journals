@@ -36,5 +36,5 @@ export const newStudentSchema = z.object({
 })
 
 export const requestNewUsernameSchema = z.object({
-    username: z.string().min(2).max(50),
+    notificationText: z.string().min(2).max(50),
 })

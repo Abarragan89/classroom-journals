@@ -14,7 +14,7 @@ import { Session } from "@/types";
 
 export default async function UserButton({
     session
-} : {
+}: {
     session?: Session
 }) {
 
@@ -28,7 +28,7 @@ export default async function UserButton({
         )
     }
 
-    const firstInitial = session?.user?.name?.charAt(0).toUpperCase() ?? 'U'
+    const firstInitial = session?.user?.username?.charAt(0).toUpperCase() ?? 'U'
 
     return (
         <div className="flex gap-2 items-center">
@@ -56,7 +56,7 @@ export default async function UserButton({
                     <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
                             <div className="text-sm font-medium leading-none">
-                                {session?.user?.name}
+                                {session?.user?.username}
                             </div>
                         </div>
                     </DropdownMenuLabel>

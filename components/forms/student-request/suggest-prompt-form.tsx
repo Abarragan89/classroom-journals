@@ -8,8 +8,9 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { createStudentRequest } from '@/lib/actions/student-request'
 import { toast } from 'sonner'
+import { Textarea } from '@/components/ui/textarea'
 
-export default function RequestNewUsernameForm({
+export default function SuggestPromptForm({
     studentId,
     teacherId,
     closeModal
@@ -27,7 +28,7 @@ export default function RequestNewUsernameForm({
 
     async function onSubmit(values: z.infer<typeof requestNewUsernameSchema>) {
         try {
-            const response = await createStudentRequest(studentId, teacherId, values.notificationText, 'username');
+            const response = await createStudentRequest(studentId, teacherId, values.notificationText, 'prompt');
             if (!response.success) {
                 throw new Error('error making new username request')
             }
@@ -50,10 +51,9 @@ export default function RequestNewUsernameForm({
                             </FormDescription> */}
                             {/* <FormLabel>Username</FormLabel> */}
                             <FormControl>
-                                <Input
+                                <Textarea
                                     {...field}
-                                    placeholder='new username'
-                                    maxLength={20}
+                                    placeholder='enter a blog prompt'
                                 />
                             </FormControl>
                         </FormItem>
