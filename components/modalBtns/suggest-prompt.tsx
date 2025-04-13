@@ -7,16 +7,22 @@ import SuggestPromptForm from '../forms/student-request/suggest-prompt-form'
 
 export default function SuggestPrompt({
     studentId,
-    teacherId
+    teacherId,
+    hasSentPromptRequest
 }: {
     studentId: string,
-    teacherId: string
+    teacherId: string,
+    hasSentPromptRequest: boolean
 }) {
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-
+    const [isRequestPending, setIsRequestPending] = useState<boolean>(hasSentPromptRequest)
     function closeModal() {
         setIsModalOpen(false)
+    }
+
+    function requestSentUIHandler() {
+        setIsRequestPending(true)
     }
 
     return (
@@ -27,11 +33,16 @@ export default function SuggestPrompt({
                 title='Suggest a Prompt'
                 description='Suggest a Prompt'
             >
-                <SuggestPromptForm
-                    studentId={studentId}
-                    teacherId={teacherId}
-                    closeModal={closeModal}
-                />
+                {isRequestPending ? (
+                    <p className='text-accent text-center mx-5 pb-5'>You already have a pending request. You can only send one prompt suggestion at a time</p>
+                ) : (
+                    <SuggestPromptForm
+                        studentId={studentId}
+                        teacherId={teacherId}
+                        closeModal={closeModal}
+                        requestSentUIHandler={requestSentUIHandler}
+                    />
+                )}
             </ResponsiveDialog>
             <Button
                 onClick={() => setIsModalOpen(true)}

@@ -35,7 +35,6 @@ export async function getTeacherRequests(teacherId: string) {
         const teacherRequests = await prisma.studentRequest.findMany({
             where: {
                 teacherId,
-                status: 'pending'
             },
             include: {
                 student: {
@@ -91,6 +90,48 @@ export async function getStudentRequests(studentId: string) {
 }
 
 // This is for the students to see which requests they have made and their status
+export async function getStudentRequestCount(teacherId: string) {
+    try {
+        const count = await prisma.studentRequest.count({
+            where: { teacherId, status: 'pending' },
+        });
+
+        return count
+    } catch (error) {
+        // Improved error logging
+        if (error instanceof Error) {
+            console.log('Error creating new prompt:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error adding student. Try again.' }
+    }
+}
+
+// This is for the students to see which requests they have made and their status
+export async function markAllRequestsAsViewed(teacherId: string) {
+    try {
+        const count = await prisma.studentRequest.updateMany({
+            where: { teacherId },
+            data: {
+                status: 'viewed'
+            }
+        });
+        return count
+    } catch (error) {
+        // Improved error logging
+        if (error instanceof Error) {
+            console.log('Error creating new prompt:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error adding student. Try again.' }
+    }
+}
+
+// This is for the students to see which requests they have made and their status
 export async function approveUsernameChange(studentId: string, username: string, responseId: string) {
     try {
         // Step 1: Fetch the existing user record to get the `iv`
@@ -118,12 +159,18 @@ export async function approveUsernameChange(studentId: string, username: string,
         });
 
         // change the status of the request
-        await prisma.studentRequest.update({
-            where: { id: responseId },
-            data: {
-                status: 'approved'
-            }
+        // await prisma.studentRequest.update({
+        //     where: { id: responseId },
+        //     data: {
+        //         status: 'approved'
+        //     }
+        // })
+
+        // delete request once approved
+        await prisma.studentRequest.delete({
+            where: { id: responseId }
         })
+
 
         return { success: true, message: 'Error adding student. Try again.' }
     } catch (error) {
@@ -161,11 +208,16 @@ export async function approveNewPrompt(teacherId: string, requestText: string, r
             });
 
             // change the status of the request
-            await prisma.studentRequest.update({
-                where: { id: responseId },
-                data: {
-                    status: 'approved'
-                }
+            // await prisma.studentRequest.update({
+            //     where: { id: responseId },
+            //     data: {
+            //         status: 'approved'
+            //     }
+            // })
+
+            // delete request once approved
+            await prisma.studentRequest.delete({
+                where: { id: responseId }
             })
         })
 
@@ -186,11 +238,16 @@ export async function approveNewPrompt(teacherId: string, requestText: string, r
 export async function declineStudentRequest(responseId: string) {
     try {
         // change the status of the request
-        await prisma.studentRequest.update({
-            where: { id: responseId },
-            data: {
-                status: 'denied'
-            }
+        // await prisma.studentRequest.update({
+        //     where: { id: responseId },
+        //     data: {
+        //         status: 'denied'
+        //     }
+        // })
+
+        // delete request once approved
+        await prisma.studentRequest.delete({
+            where: { id: responseId }
         })
         return { success: true, message: 'Error adding student. Try again.' }
     } catch (error) {

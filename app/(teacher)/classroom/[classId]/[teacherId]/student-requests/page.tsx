@@ -1,4 +1,4 @@
-import { getTeacherRequests } from "@/lib/actions/student-request"
+import { getTeacherRequests, markAllRequestsAsViewed } from "@/lib/actions/student-request"
 import StudentRequestSection from "./student-request-section";
 import { StudentRequest } from "@/types";
 import { notFound } from "next/navigation";
@@ -14,6 +14,8 @@ export default async function StudentRequests({
 
     const studentRequests = await getTeacherRequests(teacherId) as unknown as StudentRequest[]
 
+    // mark requests as viewd
+    await markAllRequestsAsViewed(teacherId)
 
     return (
         <div>

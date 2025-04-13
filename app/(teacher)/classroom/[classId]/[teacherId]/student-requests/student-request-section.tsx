@@ -54,7 +54,7 @@ export default function StudentRequestSection({
     }
 
     return (
-        <section className='gap-10 mt-10'>
+        <section className='space-y-10 mt-10'>
             {allRequests.length > 0 ? (
                 allRequests.map((studentRequest: StudentRequest) => (
                     <Card

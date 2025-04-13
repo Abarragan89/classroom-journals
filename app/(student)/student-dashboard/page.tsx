@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import Header from "@/components/shared/header";
-import { PromptCategory, Response, ResponseData, Session } from "@/types";
+import { PromptCategory, Response, ResponseData, Session, StudentRequest } from "@/types";
 import { notFound } from "next/navigation";
 import { PromptSession } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -147,6 +147,15 @@ export default async function StudentDashboard() {
         .filter(Boolean) // remove nulls
         .sort((a, b) => b!.priorityScore - a!.priorityScore); // descending
 
+    // find if there are requests for students
+    const studentRequests = await prisma.studentRequest.findMany({
+        where: { studentId }
+    }) as unknown as StudentRequest[]
+    console.log('student requeswt ', studentRequests)
+
+    const hasSentUsernameRequest = studentRequests.some(req => req.type === 'username')
+    const hasSentPromptRequest = studentRequests.some(req => req.type === 'prompt')
+
     return (
         <>
             <Header session={session} studentId={studentId} />
@@ -176,10 +185,12 @@ export default async function StudentDashboard() {
                         <RequestNewUsername
                             studentId={studentId}
                             teacherId={teacherId}
+                            hasSentUsernameRequest={hasSentUsernameRequest}
                         />
                         <SuggestPrompt
                             studentId={studentId}
                             teacherId={teacherId}
+                            hasSentPromptRequest={hasSentPromptRequest}
                         />
                     </div>
                     <Carousel>

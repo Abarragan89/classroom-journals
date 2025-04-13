@@ -7,16 +7,23 @@ import RequestNewUsernameForm from '../forms/student-request/request-new-usernam
 
 export default function RequestNewUsername({
     studentId,
-    teacherId
+    teacherId,
+    hasSentUsernameRequest
 }: {
     studentId: string,
-    teacherId: string
+    teacherId: string,
+    hasSentUsernameRequest: boolean
 }) {
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const [isRequestPending, setIsRequestPending] = useState<boolean>(hasSentUsernameRequest)
 
     function closeModal() {
         setIsModalOpen(false)
+    }
+
+    function requestSentUIHandler() {
+        setIsRequestPending(true)
     }
 
     return (
@@ -27,11 +34,18 @@ export default function RequestNewUsername({
                 title='Request New Username'
                 description='Make a request for a new username'
             >
-                <RequestNewUsernameForm
-                    studentId={studentId}
-                    teacherId={teacherId}
-                    closeModal={closeModal}
-                />
+                {isRequestPending ? (
+                    <p className='text-accent text-center mx-5 pb-5'>You already have a pending request. You can only send one username request at a time</p>
+                ) : (
+                    <RequestNewUsernameForm
+                        studentId={studentId}
+                        teacherId={teacherId}
+                        closeModal={closeModal}
+                        requestSentUIHandler={requestSentUIHandler}
+                    />
+                )}
+
+
             </ResponsiveDialog>
             <Button
                 onClick={() => setIsModalOpen(true)}

@@ -212,7 +212,7 @@ model StudentRequest {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   studentId String   @db.Uuid
   teacherId String   @db.Uuid
-  status    String // 'pending' || 'approved' || 'denied'
+  status    String // 'pending' || 'viewed' to let the notification show or not show
   type      String // 'username' || 'prompt'
   text      String
   createdAt DateTime @default(now()) @db.Timestamp(6)

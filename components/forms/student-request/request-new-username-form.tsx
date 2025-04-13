@@ -12,11 +12,13 @@ import { toast } from 'sonner'
 export default function RequestNewUsernameForm({
     studentId,
     teacherId,
-    closeModal
+    closeModal,
+    requestSentUIHandler
 }: {
     studentId: string,
     teacherId: string,
-    closeModal: () => void
+    closeModal: () => void,
+    requestSentUIHandler: () => void
 }) {
     const form = useForm<z.infer<typeof requestNewUsernameSchema>>({
         resolver: zodResolver(requestNewUsernameSchema),
@@ -33,6 +35,8 @@ export default function RequestNewUsernameForm({
             }
             closeModal();
             toast('Request has been sent!')
+            // sets the request pending to true to block user from sending multiple requests
+            requestSentUIHandler()
         } catch (error) {
             console.log('error sending request for new user name ', error)
         }
