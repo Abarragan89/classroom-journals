@@ -7,6 +7,7 @@ export default function SubscriptionSection() {
         name: 'Basic - Free',
         price: 0,
         frequency: 'mo',
+        description: 'Everything you need to use JotterBlog everyday in your classroom',
         listItems: [
             'Classroom Blogging Platform',
             'Data anaylsis for Assessments',
@@ -20,6 +21,7 @@ export default function SubscriptionSection() {
         name: 'Premium - AI Enhanced! (monthly)',
         price: 4,
         frequency: 'mo',
+        description: 'Assessments automatically graded by AI!',
         listItems: [
             'Everything in Basic plus:',
             'AI automatically grades all short answer questions!',
@@ -32,9 +34,10 @@ export default function SubscriptionSection() {
         name: 'Premium - AI Enhanced! (yearly)',
         price: 35,
         frequency: 'yr',
+        description: 'Assessments automatically graded by AI!',
         listItems: [
             'Everything in Basic plus:',
-            'AI automatically grades all short answer questions!',
+            'Assessments automatically graded by AI!',
             'Unlimited Prompts',
             'Up to 6 classes',
         ],

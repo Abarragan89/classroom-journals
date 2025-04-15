@@ -1,5 +1,5 @@
 import React from 'react'
-import { requestNewPromptSchema, requestNewUsernameSchema } from '@/lib/validators'
+import { requestNewPromptSchema } from '@/lib/validators'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from 'zod'

@@ -201,6 +201,7 @@ export interface StudentRequest {
 export interface SubscriptionData {
     name: string;
     price: number;
+    description: string;
     frequency: string;
     listItems: string[];
 }
