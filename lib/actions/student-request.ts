@@ -15,7 +15,7 @@ export async function createStudentRequest(studentId: string, teacherId: string,
                 status: 'pending'
             }
         })
-        return { success: true, message: 'Error adding student. Try again.' }
+        return { success: true, message: 'Request has been made' }
     } catch (error) {
         console.log('error ', error)
         // Improved error logging

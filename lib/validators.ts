@@ -36,5 +36,9 @@ export const newStudentSchema = z.object({
 })
 
 export const requestNewUsernameSchema = z.object({
-    notificationText: z.string().min(2).max(50),
+    notificationText: z.string().min(2).max(20, 'Maximum of 20 characters'),
+})
+
+export const requestNewPromptSchema = z.object({
+    notificationText: z.string().min(2),
 })

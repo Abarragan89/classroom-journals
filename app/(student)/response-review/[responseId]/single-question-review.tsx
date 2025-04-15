@@ -59,8 +59,6 @@ export default function SingleQuestionReview({
 
     const gradePercentage = `${questions?.[0]?.score}%`
 
-    console.log("jot data ")
-
     return (
         <div className="w-full relative">
             <div className="flex-between mt-10">

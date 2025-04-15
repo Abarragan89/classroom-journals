@@ -8,6 +8,7 @@ export type User = {
     username?: string,
     googleId?: string;
     password?: string;
+    accountType?: string;
     iv?: string;
     email?: string;
     emailVerified?: Date;
@@ -16,7 +17,6 @@ export type User = {
     role: "teacher" | "student";
     createdAt: Date;
     updatedAt: Date;
-    // classes: ClassUser[];
     commentCoolDown: number;
 };
 
@@ -32,6 +32,7 @@ export interface Classroom {
     id: string;
     name: string,
     classCode?: string;
+    _count?: { users: number }
     color?: string;
     subject?: string | null;
     year?: string | null;
@@ -195,4 +196,11 @@ export interface StudentRequest {
     status: string;
     student: User;
     teacher: User;
+}
+
+export interface SubscriptionData {
+    name: string;
+    price: number;
+    frequency: string;
+    listItems: string[];
 }

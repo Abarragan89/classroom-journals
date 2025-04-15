@@ -1,5 +1,5 @@
 import React from 'react'
-import { requestNewUsernameSchema } from '@/lib/validators'
+import { requestNewPromptSchema, requestNewUsernameSchema } from '@/lib/validators'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from 'zod'
@@ -20,15 +20,16 @@ export default function SuggestPromptForm({
     closeModal: () => void,
     requestSentUIHandler: () => void
 }) {
-    const form = useForm<z.infer<typeof requestNewUsernameSchema>>({
-        resolver: zodResolver(requestNewUsernameSchema),
+    const form = useForm<z.infer<typeof requestNewPromptSchema>>({
+        resolver: zodResolver(requestNewPromptSchema),
         defaultValues: {
             notificationText: "",
         },
     })
 
-    async function onSubmit(values: z.infer<typeof requestNewUsernameSchema>) {
+    async function onSubmit(values: z.infer<typeof requestNewPromptSchema>) {
         try {
+            console.log('values', values)
             const response = await createStudentRequest(studentId, teacherId, values.notificationText, 'prompt');
             if (!response.success) {
                 throw new Error('error making new username request')
