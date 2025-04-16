@@ -9,6 +9,8 @@ export default function SubscriptionSection({
     teacherEmail: string
 }) {
 
+    console.log('proceess ', process.env.NEXT_PUBLIC_YEARLY_SUB_LINK)
+
     const freePlanData: SubscriptionData = {
         name: 'Basic - Free',
         price: 0,
