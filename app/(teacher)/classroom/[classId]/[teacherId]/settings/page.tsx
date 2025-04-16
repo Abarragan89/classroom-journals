@@ -29,7 +29,9 @@ export default async function Settings({
 
             <Separator className="my-10" />
 
-            <SubscriptionSection />
+            <SubscriptionSection
+                teacherEmail={teacherInfo?.teacher?.email as string}
+            />
         </div>
     )
 }

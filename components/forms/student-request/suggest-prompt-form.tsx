@@ -29,7 +29,6 @@ export default function SuggestPromptForm({
 
     async function onSubmit(values: z.infer<typeof requestNewPromptSchema>) {
         try {
-            console.log('values', values)
             const response = await createStudentRequest(studentId, teacherId, values.notificationText, 'prompt');
             if (!response.success) {
                 throw new Error('error making new username request')

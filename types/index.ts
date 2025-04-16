@@ -204,4 +204,6 @@ export interface SubscriptionData {
     description: string;
     frequency: string;
     listItems: string[];
+    payoutLink: string;
+    teacherEmail: string;
 }

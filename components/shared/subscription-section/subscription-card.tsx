@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { checkout } from "@/lib/stripe/checkout";
 import { SubscriptionData } from "@/types";
+
+
 export default function SubscriptionCard({ subscriptionData }: { subscriptionData: SubscriptionData }) {
 
 
@@ -25,8 +28,16 @@ export default function SubscriptionCard({ subscriptionData }: { subscriptionDat
             <Separator className="my-5" />
             {subscriptionData.name.includes('Free') ? (
                 <Button disabled>Always Free</Button>
-            ): (
-                <Button className="bg-success">Subscribe</Button>
+            ) : (
+                <Button className="bg-success"
+                    onClick={() => {
+                        checkout({
+                            priceId: subscriptionData.payoutLink.toString(),
+                        });
+                    }}
+                >
+                    Subscribe
+                </Button>
             )}
 
         </article>
