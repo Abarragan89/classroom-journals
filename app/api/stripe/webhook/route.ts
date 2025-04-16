@@ -17,9 +17,14 @@ export async function POST(req: NextRequest) {
 
     try {
         event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
-    } catch (err: any) {
-        console.error("Webhook signature verification failed.", err.message);
-        return new Response(`Webhook Error: ${err.message}`, { status: 400 });
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            console.error("Webhook signature verification failed.", err.message);
+            return new Response(`Webhook Error: ${err.message}`, { status: 400 });
+        } else {
+            console.error("Unknown error during webhook verification.", err);
+            return new Response("Webhook Error: Unknown error", { status: 400 });
+        }
     }
 
     try {
@@ -39,7 +44,7 @@ export async function POST(req: NextRequest) {
 
                 // set variables to update depending on the plan
                 const now = new Date();
-                let futureDate = new Date(now);
+                const futureDate = new Date(now);
                 let accountType: string = '';
                 switch (amountPaid) {
                     case 400:

@@ -1,4 +1,4 @@
-// app/api/checkout/route.ts
+// Use backend to prevent data from being seen in the client
 import { NextRequest } from 'next/server';
 import Stripe from 'stripe';
 import { auth } from '@/auth';
