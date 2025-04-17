@@ -85,7 +85,7 @@ export default function SubscriptionCard({
                 title="Confirm Cancellation"
             >
                 <p>Are you sure you want to cancel your subscription?</p>
-                <p>Type 'confirm cancellation' to confirm</p>
+                <p>Type &lsquo;confirm cancellation&lsquo; to confirm</p>
                 <Input
                     type="text"
                     onChange={(e) => setUserConfirmationText(e.target.value)}
