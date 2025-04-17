@@ -41,12 +41,16 @@ export async function POST(req: NextRequest) {
 
                 // get the amont paid to determine which subscription it is. 
                 const amountPaid = invoiceHasBeenPaid.amount_paid
-
                 // set variables to update depending on the plan
                 const now = new Date();
                 const futureDate = new Date(now);
                 let accountType: string = '';
                 switch (amountPaid) {
+                    // testing case of 1 dollar
+                    case 100:
+                        futureDate.setDate(futureDate.getDate() + 1);
+                        accountType = 'Premium(monthly)';
+                        break;
                     case 400:
                         futureDate.setDate(futureDate.getDate() + 33);
                         accountType = 'Premium(monthly)';
@@ -80,7 +84,7 @@ export async function POST(req: NextRequest) {
 
                 // 3. update teacher model
                 await prisma.user.update({
-                    where: { id: teacher?.id },
+                    where: { email: customerEmail },
                     data: {
                         subscriptionId,
                         customerId,
@@ -124,7 +128,6 @@ export async function POST(req: NextRequest) {
             // If user has cancelled their subscription
             case 'customer.subscription.deleted':
                 const subscriptionUpdated = event.data.object;
-
                 const teacherCancelling = await prisma.user.findFirst({
                     where: { subscriptionId: subscriptionUpdated.id },
                     select: {

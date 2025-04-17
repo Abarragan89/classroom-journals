@@ -19,7 +19,7 @@ export default async function Settings({
         <div>
             <h2 className="text-2xl lg:text-3xl mt-2">Settings</h2>
             <UserSettings
-                teacherData={teacherInfo.teacher as User}
+                teacherData={teacherInfo.teacher as unknown as User}
             />
             <Separator className="my-10" />
 
@@ -30,7 +30,7 @@ export default async function Settings({
             <Separator className="my-10" />
 
             <SubscriptionSection
-                teacherEmail={teacherInfo?.teacher?.email as string}
+                teacherData={teacherInfo?.teacher as unknown as User}
             />
         </div>
     )

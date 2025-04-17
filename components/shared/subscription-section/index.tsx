@@ -1,15 +1,16 @@
 'use client'
+import { useState } from "react"
 import SubscriptionCard from "./subscription-card"
-import { SubscriptionData } from "@/types"
+import { SubscriptionData, User } from "@/types"
 
 
 export default function SubscriptionSection({
-    teacherEmail
+    teacherData
 }: {
-    teacherEmail: string
+    teacherData: User
 }) {
 
-    console.log('proceess ', process.env.NEXT_PUBLIC_YEARLY_SUB_LINK)
+    const [isCancelling, setIsCancelling] = useState(teacherData?.isCancelling)
 
     const freePlanData: SubscriptionData = {
         name: 'Basic - Free',
@@ -24,7 +25,7 @@ export default function SubscriptionSection({
             'Assign Unlimited Assessments and Blog Prompts',
         ],
         payoutLink: '',
-        teacherEmail
+        teacherEmail: teacherData?.email as string
 
     }
     const premiumPlanDataMonth: SubscriptionData = {
@@ -39,7 +40,7 @@ export default function SubscriptionSection({
             'Up to 6 classes',
         ],
         payoutLink: process.env.NEXT_PUBLIC_MONTHLY_SUB_LINK as string,
-        teacherEmail
+        teacherEmail: teacherData?.email as string
 
     }
     const premiumPlanDataYear: SubscriptionData = {
@@ -54,23 +55,38 @@ export default function SubscriptionSection({
             'Up to 6 classes',
         ],
         payoutLink: process.env.NEXT_PUBLIC_YEARLY_SUB_LINK as string,
-        teacherEmail,
-
+        teacherEmail: teacherData?.email as string
     }
+
 
     return (
         <section className='mb-20'>
             <h3 className="text-lg">Subscription Plans</h3>
             <p className="text-input mb-5">cancel anytime</p>
-            <div className="flex flex-col md:flex-row flex-wrap gap-10 mx-auto">
+            <div className="flex flex-col md:flex-row flex-wrap-reverse gap-10 mx-auto">
                 <SubscriptionCard
                     subscriptionData={freePlanData}
+                    currentSubscription={teacherData.accountType as string}
+                    subscriptionId={teacherData.subscriptionId as string}
+                    isCancelling={isCancelling}
+                    setIsCancelling={setIsCancelling}
+
                 />
                 <SubscriptionCard
                     subscriptionData={premiumPlanDataYear}
+                    currentSubscription={teacherData.accountType as string}
+                    subscriptionId={teacherData.subscriptionId as string}
+                    isCancelling={isCancelling}
+                    setIsCancelling={setIsCancelling}
+
                 />
                 <SubscriptionCard
                     subscriptionData={premiumPlanDataMonth}
+                    currentSubscription={teacherData.accountType as string}
+                    subscriptionId={teacherData.subscriptionId as string}
+                    isCancelling={isCancelling}
+                    setIsCancelling={setIsCancelling}
+
                 />
             </div>
         </section>

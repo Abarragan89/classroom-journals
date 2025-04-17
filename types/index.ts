@@ -17,7 +17,11 @@ export type User = {
     role: "teacher" | "student";
     createdAt: Date;
     updatedAt: Date;
+    subscriptionId: string;
+    customerId: string;
+    subscriptionExpires: Date
     commentCoolDown: number;
+    isCancelling: boolean
 };
 
 export type Class = z.infer<typeof classSchema> & {

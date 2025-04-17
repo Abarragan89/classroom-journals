@@ -16,6 +16,10 @@ export async function getTeacherSettingData(teacherId: string, classId: string) 
                     accountType: true,
                     id: true,
                     image: true,
+                    subscriptionExpires: true,
+                    subscriptionId: true,
+                    isCancelling: true,
+                    customerId: true,
                 }
             }),
 
@@ -50,7 +54,11 @@ export async function getTeacherSettingData(teacherId: string, classId: string) 
         const teacher = {
             image: teacherData?.image,
             id: teacherData?.id,
+            isCancelling: teacherData?.isCancelling,
             accountType: teacherData?.accountType,
+            subscriptionExpires: teacherData?.subscriptionExpires,
+            customerId: teacherData?.customerId,
+            subscriptionId: teacherData?.subscriptionId,
             email: teacherData?.email,
             username: decryptText(teacherData?.username as string, teacherData?.iv as string),
             name: decryptText(teacherData?.name as string, teacherData?.iv as string),
