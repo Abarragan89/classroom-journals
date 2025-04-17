@@ -11,15 +11,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function DELETE(
     req: NextRequest,
-    { params }: { params: { subscriptionId: string } }
+    { params }: { params: Promise<{ subscriptionId: string }> }
 ) {
     const session = await auth() as Session;
     if (!session || !session.user?.email) {
         return new Response("Unauthorized", { status: 401 });
     }
 
-
-    const { subscriptionId } = await params;
+    const subscriptionId = (await params).subscriptionId;
 
     try {
         await stripe.subscriptions.cancel(subscriptionId)

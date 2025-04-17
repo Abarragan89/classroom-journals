@@ -83,6 +83,7 @@ export default function SubscriptionCard({
                 isOpen={isModalOpen}
                 setIsOpen={setIsModalOpen}
                 title="Confirm Cancellation"
+                description="Confirm your subscription cancellation"
             >
                 <p>Are you sure you want to cancel your subscription?</p>
                 <p>Type &lsquo;confirm cancellation&lsquo; to confirm</p>
@@ -117,30 +118,6 @@ export default function SubscriptionCard({
                 </ul>
                 <Separator className="my-5" />
                 {generateBtn(subscriptionData.name, currentSubscription)}
-
-
-                {/* {subscriptionData.name.includes('Free') ? (
-                <Button disabled>Always Free</Button>
-            ) :
-                currentSubscription.includes('monthly') ?
-                    (
-                        <Button
-                            >
-                            Unsubscribe
-                            </Button>
-                    )
-                    : (
-                        <Button className="bg-success"
-                            onClick={() => {
-                                checkout({
-                                    priceId: subscriptionData.payoutLink.toString(),
-                                });
-                            }}
-                        >
-                            Subscribe
-                        </Button>
-                    )} */}
-
             </article>
         </>
     )
