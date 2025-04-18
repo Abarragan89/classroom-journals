@@ -29,7 +29,7 @@ export default async function StudentDashboardLayout({
         <SidebarProvider>
             <DiscussionSidebar prompt_data={promptSession as unknown as PromptSession} />
             <SidebarInset>
-                <Header session={session as Session} />
+                <Header session={session as Session} isAllowedToMakeNewClass={false} isAllowedToMakePrompt={false} />
                 <div className="flex h-10 shrink-0 items-center gap-2 border-b px-4">
                     <SidebarTrigger size='sm' className="-ml-1" />
                     <Separator orientation="vertical" className="mr-2 h-4" />
