@@ -14,8 +14,8 @@ export default function Header({
     teacherId?: string;
     studentId?: string;
     session?: Session;
-    isAllowedToMakeNewClass: boolean;
-    isAllowedToMakePrompt: boolean;
+    isAllowedToMakeNewClass?: boolean;
+    isAllowedToMakePrompt?: boolean;
 
 }) {
 
