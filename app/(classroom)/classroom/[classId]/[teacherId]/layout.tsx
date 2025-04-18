@@ -4,10 +4,11 @@ import Header from "@/components/shared/header";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { notFound } from "next/navigation";
-import { Class, Classroom, Session } from "@/types";
+import { Class, Classroom, Session, SubscriptionAllowance } from "@/types";
 import { getAllClassrooms, getSingleClassroom } from "@/lib/actions/classroom.actions";
 import { prisma } from "@/db/prisma";
 import DynamicHeader from "@/components/dynamic-header";
+import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
 
 export default async function DashboardLayout({
     children,
@@ -42,15 +43,21 @@ export default async function DashboardLayout({
 
     if (!isTeacherAuthorized) notFound()
 
+
+    const { isAllowedToMakeNewClass, isAllowedToMakePrompt } = await determineSubscriptionAllowance(teacherId)
     // Get Class Data
     const classroomData = await getSingleClassroom(classId) as Class;
-
 
     return (
         <SidebarProvider>
             <AppSidebar classes={teacherClasses as Classroom[]} />
             <SidebarInset>
-                <Header teacherId={teacherId} session={session as Session} />
+                <Header
+                    teacherId={teacherId}
+                    session={session as Session}
+                    isAllowedToMakeNewClass={isAllowedToMakeNewClass as boolean}
+                    isAllowedToMakePrompt={isAllowedToMakePrompt as boolean}
+                />
                 <div className="flex h-10 shrink-0 items-center gap-2 border-b px-4 print:hidden">
                     <SidebarTrigger size='sm' className="-ml-1" />
                     <Separator orientation="vertical" className="mr-2 h-4" />

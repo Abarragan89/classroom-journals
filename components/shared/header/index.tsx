@@ -2,16 +2,21 @@ import Link from "next/link"
 import Image from "next/image"
 import { APP_NAME } from "@/lib/constants"
 import Menu from "./menu"
-import { Session } from "@/types"
+import { Session, SubscriptionAllowance } from "@/types"
 
 export default function Header({
     teacherId,
     session,
     studentId,
+    isAllowedToMakeNewClass,
+    isAllowedToMakePrompt
 }: {
     teacherId?: string;
     studentId?: string;
     session?: Session;
+    isAllowedToMakeNewClass: boolean;
+    isAllowedToMakePrompt: boolean;
+
 }) {
 
     return (
@@ -35,6 +40,8 @@ export default function Header({
                     teacherId={teacherId}
                     studentId={studentId}
                     session={session as Session}
+                    isAllowedToMakeNewClass={isAllowedToMakeNewClass as boolean}
+                    isAllowedToMakePrompt={isAllowedToMakePrompt as boolean}
                 />
             </div>
         </header>

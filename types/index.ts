@@ -211,3 +211,9 @@ export interface SubscriptionData {
     payoutLink: string;
     teacherEmail: string;
 }
+
+export interface SubscriptionAllowance {
+    isSubscriptionActive: boolean;
+    totalPrompts: number;
+    totalClasses: number;
+}

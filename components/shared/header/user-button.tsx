@@ -8,7 +8,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
-import { UserIcon } from "lucide-react";
+import { LogOut, User, UserIcon } from "lucide-react";
 import Image from "next/image";
 import { Session } from "@/types";
 
@@ -52,18 +52,31 @@ export default async function UserButton({
                         }
                     </div>
                 </DropdownMenuTrigger>
+
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                     <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
-                            <div className="text-sm font-medium leading-none">
+                            <div className="text-sm text-center text-ring font-medium leading-none">
                                 {session?.user?.username}
                             </div>
                         </div>
                     </DropdownMenuLabel>
+                    {session.user.role === 'teacher' &&
+                        <DropdownMenuLabel className="p-0 mb-1">
+                            <Button asChild className="w-full py-4 px-2 h-4 justify-start" variant='ghost'>
+                                <Link
+                                    href='/teacher-account'
+                                    className="flex-start"
+                                >
+                                    <User size={18} /> Account
+                                </Link>
+                            </Button>
+                        </DropdownMenuLabel>
+                    }
                     <DropdownMenuItem className="p-0 mb-1">
                         <form action={signOutUser} className="w-full">
                             <Button className="w-full py-4 px-2 h-4 justify-start" variant='ghost'>
-                                Sign out
+                                <LogOut /> Sign out
                             </Button>
                         </form>
                     </DropdownMenuItem>

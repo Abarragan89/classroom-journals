@@ -1,6 +1,5 @@
 import { auth } from "@/auth";
 import { notFound } from "next/navigation";
-import Header from "@/components/shared/header";
 import SinglePromptForm from "@/components/forms/prompt-forms/single-prompt-form";
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
@@ -23,7 +22,6 @@ export default async function CreatePrompt({
 
     return (
         <>
-            <Header teacherId={teacherId} session={session as Session} />
             <main className="wrapper mx-auto">
                 <Link href={'/prompt-library'} className="flex items-center hover:underline w-fit">
                     <ArrowLeftIcon className="mr-1" size={20} />Back to all Jots

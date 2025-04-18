@@ -1,8 +1,8 @@
 import PromptLibrary from "@/components/shared/jot-library-server-comp"
 import { auth } from "@/auth";
 import { notFound } from "next/navigation";
-import Header from "@/components/shared/header";
 import { Session } from "@/types";
+import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
 
 export default async function PromptLibraryPage() {
 
@@ -13,11 +13,13 @@ export default async function PromptLibraryPage() {
     const teacherId = session?.user?.id as string
     if (!teacherId || session?.user?.role !== 'teacher') notFound()
 
+    const { isAllowedToMakePrompt } = await determineSubscriptionAllowance(teacherId)
+
     return (
         <>
-            <Header teacherId={teacherId} session={session as Session} />
             <PromptLibrary
                 teacherId={teacherId}
+                isAllowedToMakePrompt={isAllowedToMakePrompt as boolean}
             />
         </>
     )

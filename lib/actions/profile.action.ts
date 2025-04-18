@@ -1,6 +1,7 @@
 "use server"
 import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
+import { SubscriptionAllowance } from "@/types";
 
 // This is for the students to see which requests they have made and their status
 export async function getTeacherSettingData(teacherId: string, classId: string) {
@@ -67,6 +68,55 @@ export async function getTeacherSettingData(teacherId: string, classId: string) 
         const studentIds = studentIdsArr.map(student => student.userId)
         return { teacher, studentIds, classInfo }
 
+    } catch (error) {
+        // Improved error logging
+        if (error instanceof Error) {
+            console.log('Error creating new prompt:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error adding student. Try again.' }
+    }
+}
+
+
+// Determine subscription allowance for adding prompts and classes
+export async function determineSubscriptionAllowance(teacherId: string) {
+    try {
+        // get teacher data to determine subscription status
+        const teacherInfo = await prisma.user.findUnique({
+            where: { id: teacherId },
+            select: {
+                subscriptionExpires: true,
+                _count: {
+                    select: {
+                        prompts: true,
+                        classes: true,
+                    }
+                }
+            }
+        })
+
+        // Determine if subscription is expired or not
+        const today = new Date();
+        const isSubscriptionActive = teacherInfo?.subscriptionExpires ? teacherInfo?.subscriptionExpires > today : false;
+
+        const subscriptionAllowance: SubscriptionAllowance = {
+            isSubscriptionActive,
+            totalPrompts: teacherInfo?._count.prompts as number,
+            totalClasses: teacherInfo?._count.classes as number
+        }
+
+        const isAllowedToMakePrompt =
+            subscriptionAllowance?.isSubscriptionActive ||
+            (subscriptionAllowance?.totalPrompts ?? 0) < 15;
+
+        const isAllowedToMakeNewClass =
+            subscriptionAllowance?.isSubscriptionActive && subscriptionAllowance?.totalClasses < 6 ||
+            (subscriptionAllowance?.totalClasses ?? 0) < 1;
+
+        return { isAllowedToMakeNewClass, isAllowedToMakePrompt }
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {

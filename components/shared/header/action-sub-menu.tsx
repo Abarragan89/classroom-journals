@@ -10,14 +10,18 @@ import { useState } from "react";
 import AddClassBtn from "@/components/forms/class-forms/add-class-btn";
 import { Button } from "@/components/ui/button";
 import JotTypeModal from "@/components/modals/jot-type-modal";
-import { Session } from "@/types";
+import { Session, SubscriptionAllowance } from "@/types";
 
 export default function ActionSubMenu({
     teacherId,
-    session
+    session,
+    isAllowedToMakeNewClass,
+    isAllowedToMakePrompt
 }: {
     teacherId: string,
-    session: Session
+    session: Session,
+    isAllowedToMakeNewClass: boolean;
+    isAllowedToMakePrompt: boolean;
 }) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -27,7 +31,6 @@ export default function ActionSubMenu({
         setIsOpen(false)
         setIsNewJotModalOpen(false)
     }
-
 
     return (
 
@@ -41,7 +44,12 @@ export default function ActionSubMenu({
             <DropdownMenuContent>
                 <DropdownMenuItem className="hover:cursor-pointer rounded-md" onSelect={(e) => e.preventDefault()}>
                     <div onClick={(e) => { e.stopPropagation() }}>
-                        <AddClassBtn teacherId={teacherId!} closeSubMenu={closeModal} session={session} />
+                        <AddClassBtn
+                            teacherId={teacherId!}
+                            closeSubMenu={closeModal}
+                            session={session}
+                            isAllowedToMakeNewClass={isAllowedToMakeNewClass}
+                        />
                     </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="hover:cursor-pointer rounded-md" onSelect={(e) => e.preventDefault()}>
@@ -49,6 +57,7 @@ export default function ActionSubMenu({
                         isModalOpen={isNewJotModalOpen}
                         setIsModalOpen={setIsNewJotModalOpen}
                         closeModal={closeModal}
+                        isAllowedToMakePrompt={isAllowedToMakePrompt}
                     />
                     <Button className="w-full" variant='ghost' onClick={() => setIsNewJotModalOpen(true)}>
                         <Plus /> New Jot

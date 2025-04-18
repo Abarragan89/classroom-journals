@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { getAllClassrooms } from "@/lib/actions/classroom.actions";
 import ClassCard from "@/components/shared/class-card";
 import { Class, Session } from "@/types";
-import Header from "@/components/shared/header";
 import AddClassBtn from "@/components/forms/class-forms/add-class-btn";
 
 export default async function Classes() {
@@ -20,7 +19,6 @@ export default async function Classes() {
 
     return (
         <>
-            <Header teacherId={teacherId} session={session as Session} />
             <main className=" wrapper">
 
                 {allClassrooms?.length > 0 ? (
@@ -46,7 +44,13 @@ export default async function Classes() {
                                     <p className="mb-3">Easily import from Google Classroom!</p>
                                 )}
                                 <div className="w-[90%] max-w-[150px]">
-                                <AddClassBtn variant='default' teacherId={teacherId} closeSubMenu={undefined} session={session as Session} />
+                                    <AddClassBtn
+                                        variant='default'
+                                        teacherId={teacherId}
+                                        closeSubMenu={undefined}
+                                        session={session as Session}
+                                        isAllowedToMakeNewClass={true}
+                                    />
                                 </div>
                             </div>
                         </>

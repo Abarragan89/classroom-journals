@@ -12,29 +12,38 @@ import ActionSubMenu from "./action-sub-menu";
 import StudentNavLinks from "./student-nav-links";
 import TeacherNavLinks from "./teacher-nav-links";
 import { Separator } from "@/components/ui/separator";
-import { Session } from "@/types";
+import { Session, SubscriptionAllowance } from "@/types";
 
 export default function Menu({
     teacherId,
     session,
-    studentId
+    studentId,
+    isAllowedToMakeNewClass,
+    isAllowedToMakePrompt
 }: {
     teacherId?: string,
     studentId?: string,
     session: Session
+    isAllowedToMakeNewClass: boolean;
+    isAllowedToMakePrompt: boolean
 }) {
 
     const renderTeacherHeader = () => (
         <>
             <TeacherNavLinks />
-            <ActionSubMenu teacherId={teacherId as string} session={session as Session} />
+            <ActionSubMenu
+                teacherId={teacherId as string}
+                session={session as Session}
+                isAllowedToMakeNewClass={isAllowedToMakeNewClass as boolean}
+                isAllowedToMakePrompt={isAllowedToMakePrompt as boolean}
+            />
             <ModeToggle />
             <UserButton session={session as Session} />
         </>
     );
     const renderStudentHeader = () => (
         <>
-            <StudentNavLinks studentId={studentId as string}/>
+            <StudentNavLinks studentId={studentId as string} />
             <ModeToggle />
             <UserButton session={session as Session} />
         </>

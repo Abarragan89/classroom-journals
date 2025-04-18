@@ -6,17 +6,20 @@ import AddClassForm from "./add-class-form"
 import { ResponsiveDialog } from "@/components/responsive-dialog"
 import { GoogleClassroom, Session } from "@/types";
 import GoogleClassroomOptions from "./google-classroom-options";
+import Link from "next/link";
 
 export default function AddClassBtn({
     teacherId,
     closeSubMenu,
     variant = 'ghost',
-    session
+    session,
+    isAllowedToMakeNewClass
 }: {
     teacherId: string,
     closeSubMenu?: () => void,
     variant?: "ghost" | "link" | "default" | "destructive" | "outline" | "secondary" | null | undefined,
-    session: Session
+    session: Session,
+    isAllowedToMakeNewClass: boolean
 }) {
 
     const [isModalOpen, setIsOpenModal] = useState<boolean>(false)
@@ -29,7 +32,7 @@ export default function AddClassBtn({
         if (closeSubMenu) closeSubMenu()
     }
 
-    function updateGoogleClassrooms(classes: GoogleClassroom[], isOpen:boolean) {
+    function updateGoogleClassrooms(classes: GoogleClassroom[], isOpen: boolean) {
         setGoogleClassroomArr(classes)
         setShowGoogleClassrooms(isOpen)
     }
@@ -52,12 +55,29 @@ export default function AddClassBtn({
                         />
                     </div>
                     :
-                    <AddClassForm
-                        teacherId={teacherId}
-                        closeModal={closeModal}
-                        session={session as Session}
-                        updateGoogleClassrooms={updateGoogleClassrooms}
-                    />
+                    isAllowedToMakeNewClass ? (
+                        <AddClassForm
+                            teacherId={teacherId}
+                            closeModal={closeModal}
+                            session={session as Session}
+                            updateGoogleClassrooms={updateGoogleClassrooms}
+                        />
+                    ) : (
+                        <div className="text-center my-2">
+                            <p>
+                                <span className="text-destructive font-bold">Out of Space! </span>
+                                Upgrade your account to Premium to create up to 6 classes!.
+                            </p>
+                            <Button asChild className="mt-5">
+                                <Link
+                                    onClick={closeModal}
+                                    href={'/teacher-account#subscription-section'}
+                                >
+                                    Upgrade Now!
+                                </Link>
+                            </Button>
+                        </div>
+                    )
                 }
 
             </ResponsiveDialog>

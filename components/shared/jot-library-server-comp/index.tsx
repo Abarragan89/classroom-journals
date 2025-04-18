@@ -1,5 +1,5 @@
 import { getAllTeacherPrompts } from "@/lib/actions/prompt.actions";
-import { Prompt, PromptCategory } from "@/types";
+import { Prompt, PromptCategory, SubscriptionAllowance } from "@/types";
 import JotSearchArea from "@/components/jot-search-area";
 import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
 import { Classroom } from "@/types";
@@ -8,10 +8,12 @@ import { getAllPromptCategories } from "@/lib/actions/prompt.categories";
 
 export default async function PromptLibrary({
     teacherId,
-    inClassroom
+    inClassroom,
+    isAllowedToMakePrompt
 }: {
     teacherId: string,
-    inClassroom?: boolean
+    inClassroom?: boolean,
+    isAllowedToMakePrompt: boolean
 }) {
 
     const allPrompts = await getAllTeacherPrompts(teacherId) as unknown as { prompts: Prompt[], totalCount: number }
@@ -26,7 +28,9 @@ export default async function PromptLibrary({
                 <div className="flex-between relative">
                     <h1 className={`${inClassroom ? 'text-2xl lg:text-3xl mt-2' : 'h1-bold'}`}>Jot Library</h1>
                     <div className="absolute top-[40px] right-0">
-                        <CreateNewJot />
+                        <CreateNewJot 
+                            isAllowedToMakePrompt={isAllowedToMakePrompt}
+                        />
                     </div>
                 </div>
                 <JotSearchArea
