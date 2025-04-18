@@ -4,7 +4,7 @@ import Header from "@/components/shared/header";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { notFound } from "next/navigation";
-import { Class, Classroom, Session, SubscriptionAllowance } from "@/types";
+import { Class, Classroom, Session } from "@/types";
 import { getAllClassrooms, getSingleClassroom } from "@/lib/actions/classroom.actions";
 import { prisma } from "@/db/prisma";
 import DynamicHeader from "@/components/dynamic-header";

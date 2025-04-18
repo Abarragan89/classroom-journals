@@ -10,7 +10,7 @@ import { useState } from "react";
 import AddClassBtn from "@/components/forms/class-forms/add-class-btn";
 import { Button } from "@/components/ui/button";
 import JotTypeModal from "@/components/modals/jot-type-modal";
-import { Session, SubscriptionAllowance } from "@/types";
+import { Session } from "@/types";
 
 export default function ActionSubMenu({
     teacherId,

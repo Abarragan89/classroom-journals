@@ -4,7 +4,6 @@ import { promptSchema } from "../validators";
 import { SearchOptions, Question, Prompt } from "@/types";
 import { Prisma } from '@prisma/client';
 
-
 // Create new prompt 
 export async function createNewPrompt(prevState: unknown, formData: FormData) {
     try {
@@ -13,6 +12,36 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         if (typeof teacherId !== 'string') {
             throw new Error('Missing teacher ID');
         }
+
+        // Check if teacher is allowed to add a new prompte
+        const currentTeacherClassData = await prisma.user.findUnique({
+            where: { id: teacherId },
+            select: {
+                subscriptionExpires: true,
+                _count: {
+                    select: {
+                        prompts: true,
+                    }
+                }
+            }
+        })
+
+        const today = new Date();
+        const { subscriptionExpires, _count } = currentTeacherClassData || {};
+        const isSubscribed = subscriptionExpires && subscriptionExpires > today;
+
+        let isAllowedToMakeNewClass = false;
+        let promptCount = _count?.prompts ?? 0
+        if (isSubscribed) {
+            isAllowedToMakeNewClass = true;
+        } else if (!isSubscribed && promptCount < 14) {
+            isAllowedToMakeNewClass = true;
+        }
+        if (!isAllowedToMakeNewClass) {
+            throw new Error('You have reached your Prompt limit. Upgrade your account or delete Prompts.')
+        }
+
+        // make arrays for questions
         const questions: Question[] = [];
         const classesAssignTo: string[] = []
 
@@ -99,12 +128,12 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         // Improved error logging
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);
-            // // console.error(error.stack); // Log stack trace for better debugging
+            console.error(error.stack); // Log stack trace for better debugging
+            return { success: false, message: error.message as unknown as string }
         } else {
             console.log('Unexpected error:', error);
+            return { success: false, message: 'Error adding prompt' }
         }
-
-        return { success: false, message: 'Error creating prompt. Try again.' }
     }
 }
 

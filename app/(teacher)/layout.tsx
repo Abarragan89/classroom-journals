@@ -6,10 +6,8 @@ import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
 
 export default async function TeacherLayout({
     children,
-    params
 }: Readonly<{
     children: React.ReactNode;
-    params: Promise<{ classId: string }>
 }>) {
 
     const session = await auth()

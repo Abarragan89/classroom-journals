@@ -20,6 +20,35 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
             throw new Error('Missing teacher ID');
         }
 
+        const currentTeacherClassData = await prisma.user.findUnique({
+            where: { id: teacherId },
+            select: {
+                subscriptionExpires: true,
+                _count: {
+                    select: {
+                        classes: true,
+                    }
+                }
+            }
+        })
+
+        const today = new Date();
+        const { subscriptionExpires, _count } = currentTeacherClassData || {};
+        const isSubscribed = subscriptionExpires && subscriptionExpires > today;
+
+        let isAllowedToMakeNewClass = false;
+        let classCount = _count?.classes ?? 0
+        if (isSubscribed && classCount < 6) {
+            isAllowedToMakeNewClass = true;
+        } else if (!isSubscribed && classCount < 1) {
+            isAllowedToMakeNewClass = true;
+        }
+
+        if (!isAllowedToMakeNewClass) {
+            throw new Error('You have reached your class limit')
+        }
+
+
         // Get all classcodes to ensure no duplicates
         const allClassCodes = await prisma.classroom.findMany({
             where: {},

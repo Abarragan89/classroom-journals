@@ -12,7 +12,7 @@ import ActionSubMenu from "./action-sub-menu";
 import StudentNavLinks from "./student-nav-links";
 import TeacherNavLinks from "./teacher-nav-links";
 import { Separator } from "@/components/ui/separator";
-import { Session, SubscriptionAllowance } from "@/types";
+import { Session } from "@/types";
 
 export default function Menu({
     teacherId,
