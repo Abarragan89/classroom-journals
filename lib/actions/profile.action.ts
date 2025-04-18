@@ -1,7 +1,6 @@
 "use server"
 import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
-import { SubscriptionAllowance } from "@/types";
 
 // This is for the students to see which requests they have made and their status
 export async function getTeacherSettingData(teacherId: string, classId: string) {
@@ -98,23 +97,15 @@ export async function determineSubscriptionAllowance(teacherId: string) {
             }
         })
 
-        // Determine if subscription is expired or not
+        // Determine if subscription is expired or not to render correc tUI
         const today = new Date();
         const isSubscriptionActive = teacherInfo?.subscriptionExpires ? teacherInfo?.subscriptionExpires > today : false;
+        const totalPrompts = teacherInfo?._count.prompts;
+        const totalClasses = teacherInfo?._count.classes;
 
-        const subscriptionAllowance: SubscriptionAllowance = {
-            isSubscriptionActive,
-            totalPrompts: teacherInfo?._count.prompts as number,
-            totalClasses: teacherInfo?._count.classes as number
-        }
+        const isAllowedToMakePrompt = isSubscriptionActive || (totalPrompts ?? 0) < 15;
 
-        const isAllowedToMakePrompt =
-            subscriptionAllowance?.isSubscriptionActive ||
-            (subscriptionAllowance?.totalPrompts ?? 0) < 15;
-
-        const isAllowedToMakeNewClass =
-            subscriptionAllowance?.isSubscriptionActive && subscriptionAllowance?.totalClasses < 6 ||
-            (subscriptionAllowance?.totalClasses ?? 0) < 1;
+        const isAllowedToMakeNewClass = isSubscriptionActive && (totalClasses ?? 0) < 6 || (totalClasses ?? 0) < 1;
 
         return { isAllowedToMakeNewClass, isAllowedToMakePrompt }
     } catch (error) {
