@@ -37,7 +37,7 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
         const isSubscribed = subscriptionExpires && subscriptionExpires > today;
 
         let isAllowedToMakeNewClass = false;
-        let classCount = _count?.classes ?? 0
+        const classCount = _count?.classes ?? 0
         if (isSubscribed && classCount < 6) {
             isAllowedToMakeNewClass = true;
         } else if (!isSubscribed && classCount < 1) {

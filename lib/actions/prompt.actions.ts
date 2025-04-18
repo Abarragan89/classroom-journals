@@ -31,7 +31,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         const isSubscribed = subscriptionExpires && subscriptionExpires > today;
 
         let isAllowedToMakeNewClass = false;
-        let promptCount = _count?.prompts ?? 0
+        const promptCount = _count?.prompts ?? 0
         if (isSubscribed) {
             isAllowedToMakeNewClass = true;
         } else if (!isSubscribed && promptCount < 14) {
