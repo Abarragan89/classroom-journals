@@ -6,11 +6,30 @@ import { Prisma } from "@prisma/client"
 
 export async function createStudentRequest(studentId: string, teacherId: string, text: string, type: string) {
     try {
+        // get student iv to encrypt the text
+        let userText: string = ''
+        if (type = 'username') {
+            // get student Iv to encrpyt the potential username
+            const studentIv = await prisma.user.findUnique({
+                where: { id: studentId },
+                select: { iv: true }
+            })
+            if (studentIv?.iv) {
+                // Convert the iv from string, to arraybuffer
+                const ivBuffer = Buffer.from(studentIv.iv, 'hex');
+                // Step 2: Encrypt the username using the IV
+                const { encryptedData: encryptedUsername } = encryptText(text.trim(), ivBuffer);
+                userText = encryptedUsername
+            }
+        } else {
+            userText = text
+        }
+
         await prisma.studentRequest.create({
             data: {
                 studentId,
                 teacherId,
-                text,
+                text: userText,
                 type,
                 status: 'pending'
             }
@@ -49,13 +68,27 @@ export async function getTeacherRequests(teacherId: string) {
             }
         });
 
-        const decyptedTeacherRequests = teacherRequests.map((studentRequest) => ({
-            ...studentRequest,
-            student: {
-                username: decryptText(studentRequest.student.username as string, studentRequest.student.iv as string),
-                id: true,
+        const decyptedTeacherRequests = teacherRequests.map((studentRequest) => {
+            if (studentRequest.type === 'username') {
+                return ({
+                    ...studentRequest,
+                    text: studentRequest.text,
+                    displayText: decryptText(studentRequest.text as string, studentRequest.student.iv as string),
+                    student: {
+                        username: decryptText(studentRequest.student.username as string, studentRequest.student.iv as string),
+                        id: true,
+                    }
+                })
+            } else {
+                return ({
+                    ...studentRequest,
+                    student: {
+                        username: decryptText(studentRequest.student.username as string, studentRequest.student.iv as string),
+                        id: true,
+                    }
+                })
             }
-        }))
+        })
 
         return decyptedTeacherRequests;
     } catch (error) {
@@ -89,7 +122,7 @@ export async function getStudentRequests(studentId: string) {
     }
 }
 
-// This is for the students to see which requests they have made and their status
+// This is for the teacher to get notifications if there are requests, work as notifications
 export async function getStudentRequestCount(teacherId: string) {
     try {
         const count = await prisma.studentRequest.count({
@@ -135,26 +168,26 @@ export async function markAllRequestsAsViewed(teacherId: string) {
 export async function approveUsernameChange(studentId: string, username: string, responseId: string) {
     try {
         // Step 1: Fetch the existing user record to get the `iv`
-        const existingUser = await prisma.user.findUnique({
-            where: { id: studentId },
-            select: { iv: true },
-        });
+        // const existingUser = await prisma.user.findUnique({
+        //     where: { id: studentId },
+        //     select: { iv: true },
+        // });
 
-        if (!existingUser || !existingUser.iv) {
-            throw new Error("User not found or missing IV for encryption.");
-        }
+        // if (!existingUser || !existingUser.iv) {
+        //     throw new Error("User not found or missing IV for encryption.");
+        // }
 
-        // Convert the iv from string, to arraybuffer
-        const ivBuffer = Buffer.from(existingUser.iv, 'hex');
+        // // Convert the iv from string, to arraybuffer
+        // const ivBuffer = Buffer.from(existingUser.iv, 'hex');
 
-        // Step 2: Encrypt the username using the IV
-        const { encryptedData: encryptedUsername } = encryptText(username.trim(), ivBuffer);
+        // // Step 2: Encrypt the username using the IV
+        // const { encryptedData: encryptedUsername } = encryptText(username.trim(), ivBuffer);
 
         // Step 3: Update the user with the new encrypted username
         await prisma.user.update({
             where: { id: studentId },
             data: {
-                username: encryptedUsername,
+                username: username,
             },
         });
 

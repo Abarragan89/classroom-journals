@@ -200,6 +200,7 @@ export interface StudentRequest {
     status: string;
     student: User;
     teacher: User;
+    displayText?: string
 }
 
 export interface SubscriptionData {

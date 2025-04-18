@@ -1,6 +1,7 @@
 'use client'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { formatDateMonthDayYear } from "@/lib/utils"
 import { User } from "@/types"
 
 export default function UserSettings({
@@ -8,6 +9,12 @@ export default function UserSettings({
 }: {
     teacherData: User,
 }) {
+
+    const today = new Date();
+    const isSubscriptionValid = teacherData?.subscriptionExpires ? teacherData?.subscriptionExpires > today : false;
+    const isCancelling = teacherData.isCancelling;
+    const accountStatus = isSubscriptionValid ? teacherData?.accountType : 'Basic-Free'
+
     return (
         <section className="mt-8">
             <h3 className="text-lg mb-1">Account Information</h3>
@@ -37,13 +44,18 @@ export default function UserSettings({
                         onBlur={() => console.log('how')}
                     />
                 </div>
-                <div className="w-full md:ml-3 min-w-[275px]">
+                <div className="w-full md:ml-3 min-w-[275px] relative">
                     <Label>Account Type</Label>
                     <Input
-                        defaultValue={teacherData?.accountType}
+                        defaultValue={accountStatus}
                         readOnly
                         disabled
                     />
+                    {isCancelling && 
+                        <p
+                        className="text-xs text-destructive absolute top-1 right-2"
+                        >Expires: {formatDateMonthDayYear(teacherData?.subscriptionExpires)}</p>
+                    }
                 </div>
             </div>
         </section>

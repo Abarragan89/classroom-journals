@@ -63,7 +63,11 @@ export default function StudentRequestSection({
                     >
                         <CardContent>
                             <p className='text-md tracking-wider text-center mb-5'><span className="font-bold">{studentRequest.student.username}</span> is requesting a <span className="underline">{studentRequest.type}</span> :</p>
-                            <p className='text-center bg-background border border-border p-4 rounded-md mx-5 sm:mx-20'>{studentRequest.text}</p>
+                            {studentRequest.type === 'username' ? (
+                                <p className='text-center bg-background border border-border p-4 rounded-md mx-5 sm:mx-20'>{studentRequest.displayText}</p>
+                            ) : (
+                                <p className='text-center bg-background border border-border p-4 rounded-md mx-5 sm:mx-20'>{studentRequest.text}</p>
+                            )}
                         </CardContent>
                         <CardFooter className='flex-center gap-x-10'>
                             <Button onClick={() => approveRequest(studentRequest.studentId, studentRequest.text, studentRequest.id, studentRequest.type)} className='bg-success'>Accept</Button>

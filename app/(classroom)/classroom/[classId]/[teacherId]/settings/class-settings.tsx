@@ -11,7 +11,6 @@ export default function ClassSettings({
 }) {
     return (
         <section className='mb-20'>
-            <h3 className="text-lg mb-1">Class Settings</h3>
             <div className="md:flex-between space-y-5 md:space-y-0">
                 <div className="w-full md:mr-3 min-w-[275px]">
                     <Label>Class Name</Label>

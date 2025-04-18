@@ -2,6 +2,7 @@ import { prisma } from "@/db/prisma";
 import { NextRequest } from "next/server";
 import Stripe from "stripe";
 import { subscriptionCancelled, subscriptionConfirmation, subscriptionPaymentFailed } from "@/lib/emails/stripe-emails";
+import { decryptText } from "@/lib/utils";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2025-03-31.basil",
@@ -134,6 +135,7 @@ export async function POST(req: NextRequest) {
                         id: true,
                         email: true,
                         name: true,
+                        iv: true,
                     }
                 })
 
@@ -146,7 +148,7 @@ export async function POST(req: NextRequest) {
 
                 const unsubscribedUser = {
                     customerEmail: teacherCancelling?.email as string,
-                    customerName: teacherCancelling?.name as string,
+                    customerName: decryptText(teacherCancelling?.name as string, teacherCancelling?.iv as string),
                 }
 
                 await subscriptionCancelled(unsubscribedUser)
