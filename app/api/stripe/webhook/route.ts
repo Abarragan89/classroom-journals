@@ -48,10 +48,10 @@ export async function POST(req: NextRequest) {
                 let accountType: string = '';
                 switch (amountPaid) {
                     // testing case of 1 dollar
-                    case 100:
-                        futureDate.setDate(futureDate.getDate() + 1);
-                        accountType = 'Premium(monthly)';
-                        break;
+                    // case 100:
+                    //     futureDate.setDate(futureDate.getDate() + 1);
+                    //     accountType = 'Premium(monthly)';
+                    //     break;
                     case 400:
                         futureDate.setDate(futureDate.getDate() + 33);
                         accountType = 'Premium(monthly)';
@@ -68,12 +68,12 @@ export async function POST(req: NextRequest) {
                     where: { email: customerEmail },
                     select: {
                         id: true,
-                        customerId: true,
+                        subscriptionId: true,
                     }
                 });
 
                 // // if no customerId, it's a new customer so send email
-                if (teacher?.customerId) {
+                if (!teacher?.subscriptionId) {
                     const customerDetails = {
                         customerEmail,
                         customerName,
@@ -123,6 +123,7 @@ export async function POST(req: NextRequest) {
                     customerEmail: customerEmailPaymentFailed,
                     customerName: customerNamePaymentFailed,
                 }
+                // 
                 await subscriptionPaymentFailed(customerDetailsFailedPayment)
                 break;
 
@@ -143,6 +144,7 @@ export async function POST(req: NextRequest) {
                     where: { id: teacherCancelling?.id },
                     data: {
                         isCancelling: true,
+                        subscriptionId: null,
                     }
                 })
 
@@ -150,7 +152,7 @@ export async function POST(req: NextRequest) {
                     customerEmail: teacherCancelling?.email as string,
                     customerName: decryptText(teacherCancelling?.name as string, teacherCancelling?.iv as string),
                 }
-
+                // send cancellation email
                 await subscriptionCancelled(unsubscribedUser)
                 break;
         }

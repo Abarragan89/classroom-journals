@@ -31,6 +31,16 @@ export default async function StudentDashboard() {
 
     if (!classroomId) notFound()
 
+    // get student username
+    const studentInfo = await prisma.user.findUnique({
+        where: { id: studentId },
+        select: {
+            username: true,
+            iv: true,
+        }
+    })
+    const studentName = decryptText(studentInfo?.username as string, studentInfo?.iv as string)
+
     // Get Class categories for filtering
     const { userId: teacherId } = await prisma.classUser.findFirst({
         where: {
@@ -67,7 +77,7 @@ export default async function StudentDashboard() {
 
     const lastestTaskToDo = promptSessionWithMetaData.find(session => !session.isCompleted)
 
-    // Get all student Id
+    // Get all student Ids in classroom
     const studentIds = await prisma.classUser.findMany({
         where: {
             classId: classroomId,
@@ -159,7 +169,7 @@ export default async function StudentDashboard() {
         <>
             <Header session={session} studentId={studentId} />
             <main className="wrapper relative">
-                <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {session?.user?.username}</h1>
+                <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {studentName}</h1>
                 {lastestTaskToDo && (
                     <div
                         className="border border-primary w-full px-5 py-2 rounded-lg relative mb-24"

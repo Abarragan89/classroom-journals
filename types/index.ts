@@ -27,7 +27,7 @@ export type User = {
 export type Class = z.infer<typeof classSchema> & {
     id: string;
     classCode: string;
-    // users?: ClassUser[]
+    _count?: { users: number }
 }
 // This is needed for the form data that does not include Id
 export type ClassForm = Omit<Class, "id">;

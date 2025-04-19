@@ -12,10 +12,12 @@ import { toast } from 'sonner'
 
 export default function EditClassForm({
     classData,
-    closeModal
+    closeModal,
+    isInSettingsPage = false,
 }: {
     classData: Class,
-    closeModal: () => void
+    closeModal: () => void,
+    isInSettingsPage?: boolean
 }) {
 
     const [state, action] = useActionState(updateClassInfo, {
@@ -51,9 +53,12 @@ export default function EditClassForm({
     }
 
     return (
-        <form action={action} className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
-                <Label htmlFor="name" className="text-right">
+        <form action={action} className={`grid gap-4 ${isInSettingsPage ? '' : 'py-4'}`}>
+            <div className={`
+                grid items-center mx-auto
+                ${isInSettingsPage ? 'grid-cols-1 w-full gap-1' : 'grid-cols-4 w-4/5 gap-4'}`
+            }>
+                <Label htmlFor="name" className={`${isInSettingsPage ? '' : 'text-right'}`}>
                     Name
                 </Label>
                 <Input
@@ -65,8 +70,11 @@ export default function EditClassForm({
                     defaultValue={classData?.name ?? ''}
                 />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
-                <Label htmlFor="year" className="text-right">
+            <div className={`
+                grid items-center mx-auto
+                ${isInSettingsPage ? 'grid-cols-1 w-full gap-1' : 'grid-cols-4 w-4/5 gap-4'}`
+            }>
+                <Label htmlFor="year" className={`${isInSettingsPage ? '' : 'text-right'}`}>
                     Year
                 </Label>
                 <Input
@@ -79,8 +87,11 @@ export default function EditClassForm({
                     placeholder="required"
                 />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
-                <Label htmlFor="subject" className="text-right">
+            <div className={`
+                grid items-center mx-auto
+                ${isInSettingsPage ? 'grid-cols-1 w-full gap-1' : 'grid-cols-4 w-4/5 gap-4'}`
+            }>
+                <Label htmlFor="subject" className={`${isInSettingsPage ? '' : 'text-right'}`}>
                     Subject
                 </Label>
                 <Input
@@ -90,8 +101,11 @@ export default function EditClassForm({
                     defaultValue={classData?.subject ?? ''}
                 />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
-                <Label htmlFor="period" className="text-right">
+            <div className={`
+                grid items-center mx-auto
+                ${isInSettingsPage ? 'grid-cols-1 w-full gap-1' : 'grid-cols-4 w-4/5 gap-4'}`
+            }>
+                <Label htmlFor="period" className={`${isInSettingsPage ? '' : 'text-right'}`}>
                     Period
                 </Label>
                 <Input
@@ -102,8 +116,11 @@ export default function EditClassForm({
                 />
             </div>
             {/* Color Selection */}
-            <div className="grid grid-cols-4 items-center gap-4 mx-auto w-4/5">
-                <Label htmlFor="color" className="text-right">
+            <div className={`
+                grid items-center mx-auto
+                ${isInSettingsPage ? 'grid-cols-1 w-full gap-1' : 'grid-cols-4 w-4/5 gap-4'}`
+            }>
+                <Label htmlFor="color" className={`${isInSettingsPage ? '' : 'text-right'}`}>
                     Color
                 </Label>
                 <div className="col-span-3">

@@ -41,11 +41,13 @@ export async function getTeacherSettingData(teacherId: string, classId: string) 
                             users: true,
                         }
                     },
+                    id: true,
                     classCode: true,
                     subject: true,
                     year: true,
                     period: true,
                     name: true,
+                    color: true,
                 }
             })
         ]);

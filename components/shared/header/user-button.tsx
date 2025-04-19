@@ -57,7 +57,7 @@ export default async function UserButton({
                     <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
                             <div className="text-sm text-center text-ring font-medium leading-none">
-                                {session?.user?.username}
+                                {session?.user?.email ?? session?.user?.username}
                             </div>
                         </div>
                     </DropdownMenuLabel>

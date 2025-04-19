@@ -51,9 +51,10 @@ export default function UserSettings({
                         readOnly
                         disabled
                     />
-                    {isCancelling && 
+                    {/* Don't show this if it is already expired and to Basic-Free */}
+                    {isCancelling && accountStatus !== 'Basic-Free' &&
                         <p
-                        className="text-xs text-destructive absolute top-1 right-2"
+                            className="text-xs text-destructive absolute top-1 right-2"
                         >Expires: {formatDateMonthDayYear(teacherData?.subscriptionExpires)}</p>
                     }
                 </div>
