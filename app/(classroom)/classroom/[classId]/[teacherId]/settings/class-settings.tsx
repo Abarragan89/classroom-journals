@@ -1,7 +1,5 @@
 'use client';
 import EditClassForm from '@/components/forms/class-forms/edit-class-form';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Class } from '@/types';
 import React from 'react';
 
