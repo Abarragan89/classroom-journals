@@ -7,12 +7,13 @@ import { decryptText } from "../utils";
 // Create a new class
 export async function createNewClass(prevState: unknown, formData: FormData) {
     try {
-        const { name, subject, year, period, color } = classSchema.parse({
+        const { name, subject, year, period, color, grade } = classSchema.parse({
             name: formData.get('name'),
             subject: formData.get('subject'),
             year: formData.get('year'),
             period: formData.get('period'),
             color: formData.get('color'),
+            grade: formData.get('grade'),
         })
         // Get Teacher Id
         const teacherId = formData.get('teacherId')
@@ -69,7 +70,8 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
                     year: year?.trim(),
                     period: period?.trim(),
                     color,
-                    classCode
+                    classCode,
+                    grade
                 }
             })
             await tx.classUser.create({
@@ -157,12 +159,13 @@ export async function getSingleClassroom(classroomId: string) {
 // Update Class Info
 export async function updateClassInfo(prevState: unknown, formData: FormData) {
     try {
-        const { name, subject, year, period, color } = classSchema.parse({
+        const { name, subject, year, period, color, grade } = classSchema.parse({
             name: formData.get('name'),
             subject: formData.get('subject'),
             year: formData.get('year'),
             period: formData.get('period'),
-            color: formData.get('color')
+            color: formData.get('color'),
+            grade: formData.get('grade')
         })
         // Get classroom Id
         const classroomId = formData.get('classroomId')
@@ -178,7 +181,8 @@ export async function updateClassInfo(prevState: unknown, formData: FormData) {
                 subject: subject?.trim(),
                 year: year?.trim(),
                 period: period?.trim(),
-                color
+                color,
+                grade
             }
         })
 

@@ -167,23 +167,7 @@ export async function markAllRequestsAsViewed(teacherId: string) {
 // This is for the students to see which requests they have made and their status
 export async function approveUsernameChange(studentId: string, username: string, responseId: string) {
     try {
-        // Step 1: Fetch the existing user record to get the `iv`
-        // const existingUser = await prisma.user.findUnique({
-        //     where: { id: studentId },
-        //     select: { iv: true },
-        // });
-
-        // if (!existingUser || !existingUser.iv) {
-        //     throw new Error("User not found or missing IV for encryption.");
-        // }
-
-        // // Convert the iv from string, to arraybuffer
-        // const ivBuffer = Buffer.from(existingUser.iv, 'hex');
-
-        // // Step 2: Encrypt the username using the IV
-        // const { encryptedData: encryptedUsername } = encryptText(username.trim(), ivBuffer);
-
-        // Step 3: Update the user with the new encrypted username
+        // Update the user with the new encrypted username
         await prisma.user.update({
             where: { id: studentId },
             data: {

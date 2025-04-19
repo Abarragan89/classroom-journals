@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
 import MultiPromptForm from "@/components/forms/prompt-forms/multi-prompt-form";
 import { Session } from "@/types";
+import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
 
 export default async function CreatePrompt({
     searchParams
@@ -17,7 +18,7 @@ export default async function CreatePrompt({
 
     const teacherId = session?.user?.id as string
     if (!teacherId || session?.user?.role !== 'teacher') notFound()
-
+        
     const { type } = await searchParams;
 
     return (
@@ -37,7 +38,9 @@ export default async function CreatePrompt({
                     <>
                         <h1 className="h1-bold mt-5">New Assessment</h1>
                         <div className="max-w-[600px] mx-auto mt-5">
-                            <MultiPromptForm teacherId={teacherId} />
+                            <MultiPromptForm
+                                teacherId={teacherId}
+                            />
                         </div>
                     </>
                 ) : (

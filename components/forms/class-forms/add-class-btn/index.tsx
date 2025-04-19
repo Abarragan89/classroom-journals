@@ -66,7 +66,7 @@ export default function AddClassBtn({
                         <div className="text-center my-2">
                             <p>
                                 <span className="text-destructive font-bold">Out of Space! </span>
-                                Upgrade your account to Premium to create up to 6 classes!.
+                                Upgrade your account to Premium to create up to 6 classes!
                             </p>
                             <Button asChild className="mt-5">
                                 <Link

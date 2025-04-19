@@ -10,7 +10,9 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
         const studentId = formData.get('studentId') as string;
         const promptSessionId = formData.get('promptSessionId') as string;
         const responseData = formData.get('responseData') as string;
-        const promptType = formData.get('promptType') as string
+        const promptType = formData.get('promptType') as string;
+        const gradeLevel = formData.get('grade-level') as string;
+        const isTeacherPremium = formData.get('is-teacher-premium') as string
         let response = JSON.parse(responseData);
 
         // Check to see if submission from student ahs already been made. 
@@ -39,11 +41,10 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
                 message: "You have already submitted your responses."
             };
         }
-        console.log('befor ai')
 
         // Grade it with AI Only if premium member
-        if (promptType === 'multi-question') {
-            let { output_text: scores } = await gradeResponseWithAI('5th', response)
+        if (promptType === 'multi-question' && isTeacherPremium === 'true') {
+            let { output_text: scores } = await gradeResponseWithAI(gradeLevel, response)
             scores = JSON.parse(scores)
             response = response.map((res: ResponseData, index: number) => {
                 if ((scores[index]) === null) {

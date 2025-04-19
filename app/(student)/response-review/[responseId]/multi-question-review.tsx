@@ -72,7 +72,7 @@ export default function MultiQuestionReview({
     
     return (
         <div className="w-full relative">
-            <p className="h2-bold text-input">Assessment</p>
+            <p className="h2-bold text-input">Assessment Review</p>
             <div className="flex-between mt-10">
                 {showGrades && (
                     <p className='font-bold text-lg text-input ml-0 text-right mb-10'>Grade: <span

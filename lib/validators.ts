@@ -12,6 +12,7 @@ export const classSchema = z.object({
     subject: z.string().optional(),
     year: z.string().min(1, 'Year is required'),
     period: z.string().optional(),
+    grade: z.string().optional(),
     color: z.string().min(1, 'Color is required'),
 })
 

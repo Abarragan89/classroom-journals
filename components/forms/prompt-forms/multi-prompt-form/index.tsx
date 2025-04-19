@@ -15,6 +15,8 @@ import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
 import { Classroom, Prompt, PromptCategory } from "@/types";
 import { addPromptCategory, getAllPromptCategories } from "@/lib/actions/prompt.categories";
 import CategorySection from "../single-prompt-form/category-section";
+import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
+import Link from "next/link";
 
 interface Question {
     name: string;
@@ -23,7 +25,11 @@ interface Question {
 }
 
 
-export default function MultiPromptForm({ teacherId }: { teacherId: string }) {
+export default function MultiPromptForm({
+    teacherId,
+}: {
+    teacherId: string,
+}) {
 
     const searchParams = useSearchParams()
     const existingPromptId = searchParams.get('edit')
@@ -39,6 +45,7 @@ export default function MultiPromptForm({ teacherId }: { teacherId: string }) {
     const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null);
     const [categories, setCategories] = useState<PromptCategory[]>([]);
     const [newCategoryName, setNewCategoryName] = useState<string>('');
+    const [isTeacherPremium, setIsTeacherPremium] = useState<boolean>(false);
 
     const [questions, setQuestions] = useState<Question[]>([
         { name: "question1", label: "Question 1", value: "" }
@@ -59,6 +66,8 @@ export default function MultiPromptForm({ teacherId }: { teacherId: string }) {
                 setClassrooms(data as Classroom[]);
                 const categoryData = await getAllPromptCategories(teacherId) as PromptCategory[]
                 setCategories(categoryData)
+                const { isSubscriptionActive } = await determineSubscriptionAllowance(teacherId)
+                setIsTeacherPremium(isSubscriptionActive as boolean)
                 // Get existing prompt if in search params
                 if (existingPromptId) {
                     const promptData = await getSinglePrompt(existingPromptId) as unknown as Prompt
@@ -135,6 +144,16 @@ export default function MultiPromptForm({ teacherId }: { teacherId: string }) {
 
     return (
         <form action={action} className="grid relative">
+            {!isTeacherPremium &&
+                <div className="text-center space-y-2 mb-5">
+                    <p className="text-sm font-bold text-success">Upgrade to Premium to have all assessments graded instantly by AI!</p>
+                    <Button asChild>
+                        <Link href={'/teacher-account#subscription-section'}>
+                            Upgrade Now!
+                        </Link>
+                    </Button>
+                </div>
+            }
             <div className="mb-3">
                 <Label htmlFor="title" className="text-right text-md font-bold">
                     Title

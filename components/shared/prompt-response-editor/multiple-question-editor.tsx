@@ -17,9 +17,13 @@ import MultiQuestionReview from "@/app/(student)/response-review/[responseId]/mu
 export default function MultipleQuestionEditor({
     questions,
     studentId,
+    isTeacherPremium,
+    gradeLevel
 }: {
     questions: ResponseData[],
     studentId: string,
+    isTeacherPremium: boolean,
+    gradeLevel: string
 }) {
 
     const searchParams = useSearchParams();
@@ -202,6 +206,20 @@ export default function MultipleQuestionEditor({
                                 id="responseData"
                                 name="responseData"
                                 value={JSON.stringify(allQuestions)}
+                                hidden
+                                readOnly
+                            />
+                            <input
+                                id="grade-level"
+                                name="grade-level"
+                                value={gradeLevel}
+                                hidden
+                                readOnly
+                            />
+                            <input
+                                id="is-teacher-premium"
+                                name="is-teacher-premium"
+                                value={isTeacherPremium ? 'true' : 'false'}
                                 hidden
                                 readOnly
                             />

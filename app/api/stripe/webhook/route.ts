@@ -48,10 +48,10 @@ export async function POST(req: NextRequest) {
                 let accountType: string = '';
                 switch (amountPaid) {
                     // testing case of 1 dollar
-                    // case 100:
-                    //     futureDate.setDate(futureDate.getDate() + 1);
-                    //     accountType = 'Premium(monthly)';
-                    //     break;
+                    case 100:
+                        futureDate.setDate(futureDate.getDate() + 1);
+                        accountType = 'Premium(monthly)';
+                        break;
                     case 400:
                         futureDate.setDate(futureDate.getDate() + 33);
                         accountType = 'Premium(monthly)';

@@ -91,6 +91,22 @@ export default function EditClassForm({
                 grid items-center mx-auto
                 ${isInSettingsPage ? 'grid-cols-1 w-full gap-1' : 'grid-cols-4 w-4/5 gap-4'}`
             }>
+                <Label htmlFor="grade" className={`${isInSettingsPage ? '' : 'text-right'}`}>
+                    Grade
+                </Label>
+                <Input
+                    id="grade"
+                    className="col-span-3"
+                    name="grade"
+                    maxLength={12}
+                    defaultValue={classData?.grade ?? ''}
+                    placeholder="optional"
+                />
+            </div>
+            <div className={`
+                grid items-center mx-auto
+                ${isInSettingsPage ? 'grid-cols-1 w-full gap-1' : 'grid-cols-4 w-4/5 gap-4'}`
+            }>
                 <Label htmlFor="subject" className={`${isInSettingsPage ? '' : 'text-right'}`}>
                     Subject
                 </Label>
@@ -99,6 +115,7 @@ export default function EditClassForm({
                     className="col-span-3"
                     name="subject"
                     defaultValue={classData?.subject ?? ''}
+                    placeholder="optional"
                 />
             </div>
             <div className={`
@@ -113,6 +130,7 @@ export default function EditClassForm({
                     className="col-span-3"
                     name="period"
                     defaultValue={classData?.period ?? ''}
+                    placeholder="optional"
                 />
             </div>
             {/* Color Selection */}

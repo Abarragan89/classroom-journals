@@ -86,6 +86,7 @@ model Classroom {
   classCode     String          @unique @db.VarChar(8)
   color         String
   subject       String?
+  grade         String?
   year          String?         @db.VarChar(12)
   period        String?
   users         ClassUser[] // Many-to-many relationship(can be a teacher role or student rol)

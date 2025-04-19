@@ -94,7 +94,6 @@ export default function AddClassForm({
                         placeholder="required"
                     />
                 </div>
-
             </div>
             <div className="grid grid-cols-3 gap-x-5 mb-4">
                 <div className="flex flex-col col-span-2 items-start space-y-1">
@@ -104,6 +103,7 @@ export default function AddClassForm({
                     <Input
                         id="subject"
                         name="subject"
+                        placeholder="optional"
                     />
                 </div>
                 <div className="flex flex-col col-span-1 items-start space-y-1">
@@ -113,6 +113,7 @@ export default function AddClassForm({
                     <Input
                         id="period"
                         name="period"
+                        placeholder="optional"
                     />
                 </div>
             </div>
@@ -134,11 +135,22 @@ export default function AddClassForm({
                         />
                     </div>
                 </div>
-
-                <div className="col-span-1">
-                    <CreateButton />
+                <div className="flex flex-col col-span-1 items-start space-y-1">
+                    <Label htmlFor="grade" className="text-right">
+                        Grade
+                    </Label>
+                    <Input
+                        id="grade"
+                        name="grade"
+                        placeholder="optional"
+                    />
                 </div>
 
+
+            </div>
+
+            <div className="flex-center mt-5">
+                <CreateButton />
             </div>
 
 
