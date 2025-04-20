@@ -173,18 +173,10 @@ export async function deleteTeacherAccount(teacherId: string) {
                 classId: true,
             },
         });
-
         const classIds = teacherClasses.map((c) => c.classId);
 
         if (classIds.length > 0) {
-            // 2. Delete all ClassUser entries for those classes (removes students and teachers from the classes)
-            await prisma.classUser.deleteMany({
-                where: {
-                    classId: { in: classIds },
-                },
-            });
-
-            // 3. Delete all student users that were in those classes
+            // 2. Get all the student Ids
             const studentClassUsers = await prisma.classUser.findMany({
                 where: {
                     classId: { in: classIds },
@@ -194,7 +186,6 @@ export async function deleteTeacherAccount(teacherId: string) {
                     userId: true,
                 },
             });
-
             const studentIds = studentClassUsers.map(cu => cu.userId);
 
             // 3. Delete student users
@@ -204,7 +195,15 @@ export async function deleteTeacherAccount(teacherId: string) {
                 },
             });
 
-            // 4. Delete the classrooms
+            // 4. Delete all ClassUser entries for those classes (removes students and teachers from the classes)
+            await prisma.classUser.deleteMany({
+                where: {
+                    classId: { in: classIds },
+                },
+            });
+
+
+            // 5. Delete the classrooms
             await prisma.classroom.deleteMany({
                 where: {
                     id: { in: classIds },
@@ -212,17 +211,11 @@ export async function deleteTeacherAccount(teacherId: string) {
             });
         }
 
-        // 5. Remove any remaining classUser records for this teacher (just in case)
-        await prisma.classUser.deleteMany({
-            where: {
-                userId: teacherId,
-            },
-        });
-
         // 6. Delete the teacher account
         await prisma.user.delete({
             where: { id: teacherId },
         });
+
         return { success: true, message: 'successfully deleted account' }
     } catch (error) {
         // Improved error logging

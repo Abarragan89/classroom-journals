@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
 import MultiPromptForm from "@/components/forms/prompt-forms/multi-prompt-form";
 import { Session } from "@/types";
-import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
 
 export default async function CreatePrompt({
     searchParams

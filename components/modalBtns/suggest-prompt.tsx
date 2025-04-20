@@ -46,7 +46,7 @@ export default function SuggestPrompt({
             </ResponsiveDialog>
             <Button
                 onClick={() => setIsModalOpen(true)}
-                className="relative top-[-50px]"
+                className="relative top-[-20px]"
             >
                 <Plus /> Prompt
             </Button>

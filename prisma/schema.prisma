@@ -16,7 +16,7 @@ model User {
   email               String?          @unique(map: "user_email_idx")
   emailVerified       DateTime?        @db.Timestamp(6)
   image               String?
-  accountType         String           @default("basic") // 'basic' or 'premium' 
+  accountType         String           @default("Basic-Free") // 'Basic-Free' or 'Premium(monthly)' or 'Premium(yearly)' 
   password            String? // this password is only for student accounts and needs to be accessible to teacher
   iv                  String? // this is used to encrypt student names, ensures no duplicates when same input is given
   sessions            Session[]
@@ -32,7 +32,6 @@ model User {
   requestsSent        StudentRequest[] @relation("RequestsByStudent")
   requestsReceived    StudentRequest[] @relation("RequestsToTeacher")
   // These are only related to Students
-  // lastComment         DateTime?
   commentCoolDown     Int?             @default(0)
   // These are only related to Teachers
   prompts             Prompt[] // Prompts are for teachers
@@ -90,7 +89,6 @@ model Classroom {
   year          String?         @db.VarChar(12)
   period        String?
   users         ClassUser[] // Many-to-many relationship(can be a teacher role or student rol)
-  // prompts       Prompt[]        @relation("PromptClass")
   createdAt     DateTime        @default(now()) @db.Timestamp(6)
   updatedAt     DateTime        @default(now()) @updatedAt @db.Timestamp(6)
   PromptSession PromptSession[]
@@ -178,7 +176,6 @@ model Prompt {
   updatedAt     DateTime        @updatedAt
   author        String?
   questions     Json
-  // classes       Classroom[]     @relation("PromptClass") // this is for prompt organization
   promptSession PromptSession[]
   categoryId    String?         @db.Uuid
   category      PromptCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull) // Each prompt has one category

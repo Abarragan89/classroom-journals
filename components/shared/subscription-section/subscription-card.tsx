@@ -37,7 +37,10 @@ export default function SubscriptionCard({
             if (isCancelled) {
                 setIsCancelling(true)
                 setIsModalOpen(false)
-                router.replace('/teacher-account')
+                router.replace('/teacher-account');
+                setTimeout(() => {
+                    router.refresh()
+                }, 100)
             } else {
                 throw new Error('error deleting sub')
             }

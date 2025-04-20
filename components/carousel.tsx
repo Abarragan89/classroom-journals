@@ -25,7 +25,7 @@ export default function Carousel({ children }: { children: React.ReactNode }) {
                         {children}
                     </div>
                 </div>
-                <div className='flex justify-between w-[180px] mx-auto'>
+                <div className='flex justify-between w-[180px] mx-auto mt-3'>
                     <button className="embla__prev mt-4 text-[2.2rem] text-[var(--brown-500)]" onClick={scrollPrev}>
                         <IoIosArrowBack />
                     </button>

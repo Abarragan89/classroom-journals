@@ -7,10 +7,16 @@ CREATE TABLE "User" (
     "email" TEXT,
     "emailVerified" TIMESTAMP(6),
     "image" TEXT,
+    "accountType" TEXT NOT NULL DEFAULT 'Basic-Free',
     "password" TEXT,
     "iv" TEXT,
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "commentCoolDown" INTEGER DEFAULT 0,
+    "customerId" TEXT,
+    "subscriptionId" TEXT,
+    "isCancelling" BOOLEAN,
+    "subscriptionExpires" TIMESTAMP(3),
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -61,6 +67,7 @@ CREATE TABLE "Classroom" (
     "classCode" VARCHAR(8) NOT NULL,
     "color" TEXT NOT NULL,
     "subject" TEXT,
+    "grade" TEXT,
     "year" VARCHAR(12),
     "period" TEXT,
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -90,6 +97,18 @@ CREATE TABLE "Notification" (
     "isRead" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Alert" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "userId" UUID NOT NULL,
+    "type" TEXT NOT NULL,
+    "message" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isRead" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "Alert_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -132,6 +151,7 @@ CREATE TABLE "Prompt" (
     "promptType" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "author" TEXT,
     "questions" JSONB NOT NULL,
     "categoryId" UUID,
 
@@ -154,7 +174,9 @@ CREATE TABLE "PromptSession" (
     "title" TEXT NOT NULL,
     "questions" JSONB NOT NULL,
     "promptType" TEXT NOT NULL,
+    "isPublic" BOOLEAN NOT NULL DEFAULT true,
     "assignedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "areGradesVisible" BOOLEAN NOT NULL DEFAULT false,
     "classId" UUID NOT NULL,
     "status" TEXT NOT NULL DEFAULT 'open',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -171,16 +193,22 @@ CREATE TABLE "Response" (
     "response" JSONB NOT NULL,
     "submittedAt" TIMESTAMP(3) NOT NULL,
     "likeCount" INTEGER NOT NULL DEFAULT 0,
+    "isSubmittable" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Response_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "_PromptClass" (
-    "A" UUID NOT NULL,
-    "B" UUID NOT NULL,
+CREATE TABLE "StudentRequest" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "studentId" UUID NOT NULL,
+    "teacherId" UUID NOT NULL,
+    "status" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "text" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "_PromptClass_AB_pkey" PRIMARY KEY ("A","B")
+    CONSTRAINT "StudentRequest_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -201,9 +229,6 @@ CREATE UNIQUE INDEX "ResponseLike_userId_responseId_key" ON "ResponseLike"("user
 -- CreateIndex
 CREATE UNIQUE INDEX "CommentLike_userId_commentId_key" ON "CommentLike"("userId", "commentId");
 
--- CreateIndex
-CREATE INDEX "_PromptClass_B_index" ON "_PromptClass"("B");
-
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -221,6 +246,9 @@ ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE "Notification" ADD CONSTRAINT "Notification_responseId_fkey" FOREIGN KEY ("responseId") REFERENCES "Response"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Alert" ADD CONSTRAINT "Alert_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -265,7 +293,7 @@ ALTER TABLE "Response" ADD CONSTRAINT "Response_promptSessionId_fkey" FOREIGN KE
 ALTER TABLE "Response" ADD CONSTRAINT "Response_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_PromptClass" ADD CONSTRAINT "_PromptClass_A_fkey" FOREIGN KEY ("A") REFERENCES "Classroom"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "StudentRequest" ADD CONSTRAINT "StudentRequest_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_PromptClass" ADD CONSTRAINT "_PromptClass_B_fkey" FOREIGN KEY ("B") REFERENCES "Prompt"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "StudentRequest" ADD CONSTRAINT "StudentRequest_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

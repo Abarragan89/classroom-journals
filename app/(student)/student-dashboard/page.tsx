@@ -93,7 +93,6 @@ export default async function StudentDashboard() {
     const featuredBlogs = await prisma.response.findMany({
         where: {
             studentId: { in: studentIdArray },
-            likeCount: { gt: 2 }
         },
         select: {
             id: true,
@@ -133,7 +132,7 @@ export default async function StudentDashboard() {
             const characterCount = answer.length;
 
             // Exclude very short blogs
-            if (characterCount < 400) return;
+            if (characterCount < 250) return;
 
             // Convert submittedAt to Date
             const submittedAtDate = new Date(blog.submittedAt);
@@ -162,6 +161,8 @@ export default async function StudentDashboard() {
         where: { studentId }
     }) as unknown as StudentRequest[]
 
+
+    // This prevents mroe than one request at a time
     const hasSentUsernameRequest = studentRequests.some(req => req.type === 'username')
     const hasSentPromptRequest = studentRequests.some(req => req.type === 'prompt')
 
@@ -172,7 +173,7 @@ export default async function StudentDashboard() {
                 <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {studentName}</h1>
                 {lastestTaskToDo && (
                     <div
-                        className="border border-primary w-full px-5 py-2 rounded-lg relative mb-24"
+                        className="border border-primary w-full px-5 py-2 rounded-lg relative mb-10"
                     >
                         <div className="flex-between">
                             <div>
@@ -189,8 +190,7 @@ export default async function StudentDashboard() {
                     </div>
                 )}
                 <section>
-                    <div className="flex-between relative">
-                        <h3 className="h3-bold ml-1">Featured Blogs</h3>
+                    <div className="flex-end space-x-5 relative">
                         <RequestNewUsername
                             studentId={studentId}
                             teacherId={teacherId}
@@ -202,24 +202,29 @@ export default async function StudentDashboard() {
                             hasSentPromptRequest={hasSentPromptRequest}
                         />
                     </div>
-                    <Carousel>
-                        {decryptedBlogNames.map((response) => (
-                            <Link
-                                key={response?.id}
-                                href={`/discussion-board/${response?.promptSession.id}/response/${response?.id}`}
-                                className="embla__slide hover:shadow-[0_4px_10px_-3px_var(--secondary)] mx-5">
-                                <BlogCard
-                                    likeCount={response?.likeCount as number}
-                                    author={response?.student?.username as string}
-                                    totalCommentCount={response?._count?.comments as number}
-                                    title={(response?.response as unknown as ResponseData[])?.[1].answer as string}
-                                    description={(response?.response as unknown as ResponseData[])?.[0].answer as string}
-                                    date={formatDateShort(response?.submittedAt as Date)}
-                                    coverPhotoUrl={(response?.response as unknown as ResponseData[])?.[2].answer as string}
-                                />
-                            </Link>
-                        ))}
-                    </Carousel>
+                    <h3 className="h3-bold ml-1">Featured Blogs</h3>
+                    {decryptedBlogNames.length > 0 ? (
+                        <Carousel>
+                            {decryptedBlogNames.map((response) => (
+                                <Link
+                                    key={response?.id}
+                                    href={`/discussion-board/${response?.promptSession.id}/response/${response?.id}`}
+                                    className="embla__slide hover:shadow-[0_4px_10px_-3px_var(--secondary)] mx-5">
+                                    <BlogCard
+                                        likeCount={response?.likeCount as number}
+                                        author={response?.student?.username as string}
+                                        totalCommentCount={response?._count?.comments as number}
+                                        title={(response?.response as unknown as ResponseData[])?.[1].answer as string}
+                                        description={(response?.response as unknown as ResponseData[])?.[0].answer as string}
+                                        date={formatDateShort(response?.submittedAt as Date)}
+                                        coverPhotoUrl={(response?.response as unknown as ResponseData[])?.[2].answer as string}
+                                    />
+                                </Link>
+                            ))}
+                        </Carousel>
+                    ) : (
+                        <p className="text-center text-lg font-bold">No Featured Blogs</p>
+                    )}
                 </section>
                 <Separator className="mt-20 mb-10" />
                 <section>

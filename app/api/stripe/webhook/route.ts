@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
 
                 // updating the status of the teacher. Need to get student list length
                 // and word problem list length in case we need to delete
-                const teacher = await prisma.user.findFirst({
+                const teacher = await prisma.user.findUnique({
                     where: { email: customerEmail },
                     select: {
                         id: true,
@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
                 const customerEmailPaymentFailed = invoicePaymentFailed.customer_email as string;
 
                 // set the alert for the teacher to see on their dashboard
-                const userFailedPayment = await prisma.user.findFirst({
+                const userFailedPayment = await prisma.user.findUnique({
                     where: { email: customerEmailPaymentFailed },
                     select: {
                         id: true,

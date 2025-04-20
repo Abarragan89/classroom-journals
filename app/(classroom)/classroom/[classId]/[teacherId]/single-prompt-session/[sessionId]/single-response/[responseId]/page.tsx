@@ -76,7 +76,7 @@ export default async function SingleResponse({
                         <div className="max-w-[700px] px-3 mx-auto mt-10">
                             <BlogMetaDetails
                                 responseData={response}
-                                studentId={response?.student?.id as string}
+                                studentId={teacherId}
                             />
 
                             <Image

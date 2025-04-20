@@ -196,7 +196,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
         // Fetch existing prompt data
         const existingPrompt = await prisma.prompt.findUnique({
             where: { id: promptId },
-            include: { classes: true }
+            select: { id: true }
         });
 
         if (!existingPrompt) {
@@ -261,7 +261,6 @@ export async function getAllTeacherPrompts(teacherId: string) {
                     createdAt: true,
                     updatedAt: true,
                     questions: true,
-                    classes: true,
                     category: { select: { name: true } },
                     promptSession: {
                         select: {
@@ -296,7 +295,6 @@ export async function getSinglePrompt(promptId: string) {
         const prompt = await prisma.prompt.findUnique({
             where: { id: promptId },
             include: {
-                classes: true,
                 category: {
                     select: {
                         name: true,
@@ -440,7 +438,6 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
         const updatedPrompt = await prisma.prompt.findUnique({
             where: { id: promptId },
             include: {
-                classes: true,
                 category: true,
                 promptSession: {
                     select: {

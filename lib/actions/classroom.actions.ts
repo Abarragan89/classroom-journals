@@ -240,6 +240,7 @@ export async function getAllStudents(classId: string) {
 export async function deleteClassroom(prevState: unknown, formData: FormData) {
     try {
         const classroomId = formData.get('classroomId') as string
+
         const studentUsers = await prisma.classUser.findMany({
             where: {
                 classId: classroomId,
