@@ -62,19 +62,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 // Find the classroom by class code
                 const classroom = await prisma.classroom.findUnique({
                     where: { classCode: classCode.trim() as string },
-                    include: {
+                    select: {
+                        id: true,
                         users: {
                             where: {
                                 role: 'student',
-                            }
-                        }
+                            },
+                            select: { userId: true }
+                        },
+
                     }
                 });
 
+                // return if no classroom found
+                if (!classroom) {
+                    throw new Error("Classroom not found.");
+                }
 
-
+                // get all Student Ids
                 const studentIds = classroom?.users.map(student => student.userId)
-
                 const allStudents = await prisma.user.findMany({
                     where: { id: { in: studentIds } },
                     select: {
@@ -86,12 +92,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     }
                 })
 
-                if (!classroom) {
-                    throw new Error("Classroom not found.");
-                }
-
                 // Find student within the class
-                const loggedInStudent = allStudents.find(student => student.password === password) as User
+                const loggedInStudent = allStudents.find(student => decryptText(student.password as string, student.iv as string) === password) as User
 
                 if (!loggedInStudent) {
                     throw new Error("Invalid password or not a student in this class.");

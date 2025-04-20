@@ -225,7 +225,7 @@ export async function getAllStudents(classId: string) {
                 updatedAt: user.updatedAt,
                 commentCoolDown: user.commentCoolDown,
                 username: decryptText(user.username as string, user.iv as string),
-                password: user.password,
+                password: decryptText(user.password as string, user.iv as string),
                 name: decryptText(user.name as string, user.iv as string) // Decrypt name
             }));
         return decryptedStudents

@@ -2,7 +2,7 @@
 import { prisma } from "@/db/prisma";
 import { newStudentSchema } from "../validators";
 import crypto from 'crypto'
-import { encryptText, generateRandom5DigitNumber } from "../utils";
+import { decryptText, encryptText, generateRandom5DigitNumber } from "../utils";
 
 export async function addStudentToRoster(prevState: unknown, formData: FormData) {
     try {
@@ -22,21 +22,29 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
                 classId,
                 role: 'student'
             },
-            include: {
+            select: {
                 user: {
-                    select: { password: true }
+                    select: {
+                        password: true,
+                        iv: true,
+
+                    }
                 }
             }
         })
 
-        const studentPasswords = allStudentPasswords.map(classroom => classroom.user?.password ? classroom.user.password : '')
+        const studentPasswords = allStudentPasswords.map(classUser => {
+            return decryptText(classUser.user.password as string, classUser.user.iv as string)
+        })
+
+
         const password = generateRandom5DigitNumber(studentPasswords)
         const adjustedUsername = username ? username : name.split(' ')[0]
 
         const iv = crypto.randomBytes(16); // Generate a random IV
         const { encryptedData: encryptedName } = encryptText(name.trim(), iv);
         const { encryptedData: encryptedNickName } = encryptText(adjustedUsername.trim(), iv);
-
+        const { encryptedData: encryptedPassword } = encryptText(password, iv)
 
         const newStudent = await prisma.user.create({
             data: {
@@ -44,7 +52,7 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
                 username: encryptedNickName,
                 commentCoolDown: 20,
                 iv: iv.toString('hex'),
-                password,
+                password: encryptedPassword,
             }
         })
 
@@ -61,7 +69,7 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
         // Improved error logging
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);
-            // console.error(error.stack); // Log stack trace for better debugging
+            console.error(error.stack); // Log stack trace for better debugging
         } else {
             console.log('Unexpected error:', error);
         }
@@ -80,11 +88,17 @@ export async function editStudent(prevState: unknown, formData: FormData) {
             commentCoolDown: formData.get('comment-cool-down'),
         })
 
+        // Get classId and StudentId
+        const studentId = formData.get('studentId')
+        if (typeof studentId !== 'string') {
+            throw new Error('Missing classId or studentID');
+        }
 
         // check to make sure password is not already in use
         const classId = formData.get('classId') as string
         const currentPassword = formData.get('current-password') as string
-        // only do the following if they are trying to update the password
+
+        // only do the following if they are trying to update the password  It's expensive
         if (password !== currentPassword) {
             const allStudents = await prisma.classUser.findMany({
                 where: {
@@ -94,38 +108,36 @@ export async function editStudent(prevState: unknown, formData: FormData) {
                 select: {
                     user: {
                         select: {
-                            password: true
+                            password: true,
+                            iv: true
                         }
                     }
                 }
             })
-            const allStudentPasswords = allStudents.map(user => user.user.password)
+            const studentPasswords = allStudents.map(classUser => {
+                return decryptText(classUser.user.password as string, classUser.user.iv as string)
+            })
             // Password is already in use
-            if (allStudentPasswords.includes(password as string)) {
+            if (studentPasswords.includes(password as string)) {
                 return { success: false, message: 'Password already in use' }
             }
-        }
-
-        // Get classId and StudentId
-        const studentId = formData.get('studentId')
-        if (typeof studentId !== 'string') {
-            throw new Error('Missing classId or studentID');
         }
 
         const iv = crypto.randomBytes(16); // Generate a random IV
         const { encryptedData: encryptedName } = encryptText(name.trim(), iv);
         const { encryptedData: encryptedNickName } = encryptText(username?.trim() as string, iv);
+        const { encryptedData: encryptedPassword } = encryptText(password?.trim() as string, iv);
         const coolDownNumber = commentCoolDown === 'disabled' ? null : Number(commentCoolDown)
 
         await prisma.$transaction(async (prisma) => {
-            // delete the student
+            // Update the student
             await prisma.user.update({
                 where: { id: studentId },
                 data: {
                     name: encryptedName,
                     username: encryptedNickName,
                     commentCoolDown: coolDownNumber,
-                    password: password,
+                    password: encryptedPassword,
                     iv: iv.toString('hex')
                 }
             })
