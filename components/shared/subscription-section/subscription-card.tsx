@@ -6,6 +6,7 @@ import { cancelSubscription } from "@/lib/stripe/checkout";
 import { useState } from "react";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 
 export default function SubscriptionCard({
     subscriptionData,
@@ -23,6 +24,8 @@ export default function SubscriptionCard({
 
 }) {
 
+    const router = useRouter();
+
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [userConfirmationText, setUserConfirmationText] = useState<string>('')
@@ -34,6 +37,7 @@ export default function SubscriptionCard({
             if (isCancelled) {
                 setIsCancelling(true)
                 setIsModalOpen(false)
+                router.replace('/teacher-account')
             } else {
                 throw new Error('error deleting sub')
             }

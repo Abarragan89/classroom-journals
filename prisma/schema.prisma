@@ -32,7 +32,7 @@ model User {
   requestsSent        StudentRequest[] @relation("RequestsByStudent")
   requestsReceived    StudentRequest[] @relation("RequestsToTeacher")
   // These are only related to Students
-  lastComment         DateTime?
+  // lastComment         DateTime?
   commentCoolDown     Int?             @default(0)
   // These are only related to Teachers
   prompts             Prompt[] // Prompts are for teachers
@@ -90,7 +90,7 @@ model Classroom {
   year          String?         @db.VarChar(12)
   period        String?
   users         ClassUser[] // Many-to-many relationship(can be a teacher role or student rol)
-  prompts       Prompt[]        @relation("PromptClass")
+  // prompts       Prompt[]        @relation("PromptClass")
   createdAt     DateTime        @default(now()) @db.Timestamp(6)
   updatedAt     DateTime        @default(now()) @updatedAt @db.Timestamp(6)
   PromptSession PromptSession[]
@@ -178,7 +178,7 @@ model Prompt {
   updatedAt     DateTime        @updatedAt
   author        String?
   questions     Json
-  classes       Classroom[]     @relation("PromptClass") // this is for prompt organization
+  // classes       Classroom[]     @relation("PromptClass") // this is for prompt organization
   promptSession PromptSession[]
   categoryId    String?         @db.Uuid
   category      PromptCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull) // Each prompt has one category

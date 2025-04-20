@@ -50,7 +50,7 @@ export default function StudentSignInCard({ changeTab }: { changeTab: () => void
                     <TabsTrigger value="student-sign-in">Students</TabsTrigger>
                 </TabsList>
             </CardHeader>
-            <CardContent className="mt-2 ">
+            <CardContent>
                 <form onSubmit={handleSignIn} className='space-y-5' >
                     <div>
                         <Label htmlFor='class-code'>

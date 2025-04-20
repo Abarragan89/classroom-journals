@@ -70,8 +70,8 @@ export default function AddClassForm({
 
     return (
         <form action={action} className="py-4 px-2">
-            <div className="grid grid-cols-3 gap-x-5 mb-5">
-                <div className="flex flex-col col-span-2 items-start space-y-1">
+            <div className="grid grid-cols-2 gap-x-5 mb-5">
+                <div className="flex flex-col col-span-1 items-start space-y-1">
                     <Label htmlFor="name" className="text-right">
                         Name
                     </Label>
@@ -82,6 +82,18 @@ export default function AddClassForm({
                         name="name"
                     />
                 </div>
+                <div className="flex flex-col col-span-1 items-start space-y-1">
+                    <Label htmlFor="subject" className="text-right">
+                        Subject
+                    </Label>
+                    <Input
+                        id="subject"
+                        name="subject"
+                        placeholder="optional"
+                    />
+                </div>
+            </div>
+            <div className="grid grid-cols-3 gap-x-5 mb-4">
                 <div className="flex flex-col col-span-1 items-start space-y-1">
                     <Label htmlFor="year" className="text-right">
                         Year
@@ -94,15 +106,13 @@ export default function AddClassForm({
                         placeholder="required"
                     />
                 </div>
-            </div>
-            <div className="grid grid-cols-3 gap-x-5 mb-4">
-                <div className="flex flex-col col-span-2 items-start space-y-1">
-                    <Label htmlFor="subject" className="text-right">
-                        Subject
+                <div className="flex flex-col col-span-1 items-start space-y-1">
+                    <Label htmlFor="grade" className="text-right">
+                        Grade
                     </Label>
                     <Input
-                        id="subject"
-                        name="subject"
+                        id="grade"
+                        name="grade"
                         placeholder="optional"
                     />
                 </div>
@@ -135,23 +145,13 @@ export default function AddClassForm({
                         />
                     </div>
                 </div>
-                <div className="flex flex-col col-span-1 items-start space-y-1">
-                    <Label htmlFor="grade" className="text-right">
-                        Grade
-                    </Label>
-                    <Input
-                        id="grade"
-                        name="grade"
-                        placeholder="optional"
-                    />
+
+                <div className="flex-center mt-5">
+                    <CreateButton />
                 </div>
 
-
             </div>
 
-            <div className="flex-center mt-5">
-                <CreateButton />
-            </div>
 
 
             <input

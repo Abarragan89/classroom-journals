@@ -31,7 +31,9 @@ export default function DataClientWrapper({
         }))
     }
 
-    const chevronStyles = 'hover:cursor-pointer hover:text-input border border-border rounded-sm hover:bg-primary hover:text-foreground'
+    const chevronStyles = 'hover:cursor-pointer hover:text-input border border-border rounded-sm hover:bg-primary hover:text-foreground';
+
+    
 
     return (
         <div className="mb-10">

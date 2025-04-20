@@ -51,10 +51,15 @@ export default function QuestionAccordion({
             responses?.forEach((stuResp: Response) => {
                 (stuResp?.response as unknown as ResponseData[]).forEach((responseData: ResponseData) => {
                     const { question, score, answer } = responseData;
-                    if (!responseObj[question]) {
-                        responseObj[question] = { 0: [], 0.5: [], 1: [] };
+                    let adjustedScore = score
+                    if (isNaN(score)) {
+                        adjustedScore = 2
                     }
-                    responseObj[question][score]?.push({
+                    if (!responseObj[question]) {
+                        // The key '2' means not graded. (negative one wouldn't work)
+                        responseObj[question] = { 2: [], 0: [], 0.5: [], 1: [] };
+                    }
+                    responseObj[question][adjustedScore]?.push({
                         responseId: stuResp.id,
                         answer: answer,
                         studId: stuResp.student.id,
@@ -100,7 +105,7 @@ export default function QuestionAccordion({
             // Find the response object to move
             const allResponses = Object.values(prev[question]).flat();
             const responseToMove = allResponses.find((resp) => resp.responseId === responseId);
-            
+
             // If found, push it to the new score group
             if (responseToMove) {
                 if (!questionScores[newScore]) {
@@ -121,9 +126,17 @@ export default function QuestionAccordion({
         });
     }
 
-    const circleBtnStyles = "text-background rounded-lg w-16 h-8 flex-center opacity-70 hover:cursor-pointer hover:opacity-100";
+    const circleBtnStyles = "text-background rounded-lg w-full mx-1 h-8 flex-center opacity-70 hover:cursor-pointer hover:opacity-100";
 
+    const scoreLabelMap: Record<number | string, { text: string; color: string }> = {
+        1: { text: 'Correct Responses', color: 'text-success' },
+        0.5: { text: 'Half Credit Responses', color: 'text-warning' },
+        0: { text: 'Wrong Responses', color: 'text-destructive' },
+        default: { text: 'Not Graded', color: 'text-input' }
+    };
 
+    const score = currentSubQuery.current.score;
+    const label = scoreLabelMap[score as keyof typeof scoreLabelMap] ?? scoreLabelMap.default;
     return (
         <>
             <ResponsiveDialog
@@ -132,7 +145,7 @@ export default function QuestionAccordion({
                 setIsOpen={setIsResponseViewModalOpen}
             >
                 {/* show currrent question and the current score for responses */}
-                <p className="text-center font-bold w-[97%] mx-auto">{currentSubQuery.current.question}</p>
+                {/* <p className="text-center font-bold w-[97%] mx-auto">{currentSubQuery.current.question}</p>
 
                 {currentSubQuery.current.score === 1 ?
                     <p className="font-bold text-success text-center mt-[-15px] text-sm">Correct Responses</p>
@@ -140,8 +153,15 @@ export default function QuestionAccordion({
                     currentSubQuery.current.score === 0.5 ?
                         <p className="font-bold text-warning text-center mt-[-15px] text-sm">Half Credit Responses</p>
                         :
-                        <p className="font-bold text-destructive text-center mt-[-15px] text-sm">Wrong Responses</p>
-                }
+                        currentSubQuery.current.score === 0 ?
+                            <p className="font-bold text-destructive text-center mt-[-15px] text-sm">Wrong Responses</p>
+                            :
+                            <p className="font-bold text-input text-center mt-[-15px] text-sm">Not Graded</p>
+
+                } */}
+                <p className={`font-bold ${label.color} text-center mt-[-15px] text-sm`}>
+                    {label.text}
+                </p>
                 <div className="max-h-[500px] overflow-y-auto custom-scrollbar">
                     {currentResponseData?.[currentSubQuery.current.question]?.[currentSubQuery.current.score]?.map((data, index) => (
                         <div key={index} className="bg-card px-5 mx-3 pt-3 pb-14 my-4 rounded-md text-sm relative">
@@ -180,6 +200,12 @@ export default function QuestionAccordion({
                             </AccordionTrigger>
                             <AccordionContent>
                                 <div className="flex justify-around text-xl mt-3">
+                                    <div
+                                        onClick={() => handleShowModal(question.question, 2, startRange + index)}
+                                        className={`bg-input ${circleBtnStyles}`}
+                                    >
+                                        <p>{currentResponseData[question.question]?.[2]?.length}</p>
+                                    </div>
                                     <div
                                         onClick={() => handleShowModal(question.question, 0, startRange + index)}
                                         className={`bg-destructive ${circleBtnStyles}`}

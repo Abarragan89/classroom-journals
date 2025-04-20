@@ -159,3 +159,79 @@ export async function updateUsername(username: string, teacherId: string) {
         return { success: false, message: 'Error adding student. Try again.' }
     }
 }
+
+
+export async function deleteTeacherAccount(teacherId: string) {
+    try {
+        // 1. Find all classes the teacher owns
+        const teacherClasses = await prisma.classUser.findMany({
+            where: {
+                userId: teacherId,
+                role: 'teacher',
+            },
+            select: {
+                classId: true,
+            },
+        });
+
+        const classIds = teacherClasses.map((c) => c.classId);
+
+        if (classIds.length > 0) {
+            // 2. Delete all ClassUser entries for those classes (removes students and teachers from the classes)
+            await prisma.classUser.deleteMany({
+                where: {
+                    classId: { in: classIds },
+                },
+            });
+
+            // 3. Delete all student users that were in those classes
+            const studentClassUsers = await prisma.classUser.findMany({
+                where: {
+                    classId: { in: classIds },
+                    role: 'student',
+                },
+                select: {
+                    userId: true,
+                },
+            });
+
+            const studentIds = studentClassUsers.map(cu => cu.userId);
+
+            // 3. Delete student users
+            await prisma.user.deleteMany({
+                where: {
+                    id: { in: studentIds },
+                },
+            });
+
+            // 4. Delete the classrooms
+            await prisma.classroom.deleteMany({
+                where: {
+                    id: { in: classIds },
+                },
+            });
+        }
+
+        // 5. Remove any remaining classUser records for this teacher (just in case)
+        await prisma.classUser.deleteMany({
+            where: {
+                userId: teacherId,
+            },
+        });
+
+        // 6. Delete the teacher account
+        await prisma.user.delete({
+            where: { id: teacherId },
+        });
+        return { success: true, message: 'successfully deleted account' }
+    } catch (error) {
+        // Improved error logging
+        if (error instanceof Error) {
+            console.log('Error creating new prompt:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error adding student. Try again.' }
+    }
+}

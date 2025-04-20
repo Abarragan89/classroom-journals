@@ -1,3 +1,5 @@
+import { prisma } from "@/db/prisma";
+
 // lib/stripe/checkout.ts
 export async function checkout({ priceId }: { priceId: string }) {
     try {

@@ -14,7 +14,7 @@ export default function TeacherSignInCard({ changeTab }: { changeTab: () => void
                     <TabsTrigger onClick={changeTab} value="student-sign-in">Students</TabsTrigger>
                 </TabsList>
             </CardHeader>
-            <CardContent className='mt-5'>
+            <CardContent>
                 <GoogleButton />
                 <p className="my-4 text-center relative">
                     <span className="relative z-10 bg-card px-3">or</span>
