@@ -21,6 +21,8 @@ export default async function StudentDashboard() {
 
     const session = await auth() as Session
 
+    
+
     if (!session) notFound()
 
     const studentId = session?.user?.id as string
@@ -34,8 +36,12 @@ export default async function StudentDashboard() {
 
     const studentName = await getDecyptedStudentUsername(studentId)
     const teacherId = await getTeacherId(classroomId) as string
-
+    
+    if (!studentName || !teacherId) {
+        notFound()
+    }
     const allPromptCategories = await getAllPromptCategories(teacherId) as unknown as PromptCategory[]
+
 
     // Get all Sessions from class and add meta data
     const allPromptSessions = await getAllSessionsInClass(classroomId) as unknown as { prompts: PromptSession[], totalCount: number }
