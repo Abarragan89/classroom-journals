@@ -72,6 +72,7 @@ export async function getFeaturedBlogs(classroomId: string) {
         const featuredBlogs = await prisma.response.findMany({
             where: {
                 studentId: { in: studentIdArray },
+                likeCount: {gt: 2}
             },
             select: {
                 id: true,
