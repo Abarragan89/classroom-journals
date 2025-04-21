@@ -115,3 +115,26 @@ export async function getFeaturedBlogs(classroomId: string) {
         return { success: false, message: 'Error adding student. Try again.' }
     }
 }
+
+
+// Get student Requests
+export async function getStudentRequests(studentId: string) {
+    try {
+        // get student username
+        const studentRequests = await prisma.studentRequest.findMany({
+            where: { studentId }
+        })
+
+        return studentRequests
+    } catch (error) {
+        console.log('error ', error)
+        // Improved error logging
+        if (error instanceof Error) {
+            console.log('Error creating new prompt:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error adding student. Try again.' }
+    }
+}

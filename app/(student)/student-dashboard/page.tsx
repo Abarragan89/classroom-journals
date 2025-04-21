@@ -16,6 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import RequestNewUsername from "@/components/modalBtns/request-new-username";
 import SuggestPrompt from "@/components/modalBtns/suggest-prompt";
 import { getDecyptedStudentUsername, getFeaturedBlogs, getTeacherId } from "@/lib/actions/student.dashboard.actions";
+import { getStudentRequests } from "@/lib/actions/student-request";
 
 export default async function StudentDashboard() {
 
@@ -97,14 +98,12 @@ export default async function StudentDashboard() {
         .sort((a, b) => b!.priorityScore - a!.priorityScore); // descending
 
     // find if there are requests for students
-    const studentRequests = await prisma.studentRequest.findMany({
-        where: { studentId }
-    }) as unknown as StudentRequest[]
+    const studentRequests = getStudentRequests(studentId) as unknown as StudentRequest[]
 
 
     // This prevents mroe than one request at a time
-    const hasSentUsernameRequest = studentRequests.some(req => req.type === 'username')
-    const hasSentPromptRequest = studentRequests.some(req => req.type === 'prompt')
+    const hasSentUsernameRequest = studentRequests?.some(req => req.type === 'username')
+    const hasSentPromptRequest = studentRequests?.some(req => req.type === 'prompt')
 
     return (
         <>
@@ -122,7 +121,7 @@ export default async function StudentDashboard() {
                                 <p className="text-sm text-ring">{lastestTaskToDo?.prompt?.category?.name}</p>
                             </div>
                             <Button asChild variant='secondary' className="text-secondary-foreground">
-                                <Link href={`jot-response/${lastestTaskToDo.id}?q=0`}>
+                                <Link href={`jot-response/${lastestTaskToDo?.id}?q=0`}>
                                     Complete
                                 </Link>
                             </Button>
@@ -143,7 +142,7 @@ export default async function StudentDashboard() {
                         />
                     </div>
                     <h3 className="h3-bold ml-1">Featured Blogs</h3>
-                    {decryptedBlogNames.length > 0 ? (
+                    {decryptedBlogNames?.length > 0 ? (
                         <Carousel>
                             {decryptedBlogNames.map((response) => (
                                 <Link
@@ -171,7 +170,7 @@ export default async function StudentDashboard() {
                     <h3 className="h3-bold mb-2 ml-1">Assignments</h3>
                     <AssignmentSectionClient
                         initialPrompts={promptSessionWithMetaData}
-                        promptCountTotal={allPromptSessions.totalCount}
+                        promptCountTotal={allPromptSessions?.totalCount}
                         categories={allPromptCategories}
                         studentId={studentId}
                     />
