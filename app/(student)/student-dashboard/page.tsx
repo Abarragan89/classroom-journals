@@ -15,6 +15,7 @@ import { decryptText, formatDateShort } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import RequestNewUsername from "@/components/modalBtns/request-new-username";
 import SuggestPrompt from "@/components/modalBtns/suggest-prompt";
+import { getDecyptedStudentUsername, getFeaturedBlogs, getTeacherId } from "@/lib/actions/student.dashboard.actions";
 
 export default async function StudentDashboard() {
 
@@ -31,26 +32,9 @@ export default async function StudentDashboard() {
 
     if (!classroomId) notFound()
 
-    // get student username
-    const studentInfo = await prisma.user.findUnique({
-        where: { id: studentId },
-        select: {
-            username: true,
-            iv: true,
-        }
-    })
-    const studentName = decryptText(studentInfo?.username as string, studentInfo?.iv as string)
+    const studentName = await getDecyptedStudentUsername(studentId)
+    const teacherId = await getTeacherId(classroomId) as string
 
-    // Get Class categories for filtering
-    const { userId: teacherId } = await prisma.classUser.findFirst({
-        where: {
-            classId: classroomId,
-            role: 'teacher'
-        },
-        select: {
-            userId: true
-        }
-    }) as { userId: string }
     const allPromptCategories = await getAllPromptCategories(teacherId) as unknown as PromptCategory[]
 
     // Get all Sessions from class and add meta data
@@ -77,51 +61,7 @@ export default async function StudentDashboard() {
 
     const lastestTaskToDo = promptSessionWithMetaData.find(session => !session.isCompleted)
 
-    // Get all student Ids in classroom
-    const studentIds = await prisma.classUser.findMany({
-        where: {
-            classId: classroomId,
-            role: 'student'
-        },
-        select: {
-            userId: true
-        }
-    })
-    const studentIdArray = studentIds.map(student => student.userId)
-
-    // Get Featured Blog 
-    const featuredBlogs = await prisma.response.findMany({
-        where: {
-            studentId: { in: studentIdArray },
-        },
-        select: {
-            id: true,
-            promptSession: {
-                select: {
-                    id: true
-                }
-            },
-            studentId: true,
-            response: true,
-            submittedAt: true,
-            likeCount: true,
-            _count: {
-                select: {
-                    comments: true
-                }
-            },
-            student: {
-                select: {
-                    iv: true,
-                    username: true
-                }
-            }
-        },
-        orderBy: {
-            likeCount: 'desc'
-        },
-        take: 10,
-    })
+    const featuredBlogs = await getFeaturedBlogs(classroomId) as Response[]
 
     // format and sort featured blogs for display
     const today = new Date();
@@ -170,7 +110,7 @@ export default async function StudentDashboard() {
         <>
             <Header session={session} studentId={studentId} />
             <main className="wrapper relative">
-                <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {studentName}</h1>
+                <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {studentName as string}</h1>
                 {lastestTaskToDo && (
                     <div
                         className="border border-primary w-full px-5 py-2 rounded-lg relative mb-10"
@@ -208,7 +148,7 @@ export default async function StudentDashboard() {
                             {decryptedBlogNames.map((response) => (
                                 <Link
                                     key={response?.id}
-                                    href={`/discussion-board/${response?.promptSession.id}/response/${response?.id}`}
+                                    href={`/discussion-board/${response?.promptSession?.id}/response/${response?.id}`}
                                     className="embla__slide hover:shadow-[0_4px_10px_-3px_var(--secondary)] mx-5">
                                     <BlogCard
                                         likeCount={response?.likeCount as number}

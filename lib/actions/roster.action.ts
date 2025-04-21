@@ -37,7 +37,6 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
             return decryptText(classUser.user.password as string, classUser.user.iv as string)
         })
 
-
         const password = generateRandom5DigitNumber(studentPasswords)
         const adjustedUsername = username ? username : name.split(' ')[0]
 
