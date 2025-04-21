@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { getAllSessionsInClass } from "@/lib/actions/prompt.session.actions";
 import AssignmentSectionClient from "./assignement-section.client";
 import { getAllPromptCategories } from "@/lib/actions/prompt.categories";
-import { prisma } from "@/db/prisma";
 import Carousel from "@/components/carousel";
 import Link from "next/link";
 import BlogCard from "@/components/blog-card";
