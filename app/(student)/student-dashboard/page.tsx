@@ -98,8 +98,9 @@ export default async function StudentDashboard() {
         .sort((a, b) => b!.priorityScore - a!.priorityScore); // descending
 
     // find if there are requests for students
-    const studentRequests = getStudentRequests(studentId) as unknown as StudentRequest[]
+    const studentRequests = await getStudentRequests(studentId) as unknown as StudentRequest[]
 
+    console.log('studeent request ', studentRequests)
 
     // This prevents mroe than one request at a time
     const hasSentUsernameRequest = studentRequests?.some(req => req.type === 'username')
