@@ -108,7 +108,7 @@ export default function TermsOfService() {
                 <section className="mb-6">
                     <h2 className="text-xl font-semibold mb-2">9. Disclaimer of Warranty</h2>
                     <p>
-                        JotterBlog is provided "as is" without any warranties, express or implied.
+                    &ldquo;as is&ldquo; without any warranties, express or implied.
                         We do not guarantee that the app will always be error-free, available, or secure.
                     </p>
                 </section>

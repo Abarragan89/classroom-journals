@@ -112,7 +112,7 @@ export default function PrivacyPolicy() {
                     <h2 className="text-xl font-semibold mb-2">6. Use of AI and External Services</h2>
                     <p>
                         When students answer questions on JotterBlog, their responses may be
-                        processed by OpenAI's ChatGPT to generate scores.
+                        processed by OpenAI&apos;s ChatGPT to generate scores.
                         These responses are <strong>not linked</strong> to any personal
                         identifying information. While content is shared with OpenAI for
                         processing, it is done anonymously and solely to provide educational
