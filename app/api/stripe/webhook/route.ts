@@ -57,8 +57,11 @@ export async function POST(req: NextRequest) {
                         accountType = 'Premium(monthly)';
                         break;
                     case 3500:
-                        futureDate.setDate(futureDate.getDate() + 368);
-                        accountType = 'Premium(yearly)';
+                        futureDate.setDate(futureDate.getDate() + 33);
+                        accountType = 'Premium(monthly)';
+
+                        // futureDate.setDate(futureDate.getDate() + 368);
+                        // accountType = 'Premium(yearly)';
                         break;
                 }
 
