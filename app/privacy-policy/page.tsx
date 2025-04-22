@@ -175,7 +175,7 @@ export default function PrivacyPolicy() {
                         , including the Limited Use requirements.
                     </p>
                     <p className="mt-2">
-                        We request access to a teacher's basic Google profile information (Google ID, name, email address, and profile image)
+                        We request access to a teacher&apos;s basic Google profile information (Google ID, name, email address, and profile image)
                         &apos;s permission, we access their Google
                         Classrooms and classroom rosters to help populate and manage their teaching dashboard within JotterBlog.
                     </p>
