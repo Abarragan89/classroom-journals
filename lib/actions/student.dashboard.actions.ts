@@ -53,6 +53,29 @@ export async function getTeacherId(classroomId: string) {
     }
 }
 
+// Get classroom Grade for AI
+export async function getClassroomGrade(classroomId: string) {
+    try {
+        const { grade } = await prisma.classroom.findUnique({
+            where: { id: classroomId },
+            select: {
+                grade: true
+            }
+        }) as { grade: string }
+        return grade
+    } catch (error) {
+        console.log('error ', error)
+        // Improved error logging
+        if (error instanceof Error) {
+            console.log('Error creating new prompt:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error adding student. Try again.' }
+    }
+}
+
 // get Featured blogs
 export async function getFeaturedBlogs(classroomId: string) {
     try {
@@ -72,7 +95,7 @@ export async function getFeaturedBlogs(classroomId: string) {
         const featuredBlogs = await prisma.response.findMany({
             where: {
                 studentId: { in: studentIdArray },
-                likeCount: {gt: 2}
+                likeCount: { gt: 2 }
             },
             select: {
                 id: true,

@@ -78,6 +78,53 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
     }
 }
 
+// Get Single Response for Resubmission
+export async function updateASingleResponse(
+    responseId: string,
+    responseData: ResponseData[],
+    submittedAt: Date,
+    // These are only for multi-question prompts
+    promptType?: string,
+    isTeacherPremium?: boolean,
+    gradeLevel?: string
+) {
+    try {
+
+        // Grade it with AI Only if premium member
+        if (promptType === 'multi-question' && isTeacherPremium && gradeLevel) {
+            let { output_text: scores } = await gradeResponseWithAI(gradeLevel, responseData)
+            scores = JSON.parse(scores)
+            responseData = responseData.map((res: ResponseData, index: number) => {
+                if ((scores[index]) === null) {
+                    return ({ ...res })
+                } else {
+                    return ({ ...res, score: parseFloat(scores[index]) })
+                }
+            })
+        }
+
+        await prisma.response.update({
+            where: { id: responseId },
+            data: {
+                response: responseData as unknown as JsonValue[],
+                isSubmittable: false,
+                submittedAt
+            }
+        })
+
+        return { success: true, message: "Error fetching prompts. Try again." };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+
+        return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
+
 export async function gradeStudentResponse(responseId: string, question: number, score: number) {
     try {
         // Fetch the current response
@@ -432,30 +479,6 @@ export async function getSingleResponseForReview(responseId: string) {
         } else {
             console.log("Unexpected error:", error);
         }
-        return { success: false, message: "Error fetching prompts. Try again." };
-    }
-}
-
-// Get Single Response for Resubmission
-export async function updateASingleResponse(responseId: string, responseData: ResponseData[], submittedAt: Date) {
-    try {
-        await prisma.response.update({
-            where: { id: responseId },
-            data: {
-                response: responseData as unknown as JsonValue[],
-                isSubmittable: false,
-                submittedAt
-            }
-        })
-        return { success: true, message: "Error fetching prompts. Try again." };
-    } catch (error) {
-        if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
-            console.error(error.stack);
-        } else {
-            console.log("Unexpected error:", error);
-        }
-
         return { success: false, message: "Error fetching prompts. Try again." };
     }
 }

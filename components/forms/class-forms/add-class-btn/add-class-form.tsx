@@ -11,6 +11,15 @@ import { usePathname } from "next/navigation";
 import { toast } from "sonner"
 import { GoogleClassroom, Session } from "@/types";
 import { getTeacherGoogleClassrooms } from "@/lib/actions/google.classroom.actions";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 export default function AddClassForm({
     teacherId,
@@ -42,7 +51,7 @@ export default function AddClassForm({
         }
     }, [state, pathname, router])
 
-    const [selectedColor, setSelectedColor] = useState<string>('#dc2626');
+    const [selectedColor, setSelectedColor] = useState<string>('rgba(220, 38, 38, 0.90)');
 
     // Handler for setting the color value when a color is selected
     const handleColorSelect = (color: string) => {
@@ -66,6 +75,23 @@ export default function AddClassForm({
             console.log('error fetching google classrooms', error)
         }
     }
+
+    const selectionGradeLevelOptions = [
+        { value: 'kindergarten', label: 'Kindergarten' },
+        { value: '1st Grade', label: '1st Grade' },
+        { value: '2nd Grade', label: '2nd Grade' },
+        { value: '3rd Grade', label: '3rd Grade' },
+        { value: '4th Grade', label: '4th Grade' },
+        { value: '5th Grade', label: '5th Grade' },
+        { value: '6th Grade', label: '6th Grade' },
+        { value: '7th Grade', label: '7th Grade' },
+        { value: '8th Grade', label: '8th Grade' },
+        { value: '9th Grade', label: '9th Grade' },
+        { value: '10th Grade', label: '10th Grade' },
+        { value: '11th Grade', label: '11th Grade' },
+        { value: '12th Grade', label: '12th Grade' },
+        { value: 'college', label: 'College Level' }
+    ];
 
 
     return (
@@ -106,15 +132,23 @@ export default function AddClassForm({
                         placeholder="required"
                     />
                 </div>
-                <div className="flex flex-col col-span-1 items-start space-y-1">
+                <div className="flex flex-col col-span-1 items-stretch space-y-1">
                     <Label htmlFor="grade" className="text-right">
                         Grade
                     </Label>
-                    <Input
-                        id="grade"
-                        name="grade"
-                        placeholder="optional"
-                    />
+                    <Select name="grade">
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a grade level" />
+                        </SelectTrigger>
+                        <SelectContent className="w-full">
+                            <SelectGroup>
+                                <SelectLabel>Grade Levels</SelectLabel>
+                                {selectionGradeLevelOptions.map((option) => (
+                                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
                 </div>
                 <div className="flex flex-col col-span-1 items-start space-y-1">
                     <Label htmlFor="period" className="text-right">

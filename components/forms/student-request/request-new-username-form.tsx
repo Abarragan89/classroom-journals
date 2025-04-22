@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { requestNewUsernameSchema } from '@/lib/validators'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -27,8 +27,11 @@ export default function RequestNewUsernameForm({
         },
     })
 
+    const [isSendingRequest, setIsSendingRequest] = useState<boolean>(false)
+
     async function onSubmit(values: z.infer<typeof requestNewUsernameSchema>) {
         try {
+            setIsSendingRequest(true)
             const response = await createStudentRequest(studentId, teacherId, values.notificationText, 'username');
             if (!response.success) {
                 throw new Error('error making new username request')
@@ -39,6 +42,8 @@ export default function RequestNewUsernameForm({
             requestSentUIHandler()
         } catch (error) {
             console.log('error sending request for new user name ', error)
+        } finally {
+            setIsSendingRequest(false)
         }
     }
     return (
@@ -58,6 +63,7 @@ export default function RequestNewUsernameForm({
                                     {...field}
                                     placeholder='new username'
                                     maxLength={20}
+                                    onChange={(e) => field.onChange(e.target.value.replace(/\s/g, ''))}
                                 />
                             </FormControl>
                         </FormItem>
@@ -65,7 +71,12 @@ export default function RequestNewUsernameForm({
                 >
                 </FormField>
                 <div className="flex-center">
-                    <Button className='mt-4' type="submit">Send</Button>
+                    <Button
+                        disabled={isSendingRequest}
+                        className='mt-4'
+                        type="submit">
+                        Send
+                    </Button>
                 </div>
             </form>
         </Form>

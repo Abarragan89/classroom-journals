@@ -221,7 +221,7 @@ export default function SinglePromptEditor({
                         </div>
                         {confirmSubmission ? (
                             <div className="flex flex-col justify-center items-center">
-                                <p className="text-center text-destructive mb-3 font-bold">Are you sure you want to submit all your answers?</p>
+                                <p className="text-center text-success mb-3 font-bold">Are you sure you want to submit all your answers?</p>
                                 <form action={action} className="mt-5">
                                     <input
                                         id="studentId"

@@ -32,7 +32,7 @@ export default function PromptCard({
             {promptData.promptType === 'multi-question' ? (
                 <div className="w-full text-muted-foreground bg-muted rounded-xl rounded-b-none h-[70px]">
                     <div className="p-3">
-                        <p className="text-2xl font-bold">{promptData?.category?.name}</p>
+                        <p className="text-xl font-bold">{promptData?.category?.name}</p>
                         <p className={`${promptData?.category?.name ? 'text-xs' : 'text-2xl font-bold'}`}>Assessment</p>
                         {!promptData?.category?.name &&
                             <p className="text-xs">(no category)</p>
@@ -42,7 +42,7 @@ export default function PromptCard({
             ) : (
                 <div className="w-full text-muted-foreground bg-muted rounded-xl rounded-b-none h-[70px]">
                     <div className="p-3">
-                        <p className="text-2xl font-bold">{promptData?.category?.name}</p>
+                        <p className="text-xl font-bold">{promptData?.category?.name}</p>
                         <p className={`${promptData?.category?.name ? 'text-xs' : 'text-2xl font-bold'}`}>Blog</p>
                         {!promptData?.category?.name &&
                             <p className="text-xs">(no category)</p>

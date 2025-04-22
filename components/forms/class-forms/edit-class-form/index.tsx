@@ -8,7 +8,16 @@ import { updateClassInfo } from "@/lib/actions/classroom.actions";
 import ColorSelect from "../class-color-select";
 import { Class } from "@/types";
 import { usePathname, useRouter } from "next/navigation";
-import { toast } from 'sonner'
+import { toast } from 'sonner';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 export default function EditClassForm({
     classData,
@@ -36,7 +45,7 @@ export default function EditClassForm({
         }
     }, [state])
 
-    const [selectedColor, setSelectedColor] = useState<string>(classData?.color ?? '#f87171');
+    const [selectedColor, setSelectedColor] = useState<string>(classData?.color || '#f87171');
 
     // Handler for setting the color value when a color is selected
     const handleColorSelect = (color: string) => {
@@ -51,6 +60,23 @@ export default function EditClassForm({
             </Button>
         )
     }
+
+    const selectionGradeLevelOptions = [
+        { value: 'kindergarten', label: 'Kindergarten' },
+        { value: '1st Grade', label: '1st Grade' },
+        { value: '2nd Grade', label: '2nd Grade' },
+        { value: '3rd Grade', label: '3rd Grade' },
+        { value: '4th Grade', label: '4th Grade' },
+        { value: '5th Grade', label: '5th Grade' },
+        { value: '6th Grade', label: '6th Grade' },
+        { value: '7th Grade', label: '7th Grade' },
+        { value: '8th Grade', label: '8th Grade' },
+        { value: '9th Grade', label: '9th Grade' },
+        { value: '10th Grade', label: '10th Grade' },
+        { value: '11th Grade', label: '11th Grade' },
+        { value: '12th Grade', label: '12th Grade' },
+        { value: 'college', label: 'College Level' }
+    ];
 
     return (
         <form action={action} className={`grid gap-4 ${isInSettingsPage ? '' : 'py-4'}`}>
@@ -94,14 +120,19 @@ export default function EditClassForm({
                 <Label htmlFor="grade" className={`${isInSettingsPage ? '' : 'text-right'}`}>
                     Grade
                 </Label>
-                <Input
-                    id="grade"
-                    className="col-span-3"
-                    name="grade"
-                    maxLength={12}
-                    defaultValue={classData?.grade ?? ''}
-                    placeholder="optional"
-                />
+                <Select name="grade" defaultValue={classData.grade}>
+                    <SelectTrigger className="col-span-3">
+                        <SelectValue placeholder="Select a grade level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectLabel>Grade Levels</SelectLabel>
+                            {selectionGradeLevelOptions.map((option) => (
+                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                            ))}
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
             </div>
             <div className={`
                 grid items-center mx-auto

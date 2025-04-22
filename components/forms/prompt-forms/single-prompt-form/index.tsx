@@ -42,6 +42,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
 
     const [classrooms, setClassrooms] = useState<Classroom[]>([]);
     const [categories, setCategories] = useState<PromptCategory[]>([]);
+    const [isAddingCategory, setIsAddingCategory] = useState<boolean>(false)
     const [newCategoryName, setNewCategoryName] = useState<string>('');
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
     const [isPublic, setIsPublic] = useState<boolean>(true);
@@ -94,12 +95,15 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
 
     async function handleAddCategory(categoryName: string) {
         try {
+            setIsAddingCategory(true)
             if (!categoryName) return
             const newCategory = await addPromptCategory(categoryName, teacherId) as PromptCategory
             setCategories(prev => [newCategory, ...prev])
             setNewCategoryName('')
         } catch (error) {
             console.log('error adding category ', error)
+        } finally {
+            setIsAddingCategory(false)
         }
     }
 
@@ -151,6 +155,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                 setCategories={setCategories}
                 categories={categories}
                 editingPrompt={editingPrompt as Prompt}
+                isAddingCategory={isAddingCategory}
             />
 
             {/* Assign to a classroom */}

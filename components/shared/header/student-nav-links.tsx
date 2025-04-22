@@ -43,7 +43,7 @@ export default function StudentNavLinks({
             </Link>
             <div className='relative'>
                 {notificationCount > 0 && (
-                    <p className='text-center min-w-5 absolute top-[-10px] right-[-16px] p-[3px] rounded-full bg-destructive text-destructive-foreground text-sm'
+                    <p className='opacity-80 text-center min-w-5 absolute top-[-10px] right-[-16px] py-[2px] rounded-full bg-destructive text-destructive-foreground text-xs'
                     >
                         {notificationCount}
                     </p>

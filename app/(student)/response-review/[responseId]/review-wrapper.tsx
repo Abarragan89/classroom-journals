@@ -9,6 +9,8 @@ export default function ReviewWrapper({
     isSubmittable,
     responseId,
     showGrades,
+    isTeacherPremium,
+    gradeLevel
 }: {
     allQuestions: ResponseData[],
     isSubmittable: boolean,
@@ -16,6 +18,8 @@ export default function ReviewWrapper({
     // and needs the submit button here to update
     responseId?: string,
     showGrades: boolean
+    isTeacherPremium: boolean,
+    gradeLevel: string
 }) {
 
     const [questions, setQuestions] = useState<ResponseData[]>(allQuestions)
@@ -27,6 +31,8 @@ export default function ReviewWrapper({
             isSubmittable={isSubmittable}
             responseId={responseId}
             showGrades={showGrades}
+            isTeacherPremium={isTeacherPremium}
+            gradeLevel={gradeLevel}
         />
     )
 }

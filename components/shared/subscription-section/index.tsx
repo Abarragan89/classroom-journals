@@ -19,10 +19,11 @@ export default function SubscriptionSection({
         description: 'Everything you need to use JotterBlog everyday in your classroom',
         listItems: [
             'Classroom Blogging Platform',
-            'Data anaylsis for Assessments',
-            'Up to 1 classroom',
-            'Create up to 30 Prompts',
-            'Assign Unlimited Assessments and Blog Prompts',
+            'Anti-cheating Student Text Editor',
+            'Assessment Data',
+            'Up to 1 class',
+            'Up to 15 Prompts',
+            'Unlimited Assignments!',
         ],
         payoutLink: '',
         teacherEmail: teacherData?.email as string
@@ -35,7 +36,7 @@ export default function SubscriptionSection({
         description: 'Save time grading with AI!',
         listItems: [
             'Everything in Basic plus:',
-            'AI automatically grades all short answer questions!',
+            'AI Autograde!',
             'Unlimited Prompts',
             'Up to 6 classes',
         ],
@@ -47,10 +48,10 @@ export default function SubscriptionSection({
         name: 'Premium - AI Enhanced! (yearly)',
         price: 35,
         frequency: 'yr',
-        description: 'Save time grading with AI!',
+        description: 'Automatically grades your assessments with AI! - You\'re New Best Friend',
         listItems: [
             'Everything in Basic plus:',
-            'Assessments automatically graded by AI!',
+            'AI Autograde!',
             'Unlimited Prompts',
             'Up to 6 classes',
         ],

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { requestNewPromptSchema } from '@/lib/validators'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -27,8 +27,11 @@ export default function SuggestPromptForm({
         },
     })
 
+    const [isSendingRequest, setIsSendingRequest] = useState<boolean>(false)
+
     async function onSubmit(values: z.infer<typeof requestNewPromptSchema>) {
         try {
+            setIsSendingRequest(true)
             const response = await createStudentRequest(studentId, teacherId, values.notificationText, 'prompt');
             if (!response.success) {
                 throw new Error('error making new username request')
@@ -39,6 +42,8 @@ export default function SuggestPromptForm({
             requestSentUIHandler()
         } catch (error) {
             console.log('error sending request for new user name ', error)
+        } finally {
+            setIsSendingRequest(false)
         }
     }
     return (
@@ -64,7 +69,11 @@ export default function SuggestPromptForm({
                 >
                 </FormField>
                 <div className="flex-center">
-                    <Button className='mt-4' type="submit">Send</Button>
+                    <Button
+                        disabled={isSendingRequest}
+                        className='mt-4'
+                        type="submit">
+                        Send</Button>
                 </div>
             </form>
         </Form>

@@ -17,6 +17,7 @@ import { addPromptCategory, getAllPromptCategories } from "@/lib/actions/prompt.
 import CategorySection from "../single-prompt-form/category-section";
 import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
 import Link from "next/link";
+import UpgradeAccountBtn from "@/components/buttons/upgrade-account-btn";
 
 interface Question {
     name: string;
@@ -42,6 +43,7 @@ export default function MultiPromptForm({
     })
     const [classrooms, setClassrooms] = useState<Classroom[]>([]);
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
+    const [isAddingCategory, setIsAddingCategory] = useState<boolean>(false)
     const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null);
     const [categories, setCategories] = useState<PromptCategory[]>([]);
     const [newCategoryName, setNewCategoryName] = useState<string>('');
@@ -95,12 +97,15 @@ export default function MultiPromptForm({
 
     async function handleAddCategory(categoryName: string) {
         try {
+            setIsAddingCategory(true)
             if (!categoryName) return
             const newCategory = await addPromptCategory(categoryName, teacherId) as PromptCategory
             setCategories(prev => [newCategory, ...prev])
             setNewCategoryName('')
         } catch (error) {
             console.log('error adding category ', error)
+        } finally {
+            setIsAddingCategory(false)
         }
     }
 
@@ -145,14 +150,9 @@ export default function MultiPromptForm({
     return (
         <form action={action} className="grid relative">
             {!isTeacherPremium &&
-                <div className="text-center space-y-2 mb-5">
-                    <p className="text-sm font-bold text-success">Upgrade to Premium to have all assessments graded instantly by AI!</p>
-                    <Button asChild>
-                        <Link href={'/teacher-account#subscription-section'}>
-                            Upgrade Now!
-                        </Link>
-                    </Button>
-                </div>
+            <div className="mb-5">
+                <UpgradeAccountBtn />
+            </div>
             }
             <div className="mb-3">
                 <Label htmlFor="title" className="text-right text-md font-bold">
@@ -206,6 +206,7 @@ export default function MultiPromptForm({
                 handleAddCategory={handleAddCategory}
                 categories={categories}
                 editingPrompt={editingPrompt as Prompt}
+                isAddingCategory={isAddingCategory}
             />
 
             {/* Assign to a classroom */}

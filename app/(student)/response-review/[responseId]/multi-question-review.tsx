@@ -16,6 +16,8 @@ export default function MultiQuestionReview({
     setAllQuestions,
     responseId,
     showGrades,
+    isTeacherPremium,
+    gradeLevel
 }: {
     allQuestions: ResponseData[],
     setAllQuestions: React.Dispatch<React.SetStateAction<ResponseData[]>>
@@ -23,7 +25,9 @@ export default function MultiQuestionReview({
     // if there is a responseId, then it's been given back to student
     // and needs the submit button here to update
     responseId?: string,
-    showGrades: boolean
+    showGrades: boolean,
+    isTeacherPremium: boolean,
+    gradeLevel: string
 }) {
 
     const router = useRouter();
@@ -36,7 +40,14 @@ export default function MultiQuestionReview({
         try {
             setIsLoading(true)
             const submittedAt = new Date()
-            const updatedResponse = await updateASingleResponse(responseId, responseData, submittedAt)
+            const updatedResponse = await updateASingleResponse(
+                responseId,
+                responseData,
+                submittedAt,
+                'multi-question',
+                isTeacherPremium,
+                gradeLevel
+            )
             if (updatedResponse.success) {
                 router.push('/my-work')
                 toast('Assignment Submitted!')
@@ -61,15 +72,15 @@ export default function MultiQuestionReview({
         switch (score) {
             case 0:
                 return <p className='text-destructive font-bold'>Wrong</p>;
-                case 0.5:
+            case 0.5:
                 return <p className='text-warning font-bold'>Half Credit</p>;
-                case 1:
+            case 1:
                 return <p className='text-success font-bold'>Correct</p>;
         }
     }
 
     const gradePercentage = responsePercentage(allQuestions)
-    
+
     return (
         <div className="w-full relative">
             <p className="h2-bold text-input">Assessment Review</p>
@@ -81,12 +92,6 @@ export default function MultiQuestionReview({
                         `}
                     >{gradePercentage}</span></p>
                 )}
-                {isSubmittable && responseId &&
-                    <Button
-                        onClick={() => updateResponsesHandler(allQuestions)}
-                        className="mr-0 block"
-                    >Submit</Button>
-                }
             </div>
             {allQuestions?.map((responseData, index) => (
                 <Card className="w-full max-w-[650px] p-4 space-y-2  mx-auto mb-10 relative" key={index}>
@@ -97,7 +102,7 @@ export default function MultiQuestionReview({
                         )}
                     </div>
                     <CardTitle className="p-4 leading-snug text-center font-normal italic">
-                    <Separator className='mb-5'/>
+                        <Separator className='mb-5' />
                         {responseData.question}
                     </CardTitle>
                     <CardContent className="p-3 pt-0 mt-0">
@@ -119,6 +124,15 @@ export default function MultiQuestionReview({
                     </CardContent>
                 </Card>
             ))}
+            {isSubmittable && responseId &&
+                <div className="flex-center">
+                    <Button
+                        disabled={isLoading}
+                        onClick={() => updateResponsesHandler(allQuestions)}
+                        className="mr-0 block"
+                    >Submit</Button>
+                </div>
+            }
         </div>
     );
 }

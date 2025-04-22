@@ -32,7 +32,7 @@ export default function BlogCard({
                 width={320}
                 height={180}
                 alt="Busts of Greek philosophers"
-                className="rounded-t-sm w-full"
+                className="rounded-t-sm w-[320px] h-[180px]"
             />
             <div className="min-h-[200px]">
                 <div className="flex justify-between px-2 pt-1 text-input text-[0.875rem]">

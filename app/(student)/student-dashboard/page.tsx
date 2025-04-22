@@ -105,8 +105,6 @@ export default async function StudentDashboard() {
     // find if there are requests for students
     const studentRequests = await getStudentRequests(studentId) as unknown as StudentRequest[]
 
-    console.log('studeent request ', studentRequests)
-
     // This prevents mroe than one request at a time
     const hasSentUsernameRequest = studentRequests?.some(req => req.type === 'username')
     const hasSentPromptRequest = studentRequests?.some(req => req.type === 'prompt')

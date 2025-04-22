@@ -145,9 +145,9 @@ export default function QuestionAccordion({
                 setIsOpen={setIsResponseViewModalOpen}
             >
                 {/* show currrent question and the current score for responses */}
-                {/* <p className="text-center font-bold w-[97%] mx-auto">{currentSubQuery.current.question}</p>
+                <p className="text-center font-bold w-[97%] mx-auto">{currentSubQuery.current.question}</p>
 
-                {currentSubQuery.current.score === 1 ?
+                {/* {currentSubQuery.current.score === 1 ?
                     <p className="font-bold text-success text-center mt-[-15px] text-sm">Correct Responses</p>
                     :
                     currentSubQuery.current.score === 0.5 ?

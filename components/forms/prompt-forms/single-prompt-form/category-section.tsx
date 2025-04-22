@@ -17,7 +17,8 @@ export default function CategorySection({
     newCategoryName,
     setNewCategoryName,
     handleAddCategory,
-    setCategories
+    setCategories,
+    isAddingCategory
 }: {
     categories: PromptCategory[],
     editingPrompt?: Prompt,
@@ -25,6 +26,7 @@ export default function CategorySection({
     setNewCategoryName: React.Dispatch<React.SetStateAction<string>>,
     handleAddCategory: (categoryName: string) => void,
     setCategories: React.Dispatch<React.SetStateAction<PromptCategory[]>>
+    isAddingCategory: boolean
 }) {
 
     const [showDeleteCategoryModal, setShowDeleteCategoryModal] = useState<boolean>(false);
@@ -40,6 +42,7 @@ export default function CategorySection({
             setCategories(prev => [...prev.filter(category => category.id !== promptId)])
             setPromptId('')
             setShowDeleteCategoryModal(false)
+            setUserText('')
         } catch (error) {
             console.log('error deleting category ', error)
         }
@@ -138,6 +141,7 @@ export default function CategorySection({
                 />
                 <Button
                     type="button"
+                    disabled={isAddingCategory}
                     onClick={() => handleAddCategory(newCategoryName)}
                     className="mt-3"
                 >Add Category</Button>

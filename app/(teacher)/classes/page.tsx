@@ -4,6 +4,8 @@ import { getAllClassrooms } from "@/lib/actions/classroom.actions";
 import ClassCard from "@/components/shared/class-card";
 import { Class, Session } from "@/types";
 import AddClassBtn from "@/components/forms/class-forms/add-class-btn";
+import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
+import UpgradeAccountBtn from "@/components/buttons/upgrade-account-btn";
 
 export default async function Classes() {
 
@@ -15,15 +17,23 @@ export default async function Classes() {
 
     if (!teacherId || session?.user?.role !== 'teacher') notFound()
 
-    const allClassrooms = await getAllClassrooms(teacherId) as Class[]
+    const allClassrooms = await getAllClassrooms(teacherId) as Class[];
+
+    const { isSubscriptionActive } = await determineSubscriptionAllowance(teacherId)
 
     return (
         <>
-            <main className=" wrapper">
-
+            <main className="wrapper relative">
                 {allClassrooms?.length > 0 ? (
                     <>
                         <h1 className="h1-bold">My Classes</h1>
+                        {!isSubscriptionActive && (
+                            <div className="absolute top-1 right-10">
+                                <UpgradeAccountBtn />
+                            </div>
+                        )
+                        }
+
                         <div className="mt-10 flex flex-wrap items-start gap-14 mx-auto">
                             {allClassrooms.map((classroom: Class) => (
                                 <ClassCard

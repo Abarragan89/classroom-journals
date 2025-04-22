@@ -176,6 +176,9 @@ export default function MultipleQuestionEditor({
                         setAllQuestions={setAllQuestions}
                         isSubmittable={true}
                         showGrades={false}
+                        isTeacherPremium={isTeacherPremium}
+                        gradeLevel={gradeLevel}
+
                     />
                     <div className="flex flex-col justify-center items-center">
                         <p className="text-center font-bold">Ready to Submit?</p>

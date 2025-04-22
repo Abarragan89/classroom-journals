@@ -8,6 +8,8 @@ import SingleQuestionReview from './single-question-review'
 import Link from 'next/link'
 import { ArrowLeftIcon } from 'lucide-react'
 import ReviewWrapper from './review-wrapper'
+import { getClassroomGrade, getTeacherId } from '@/lib/actions/student.dashboard.actions'
+import { determineSubscriptionAllowance } from '@/lib/actions/profile.action'
 
 export default async function ResponseReview({
     params
@@ -19,6 +21,8 @@ export default async function ResponseReview({
 
     if (!session) notFound()
 
+    const classroomId = session?.classroomId
+
     const studentId = session?.user?.id as string
     if (session?.user?.role !== 'student' || !studentId) {
         notFound()
@@ -27,6 +31,11 @@ export default async function ResponseReview({
     const { responseId } = await params
 
     const singleResponse = await getSingleResponseForReview(responseId) as unknown as Response
+
+    const teacherId = await getTeacherId(classroomId as string)
+
+    const { isSubscriptionActive } = await determineSubscriptionAllowance(teacherId as string)
+    const grade = await getClassroomGrade(classroomId as string)
 
     return (
         <div>
@@ -43,6 +52,8 @@ export default async function ResponseReview({
                         isSubmittable={singleResponse?.isSubmittable}
                         responseId={singleResponse?.id}
                         showGrades={singleResponse?.promptSession?.areGradesVisible}
+                        isTeacherPremium={isSubscriptionActive as boolean}
+                        gradeLevel={grade as string}
                     />
                     :
                     <SingleQuestionReview

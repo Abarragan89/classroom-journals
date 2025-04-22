@@ -39,7 +39,6 @@ export default function UserSettings({
         try {
             setIsLoading(true)
             const isDeleted = await deleteTeacherAccount(teacherData?.id)
-            console.log('is deleted return ', isDeleted)
             if (isDeleted.success) {
                 setIsModalOpen(false)
                 setIsLoading(false)
