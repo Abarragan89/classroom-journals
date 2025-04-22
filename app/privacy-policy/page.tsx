@@ -53,7 +53,7 @@ export default function PrivacyPolicy() {
                     <ul className="list-disc list-inside mb-2">
                         <li>Encrypted Name</li>
                         <li>Email address</li>
-                        <li>Public Google account information (such as googleId, google profile image, and email)</li>
+                        <li>Google account information(See section 11)</li>
                     </ul>
                     <p className="mb-2 font-medium">From Students:</p>
                     <ul className="list-disc list-inside">
@@ -160,9 +160,41 @@ export default function PrivacyPolicy() {
                         version will always be available on our website.
                     </p>
                 </section>
+                <section className="mb-6">
+                    <h2 className="text-xl font-semibold mb-2">11. Google User Data Disclosure</h2>
+                    <p>
+                        JotterBlog’s use and transfer of information received from Google APIs will adhere to the{' '}
+                        <a
+                            href="https://developers.google.com/terms/api-services-user-data-policy"
+                            className="text-blue-600 underline"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Google API Services User Data Policy
+                        </a>
+                        , including the Limited Use requirements.
+                    </p>
+                    <p className="mt-2">
+                        We request access to a teacher's basic Google profile information (Google ID, name, email address, and profile image)
+                        &apos;s permission, we access their Google
+                        Classrooms and classroom rosters to help populate and manage their teaching dashboard within JotterBlog.
+                    </p>
+                    <p className="mt-2">
+                        This information is used solely to:
+                    </p>
+                    <ul className="list-disc list-inside mb-2">
+                        <li>Verify identity and securely authenticate teacher logins</li>
+                        <li>Provide personalized dashboard features</li>
+                        <li>Display and manage teacher&apos;s classes and student rosters</li>
+                    </ul>
+                    <p>
+                        We do <strong>not</strong> share Google user data with any third parties, and it is <strong>not</strong> used for advertising or analytics purposes.
+                        Teachers may revoke JotterBlog&apos;s access to their Google account at any time through their Google Account settings.
+                    </p>
+                </section>
 
                 <section>
-                    <h2 className="text-xl font-semibold mb-2">11. Contact Us</h2>
+                    <h2 className="text-xl font-semibold mb-2">12. Contact Us</h2>
                     <p>
                         If you have any questions about this policy, please reach out to us at:
                     </p>
