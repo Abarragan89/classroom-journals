@@ -16,7 +16,6 @@ import { Classroom, Prompt, PromptCategory } from "@/types";
 import { addPromptCategory, getAllPromptCategories } from "@/lib/actions/prompt.categories";
 import CategorySection from "../single-prompt-form/category-section";
 import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
-import Link from "next/link";
 import UpgradeAccountBtn from "@/components/buttons/upgrade-account-btn";
 
 interface Question {
