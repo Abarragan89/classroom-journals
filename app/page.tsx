@@ -1,7 +1,6 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation";
 import Header from "@/components/shared/header";
-import Footer from "@/components/footer";
 import { Session } from "@/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
