@@ -21,6 +21,16 @@ export default function TeacherSignInCard({ changeTab }: { changeTab: () => void
                     <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
                 </p>
                 <MagicLink />
+                <p className="text-sm text-center text-accent mt-4 px-4">
+                    By using JotterBlog, you agree to our{" "}
+                    <a href="/terms-of-service" className="underline hover:text-primary">
+                        Terms of Service
+                    </a>{" "}
+                    and{" "}
+                    <a href="/privacy-policy" className="underline hover:text-primary">
+                        Privacy Policy
+                    </a>.
+                </p>
             </CardContent>
         </Card>
     )
