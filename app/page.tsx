@@ -30,7 +30,7 @@ export default async function page() {
                         A modern tool for teachers to manage student writing, get AI-generated feedback, and create sharable student blogs — all in one place.
                     </p>
                     <div className="flex justify-center gap-4 flex-wrap">
-                        <Link href="/auth">
+                        <Link href="/sign-in">
                             <Button size="lg">Get Started</Button>
                         </Link>
                         <Link href="/privacy-policy">
@@ -61,7 +61,7 @@ export default async function page() {
                     <p className="text-lg mb-6 text-muted-foreground">
                         Sign up today and let JotterBlog help you manage student writing with ease.
                     </p>
-                    <Link href="/auth">
+                    <Link href="sign-in">
                         <Button size="lg">Join Now</Button>
                     </Link>
                 </section>
