@@ -28,7 +28,7 @@ export default async function page() {
                         Welcome to JotterBlog
                     </h1>
                     <p className="text-lg sm:text-xl max-w-2xl mx-auto mb-6 text-primary">
-                        A modern tool for teachers to manage student writing, automatically grade short answer questions with AI, and create sharable student blogs — all in one place.
+                        A modern tool for teachers to manage student writing, automatically grade assessments with AI, and create sharable student blogs — all in one place.
                     </p>
                     <div className="flex justify-center gap-4 flex-wrap">
                         <Link href="/sign-in">
@@ -73,7 +73,7 @@ export default async function page() {
                             className="rounded-lg"
                         />
                         <h3 className="text-xl font-semibold mb-2">AI Anti-Cheat</h3>
-                        <p className="text-primary">Our custom student text editor doesn&apos;t allow copy and paste, word prediction or spell check. Know exactly how well your students know how to write</p>
+                        <p className="text-primary">Custom text editor disables copy and paste, word prediction or spell check. Know exactly how well your students know how to write</p>
                     </div>
                     {/* <div>
                         <h3 className="text-xl font-semibold mb-2">Privacy-First</h3>
