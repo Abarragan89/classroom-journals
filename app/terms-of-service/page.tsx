@@ -2,29 +2,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { APP_NAME } from '@/lib/constants'
 import ModeToggle from '@/components/shared/header/mode-toggle'
+import NoSignInHeader from '@/components/shared/header/no-signin-header'
 
 export default function TermsOfService() {
     return (
         <>
-            <header className='w-full border-b print:hidden'>
-                <div className="py-3 px-5  flex-between">
-                    <div className="flex-start">
-                        <Link
-                            href='/'
-                            className='flex-start'>
-                            <Image
-                                src='/images/logo.png'
-                                alt={`${APP_NAME} logo`}
-                                height={50}
-                                width={50}
-                                priority={true}
-                                className="rounded-2xl"
-                            />
-                        </Link>
-                    </div>
-                    <ModeToggle />
-                </div>
-            </header>
+            <NoSignInHeader />
             <main className="max-w-3xl mx-auto p-6 space-y-6">
                 <h1 className="text-3xl font-bold mb-4 text-center">Terms of Service for JotterBlog</h1>
                 <p className="text-sm text-gray-500 mb-6 text-center">Last updated: April 22, 2025</p>

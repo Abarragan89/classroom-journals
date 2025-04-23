@@ -32,11 +32,11 @@ export default function Editor({
         }
     }, [isFocused])
 
-    useEffect(() => {
-        if (journalText.length > 0) {
-            setCursorIndex(journalText.length)
-        }
-    }, [journalText])
+    // useEffect(() => {
+    //     if (journalText.length > 0) {
+    //         setCursorIndex(journalText.length)
+    //     }
+    // }, [journalText])
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         e.preventDefault(); // Prevent default behavior
@@ -120,7 +120,7 @@ export default function Editor({
                 className="absolute opacity-0 pointer-events-none"
             />
             {/* {!isInReview && <p className="text-xs text-center mt-1 italic absolute">Click in the box to start typing</p>} */}
-            {!isInReview && <p className="text-xs mt-1 flex">Use ARROW keys to move cursor (Mobile controls below):</p>}
+            {!isInReview && <p className="text-xs mt-1 flex text-accent">Use ARROW keys to move cursor (Mobile controls below):</p>}
             <div className="flex-between mt-2 w-full">
                 <div className="flex">
                     <div className="flex-start">

@@ -43,7 +43,7 @@ export default function ModeToggle() {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+                    <DropdownMenuLabel>Themes</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuCheckboxItem checked={theme === 'tech'} onClick={() => setTheme('tech')}>
                         Tech
