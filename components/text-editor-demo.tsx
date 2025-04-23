@@ -1,8 +1,6 @@
 "use client"
-import NoSignInHeader from '@/components/shared/header/no-signin-header';
 import Editor from '@/components/shared/prompt-response-editor/editor'
 import React, { useRef, useState } from 'react'
-import { CornerRightUp } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 export default function TextEditorDemo() {
