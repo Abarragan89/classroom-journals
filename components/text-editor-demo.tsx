@@ -2,6 +2,7 @@
 import Editor from '@/components/shared/prompt-response-editor/editor'
 import React, { useRef, useState } from 'react'
 import { Separator } from '@/components/ui/separator';
+import { CornerLeftUp, CornerRightUp } from 'lucide-react';
 
 export default function TextEditorDemo() {
 
@@ -15,19 +16,47 @@ export default function TextEditorDemo() {
                     Try our different themes <CornerRightUp />
                 </div> */}
                 <div className='flex flex-col justify-center items-center'>
-                    <h1 className='h1-bold'>Restricted Text Editor</h1>
-                    <h3 className='font-bold'>No distractions, just typing</h3>
-                    <div className='mt-10 w-full max-w-[750px]'>
+                    <h1 className='h1-bold'>Meet Our Restricted Text Editor</h1>
+                    <h3 className='font-bold text-sm'>No spell-check, word prediction, copy and paste, or distractions. Just typing.</h3>
+                    <div className='mt-10 w-full max-w-[750px] relative'>
                         <div className="text-xs text-accent text-center">
                             Press TAB or click the Textbox to start typing
                         </div>
-                        <Editor
-                            setJournalText={setJournalText}
-                            journalText={journalText}
-                            inputRef={inputRef}
-                        />
-                        <Separator className='mt-20 mb-6' />
-                        <h3 className='h3-bold text-center'>How to Use</h3>
+                        <div className='z-10'>
+                            <Editor
+                                setJournalText={setJournalText}
+                                journalText={journalText}
+                                inputRef={inputRef}
+                            />
+                        </div>
+                        {/* Explaining the move cursor arrow */}
+                        <div className='absolute -left-2 -bottom-8 flex flex-col items-start z-0'>
+                            <div className='w-[220px] border-2 border-accent rounded-full h-16'>
+                            </div>
+                            <div className="flex items-baseline ml-20">
+                                <CornerLeftUp
+                                    className='text-accent'
+                                    size={30}
+                                />
+                                <p className='text-sm font-bold text-accent'>
+                                    Move cursor
+                                </p>
+                            </div>
+                        </div>
+                        {/* Explaining the new Paragraph */}
+                        <div className='absolute -bottom-8 right-0 flex flex-col items-end z-0'>
+                            <div className='w-[110px] border-2 border-accent rounded-full h-16'>
+                            </div>
+                            <div className="flex items-baseline mr-12">
+                                <p className='text-sm font-bold text-accent'>
+                                    New Paragraph
+                                </p>
+                                <CornerRightUp
+                                    className='text-accent'
+                                    size={30}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>

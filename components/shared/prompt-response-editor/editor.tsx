@@ -21,10 +21,13 @@ export default function Editor({
     characterLimit?: number,
     isInReview?: boolean
 }) {
-    const hiddenInputRef = useRef<HTMLInputElement>(null);
 
+    const hiddenInputRef = useRef<HTMLInputElement>(null);
+    // this ref will track if it's the first render
+    const hasInitialized = useRef(false);
+    console.log('initial ', hasInitialized)
     const [cursorIndex, setCursorIndex] = useState<number>(journalText?.length);
-    const [isFocused, setIsFocused] = useState(false);
+    const [isFocused, setIsFocused] = useState<boolean>(false);
 
     useEffect(() => {
         if (isFocused) {
@@ -32,11 +35,13 @@ export default function Editor({
         }
     }, [isFocused])
 
-    // useEffect(() => {
-    //     if (journalText.length > 0) {
-    //         setCursorIndex(journalText.length)
-    //     }
-    // }, [journalText])
+    useEffect(() => {
+        const loadedFromStorage = journalText.length > 0 && !hasInitialized.current;
+        if (loadedFromStorage) {
+            setCursorIndex(journalText.length);
+            hasInitialized.current = true;
+        }
+    }, [journalText]);
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         e.preventDefault(); // Prevent default behavior
@@ -121,36 +126,36 @@ export default function Editor({
             />
             {/* {!isInReview && <p className="text-xs text-center mt-1 italic absolute">Click in the box to start typing</p>} */}
             {!isInReview && <p className="text-xs mt-1 flex text-accent">Use ARROW keys to move cursor (Mobile controls below):</p>}
-            <div className="flex-between mt-2 w-full">
+            <div className="flex-between mt-2 w-full z-50">
                 <div className="flex">
                     <div className="flex-start">
                         <MdKeyboardDoubleArrowLeft
                             onClick={() => moveCursor(10, 'back')}
                             size={25}
-                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-input"
+                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-accent"
                         />
                         <MdKeyboardArrowLeft
                             onClick={() => moveCursor(1, 'back')}
                             size={25}
-                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-input"
+                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-accent"
                         />
                     </div>
                     <div className="flex-start">
                         <MdKeyboardArrowRight
                             onClick={() => moveCursor(1, 'forward')}
                             size={25}
-                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-input"
+                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-accent"
                         />
                         <MdKeyboardDoubleArrowRight
                             onClick={() => moveCursor(10, 'forward')}
                             size={25}
-                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-input"
+                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-accent"
                         />
                     </div>
                 </div>
                 <MdOutlineSubdirectoryArrowLeft
                     onClick={makeNewParagraph}
-                    className="border border-border rounded-sm mx-3 w-20 hover:cursor-pointer hover:text-input"
+                    className="border border-border rounded-sm mx-3 w-20 hover:cursor-pointer hover:text-accent"
                     size={25}
                 />
             </div>

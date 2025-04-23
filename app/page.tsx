@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import TextEditorDemo from "@/components/text-editor-demo";
+import { Separator } from "@/components/ui/separator";
 
 export default async function page() {
 
@@ -89,9 +90,16 @@ export default async function page() {
                     </div>
                 </section>
                 {/* Demo */}
-                <section className="py-20 px-6 text-center">
-                    <TextEditorDemo />
+                <section className="py-16 px-6">
+                    <div className="mb-20">
+                        <TextEditorDemo />
+                    </div>
+                    {/* <Separator className='mt-10 mb-6' /> */}
+                    <h3 className='mt-10 font-bold text-lg text-center w-full mx-auto px-20'>No need to worry about formatting, font, or font-size. Student writing will be transformed beautiful blogs as shown below:</h3>
                 </section>
+
+
+
 
 
                 {/* Call to Action */}
