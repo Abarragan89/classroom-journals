@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import TextEditorDemo from "@/components/text-editor-demo";
-import { Separator } from "@/components/ui/separator";
 
 export default async function page() {
 

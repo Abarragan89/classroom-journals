@@ -1,7 +1,6 @@
 "use client"
 import Editor from '@/components/shared/prompt-response-editor/editor'
 import React, { useRef, useState } from 'react'
-import { Separator } from '@/components/ui/separator';
 import { CornerLeftUp, CornerRightUp } from 'lucide-react';
 
 export default function TextEditorDemo() {
