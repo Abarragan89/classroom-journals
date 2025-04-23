@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+
 export const metadata: Metadata = {
   title: "JotterBlog",
   description: "Blogging Platform for Students",
