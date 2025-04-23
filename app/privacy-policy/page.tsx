@@ -2,9 +2,6 @@
 import { ArrowLeftIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
-import Image from 'next/image'
-import { APP_NAME } from '@/lib/constants'
-import ModeToggle from '@/components/shared/header/mode-toggle'
 import NoSignInHeader from '@/components/shared/header/no-signin-header'
 
 export default function PrivacyPolicy() {

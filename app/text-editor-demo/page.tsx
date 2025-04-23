@@ -5,7 +5,7 @@ import React, { useRef, useState } from 'react'
 import { CornerRightUp } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
-export default function page() {
+export default function TextEditorDemoPage() {
 
     const [journalText, setJournalText] = useState<string>('');
     const inputRef = useRef<HTMLDivElement>(null);
