@@ -34,8 +34,6 @@ export default async function SingleResponse({
         }
     }) as { commentCoolDown: number };
 
-    console.log((response.response as unknown as ResponseData[])?.[0].answer)
-
     return (
         <div className="max-w-[700px] px-3 mx-auto">
             <BlogMetaDetails

@@ -1,11 +1,14 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation";
 import Header from "@/components/shared/header";
-import { Session } from "@/types";
+import { Response, Session } from "@/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import TextEditorDemo from "@/components/text-editor-demo";
+import BlogMetaDetails from "@/components/blog-meta-details";
+import { Separator } from "@/components/ui/separator";
+import CommentSection from "@/components/shared/comment-section";
 
 export default async function page() {
 
@@ -18,6 +21,40 @@ export default async function page() {
             redirect('/student-dashboard')
         }
     }
+    const response: Response = {
+
+        id: '8097935b-c272-48f4-8c6d-289891cba124',
+        likes: [],
+        likeCount: 0,
+        submittedAt: new Date('2025-04-24T01:18:11.967Z'),
+        response: [
+            {
+                answer: 'Test',
+                question: 'How was your Spring Break? What  did you do? How do you feel knowing there are only 8 weeks left in school!'
+            },
+            { answer: 'Rethinking Romeo and Juliet: A Study of Youth and Rebellion', question: 'Add a Blog Title' },
+            {
+                answer: 'https://unfinished-pages.s3.us-east-2.amazonaws.com/17.png-1735541082906',
+                question: 'Add a Cover Photo'
+            }
+        ],
+        isSubmittable: false,
+        _count: { comments: 0 },
+        comments: [],
+        // @ts-ignore: using Dummy Data
+        student: {
+            id: '94de9ffa-4753-4656-adad-32c03c5f6001',
+            name: 'Flor Liera',
+            username: 'Flor'
+        },
+        // @ts-ignore: using Dummy Data
+        promptSession: { status: 'open', promptType: 'single-question' }
+    }
+
+    const dummyBlogText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget turpis id purus fermentum volutpat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer luctus libero non sem tincidunt, ut feugiat odio tempor. Donec sed felis nec erat egestas blandit sed eget metus. Sed blandit mi non turpis fermentum, a iaculis eros viverra. Fusce fringilla, sem in porta dictum, velit justo lobortis nunc, ut tincidunt nibh nisi nec magna.
+
+Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volutpat imperdiet leo. Nullam tristique congue felis, vitae vulputate ante sollicitudin a. Vivamus non diam sapien. In dignissim justo sem, nec posuere nulla tincidunt nec. Integer cursus nisl non magna efficitur, a fermentum nulla accumsan. Donec et eros a risus ultrices malesuada.`
+
 
     return (
         <>
@@ -94,11 +131,40 @@ export default async function page() {
                         <TextEditorDemo />
                     </div>
                     {/* <Separator className='mt-10 mb-6' /> */}
-                    <h3 className='mt-10 font-bold text-lg text-center w-full mx-auto px-20'>No need to worry about formatting, font, or font-size. Student writing will be transformed beautiful blogs as shown below:</h3>
+
+                    <h3 className='mt-10 max-w-[850px] font-bold text-lg text-center w-full mx-auto px-5 md:px-20'>No need to worry about formatting, font, or font-size. Student writing will be transformed beautiful blogs as shown below:</h3>
+
                 </section>
 
+                <Separator/>
+                <p className="text-sm text-center font-bold text-accent mb-8">Example Blog</p>
+                {/* Demo Blog */}
+                <section className="max-w-[700px] px-10 mx-auto">
+                    <BlogMetaDetails
+                        responseData={response}
+                        studentId="1"
+                    />
+                    <Image
+                        src={'https://unfinished-pages.s3.us-east-2.amazonaws.com/user-cm5bmuyhh0001zizwly9lp1td-profile-pic.jpeg-1735709463754'}
+                        width={700}
+                        height={394}
+                        alt={'blog cover photo'}
+                        className="block mx-auto mb-5 w-[700px] h-[394px]"
+                        priority
+                    />
+                    <p className="leading-[2rem] text-foreground text-[16px] sm:text-[19px] whitespace-pre-line">{dummyBlogText}</p>
+                    <Separator className="my-5" />
 
-
+                    <CommentSection
+                        comments={[]}
+                        responseId={'1'}
+                        studentId={'1'}
+                        sessionId={'1'}
+                        classroomId={'1'}
+                        discussionStatus={'open'}
+                        commentCoolDown={20}
+                    />
+                </section>
 
 
                 {/* Call to Action */}

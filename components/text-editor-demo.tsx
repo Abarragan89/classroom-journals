@@ -7,6 +7,7 @@ export default function TextEditorDemo() {
 
     const [journalText, setJournalText] = useState<string>('');
     const inputRef = useRef<HTMLDivElement>(null);
+
     return (
         <>
             {/* <NoSignInHeader /> */}
@@ -18,14 +19,15 @@ export default function TextEditorDemo() {
                     <h1 className='h1-bold'>Meet Our Restricted Text Editor</h1>
                     <h3 className='font-bold text-sm'>No spell-check, word prediction, copy and paste, or distractions. Just typing.</h3>
                     <div className='mt-10 w-full max-w-[750px] relative'>
-                        <div className="text-xs text-accent text-center">
+                        {/* <div className="text-xs text-accent text-center">
                             Press TAB or click the Textbox to start typing
-                        </div>
+                        </div> */}
                         <div className='z-10'>
                             <Editor
                                 setJournalText={setJournalText}
                                 journalText={journalText}
                                 inputRef={inputRef}
+                                isInDemo={true}
                             />
                         </div>
                         {/* Explaining the move cursor arrow */}

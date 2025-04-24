@@ -12,14 +12,16 @@ export default function Editor({
     inputRef,
     jotType,
     characterLimit,
-    isInReview = false
+    isInReview = false,
+    isInDemo = false
 }: {
     journalText: string;
     setJournalText: React.Dispatch<React.SetStateAction<string>>;
     inputRef: React.RefObject<HTMLDivElement | null>;
     jotType?: string;
     characterLimit?: number,
-    isInReview?: boolean
+    isInReview?: boolean,
+    isInDemo?: boolean
 }) {
 
     const hiddenInputRef = useRef<HTMLInputElement>(null);
@@ -94,6 +96,9 @@ export default function Editor({
     return (
         <div className={`${isInReview ? '' : 'mb-5'} w-full mx-auto flex flex-col items-center relative`}>
             {characterLimit && <p className="text-sm absolute right-2 top-[-20px]">{cursorIndex} / {characterLimit}</p>}
+            <div className="text-xs text-accent text-center">
+                Press TAB or click the Textbox to start typing
+            </div>
             <div
                 ref={inputRef}
                 tabIndex={0}
@@ -125,8 +130,8 @@ export default function Editor({
                 className="absolute opacity-0 pointer-events-none"
             />
             {/* {!isInReview && <p className="text-xs text-center mt-1 italic absolute">Click in the box to start typing</p>} */}
-            {!isInReview && <p className="text-xs mt-1 flex text-accent">Use ARROW keys to move cursor (Mobile controls below):</p>}
-            <div className="flex-between mt-2 w-full z-50">
+            {!isInReview && !isInDemo && <p className="text-xs mt-1 flex text-accent">Use ARROW keys to move cursor (Mobile controls below):</p>}
+            <div className={`flex-between ${isInDemo ? 'mt-7' : 'mt-2'} w-full z-50`}>
                 <div className="flex">
                     <div className="flex-start">
                         <MdKeyboardDoubleArrowLeft

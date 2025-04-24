@@ -34,7 +34,12 @@ export default function CommentSection({
     const [commentText, setCommentText] = useState<string>('')
 
     async function addCommentHandler(e: React.FormEvent<HTMLFormElement>) {
+        // student id === 1 if it is displayed as demo on landing page
         e.preventDefault();
+        if (studentId === '1') {
+            toast('This is just a demo blog. Only actual student blogs can be commented.')
+            return;
+        }
         // Check cool down time
         if (commentCoolDown === null) {
             toast.error(`Commenting has been disabled for you account`, {

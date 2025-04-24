@@ -40,7 +40,10 @@ export default function BlogMetaDetails({
                 setIsBlogLikeByUser(false)
                 setTotalCommentLikes(prev => prev - 1)
             }
-            await toggleResponseLike(responseData.id, studentId)
+            // if studentId === 1, then it is the display on the landing page an should not actually like
+            if (studentId !== '1') {
+                await toggleResponseLike(responseData.id, studentId)
+            }
         } catch (error) {
             console.log('error adding comment ', error)
             if (toggleOption === 'add') {
