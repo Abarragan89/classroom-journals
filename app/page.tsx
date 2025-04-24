@@ -9,6 +9,7 @@ import TextEditorDemo from "@/components/text-editor-demo";
 import BlogMetaDetails from "@/components/blog-meta-details";
 import { Separator } from "@/components/ui/separator";
 import CommentSection from "@/components/shared/comment-section";
+import WelcomeToJotterBlog from "@/components/welcome-to-jotterblog";
 
 export default async function page() {
 
@@ -62,9 +63,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
             <main className="min-h-screen bg-background">
                 {/* Hero Section */}
                 <section className="py-20 px-6 text-center">
-                    <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-                        Welcome to JotterBlog
-                    </h1>
+                    <WelcomeToJotterBlog />
                     <p className="text-lg sm:text-xl max-w-2xl mx-auto mb-6 text-primary">
                         A modern tool for teachers to manage student writing, automatically grade assessments with AI, and create sharable student blogs — all in one place.
                     </p>
@@ -73,7 +72,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                             <Button size="lg">Get Started</Button>
                         </Link>
                         <Link href="#app-demo-section">
-                            <Button variant="outline" size="lg">Learn More</Button>
+                            <Button variant="outline" size="lg">See Demo</Button>
                         </Link>
                     </div>
                     <div className="flex flex-col items-center mt-2 text-sm rounded-lg mx-auto">
@@ -86,14 +85,13 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                             className="rounded-lg"
                         />
                     </div>
-
                 </section>
-
+                <Separator />
                 {/* Features */}
-                <section className="py-16 border-y border-border px-6 max-w-6xl mx-auto grid gap-12 md:grid-cols-3 text-center">
-                    <div className="mx-3 md:mx-0">
+                <section className="py-16 px-6 max-w-6xl mx-auto grid gap-6 sm:grid-cols-3 text-center">
+                    <div className="mx-5 md:mx-0">
                         <h3 className="text-xl font-semibold mb-2">Auto-Graded Assessments</h3>
-                        <p className="text-primary mb-5">Let AI grade your assessments. No need to make it multiple-choice, just let AI handle it!</p>
+                        <p className="text-primary">Let AI grade your assessments. No need to make it multiple-choice, just let AI handle it!</p>
                         <Image
                             src='/images/assessment-data.png'
                             width={700}
@@ -102,7 +100,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                             className="rounded-lg mb-4 mt-10 sm:mt-0"
                         />
                     </div>
-                    <div className="mx-3 md:mx-0">
+                    <div className="mx-5 md:mx-0 flex flex-col-reverse sm:flex-col">
                         <Image
                             src='/images/featured-blogs.png'
                             width={700}
@@ -110,21 +108,24 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                             alt="featured blogs screenshot"
                             className="rounded-lg mb-4 mt-10 sm:mt-0"
                         />
-                        <h3 className="text-xl font-semibold mb-2">Sharable Blogs</h3>
-                        <p className="text-primary">Turn student writing into blog posts for peers to comment and like. Set blogs to private to keep some assignments personal.</p>
+                        <div className="flex-col sm:flex-col">
+                            <h3 className="text-xl font-semibold mb-2">Sharable Blogs</h3>
+                            <p className="text-primary">Turn student writing into blog posts for peers to comment and like. Set blogs to private to keep some assignments personal.</p>
+                        </div>
                     </div>
-                    <div className="mx-3 md:mx-0">
+                    <div className="mx-5 md:mx-0">
                         <h3 className="text-xl font-semibold mb-2">AI Anti-Cheat</h3>
-                        <p className="text-primary mb-5">Custom text editor disables copy and paste, word prediction and spell check. Know exactly how well your students write.</p>
+                        <p className="text-primary">Custom text editor disables copy and paste, word prediction and spell check. Know exactly how well your students write.</p>
                         <Image
                             src='/images/text-editor.png'
                             width={700}
                             height={394}
                             alt="student text-editor screenshot"
-                            className="rounded-lg mb-4 mt-10 sm:mt-0"
+                            className="rounded-lg mb-4 mt-5 sm:mt-0"
                         />
                     </div>
                 </section>
+                <Separator />
                 {/* Demo */}
                 <section className="py-16 px-6" id="app-demo-section">
                     <div className="mb-16">
@@ -133,22 +134,20 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                     {/* <Separator className='mt-10 mb-6' /> */}
                     <div className="flex flex-col items-center">
                         <h5 className="font-bold text-lg mb-1">Benefits</h5>
-                        <div className="text-ring space-y-2">
+                        <div className="text-primary space-y-2">
                             <p>- Cannot copy and paste text into the editor (try it!)</p>
+                            <p>- No distractions with font, font-sizes, formatting, images, etc.</p>
                             <p>- Word predication will not complete sentences</p>
                             <p>- Grammar or spelling mistakes will not be highlighted</p>
-                            <p>- No distractions with font, font-sizes, formatting, images, etc.</p>
                         </div>
                     </div>
-
-                    <h3 className='mt-10 max-w-[850px] font-bold text-lg text-ring text-center w-full mx-auto px-5 md:px-20'>No need to worry about formatting, font, or font-size. Student writing will be transformed into beautiful blogs as shown below:</h3>
-
+                    <h3 className='mt-10 max-w-[850px] font-bold text-lg text-center w-full mx-auto px-5 md:px-20'>Student writing will be transformed into beautiful blogs as shown below:</h3>
                 </section>
 
                 <Separator />
-                <p className="text-sm text-center font-bold text-accent mb-8 mt-1">Example Blog</p>
                 {/* Demo Blog */}
-                <section className="max-w-[700px] px-10 mx-auto">
+                <section className="max-w-[700px] py-12 px-10 mx-auto">
+                    <h2 className='h1-bold text-center mb-10 text-input'>Example Blog</h2>
                     <BlogMetaDetails
                         responseData={response}
                         studentId="1"
@@ -174,16 +173,37 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                         commentCoolDown={20}
                     />
                 </section>
-
+                <Separator />
+                <section className="py-16 px-6">
+                    <h2 className='h1-bold text-center'>AI Graded Assessments</h2>
+                    <h3 className='font-bold text-sm text-center mb-5'>Making Data-Driven Teaching Simple and Effective</h3>
+                    <Image
+                        src='/images/assessment-data.png'
+                        width={700}
+                        height={394}
+                        alt="assessment data screenshot"
+                        className="rounded-lg mb-4 mt-10 sm:mt-0"
+                    />
+                    <div className="flex flex-col items-center">
+                        <h5 className="font-bold text-lg mb-1">Benefits</h5>
+                        <div className="text-primary space-y-2">
+                            <p>- No need to make questions multiple choice</p>
+                            <p>- Immediate teacher feedback</p>
+                            <p>- Save hours on grading assessments and Exit Tickets</p>
+                            <p>- Graph data shows class and student performance</p>
+                        </div>
+                    </div>
+                </section>
+                <Separator />
 
                 {/* Call to Action */}
-                <section className="py-20 px-6 text-center">
+                <section className="py-16 px-6 text-center">
                     <h2 className="text-3xl font-bold mb-4">Ready to simplify your classroom?</h2>
                     <p className="text-lg mb-6 text-primary">
-                        Sign up today and let JotterBlog help you manage student writing with ease.
+                        Sign up today and let JotterBlog help you manage student writing and assessment
                     </p>
                     <Link href="sign-in">
-                        <Button size="lg">Join Now</Button>
+                        <Button size="lg">Join Now!</Button>
                     </Link>
                 </section>
             </main>

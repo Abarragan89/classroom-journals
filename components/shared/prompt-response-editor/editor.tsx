@@ -52,12 +52,12 @@ export default function Editor({
         }
         let updatedText = journalText;
         let updatedCursor = cursorIndex;
-        if (e.key.length === 1) {
-            updatedText = journalText.slice(0, cursorIndex) + e.key + journalText.slice(cursorIndex);
-            updatedCursor++;
-        } else if (e.key === "Backspace" && cursorIndex > 0) {
+        if ( e.key === "Backspace" && cursorIndex > 0) {
             updatedText = journalText.slice(0, cursorIndex - 1) + journalText.slice(cursorIndex);
             updatedCursor--;
+        } else if (e.key.length === 1) {
+            updatedText = journalText.slice(0, cursorIndex) + e.key + journalText.slice(cursorIndex);
+            updatedCursor++;
         } else if (e.key === "Enter" && !journalText.endsWith("\n\n")) {
             updatedText = journalText.slice(0, cursorIndex) + "\n\n" + journalText.slice(cursorIndex);
             updatedCursor += 2;

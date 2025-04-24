@@ -16,7 +16,7 @@ export default function TextEditorDemo() {
                     Try our different themes <CornerRightUp />
                 </div> */}
                 <div className='flex flex-col justify-center items-center'>
-                    <h1 className='h1-bold'>Meet Our Restricted Text Editor</h1>
+                    <h2 className='h1-bold'>Meet Our Restricted Text Editor</h2>
                     <h3 className='font-bold text-sm'>No spell-check, word prediction, copy and paste, or distractions. Just typing.</h3>
                     <div className='mt-10 w-full max-w-[750px] relative'>
                         {/* <div className="text-xs text-accent text-center">

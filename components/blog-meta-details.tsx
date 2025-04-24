@@ -58,7 +58,7 @@ export default function BlogMetaDetails({
 
     return (
         <>
-            <h1 className="max-w-[700px] mx-auto leading-[1.4rem] sm:leading-[2.2rem] text-[30px] sm:text-[36px] mb-[18px] font-[700]">{(responseData?.response as { answer: string }[])?.[1]?.answer}</h1>
+            <h1 className="max-w-[700px] mx-auto leading-[2rem] sm:leading-[2.2rem] text-[30px] sm:text-[36px] mb-[18px] font-[700]">{(responseData?.response as { answer: string }[])?.[1]?.answer}</h1>
             {/* Author information */}
             <section className="flex max-w-[700px] mx-auto">
                 <p className="relative w-[43px] h-[40px] bg-primary text-primary-foreground rounded-full flex items-center justify-center">
