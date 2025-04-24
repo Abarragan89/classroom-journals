@@ -132,7 +132,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                     </div>
                     {/* <Separator className='mt-10 mb-6' /> */}
 
-                    <h3 className='mt-10 max-w-[850px] font-bold text-lg text-center w-full mx-auto px-5 md:px-20'>No need to worry about formatting, font, or font-size. Student writing will be transformed beautiful blogs as shown below:</h3>
+                    <h3 className='mt-10 max-w-[850px] font-bold text-lg text-center w-full mx-auto px-5 md:px-20'>No need to worry about formatting, font, or font-size. Student writing will be transformed into beautiful blogs as shown below:</h3>
 
                 </section>
 
