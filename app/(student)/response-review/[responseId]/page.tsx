@@ -45,7 +45,7 @@ export default async function ResponseReview({
                     <ArrowLeftIcon className="mr-1" size={20} />
                     Back to My Work
                 </Link>
-                <h1 className="h2-bold mt-2 ">{singleResponse?.promptSession?.title}</h1>
+                <h1 className="h2-bold mt-2 whitespace-pre-line">{singleResponse?.promptSession?.title}</h1>
                 {singleResponse?.promptSession?.promptType === 'multi-question' ?
                     <ReviewWrapper
                         allQuestions={singleResponse?.response as unknown as ResponseData[]}

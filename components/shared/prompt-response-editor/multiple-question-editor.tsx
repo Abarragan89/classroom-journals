@@ -238,7 +238,7 @@ export default function MultipleQuestionEditor({
                 // IF not final question, just show the editor and question with continue buttons
                 <>
                     <p className="absolute -top-16 right-0 text-sm">Question: {Number(questionNumber) + 1} / {questions.length}</p>
-                    <p className="h3-bold mt-16 mb-5 w-full mx-auto text-center">{currentQuestion}</p>
+                    <p className="mt-16 mb-5 w-full mx-auto whitespace-pre-line text-left lg:text-lg">{currentQuestion}</p>
                     <Editor
                         setJournalText={setJournalText}
                         journalText={journalText}

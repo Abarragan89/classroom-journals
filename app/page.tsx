@@ -126,18 +126,27 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                     </div>
                 </section>
                 {/* Demo */}
-                <section className="py-16 px-6" id="app-demo-section"> 
-                    <div className="mb-20">
+                <section className="py-16 px-6" id="app-demo-section">
+                    <div className="mb-16">
                         <TextEditorDemo />
                     </div>
                     {/* <Separator className='mt-10 mb-6' /> */}
+                    <div className="flex flex-col items-center">
+                        <h5 className="font-bold text-lg mb-1">Benefits</h5>
+                        <div className="text-ring space-y-2">
+                            <p>- Cannot copy and paste text into the editor (try it!)</p>
+                            <p>- Word predication will not complete sentences</p>
+                            <p>- Grammar or spelling mistakes will not be highlighted</p>
+                            <p>- No distractions with font, font-sizes, formatting, images, etc.</p>
+                        </div>
+                    </div>
 
-                    <h3 className='mt-10 max-w-[850px] font-bold text-lg text-center w-full mx-auto px-5 md:px-20'>No need to worry about formatting, font, or font-size. Student writing will be transformed into beautiful blogs as shown below:</h3>
+                    <h3 className='mt-10 max-w-[850px] font-bold text-lg text-ring text-center w-full mx-auto px-5 md:px-20'>No need to worry about formatting, font, or font-size. Student writing will be transformed into beautiful blogs as shown below:</h3>
 
                 </section>
 
-                <Separator/>
-                <p className="text-sm text-center font-bold text-accent mb-8">Example Blog</p>
+                <Separator />
+                <p className="text-sm text-center font-bold text-accent mb-8 mt-1">Example Blog</p>
                 {/* Demo Blog */}
                 <section className="max-w-[700px] px-10 mx-auto">
                     <BlogMetaDetails
