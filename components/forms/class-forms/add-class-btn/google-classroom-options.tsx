@@ -5,7 +5,6 @@ import React from 'react'
 import { useState } from 'react'
 import { createClassroomWithGoogle } from '@/lib/actions/google.classroom.actions'
 import { useRouter } from 'next/navigation'
-import { Separator } from '@radix-ui/react-dropdown-menu'
 
 export default function GoogleClassroomOptions({
     googleClassrooms,
