@@ -27,7 +27,6 @@ export default function Editor({
     const hiddenInputRef = useRef<HTMLInputElement>(null);
     // this ref will track if it's the first render
     const hasInitialized = useRef(false);
-    console.log('initial ', hasInitialized)
     const [cursorIndex, setCursorIndex] = useState<number>(journalText?.length);
     const [isFocused, setIsFocused] = useState<boolean>(false);
 
