@@ -41,13 +41,13 @@ export default async function page() {
         isSubmittable: false,
         _count: { comments: 0 },
         comments: [],
-        // @ts-ignore: using Dummy Data
+        // @ts-expect-error: using Dummy Data
         student: {
             id: '94de9ffa-4753-4656-adad-32c03c5f6001',
             name: 'Flor Liera',
             username: 'Flor'
         },
-        // @ts-ignore: using Dummy Data
+        // @ts-expect-error: using Dummy Data
         promptSession: { status: 'open', promptType: 'single-question' }
     }
 
