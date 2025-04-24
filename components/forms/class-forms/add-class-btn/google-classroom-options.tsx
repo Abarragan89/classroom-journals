@@ -5,6 +5,7 @@ import React from 'react'
 import { useState } from 'react'
 import { createClassroomWithGoogle } from '@/lib/actions/google.classroom.actions'
 import { useRouter } from 'next/navigation'
+import { Separator } from '@radix-ui/react-dropdown-menu'
 
 export default function GoogleClassroomOptions({
     googleClassrooms,
@@ -26,7 +27,6 @@ export default function GoogleClassroomOptions({
     async function createClassroom(classInfo: GoogleClassroom) {
         try {
             setIsLoading(true)
-
             const classroomUrl = await createClassroomWithGoogle(classInfo, session?.user?.id)
             router.push(`/classroom/${classroomUrl}/${teacherId}`)
         } catch (error) {
@@ -49,9 +49,18 @@ export default function GoogleClassroomOptions({
             {googleClassrooms?.length > 0 ? (
                 <p className='font-bold text-md text-center mb-3'>Choose a class to import</p>
             ) : (
-                <>
-                    <p className='text-md w-[75%] mb-1 mx-auto text-center'>No classrooms associated with your Google Account:</p>
-                </>
+                <div className='space-y-2 mb-7'>
+                    <p className='text-center text-destructive font-bold mb-5'>No Google Classes Found</p>
+                    <ul className='text-center
+                    space-y-1 text-sm'>
+                        <li className='text-accent max-w-[260px] mx-auto mb-3'>Give JotterBlog access to your Google Classrooms when logging in</li>
+                        <li className="text-center relative text-accent max-w-[150px] mx-auto">
+                            <span className="relative z-10 bg-background px-3">or</span>
+                            <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
+                        </li>
+                        <li className='text-accent max-w-[260px] mx-auto'>Create a Google Classroom using {session?.user?.email}</li>
+                    </ul>
+                </div>
 
             )}
             {googleClassrooms?.length > 0 && googleClassrooms.map((classroom) => (

@@ -80,7 +80,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                         <p className="font-bold tracking-wide mb-2">Connects with Google Classroom!</p>
                         <Image
                             src='/images/google-classroom-logo.png'
-                            width={55}
+                            width={45}
                             height={15}
                             alt='Google Classroom Logo'
                             className="rounded-lg"
