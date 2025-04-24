@@ -189,7 +189,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                         <div className="text-primary space-y-2">
                             <p>- No need to make questions multiple choice</p>
                             <p>- Immediate teacher feedback</p>
-                            <p>- Save hours on grading assessments and Exit Tickets</p>
+                            <p>- Save hours on grading Assessments and Exit Tickets</p>
                             <p>- Graph data shows class and student performance</p>
                         </div>
                     </div>
