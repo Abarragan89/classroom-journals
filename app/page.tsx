@@ -72,7 +72,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                         <Link href="/sign-in">
                             <Button size="lg">Get Started</Button>
                         </Link>
-                        <Link href="/privacy-policy">
+                        <Link href="#app-demo-section">
                             <Button variant="outline" size="lg">Learn More</Button>
                         </Link>
                     </div>
@@ -126,7 +126,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                     </div>
                 </section>
                 {/* Demo */}
-                <section className="py-16 px-6">
+                <section className="py-16 px-6" id="app-demo-section"> 
                     <div className="mb-20">
                         <TextEditorDemo />
                     </div>
