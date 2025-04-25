@@ -132,7 +132,7 @@ export default function AddClassForm({
                         placeholder="required"
                     />
                 </div>
-                <div className="flex flex-col col-span-1 items-stretch space-y-1">
+                <div className="flex flex-col col-span-1 items-start space-y-1">
                     <Label htmlFor="grade" className="text-right">
                         Grade
                     </Label>
