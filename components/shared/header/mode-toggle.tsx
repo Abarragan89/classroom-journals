@@ -10,10 +10,12 @@ import {
     DropdownMenuCheckboxItem
 } from "@/components/ui/dropdown-menu"
 import { useTheme } from "next-themes"
-import { SunIcon, MoonIcon, ComputerIcon, Heart } from 'lucide-react'
+import { SunIcon, MoonIcon, ComputerIcon, Heart, Sprout } from 'lucide-react'
+import { FaUserTie } from "react-icons/fa";
+
 
 export default function ModeToggle() {
-    const [mounted, setMounted] = useState(false)
+    const [mounted, setMounted] = useState<boolean>(false)
     const { theme, setTheme } = useTheme()
 
     useEffect(() => {
@@ -25,21 +27,31 @@ export default function ModeToggle() {
         return null
     }
 
+    function showModeIcon(theme: string | undefined) {
+        if (!theme) return <SunIcon />
+        switch (theme) {
+            case 'tech':
+                return <ComputerIcon />
+            case 'dark':
+                return <MoonIcon />
+            case 'silva':
+                return <Heart />
+            case 'light':
+                return <SunIcon />
+            case 'tuxedo':
+                return <FaUserTie />
+            case 'avocado':
+                return <Sprout />
+
+        }
+    }
 
     return (
         <div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant='ghost' className="focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full px-[10px] py-2">
-                        {theme === 'tech' ? (
-                            <ComputerIcon />
-                        ) : theme === 'dark' ? (
-                            <MoonIcon />
-                        ) : theme === 'silva' ?
-                            <Heart />
-                            :
-                            <SunIcon />
-                        }
+                        {showModeIcon(theme)}
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
@@ -56,6 +68,12 @@ export default function ModeToggle() {
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'silva'} onClick={() => setTheme('silva')}>
                         Silva
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem checked={theme === 'tuxedo'} onClick={() => setTheme('tuxedo')}>
+                        Tuxedo
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem checked={theme === 'avocado'} onClick={() => setTheme('avocado')}>
+                        Avocado
                     </DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
             </DropdownMenu>

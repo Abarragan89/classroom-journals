@@ -182,7 +182,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                         width={700}
                         height={394}
                         alt="assessment data screenshot"
-                        className="rounded-lg mb-4 mt-10 sm:mt-0"
+                        className="rounded-lg mb-4 mt-10 sm:mt-0 mx-auto"
                     />
                     <div className="flex flex-col items-center">
                         <h5 className="font-bold text-lg mb-1">Benefits</h5>
