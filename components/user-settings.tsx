@@ -36,10 +36,6 @@ export default function UserSettings({
         }
     }
 
-    console.log('teacher is cancelling', isCancelling)
-    console.log('teacher sub valid', isSubscriptionValid)
-    console.log('teacher account status', accountStatus)
-
     async function handleDeleteAccount() {
         try {
             setIsLoading(true)

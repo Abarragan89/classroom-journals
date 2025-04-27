@@ -4,7 +4,6 @@ import { getAllClassrooms } from "@/lib/actions/classroom.actions";
 import ClassCard from "@/components/shared/class-card";
 import { Class, Session } from "@/types";
 import AddClassBtn from "@/components/forms/class-forms/add-class-btn";
-import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
 import UpgradeAccountBtn from "@/components/buttons/upgrade-account-btn";
 
 export default async function Classes() {
@@ -18,8 +17,6 @@ export default async function Classes() {
     if (!teacherId || session?.user?.role !== 'teacher') notFound()
 
     const allClassrooms = await getAllClassrooms(teacherId) as Class[];
-
-    // const { isSubscriptionActive } = await determineSubscriptionAllowance(teacherId)
 
     return (
         <>

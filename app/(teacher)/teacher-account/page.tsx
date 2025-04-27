@@ -1,9 +1,6 @@
 import { auth } from "@/auth";
 import { notFound } from "next/navigation";
 import { Session, User } from "@/types";
-import UserSettings from "@/components/user-settings";
-import SubscriptionSection from "@/components/shared/subscription-section";
-import { Separator } from "@/components/ui/separator";
 import { getTeacherAccountData } from "@/lib/actions/profile.action";
 import AccountClientWrapper from "./account-client-wrapper";
 

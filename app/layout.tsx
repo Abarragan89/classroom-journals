@@ -7,10 +7,6 @@ import { headers } from 'next/headers';
 import Footer from "@/components/footer";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import TanstackQueryProvider from "@/components/providers/tanstack-query-provider";
-import {
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,9 +33,6 @@ export default async function RootLayout({
   const headersList = await headers();
   const nonce = headersList.get('x-nonce');
   if (!nonce) return
-
-
-  const queryClient = new QueryClient()
 
   return (
     <html lang="en" suppressHydrationWarning>
