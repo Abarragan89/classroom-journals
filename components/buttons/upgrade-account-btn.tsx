@@ -1,12 +1,37 @@
-import Link from 'next/link'
+'use client'
+import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
+import { determineSubscriptionAllowance } from '@/lib/actions/profile.action';
 
-export default function UpgradeAccountBtn() {
+export default function UpgradeAccountBtn({
+    teacherId
+}: {
+    teacherId: string
+}) {
+    const { isPending, error, data } = useQuery({
+        queryKey: ['teacher-sub-status'],
+        queryFn: () => determineSubscriptionAllowance(teacherId),
+    })
+
+    if (isPending) return
+    if (error) {
+        throw new Error('Cannot determine subscription status')
+    }
+
     return (
-            <p className="w-fit text-sm font-bold text-success">
-                Autograde Assessments with AI!
-                <Link className='ml-1 text-primary underline hover:italic' href={'/teacher-account#subscription-section'}>
-                    Upgrade Now
-                </Link>
-            </p>
+        <>
+            {data && !data.isSubscriptionActive && (
+                <p className="w-fit text-sm font-bold text-success">
+                    Autograde Assessments with AI!
+                    <Link
+                        className='ml-1 text-primary underline hover:italic'
+                        href={'/teacher-account#subscription-section'}
+                    >
+                        Upgrade Now
+                    </Link>
+                </p>
+
+            )}
+        </>
     )
 }

@@ -5,6 +5,12 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { headers } from 'next/headers';
 import Footer from "@/components/footer";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import TanstackQueryProvider from "@/components/providers/tanstack-query-provider";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,27 +38,33 @@ export default async function RootLayout({
   const nonce = headersList.get('x-nonce');
   if (!nonce) return
 
+
+  const queryClient = new QueryClient()
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         nonce={nonce}
       >
-        <ThemeProvider
-          attribute='class'
-          themes={["light", "dark", "tech", "silva", "tuxedo", "avocado"]}
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Toaster />
-          <div className="flex min-h-screen flex-col">
-            <div className="flex-1">
-              {children}
+        <TanstackQueryProvider>
+          <ReactQueryDevtools initialIsOpen={true} />
+          <ThemeProvider
+            attribute='class'
+            themes={["light", "dark", "tech", "silva", "tuxedo", "avocado"]}
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Toaster />
+            <div className="flex min-h-screen flex-col">
+              <div className="flex-1">
+                {children}
+              </div>
             </div>
-          </div>
-          <Footer />
-        </ThemeProvider>
+            <Footer />
+          </ThemeProvider>
+        </TanstackQueryProvider>
       </body>
     </html>
   );

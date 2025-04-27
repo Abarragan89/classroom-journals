@@ -14,7 +14,7 @@ export default function NotFoundPage() {
                 priority={true}
                 className="rounded-3xl"
             />
-            <div className="p-6 w-[80%] max-w-lg rounded-lg shadow-md text-center">
+            <div className="p-6 w-[80%] max-w-lg border border-border bg-card rounded-lg shadow-md text-center mt-10">
                 <h1 className="text-3xl font-bold mb-4">Not Found</h1>
                 <p className="text-destructive">Cound not find requested page</p>
                 <Button variant='outline' className="mt-4 ml-2" onClick={() => (window.location.href = '/')}>

@@ -1,30 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { checkout } from "@/lib/stripe/checkout";
-import { SubscriptionData } from "@/types";
+import { SubscriptionData, User } from "@/types";
 import { cancelSubscription } from "@/lib/stripe/checkout";
 import { useState } from "react";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
 
 export default function SubscriptionCard({
     subscriptionData,
     currentSubscription,
     subscriptionId,
     isCancelling,
-    setIsCancelling
-
+    setIsCancelling,
+    updateTeacherData
 }: {
     subscriptionData: SubscriptionData;
     currentSubscription: string;
     subscriptionId: string;
     isCancelling: boolean;
     setIsCancelling: React.Dispatch<React.SetStateAction<boolean>>;
+    updateTeacherData: (updatedData: Partial<User>) => void;
 
 }) {
-
-    const router = useRouter();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -37,10 +35,7 @@ export default function SubscriptionCard({
             if (isCancelled) {
                 setIsCancelling(true)
                 setIsModalOpen(false)
-                router.replace('/teacher-account');
-                setTimeout(() => {
-                    router.refresh()
-                }, 100)
+                updateTeacherData({ isCancelling: true })
             } else {
                 throw new Error('error deleting sub')
             }
@@ -51,22 +46,22 @@ export default function SubscriptionCard({
         }
     }
 
-    function generateBtn(subPlanName: string, currentSubPlan: string) {
-        if (subPlanName.includes('Free')) {
+    function generateBtn() {
+        if (subscriptionData.name.includes('Free')) {
             return <Button disabled>Always Free</Button>
         }
         // Handle Monthly if subscribed or disabled
-        if (currentSubPlan.includes('monthly') && subPlanName.includes('monthly') && !isCancelling) {
+        if (currentSubscription.includes('monthly') && subscriptionData.name.includes('monthly') && !isCancelling) {
             return <Button variant='destructive' onClick={() => setIsModalOpen(true)}>Unsubscribe</Button>
 
-        } else if (currentSubPlan.includes('monthly') && !subPlanName.includes('monthly') && !isCancelling) {
+        } else if (currentSubscription.includes('monthly') && !subscriptionData.name.includes('monthly') && !isCancelling) {
             return <Button disabled>You must first Unsubscribe</Button>
         }
         // Handle Yearly if subscribed or disabled
-        if (currentSubPlan.includes('yearly') && subPlanName.includes('yearly') && !isCancelling) {
+        if (currentSubscription.includes('yearly') && subscriptionData.name.includes('yearly') && !isCancelling) {
             return <Button variant='destructive' onClick={() => setIsModalOpen(true)}>Unsubscribe</Button>
 
-        } else if (currentSubPlan.includes('yearly') && !subPlanName.includes('yearly') && !isCancelling) {
+        } else if (currentSubscription.includes('yearly') && !subscriptionData.name.includes('yearly') && !isCancelling) {
             return <Button disabled>You must first Unsubscribe</Button>
         }
 
@@ -124,7 +119,7 @@ export default function SubscriptionCard({
                     ))}
                 </ul>
                 <Separator className="my-5" />
-                {generateBtn(subscriptionData.name, currentSubscription)}
+                {generateBtn()}
             </article>
         </>
     )

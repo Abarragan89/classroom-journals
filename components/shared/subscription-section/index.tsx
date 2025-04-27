@@ -3,11 +3,12 @@ import { useState } from "react"
 import SubscriptionCard from "./subscription-card"
 import { SubscriptionData, User } from "@/types"
 
-
 export default function SubscriptionSection({
-    teacherData
+    teacherData,
+    updateTeacherData
 }: {
-    teacherData: User
+    teacherData: User;
+    updateTeacherData: (updatedData: Partial<User>) => void
 }) {
 
     const [isCancelling, setIsCancelling] = useState(teacherData?.isCancelling)
@@ -67,26 +68,29 @@ export default function SubscriptionSection({
             <div className="flex flex-col md:flex-row flex-wrap-reverse gap-10 mx-auto">
                 <SubscriptionCard
                     subscriptionData={freePlanData}
-                    currentSubscription={teacherData.accountType as string}
+                    currentSubscription={teacherData?.accountType as string}
                     subscriptionId={teacherData.subscriptionId as string}
+                    updateTeacherData={updateTeacherData}
                     isCancelling={isCancelling}
                     setIsCancelling={setIsCancelling}
 
                 />
                 <SubscriptionCard
                     subscriptionData={premiumPlanDataYear}
-                    currentSubscription={teacherData.accountType as string}
+                    currentSubscription={teacherData?.accountType as string}
                     subscriptionId={teacherData.subscriptionId as string}
+                    updateTeacherData={updateTeacherData}
                     isCancelling={isCancelling}
                     setIsCancelling={setIsCancelling}
 
                 />
                 <SubscriptionCard
                     subscriptionData={premiumPlanDataMonth}
-                    currentSubscription={teacherData.accountType as string}
+                    currentSubscription={teacherData?.accountType as string}
                     subscriptionId={teacherData.subscriptionId as string}
                     isCancelling={isCancelling}
                     setIsCancelling={setIsCancelling}
+                    updateTeacherData={updateTeacherData}
 
                 />
             </div>

@@ -161,6 +161,50 @@ export async function updateUsername(username: string, teacherId: string) {
 }
 
 
+export async function getTeacherAccountData(teacherId: string) {
+    try {
+        const teacherData = await prisma.user.findUnique({
+            where: { id: teacherId },
+            select: {
+                username: true,
+                name: true,
+                iv: true,
+                email: true,
+                accountType: true,
+                id: true,
+                image: true,
+                subscriptionExpires: true,
+                subscriptionId: true,
+                isCancelling: true,
+                customerId: true,
+            }
+        })
+
+        const decryptedTeacher = {
+            image: teacherData?.image,
+            id: teacherData?.id,
+            isCancelling: teacherData?.isCancelling,
+            accountType: teacherData?.accountType,
+            subscriptionExpires: teacherData?.subscriptionExpires,
+            customerId: teacherData?.customerId,
+            subscriptionId: teacherData?.subscriptionId,
+            email: teacherData?.email,
+            username: decryptText(teacherData?.username as string, teacherData?.iv as string),
+            name: decryptText(teacherData?.name as string, teacherData?.iv as string),
+        }
+
+        return decryptedTeacher
+    } catch (error) {
+        // Improved error logging
+        if (error instanceof Error) {
+            console.log('Error creating new prompt:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error adding student. Try again.' }
+    }
+}
 export async function deleteTeacherAccount(teacherId: string) {
     try {
         // 1. Find all classes the teacher owns
@@ -228,3 +272,28 @@ export async function deleteTeacherAccount(teacherId: string) {
         return { success: false, message: 'Error adding student. Try again.' }
     }
 }
+
+
+// // get teacher account type 
+// export async function getTeacherAccountType(teacherId: string) {
+//     try {
+//         const accountData = await prisma.user.findUnique({
+//             where: { id: teacherId },
+//             select: {
+//                 accountType: true,
+//                 isCancelling: true,
+//                 subscriptionExpires: true,
+//             }
+//         })
+//         return accountData
+//     } catch (error) {
+//         // Improved error logging
+//         if (error instanceof Error) {
+//             console.log('Error creating new prompt:', error.message);
+//             console.error(error.stack); // Log stack trace for better debugging
+//         } else {
+//             console.log('Unexpected error:', error);
+//         }
+//         return { success: false, message: 'Error adding student. Try again.' }
+//     }
+// }

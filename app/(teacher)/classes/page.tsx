@@ -19,7 +19,7 @@ export default async function Classes() {
 
     const allClassrooms = await getAllClassrooms(teacherId) as Class[];
 
-    const { isSubscriptionActive } = await determineSubscriptionAllowance(teacherId)
+    // const { isSubscriptionActive } = await determineSubscriptionAllowance(teacherId)
 
     return (
         <>
@@ -27,12 +27,11 @@ export default async function Classes() {
                 {allClassrooms?.length > 0 ? (
                     <>
                         <h1 className="h1-bold">My Classes</h1>
-                        {!isSubscriptionActive && (
-                            <div className="absolute top-1 right-10">
-                                <UpgradeAccountBtn />
-                            </div>
-                        )
-                        }
+                        <div className="absolute top-2 right-5">
+                            <UpgradeAccountBtn
+                                teacherId={teacherId}
+                            />
+                        </div>
 
                         <div className="mt-10 flex flex-wrap items-start gap-14 mx-auto">
                             {allClassrooms.map((classroom: Class) => (

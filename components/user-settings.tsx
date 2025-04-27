@@ -26,6 +26,7 @@ export default function UserSettings({
     const isCancelling = teacherData.isCancelling;
     const accountStatus = isSubscriptionValid ? teacherData?.accountType : 'Basic-Free'
 
+    
     async function updateUsernameHandler() {
         try {
             await updateUsername(updatedUsername, teacherData?.id);
@@ -34,6 +35,10 @@ export default function UserSettings({
             console.log('error updating username ', error)
         }
     }
+
+    console.log('teacher is cancelling', isCancelling)
+    console.log('teacher sub valid', isSubscriptionValid)
+    console.log('teacher account status', accountStatus)
 
     async function handleDeleteAccount() {
         try {
