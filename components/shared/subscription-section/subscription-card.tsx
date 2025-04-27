@@ -101,7 +101,7 @@ export default function SubscriptionCard({
                     {isLoading ? 'Unsubscribing...' : 'Unsubscribe'}
                 </Button>
             </ResponsiveDialog>
-            <article className="flex-1 flex flex-col justify-between border border-secondary rounded-lg p-5 min-w-[250px]">
+            <article className="flex-1 flex flex-col justify-between border border-secondary rounded-lg p-5 min-w-[250px] max-w-[350px] mx-auto">
                 <div>
                     <p className="font-bold">{subscriptionData.name}</p>
                     <p className="text-[2.5rem] mt-5">${subscriptionData.price}<span className="text-[1rem]">/{subscriptionData.frequency}</span></p>

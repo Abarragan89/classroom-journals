@@ -150,7 +150,9 @@ export default function MultiPromptForm({
         <form action={action} className="grid relative">
             {!isTeacherPremium &&
             <div className="mb-5">
-                <UpgradeAccountBtn />
+                <UpgradeAccountBtn 
+                    teacherId={teacherId}
+                />
             </div>
             }
             <div className="mb-3">

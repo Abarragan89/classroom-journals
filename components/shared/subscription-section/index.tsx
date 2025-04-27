@@ -65,7 +65,7 @@ export default function SubscriptionSection({
         <section className='mb-20' id="subscription-section">
             <h3 className="text-lg">Subscription Plans</h3>
             <p className="text-input mb-5">cancel anytime</p>
-            <div className="flex flex-col md:flex-row flex-wrap-reverse gap-10 mx-auto">
+            <div className="flex flex-col md:flex-row flex-wrap gap-10 mx-auto">
                 <SubscriptionCard
                     subscriptionData={freePlanData}
                     currentSubscription={teacherData?.accountType as string}
