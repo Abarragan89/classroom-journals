@@ -91,7 +91,7 @@ export async function getAllSessionsInClassForStudent(classId: string) {
     }
 }
 
-export async function getSinglePromptSession(promptId: string) {
+export async function getSinglePromptSessionStudentDiscussion(promptId: string) {
     try {
         const allPromptSession = await prisma.promptSession.findUnique({
             where: { id: promptId },
@@ -140,6 +140,79 @@ export async function getSinglePromptSession(promptId: string) {
         }
 
         return promptSessionWithDecryptedUsernames;
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log('Error creating new prompt:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+
+        return { success: false, message: 'Error creating prompt. Try again.' }
+    }
+}
+
+// Get single prompt session with responses and student data for SinglePromptSession Page
+export async function getSinglePromptSessionTeacherDashboard(sessionId: string) {
+    try {
+        const promptSession = await prisma.promptSession.findUnique({
+            where: { id: sessionId },
+            select: {
+                status: true,
+                id: true,
+                promptType: true,
+                questions: true,
+                isPublic: true,
+                areGradesVisible: true,
+                responses: {
+                    select: {
+                        id: true,
+                        submittedAt: true,
+                        response: true,
+                        student: {
+                            select: {
+                                id: true,
+                                name: true,
+                                iv: true,
+                                username: true,
+                            }
+                        },
+                        _count: {
+                            select: {
+                                comments: true
+                            }
+                        }
+                    },
+                },
+                prompt: {
+                    select: {
+                        title: true,
+                        category: {
+                            select: {
+                                name: true
+                            }
+                        }
+                    },
+                },
+            },
+        })
+
+        // Ensure that responses exist before mapping
+        const decryptedResponses = promptSession?.responses?.map((response) => ({
+            ...response,
+            student: {
+                id: response.student.id,
+                username: decryptText(response.student.username as string, response.student.iv as string),
+                name: decryptText(response.student.name as string, response.student.iv as string)
+            }
+        }));
+
+        // Keep the rest of the promptSession unchanged
+        const updatedPromptSession = {
+            ...promptSession,
+            responses: decryptedResponses,
+        };
+        return updatedPromptSession;
     } catch (error) {
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);

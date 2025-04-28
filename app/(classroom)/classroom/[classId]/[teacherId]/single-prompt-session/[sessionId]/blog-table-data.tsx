@@ -1,3 +1,4 @@
+"use client"
 import {
     Table,
     TableBody,
@@ -7,24 +8,35 @@ import {
     TableCell
 } from "@/components/ui/table"
 import { formatDateShort } from "@/lib/utils";
-import { Response, User } from "@/types";
+import { PromptSession, Response, User } from "@/types";
 import { ClipboardCheckIcon } from "lucide-react";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { getSinglePromptSessionTeacherDashboard } from "@/lib/actions/prompt.session.actions";
 
 export default function BlogTableData({
-    studentSubmittedWithFormattedNamed,
+    promptSessionData,
     promptSessionId,
     classId,
     teacherId,
     notSubmitted,
 }: {
-    studentSubmittedWithFormattedNamed: Response[];
+    promptSessionData: Response[];
     promptSessionId: string;
     classId: string;
     teacherId: string;
     notSubmitted: User[];
 
 }) {
+
+    const { data: promptSession } = useQuery({
+        queryKey: ['getStudentBlogSessionData'],
+        queryFn: async () => {
+            const data = await getSinglePromptSessionTeacherDashboard(promptSessionId) as unknown as PromptSession
+            return data.responses
+        },
+        initialData: promptSessionData
+    })
     return (
         <Table className="mt-3">
             <TableHeader>
@@ -40,7 +52,7 @@ export default function BlogTableData({
                 <TableRow>
                     <TableCell colSpan={6} className="text-center font-bold bg-background text-success">Submitted</TableCell>
                 </TableRow>
-                {(studentSubmittedWithFormattedNamed ?? []).sort((a, b) => {
+                {(promptSession ?? []).sort((a, b) => {
                     const lastNameA = a.student.name?.split(" ")[1] ?? "";
                     const lastNameB = b.student.name?.split(" ")[1] ?? "";
                     return lastNameA.localeCompare(lastNameB);

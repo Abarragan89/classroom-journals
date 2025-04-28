@@ -42,7 +42,7 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
             };
         }
 
-        // Grade it with AI Only if premium member
+        // Grade it with AI Only if premium member and multiple questions
         if (promptType === 'multi-question' && isTeacherPremium === 'true') {
             let { output_text: scores } = await gradeResponseWithAI(gradeLevel, response)
             scores = JSON.parse(scores)

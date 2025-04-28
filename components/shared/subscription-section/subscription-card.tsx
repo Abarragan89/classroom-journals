@@ -74,7 +74,7 @@ export default function SubscriptionCard({
                     });
                 }}
             >
-                Subscribe
+                Subscribe 
             </Button>
         )
     }

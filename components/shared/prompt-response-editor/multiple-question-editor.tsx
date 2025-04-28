@@ -47,7 +47,7 @@ export default function MultipleQuestionEditor({
             async function finishResponseHandler() {
                 // deleltes row in indexedDB
                 await deleteRow(promptSessionId as string)
-                router.replace('/')
+                router.push('/')
                 toast('Answers Submitted!')
             }
             finishResponseHandler()

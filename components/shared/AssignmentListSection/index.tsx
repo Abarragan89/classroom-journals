@@ -2,10 +2,11 @@
 import { PromptCategory, PromptSession, SearchOptions } from "@/types"
 import { useRef, useState } from "react"
 import AssignmentListItem from "@/components/shared/AssignmentListSection/assignment-list-item"
-import { getFilteredPromptSessions } from "@/lib/actions/prompt.session.actions"
+import { getAllSessionsInClass, getFilteredPromptSessions } from "@/lib/actions/prompt.session.actions"
 import PromptSearchBar from "../prompt-filter-options/prompt-search-bar"
 import TraitFilterCombobox from "../prompt-filter-options/trait-filter-combobox"
 import PaginationList from "../prompt-filter-options/pagination-list"
+import { useQuery } from "@tanstack/react-query"
 
 
 interface Props {
@@ -24,6 +25,17 @@ export default function AssignmentListSection({
     teacherId,
     promptCountTotal
 }: Props) {
+
+
+    const { data } = useQuery({
+        queryKey: ['assignmentList'],
+        queryFn: async () => {
+            const classdata = await getAllSessionsInClass(classId) as unknown as { prompts: PromptSession[], totalCount: number }
+            setFetchedPrompts(data)
+            return classdata.prompts
+        },
+        initialData: initialPrompts
+    })
 
     const [fetchedPrompts, setFetchedPrompts] = useState<PromptSession[]>(initialPrompts)
 

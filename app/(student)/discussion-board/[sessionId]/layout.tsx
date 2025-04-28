@@ -3,7 +3,7 @@ import { DiscussionSidebar } from "@/components/shared/discussion-sidebar";
 import Header from "@/components/shared/header";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { getSinglePromptSession } from "@/lib/actions/prompt.session.actions";
+import { getSinglePromptSessionStudentDiscussion } from "@/lib/actions/prompt.session.actions";
 import { PromptSession, Session } from "@/types";
 import { notFound } from "next/navigation";
 
@@ -23,7 +23,7 @@ export default async function StudentDashboardLayout({
 
     const { sessionId } = await params;
 
-    const promptSession = await getSinglePromptSession(sessionId) as unknown as PromptSession
+    const promptSession = await getSinglePromptSessionStudentDiscussion(sessionId) as unknown as PromptSession
 
     return (
         <SidebarProvider>

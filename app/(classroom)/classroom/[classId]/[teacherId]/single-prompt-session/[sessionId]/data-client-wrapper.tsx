@@ -1,5 +1,5 @@
 'use client'
-import { Response, Question } from "@/types";
+import { Response, Question, PromptSession } from "@/types";
 import { useState } from "react";
 import { StudentDataBarChart } from "./student-data-bar-chart";
 import QuestionAccordion from "./question-accordion";
@@ -11,6 +11,7 @@ export default function DataClientWrapper({
 }: {
     questions: Question[];
     responses: Response[];
+    sessionId: string;
 }) {
 
     const [currentQuestions, setCurrentQuestions] = useState<{ start: number, end: number }>({ start: 0, end: questions.length >= 4 ? 4 : questions.length })
@@ -33,8 +34,6 @@ export default function DataClientWrapper({
 
     const chevronStyles = 'hover:cursor-pointer hover:text-input border border-border rounded-sm hover:bg-primary hover:text-foreground';
 
-    
-
     return (
         <div className="mb-10">
             <div className="flex-start mt-5 gap-x-5 mb-3">
@@ -44,7 +43,7 @@ export default function DataClientWrapper({
                 </p>
                 <p className={chevronStyles} onClick={nextQuestionSet}>
                     < BiChevronRight size={25} />
-                </p> 
+                </p>
             </div>
             <div className="flex flex-col lg:flex-row lg:items-start ">
                 <div className="flex-1 w-[95%] mx-auto">

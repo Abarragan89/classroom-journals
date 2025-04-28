@@ -29,7 +29,7 @@ export default function QuestionAccordion({
     questions,
     responses,
     startRange,
-    endRange
+    endRange,
 }: {
     questions: Question[];
     responses: Response[];
@@ -79,53 +79,6 @@ export default function QuestionAccordion({
         setIsResponseViewModalOpen(true);
     }
 
-
-    // Update the UI when updating grades in the modal
-    function handleScoreUpdateUI(
-        responseId: string,
-        oldScore: number,
-        question: string,
-        newScore: number,
-    ) {
-        setCurrentResponseData((prev) => {
-            // Clone previous state to avoid direct mutation
-            const updated = { ...prev };
-
-            // Defensive check
-            if (!updated[question]) return prev
-
-            // Clone the score groups
-            const questionScores = { ...updated[question] };
-
-            // Remove the response from the old score group
-            questionScores[oldScore] = questionScores[oldScore].filter(
-                (resp) => resp.responseId !== responseId
-            );
-
-            // Find the response object to move
-            const allResponses = Object.values(prev[question]).flat();
-            const responseToMove = allResponses.find((resp) => resp.responseId === responseId);
-
-            // If found, push it to the new score group
-            if (responseToMove) {
-                if (!questionScores[newScore]) {
-                    questionScores[newScore] = [];
-                }
-                // prevents duplicates
-                const alreadyExists = questionScores[newScore].some(
-                    (resp) => resp.responseId === responseId
-                );
-                if (!alreadyExists) {
-                    questionScores[newScore].push(responseToMove);
-                }
-            }
-            return {
-                ...prev,
-                [question]: questionScores,
-            };
-        });
-    }
-
     const circleBtnStyles = "text-background rounded-lg w-full mx-1 h-8 flex-center opacity-70 hover:cursor-pointer hover:opacity-100";
 
     const scoreLabelMap: Record<number | string, { text: string; color: string }> = {
@@ -146,19 +99,6 @@ export default function QuestionAccordion({
             >
                 {/* show currrent question and the current score for responses */}
                 <p className="text-center font-bold w-[97%] mx-auto">{currentSubQuery.current.question}</p>
-
-                {/* {currentSubQuery.current.score === 1 ?
-                    <p className="font-bold text-success text-center mt-[-15px] text-sm">Correct Responses</p>
-                    :
-                    currentSubQuery.current.score === 0.5 ?
-                        <p className="font-bold text-warning text-center mt-[-15px] text-sm">Half Credit Responses</p>
-                        :
-                        currentSubQuery.current.score === 0 ?
-                            <p className="font-bold text-destructive text-center mt-[-15px] text-sm">Wrong Responses</p>
-                            :
-                            <p className="font-bold text-input text-center mt-[-15px] text-sm">Not Graded</p>
-
-                } */}
                 <p className={`font-bold ${label.color} text-center mt-[-15px] text-sm`}>
                     {label.text}
                 </p>
@@ -166,7 +106,7 @@ export default function QuestionAccordion({
                     {currentResponseData?.[currentSubQuery.current.question]?.[currentSubQuery.current.score]?.map((data, index) => (
                         <div key={index} className="bg-card px-5 mx-3 pt-3 pb-14 my-4 rounded-md text-sm relative">
                             <p
-                                className="">
+                            >
                                 {data.answer}
                             </p>
                             <span className="absolute bottom-1 right-5 text-input text-xs">-{data.studName}</span>
@@ -175,14 +115,6 @@ export default function QuestionAccordion({
                                     responseId={data.responseId}
                                     questionNumber={currentSubQuery.current.questionNumber}
                                     currentScore={currentSubQuery.current.score}
-                                    updateUIQuestionAccordion={(newScore) =>
-                                        handleScoreUpdateUI(
-                                            data.responseId,
-                                            currentSubQuery.current.score,
-                                            currentSubQuery.current.question,
-                                            newScore
-                                        )
-                                    }
                                 />
                             </div>
                         </div>

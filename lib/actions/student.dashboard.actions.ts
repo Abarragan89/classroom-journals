@@ -1,6 +1,7 @@
 "use server"
 import { prisma } from "@/db/prisma"
 import { decryptText } from "../utils"
+import { ResponseData } from "@/types"
 
 // Get and decrypt student username 
 export async function getDecyptedStudentUsername(studentId: string) {
@@ -95,7 +96,7 @@ export async function getFeaturedBlogs(classroomId: string) {
         const featuredBlogs = await prisma.response.findMany({
             where: {
                 studentId: { in: studentIdArray },
-                likeCount: { gt: 2 }
+                // likeCount: { gt: 2 }
             },
             select: {
                 id: true,
@@ -125,8 +126,40 @@ export async function getFeaturedBlogs(classroomId: string) {
             },
             take: 10,
         })
+        const today = new Date();
+        const decryptedBlogNames = featuredBlogs
+            .map((blog) => {
+                const responseData = blog?.response as unknown as ResponseData[];
+                const answer = responseData?.[0]?.answer || "";
+                const characterCount = answer.length;
 
-        return featuredBlogs;
+                // Exclude very short blogs
+                if (characterCount < 250) return;
+
+                // Convert submittedAt to Date
+                const submittedAtDate = new Date(blog.submittedAt);
+                const daysAgo = (today.getTime() - submittedAtDate.getTime()) / (1000 * 60 * 60 * 24); // days since submission
+
+                // Get interaction counts
+                const totalLikes = blog?.likeCount || 0;
+                const totalComments = blog?._count?.comments || 0;
+
+                // Example priority score: weight likes, comments, and recency
+                const priorityScore = totalLikes * 2 + totalComments * 1.5 - daysAgo;
+
+                return {
+                    ...blog,
+                    student: {
+                        username: decryptText(blog.student.username as string, blog.student.iv as string),
+                    },
+                    priorityScore,
+                };
+            })
+            .filter(Boolean) // remove nulls
+            .sort((a, b) => b!.priorityScore - a!.priorityScore); // descending
+
+
+        return decryptedBlogNames;
     } catch (error) {
         console.log('error ', error)
         // Improved error logging
