@@ -1,5 +1,3 @@
-"use client";
-import { useState } from "react";
 import GradingPanel from "@/components/grading-panel"
 import { Card, CardContent, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -12,19 +10,6 @@ export default function GradeResponseCard({
     questionsAndAnswers: ResponseData[],
     responseId: string,
 }) {
-
-    const [responseArr, setResponseArr] = useState<ResponseData[]>(questionsAndAnswers)
-
-    function updateScoreUIHandler(questionNumber: number, score: number) {
-        setResponseArr(prev => {
-            const updatedArr = [...prev]
-            updatedArr[questionNumber] = {
-                ...updatedArr[questionNumber],
-                score
-            }
-            return updatedArr
-        })
-    }
 
     function renderScoreUIText(score: number) {
         switch (score) {
@@ -50,7 +35,7 @@ export default function GradeResponseCard({
     return (
         <>
             <div className="mt-8 flex flex-wrap justify-start gap-10">
-                {responseArr?.length > 0 && responseArr.map((responseData: ResponseData, index: number) => (
+                {questionsAndAnswers?.length > 0 && questionsAndAnswers.map((responseData: ResponseData, index: number) => (
                     <Card className='w-full p-4 space-y-2 max-w-[500px] mx-auto' key={index}>
                         <div className="flex-between text-sm">
                             <p className='ml-2'> Marked As:
@@ -60,7 +45,6 @@ export default function GradeResponseCard({
                                 currentScore={responseData.score}
                                 responseId={responseId}
                                 questionNumber={index}
-                                updateScoreUIHandler={updateScoreUIHandler}
                             />
                         </div>
                         <Separator />
