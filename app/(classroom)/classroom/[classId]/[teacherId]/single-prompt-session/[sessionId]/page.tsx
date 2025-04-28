@@ -1,12 +1,7 @@
-import { responsePercentage } from "@/lib/utils";
-import { Question, Response, ResponseData, User } from "@/types";
+import { User } from "@/types";
 import { PromptSession } from "@/types";
 import { getAllStudents } from "@/lib/actions/classroom.actions";
 import EditPromptSessionPopUp from "@/components/modalBtns/edit-prompt-session-popup";
-import AssessmentTableData from "./assessment-table-data";
-import BlogTableData from "./blog-table-data";
-import DataClientWrapper from './data-client-wrapper';
-import ToggleGradesVisible from './single-response/toggle-grades-visible';
 import { getSinglePromptSessionTeacherDashboard } from '@/lib/actions/prompt.session.actions';
 import MainClientWrapper from "./main-client-wrapper";
 

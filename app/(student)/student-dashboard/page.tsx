@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import Header from "@/components/shared/header";
-import { PromptCategory, Response, ResponseData, Session, StudentRequest } from "@/types";
+import { PromptCategory, Response, Session, StudentRequest } from "@/types";
 import { notFound } from "next/navigation";
 import { PromptSession } from "@/types";
 import { getAllSessionsInClass } from "@/lib/actions/prompt.session.actions";

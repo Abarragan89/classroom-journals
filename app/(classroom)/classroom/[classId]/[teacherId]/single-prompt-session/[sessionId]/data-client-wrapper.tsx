@@ -1,5 +1,5 @@
 'use client'
-import { Response, Question, PromptSession } from "@/types";
+import { Response, Question } from "@/types";
 import { useState } from "react";
 import { StudentDataBarChart } from "./student-data-bar-chart";
 import QuestionAccordion from "./question-accordion";
