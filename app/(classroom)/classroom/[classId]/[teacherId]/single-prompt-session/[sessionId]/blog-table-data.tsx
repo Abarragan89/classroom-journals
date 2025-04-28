@@ -33,7 +33,7 @@ export default function BlogTableData({
         queryKey: ['getStudentBlogSessionData'],
         queryFn: async () => {
             const data = await getSinglePromptSessionTeacherDashboard(promptSessionId) as unknown as PromptSession
-            return data.responses
+            return data?.responses ? data.responses : []
         },
         initialData: promptSessionData
     })

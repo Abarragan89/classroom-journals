@@ -8,7 +8,6 @@ import TraitFilterCombobox from "../prompt-filter-options/trait-filter-combobox"
 import PaginationList from "../prompt-filter-options/pagination-list"
 import { useQuery } from "@tanstack/react-query"
 
-
 interface Props {
     categories: PromptCategory[];
     initialPrompts: PromptSession[];
@@ -27,15 +26,19 @@ export default function AssignmentListSection({
 }: Props) {
 
 
-    const { data } = useQuery({
-        queryKey: ['assignmentList'],
+    const { error } = useQuery({
+        queryKey: ['assignmentListDash'],
         queryFn: async () => {
             const classdata = await getAllSessionsInClass(classId) as unknown as { prompts: PromptSession[], totalCount: number }
-            setFetchedPrompts(data)
+            setFetchedPrompts(classdata?.prompts)
             return classdata.prompts
         },
-        initialData: initialPrompts
+        initialData: initialPrompts,
     })
+
+    if (error) {
+        throw new Error('Error finding assignment list')
+    }
 
     const [fetchedPrompts, setFetchedPrompts] = useState<PromptSession[]>(initialPrompts)
 

@@ -24,7 +24,7 @@ export default function MainClientWrapper({
 
     // This query will rerun when regrading
     const { data: promptSessionData } = useQuery({
-        queryKey: ['getSingleSessionData'],
+        queryKey: ['getSingleSessionData', sessionId],
         queryFn: () => getSinglePromptSessionTeacherDashboard(sessionId) as unknown as PromptSession,
         initialData: promptSession,
     })
