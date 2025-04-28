@@ -29,14 +29,6 @@ export default function BlogTableData({
 
 }) {
 
-    const { data: promptSession } = useQuery({
-        queryKey: ['getStudentBlogSessionData'],
-        queryFn: async () => {
-            const data = await getSinglePromptSessionTeacherDashboard(promptSessionId) as unknown as PromptSession
-            return data?.responses ? data.responses : []
-        },
-        initialData: promptSessionData
-    })
     return (
         <Table className="mt-3">
             <TableHeader>
@@ -52,7 +44,7 @@ export default function BlogTableData({
                 <TableRow>
                     <TableCell colSpan={6} className="text-center font-bold bg-background text-success">Submitted</TableCell>
                 </TableRow>
-                {(promptSession ?? []).sort((a, b) => {
+                {(promptSessionData ?? []).sort((a, b) => {
                     const lastNameA = a.student.name?.split(" ")[1] ?? "";
                     const lastNameB = b.student.name?.split(" ")[1] ?? "";
                     return lastNameA.localeCompare(lastNameB);
