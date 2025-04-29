@@ -11,6 +11,8 @@ import Link from 'next/link';
 import AssignmentSectionClient from './assignement-section.client';
 import { useQuery } from '@tanstack/react-query';
 import { getAllSessionsInClass } from '@/lib/actions/prompt.session.actions';
+import { getFeaturedBlogs, getStudentRequests } from '@/lib/actions/student.dashboard.actions';
+import { useState } from 'react';
 
 export default function StudentDashClientWrapper({
   allCategories,
@@ -30,12 +32,43 @@ export default function StudentDashClientWrapper({
   classroomId: string
 }) {
 
+
+  // Get the prompt sessions
   const { data: allPromptSessionData } = useQuery({
-    queryKey: ['getStudentDashPromptSession'],
+    queryKey: ['getStudentDashPromptSession', classroomId],
     queryFn: () => getAllSessionsInClass(classroomId) as unknown as { prompts: PromptSession[], totalCount: number },
     initialData: allPromptSessions
   })
 
+  // Get the student requests
+  const { data: studentRequestData } = useQuery({
+    queryKey: ['getStudentRequests', classroomId],
+    queryFn: async () => {
+      const requests = await getStudentRequests(studentId) as unknown as StudentRequest[]
+      setHasSentPromptRequest(requests?.some(req => req.type === 'prompt'))
+      setHasSentUsernameRequest(requests?.some(req => req.type === 'username'))
+      return requests
+    },
+    initialData: studentRequests
+  })
+
+  // Get the Featured Blogs
+  const { data: featuredBlogsData } = useQuery({
+    queryKey: ['getFeaturedBlogs', classroomId],
+    queryFn: () => getFeaturedBlogs(classroomId) as unknown as Response[],
+    initialData: featuredBlogs
+  })
+
+  const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'username'))
+  const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'prompt'))
+
+  function handleRequestUIHandler(type: 'prompt' | 'username') {
+    if (type === 'prompt') {
+      setHasSentPromptRequest(true)
+    } else if (type === 'username') {
+      setHasSentUsernameRequest(true)
+    }
+  }
 
   const promptSessionWithMetaData = allPromptSessionData?.prompts?.map(session => {
     // Determine if assignment is completed
@@ -58,15 +91,6 @@ export default function StudentDashClientWrapper({
   }) as unknown as PromptSession[]
 
   const lastestTaskToDo = promptSessionWithMetaData.find(session => !session.isCompleted)
-
-
-  // format and sort featured blogs for display
-
-
-  // This prevents mroe than one request at a time
-  const hasSentUsernameRequest = studentRequests?.some(req => req.type === 'username')
-  const hasSentPromptRequest = studentRequests?.some(req => req.type === 'prompt')
-
 
   return (
     <>
@@ -93,18 +117,20 @@ export default function StudentDashClientWrapper({
           <RequestNewUsername
             studentId={studentId}
             teacherId={teacherId}
+            handleUIChange={handleRequestUIHandler}
             hasSentUsernameRequest={hasSentUsernameRequest}
           />
           <SuggestPrompt
             studentId={studentId}
             teacherId={teacherId}
+            handleUIChange={handleRequestUIHandler}
             hasSentPromptRequest={hasSentPromptRequest}
           />
         </div>
         <h3 className="h3-bold ml-1">Featured Blogs</h3>
-        {featuredBlogs?.length > 0 ? (
+        {featuredBlogsData?.length > 0 ? (
           <Carousel>
-            {featuredBlogs.map((response) => (
+            {featuredBlogsData.map((response) => (
               <Link
                 key={response?.id}
                 href={`/discussion-board/${response?.promptSession?.id}/response/${response?.id}`}

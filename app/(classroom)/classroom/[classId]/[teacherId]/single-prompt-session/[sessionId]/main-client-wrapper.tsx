@@ -24,11 +24,8 @@ export default function MainClientWrapper({
 
 
     const { data: promptSessionData } = useQuery({
-        queryKey: ['getSingleSessionData'],
-        queryFn: async () => {
-            const newData = await getSinglePromptSessionTeacherDashboard(sessionId) as unknown as PromptSession
-            return newData
-        },
+        queryKey: ['getSingleSessionData', sessionId],
+        queryFn: () => getSinglePromptSessionTeacherDashboard(sessionId) as unknown as PromptSession,
         initialData: promptSession,
     })
 

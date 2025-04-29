@@ -2,9 +2,10 @@
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { approveUsernameChange, declineStudentRequest, approveNewPrompt } from '@/lib/actions/student-request';
+import { approveUsernameChange, declineStudentRequest, approveNewPrompt, getTeacherRequests, markAllRequestsAsViewed } from '@/lib/actions/student-request';
 import { StudentRequest } from '@/types';
 import { toast } from 'sonner';
+import { useQuery } from '@tanstack/react-query';
 
 export default function StudentRequestSection({
     teacherId,
@@ -13,6 +14,21 @@ export default function StudentRequestSection({
     teacherId: string;
     studentRequests: StudentRequest[]
 }) {
+
+    const { error } = useQuery({
+        queryKey: ['getStudentRequests', teacherId],
+        queryFn: async () => {
+            const studentRequestData = await getTeacherRequests(teacherId) as unknown as StudentRequest[];
+            await markAllRequestsAsViewed(teacherId)
+            setAllRequests(studentRequestData)
+            return studentRequestData
+        },
+        initialData: studentRequests
+    })
+
+    if (error) {
+        throw new Error('Error getting student requests')
+    }
 
     const [allRequests, setAllRequests] = useState<StudentRequest[]>(studentRequests)
 

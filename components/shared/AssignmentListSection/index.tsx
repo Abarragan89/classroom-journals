@@ -27,7 +27,7 @@ export default function AssignmentListSection({
 
 
     const { error } = useQuery({
-        queryKey: ['assignmentListDash'],
+        queryKey: ['assignmentListDash', classId],
         queryFn: async () => {
             const classdata = await getAllSessionsInClass(classId) as unknown as { prompts: PromptSession[], totalCount: number }
             setFetchedPrompts(classdata?.prompts)

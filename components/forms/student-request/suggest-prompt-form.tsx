@@ -13,12 +13,12 @@ export default function SuggestPromptForm({
     studentId,
     teacherId,
     closeModal,
-    requestSentUIHandler
+    handleUIChange
 }: {
     studentId: string,
     teacherId: string,
     closeModal: () => void,
-    requestSentUIHandler: () => void
+    handleUIChange: (type: "username" | "prompt") => void;
 }) {
     const form = useForm<z.infer<typeof requestNewPromptSchema>>({
         resolver: zodResolver(requestNewPromptSchema),
@@ -39,7 +39,7 @@ export default function SuggestPromptForm({
             closeModal();
             toast('Request has been sent!')
             // sets the request pending to true to block user from sending multiple requests
-            requestSentUIHandler()
+            handleUIChange('prompt')
         } catch (error) {
             console.log('error sending request for new user name ', error)
         } finally {

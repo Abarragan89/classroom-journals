@@ -11,7 +11,6 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { CiCircleQuestion } from "react-icons/ci";
-import { useQueryClient } from "@tanstack/react-query"
 
 export default function AssignPromptForm({
     promptId,
@@ -29,7 +28,6 @@ export default function AssignPromptForm({
     promptType: string
 }) {
     const [isPublic, setIsPublic] = useState<boolean>(true);
-    const queryClient = useQueryClient();
 
     const [state, action] = useActionState(assignPrompt, {
         success: false,
@@ -42,7 +40,6 @@ export default function AssignPromptForm({
         if (state.success && state.data) {
             toast('Jot Assigned!');
             updatePromptData(prev => prev.map(prompt => prompt.id === state.data.id ? state.data : prompt))
-            queryClient.invalidateQueries({ queryKey: ['assignmentListDash'] })
             closeModal();
         }
     }, [state.success]);

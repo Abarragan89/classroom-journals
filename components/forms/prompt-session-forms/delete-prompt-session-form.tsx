@@ -7,7 +7,6 @@ import { toast } from 'sonner'
 import { deletePromptSession } from "@/lib/actions/prompt.session.actions";
 import { useRouter } from "next/navigation"
 import { useParams } from "next/navigation"
-import { useQueryClient } from '@tanstack/react-query';
 
 export default function DeletePromptSessionForm({
     promptSessionId,
@@ -17,7 +16,6 @@ export default function DeletePromptSessionForm({
 
     const router = useRouter();
     const { classId, teacherId} = useParams();
-    const queryClient = useQueryClient()
 
     const [state, action] = useActionState(deletePromptSession, {
         success: false,
@@ -30,7 +28,6 @@ export default function DeletePromptSessionForm({
             toast('Assignment Deleted!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
-            queryClient.invalidateQueries({queryKey: ['assignmentListDash']})
             router.push(`/classroom/${classId}/${teacherId}`);
         }
     }, [state])

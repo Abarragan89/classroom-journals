@@ -8,7 +8,7 @@ export async function createStudentRequest(studentId: string, teacherId: string,
     try {
         // get student iv to encrypt the text
         let userText: string = ''
-        if (type = 'username') {
+        if (type === 'username') {
             // get student Iv to encrpyt the potential username
             const studentIv = await prisma.user.findUnique({
                 where: { id: studentId },
@@ -34,6 +34,7 @@ export async function createStudentRequest(studentId: string, teacherId: string,
                 status: 'pending'
             }
         })
+
         return { success: true, message: 'Request has been made' }
     } catch (error) {
         console.log('error ', error)
@@ -207,11 +208,10 @@ export async function approveNewPrompt(teacherId: string, requestText: string, r
     try {
         // build up the questions for the prompt Session
         const questions: Question[] = [];
-        questions.push({ question: 'Add a Cover Photo' })
-        questions.push({ question: 'Add a Blog Title' })
-
         // user only provides the initial question
         questions.push({ question: requestText });
+        questions.push({ question: 'Add a Blog Title' })
+        questions.push({ question: 'Add a Cover Photo' })
 
 
         await prisma.$transaction(async (prisma) => {

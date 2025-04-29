@@ -30,7 +30,7 @@ export default async function StudentNotifications() {
             <main className="wrapper">
                 <h1 className="h2-bold mt-2 line-clamp-1">Notifications</h1>
                 <NotificationSection
-                    studentId={studentId}
+                    userId={studentId}
                     notifications={userNotifications}
                 />
             </main>

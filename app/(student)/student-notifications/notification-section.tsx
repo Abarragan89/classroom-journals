@@ -1,25 +1,48 @@
 "use client";
 import { useState } from "react";
-import { clearAllNotifications } from "@/lib/actions/notifications.action";
+import {
+    clearAllNotifications,
+    getUserNotifications,
+    markAllNotificationsAsRead
+} from "@/lib/actions/notifications.action";
 import { UserNotification } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { formatDateLong } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
 
 
 export default function NotificationSection({
     notifications,
-    studentId,
+    userId,
 }: {
     notifications: UserNotification[],
-    studentId: string
+    userId: string
 }) {
-    const [notificationsState, setNotificaitonsState] = useState<UserNotification[]>(notifications)
 
+
+    const { error } = useQuery({
+        queryKey: ['getUserNotifications', userId],
+        queryFn: async () => {
+            const userNotifications = await getUserNotifications(userId) as unknown as UserNotification[]
+            setNotificaitonsState(userNotifications)
+            if (userNotifications.length > 0) await markAllNotificationsAsRead(userId)
+            return userNotifications;
+        },
+        initialData: notifications,
+    })   
+
+    if (error) {
+        throw new Error('Error getting user notifications')
+    }
+    
+
+    const [notificationsState, setNotificaitonsState] = useState<UserNotification[]>(notifications)
+    
     async function clearNotifications() {
         try {
-            clearAllNotifications(studentId)
+            clearAllNotifications(userId)
             setNotificaitonsState([])
         } catch (error) {
             console.log('error clearing all notifications', error)

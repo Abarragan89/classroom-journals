@@ -9,7 +9,7 @@ export default function UpgradeAccountBtn({
     teacherId: string
 }) {
     const { isPending, error, data } = useQuery({
-        queryKey: ['teacher-sub-status'],
+        queryKey: ['teacher-sub-status', teacherId],
         queryFn: () => determineSubscriptionAllowance(teacherId),
     })
 
