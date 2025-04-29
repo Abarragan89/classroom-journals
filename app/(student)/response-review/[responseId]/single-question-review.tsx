@@ -69,12 +69,6 @@ export default function SingleQuestionReview({
                         `}
                     >{gradePercentage}</span></p>
                 )}
-                {isSubmittable &&
-                    <Button
-                        onClick={() => updateResponsesHandler(allQuestions)}
-                        className="mr-0 block mt-5 mb-10"
-                    >Submit</Button>
-                }
                 {isPublic && (
                     <div className="flex-end w-full">
                         <Button asChild
@@ -115,6 +109,14 @@ export default function SingleQuestionReview({
                     </CardContent>
                 </Card>
             ))}
+            {isSubmittable &&
+                <div className="flex-center">
+                    <Button
+                        onClick={() => updateResponsesHandler(allQuestions)}
+                        className="mr-0 block mt-5 mb-10"
+                    >Submit</Button>
+                </div>
+            }
         </div>
     );
 }

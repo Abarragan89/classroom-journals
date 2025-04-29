@@ -1,9 +1,9 @@
 'use client'
 import { Bell, ClipboardPen, LayoutDashboard } from 'lucide-react'
 import Link from 'next/link'
-import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { getUnreadUserNotifications } from '@/lib/actions/notifications.action';
+import { useQuery } from '@tanstack/react-query';
 
 
 export default function StudentNavLinks({
@@ -13,17 +13,11 @@ export default function StudentNavLinks({
 }) {
     const pathname = usePathname().split('/')[1];
 
-    const [notificationCount, setNotificationCount] = useState<number>(0)
-
-    useEffect(() => {
-        async function getNotifications() {
-            if (studentId) {
-                const newNotificaitonCount = await getUnreadUserNotifications(studentId)
-                setNotificationCount(newNotificaitonCount as number)
-            }
-        }
-        getNotifications();
-    }, [studentId, pathname])
+    const { data: notificationCount} = useQuery({
+        queryKey: ['getStudentNotificationHeader', studentId],
+        queryFn: () => getUnreadUserNotifications(studentId) as unknown as number,
+        placeholderData: 0
+    })
 
     return (
         <>
@@ -42,7 +36,7 @@ export default function StudentNavLinks({
                 <ClipboardPen size={16} className='mr-1' />My Work
             </Link>
             <div className='relative'>
-                {notificationCount > 0 && (
+                {notificationCount !== undefined && notificationCount > 0 && (
                     <p className='opacity-80 text-center min-w-5 absolute top-[-10px] right-[-16px] py-[2px] rounded-full bg-destructive text-destructive-foreground text-xs'
                     >
                         {notificationCount}
