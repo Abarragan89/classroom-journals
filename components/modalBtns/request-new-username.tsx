@@ -18,14 +18,9 @@ export default function RequestNewUsername({
 }) {
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-    const [_isRequestPending, setIsRequestPending] = useState<boolean>(hasSentUsernameRequest)
 
     function closeModal() {
         setIsModalOpen(false)
-    }
-
-    function requestSentUIHandler() {
-        setIsRequestPending(true)
     }
 
     return (

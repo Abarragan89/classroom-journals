@@ -8,11 +8,9 @@ import {
     TableCell
 } from "@/components/ui/table"
 import { formatDateShort } from "@/lib/utils";
-import { PromptSession, Response, User } from "@/types";
+import { Response, User } from "@/types";
 import { ClipboardCheckIcon } from "lucide-react";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { getSinglePromptSessionTeacherDashboard } from "@/lib/actions/prompt.session.actions";
 
 export default function BlogTableData({
     promptSessionData,
