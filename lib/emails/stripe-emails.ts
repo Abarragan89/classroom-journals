@@ -12,15 +12,18 @@ export async function subscriptionConfirmation(customerDetails: CustomerDetails)
     // 1. Create the email template and send messages
     const messageId = `<${customerDetails.customerName}-${new Date().toISOString()}@unfinishedpages.com>`
     const message: MailDataRequired = {
-        from: process.env.SENDGRID_ACCOUNT_EMAIL as string,
+        from: {
+            email: process.env.SENDGRID_ACCOUNT_EMAIL as string,
+            name: 'JotterBlog'
+        },
         to: customerDetails.customerEmail as string,
-        subject: `JotterBlog Subscription Confirmation`,
+        subject: `Subscription Confirmation`,
         html: `
                 <h2 style="color: #333;">Hello ${customerDetails.customerName},</h2>
                 <p style="color: #555;">Thank you for subscribing to JotterBlog!</p>
                 <p style="color: #555;">Here is a link to your invoice:</p>
                 <p style="color: #555;">${customerDetails.hostedInvoice}></p>
-                <p style="color: #999; font-size: 12px; margin-top: 20px;">You can cancel your subscription at any time from you account.</p>
+                <p style="color: #555;">You can cancel your subscription at any time from you account.</p>
                 <p style="color: #555;">- JotterBlog</p>
             `,
         headers: {
@@ -39,9 +42,12 @@ export async function subscriptionPaymentFailed(customerDetails: CustomerDetails
     // 1. Create the email template and send messages
     const messageId = `<${customerDetails.customerName}-${new Date().toISOString()}@unfinishedpages.com>`
     const message: MailDataRequired = {
-        from: process.env.SENDGRID_ACCOUNT_EMAIL as string,
+        from: {
+            email: process.env.SENDGRID_ACCOUNT_EMAIL as string,
+            name: 'JotterBlog'
+        },
         to: customerDetails.customerEmail as string,
-        subject: `JotterBlog - Payment Unsuccessful`,
+        subject: `Payment Unsuccessful`,
         html: `
                 <h2 style="color: #333;">Hello ${customerDetails.customerName},</h2>
                 <p>Looks like there was an issue processing your payment.</p>
@@ -69,14 +75,17 @@ export async function subscriptionCancelled(customerDetails: CustomerDetails): P
     // 1. Create the email template and send messages
     const messageId = `<${customerDetails.customerName}-${new Date().toISOString()}@unfinishedpages.com>`
     const message: MailDataRequired = {
-        from: process.env.SENDGRID_ACCOUNT_EMAIL as string,
+        from: {
+            email: process.env.SENDGRID_ACCOUNT_EMAIL as string,
+            name: 'JotterBlog'
+        },
         to: customerDetails.customerEmail as string,
-        subject: `JotterBlog - Subscription Cancelled`,
+        subject: `Subscription Cancelled`,
         html: `
                 <h2 style="color: #333;">Hello ${customerDetails.customerName},</h2>
                 <p>Your subscription has been cancelled.</p>
                 <p>You and your students will still have access until your current subscripion expires, but you will not be charged any further.</p>
-                <p>We're sad to see you go, but you can resubscribe at any time. All of your data will be saved to the account associated with this email until the account is deleted.</p>
+                <p>We're sad to see you go, but you can resubscribe at any time.</p>
                 <p>Thank you,</p>
                 <p>-JotterBlog</p>
             `,

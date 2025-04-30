@@ -7,6 +7,7 @@ import { FaRegHeart } from "react-icons/fa6";
 import Link from "next/link";
 import { toggleResponseLike } from "@/lib/actions/response.action";
 import { formatDateMonthDayYear } from "@/lib/utils";
+import { PrinterIcon } from "lucide-react";
 
 interface Props {
     responseData: Response,
@@ -21,6 +22,7 @@ export default function BlogMetaDetails({
     const [isBlogLikedByUser, setIsBlogLikeByUser] = useState<boolean>(false);
     const [totalCommentLikes, setTotalCommentLikes] = useState<number>(responseData.likeCount);
     const [totalComments, setTotalComments] = useState<number>(responseData?._count?.comments ?? 0)
+
     useEffect(() => {
         if (studentId && responseData._count) {
             const isLiked = responseData?.likes?.some((like) => like.userId === studentId);
@@ -64,11 +66,17 @@ export default function BlogMetaDetails({
                 <p className="relative w-[43px] h-[40px] bg-primary text-primary-foreground rounded-full flex items-center justify-center">
                     {responseData?.student?.username?.charAt(0).toUpperCase()}
                 </p>
-                <div className="ml-2 w-full text-sm text-input">
-                    <p className="leading-5">{responseData.student.username}</p>
-                    <div className="flex justify-between w-full">
-                        <p className="leading-5">{formatDateMonthDayYear(responseData?.submittedAt)}</p>
+                <div className="ml-2 w-full text-sm text-input flex-between">
+                    <div>
+                        <p className="leading-5">{responseData.student.username}</p>
+                        <div className="flex justify-between w-full">
+                            <p className="leading-5">{formatDateMonthDayYear(responseData?.submittedAt)}</p>
+                        </div>
                     </div>
+                    <PrinterIcon 
+                        className="hover:cursor-pointer hover:text-ring"
+                        onClick={() => window.print()}
+                    />
                 </div>
             </section>
             {/* Comment LIke Bar */}
