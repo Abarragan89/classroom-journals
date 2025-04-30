@@ -5,7 +5,6 @@ import RequestNewUsername from '@/components/modalBtns/request-new-username';
 import SuggestPrompt from '@/components/modalBtns/suggest-prompt';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { formatDateShort } from '@/lib/utils';
 import { PromptCategory, PromptSession, StudentRequest, Response, ResponseData } from '@/types'
 import Link from 'next/link';
 import AssignmentSectionClient from './assignement-section.client';

@@ -103,7 +103,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             let isAllowedToAssign = false;
             if (isSubscribed) {
                 isAllowedToAssign = true;
-            } else if (!isSubscribed && promptSessionCount < 10) {
+            } else if (!isSubscribed && promptSessionCount < 5) {
                 isAllowedToAssign = true;
             }
 
@@ -426,7 +426,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
         let isAllowedToAssign = false;
         if (isSubscribed) {
             isAllowedToAssign = true;
-        } else if (!isSubscribed && promptSessionCount < 10) {
+        } else if (!isSubscribed && promptSessionCount < 5) {
             isAllowedToAssign = true;
         }
 
