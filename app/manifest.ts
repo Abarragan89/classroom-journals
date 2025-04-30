@@ -24,9 +24,9 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Next.js PWA',
-    short_name: 'NextPWA',
-    description: 'A Progressive Web App built with Next.js',
+    name: 'JotterBlog',
+    short_name: 'JotterBlog',
+    description: 'Student writing platform and assessment hub',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',
