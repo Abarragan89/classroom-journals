@@ -10,9 +10,6 @@ export default function PrintViewBlog({
 }: {
     response: Response,
 }) {
-    function toggleResponseLikeHandler(arg0: string) {
-        throw new Error('Function not implemented.')
-    }
 
     return (
         <div className='hidden print:block text-slate-400'>
