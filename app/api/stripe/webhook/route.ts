@@ -48,20 +48,17 @@ export async function POST(req: NextRequest) {
                 let accountType: string = '';
                 switch (amountPaid) {
                     // testing case of 1 dollar
-                    case 100:
-                        futureDate.setDate(futureDate.getDate() + 1);
-                        accountType = 'Premium(monthly)';
+                    // case 100:
+                    //     futureDate.setDate(futureDate.getDate() + 1);
+                    //     accountType = 'Premium(monthly)';
+                    //     break;
+                    case 4999:
+                        futureDate.setDate(futureDate.getDate() + 368);
+                        accountType = 'Standard';
                         break;
-                    case 400:
-                        futureDate.setDate(futureDate.getDate() + 33);
-                        accountType = 'Premium(monthly)';
-                        break;
-                    case 3500:
-                        futureDate.setDate(futureDate.getDate() + 33);
-                        accountType = 'Premium(monthly)';
-
-                        // futureDate.setDate(futureDate.getDate() + 368);
-                        // accountType = 'Premium(yearly)';
+                    case 9999:
+                        futureDate.setDate(futureDate.getDate() + 368);
+                        accountType = 'Premium';
                         break;
                 }
 

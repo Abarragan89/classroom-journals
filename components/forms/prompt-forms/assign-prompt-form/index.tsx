@@ -19,13 +19,15 @@ export default function AssignPromptForm({
     updatePromptData,
     classroomData,
     promptType,
+    teacherId
 }: {
     promptId: string,
     promptTitle: string,
     closeModal: () => void,
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>,
     classroomData: Classroom[],
-    promptType: string
+    promptType: string,
+    teacherId:string
 }) {
     const [isPublic, setIsPublic] = useState<boolean>(true);
 
@@ -87,6 +89,14 @@ export default function AssignPromptForm({
                     id="promptId"
                     name="promptId"
                     value={promptId}
+                    required
+                    readOnly
+                    hidden
+                />
+                <input
+                    id="teacherId"
+                    name="teacherId"
+                    value={teacherId}
                     required
                     readOnly
                     hidden

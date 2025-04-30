@@ -37,7 +37,7 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
 
         if (hasSubmitted) {
             return {
-                success: false,
+                success: true,
                 message: "You have already submitted your responses."
             };
         }

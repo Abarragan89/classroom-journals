@@ -12,12 +12,14 @@ export default function JotSearchArea({
     initialPrompts,
     classroomData,
     categories,
-    totalPromptCount
+    totalPromptCount,
+    teacherId,
 }: {
     initialPrompts: Prompt[],
     classroomData: Classroom[],
     categories: PromptCategory[],
-    totalPromptCount: number
+    totalPromptCount: number,
+    teacherId: string
 }) {
 
     const [fetchedPrompts, setFetchedPrompts] = useState<Prompt[]>(initialPrompts)
@@ -49,6 +51,7 @@ export default function JotSearchArea({
                         promptData={prompt}
                         updatePromptData={setFetchedPrompts}
                         classroomData={classroomData}
+                        teacherId={teacherId}
                     />
                 ))}
             </div>

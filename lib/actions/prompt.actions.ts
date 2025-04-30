@@ -13,34 +13,6 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             throw new Error('Missing teacher ID');
         }
 
-        // Check if teacher is allowed to add a new prompte
-        const currentTeacherClassData = await prisma.user.findUnique({
-            where: { id: teacherId },
-            select: {
-                subscriptionExpires: true,
-                _count: {
-                    select: {
-                        prompts: true,
-                    }
-                }
-            }
-        })
-
-        const today = new Date();
-        const { subscriptionExpires, _count } = currentTeacherClassData || {};
-        const isSubscribed = subscriptionExpires && subscriptionExpires > today;
-
-        let isAllowedToMakeNewClass = false;
-        const promptCount = _count?.prompts ?? 0
-        if (isSubscribed) {
-            isAllowedToMakeNewClass = true;
-        } else if (!isSubscribed && promptCount < 14) {
-            isAllowedToMakeNewClass = true;
-        }
-        if (!isAllowedToMakeNewClass) {
-            throw new Error('You have reached your Prompt limit. Upgrade your account or delete Prompts.')
-        }
-
         // make arrays for questions
         const questions: Question[] = [];
         const classesAssignTo: string[] = []
@@ -90,7 +62,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             return { success: false, message: "Missing a required field" };
         }
 
-        await prisma.$transaction(async (prisma) => {
+        const finalTransaction = await prisma.$transaction(async (prisma) => {
             // Create the Prompt
             const createdPrompt = await prisma.prompt.create({
                 data: {
@@ -101,6 +73,43 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                     questions: questions as unknown as Prisma.InputJsonValue,
                 },
             });
+
+            // This is where the prompt can be assigned if  the user is subscribed and has enough space
+            const promptSessionCount = await prisma.promptSession.count({
+                where: {
+                    prompt: {
+                        teacherId: teacherId, // the teacher's UUID
+                    },
+                },
+            });
+
+            // Check if teacher is allowed to add a new prompts
+            const currentTeacherClassData = await prisma.user.findUnique({
+                where: { id: teacherId },
+                select: {
+                    subscriptionExpires: true,
+                    _count: {
+                        select: {
+                            prompts: true,
+                        }
+                    }
+                }
+            })
+
+            const today = new Date();
+            const { subscriptionExpires } = currentTeacherClassData || {};
+            const isSubscribed = subscriptionExpires && subscriptionExpires > today;
+
+            let isAllowedToAssign = false;
+            if (isSubscribed) {
+                isAllowedToAssign = true;
+            } else if (!isSubscribed && promptSessionCount < 10) {
+                isAllowedToAssign = true;
+            }
+
+            if (!isAllowedToAssign && classesAssignTo.length > 0) {
+                return { success: false, message: 'Assignment limit reached. You can create prompts, but assigning them to classes requires account upgrade or deleting old assignments' }
+            }
 
             // Create PromptSessions if there are classes to assign
             if (classesAssignTo.length > 0) {
@@ -122,7 +131,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             }
             return { success: true, message: 'Prompt Created!' };
         })
-        return { success: true, message: 'Prompt Created!' };
+        return finalTransaction;
 
     } catch (error) {
         // Improved error logging
@@ -385,6 +394,46 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
 // Assign prompt
 export async function assignPrompt(prevState: unknown, formData: FormData) {
     try {
+
+        const teacherId = formData.get('teacherId') as string;
+
+        // This is where the prompt can be assigned if  the user is subscribed and has enough space
+        const promptSessionCount = await prisma.promptSession.count({
+            where: {
+                prompt: {
+                    teacherId: teacherId, // the teacher's UUID
+                },
+            },
+        });
+
+        // Check if teacher is allowed to add a new prompts
+        const currentTeacherClassData = await prisma.user.findUnique({
+            where: { id: teacherId },
+            select: {
+                subscriptionExpires: true,
+                _count: {
+                    select: {
+                        prompts: true,
+                    }
+                }
+            }
+        })
+
+        const today = new Date();
+        const { subscriptionExpires } = currentTeacherClassData || {};
+        const isSubscribed = subscriptionExpires && subscriptionExpires > today;
+
+        let isAllowedToAssign = false;
+        if (isSubscribed) {
+            isAllowedToAssign = true;
+        } else if (!isSubscribed && promptSessionCount < 10) {
+            isAllowedToAssign = true;
+        }
+
+        if (!isAllowedToAssign) {
+            return { success: false, message: 'Assignment limit reached. You can create prompts, but assigning them to classes requires account upgrade or deleting old assignments' }
+        }
+
 
         const promptId = formData.get('promptId') as string
         const classesAssignTo: string[] = []

@@ -272,28 +272,3 @@ export async function deleteTeacherAccount(teacherId: string) {
         return { success: false, message: 'Error adding student. Try again.' }
     }
 }
-
-
-// // get teacher account type 
-// export async function getTeacherAccountType(teacherId: string) {
-//     try {
-//         const accountData = await prisma.user.findUnique({
-//             where: { id: teacherId },
-//             select: {
-//                 accountType: true,
-//                 isCancelling: true,
-//                 subscriptionExpires: true,
-//             }
-//         })
-//         return accountData
-//     } catch (error) {
-//         // Improved error logging
-//         if (error instanceof Error) {
-//             console.log('Error creating new prompt:', error.message);
-//             console.error(error.stack); // Log stack trace for better debugging
-//         } else {
-//             console.log('Unexpected error:', error);
-//         }
-//         return { success: false, message: 'Error adding student. Try again.' }
-//     }
-// }

@@ -15,14 +15,12 @@ interface Props {
 export default function BlogCard({
     title,
     description,
-    date,
+    // date,
     likeCount,
     coverPhotoUrl,
     totalCommentCount,
     author
 }: Props) {
-
-    console.log('blog dat ', date)
 
     return (
         <div className="embla__slide-inner flex-col h-full w-[300px] border pb-2 rounded-sm hover:cursor-pointer relative">

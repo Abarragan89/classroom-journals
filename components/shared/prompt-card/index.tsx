@@ -14,11 +14,13 @@ import { PromptSession } from "@/types";
 export default function PromptCard({
     promptData,
     updatePromptData,
-    classroomData
+    classroomData,
+    teacherId
 }: {
     promptData: Prompt
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
-    classroomData: Classroom[]
+    classroomData: Classroom[],
+    teacherId: string
 }) {
 
     return (
@@ -28,6 +30,7 @@ export default function PromptCard({
                 promptData={promptData}
                 updatePromptData={updatePromptData}
                 classroomData={classroomData}
+                teacherId={teacherId}
             />
             {promptData.promptType === 'multi-question' ? (
                 <div className="w-full text-muted-foreground bg-muted rounded-xl rounded-b-none h-[70px]">

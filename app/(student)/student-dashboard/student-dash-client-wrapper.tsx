@@ -141,7 +141,7 @@ export default function StudentDashClientWrapper({
                   totalCommentCount={response?._count?.comments as number}
                   title={(response?.response as unknown as ResponseData[])?.[1].answer as string}
                   description={(response?.response as unknown as ResponseData[])?.[0].answer as string}
-                  date={formatDateShort(response?.submittedAt as Date)}
+                  // date={formatDateShort(response?.submittedAt as Date)}
                   coverPhotoUrl={(response?.response as unknown as ResponseData[])?.[2].answer as string}
                 />
               </Link>

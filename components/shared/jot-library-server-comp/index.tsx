@@ -38,6 +38,7 @@ export default async function PromptLibrary({
                     classroomData={allClassroomIds}
                     categories={allPromptCategories}
                     totalPromptCount={allPrompts.totalCount}
+                    teacherId={teacherId}
                 />
             </main>
         </>

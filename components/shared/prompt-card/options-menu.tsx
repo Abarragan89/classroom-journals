@@ -18,11 +18,13 @@ import Link from 'next/link';
 export default function OptionsMenu({
     promptData,
     updatePromptData,
-    classroomData
+    classroomData,
+    teacherId
 }: {
     promptData: Prompt,
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
     classroomData: Classroom[],
+    teacherId: string
 }) {
 
     const pathname = usePathname();
@@ -76,7 +78,9 @@ export default function OptionsMenu({
                     closeModal={closeModal}
                     updatePromptData={updatePromptData}
                     classroomData={classroomData}
+                    teacherId={teacherId}
                 />
+
             </ResponsiveDialog>
 
             {/* Options Menu */}
@@ -88,7 +92,7 @@ export default function OptionsMenu({
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuItem onClick={() => setIsAssignModalOpen(true)} className="hover:cursor-pointer rounded-md">
-                        <Pin />Assign
+                            <Pin />Assign
                         </DropdownMenuItem>
                         <Link href={`/prompt-form/?type=${promptData.promptType}&edit=${promptData.id}&callbackUrl=${pathname}`}>
                             <DropdownMenuItem className="hover:cursor-pointer rounded-md">

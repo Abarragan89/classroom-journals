@@ -51,17 +51,17 @@ export default function SubscriptionCard({
             return <Button disabled>Always Free</Button>
         }
         // Handle Monthly if subscribed or disabled
-        if (currentSubscription.includes('monthly') && subscriptionData.name.includes('monthly') && !isCancelling) {
+        if (currentSubscription.includes('Standard') && subscriptionData.name.includes('Standard') && !isCancelling) {
             return <Button variant='destructive' onClick={() => setIsModalOpen(true)}>Unsubscribe</Button>
 
-        } else if (currentSubscription.includes('monthly') && !subscriptionData.name.includes('monthly') && !isCancelling) {
+        } else if (currentSubscription.includes('Standard') && !subscriptionData.name.includes('Standard') && !isCancelling) {
             return <Button disabled>You must first Unsubscribe</Button>
         }
         // Handle Yearly if subscribed or disabled
-        if (currentSubscription.includes('yearly') && subscriptionData.name.includes('yearly') && !isCancelling) {
+        if (currentSubscription.includes('Premium') && subscriptionData.name.includes('Premium') && !isCancelling) {
             return <Button variant='destructive' onClick={() => setIsModalOpen(true)}>Unsubscribe</Button>
 
-        } else if (currentSubscription.includes('yearly') && !subscriptionData.name.includes('yearly') && !isCancelling) {
+        } else if (currentSubscription.includes('Premium') && !subscriptionData.name.includes('Premium') && !isCancelling) {
             return <Button disabled>You must first Unsubscribe</Button>
         }
 
@@ -104,15 +104,21 @@ export default function SubscriptionCard({
             <article className="flex-1 flex flex-col justify-between border border-secondary rounded-lg p-5 min-w-[250px] max-w-[350px] mx-auto">
                 <div>
                     <p className="font-bold">{subscriptionData.name}</p>
-                    <p className="text-[2.5rem] mt-5">${subscriptionData.price}<span className="text-[1rem]">/{subscriptionData.frequency}</span></p>
+                    {subscriptionData.price === 0 ? (
+                        <p className="text-[2.5rem] mt-5">${subscriptionData.price}<span className="text-[1rem]">/{subscriptionData.frequency}</span></p>
+                    ) : (
+                        <p className="text-[2.5rem] mt-5">${subscriptionData.price}<span className="text-[1.5rem]">.99</span><span className="text-[1rem]">/{subscriptionData.frequency}</span></p>
+                    )}
                     <p className="text-sm text-input">{subscriptionData.description}</p>
                 </div>
                 <Separator className="my-5" />
                 <ul>
-                    {subscriptionData.listItems.map((listItem) => (
+                    {subscriptionData.listItems.map((listItem, index) => (
                         <li
                             key={listItem}
-                            className="list-disc ml-5 my-3"
+                            className={`list-disc ml-5 my-3
+                            ${!subscriptionData.name.includes('Basic') && index === 0 ? 'font-bold underline' : ''}
+                                `}
                         >
                             {listItem}
                         </li>
