@@ -179,7 +179,7 @@ export default function PrivacyPolicy() {
                         If you have any questions about this policy, please reach out to us at:
                     </p>
                     <ul className="list-none mt-2">
-                        <li>Email: <a href="mailto:customer.support@jotterblog.com" className="text-blue-600 underline">customer.support@jotterblog.com</a></li>
+                        <li>Email: <a href="mailto:customer.team@jotterblog.com" className="text-blue-600 underline">customer.team@jotterblog.com</a></li>
                         <li>Website: <a href="https://jotterblog.com" className="text-blue-600 underline">https://jotterblog.com</a></li>
                     </ul>
                 </section>
