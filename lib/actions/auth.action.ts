@@ -9,6 +9,7 @@ export async function signInWithMagicLink(prevState: unknown, formData: FormData
         signInFormSchema.parse({
             email: formData.get('email')
         })
+        console.log('')
         await signIn("sendgrid", formData)
         return { success: true, message: 'Signed in successfully' }
     } catch (error) {
