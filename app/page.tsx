@@ -10,6 +10,7 @@ import BlogMetaDetails from "@/components/blog-meta-details";
 import { Separator } from "@/components/ui/separator";
 import CommentSection from "@/components/shared/comment-section";
 import WelcomeToJotterBlog from "@/components/welcome-to-jotterblog";
+import { CornerRightUp } from "lucide-react";
 
 export default async function page() {
 
@@ -60,9 +61,12 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
     return (
         <>
             <Header />
-            <main className="min-h-screen bg-background">
+            <main className="min-h-screen bg-background relative">
                 {/* Hero Section */}
-                <section className="py-20 px-6 text-center">
+                <section className="py-20 px-6 text-center relative max-w-7xl mx-auto">
+                    <div className='hidden sm:flex items-baseline absolute -top-4 right-[9rem] text-accent italic font-bold'>
+                        Try our different themes! <CornerRightUp />
+                    </div>
                     <WelcomeToJotterBlog />
                     <p className="text-lg sm:text-xl max-w-2xl mx-auto mb-6 text-primary">
                         A modern tool for teachers to manage student writing, automatically grade assessments with AI, and create sharable student blogs — all in one place.
