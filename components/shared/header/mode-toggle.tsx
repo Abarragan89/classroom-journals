@@ -34,7 +34,7 @@ export default function ModeToggle() {
                 return <ComputerIcon />
             case 'dark':
                 return <MoonIcon />
-            case 'silva':
+            case 'cupid':
                 return <Heart />
             case 'light':
                 return <SunIcon />
@@ -66,8 +66,8 @@ export default function ModeToggle() {
                     <DropdownMenuCheckboxItem checked={theme === 'light'} onClick={() => setTheme('light')}>
                         Light
                     </DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem checked={theme === 'silva'} onClick={() => setTheme('silva')}>
-                        Silva
+                    <DropdownMenuCheckboxItem checked={theme === 'cupid'} onClick={() => setTheme('cupid')}>
+                        Cupid
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'tuxedo'} onClick={() => setTheme('tuxedo')}>
                         Tuxedo

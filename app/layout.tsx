@@ -44,7 +44,7 @@ export default async function RootLayout({
           <ReactQueryDevtools initialIsOpen={true} />
           <ThemeProvider
             attribute='class'
-            themes={["light", "dark", "tech", "silva", "tuxedo", "avocado"]}
+            themes={["light", "dark", "tech", "cupid", "tuxedo", "avocado"]}
             defaultTheme="light"
             enableSystem
             disableTransitionOnChange
