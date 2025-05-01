@@ -30,7 +30,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     providers: [
         Sendgrid({
             apiKey: process.env.SENDGRID_API_KEY,
-            from: process.env.SENDGRID_ACCOUNT_EMAIL,
+            from: `"JotterBlog" <${process.env.SENDGRID_ACCOUNT_EMAIL}>`
         }),
         Google({
             clientId: process.env.AUTH_GOOGLE_ID!,
