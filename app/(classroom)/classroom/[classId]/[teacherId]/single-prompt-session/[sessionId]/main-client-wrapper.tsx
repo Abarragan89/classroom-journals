@@ -7,6 +7,7 @@ import { PromptSession, Question, User, Response, ResponseData } from '@/types'
 import { responsePercentage } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { getSinglePromptSessionTeacherDashboard } from '@/lib/actions/prompt.session.actions'
+import Link from 'next/link'
 
 export default function MainClientWrapper({
     promptSession,
@@ -73,6 +74,9 @@ export default function MainClientWrapper({
                     promptSessionId={promptSessionData?.id}
                     gradesVisibility={promptSessionData?.areGradesVisible}
                 />
+                <Link href={`/classroom/${classId}/${teacherId}/single-prompt-session/${sessionId}/review-assessment-questions`}>
+                    Review Questions
+                </Link>
             </div>
             {/* Bar chart */}
             {promptSessionData?.promptType === 'multi-question' &&

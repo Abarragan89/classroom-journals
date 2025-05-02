@@ -176,47 +176,37 @@
     --sidebar-ring: hsl(0, 0%, 80%);
   }
 
+
   .avocado {
     --background: hsl(97, 71%, 92%); /* Pale avocado green for main content */
     --foreground: hsl(100, 14%, 4%); /* Deep green text for contrast */
-
     --primary: hsl(100, 70%, 40%); /* Avocado green */
     --primary-foreground: hsl(0, 0%, 100%); /* White text */
-
     --secondary: hsl(30, 66%, 26%); /* Avocado pit brown */
     --secondary-foreground: hsl(46, 55%, 83%); /* Creamy highlight */
-
     --muted: hsl(99, 26%, 49%);
     --muted-foreground: hsl(100, 40%, 21%);
-
     --card: hsl(60, 69%, 88%);
     --card-foreground: hsl(100, 40%, 25%);
-
     --accent: hsl(55, 28%, 36%); /* Avocado yellow */
     --accent-foreground: hsl(105, 41%, 85%);
-
     --border: hsl(100, 20%, 80%);
     --input: hsl(100, 61%, 22%);
     --ring: hsl(34, 74%, 32%);
-
     --destructive: hsl(0, 70%, 50%);
     --destructive-foreground: hsl(0, 0%, 100%);
-
     --warning: hsl(45, 100%, 60%);
     --warning-foreground: hsl(0, 0%, 10%);
-
     --popover: hsl(100, 30%, 95%);
     --popover-foreground: hsl(100, 40%, 25%);
-
     --sidebar-background: hsl(69, 88%, 94%); /* WHITE sidebar now */
     --sidebar-foreground: hsl(100, 40%, 25%);
     --sidebar-primary: hsl(100, 60%, 35%);
     --sidebar-primary-foreground: hsl(0, 0%, 100%);
-    --sidebar-accent: hsl(30, 60%, 30%);
-    --sidebar-accent-foreground: hsl(45, 100%, 95%);
+    --sidebar-accent: hsl(72, 68%, 78%);
+    --sidebar-accent-foreground: hsl(106, 84%, 31%);
     --sidebar-border: hsl(100, 30%, 80%);
     --sidebar-ring: hsl(100, 70%, 50%);
-
     --success: hsl(140, 70%, 40%);
   }
 }

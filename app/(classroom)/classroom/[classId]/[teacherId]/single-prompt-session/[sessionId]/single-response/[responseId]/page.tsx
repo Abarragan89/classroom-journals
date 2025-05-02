@@ -89,7 +89,7 @@ export default async function SingleResponse({
                                     className="block mx-auto mb-5"
                                     priority
                                 />
-                                <p className="leading-[2rem] text-foreground text-[16px] sm:text-[19px]">{(response.response as unknown as ResponseData[])?.[0].answer}</p>
+                                <p className="leading-[2rem] text-foreground text-[16px] sm:text-[19px] whitespace-pre-line">{(response.response as unknown as ResponseData[])?.[0].answer}</p>
                                 <Separator className="my-5" />
                                 <CommentSection
                                     comments={response.comments as unknown as ResponseComment[]}

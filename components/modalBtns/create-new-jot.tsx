@@ -4,11 +4,7 @@ import { Button } from '../ui/button'
 import { Plus } from 'lucide-react'
 import JotTypeModal from '../modals/jot-type-modal'
 
-export default function CreateNewJot({
-    isAllowedToMakePrompt
-}: {
-    isAllowedToMakePrompt: boolean
-}) {
+export default function CreateNewJot() {
     const [isJotTypeModalOpen, setIsJotTypeModalOpen] = useState<boolean>(false)
 
     return (
@@ -17,7 +13,6 @@ export default function CreateNewJot({
                 closeModal={undefined}
                 setIsModalOpen={setIsJotTypeModalOpen}
                 isModalOpen={isJotTypeModalOpen}
-                isAllowedToMakePrompt={isAllowedToMakePrompt}
             />
             <Button onClick={() => setIsJotTypeModalOpen(true)} variant='secondary'>
                 <Plus />Create Jot

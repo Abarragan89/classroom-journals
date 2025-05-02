@@ -8,13 +8,10 @@ export default async function Jots({
 }) {
     const { teacherId } = await params
 
-    const { isAllowedToMakePrompt } = await determineSubscriptionAllowance(teacherId)
-
     return (
         <PromptLibrary
             teacherId={teacherId}
             inClassroom={true}
-            isAllowedToMakePrompt={isAllowedToMakePrompt as boolean}
         />
     )
 }

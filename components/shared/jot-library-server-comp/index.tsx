@@ -9,11 +9,9 @@ import { getAllPromptCategories } from "@/lib/actions/prompt.categories";
 export default async function PromptLibrary({
     teacherId,
     inClassroom,
-    isAllowedToMakePrompt
 }: {
     teacherId: string,
     inClassroom?: boolean,
-    isAllowedToMakePrompt: boolean
 }) {
 
     const allPrompts = await getAllTeacherPrompts(teacherId) as unknown as { prompts: Prompt[], totalCount: number }
@@ -29,7 +27,6 @@ export default async function PromptLibrary({
                     <h1 className={`${inClassroom ? 'text-2xl lg:text-3xl mt-2' : 'h1-bold'}`}>Jot Library</h1>
                     <div className="absolute top-[40px] right-0">
                         <CreateNewJot 
-                            isAllowedToMakePrompt={isAllowedToMakePrompt}
                         />
                     </div>
                 </div>
