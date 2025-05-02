@@ -101,8 +101,7 @@ export async function determineSubscriptionAllowance(teacherId: string) {
 
         // Determine if subscription is expired or not to render correc tUI
         const today = new Date();
-        const isSubscriptionActive = teacherInfo?.subscriptionExpires ? teacherInfo?.subscriptionExpires > today : false;
-        const totalClasses = teacherInfo?._count.classes;
+        const isSubscriptionActive = teacherInfo?.subscriptionExpires ? teacherInfo?.subscriptionExpires > today : false;        const totalClasses = teacherInfo?._count.classes;
 
         const isAllowedToMakeNewClass = isSubscriptionActive && (totalClasses ?? 0) < 6 || (totalClasses ?? 0) < 1;
 

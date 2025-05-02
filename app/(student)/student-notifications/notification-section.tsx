@@ -70,7 +70,7 @@ export default function NotificationSection({
                                         className="h-[80px] w-full text-xs flex flex-col justify-between items-center opacity-80 hover:opacity-100"
                                     >
                                         <p className="text-center">{notification.message}</p>
-                                        <p className="text-sm text-center italic font-bold text-foreground my-2">&ldquo;{notification?.commentText}&rdquo;</p>
+                                        <p className="text-sm text-center italic font-bold text-foreground my-2 line-clamp-2">&ldquo;{notification?.commentText}&rdquo;</p>
                                         <p>on: {formatDateLong(notification.createdAt)}</p>
                                     </Link>
 

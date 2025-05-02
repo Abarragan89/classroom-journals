@@ -1,11 +1,12 @@
 'use client'
-import { Circle, Edit, Trash2Icon, X } from 'lucide-react'
+import { Circle, Edit, Monitor, Trash2Icon, X } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import { useState } from 'react'
 import { ResponsiveDialog } from '../responsive-dialog'
 import DeletePromptSessionForm from '../forms/prompt-session-forms/delete-prompt-session-form'
 import ToggleBlogStatus from '../forms/prompt-session-forms/toggle-blog-status'
 import TogglePrivatePublicStatus from '../forms/prompt-session-forms/toggle-private-public-status'
+import Link from 'next/link'
 
 
 export default function EditPromptSessionPopUp({
@@ -78,21 +79,21 @@ export default function EditPromptSessionPopUp({
             </ResponsiveDialog>
 
             {/* Options Menu */}
-            <div className={`${promptSessionType === 'single-question' ? 'flex-between' : 'flex-end'} relative z-10`}>
-                {promptSessionType === 'single-question' && isSessionPublic ? (
-                    <p className='text-input'>Discussion:
-                        {
-                            promptSessionStatus === 'open' ? (
-                                <span className="text-success font-bold text-sm"> Open</span>
-                            ) : (
-                                <span className="text-destructive font-bold text-sm"> Closed</span>
-                            )
-                        }
-                    </p>
-                ) : (
-                    !isSessionPublic && promptSessionType !== 'multi-question' &&
-                    <p>Private</p>
-                )}
+            {promptSessionType === 'single-question' && isSessionPublic ? (
+                <p className='text-input text-left'>Discussion:
+                    {
+                        promptSessionStatus === 'open' ? (
+                            <span className="text-success font-bold text-sm"> Open</span>
+                        ) : (
+                            <span className="text-destructive font-bold text-sm"> Closed</span>
+                        )
+                    }
+                </p>
+            ) : (
+                !isSessionPublic && promptSessionType !== 'multi-question' &&
+                <p>Private</p>
+            )}
+            <div className={`flex-end ${promptSessionType === 'multi-question' ? 'w-full' : ''} relative z-10`}>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Edit size={22} className="hover:cursor-pointer hover:text-accent text-foreground" />
@@ -129,7 +130,18 @@ export default function EditPromptSessionPopUp({
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
+                <Link
+                    className="ml-6"
+                    // href={`/classroom/${classId}/${teacherId}/single-prompt-session/${sessionId}/review-assessment-questions`}
+                    href={`#`}
+                >
+                    <Monitor
+                        className='hover:cursor-pointer hover:text-accent'
+                    />
+                </Link>
             </div>
+
+
         </>
 
     )
