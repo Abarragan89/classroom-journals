@@ -1,7 +1,7 @@
 'use client';
 import { Button } from "@/components/ui/button"
 import { useState } from "react";
-import {  UserRoundPlus } from "lucide-react"
+import { UserRoundPlus } from "lucide-react"
 import AddStudentForm from "./add-student-form";
 import { ResponsiveDialog } from "@/components/responsive-dialog"
 import { GoogleClassroom, Session } from "@/types";
@@ -10,12 +10,10 @@ import AddGoogleStudents from "./add-google-students";
 export default function AddStudentBtn({
     classId,
     closeSubMenu,
-    variant = 'ghost',
     session
 }: {
     classId: string,
     closeSubMenu?: () => void,
-    variant?: "ghost" | "link" | "default" | "destructive" | "outline" | "secondary" | null | undefined,
     session: Session
 }) {
 

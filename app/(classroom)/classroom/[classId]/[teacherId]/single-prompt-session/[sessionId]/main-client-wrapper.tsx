@@ -7,8 +7,6 @@ import { PromptSession, Question, User, Response, ResponseData } from '@/types'
 import { responsePercentage } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { getSinglePromptSessionTeacherDashboard } from '@/lib/actions/prompt.session.actions'
-import Link from 'next/link'
-import { Monitor } from 'lucide-react'
 
 export default function MainClientWrapper({
     promptSession,

@@ -37,7 +37,7 @@ export default async function Roster({
       <div className="relative print:hidden">
         <div className="flex-between w-full absolute top-[40px] right-0">
           <PringLoginBtn />
-          <AddStudentBtn classId={classId} session={session} variant='secondary' />
+          <AddStudentBtn classId={classId} session={session} />
         </div>
         <h2 className="text-2xl lg:text-3xl mt-2">Class Roster</h2>
         <Table className="mt-14">
