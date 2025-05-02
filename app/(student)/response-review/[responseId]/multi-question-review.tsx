@@ -94,7 +94,7 @@ export default function MultiQuestionReview({
                 )}
             </div>
             {allQuestions?.map((responseData, index) => (
-                <Card className="w-full max-w-[650px] p-4 space-y-2  mx-auto mb-10 relative" key={index}>
+                <Card className="w-full max-w-[650px] p-4 space-y-2 shadow-sm shadow-accent  mx-auto mb-10 relative" key={index}>
                     <div className="flex-between left-5 right-5 absolute top-2 text-sm">
                         <p className='text-accent font-bold'>Question {index + 1}</p>
                         {showGrades && (

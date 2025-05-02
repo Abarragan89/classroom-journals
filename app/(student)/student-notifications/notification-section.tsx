@@ -16,11 +16,9 @@ import { useQueryClient } from "@tanstack/react-query";
 export default function NotificationSection({
     notifications,
     userId,
-    classId
 }: {
     notifications: UserNotification[],
     userId: string,
-    classId: string
 }) {
 
     const queryClient = useQueryClient()
@@ -48,7 +46,7 @@ export default function NotificationSection({
         try {
             clearAllNotifications(userId)
             queryClient.invalidateQueries({
-                queryKey: ['getTeacherNotifications', classId],
+                queryKey: ['getUserNotifications', userId],
             })
             setNotificaitonsState([])
         } catch (error) {

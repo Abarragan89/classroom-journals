@@ -6,6 +6,7 @@ import { approveUsernameChange, declineStudentRequest, approveNewPrompt, getTeac
 import { StudentRequest } from '@/types';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function StudentRequestSection({
     teacherId,
@@ -15,6 +16,8 @@ export default function StudentRequestSection({
     studentRequests: StudentRequest[]
 }) {
 
+
+    const queryClient = useQueryClient();
 
     const { error } = useQuery({
         queryKey: ['getStudentRequests', teacherId],
@@ -50,6 +53,9 @@ export default function StudentRequestSection({
                 setAllRequests(prev => prev.filter(request => request.id !== responseId))
                 toast('Prompt added to Library');
             }
+            queryClient.invalidateQueries({
+                queryKey: ['getStudentRequestCount', teacherId],
+            })
         } catch (error) {
             console.log('error approving student request', error)
         }
@@ -65,6 +71,9 @@ export default function StudentRequestSection({
             toast.error('Request Denied!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
+            queryClient.invalidateQueries({
+                queryKey: ['getStudentRequestCount', teacherId],
+            })
         } catch (error) {
             console.log('error denying username change ', error)
         }

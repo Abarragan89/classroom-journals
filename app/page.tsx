@@ -155,6 +155,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                     <BlogMetaDetails
                         responseData={response}
                         studentId="1"
+                        teacherView={false}
                     />
                     <Image
                         src={'https://unfinished-pages.s3.us-east-2.amazonaws.com/user-cm5bmuyhh0001zizwly9lp1td-profile-pic.jpeg-1735709463754'}

@@ -11,12 +11,14 @@ import { PrinterIcon } from "lucide-react";
 
 interface Props {
     responseData: Response,
-    studentId: string
+    studentId: string;
+    teacherView: boolean
 }
 
 export default function BlogMetaDetails({
     responseData,
-    studentId
+    studentId,
+    teacherView
 }: Props) {
 
     const [isBlogLikedByUser, setIsBlogLikeByUser] = useState<boolean>(false);
@@ -73,10 +75,12 @@ export default function BlogMetaDetails({
                             <p className="leading-5">{formatDateMonthDayYear(responseData?.submittedAt)}</p>
                         </div>
                     </div>
-                    <PrinterIcon 
-                        className="hover:cursor-pointer hover:text-ring"
-                        onClick={() => window.print()}
-                    />
+                    {teacherView && (
+                        <PrinterIcon
+                            className="hover:cursor-pointer hover:text-ring"
+                            onClick={() => window.print()}
+                        />
+                    )}
                 </div>
             </section>
             {/* Comment LIke Bar */}

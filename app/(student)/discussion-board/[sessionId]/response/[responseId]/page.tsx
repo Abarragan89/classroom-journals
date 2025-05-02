@@ -39,6 +39,7 @@ export default async function SingleResponse({
             <BlogMetaDetails
                 responseData={response}
                 studentId={studentId}
+                teacherView={false}
             />
 
             <Image

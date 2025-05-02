@@ -85,8 +85,8 @@ export default function SingleQuestionReview({
                 }
             </div>
             {allQuestions.slice(0, 2).map((responseData, index) => (
-                <Card className="w-full p-4 space-y-2 max-w-[700px] mx-auto mb-10" key={index}>
-                    <CardTitle className="p-2 leading-snug text-center">
+                <Card className="w-full p-4 space-y-2 max-w-[700px] mx-auto mb-10 border border-border" key={index}>
+                    <CardTitle className="p-2 leading-snug whitespace-pre-line">
                         {responseData.question}
                     </CardTitle>
                     <CardContent className="p-3 pt-0">
