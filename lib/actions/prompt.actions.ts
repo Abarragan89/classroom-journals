@@ -28,7 +28,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         });
 
         // Get title for prompt(only searchable text)
-        const title = formData.get("title")?.toString().trim() || "";
+        const title = formData.get("title") as string || "";
         const isPublic = formData.get('is-public');
         let categoryId = formData.get("prompt-category") as string | null;
 
@@ -169,7 +169,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
         });
 
         // Get & Validate Prompt Title
-        const title = formData.get("title")?.toString().trim() || "";
+        const title = formData.get("title") as string || "";
         const isPublic = formData.get('is-public');
         let categoryId = formData.get("prompt-category") as string | null;
 

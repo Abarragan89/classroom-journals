@@ -69,7 +69,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
 
                 if (existingPromptId) {
                     const promptData = await getSinglePrompt(existingPromptId) as unknown as Prompt
-                    setQuestions([{ name: "question1", label: "Prompt", value: promptData.title }])
+                    setQuestions([{ name: "question1", label: "Prompt", value: promptData.questions[0].question }])
                     setEditingPrompt(promptData)
                 }
                 setIsLoaded(true)
@@ -122,6 +122,8 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
             </div>
         )
     }
+
+    console.log('question ', questions)
 
     return (
         <form action={action} className="grid relative">

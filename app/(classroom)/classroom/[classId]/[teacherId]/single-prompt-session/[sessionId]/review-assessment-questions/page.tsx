@@ -23,9 +23,12 @@ export default async function ReviewAssessmentQuestions({
 
     return (
         <>
-            <h2 className="text-xl lg:text-2xl line-clamp-3 mt-5">{promptSession?.prompt?.title}</h2>
+            {promptSession?.promptType === 'multi-question' &&
+                <h2 className="text-xl lg:text-2xl line-clamp-3 mt-5">{promptSession?.prompt?.title}</h2>
+            }
             <ClientQuestionControls
                 questions={promptSession?.questions as unknown as Question[]}
+                sessionType={promptSession?.promptType}
             />
         </>
     )

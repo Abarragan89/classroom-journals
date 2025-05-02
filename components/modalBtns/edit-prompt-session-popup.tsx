@@ -14,11 +14,17 @@ export default function EditPromptSessionPopUp({
     promptSessionId,
     initialStatus,
     initialPublicStatus,
+    classId,
+    teacherId,
+    sessionId
 }: {
     promptSessionType: string,
     promptSessionId: string,
     initialStatus: string,
     initialPublicStatus: boolean,
+    classId: string,
+    teacherId: string,
+    sessionId: string
 }) {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
     const [isPublicModal, setisPublicModal] = useState<boolean>(false);
@@ -132,8 +138,7 @@ export default function EditPromptSessionPopUp({
                 </DropdownMenu>
                 <Link
                     className="ml-6"
-                    // href={`/classroom/${classId}/${teacherId}/single-prompt-session/${sessionId}/review-assessment-questions`}
-                    href={`#`}
+                    href={`/classroom/${classId}/${teacherId}/single-prompt-session/${sessionId}/review-assessment-questions`}
                 >
                     <Monitor
                         className='hover:cursor-pointer hover:text-accent'

@@ -36,7 +36,10 @@ export default async function SinglePromptSession({
                     promptSessionId={promptSession?.id}
                     initialStatus={promptSession?.status}
                     initialPublicStatus={promptSession?.isPublic}
-                /> 
+                    classId={classId}
+                    teacherId={teacherId}
+                    sessionId={sessionId}
+                />
 
             </div>
             <MainClientWrapper
