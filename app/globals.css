@@ -136,11 +136,11 @@
   }
 
   .tuxedo {
-    --background: hsl(0, 0%, 6%); /* deep black */
+    --background: hsl(0, 0%, 7%); /* deep black */
     --foreground: hsl(0, 0%, 95%); /* near-white text */
 
     --primary: hsl(0, 0%, 100%); /* pure white, like a tux shirt */
-    --primary-foreground: hsl(0, 0%, 10%); /* text on white */
+    --primary-foreground: hsl(0, 0%, 8%); /* text on white */
 
     --secondary: hsl(0, 0%, 20%); /* charcoal gray, soft contrast */
     --secondary-foreground: hsl(0, 0%, 95%); /* light text */
@@ -148,7 +148,7 @@
     --muted: hsl(0, 0%, 15%); /* very dark muted background */
     --muted-foreground: hsl(0, 0%, 60%); /* medium gray text */
 
-    --card: hsl(0, 0%, 10%); /* soft black for cards */
+    --card: hsl(0, 0%, 12%); /* soft black for cards */
     --card-foreground: hsl(0, 0%, 95%); /* light text for readability */
 
     --accent: hsl(0, 0%, 60%); /* silver-gray accent */
@@ -156,7 +156,7 @@
 
     --border: hsl(0, 0%, 25%); /* subtle borders */
     --input: hsl(0, 2%, 33%); /* input field background */
-    --ring: hsl(0, 0%, 39%); /* mid-gray ring */
+    --ring: hsl(0, 3%, 29%); /* mid-gray ring */
 
     --destructive: hsl(0, 80%, 50%); /* red for delete/warning */
     --destructive-foreground: hsl(0, 0%, 100%);

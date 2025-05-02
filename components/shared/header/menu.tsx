@@ -19,13 +19,11 @@ export default function Menu({
     session,
     studentId,
     isAllowedToMakeNewClass,
-    isAllowedToMakePrompt
 }: {
     teacherId?: string,
     studentId?: string,
     session: Session
     isAllowedToMakeNewClass: boolean;
-    isAllowedToMakePrompt: boolean
 }) {
 
     const renderTeacherHeader = () => (
