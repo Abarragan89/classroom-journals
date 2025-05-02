@@ -14,7 +14,7 @@ export default function CreateNewJot() {
                 setIsModalOpen={setIsJotTypeModalOpen}
                 isModalOpen={isJotTypeModalOpen}
             />
-            <Button onClick={() => setIsJotTypeModalOpen(true)} variant='secondary'>
+            <Button onClick={() => setIsJotTypeModalOpen(true)}>
                 <Plus />Create Jot
             </Button>
         </>

@@ -5,10 +5,10 @@
 @layer base {
   :root {
     --background: hsl(48, 24%, 88%);
-    --foreground: hsl(0, 0%, 20%);
+    --foreground: hsl(233, 91%, 17%);
     --primary: hsl(217, 58%, 17%);
     --primary-foreground: hsl(0, 3%, 94%);
-    --secondary: hsla(209, 38%, 21%, 0.959);
+    --secondary: hsl(223, 82%, 30%);
     --secondary-foreground: hsl(15, 40%, 98%);
     --muted: hsl(228, 19%, 35%);
     --muted-foreground: hsl(0, 1%, 60%);
@@ -18,7 +18,7 @@
     --accent-foreground: hsl(0, 0%, 100%);
     --border: hsla(192, 31%, 25%, 0.281);
     --input: hsl(70, 4%, 29%);
-    --ring: hsl(230, 76%, 19%);
+    --ring: hsl(208, 16%, 55%);
     --destructive: hsl(0, 79%, 41%);
     --warning: hsl(37, 95%, 45%);
     --warning-foreground: hsl(0, 0%, 7%);
@@ -46,7 +46,7 @@
     --muted-foreground: hsl(240, 3%, 31%);
     --card: hsl(220.9 39.3% 11%);
     --card-foreground: hsl(212.7 26.8% 83.9%);
-    --accent: hsl(217, 25%, 64%);
+    --accent: hsl(221, 61%, 64%);
     --accent-foreground: hsl(212, 89%, 7%);
     --border: hsl(212, 44%, 18%);
     --input: hsl(215.4 16.3% 46.9%);
@@ -73,7 +73,7 @@
     --foreground: hsl(210, 20%, 85%);
     --primary: hsl(107, 89%, 48%);
     --primary-foreground: hsl(0, 0%, 0%);
-    --secondary: hsl(73, 74%, 64%);
+    --secondary: hsl(73, 77%, 61%);
     --secondary-foreground: hsl(180, 3%, 6%);
     --muted: hsla(135, 37%, 27%, 0.833);
     --muted-foreground: hsl(0, 0%, 59%);
@@ -83,7 +83,8 @@
     --accent-foreground: hsl(0, 0%, 2%);
     --border: hsl(109, 66%, 17%);
     --input: hsl(210, 15%, 28%);
-    --ring: hsl(113, 71%, 25%);
+    /* --ring: hsl(113, 74%, 26%); */
+    --ring: hsl(127, 69%, 27%);
     --destructive: hsl(0, 100%, 50%);
     --warning: hsl(49, 84%, 48%);
     --warning-foreground: hsl(0, 0%, 7%);
@@ -102,6 +103,7 @@
   }
   .cupid {
     --background: hsl(330, 60%, 94%);
+    /* --foreground: hsl(0, 72%, 27%); */
     --foreground: hsl(0, 72%, 27%);
     --primary: hsl(340, 72%, 48%); /* Hot Pink */
     --primary-foreground: hsl(0, 0%, 100%);
@@ -111,11 +113,11 @@
     --muted-foreground: hsl(316, 70%, 26%);
     --card: hsl(340, 80%, 90%);
     --card-foreground: hsl(0, 0%, 15%);
-    --accent: hsl(320, 90%, 50%); /* Vibrant Pink */
+    --accent: hsl(320, 92%, 35%); /* Vibrant Pink */
     --accent-foreground: hsl(0, 0%, 100%);
     --border: hsl(330, 40%, 60%);
     --input: hsl(330, 30%, 50%);
-    --ring: hsl(340, 80%, 60%);
+    --ring: hsl(340, 77%, 70%);
     --destructive: hsl(0, 79%, 50%);
     --warning: hsl(37, 95%, 45%);
     --warning-foreground: hsl(0, 0%, 10%);
@@ -154,7 +156,7 @@
 
     --border: hsl(0, 0%, 25%); /* subtle borders */
     --input: hsl(0, 2%, 33%); /* input field background */
-    --ring: hsl(0, 0%, 50%); /* mid-gray ring */
+    --ring: hsl(0, 0%, 39%); /* mid-gray ring */
 
     --destructive: hsl(0, 80%, 50%); /* red for delete/warning */
     --destructive-foreground: hsl(0, 0%, 100%);
@@ -182,7 +184,7 @@
     --foreground: hsl(100, 14%, 4%); /* Deep green text for contrast */
     --primary: hsl(100, 70%, 40%); /* Avocado green */
     --primary-foreground: hsl(0, 0%, 100%); /* White text */
-    --secondary: hsl(30, 66%, 26%); /* Avocado pit brown */
+    --secondary: hsl(30, 61%, 37%); /* Avocado pit brown */
     --secondary-foreground: hsl(46, 55%, 83%); /* Creamy highlight */
     --muted: hsl(99, 26%, 49%);
     --muted-foreground: hsl(100, 40%, 21%);
@@ -192,7 +194,7 @@
     --accent-foreground: hsl(105, 41%, 85%);
     --border: hsl(100, 20%, 80%);
     --input: hsl(100, 61%, 22%);
-    --ring: hsl(34, 74%, 32%);
+    --ring: hsl(34, 63%, 64%);
     --destructive: hsl(0, 70%, 50%);
     --destructive-foreground: hsl(0, 0%, 100%);
     --warning: hsl(45, 100%, 60%);

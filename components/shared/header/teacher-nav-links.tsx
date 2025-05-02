@@ -10,15 +10,15 @@ export default function TeacherNavLinks() {
     return (
         <>
             <Link href={`/classes`} className={`
-            flex-center hover:cursor-pointer hover:text-primary text-sm
-            ${pathname === 'classes' || pathname === 'classroom' ? 'text-primary underline' : 'text-ring'}    
+            flex-center hover:cursor-pointer hover:text-accent text-sm
+            ${pathname === 'classes' || pathname === 'classroom' ? 'text-accent underline' : 'text-foreground'}    
             `}>
                 <GraduationCap size={21} className='mr-1' />Classes
             </Link>
 
             <Link href={`/prompt-library`} className={`
-            flex-center hover:cursor-pointer hover:text-primary text-sm
-            ${pathname.includes('prompt') ? 'text-primary underline' : 'text-ring'}  
+            flex-center hover:cursor-pointer hover:text-accent text-sm
+            ${pathname.includes('prompt') ? 'text-accent underline' : 'text-foreground'}  
             `}>
                 <PenTool size={16} className='mr-1' />My Jots
             </Link>

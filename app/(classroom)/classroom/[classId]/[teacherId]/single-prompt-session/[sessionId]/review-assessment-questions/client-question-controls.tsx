@@ -1,7 +1,6 @@
 "use client"
 import { useState } from 'react'
 import { Question } from '@/types'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi'
 

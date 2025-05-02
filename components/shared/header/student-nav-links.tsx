@@ -23,15 +23,15 @@ export default function StudentNavLinks({
         <>
 
             <Link href={`/student-dashboard`} className={`
-            flex-center hover:cursor-pointer hover:text-primary text-sm
-            ${pathname === 'student-dashboard' ? 'text-primary underline' : 'text-ring'}  
+            flex-center hover:cursor-pointer hover:text-foreground text-sm
+            ${pathname === 'student-dashboard' ? 'text-foreground underline' : 'text-accent'}  
             `}>
                 <LayoutDashboard size={16} className='mr-1' />Dashboard
             </Link>
 
             <Link href={`/my-work`} className={`
-                flex-center hover:cursor-pointer hover:text-primary min-w-[90px] text-sm
-                ${pathname === 'my-work' ? 'text-primary underline' : 'text-ring'}    
+                flex-center hover:cursor-pointer hover:text-foreground min-w-[90px] text-sm
+                ${pathname === 'my-work' ? 'text-foreground underline' : 'text-accent'}    
                 `}>
                 <ClipboardPen size={16} className='mr-1' />My Work
             </Link>
@@ -43,8 +43,8 @@ export default function StudentNavLinks({
                     </p>
                 )}
                 <Link href={`/student-notifications`} className={`
-                flex-center hover:cursor-pointer hover:text-primary text-sm
-                ${pathname === 'student-notifications' ? 'text-primary underline' : 'text-ring'}    
+                flex-center hover:cursor-pointer hover:text-foreground text-sm
+                ${pathname === 'student-notifications' ? 'text-foreground underline' : 'text-accent'}    
                 `}>
                     <Bell size={16} className='mr-1' />Notifications
                 </Link>

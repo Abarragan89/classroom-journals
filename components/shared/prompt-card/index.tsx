@@ -24,7 +24,7 @@ export default function PromptCard({
 }) {
 
     return (
-        <Card className="w-[100%] sm:w-[265px] relative">
+        <Card className="w-[100%] sm:w-[265px] relative shadow-sm shadow-accent">
             {/* Absolutely positions options menu, type, and class colors with responsive dialogs */}
             <OptionsMenu
                 promptData={promptData}
@@ -33,7 +33,7 @@ export default function PromptCard({
                 teacherId={teacherId}
             />
             {promptData.promptType === 'multi-question' ? (
-                <div className="w-full text-muted-foreground bg-muted rounded-xl rounded-b-none h-[70px]">
+                <div className="w-full text-foreground bg-ring rounded-xl rounded-b-none h-[70px]">
                     <div className="p-3">
                         <p className="text-xl font-bold">{promptData?.category?.name}</p>
                         <p className={`${promptData?.category?.name ? 'text-xs' : 'text-2xl font-bold'}`}>Assessment</p>
@@ -43,7 +43,7 @@ export default function PromptCard({
                     </div>
                 </div>
             ) : (
-                <div className="w-full text-muted-foreground bg-muted rounded-xl rounded-b-none h-[70px]">
+                <div className="w-full text-foreground bg-ring rounded-xl rounded-b-none h-[70px] ">
                     <div className="p-3">
                         <p className="text-xl font-bold">{promptData?.category?.name}</p>
                         <p className={`${promptData?.category?.name ? 'text-xs' : 'text-2xl font-bold'}`}>Blog</p>

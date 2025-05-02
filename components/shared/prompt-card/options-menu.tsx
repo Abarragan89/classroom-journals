@@ -88,7 +88,7 @@ export default function OptionsMenu({
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         {/* Ellipse */}
-                        <EllipsisVertical size={20} className="hover:cursor-pointer text-muted-foreground" />
+                        <EllipsisVertical size={20} className="hover:cursor-pointer text-foreground" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuItem onClick={() => setIsAssignModalOpen(true)} className="hover:cursor-pointer rounded-md">

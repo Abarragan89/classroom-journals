@@ -78,7 +78,7 @@ export default function EditPromptSessionPopUp({
             </ResponsiveDialog>
 
             {/* Options Menu */}
-            <div className={`${promptSessionType === 'single-question' ? 'flex-between' : 'flex-end'} relative mt-5 z-10`}>
+            <div className={`${promptSessionType === 'single-question' ? 'flex-between' : 'flex-end'} relative z-10`}>
                 {promptSessionType === 'single-question' && isSessionPublic ? (
                     <p className='text-input'>Discussion:
                         {
@@ -95,7 +95,7 @@ export default function EditPromptSessionPopUp({
                 )}
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Edit size={22} className="top-0 hover:cursor-pointer text-foreground" />
+                        <Edit size={22} className="hover:cursor-pointer hover:text-accent text-foreground" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className='mr-[2.5rem]'>
                         {promptSessionType === 'single-question' && isSessionPublic &&

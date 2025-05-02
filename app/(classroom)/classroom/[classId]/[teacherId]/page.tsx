@@ -22,7 +22,7 @@ export default async function Classroom({
 
     return (
         <div className="relative">
-            <Button asChild className="absolute top-[40px] right-0" variant='secondary'>
+            <Button asChild className="absolute top-[40px] right-0">
                 <Link href={`/classroom/${classId}/${teacherId}/jots`}>
                     <Plus />Assign
                 </Link>

@@ -77,11 +77,11 @@ export default function MainClientWrapper({
                         gradesVisibility={promptSessionData?.areGradesVisible}
                     />
                 </div>
-                <Link href={`/classroom/${classId}/${teacherId}/single-prompt-session/${sessionId}/review-assessment-questions`}>
+                {/* <Link href={`/classroom/${classId}/${teacherId}/single-prompt-session/${sessionId}/review-assessment-questions`}>
                     <Monitor 
                         className='hover:cursor-pointer hover:text-accent'
                     /> 
-                </Link>
+                </Link> */}
             </div>
             {/* Bar chart */}
             {promptSessionData?.promptType === 'multi-question' &&
