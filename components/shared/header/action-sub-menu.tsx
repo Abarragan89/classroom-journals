@@ -57,7 +57,6 @@ export default function ActionSubMenu({
                         isModalOpen={isNewJotModalOpen}
                         setIsModalOpen={setIsNewJotModalOpen}
                         closeModal={closeModal}
-                        isAllowedToMakePrompt={isAllowedToMakePrompt}
                     />
                     <Button className="w-full" variant='ghost' onClick={() => setIsNewJotModalOpen(true)}>
                         <Plus /> New Jot
