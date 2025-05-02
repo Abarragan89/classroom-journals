@@ -9,13 +9,11 @@ export default function Header({
     session,
     studentId,
     isAllowedToMakeNewClass,
-    isAllowedToMakePrompt
 }: {
     teacherId?: string;
     studentId?: string;
     session?: Session;
     isAllowedToMakeNewClass?: boolean;
-    isAllowedToMakePrompt?: boolean;
 
 }) {
 
@@ -41,7 +39,6 @@ export default function Header({
                     studentId={studentId}
                     session={session as Session}
                     isAllowedToMakeNewClass={isAllowedToMakeNewClass as boolean}
-                    isAllowedToMakePrompt={isAllowedToMakePrompt as boolean}
                 />
             </div>
         </header>

@@ -93,7 +93,6 @@ export async function determineSubscriptionAllowance(teacherId: string) {
                 subscriptionExpires: true,
                 _count: {
                     select: {
-                        prompts: true,
                         classes: true,
                     }
                 }
@@ -103,14 +102,11 @@ export async function determineSubscriptionAllowance(teacherId: string) {
         // Determine if subscription is expired or not to render correc tUI
         const today = new Date();
         const isSubscriptionActive = teacherInfo?.subscriptionExpires ? teacherInfo?.subscriptionExpires > today : false;
-        const totalPrompts = teacherInfo?._count.prompts;
         const totalClasses = teacherInfo?._count.classes;
-
-        const isAllowedToMakePrompt = isSubscriptionActive || (totalPrompts ?? 0) < 15;
 
         const isAllowedToMakeNewClass = isSubscriptionActive && (totalClasses ?? 0) < 6 || (totalClasses ?? 0) < 1;
 
-        return { isSubscriptionActive, isAllowedToMakeNewClass, isAllowedToMakePrompt }
+        return { isSubscriptionActive, isAllowedToMakeNewClass }
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {

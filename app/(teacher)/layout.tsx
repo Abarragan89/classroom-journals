@@ -17,7 +17,7 @@ export default async function TeacherLayout({
     const teacherId = session?.user?.id as string
     if (!teacherId) notFound()
 
-    const { isAllowedToMakeNewClass, isAllowedToMakePrompt } = await determineSubscriptionAllowance(teacherId)
+    const { isAllowedToMakeNewClass } = await determineSubscriptionAllowance(teacherId)
 
     return (
         <>
@@ -25,7 +25,6 @@ export default async function TeacherLayout({
                 teacherId={teacherId}
                 session={session as Session}
                 isAllowedToMakeNewClass={isAllowedToMakeNewClass as boolean}
-                isAllowedToMakePrompt={isAllowedToMakePrompt as boolean}
             />
             {children}
         </>

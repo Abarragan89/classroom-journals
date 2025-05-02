@@ -44,7 +44,7 @@ export default async function DashboardLayout({
     if (!isTeacherAuthorized) notFound()
 
 
-    const { isAllowedToMakeNewClass, isAllowedToMakePrompt } = await determineSubscriptionAllowance(teacherId)
+    const { isAllowedToMakeNewClass } = await determineSubscriptionAllowance(teacherId)
     // Get Class Data
     const classroomData = await getSingleClassroom(classId) as Class;
 
@@ -56,7 +56,6 @@ export default async function DashboardLayout({
                     teacherId={teacherId}
                     session={session as Session}
                     isAllowedToMakeNewClass={isAllowedToMakeNewClass as boolean}
-                    isAllowedToMakePrompt={isAllowedToMakePrompt as boolean}
                 />
                 <div className="flex h-10 shrink-0 items-center gap-2 border-b px-4 print:hidden">
                     <SidebarTrigger size='sm' className="-ml-1" />
