@@ -1,5 +1,4 @@
 import PromptLibrary from "@/components/shared/jot-library-server-comp"
-import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
 
 export default async function Jots({
     params
