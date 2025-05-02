@@ -103,7 +103,7 @@ export default function StudentRequestSection({
                     </Card>
                 ))
             ) : (
-                <p className="text-2xl">No Requests</p>
+                <p className="text-2xl italic text-center">No Requests</p>
             )}
         </section>
     )
