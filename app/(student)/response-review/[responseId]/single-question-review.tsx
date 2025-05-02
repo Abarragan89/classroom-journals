@@ -102,7 +102,7 @@ export default function SingleQuestionReview({
                                 />
                             </>
                         ) : (
-                            <div className='bg-background px-4  py-3 m-0 rounded-md'>
+                            <div className='bg-background px-4 py-3 m-0 rounded-md whitespace-pre-line'>
                                 <p>{responseData.answer}</p>
                             </div>
                         )}

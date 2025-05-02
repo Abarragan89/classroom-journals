@@ -101,7 +101,7 @@ export default function MultiQuestionReview({
                             displayGradeUI(responseData?.score)
                         )}
                     </div>
-                    <CardTitle className="p-4 leading-snug text-center font-normal italic">
+                    <CardTitle className="p-4 leading-snug text-center font-normal italic whitespace-pre-line">
                         <Separator className='mb-5' />
                         {responseData.question}
                     </CardTitle>
@@ -117,7 +117,7 @@ export default function MultiQuestionReview({
                                 />
                             </>
                         ) : (
-                            <div className='bg-background px-4  py-3 m-0 rounded-md'>
+                            <div className='bg-background px-4  py-3 m-0 rounded-md whitespace-pre-line'>
                                 <p>{responseData.answer}</p>
                             </div>
                         )}
