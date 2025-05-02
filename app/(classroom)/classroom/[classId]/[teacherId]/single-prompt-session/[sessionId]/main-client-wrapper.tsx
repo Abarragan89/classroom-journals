@@ -8,6 +8,7 @@ import { responsePercentage } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { getSinglePromptSessionTeacherDashboard } from '@/lib/actions/prompt.session.actions'
 import Link from 'next/link'
+import { Monitor } from 'lucide-react'
 
 export default function MainClientWrapper({
     promptSession,
@@ -68,14 +69,18 @@ export default function MainClientWrapper({
 
     return (
         <div>
-            <div className='space-y-4'>
-                <p className="text-input">Class Average: {classAverage}</p>
-                <ToggleGradesVisible
-                    promptSessionId={promptSessionData?.id}
-                    gradesVisibility={promptSessionData?.areGradesVisible}
-                />
+            <div className="flex">
+                <div className='space-y-4'>
+                    <p className="text-input">Class Average: {classAverage}</p>
+                    <ToggleGradesVisible
+                        promptSessionId={promptSessionData?.id}
+                        gradesVisibility={promptSessionData?.areGradesVisible}
+                    />
+                </div>
                 <Link href={`/classroom/${classId}/${teacherId}/single-prompt-session/${sessionId}/review-assessment-questions`}>
-                    Review Questions
+                    <Monitor 
+                        className='hover:cursor-pointer hover:text-accent'
+                    /> 
                 </Link>
             </div>
             {/* Bar chart */}

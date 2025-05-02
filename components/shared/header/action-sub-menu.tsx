@@ -16,12 +16,10 @@ export default function ActionSubMenu({
     teacherId,
     session,
     isAllowedToMakeNewClass,
-    isAllowedToMakePrompt
 }: {
     teacherId: string,
     session: Session,
     isAllowedToMakeNewClass: boolean;
-    isAllowedToMakePrompt: boolean;
 }) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)

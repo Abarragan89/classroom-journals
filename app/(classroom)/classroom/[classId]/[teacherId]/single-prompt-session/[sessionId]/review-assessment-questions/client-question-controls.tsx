@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Question } from '@/types'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
+import { BiChevronLeft, BiChevronRight } from 'react-icons/bi'
 
 export default function ClientQuestionControls({ questions }: { questions: Question[] }) {
 
@@ -32,22 +33,24 @@ export default function ClientQuestionControls({ questions }: { questions: Quest
 
     return (
         <>
-            <p className='whitespace-pre-line my-5'>{questions[currentQuestion].question}</p>
-            <div className="flex-between max-w-[100px] mx-auto my-5">
-                <ArrowLeft
+            <div className="flex-between max-w-[100px] my-3">
+                <BiChevronLeft
+                    size={25}
                     onClick={prevQuestion}
                     className={`
                         ${currentQuestion === 0 ? disabledArrowStyles : enabledArrowStyles}    
-                    `}
+                        `}
                 />
-                <ArrowRight
+                <BiChevronRight
+                    size={25}
                     onClick={nextQuestion}
                     className={`
                         ${currentQuestion === questions.length - 1 ? disabledArrowStyles : enabledArrowStyles}
                     `}
                 />
             </div>
-            <Separator className='my-5' />
+            <p className='whitespace-pre-line my-5 font-bold text-center'>{questions[currentQuestion].question}</p>
+            <Separator className='mt-5 mb-2' />
             <div className='flex-between mb-9 mx-auto max-w-[500px]'>
                 <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'blank' ? 'text-input' : ''}`} onClick={() => setSelectedPaper('blank')}>Blank</p>
                 <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'line1' ? 'text-input' : ''}`} onClick={() => setSelectedPaper('line1')}>Line 1</p>

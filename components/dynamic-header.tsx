@@ -11,7 +11,12 @@ export default function DynamicHeader({ classId, teacherId }: { classId: string;
     let breadCrumbRoute = '/classes';
     let breadCrumbText = 'Back to All Classes';
 
-    if (pathname.includes("single-response")) {
+    if (pathname.includes('review-assessment-questions')) {
+        const promptSessionId = params?.sessionId
+        breadCrumbRoute = `/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}`;
+        breadCrumbText = 'Back to Class Responses';
+        
+    } else if (pathname.includes("single-response")) {
         const promptSessionId = params?.sessionId
         breadCrumbRoute = `/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}`;
         breadCrumbText = 'Back to Class Responses';
