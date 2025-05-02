@@ -35,7 +35,6 @@ export default function Menu({
                 teacherId={teacherId as string}
                 session={session as Session}
                 isAllowedToMakeNewClass={isAllowedToMakeNewClass as boolean}
-                isAllowedToMakePrompt={isAllowedToMakePrompt as boolean}
             />
             <ModeToggle />
             <UserButton session={session as Session} />
