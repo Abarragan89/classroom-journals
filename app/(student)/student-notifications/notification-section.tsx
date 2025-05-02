@@ -11,15 +11,19 @@ import Link from "next/link";
 import { formatDateLong } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
-
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function NotificationSection({
     notifications,
     userId,
+    classId
 }: {
     notifications: UserNotification[],
-    userId: string
+    userId: string,
+    classId: string
 }) {
+
+    const queryClient = useQueryClient()
 
 
     const { error } = useQuery({
@@ -31,18 +35,21 @@ export default function NotificationSection({
             return userNotifications;
         },
         initialData: notifications,
-    })   
+    })
 
     if (error) {
         throw new Error('Error getting user notifications')
     }
-    
+
 
     const [notificationsState, setNotificaitonsState] = useState<UserNotification[]>(notifications)
-    
+
     async function clearNotifications() {
         try {
             clearAllNotifications(userId)
+            queryClient.invalidateQueries({
+                queryKey: ['getTeacherNotifications', classId],
+            })
             setNotificaitonsState([])
         } catch (error) {
             console.log('error clearing all notifications', error)

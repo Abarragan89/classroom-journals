@@ -4,8 +4,6 @@ import { getAllStudents } from "@/lib/actions/classroom.actions";
 import EditPromptSessionPopUp from "@/components/modalBtns/edit-prompt-session-popup";
 import { getSinglePromptSessionTeacherDashboard } from '@/lib/actions/prompt.session.actions';
 import MainClientWrapper from "./main-client-wrapper";
-import { Monitor } from "lucide-react";
-import Link from "next/link";
 
 export default async function SinglePromptSession({
     params

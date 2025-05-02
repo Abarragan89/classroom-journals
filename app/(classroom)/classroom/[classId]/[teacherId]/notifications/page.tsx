@@ -8,7 +8,7 @@ export default async function Notifications({
     params: Promise<{ classId: string, teacherId: string }>
 }) {
 
-    const { teacherId } = await params;
+    const { teacherId, classId } = await params;
 
     const teacherNotifications = await getUserNotifications(teacherId) as unknown as UserNotification[];
 
@@ -20,6 +20,7 @@ export default async function Notifications({
             <NotificationSection
                 userId={teacherId}
                 notifications={teacherNotifications}
+                classId={classId}
             />
         </div>
     )
