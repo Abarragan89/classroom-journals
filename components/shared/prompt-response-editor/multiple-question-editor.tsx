@@ -12,16 +12,17 @@ import { useFormStatus } from "react-dom";
 import { createStudentResponse } from "@/lib/actions/response.action";
 import { toast } from "sonner";
 import Editor from "./editor";
+import { Response } from "@/types";
 import MultiQuestionReview from "@/app/(student)/response-review/[responseId]/multi-question-review";
 
 export default function MultipleQuestionEditor({
     questions,
-    studentId,
+    studentResponse,
     isTeacherPremium,
     gradeLevel
 }: {
     questions: ResponseData[],
-    studentId: string,
+    studentResponse: Response
     isTeacherPremium: boolean,
     gradeLevel: string
 }) {
@@ -35,7 +36,8 @@ export default function MultipleQuestionEditor({
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
-    // const [isTyping, setIsTyping] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
+    const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     const [state, action] = useActionState(createStudentResponse, {
         success: false,
@@ -82,19 +84,19 @@ export default function MultipleQuestionEditor({
     }, [questionNumber, questions])
 
     // /** Auto-save logic */
-    // useEffect(() => {
-    //     if (!isTyping) return
-    //     if (isTyping) {
-    //         if (typingTimeoutRef.current) {
-    //             clearTimeout(typingTimeoutRef.current);
-    //         }
-    //         // typingTimeoutRef.current = setTimeout(() => {
-    //         //     handleSaveResponses();
-    //         //     setIsTyping(false);
-    //         // }, 5000); // Save after 5 seconds of inactivity
-    //     }
-    //     return () => clearTimeout(typingTimeoutRef.current);
-    // }, [journalText, isTyping]);
+    useEffect(() => {
+        if (!isTyping) return
+        if (isTyping) {
+            if (typingTimeoutRef.current) {
+                clearTimeout(typingTimeoutRef.current);
+            }
+            typingTimeoutRef.current = setTimeout(() => {
+                handleSaveResponses();
+                setIsTyping(false);
+            }, 5000); // Save after 5 seconds of inactivity
+        }
+        return () => clearTimeout(typingTimeoutRef.current);
+    }, [journalText, isTyping]);
 
 
     // Go into fullscreen mode
@@ -108,6 +110,8 @@ export default function MultipleQuestionEditor({
     }, []);
 
 
+
+
     async function handleSaveResponses() {
         try {
             setIsSaving(true);
@@ -118,7 +122,9 @@ export default function MultipleQuestionEditor({
             );
             // Save immediately after updating questions
             setAllQuestions(updatedQuestions as ResponseData[]);
+
             await saveFormData(updatedQuestions, promptSessionId);
+
             toast('Answers Saved')
         } catch (error) {
             console.log('error saving to indexed db', error);
@@ -126,6 +132,8 @@ export default function MultipleQuestionEditor({
             setIsSaving(false);
         }
     }
+
+
 
     async function saveAndContinue(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -185,9 +193,9 @@ export default function MultipleQuestionEditor({
                         {/* Final form to submit responses to database */}
                         <form action={action} className="mt-5">
                             <input
-                                id="studentId"
-                                name="studentId"
-                                value={studentId}
+                                id="responseId"
+                                name="responseId"
+                                value={studentResponse.id}
                                 hidden
                                 readOnly
                             />

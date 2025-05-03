@@ -6,13 +6,13 @@ import PromptSearchBar from "@/components/shared/prompt-filter-options/prompt-se
 import TraitFilterCombobox from "@/components/shared/prompt-filter-options/trait-filter-combobox"
 import PaginationList from "@/components/shared/prompt-filter-options/pagination-list"
 import StudentAssignmentListItem from "./student-assignment-list-item"
-import { PromptCategory } from "@/types"
+import { PromptCategory, Response } from "@/types"
 
 interface Props {
     initialPrompts: PromptSession[];
     promptCountTotal: number
     categories: PromptCategory[],
-    studentId:string
+    studentId: string
 
 }
 export default function AssignmentSectionClient({
@@ -34,11 +34,26 @@ export default function AssignmentSectionClient({
 
     async function getFilteredSearch(filterOptions: SearchOptions) {
         let filterPrompts = await getFilteredPromptSessions(filterOptions) as unknown as PromptSession[];
-        filterPrompts = filterPrompts.map(session => ({
-            ...session,
-            isCompleted: session?.responses?.some(response => response.studentId === studentId)
-        }))
-        setFetchedPrompts(filterPrompts)
+        const promptSessionWithMetaData = filterPrompts?.map(session => {
+            // Determine if assignment is completed
+            const isCompleted = session?.responses?.some(response => response.studentId === studentId)
+            let studentResponseId: string | null = null
+            let isSubmittable: boolean = false;
+            if (isCompleted) {
+                // if completed, get their responseID so we can navigate them to their '/review-reponse/${responseID}'
+                const { id, isSubmittable: isReturned } = session?.responses?.find(res => res.studentId === studentId) as unknown as Response
+                studentResponseId = id;
+                isSubmittable = isReturned
+            }
+            // Add fields is completed, and their specific responseID to the promptSession
+            return ({
+                ...session,
+                isCompleted,
+                isSubmittable,
+                studentResponseId,
+            })
+        }) as unknown as PromptSession[]
+        setFetchedPrompts(promptSessionWithMetaData)
     }
 
     const traitFilterOptions = [
@@ -60,8 +75,8 @@ export default function AssignmentSectionClient({
         value: category.id,
         label: category.name
     }))
-    
-    categoryFilterOptions.unshift({value: " ", label: "All Categories"})
+
+    categoryFilterOptions.unshift({ value: " ", label: "All Categories" })
 
 
     return (

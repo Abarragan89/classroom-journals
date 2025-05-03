@@ -213,12 +213,13 @@ model Response {
   promptSessionId String         @db.Uuid
   studentId       String         @db.Uuid
   response        Json //stores questions, answers, and score (score is Correct, 1/2 or wrong) Arrary of objects
-  submittedAt     DateTime // Nullable in case they haven't submitted yet
+  submittedAt     DateTime? // Nullable in case they haven't submitted yet
+  isComplete      Boolean        @default(false)
   likeCount       Int            @default(0)
   likes           ResponseLike[]
   notifications   Notification[]
   comments        Comment[]
-  isSubmittable   Boolean        @default(false)
+  isSubmittable   Boolean        @default(true)
   // Relationship
   promptSession   PromptSession  @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
   student         User           @relation(fields: [studentId], references: [id], onDelete: Cascade)

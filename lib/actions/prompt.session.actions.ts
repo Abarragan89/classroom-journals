@@ -165,6 +165,11 @@ export async function getSinglePromptSessionTeacherDashboard(sessionId: string) 
                 isPublic: true,
                 areGradesVisible: true,
                 responses: {
+                    where: {
+                        submittedAt: {
+                            not: null
+                        }
+                    },
                     select: {
                         id: true,
                         submittedAt: true,
@@ -318,23 +323,28 @@ export async function getFilteredPromptSessions(filterOptions: SearchOptions) {
                     : undefined
             },
             select: {
-                isPublic: true,
                 id: true,
-                updatedAt: true,
+                isPublic: true,
                 createdAt: true,
-                title: true,
                 promptType: true,
-                questions: true,
+                title: true,
                 status: true,
+                questions: true,
                 prompt: {
                     select: {
-                        category: true,
+                        category: {
+                            select: {
+                                name: true
+                            }
+                        }
                     }
                 },
                 responses: {
                     select: {
+                        id: true,
                         studentId: true,
                         isSubmittable: true,
+                        submittedAt: true
                     }
                 }
             },
