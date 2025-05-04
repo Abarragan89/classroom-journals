@@ -1,35 +1,33 @@
 "use client";
-import { Question } from "@/types";
+import { Question, ResponseData } from "@/types";
 import { useState, useRef, useEffect } from "react";
-import { useSearchParams, useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import SaveAndContinueBtns from "@/components/buttons/save-and-continue";
-import { saveFormData, getFormData, deleteRow } from "@/lib/indexed.db.actions";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowBigLeft } from "lucide-react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { createStudentResponse } from "@/lib/actions/response.action";
+import { updateStudentResponse, submitStudentResponse } from "@/lib/actions/response.action";
 import { toast } from "sonner";
 import Editor from "./editor";
 import Image from "next/image";
 import { imageUrls } from "@/data";
 
 export default function SinglePromptEditor({
-    questions,
-    studentId,
+    studentResponse,
+    responseId,
 }: {
-    questions: Question[],
-    studentId: string,
+    studentResponse: ResponseData[],
+    responseId: string
 }) {
 
     const searchParams = useSearchParams();
     const questionNumber: string | number = searchParams.get('q') as string;
-    const { promptSessionId } = useParams();
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);
     const [journalText, setJournalText] = useState<string>("");
-    const [allQuestions, setAllQuestions] = useState<Question[]>(questions);
+    const [studentResponseData, setStudentResponseData] = useState<ResponseData[]>(studentResponse);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
@@ -37,7 +35,7 @@ export default function SinglePromptEditor({
     const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
 
-    const [state, action] = useActionState(createStudentResponse, {
+    const [state, action] = useActionState(submitStudentResponse, {
         success: false,
         message: ''
     })
@@ -45,7 +43,6 @@ export default function SinglePromptEditor({
     useEffect(() => {
         if (state?.success) {
             async function finishResponseHandler() {
-                await deleteRow(promptSessionId as string)
                 router.push('/')
                 toast('Blog Posted!')
             }
@@ -53,31 +50,18 @@ export default function SinglePromptEditor({
         }
     }, [state.success])
 
-    async function getSavedText() {
-        try {
-            const savedResponse = await getFormData(promptSessionId as string)
-            const isThereResponse = savedResponse.questions[Number(questionNumber)].answer
-            if (!savedResponse || !isThereResponse) {
-                return
-            }
-            setAllQuestions(savedResponse.questions)
-            setJournalText(isThereResponse);
-        } catch (error) {
-            console.log('error getting saved data in indexedb', error)
-        }
-    }
+
     // This runs on every new page
     useEffect(() => {
-        if (questionNumber && questions) {
+        if (questionNumber && studentResponseData && questionNumber) {
             if (questionNumber === '2') {
                 setJournalText('https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png')
             }
-            setCurrentQuestion(questions[Number(questionNumber)]?.question)
-            getSavedText()
-            setJournalText('')
+            setCurrentQuestion(studentResponseData?.[Number(questionNumber)]?.question)
+            setJournalText(studentResponseData?.[Number(questionNumber)]?.answer ?? '')
             inputRef.current?.focus()
         }
-    }, [questionNumber, questions])
+    }, [questionNumber, studentResponseData, questionNumber])
 
     // /** Auto-save logic */
     useEffect(() => {
@@ -92,7 +76,7 @@ export default function SinglePromptEditor({
             }, 5000); // Save after 5 seconds of inactivity
         }
         return () => clearTimeout(typingTimeoutRef.current);
-    }, [journalText, isTyping, questionNumber]);
+    }, [journalText, isTyping]);
 
     // Go into fullscreen mode
     useEffect(() => {
@@ -105,16 +89,20 @@ export default function SinglePromptEditor({
     }, []);
 
     async function handleSaveResponses() {
+        if (isSaving) return
         try {
             setIsSaving(true);
-            const updatedQuestions = allQuestions.map((q, index) =>
+            const updatedAnswer = journalText.trim();
+            const updatedData = studentResponseData.map((q, index) =>
                 index === Number(questionNumber)
-                    ? { question: currentQuestion, answer: journalText.trim() }
+                    ? { ...q, answer: updatedAnswer }
                     : q
             );
-            // Save immediately after updating questions
-            setAllQuestions(updatedQuestions);
-            await saveFormData(updatedQuestions, promptSessionId);
+            // Update the state
+            setStudentResponseData(updatedData);
+            // Call the server action with the updated data
+            await updateStudentResponse(updatedData, responseId);
+            toast('Answers Saved')
         } catch (error) {
             console.log('error saving to indexed db', error);
         } finally {
@@ -124,7 +112,7 @@ export default function SinglePromptEditor({
 
     async function saveAndContinue(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        if (journalText.trim() === '') {
+        if (journalText === '') {
             toast.error('Add Some Text!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
@@ -133,11 +121,12 @@ export default function SinglePromptEditor({
         try {
             await handleSaveResponses();
             const nextQuestion = (Number(questionNumber) + 1).toString()
-            router.push(`/jot-response/${promptSessionId}?q=${nextQuestion}`)
-            inputRef.current?.focus()
+            router.push(`/jot-response/${responseId}?q=${nextQuestion}`)
             setJournalText('');
         } catch (error) {
             console.log('error saving and continuing ', error)
+        } finally {
+            inputRef?.current?.focus()
         }
     }
 
@@ -226,16 +215,9 @@ export default function SinglePromptEditor({
                                 <p className="text-center text-success mb-3 font-bold">Are you sure you want to submit all your answers?</p>
                                 <form action={action} className="mt-5">
                                     <input
-                                        id="studentId"
-                                        name="studentId"
-                                        value={studentId}
-                                        hidden
-                                        readOnly
-                                    />
-                                    <input
-                                        id="promptSessionId"
-                                        name="promptSessionId"
-                                        value={promptSessionId}
+                                        id="responseId"
+                                        name="responseId"
+                                        value={responseId}
                                         hidden
                                         readOnly
                                     />
@@ -256,7 +238,7 @@ export default function SinglePromptEditor({
                                     <input
                                         id="responseData"
                                         name="responseData"
-                                        value={JSON.stringify(allQuestions)}
+                                        value={JSON.stringify(studentResponseData)}
                                         hidden
                                         readOnly
                                     />

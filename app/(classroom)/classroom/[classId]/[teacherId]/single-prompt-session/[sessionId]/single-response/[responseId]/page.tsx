@@ -51,7 +51,7 @@ export default async function SingleResponse({
                     <div className="flex-between">
                         <HandleToggleReturnStateBtn
                             responseId={responseId}
-                            initialSubmitStatus={response?.isSubmittable}
+                            isCompleted={response?.completionStatus === 'COMPLETE'}
                         />
                         <DeleteResponseBtn
                             responseId={responseId}

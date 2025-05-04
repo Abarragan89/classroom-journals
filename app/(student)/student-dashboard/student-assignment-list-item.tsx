@@ -1,15 +1,15 @@
-import { PromptSession } from '@/types'
+import { Response } from '@/types'
 import { formatDateLong } from '@/lib/utils'
 import Link from 'next/link'
 
 export default function StudentAssignmentListItem({
-    jotData,
+    studentResponse,
 }: {
-    jotData: PromptSession,
+    studentResponse: Response,
 }) {
 
-    const type = jotData.promptType === 'multi-question' ? 'Assessment' : 'Blog';
-    const hrefLink = jotData?.studentResponseId ? `response-review/${jotData?.studentResponseId}` : `/jot-response/${jotData.id}?q=0`
+    const type = studentResponse?.promptSession?.promptType === 'multi-question' ? 'Assessment' : 'Blog';
+    const hrefLink = studentResponse?.completionStatus === 'COMPLETE' ? `response-review/${studentResponse?.id}` : `/jot-response/${studentResponse.id}?q=0`
 
     return (
         <div className='relative'>
@@ -22,18 +22,18 @@ export default function StudentAssignmentListItem({
                         {type.charAt(0)}
                     </p>
                     <div className="flex flex-col relative w-full">
-                        <p className='text-md font-bold line-clamp-1 text-foreground'>{jotData.title}</p>
+                        <p className='text-md font-bold line-clamp-1 text-foreground'>{studentResponse?.promptSession?.title}</p>
                         <div className="relative top-[11px] w-full flex-between text-xs text-input">
-                            <p>{formatDateLong(jotData.createdAt, 'short')}</p>
-                            {jotData.isCompleted ?
-                                jotData.isSubmittable ? (
-                                    <p>Status: <span className={`font-bold pr-2 text-warning`}>Returned</span></p>
-                                )
-                                    : (
-                                        <p>Status: <span className={`font-bold pr-2 text-success`}>Completed</span></p>
-                                    ) : (
-                                    <p>Status: <span className={`font-bold pr-2 text-destructive`}>Incomplete</span></p>
-                                )}
+                            <p>{formatDateLong(studentResponse?.createdAt, 'short')}</p>
+                            {studentResponse.completionStatus === 'COMPLETE' && (
+                                <p>Status: <span className={`font-bold pr-2 text-success`}>Completed</span></p>
+                            )}
+                            {studentResponse.completionStatus === 'INCOMPLETE' && (
+                                <p>Status: <span className={`font-bold pr-2 text-destructive`}>Incomplete</span></p>
+                            )}
+                            {studentResponse.completionStatus === 'RETURNED' && (
+                                <p>Status: <span className={`font-bold pr-2 text-warning`}>Returned</span></p>
+                            )}
                         </div>
                     </div>
                 </article>
@@ -43,14 +43,3 @@ export default function StudentAssignmentListItem({
         </div >
     )
 }
-// {jotData.promptType === 'multi-question' && (
-//     <QuestionPopup promptQuestions={jotData as unknown as Prompt} />
-// )}
-
-// : (
-//     jotData.isPublic && jotData.promptType === 'single-question' ? (
-//         <p>Status: <span className={`font-bold pr-2 ${jotData.status === 'open' ? 'text-success' : 'text-destructive'}`}>{jotData.status}</span></p>
-//     ) : (
-//         <p>Private</p>
-//     )
-//     )

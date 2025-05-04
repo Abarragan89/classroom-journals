@@ -3,27 +3,35 @@ import { Check, X } from "lucide-react"
 import { gradeStudentResponse } from "@/lib/actions/response.action";
 import { useState } from "react";
 import { BarLoader } from "react-spinners"
-import { useQueryClient } from '@tanstack/react-query';
-
 
 export default function GradingPanel({
     responseId,
     questionNumber,
+    updateScoreUIHandler,
     currentScore,
+    updateUIQuestionAccordion
 }: {
     responseId: string,
     questionNumber: number,
-    currentScore: number;
+    updateScoreUIHandler?: (questionNumber: number, score: number) => void;
+    updateUIQuestionAccordion?: (newScore: number) => void;
+    currentScore: number
 }) {
 
     const [isGrading, setIsGrading] = useState<boolean>(false)
-    const queryClient = useQueryClient();
+    const [currentScoreState, setCurrentScoreState] = useState<number>(currentScore)
 
     async function updateResponseScore(score: number) {
         try {
             setIsGrading(true)
             await gradeStudentResponse(responseId, questionNumber, score)
-            queryClient.invalidateQueries({ queryKey: ['getSingleSessionData'] });
+            if (updateScoreUIHandler) {
+                updateScoreUIHandler(questionNumber, score)
+            } else if (updateUIQuestionAccordion) {
+                updateUIQuestionAccordion(score)
+                return
+            }
+            setCurrentScoreState(score)
         } catch (error) {
             console.log('error updating score ', error)
         } finally {
@@ -49,10 +57,10 @@ export default function GradingPanel({
                     <X
                         onClick={() => { if (currentScore !== 0) updateResponseScore(0) }}
                         size={25}
-                        className={`bg-destructive ${iconStyles} ${currentScore === 0 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`} />
+                        className={`bg-destructive ${iconStyles} ${currentScoreState === 0 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`} />
                     <p
                         onClick={() => { if (currentScore !== 0.5) updateResponseScore(0.5) }}
-                        className={`bg-warning text-[.93rem] ${iconStyles} ${currentScore === 0.5 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`}
+                        className={`bg-warning text-[.93rem] ${iconStyles} ${currentScoreState === 0.5 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 50 50">
                             <text x="37%" y="30%" dominantBaseline="middle" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="26" fontWeight={600} fill="black">1</text>
@@ -61,12 +69,13 @@ export default function GradingPanel({
                         </svg>
                     </p>
                     <Check
-                        onClick={() => { if (currentScore !== 1) updateResponseScore(1) }}
+                        onClick={() => { if (currentScoreState !== 1) updateResponseScore(1) }}
                         size={25}
-                        className={`bg-success ${iconStyles} ${currentScore === 1 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`}
+                        className={`bg-success ${iconStyles} ${currentScoreState === 1 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`}
                     />
                 </>
             )}
         </div>
     )
 }
+

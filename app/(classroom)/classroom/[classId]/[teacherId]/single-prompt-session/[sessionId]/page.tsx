@@ -19,6 +19,7 @@ export default async function SinglePromptSession({
 
     const promptSession = await getSinglePromptSessionTeacherDashboard(sessionId) as unknown as PromptSession
 
+
     if (!promptSession) {
         return <div>Prompt session not found</div>;
     }

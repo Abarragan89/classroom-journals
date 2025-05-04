@@ -208,21 +208,29 @@ model PromptSession {
   updatedAt        DateTime   @updatedAt
 }
 
+enum ResponseStatus {
+  INCOMPLETE
+  COMPLETE
+  RETURNED
+}
+
 model Response {
-  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  promptSessionId String         @db.Uuid
-  studentId       String         @db.Uuid
-  response        Json //stores questions, answers, and score (score is Correct, 1/2 or wrong) Arrary of objects
-  submittedAt     DateTime? // Nullable in case they haven't submitted yet
-  isComplete      Boolean        @default(false)
-  likeCount       Int            @default(0)
-  likes           ResponseLike[]
-  notifications   Notification[]
-  comments        Comment[]
-  isSubmittable   Boolean        @default(true)
+  id               String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  promptSessionId  String         @db.Uuid
+  studentId        String         @db.Uuid
+  response         Json //stores questions, answers, and score (score is Correct, 1/2 or wrong) Arrary of objects
+  submittedAt      DateTime? // Nullable in case they haven't submitted yet
+  isComplete       Boolean        @default(false)
+  completionStatus ResponseStatus @default(INCOMPLETE)
+  likeCount        Int            @default(0)
+  likes            ResponseLike[]
+  notifications    Notification[]
+  comments         Comment[]
+  isSubmittable    Boolean        @default(true)
+  createdAt        DateTime       @default(now())
   // Relationship
-  promptSession   PromptSession  @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
-  student         User           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  promptSession    PromptSession  @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
+  student          User           @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }
 
 model StudentRequest {

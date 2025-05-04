@@ -53,7 +53,7 @@ export default async function ResponseReview({
                 {singleResponse?.promptSession?.promptType === 'multi-question' ?
                     <ReviewWrapper
                         allQuestions={singleResponse?.response as unknown as ResponseData[]}
-                        isSubmittable={singleResponse?.isSubmittable}
+                        isSubmittable={singleResponse?.completionStatus === 'INCOMPLETE' || singleResponse?.completionStatus === 'RETURNED'}
                         responseId={singleResponse?.id}
                         showGrades={singleResponse?.promptSession?.areGradesVisible}
                         isTeacherPremium={isSubscriptionActive as boolean}
@@ -62,7 +62,7 @@ export default async function ResponseReview({
                     :
                     <SingleQuestionReview
                         questions={singleResponse?.response as unknown as ResponseData[]}
-                        isSubmittable={singleResponse?.isSubmittable}
+                        isSubmittable={singleResponse?.completionStatus === 'INCOMPLETE' || singleResponse?.completionStatus === 'RETURNED'}
                         responseId={singleResponse?.id}
                         showGrades={singleResponse?.promptSession?.areGradesVisible as boolean}
                         isPublic={singleResponse?.promptSession?.isPublic as boolean}

@@ -2,7 +2,7 @@
 import { prisma } from "@/db/prisma";
 import { promptSchema } from "../validators";
 import { SearchOptions, Question, Prompt } from "@/types";
-import { Prisma } from '@prisma/client';
+import { Prisma, ResponseStatus } from '@prisma/client';
 
 // Create new prompt 
 export async function createNewPrompt(prevState: unknown, formData: FormData) {
@@ -128,6 +128,54 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                 await prisma.promptSession.createMany({
                     data: promptSessions,
                 });
+                // Now create the Responses for each student
+
+                // Step 1: Fetch the new PromptSessions that were just created
+                const createdPromptSessions = await prisma.promptSession.findMany({
+                    where: {
+                        promptId: createdPrompt.id,
+                        classId: {
+                            in: classesAssignTo,
+                        },
+                    },
+                    select: {
+                        id: true,
+                        classId: true,
+                    },
+                });
+
+
+                const classUsers = await prisma.classUser.findMany({
+                    where: {
+                        classId: {
+                            in: classesAssignTo
+                        },
+                        role: 'student'
+                    },
+                    select: {
+                        userId: true,
+                        classId: true,
+                    }
+                })
+
+                // Step 3: Map each student to the correct PromptSession and build responses
+                const responsesToCreate = classUsers.flatMap(classUser => {
+                    return createdPromptSessions
+                        .filter(session => session.classId === classUser.classId)
+                        .map(session => ({
+                            studentId: classUser.userId,
+                            promptSessionId: session.id,
+                            completionStatus: ResponseStatus.INCOMPLETE,
+                            response: createdPrompt.questions as Prisma.InputJsonValue, // or an empty object if you prefer
+                        }));
+                });
+
+                // Step 4: Create all the responses
+                if (responsesToCreate.length > 0) {
+                    await prisma.response.createMany({
+                        data: responsesToCreate,
+                    });
+                }
             }
             return { success: true, message: 'Prompt Created!' };
         })
@@ -391,127 +439,160 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
     }
 }
 
-// Assign prompt
+
 export async function assignPrompt(prevState: unknown, formData: FormData) {
     try {
-
         const teacherId = formData.get('teacherId') as string;
 
-        // This is where the prompt can be assigned if  the user is subscribed and has enough space
+        // Check subscription and limits
         const promptSessionCount = await prisma.promptSession.count({
             where: {
                 prompt: {
-                    teacherId: teacherId, // the teacher's UUID
+                    teacherId,
                 },
             },
         });
 
-        // Check if teacher is allowed to add a new prompts
         const currentTeacherClassData = await prisma.user.findUnique({
             where: { id: teacherId },
             select: {
                 subscriptionExpires: true,
-                _count: {
-                    select: {
-                        prompts: true,
-                    }
-                }
+                _count: { select: { prompts: true } }
             }
-        })
+        });
 
         const today = new Date();
         const { subscriptionExpires } = currentTeacherClassData || {};
         const isSubscribed = subscriptionExpires && subscriptionExpires > today;
 
-        let isAllowedToAssign = false;
-        if (isSubscribed) {
-            isAllowedToAssign = true;
-        } else if (!isSubscribed && promptSessionCount < 5) {
-            isAllowedToAssign = true;
-        }
+        const isAllowedToAssign = isSubscribed || (!isSubscribed && promptSessionCount < 5);
 
         if (!isAllowedToAssign) {
-            return { success: false, message: 'Assignment limit reached. You can create prompts, but assigning them to classes requires account upgrade or deleting old assignments' }
+            return { success: false, message: 'Assignment limit reached. You can create prompts, but assigning them to classes requires account upgrade or deleting old assignments' };
         }
 
+        const promptId = formData.get('promptId') as string;
+        const isPublic = formData.get('is-public');
+        const classesAssignTo: string[] = [];
 
-        const promptId = formData.get('promptId') as string
-        const classesAssignTo: string[] = []
-
-        // Extract all questions from formData & dump into questions[]
         formData.forEach((value, key) => {
             if (key.startsWith("classroom")) {
-                classesAssignTo.push(value as string)
+                classesAssignTo.push(value as string);
             }
         });
 
         if (classesAssignTo.length < 1) {
-            return { success: false, message: 'At least one class needs to be selected.' }
+            return { success: false, message: 'At least one class needs to be selected.' };
         }
-        const isPublic = formData.get('is-public');
-        // find the prompt
+
         const currentPrompt = await prisma.prompt.findUnique({
             where: { id: promptId },
             select: {
-                category: true,
                 id: true,
                 title: true,
                 questions: true,
-                promptType: true
+                promptType: true,
+                category: true
             }
-        })
+        });
 
         if (!currentPrompt) {
-            return { success: false, message: 'No prompt exists with that ID' }
+            return { success: false, message: 'No prompt exists with that ID' };
         }
 
-        // Create PromptSessions if there are classes to assign
-        if (classesAssignTo.length > 0) {
+        // Execute everything in a transaction
+        const result = await prisma.$transaction(async (tx) => {
+            // 1. Create prompt sessions
             const promptSessions = classesAssignTo.map((classId) => ({
                 promptId: currentPrompt.id,
                 title: currentPrompt.title,
                 promptType: currentPrompt.promptType,
-                isPublic: isPublic === 'true' ? true : false,
+                isPublic: isPublic === 'true',
                 questions: currentPrompt.questions as Prisma.InputJsonValue,
                 assignedAt: new Date(),
-                classId: classId,
+                classId,
                 status: 'open',
             }));
 
-            // Create all the PromptSessions in one transaction
-            await prisma.promptSession.createMany({
+            await tx.promptSession.createMany({
                 data: promptSessions,
             });
-        }
-        // Fetch the updated prompt including its promptSessions
-        const updatedPrompt = await prisma.prompt.findUnique({
-            where: { id: promptId },
-            include: {
-                category: true,
-                promptSession: {
-                    select: {
-                        assignedAt: true,
-                        class: {
-                            select: {
-                                id: true,
-                                name: true
-                            },
-                        }
-                    },
-                }
-            },
+
+            // 2. Fetch the new prompt sessions
+            const createdPromptSessions = await tx.promptSession.findMany({
+                where: {
+                    promptId: currentPrompt.id,
+                    classId: { in: classesAssignTo },
+                },
+                select: {
+                    id: true,
+                    classId: true,
+                },
+            });
+
+            // 3. Fetch class users
+            const classUsers = await tx.classUser.findMany({
+                where: {
+                    classId: { in: classesAssignTo },
+                    role: 'student',
+                },
+                select: {
+                    userId: true,
+                    classId: true,
+                    user: { select: { id: true } }
+                },
+            });
+
+            // 4. Generate responses for each student in each session
+            const responsesToCreate = classUsers.flatMap((classUser) => {
+                return createdPromptSessions
+                    .filter((session) => session.classId === classUser.classId)
+                    .map((session) => ({
+                        studentId: classUser.user.id,
+                        promptSessionId: session.id,
+                        completionStatus: ResponseStatus.INCOMPLETE,
+                        response: currentPrompt.questions as Prisma.InputJsonValue,
+                    }));
+            });
+
+            if (responsesToCreate.length > 0) {
+                await tx.response.createMany({
+                    data: responsesToCreate,
+                });
+            }
+
+            // 5. Return the updated prompt
+            return await tx.prompt.findUnique({
+                where: { id: promptId },
+                include: {
+                    category: true,
+                    promptSession: {
+                        select: {
+                            assignedAt: true,
+                            class: {
+                                select: {
+                                    id: true,
+                                    name: true
+                                },
+                            }
+                        },
+                    }
+                },
+            });
         });
-        return { success: true, message: 'Prompt Updated!', data: updatedPrompt as unknown as Prompt };
+
+        return { success: true, message: 'Prompt Assigned and Responses Created!', data: result as unknown as Prompt };
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.log("Error assigning prompt:", error.message);
             console.error(error.stack);
         } else {
             console.log("Unexpected error:", error);
         }
-        return { success: false, message: "Error fetching prompts. Try again." };
+        return { success: false, message: "Error assigning prompt. Try again." };
     }
 }
+
 
 // Delete Prompt
 export async function deletePrompt(prevState: unknown, formData: FormData) {

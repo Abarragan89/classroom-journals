@@ -10,22 +10,18 @@ import { useQuery } from "@tanstack/react-query";
 
 
 export default function MyWorkClientWrapper({
-    allPromptSessions,
     studentResponses,
     studentId,
-    classroomId
 }: {
-    allPromptSessions: { prompts: PromptSession[], totalCount: number };
     studentResponses: Response[],
     studentId: string,
-    classroomId: string
 }) {
 
-    const { data: allPromptSessionsData } = useQuery({
-        queryKey: ['getSessionInStudentWork', studentId],
-        queryFn: () => getAllSessionsInClassForStudent(classroomId) as unknown as { prompts: PromptSession[], totalCount: number },
-        initialData: allPromptSessions
-    })
+    // const { data: allPromptSessionsData } = useQuery({
+    //     queryKey: ['getSessionInStudentWork', studentId],
+    //     queryFn: () => getAllSessionsInClassForStudent(classroomId) as unknown as { prompts: PromptSession[], totalCount: number },
+    //     initialData: allPromptSessions
+    // })
 
     const { data: studentResponsesData } = useQuery({
         queryKey: ['getStudentResponseData', studentId],
@@ -35,19 +31,30 @@ export default function MyWorkClientWrapper({
 
 
     // Determine Incomplete Tasks
-    const incompleteTasks = allPromptSessionsData?.prompts
-        .filter(singleSession =>
-            !singleSession?.responses?.some(response => response.studentId === studentId))
-        .map(session => ({
-            id: session.id,
-            title: session.title,
-            status: "Incomplete",
-            createdAt: formatDateMonthDayYear(session.createdAt)
-        })) as unknown as PromptSession[];
+    // const incompleteTasks = studentResponses?.prompts
+    //     .filter(singleSession =>
+    //         !singleSession?.responses?.some(response => response.studentId === studentId))
+    //     .map(session => ({
+    //         id: session.id,
+    //         title: session.title,
+    //         status: "Incomplete",
+    //         createdAt: formatDateMonthDayYear(session.createdAt)
+    //     })) as unknown as PromptSession[];
 
     // Determine Returned Work 
+    const incompleteTasks = studentResponsesData?.map(response => {
+        if (response.completionStatus === 'INCOMPLETE') {
+            return ({
+                id: response.id,
+                title: response?.promptSession?.title,
+                status: "Returned",
+                createdAt: formatDateMonthDayYear(response.submittedAt)
+            })
+        }
+    }).filter(Boolean)
+
     const returnedWork = studentResponsesData?.map(response => {
-        if (response.isSubmittable) {
+        if (response.completionStatus === 'RETURNED') {
             return ({
                 id: response.id,
                 title: response?.promptSession?.title,
@@ -63,20 +70,22 @@ export default function MyWorkClientWrapper({
     // Completed Tasks
     const completedTasks = studentResponsesData.map(response => {
         // If it's submittable, then it has been returned and should not be on this table
-        if (response.isSubmittable) return
-        let score: string = 'N/A'
-        if (response.promptSession?.promptType === 'single-question') {
-            score = ((response?.response as { score?: number }[] | undefined)?.[0]?.score)?.toString() ?? 'N/A'
-            score = score !== 'N/A' ? `${score}%` : score
-        } else {
-            // This returns 'N/A' if every question is not scored. 
-            score = responsePercentage(response?.response as unknown as ResponseData[]);
+        if (response.completionStatus === 'COMPLETE') {
+            console.log('resposne ', response)
+            let score: string = 'N/A'
+            if (response.promptSession?.promptType === 'single-question') {
+                score = ((response?.response as { score?: number }[] | undefined)?.[0]?.score)?.toString() ?? 'N/A'
+                score = score !== 'N/A' ? `${score}%` : score
+            } else {
+                // This returns 'N/A' if every question is not scored. 
+                score = responsePercentage(response?.response as unknown as ResponseData[]);
+            }
+            return ({
+                ...response,
+                submittedAt: formatDateMonthDayYear(response.submittedAt),
+                score,
+            })
         }
-        return ({
-            ...response,
-            submittedAt: formatDateMonthDayYear(response.submittedAt),
-            score,
-        })
     }).filter(Boolean) as unknown as Response[]
 
 

@@ -1,45 +1,42 @@
 "use client";
 import { ResponseData } from "@/types";
 import { useState, useRef, useEffect } from "react";
-import { useSearchParams, useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import SaveAndContinueBtns from "@/components/buttons/save-and-continue";
-import { saveFormData, getFormData, deleteRow } from "@/lib/indexed.db.actions";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowBigLeft } from "lucide-react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { createStudentResponse } from "@/lib/actions/response.action";
+import { submitStudentResponse, updateStudentResponse } from "@/lib/actions/response.action";
 import { toast } from "sonner";
 import Editor from "./editor";
-import { Response } from "@/types";
 import MultiQuestionReview from "@/app/(student)/response-review/[responseId]/multi-question-review";
 
 export default function MultipleQuestionEditor({
-    questions,
     studentResponse,
     isTeacherPremium,
-    gradeLevel
+    gradeLevel,
+    responseId
 }: {
-    questions: ResponseData[],
-    studentResponse: Response
+    studentResponse: ResponseData[]
     isTeacherPremium: boolean,
     gradeLevel: string
+    responseId: string
 }) {
 
     const searchParams = useSearchParams();
     const questionNumber: string | number = searchParams.get('q') as string;
-    const { promptSessionId } = useParams();
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);
     const [journalText, setJournalText] = useState<string>("");
-    const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
+    const [studentResponseData, setStudentResponseData] = useState<ResponseData[]>(studentResponse);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [isTyping, setIsTyping] = useState(false);
     const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-    const [state, action] = useActionState(createStudentResponse, {
+    const [state, action] = useActionState(submitStudentResponse, {
         success: false,
         message: ''
     })
@@ -47,8 +44,6 @@ export default function MultipleQuestionEditor({
     useEffect(() => {
         if (state?.success) {
             async function finishResponseHandler() {
-                // deleltes row in indexedDB
-                await deleteRow(promptSessionId as string)
                 router.push('/')
                 toast('Answers Submitted!')
             }
@@ -56,32 +51,14 @@ export default function MultipleQuestionEditor({
         }
     }, [state.success])
 
-    async function getSavedText() {
-        try {
-            const savedResponse = await getFormData(promptSessionId as string)
-            setAllQuestions(savedResponse.questions)
-            // Dont run if on review page
-            if (Number(questionNumber) !== questions?.length) {
-                const isThereResponse = savedResponse?.questions[Number(questionNumber)]?.answer
-                if (!savedResponse || !isThereResponse) {
-                    return
-                }
-                setJournalText(isThereResponse);
-            }
-        } catch (error) {
-            console.log('error getting saved data in indexedb', error)
-        }
-    }
-
     // This runs on every new page
     useEffect(() => {
-        if (questionNumber && questions) {
-            setCurrentQuestion(questions?.[Number(questionNumber)]?.question)
-            getSavedText()
-            setJournalText('')
+        if (questionNumber && studentResponseData && questionNumber) {
+            setCurrentQuestion(studentResponseData?.[Number(questionNumber)]?.question)
+            setJournalText(studentResponseData?.[Number(questionNumber)]?.answer ?? '')
             inputRef.current?.focus()
         }
-    }, [questionNumber, questions])
+    }, [questionNumber, studentResponseData, questionNumber])
 
     // /** Auto-save logic */
     useEffect(() => {
@@ -110,21 +87,20 @@ export default function MultipleQuestionEditor({
     }, []);
 
 
-
-
     async function handleSaveResponses() {
+        if (isSaving) return
         try {
             setIsSaving(true);
-            const updatedQuestions = allQuestions.map((q, index) =>
+            const updatedAnswer = journalText.trim();
+            const updatedData = studentResponseData.map((q, index) =>
                 index === Number(questionNumber)
-                    ? { question: currentQuestion, answer: journalText.trim() }
+                    ? { ...q, answer: updatedAnswer }
                     : q
             );
-            // Save immediately after updating questions
-            setAllQuestions(updatedQuestions as ResponseData[]);
-
-            await saveFormData(updatedQuestions, promptSessionId);
-
+            // Update the state
+            setStudentResponseData(updatedData);
+            // Call the server action with the updated data
+            await updateStudentResponse(updatedData, responseId);
             toast('Answers Saved')
         } catch (error) {
             console.log('error saving to indexed db', error);
@@ -132,8 +108,6 @@ export default function MultipleQuestionEditor({
             setIsSaving(false);
         }
     }
-
-
 
     async function saveAndContinue(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -146,7 +120,7 @@ export default function MultipleQuestionEditor({
         try {
             await handleSaveResponses();
             const nextQuestion = (Number(questionNumber) + 1).toString()
-            router.push(`/jot-response/${promptSessionId}?q=${nextQuestion}`)
+            router.push(`/jot-response/${responseId}?q=${nextQuestion}`)
             setJournalText('');
         } catch (error) {
             console.log('error saving and continuing ', error)
@@ -177,11 +151,11 @@ export default function MultipleQuestionEditor({
                 <ArrowBigLeft className="" />
                 <p className="ml-1 text-md">Back</p>
             </div>
-            {Number(questionNumber) === questions.length ? (
+            {Number(questionNumber) === studentResponse.length ? (
                 <div className="mt-16">
                     <MultiQuestionReview
-                        allQuestions={allQuestions as ResponseData[]}
-                        setAllQuestions={setAllQuestions}
+                        allQuestions={studentResponseData as ResponseData[]}
+                        setAllQuestions={setStudentResponseData}
                         isSubmittable={true}
                         showGrades={false}
                         isTeacherPremium={isTeacherPremium}
@@ -195,14 +169,7 @@ export default function MultipleQuestionEditor({
                             <input
                                 id="responseId"
                                 name="responseId"
-                                value={studentResponse.id}
-                                hidden
-                                readOnly
-                            />
-                            <input
-                                id="promptSessionId"
-                                name="promptSessionId"
-                                value={promptSessionId}
+                                value={responseId}
                                 hidden
                                 readOnly
                             />
@@ -216,7 +183,7 @@ export default function MultipleQuestionEditor({
                             <input
                                 id="responseData"
                                 name="responseData"
-                                value={JSON.stringify(allQuestions)}
+                                value={JSON.stringify(studentResponseData)}
                                 hidden
                                 readOnly
                             />
@@ -245,7 +212,7 @@ export default function MultipleQuestionEditor({
             ) : (
                 // IF not final question, just show the editor and question with continue buttons
                 <>
-                    <p className="absolute -top-16 right-0 text-sm">Question: {Number(questionNumber) + 1} / {questions.length}</p>
+                    <p className="absolute -top-16 right-0 text-sm">Question: {Number(questionNumber) + 1} / {studentResponse.length}</p>
                     <p className="mt-16 mb-5 w-full mx-auto whitespace-pre-line text-left lg:text-lg">{currentQuestion}</p>
                     <Editor
                         setJournalText={setJournalText}

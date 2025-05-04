@@ -7,9 +7,10 @@ import TraitFilterCombobox from "@/components/shared/prompt-filter-options/trait
 import PaginationList from "@/components/shared/prompt-filter-options/pagination-list"
 import StudentAssignmentListItem from "./student-assignment-list-item"
 import { PromptCategory, Response } from "@/types"
+import { getFilteredStudentResponses } from "@/lib/actions/response.action"
 
 interface Props {
-    initialPrompts: PromptSession[];
+    initialPrompts: Response[];
     promptCountTotal: number
     categories: PromptCategory[],
     studentId: string
@@ -22,7 +23,7 @@ export default function AssignmentSectionClient({
     studentId
 }: Props) {
 
-    const [fetchedPrompts, setFetchedPrompts] = useState<PromptSession[]>(initialPrompts)
+    const [fetchedPrompts, setFetchedPrompts] = useState<Response[]>(initialPrompts)
 
     const promptSearchOptions = useRef<SearchOptions>({
         category: '',
@@ -33,27 +34,8 @@ export default function AssignmentSectionClient({
     });
 
     async function getFilteredSearch(filterOptions: SearchOptions) {
-        let filterPrompts = await getFilteredPromptSessions(filterOptions) as unknown as PromptSession[];
-        const promptSessionWithMetaData = filterPrompts?.map(session => {
-            // Determine if assignment is completed
-            const isCompleted = session?.responses?.some(response => response.studentId === studentId)
-            let studentResponseId: string | null = null
-            let isSubmittable: boolean = false;
-            if (isCompleted) {
-                // if completed, get their responseID so we can navigate them to their '/review-reponse/${responseID}'
-                const { id, isSubmittable: isReturned } = session?.responses?.find(res => res.studentId === studentId) as unknown as Response
-                studentResponseId = id;
-                isSubmittable = isReturned
-            }
-            // Add fields is completed, and their specific responseID to the promptSession
-            return ({
-                ...session,
-                isCompleted,
-                isSubmittable,
-                studentResponseId,
-            })
-        }) as unknown as PromptSession[]
-        setFetchedPrompts(promptSessionWithMetaData)
+        let filterPrompts = await getFilteredStudentResponses(filterOptions) as unknown as Response[];
+        setFetchedPrompts(filterPrompts)
     }
 
     const traitFilterOptions = [
@@ -86,10 +68,10 @@ export default function AssignmentSectionClient({
                     <p className="flex-1">No Assignments</p>
                 ) : (
                     <div className="flex-2 w-full md:mr-10">
-                        {fetchedPrompts.map((prompt: PromptSession) => (
+                        {fetchedPrompts.map((response: Response) => (
                             <StudentAssignmentListItem
-                                key={prompt.id}
-                                jotData={prompt}
+                                key={response.id}
+                                studentResponse={response}
                             />
                         ))}
                         <PaginationList

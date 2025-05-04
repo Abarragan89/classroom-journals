@@ -111,7 +111,7 @@ export function checkCommentCoolDown(commentCoolDown: number) {
 
 export function responsePercentage(response: ResponseData[]) {
   // Dont get percentage if not all responses are not graded. 
-  const isGraded = response.every(entry => entry.score !== undefined)
+  const isGraded = response?.every(entry => entry.score !== undefined)
   if (!isGraded) {
     return (
       'N/A'
@@ -124,7 +124,7 @@ export function responsePercentage(response: ResponseData[]) {
 }
 
 export function responseScore(response: ResponseData[]) {
-  const isGraded = response.every(entry => entry.score !== undefined)
+  const isGraded = response?.every(entry => entry.score !== undefined)
   if (!isGraded) {
     return (
       'Not Graded'

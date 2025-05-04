@@ -123,8 +123,6 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
         )
     }
 
-    console.log('question ', questions)
-
     return (
         <form action={action} className="grid relative">
             {questions.map((question, index) => (

@@ -12,10 +12,11 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllSessionsInClass } from '@/lib/actions/prompt.session.actions';
 import { getFeaturedBlogs, getStudentRequests } from '@/lib/actions/student.dashboard.actions';
 import { useState } from 'react';
+import { getStudentResponsesDashboard } from '@/lib/actions/response.action';
 
 export default function StudentDashClientWrapper({
   allCategories,
-  allPromptSessions,
+  allResponses,
   featuredBlogs,
   studentRequests,
   studentId,
@@ -23,7 +24,7 @@ export default function StudentDashClientWrapper({
   classroomId
 }: {
   allCategories: PromptCategory[];
-  allPromptSessions: { prompts: PromptSession[], totalCount: number };
+  allResponses: { responses: Response[], totalCount: number },
   featuredBlogs: Response[],
   studentRequests: StudentRequest[],
   studentId: string;
@@ -33,10 +34,10 @@ export default function StudentDashClientWrapper({
 
 
   // Get the prompt sessions
-  const { data: allPromptSessionData } = useQuery({
-    queryKey: ['getStudentDashPromptSession', classroomId],
-    queryFn: () => getAllSessionsInClass(classroomId) as unknown as { prompts: PromptSession[], totalCount: number },
-    initialData: allPromptSessions
+  const { data: allResponseData } = useQuery({
+    queryKey: ['getAllStudentResponses', classroomId],
+    queryFn: () => getStudentResponsesDashboard(studentId) as unknown as { responses: Response[], totalCount: number },
+    initialData: allResponses
   })
 
   // Get the student requests
@@ -69,27 +70,7 @@ export default function StudentDashClientWrapper({
     }
   }
 
-  const promptSessionWithMetaData = allPromptSessionData?.prompts?.map(session => {
-    // Determine if assignment is completed
-    const isCompleted = session?.responses?.some(response => response.studentId === studentId)
-    let studentResponseId: string | null = null
-    let isSubmittable: boolean = false;
-    if (isCompleted) {
-      // if completed, get their responseID so we can navigate them to their '/review-reponse/${responseID}'
-      const { id, isSubmittable: isReturned } = session?.responses?.find(res => res.studentId === studentId) as unknown as Response
-      studentResponseId = id;
-      isSubmittable = isReturned
-    }
-    // Add fields is completed, and their specific responseID to the promptSession
-    return ({
-      ...session,
-      isCompleted,
-      isSubmittable,
-      studentResponseId,
-    })
-  }) as unknown as PromptSession[]
-
-  const lastestTaskToDo = promptSessionWithMetaData.find(session => !session.isCompleted)
+  const lastestTaskToDo = allResponseData?.responses.find(res => res.completionStatus === 'INCOMPLETE' || res.completionStatus === 'RETURNED')
 
   return (
     <>
@@ -100,8 +81,8 @@ export default function StudentDashClientWrapper({
           <div className="flex-between">
             <div>
               <p className="h3-bold text-primary">Alert! New Assignment</p>
-              <p className="text-md line-clamp-1">{lastestTaskToDo?.title}</p>
-              <p className="text-sm text-ring">{lastestTaskToDo?.prompt?.category?.name}</p>
+              <p className="text-md line-clamp-1">{lastestTaskToDo?.promptSession?.title}</p>
+              <p className="text-sm text-ring">{lastestTaskToDo?.promptSession?.prompt?.category?.name}</p>
             </div>
             <Button asChild variant='secondary' className="text-secondary-foreground">
               <Link href={`jot-response/${lastestTaskToDo?.id}?q=0`}>
@@ -154,8 +135,8 @@ export default function StudentDashClientWrapper({
       <section>
         <h3 className="h3-bold mb-2 ml-1">Assignments</h3>
         <AssignmentSectionClient
-          initialPrompts={promptSessionWithMetaData}
-          promptCountTotal={allPromptSessionData?.totalCount}
+          initialPrompts={allResponseData?.responses}
+          promptCountTotal={allResponseData?.totalCount}
           categories={allCategories}
           studentId={studentId}
         />

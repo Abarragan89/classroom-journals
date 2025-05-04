@@ -1,11 +1,10 @@
 import { auth } from "@/auth";
 import Header from "@/components/shared/header";
-import { PromptSession, Response, Session } from "@/types";
+import { Response, Session } from "@/types";
 import { notFound } from "next/navigation";
 import { getSingleStudentResponses } from "@/lib/actions/response.action";
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
-import { getAllSessionsInClassForStudent } from "@/lib/actions/prompt.session.actions";
 import MyWorkClientWrapper from "./my-work-client-wrapper";
 
 
@@ -24,8 +23,8 @@ export default async function MyWork() {
     }
 
     const studentResponses = await getSingleStudentResponses(studentId) as unknown as Response[]
-    const allPromptSessions = await getAllSessionsInClassForStudent(classroomId) as unknown as { prompts: PromptSession[], totalCount: number }
 
+    console.log('student response ', studentResponses)
 
     return (
         <>
@@ -40,9 +39,8 @@ export default async function MyWork() {
 
                 <MyWorkClientWrapper 
                     studentResponses={studentResponses}
-                    allPromptSessions={allPromptSessions}
                     studentId={studentId}
-                    classroomId={classroomId}
+
                 />
                 </div>
             </main>

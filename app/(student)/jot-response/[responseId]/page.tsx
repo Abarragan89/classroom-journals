@@ -1,0 +1,57 @@
+import { auth } from "@/auth";
+import Header from "@/components/shared/header";
+import { Response, ResponseData, Session } from "@/types";
+import { notFound } from "next/navigation";
+import MultipleQuestionEditor from "@/components/shared/prompt-response-editor/multiple-question-editor";
+import SinglePromptEditor from "@/components/shared/prompt-response-editor/single-question-editor";
+import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
+import { getClassroomGrade, getTeacherId } from "@/lib/actions/student.dashboard.actions";
+import { getSingleResponseForReview } from "@/lib/actions/response.action";
+
+export default async function StudentDashboard({
+    params
+}: {
+    params: Promise<{ responseId: string }>
+}) {
+
+    const session = await auth() as Session
+
+    if (!session) notFound()
+
+    const studentId = session?.user?.id as string
+    if (session?.user?.role !== 'student' || !studentId) {
+        notFound()
+    }
+
+    const classroomId = session?.classroomId
+
+    const { responseId } = await params
+
+    const studentResponse = await getSingleResponseForReview(responseId) as unknown as Response
+
+    const teacherId = await getTeacherId(classroomId as string)
+    const { isSubscriptionActive } = await determineSubscriptionAllowance(teacherId as string)
+    const grade = await getClassroomGrade(classroomId as string)
+
+
+    return (
+        <div>
+            <Header session={session} />
+            <main className="wrapper">
+                {studentResponse?.promptSession?.promptType === 'multi-question' ?
+                    <MultipleQuestionEditor
+                        responseId={studentResponse.id}
+                        studentResponse={studentResponse.response as unknown as ResponseData[]}
+                        isTeacherPremium={isSubscriptionActive as boolean}
+                        gradeLevel={grade as string}
+                    />
+                    :
+                    <SinglePromptEditor
+                        studentResponse={studentResponse.response as unknown as ResponseData[]}
+                        responseId={responseId}
+                    />
+                }
+            </main>
+        </div>
+    )
+}

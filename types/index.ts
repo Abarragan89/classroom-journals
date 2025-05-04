@@ -65,8 +65,6 @@ export type PromptSession = {
     promptId: string | null;
     title: string;
     questions: JsonValue;
-    isCompleted?: boolean // only exists on the client not DB
-    isSubmittable?: boolean; // only exists on the client not DB
     assignedAt: Date;
     isPublic: boolean;
     promptType: string;
@@ -88,6 +86,7 @@ export interface Response {
     likes: ResponseLike[];
     likeCount: number;
     blogImage?: string;
+    completionStatus: 'INCOMPLETE' | 'COMPLETE' | 'RETURNED'
     studentId: string;
     _count: { comments: number }
     response: JsonValue;
@@ -96,6 +95,7 @@ export interface Response {
     comments: ResponseComment[];
     isSubmittable: boolean;
     submittedAt: Date;
+    createdAt: Date;
     student: User;
 }
 
