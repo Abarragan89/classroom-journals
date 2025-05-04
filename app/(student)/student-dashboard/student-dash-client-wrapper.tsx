@@ -5,11 +5,10 @@ import RequestNewUsername from '@/components/modalBtns/request-new-username';
 import SuggestPrompt from '@/components/modalBtns/suggest-prompt';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { PromptCategory, PromptSession, StudentRequest, Response, ResponseData } from '@/types'
+import { PromptCategory, StudentRequest, Response, ResponseData } from '@/types'
 import Link from 'next/link';
 import AssignmentSectionClient from './assignement-section.client';
 import { useQuery } from '@tanstack/react-query';
-import { getAllSessionsInClass } from '@/lib/actions/prompt.session.actions';
 import { getFeaturedBlogs, getStudentRequests } from '@/lib/actions/student.dashboard.actions';
 import { useState } from 'react';
 import { getStudentResponsesDashboard } from '@/lib/actions/response.action';
@@ -121,7 +120,6 @@ export default function StudentDashClientWrapper({
                   totalCommentCount={response?._count?.comments as number}
                   title={(response?.response as unknown as ResponseData[])?.[1].answer as string}
                   description={(response?.response as unknown as ResponseData[])?.[0].answer as string}
-                  // date={formatDateShort(response?.submittedAt as Date)}
                   coverPhotoUrl={(response?.response as unknown as ResponseData[])?.[2].answer as string}
                 />
               </Link>
@@ -138,7 +136,6 @@ export default function StudentDashClientWrapper({
           initialPrompts={allResponseData?.responses}
           promptCountTotal={allResponseData?.totalCount}
           categories={allCategories}
-          studentId={studentId}
         />
       </section>
     </>

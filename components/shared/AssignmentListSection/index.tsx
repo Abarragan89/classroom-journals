@@ -1,6 +1,6 @@
 'use client'
 import { PromptCategory, PromptSession, SearchOptions } from "@/types"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import AssignmentListItem from "@/components/shared/AssignmentListSection/assignment-list-item"
 import { getAllSessionsInClass, getFilteredPromptSessions } from "@/lib/actions/prompt.session.actions"
 import PromptSearchBar from "../prompt-filter-options/prompt-search-bar"
@@ -54,6 +54,10 @@ export default function AssignmentListSection({
         setFetchedPrompts(filterPrompts)
     }
 
+    useEffect(() => {
+        setFetchedPrompts(initialPrompts)
+    }, [initialPrompts])
+
     const traitFilterOptions = [
         {
             value: "desc",
@@ -84,7 +88,7 @@ export default function AssignmentListSection({
         <>
             < div className="flex flex-col-reverse items-end lg:flex-row lg:items-start justify-between">
                 {fetchedPrompts?.length <= 0 ? (
-                    <p className="flex-1">No Assignments</p>
+                    <p className="flex-1 text-center">No Assignments</p>
                 ) : (
                     <div className="flex-2 w-full lg:mr-10">
                         {fetchedPrompts.map((prompt: PromptSession) => (

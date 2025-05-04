@@ -1,6 +1,6 @@
 'use client'
 import { PromptSession, SearchOptions } from "@/types"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { getFilteredPromptSessions } from "@/lib/actions/prompt.session.actions"
 import PromptSearchBar from "@/components/shared/prompt-filter-options/prompt-search-bar"
 import TraitFilterCombobox from "@/components/shared/prompt-filter-options/trait-filter-combobox"
@@ -13,17 +13,16 @@ interface Props {
     initialPrompts: Response[];
     promptCountTotal: number
     categories: PromptCategory[],
-    studentId: string
 
 }
 export default function AssignmentSectionClient({
     initialPrompts,
     promptCountTotal,
     categories,
-    studentId
 }: Props) {
 
     const [fetchedPrompts, setFetchedPrompts] = useState<Response[]>(initialPrompts)
+
 
     const promptSearchOptions = useRef<SearchOptions>({
         category: '',
@@ -37,6 +36,10 @@ export default function AssignmentSectionClient({
         let filterPrompts = await getFilteredStudentResponses(filterOptions) as unknown as Response[];
         setFetchedPrompts(filterPrompts)
     }
+
+    useEffect(() => {
+        setFetchedPrompts(initialPrompts)
+    }, [initialPrompts])
 
     const traitFilterOptions = [
         {
@@ -65,7 +68,7 @@ export default function AssignmentSectionClient({
         <>
             < div className="flex flex-col-reverse items-end md:flex-row md:items-start justify-between">
                 {fetchedPrompts?.length <= 0 ? (
-                    <p className="flex-1">No Assignments</p>
+                    <p className="flex-1 text-center">No Assignments</p>
                 ) : (
                     <div className="flex-2 w-full md:mr-10">
                         {fetchedPrompts.map((response: Response) => (

@@ -40,7 +40,6 @@ export default async function page() {
                 question: 'Add a Cover Photo'
             }
         ],
-        isSubmittable: false,
         _count: { comments: 0 },
         comments: [],
         // @ts-expect-error: using Dummy Data

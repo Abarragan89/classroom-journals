@@ -8,31 +8,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TeacherAccountType {
+  BASIC
+  STANDARD
+  PREMIUM
+}
+
 model User {
-  id                  String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  googleId            String?          @unique // Optional, only for students with Google IDs
-  name                String?          @default("NO_NAME")
+  id                  String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  googleId            String?            @unique // Optional, only for students with Google IDs
+  name                String?            @default("NO_NAME")
   username            String?
-  email               String?          @unique(map: "user_email_idx")
-  emailVerified       DateTime?        @db.Timestamp(6)
+  email               String?            @unique(map: "user_email_idx")
+  emailVerified       DateTime?          @db.Timestamp(6)
   image               String?
-  accountType         String           @default("Basic-Free") // 'Basic-Free' or 'Premium(monthly)' or 'Premium(yearly)' 
+  accountType         TeacherAccountType @default(BASIC) // 'Basic-Free' or 'Premium(monthly)' or 'Premium(yearly)' 
   password            String? // this password is only for student accounts and needs to be accessible to teacher
   iv                  String? // this is used to encrypt student names, ensures no duplicates when same input is given
   sessions            Session[]
   accounts            Account[]
-  createdAt           DateTime         @default(now()) @db.Timestamp(6)
-  updatedAt           DateTime         @updatedAt
+  createdAt           DateTime           @default(now()) @db.Timestamp(6)
+  updatedAt           DateTime           @updatedAt
   comments            Comment[]
   responseLikes       ResponseLike[]
   commentLikes        CommentLike[]
   responses           Response[]
   notifications       Notification[]
   classes             ClassUser[]
-  requestsSent        StudentRequest[] @relation("RequestsByStudent")
-  requestsReceived    StudentRequest[] @relation("RequestsToTeacher")
+  requestsSent        StudentRequest[]   @relation("RequestsByStudent")
+  requestsReceived    StudentRequest[]   @relation("RequestsToTeacher")
   // These are only related to Students
-  commentCoolDown     Int?             @default(0)
+  commentCoolDown     Int?               @default(0)
   // These are only related to Teachers
   prompts             Prompt[] // Prompts are for teachers
   PromptCategory      PromptCategory[]
@@ -94,12 +100,17 @@ model Classroom {
   PromptSession PromptSession[]
 }
 
+enum ClassUserRole {
+  TEACHER
+  STUDENT
+}
+
 model ClassUser {
-  userId  String    @db.Uuid
-  classId String    @db.Uuid
-  role    String    @default("student") // "teacher" or "student"
-  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  class   Classroom @relation(fields: [classId], references: [id], onDelete: Cascade)
+  userId  String        @db.Uuid
+  classId String        @db.Uuid
+  role    ClassUserRole @default(STUDENT)
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  class   Classroom     @relation(fields: [classId], references: [id], onDelete: Cascade)
 
   @@id([userId, classId]) // Composite primary key
 }
@@ -118,14 +129,19 @@ model Notification {
 }
 
 // This is used for teachers when payment fails
+
+enum AlertType {
+  PAYMENT
+}
+
 model Alert {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId    String   @db.Uuid
-  type      String // 'payment'
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @db.Uuid
+  type      AlertType
   message   String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  isRead    Boolean  @default(false)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  isRead    Boolean   @default(false)
 }
 
 model Comment {
@@ -166,11 +182,16 @@ model CommentLike {
   @@unique([userId, commentId]) // Ensure a user can like a resoponse only once
 }
 
+enum PromptType {
+  BLOG
+  ASSESSMENT
+}
+
 model Prompt {
   id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title         String
   teacherId     String          @db.Uuid
-  promptType    String // "single-question" or "multi-question"
+  promptType    PromptType
   teacher       User            @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
@@ -189,23 +210,28 @@ model PromptCategory {
   prompts Prompt[]
 }
 
+enum PromptSessionStatus {
+  OPEN
+  CLOSED
+}
+
 model PromptSession {
-  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  promptId         String?    @db.Uuid
+  id               String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  promptId         String?             @db.Uuid
   title            String
   questions        Json // Single array of question objects
-  promptType       String // single-question or multi-question
-  isPublic         Boolean    @default(true)
-  assignedAt       DateTime   @default(now())
-  areGradesVisible Boolean    @default(false)
-  classId          String     @db.Uuid // relate it to which side it is attached to
-  status           String     @default("open") // e.g., "open", "closed"
+  promptType       PromptType
+  isPublic         Boolean             @default(true)
+  assignedAt       DateTime            @default(now())
+  areGradesVisible Boolean             @default(false)
+  classId          String              @db.Uuid // relate it to which side it is attached to
+  status           PromptSessionStatus @default(OPEN)
   responses        Response[]
   // Relationship
-  prompt           Prompt?    @relation(fields: [promptId], references: [id], onDelete: SetNull)
-  class            Classroom  @relation(fields: [classId], references: [id], onDelete: Cascade)
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  prompt           Prompt?             @relation(fields: [promptId], references: [id], onDelete: SetNull)
+  class            Classroom           @relation(fields: [classId], references: [id], onDelete: Cascade)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
 }
 
 enum ResponseStatus {
@@ -220,27 +246,35 @@ model Response {
   studentId        String         @db.Uuid
   response         Json //stores questions, answers, and score (score is Correct, 1/2 or wrong) Arrary of objects
   submittedAt      DateTime? // Nullable in case they haven't submitted yet
-  isComplete       Boolean        @default(false)
   completionStatus ResponseStatus @default(INCOMPLETE)
   likeCount        Int            @default(0)
   likes            ResponseLike[]
   notifications    Notification[]
   comments         Comment[]
-  isSubmittable    Boolean        @default(true)
   createdAt        DateTime       @default(now())
   // Relationship
   promptSession    PromptSession  @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
   student          User           @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }
 
+enum StudentRequestStatus {
+  PENDING
+  VIEWED
+}
+
+enum StudentRequestType {
+  USERNAME
+  PROMPT
+}
+
 model StudentRequest {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  studentId String   @db.Uuid
-  teacherId String   @db.Uuid
-  status    String // 'pending' || 'viewed' to let the notification show or not show
-  type      String // 'username' || 'prompt'
+  id        String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  studentId String               @db.Uuid
+  teacherId String               @db.Uuid
+  status    StudentRequestStatus // 'pending' || 'viewed' to let the notification show or not show
+  type      StudentRequestType // 'username' || 'prompt'
   text      String
-  createdAt DateTime @default(now()) @db.Timestamp(6)
+  createdAt DateTime             @default(now()) @db.Timestamp(6)
 
   // Relations
   student User @relation("RequestsByStudent", fields: [studentId], references: [id], onDelete: Cascade)

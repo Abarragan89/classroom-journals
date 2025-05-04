@@ -103,7 +103,7 @@ export async function updateASingleResponse(
             })
         }
 
-        await prisma.response.update({
+        const data = await prisma.response.update({
             where: { id: responseId },
             data: {
                 response: responseData as unknown as JsonValue[],
@@ -111,7 +111,7 @@ export async function updateASingleResponse(
                 submittedAt
             }
         })
-
+        console.log('data ', data)
         return { success: true, message: "Error fetching prompts. Try again." };
     } catch (error) {
         if (error instanceof Error) {

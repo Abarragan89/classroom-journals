@@ -9,7 +9,9 @@ export default function StudentAssignmentListItem({
 }) {
 
     const type = studentResponse?.promptSession?.promptType === 'multi-question' ? 'Assessment' : 'Blog';
-    const hrefLink = studentResponse?.completionStatus === 'COMPLETE' ? `response-review/${studentResponse?.id}` : `/jot-response/${studentResponse.id}?q=0`
+    const hrefLink = studentResponse?.completionStatus === 'COMPLETE' ?
+        `response-review/${studentResponse?.id}` : studentResponse?.completionStatus === 'RETURNED' ?
+            `response-review/${studentResponse?.id}` : `/jot-response/${studentResponse.id}?q=0`
 
     return (
         <div className='relative'>

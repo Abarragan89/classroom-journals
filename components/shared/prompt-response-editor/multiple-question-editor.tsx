@@ -53,12 +53,12 @@ export default function MultipleQuestionEditor({
 
     // This runs on every new page
     useEffect(() => {
-        if (questionNumber && studentResponseData && questionNumber) {
+        if (questionNumber) {
             setCurrentQuestion(studentResponseData?.[Number(questionNumber)]?.question)
             setJournalText(studentResponseData?.[Number(questionNumber)]?.answer ?? '')
             inputRef.current?.focus()
         }
-    }, [questionNumber, studentResponseData, questionNumber])
+    }, [questionNumber, studentResponseData])
 
     // /** Auto-save logic */
     useEffect(() => {

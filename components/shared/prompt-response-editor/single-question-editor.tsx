@@ -53,16 +53,16 @@ export default function SinglePromptEditor({
 
     // This runs on every new page
     useEffect(() => {
-        if (questionNumber && studentResponseData && questionNumber) {
+        if (questionNumber) {
             if (questionNumber === '2') {
-                setJournalText('https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png')
+                setJournalText(studentResponseData?.[Number(questionNumber)]?.answer ?? 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png')
             }
             setCurrentQuestion(studentResponseData?.[Number(questionNumber)]?.question)
             setJournalText(studentResponseData?.[Number(questionNumber)]?.answer ?? '')
             inputRef.current?.focus()
         }
-    }, [questionNumber, studentResponseData, questionNumber])
-
+    }, [questionNumber, studentResponseData])
+    
     // /** Auto-save logic */
     useEffect(() => {
         if (!isTyping) return
