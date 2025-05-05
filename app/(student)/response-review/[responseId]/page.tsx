@@ -34,7 +34,7 @@ export default async function ResponseReview({
 
     const teacherId = await getTeacherId(classroomId as string)
 
-    const { isSubscriptionActive } = await determineSubscriptionAllowance(teacherId as string)
+    const { isPremiumTeacher } = await determineSubscriptionAllowance(teacherId as string)
     const grade = await getClassroomGrade(classroomId as string)
 
     return (
@@ -56,7 +56,7 @@ export default async function ResponseReview({
                         isSubmittable={singleResponse?.completionStatus === 'INCOMPLETE' || singleResponse?.completionStatus === 'RETURNED'}
                         responseId={singleResponse?.id}
                         showGrades={singleResponse?.promptSession?.areGradesVisible}
-                        isTeacherPremium={isSubscriptionActive as boolean}
+                        isTeacherPremium={isPremiumTeacher as boolean}
                         gradeLevel={grade as string}
                     />
                     :

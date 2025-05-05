@@ -1,7 +1,7 @@
 "use server"
 import { prisma } from "@/db/prisma";
 import { decryptText, encryptText } from "../utils";
-import { ClassUserRole } from "@prisma/client";
+import { ClassUserRole, TeacherAccountType } from "@prisma/client";
 
 // This is for the students to see which requests they have made and their status
 export async function getTeacherSettingData(teacherId: string, classId: string) {
@@ -92,6 +92,7 @@ export async function determineSubscriptionAllowance(teacherId: string) {
             where: { id: teacherId },
             select: {
                 subscriptionExpires: true,
+                accountType: true,
                 _count: {
                     select: {
                         classes: true,
@@ -102,11 +103,12 @@ export async function determineSubscriptionAllowance(teacherId: string) {
 
         // Determine if subscription is expired or not to render correc tUI
         const today = new Date();
-        const isSubscriptionActive = teacherInfo?.subscriptionExpires ? teacherInfo?.subscriptionExpires > today : false;        const totalClasses = teacherInfo?._count.classes;
-
+        const isSubscriptionActive = teacherInfo?.subscriptionExpires ? teacherInfo?.subscriptionExpires > today : false;        
+        const totalClasses = teacherInfo?._count.classes;
+        const isPremiumTeacher = isSubscriptionActive && teacherInfo?.accountType === TeacherAccountType.PREMIUM
         const isAllowedToMakeNewClass = isSubscriptionActive && (totalClasses ?? 0) < 6 || (totalClasses ?? 0) < 1;
 
-        return { isSubscriptionActive, isAllowedToMakeNewClass }
+        return { isSubscriptionActive, isAllowedToMakeNewClass, isPremiumTeacher }
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {

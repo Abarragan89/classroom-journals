@@ -13,6 +13,8 @@ export default function UpgradeAccountBtn({
         queryFn: () => determineSubscriptionAllowance(teacherId),
     })
 
+    console.log('data ', data)
+
     if (isPending) return
     if (error) {
         throw new Error('Cannot determine subscription status')
@@ -20,7 +22,7 @@ export default function UpgradeAccountBtn({
 
     return (
         <>
-            {data && !data.isSubscriptionActive && (
+            {data && !data.isPremiumTeacher && (
                 <p className="w-fit text-sm font-bold text-success">
                     Autograde Assessments with AI!
                     <Link

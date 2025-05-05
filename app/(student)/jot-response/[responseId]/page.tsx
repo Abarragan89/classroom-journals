@@ -30,7 +30,7 @@ export default async function StudentDashboard({
     const studentResponse = await getSingleResponseForReview(responseId) as unknown as Response
 
     const teacherId = await getTeacherId(classroomId as string)
-    const { isSubscriptionActive } = await determineSubscriptionAllowance(teacherId as string)
+    const { isPremiumTeacher } = await determineSubscriptionAllowance(teacherId as string)
     const grade = await getClassroomGrade(classroomId as string)
 
 
@@ -42,7 +42,7 @@ export default async function StudentDashboard({
                     <MultipleQuestionEditor
                         responseId={studentResponse.id}
                         studentResponse={studentResponse.response as unknown as ResponseData[]}
-                        isTeacherPremium={isSubscriptionActive as boolean}
+                        isTeacherPremium={isPremiumTeacher as boolean}
                         gradeLevel={grade as string}
                     />
                     :
