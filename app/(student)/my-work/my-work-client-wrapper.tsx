@@ -2,7 +2,6 @@
 import StudentTodoTable from "@/components/shared/student-task-table";
 import { gradedTasksColumns } from "@/components/shared/student-task-table/graded-tasks-columns";
 import { tasksTodoColumns } from "@/components/shared/student-task-table/tasks-todo-columns";
-import { getAllSessionsInClassForStudent } from "@/lib/actions/prompt.session.actions";
 import { getSingleStudentResponses } from "@/lib/actions/response.action";
 import { formatDateMonthDayYear, responsePercentage } from "@/lib/utils";
 import { PromptSession, Response, ResponseData } from "@/types";
@@ -17,29 +16,11 @@ export default function MyWorkClientWrapper({
     studentId: string,
 }) {
 
-    // const { data: allPromptSessionsData } = useQuery({
-    //     queryKey: ['getSessionInStudentWork', studentId],
-    //     queryFn: () => getAllSessionsInClassForStudent(classroomId) as unknown as { prompts: PromptSession[], totalCount: number },
-    //     initialData: allPromptSessions
-    // })
-
     const { data: studentResponsesData } = useQuery({
         queryKey: ['getStudentResponseData', studentId],
         queryFn: () => getSingleStudentResponses(studentId) as unknown as Response[],
         initialData: studentResponses
     })
-
-
-    // Determine Incomplete Tasks
-    // const incompleteTasks = studentResponses?.prompts
-    //     .filter(singleSession =>
-    //         !singleSession?.responses?.some(response => response.studentId === studentId))
-    //     .map(session => ({
-    //         id: session.id,
-    //         title: session.title,
-    //         status: "Incomplete",
-    //         createdAt: formatDateMonthDayYear(session.createdAt)
-    //     })) as unknown as PromptSession[];
 
     // Determine Returned Work 
     const incompleteTasks = studentResponsesData?.map(response => {

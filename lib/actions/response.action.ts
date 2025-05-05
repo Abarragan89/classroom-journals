@@ -103,7 +103,7 @@ export async function updateASingleResponse(
             })
         }
 
-        const data = await prisma.response.update({
+        await prisma.response.update({
             where: { id: responseId },
             data: {
                 response: responseData as unknown as JsonValue[],

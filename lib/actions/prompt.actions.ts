@@ -503,17 +503,6 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
         // Execute everything in a transaction
         const result = await prisma.$transaction(async (tx) => {
             // 1. Create prompt sessions
-            const promptSessions = classesAssignTo.map((classId) => ({
-                promptId: currentPrompt.id,
-                title: currentPrompt.title,
-                promptType: currentPrompt.promptType,
-                isPublic: isPublic === 'true',
-                questions: currentPrompt.questions as Prisma.InputJsonValue,
-                assignedAt: new Date(),
-                classId,
-                status: PromptSessionStatus.OPEN
-            }));
-
             const createdPromptSessions = await Promise.all(
                 classesAssignTo.map((classId) =>
                     tx.promptSession.create({

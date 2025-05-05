@@ -2,8 +2,6 @@ import { auth } from "@/auth";
 import Header from "@/components/shared/header";
 import { PromptCategory, Response, Session, StudentRequest } from "@/types";
 import { notFound } from "next/navigation";
-import { PromptSession } from "@/types";
-import { getAllSessionsInClass, getAllSessionsInClassForStudent } from "@/lib/actions/prompt.session.actions";
 import { getAllPromptCategories } from "@/lib/actions/prompt.categories";
 import { getDecyptedStudentUsername, getFeaturedBlogs, getTeacherId } from "@/lib/actions/student.dashboard.actions";
 import { getStudentRequests } from "@/lib/actions/student-request";
@@ -32,9 +30,6 @@ export default async function StudentDashboard() {
         notFound()
     }
     const allPromptCategories = await getAllPromptCategories(teacherId) as unknown as PromptCategory[]
-
-    // Get all Sessions from class and add meta data
-    // const allPromptSessions = await getAllSessionsInClass(classroomId) as unknown as { prompts: PromptSession[], totalCount: number }
     const allResponses = await getStudentResponsesDashboard(studentId) as unknown as { responses: Response[], totalCount: number }
 
     const featuredBlogs = await getFeaturedBlogs(classroomId) as unknown as Response[]

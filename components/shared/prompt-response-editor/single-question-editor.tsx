@@ -1,5 +1,5 @@
 "use client";
-import { Question, ResponseData } from "@/types";
+import { ResponseData } from "@/types";
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import SaveAndContinueBtns from "@/components/buttons/save-and-continue";

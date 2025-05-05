@@ -1,7 +1,6 @@
 'use client'
-import { PromptSession, SearchOptions } from "@/types"
+import { SearchOptions } from "@/types"
 import { useEffect, useRef, useState } from "react"
-import { getFilteredPromptSessions } from "@/lib/actions/prompt.session.actions"
 import PromptSearchBar from "@/components/shared/prompt-filter-options/prompt-search-bar"
 import TraitFilterCombobox from "@/components/shared/prompt-filter-options/trait-filter-combobox"
 import PaginationList from "@/components/shared/prompt-filter-options/pagination-list"
@@ -33,7 +32,7 @@ export default function AssignmentSectionClient({
     });
 
     async function getFilteredSearch(filterOptions: SearchOptions) {
-        let filterPrompts = await getFilteredStudentResponses(filterOptions) as unknown as Response[];
+        const filterPrompts = await getFilteredStudentResponses(filterOptions) as unknown as Response[];
         setFetchedPrompts(filterPrompts)
     }
 
