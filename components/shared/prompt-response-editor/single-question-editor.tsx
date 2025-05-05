@@ -27,7 +27,7 @@ export default function SinglePromptEditor({
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);
     const [journalText, setJournalText] = useState<string>("");
-    const [studentResponseData, setStudentResponseData] = useState<ResponseData[]>(studentResponse);
+    const studentResponseData= useRef<ResponseData[]>(studentResponse);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
@@ -53,17 +53,17 @@ export default function SinglePromptEditor({
 
     // This runs on every new page
     useEffect(() => {
-        if (questionNumber && studentResponseData) {
+        if (questionNumber && studentResponseData.current) {
             if (questionNumber === '2') {
-                setJournalText(studentResponseData?.[Number(questionNumber)]?.answer ?? 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png')
+                setJournalText(studentResponseData.current?.[Number(questionNumber)]?.answer ?? 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png')
             }
-            setCurrentQuestion(studentResponseData?.[Number(questionNumber)]?.question)
-            setJournalText(studentResponseData?.[Number(questionNumber)]?.answer ?? '')
+            setCurrentQuestion(studentResponseData.current?.[Number(questionNumber)]?.question)
+            setJournalText(studentResponseData.current?.[Number(questionNumber)]?.answer ?? '')
             inputRef.current?.focus()
         }
-    }, [questionNumber, studentResponseData])
+    }, [questionNumber, studentResponseData.current])
 
-    console.log('student response data ', studentResponseData)
+    console.log('student response data ', studentResponseData.current)
 
     // /** Auto-save logic */
     useEffect(() => {
@@ -75,7 +75,7 @@ export default function SinglePromptEditor({
             typingTimeoutRef.current = setTimeout(() => {
                 handleSaveResponses();
                 setIsTyping(false);
-            }, 5000); // Save after 5 seconds of inactivity
+            }, 8000); // Save after 5 seconds of inactivity
         }
         return () => clearTimeout(typingTimeoutRef.current);
     }, [journalText, isTyping]);
@@ -95,15 +95,13 @@ export default function SinglePromptEditor({
         try {
             setIsSaving(true);
             const updatedAnswer = journalText.trim();
-            const updatedData = studentResponseData.map((q, index) =>
+            studentResponseData.current = studentResponseData.current.map((q, index) =>
                 index === Number(questionNumber)
                     ? { ...q, answer: updatedAnswer }
                     : q
             );
-            // Update the state
-            // setStudentResponseData(updatedData);
             // Call the server action with the updated data
-            await updateStudentResponse(updatedData, responseId);
+            await updateStudentResponse(studentResponseData.current, responseId);
         } catch (error) {
             console.log('error saving to indexed db', error);
         } finally {
@@ -240,7 +238,7 @@ export default function SinglePromptEditor({
                                     <input
                                         id="responseData"
                                         name="responseData"
-                                        value={JSON.stringify(studentResponseData)}
+                                        value={JSON.stringify(studentResponseData.current)}
                                         hidden
                                         readOnly
                                     />

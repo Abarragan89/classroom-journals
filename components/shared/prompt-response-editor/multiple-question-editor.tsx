@@ -71,7 +71,7 @@ export default function MultipleQuestionEditor({
                 await handleSaveResponses();
                 setIsTyping(false);
                 inputRef.current?.focus()
-            }, 5000); // Save after 5 seconds of inactivity
+            }, 8000); // Save after 5 seconds of inactivity
         }
         return () => clearTimeout(typingTimeoutRef.current);
     }, [journalText, isTyping]);
