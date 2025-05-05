@@ -33,8 +33,8 @@ export default function MultipleQuestionEditor({
     const [studentResponseData, setStudentResponseData] = useState<ResponseData[]>(studentResponse);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
-    const [isTyping, setIsTyping] = useState(false);
-    const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    // const [isTyping, setIsTyping] = useState(false);
+    // const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     const [state, action] = useActionState(submitStudentResponse, {
         success: false,
@@ -61,19 +61,19 @@ export default function MultipleQuestionEditor({
     }, [questionNumber, studentResponseData])
 
     // /** Auto-save logic */
-    useEffect(() => {
-        if (!isTyping) return
-        if (isTyping) {
-            if (typingTimeoutRef.current) {
-                clearTimeout(typingTimeoutRef.current);
-            }
-            typingTimeoutRef.current = setTimeout(async () => {
-                setIsTyping(false);
-                await handleSaveResponses();
-            }, 8000); // Save after 5 seconds of inactivity
-        }
-        return () => clearTimeout(typingTimeoutRef.current);
-    }, [journalText, isTyping]);
+    // useEffect(() => {
+    //     if (!isTyping) return
+    //     if (isTyping) {
+    //         if (typingTimeoutRef.current) {
+    //             clearTimeout(typingTimeoutRef.current);
+    //         }
+    //         typingTimeoutRef.current = setTimeout(async () => {
+    //             setIsTyping(false);
+    //             await handleSaveResponses();
+    //         }, 8000); // Save after 5 seconds of inactivity
+    //     }
+    //     return () => clearTimeout(typingTimeoutRef.current);
+    // }, [journalText, isTyping]);
 
 
     // Go into fullscreen mode
@@ -214,7 +214,7 @@ export default function MultipleQuestionEditor({
                         setJournalText={setJournalText}
                         journalText={journalText}
                         inputRef={inputRef}
-                        setIsTyping={setIsTyping}
+                        // setIsTyping={setIsTyping}
                     />
                     <form onSubmit={(e) => saveAndContinue(e)}>
                         <SaveAndContinueBtns

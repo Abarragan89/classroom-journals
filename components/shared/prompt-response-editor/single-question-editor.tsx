@@ -31,8 +31,8 @@ export default function SinglePromptEditor({
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
-    const [isTyping, setIsTyping] = useState(false);
-    const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    // const [isTyping, setIsTyping] = useState(false);
+    // const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
 
     const [state, action] = useActionState(submitStudentResponse, {
@@ -71,19 +71,19 @@ export default function SinglePromptEditor({
 
 
     // /** Auto-save logic */
-    useEffect(() => {
-        if (!isTyping) return
-        if (isTyping) {
-            if (typingTimeoutRef.current) {
-                clearTimeout(typingTimeoutRef.current);
-            }
-            typingTimeoutRef.current = setTimeout(() => {
-                handleSaveResponses();
-                setIsTyping(false);
-            }, 8000); // Save after 5 seconds of inactivity
-        }
-        return () => clearTimeout(typingTimeoutRef.current);
-    }, [journalText, isTyping]);
+    // useEffect(() => {
+    //     if (!isTyping) return
+    //     if (isTyping) {
+    //         if (typingTimeoutRef.current) {
+    //             clearTimeout(typingTimeoutRef.current);
+    //         }
+    //         typingTimeoutRef.current = setTimeout(() => {
+    //             handleSaveResponses();
+    //             setIsTyping(false);
+    //         }, 8000); // Save after 5 seconds of inactivity
+    //     }
+    //     return () => clearTimeout(typingTimeoutRef.current);
+    // }, [journalText, isTyping]);
 
     // Go into fullscreen mode
     useEffect(() => {
@@ -155,7 +155,7 @@ export default function SinglePromptEditor({
                         setJournalText={setJournalText}
                         journalText={journalText}
                         inputRef={inputRef}
-                        setIsTyping={setIsTyping}
+                        // setIsTyping={setIsTyping}
                         jotType='BLOG'
                     />
                     <div className="flex flex-col justify-center items-center mb-20">
@@ -176,7 +176,7 @@ export default function SinglePromptEditor({
                         setJournalText={setJournalText}
                         journalText={journalText}
                         inputRef={inputRef}
-                        setIsTyping={setIsTyping}
+                        // setIsTyping={setIsTyping}
                         characterLimit={70}
                     />
                     <div className="flex flex-col justify-center items-center mb-20">
