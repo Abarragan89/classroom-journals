@@ -27,7 +27,7 @@ export default function SinglePromptEditor({
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);
     const [journalText, setJournalText] = useState<string>("");
-    const studentResponseData= useRef<ResponseData[]>(studentResponse);
+    const studentResponseData = useRef<ResponseData[]>(studentResponse);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
@@ -54,16 +54,21 @@ export default function SinglePromptEditor({
     // This runs on every new page
     useEffect(() => {
         if (questionNumber && studentResponseData.current) {
-            if (questionNumber === '2') {
-                setJournalText(studentResponseData.current?.[Number(questionNumber)]?.answer ?? 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png')
-            }
-            setCurrentQuestion(studentResponseData.current?.[Number(questionNumber)]?.question)
-            setJournalText(studentResponseData.current?.[Number(questionNumber)]?.answer ?? '')
-            inputRef.current?.focus()
-        }
-    }, [questionNumber, studentResponseData.current])
+            const current = studentResponseData.current[Number(questionNumber)];
+            if (!current) return;
 
-    console.log('student response data ', studentResponseData.current)
+            if (questionNumber === '2') {
+                setJournalText(current.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png');
+                setCurrentQuestion(current.question);
+                return;
+            }
+
+            setJournalText(current.answer || '');
+            setCurrentQuestion(current.question);
+            inputRef.current?.focus();
+        }
+    }, [questionNumber, studentResponseData.current]);
+
 
     // /** Auto-save logic */
     useEffect(() => {
@@ -171,6 +176,7 @@ export default function SinglePromptEditor({
                         setJournalText={setJournalText}
                         journalText={journalText}
                         inputRef={inputRef}
+                        setIsTyping={setIsTyping}
                         characterLimit={70}
                     />
                     <div className="flex flex-col justify-center items-center mb-20">
