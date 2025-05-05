@@ -47,21 +47,21 @@ export default function SubscriptionCard({
     }
 
     function generateBtn() {
-        if (subscriptionData.name.includes('BASIC')) {
+        if (subscriptionData.name.includes('Basic')) {
             return <Button disabled>Always Free</Button>
         }
         // Handle Monthly if subscribed or disabled
-        if (currentSubscription.includes('STANDARD') && subscriptionData.name.includes('STANDARD') && !isCancelling) {
+        if (currentSubscription.includes('STANDARD') && subscriptionData.name.includes('Standard') && !isCancelling) {
             return <Button variant='destructive' onClick={() => setIsModalOpen(true)}>Unsubscribe</Button>
 
-        } else if (currentSubscription.includes('STANDARD') && !subscriptionData.name.includes('STANDARD') && !isCancelling) {
+        } else if (currentSubscription.includes('STANDARD') && !subscriptionData.name.includes('Standard') && !isCancelling) {
             return <Button disabled>You must first Unsubscribe</Button>
         }
         // Handle Yearly if subscribed or disabled
-        if (currentSubscription.includes('PREMIUM') && subscriptionData.name.includes('PREMIUM') && !isCancelling) {
+        if (currentSubscription.includes('PREMIUM') && subscriptionData.name.includes('Premium') && !isCancelling) {
             return <Button variant='destructive' onClick={() => setIsModalOpen(true)}>Unsubscribe</Button>
 
-        } else if (currentSubscription.includes('PREMIUM') && !subscriptionData.name.includes('PREMIUM') && !isCancelling) {
+        } else if (currentSubscription.includes('PREMIUM') && !subscriptionData.name.includes('Premium') && !isCancelling) {
             return <Button disabled>You must first Unsubscribe</Button>
         }
 

@@ -3,6 +3,7 @@ import { Check, X } from "lucide-react"
 import { gradeStudentResponse } from "@/lib/actions/response.action";
 import { useState } from "react";
 import { BarLoader } from "react-spinners"
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function GradingPanel({
     responseId,
@@ -20,6 +21,7 @@ export default function GradingPanel({
 
     const [isGrading, setIsGrading] = useState<boolean>(false)
     const [currentScoreState, setCurrentScoreState] = useState<number>(currentScore)
+    const queryClient = useQueryClient();
 
     async function updateResponseScore(score: number) {
         try {
@@ -29,6 +31,7 @@ export default function GradingPanel({
                 updateScoreUIHandler(questionNumber, score)
             } else if (updateUIQuestionAccordion) {
                 updateUIQuestionAccordion(score)
+                queryClient.invalidateQueries({ queryKey: ['getSingleSessionData'] });
                 return
             }
             setCurrentScoreState(score)

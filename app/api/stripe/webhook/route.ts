@@ -46,20 +46,20 @@ export async function POST(req: NextRequest) {
                 // set variables to update depending on the plan
                 const now = new Date();
                 const futureDate = new Date(now);
-                let accountType: string = '';
+                let accountType: TeacherAccountType = TeacherAccountType.BASIC;
                 switch (amountPaid) {
                     // testing case of 1 dollar
                     case 100:
                         futureDate.setDate(futureDate.getDate() + 1);
-                        accountType = 'PREMIUM';
+                        accountType = TeacherAccountType.PREMIUM;
                         break;
                     case 4999:
                         futureDate.setDate(futureDate.getDate() + 368);
-                        accountType = 'STANDARD';
+                        accountType = TeacherAccountType.STANDARD;
                         break;
                     case 9999:
                         futureDate.setDate(futureDate.getDate() + 368);
-                        accountType = 'PREMIUM';
+                        accountType = TeacherAccountType.PREMIUM
                         break;
                 }
 
@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
                         customerId,
                         isCancelling: false,
                         subscriptionExpires: futureDate,
-                        accountType: accountType === 'Standard' ? TeacherAccountType.STANDARD : TeacherAccountType.PREMIUM 
+                        accountType
                     }
                 })
 
