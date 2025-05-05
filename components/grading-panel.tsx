@@ -31,9 +31,8 @@ export default function GradingPanel({
                 updateScoreUIHandler(questionNumber, score)
             } else if (updateUIQuestionAccordion) {
                 updateUIQuestionAccordion(score)
-                queryClient.invalidateQueries({ queryKey: ['getSingleSessionData'] });
-                return
             }
+            queryClient.invalidateQueries({ queryKey: ['getSingleSessionData'] });
             setCurrentScoreState(score)
         } catch (error) {
             console.log('error updating score ', error)
