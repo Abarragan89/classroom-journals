@@ -53,7 +53,7 @@ export default function SinglePromptEditor({
 
     // This runs on every new page
     useEffect(() => {
-        if (questionNumber) {
+        if (questionNumber && studentResponseData) {
             if (questionNumber === '2') {
                 setJournalText(studentResponseData?.[Number(questionNumber)]?.answer ?? 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png')
             }
@@ -62,6 +62,8 @@ export default function SinglePromptEditor({
             inputRef.current?.focus()
         }
     }, [questionNumber, studentResponseData])
+
+    console.log('student response data ', studentResponseData)
 
     // /** Auto-save logic */
     useEffect(() => {
@@ -99,7 +101,7 @@ export default function SinglePromptEditor({
                     : q
             );
             // Update the state
-            setStudentResponseData(updatedData);
+            // setStudentResponseData(updatedData);
             // Call the server action with the updated data
             await updateStudentResponse(updatedData, responseId);
         } catch (error) {

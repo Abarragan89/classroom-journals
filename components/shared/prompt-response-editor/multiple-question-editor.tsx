@@ -53,7 +53,7 @@ export default function MultipleQuestionEditor({
 
     // This runs on every new page
     useEffect(() => {
-        if (questionNumber) {
+        if (questionNumber && studentResponseData) {
             setCurrentQuestion(studentResponseData?.[Number(questionNumber)]?.question)
             setJournalText(studentResponseData?.[Number(questionNumber)]?.answer ?? '')
             inputRef.current?.focus()
@@ -99,7 +99,7 @@ export default function MultipleQuestionEditor({
                     : q
             );
             // Update the state
-            setStudentResponseData(updatedData);
+            // setStudentResponseData(updatedData);
             // Call the server action with the updated data
             await updateStudentResponse(updatedData, responseId);
         } catch (error) {
