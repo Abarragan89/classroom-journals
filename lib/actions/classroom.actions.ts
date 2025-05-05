@@ -3,6 +3,7 @@ import { prisma } from "@/db/prisma";
 import { classSchema } from "../validators";
 import { generateClassCode } from "../utils";
 import { decryptText } from "../utils";
+import { ClassUserRole } from "@prisma/client";
 
 // Create a new class
 export async function createNewClass(prevState: unknown, formData: FormData) {
@@ -78,7 +79,7 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
                 data: {
                     userId: teacherId,
                     classId: newClass.id,
-                    role: "teacher"
+                    role: ClassUserRole.TEACHER
                 }
             })
             classUrl = newClass.id
@@ -100,7 +101,7 @@ export async function getAllClassrooms(teacherId: string) {
                 users: {
                     some: {
                         userId: teacherId,
-                        role: 'teacher'
+                        role: ClassUserRole.TEACHER
                     }
                 }
             },
@@ -123,7 +124,7 @@ export async function getAllClassroomIds(teacherId: string) {
                 users: {
                     some: {
                         userId: teacherId,
-                        role: 'teacher'
+                        role: ClassUserRole.TEACHER
                     }
                 }
             },
@@ -200,7 +201,7 @@ export async function getAllStudents(classId: string) {
         const allStudents = await prisma.classUser.findMany({
             where: {
                 classId: classId,
-                role: 'student'
+                role: ClassUserRole.STUDENT
             },
             select: {
                 user: {
@@ -244,7 +245,7 @@ export async function deleteClassroom(prevState: unknown, formData: FormData) {
         const studentUsers = await prisma.classUser.findMany({
             where: {
                 classId: classroomId,
-                role: "student",
+                role: ClassUserRole.STUDENT,
             },
             select: { userId: true }, // Get only user IDs
         });

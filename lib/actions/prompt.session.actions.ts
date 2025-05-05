@@ -2,6 +2,7 @@
 import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
 import { SearchOptions } from "@/types";
+import { PromptSessionStatus, ResponseStatus } from "@prisma/client";
 
 export async function getAllSessionsInClass(classId: string) {
     try {
@@ -16,7 +17,6 @@ export async function getAllSessionsInClass(classId: string) {
                         select: {
                             id: true,
                             studentId: true,
-                            isSubmittable: true
                         }
                     },
                     isPublic: true,
@@ -66,7 +66,6 @@ export async function getAllSessionsInClassForStudent(classId: string) {
                         select: {
                             id: true,
                             studentId: true,
-                            isSubmittable: true
                         }
                     },
                     createdAt: true,
@@ -101,6 +100,7 @@ export async function getSinglePromptSessionStudentDiscussion(promptId: string) 
                 assignedAt: true,
                 isPublic: true,
                 responses: {
+                    where: { completionStatus: ResponseStatus.COMPLETE },
                     select: {
                         notifications: true,
                         likeCount: true,
@@ -261,7 +261,7 @@ export async function toggleBlogStatus(prevState: unknown, formData: FormData) {
         await prisma.promptSession.update({
             where: { id: promptId },
             data: {
-                status: promptStatus
+                status: promptStatus === 'OPEN' ? PromptSessionStatus.OPEN : PromptSessionStatus.CLOSED
             }
         })
         return { success: true, message: 'Prompt Updated!', promptId };
@@ -318,7 +318,7 @@ export async function getFilteredPromptSessions(filterOptions: SearchOptions) {
                 title: filterOptions.searchWords
                     ? { contains: filterOptions.searchWords, mode: "insensitive" }
                     : undefined,
-                promptType: filterOptions.filter === 'single-question' || filterOptions.filter === 'multi-question'
+                promptType: filterOptions.filter === 'BLOG' || filterOptions.filter === 'ASSESSMENT'
                     ? filterOptions.filter
                     : undefined
             },
@@ -343,7 +343,6 @@ export async function getFilteredPromptSessions(filterOptions: SearchOptions) {
                     select: {
                         id: true,
                         studentId: true,
-                        isSubmittable: true,
                         submittedAt: true
                     }
                 }

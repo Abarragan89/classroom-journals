@@ -92,7 +92,7 @@ export default function CommentSection({
         <section className="relative mx-auto" id="comment-section-main">
             <h3 className="h3-bold text-center pb-3">Comments</h3>
 
-            {discussionStatus === 'open' &&
+            {discussionStatus === 'OPEN' &&
                 <form
                     onSubmit={(e) => addCommentHandler(e)}
                     className="relative"

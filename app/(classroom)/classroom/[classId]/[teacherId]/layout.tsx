@@ -9,6 +9,7 @@ import { getAllClassrooms, getSingleClassroom } from "@/lib/actions/classroom.ac
 import { prisma } from "@/db/prisma";
 import DynamicHeader from "@/components/dynamic-header";
 import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
+import { ClassUserRole } from "@prisma/client";
 
 export default async function DashboardLayout({
     children,
@@ -36,7 +37,7 @@ export default async function DashboardLayout({
         where: {
             classId: classId,
             userId: teacherId,
-            role: 'teacher'
+            role: ClassUserRole.TEACHER
         },
         select: { userId: true }
     });

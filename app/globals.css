@@ -171,7 +171,7 @@
 
   .avocado {
     --background: hsl(97, 71%, 92%); /* Pale avocado green for main content */
-    --foreground: hsl(100, 14%, 4%); /* Deep green text for contrast */
+    --foreground: hsl(99, 13%, 21%); /* Deep green text for contrast */
     --primary: hsl(100, 70%, 40%); /* Avocado green */
     --primary-foreground: hsl(0, 0%, 100%); /* White text */
     --secondary: hsl(30, 61%, 37%); /* Avocado pit brown */
@@ -184,10 +184,10 @@
     --accent-foreground: hsl(105, 41%, 85%);
     --border: hsl(100, 20%, 80%);
     --input: hsl(100, 61%, 22%);
-    --ring: hsl(34, 63%, 64%);
+    --ring: hsl(34, 58%, 42%);
     --destructive: hsl(0, 70%, 50%);
     --destructive-foreground: hsl(0, 0%, 100%);
-    --warning: hsl(45, 100%, 60%);
+    --warning: hsl(45, 87%, 52%);
     --warning-foreground: hsl(0, 0%, 10%);
     --popover: hsl(100, 30%, 95%);
     --popover-foreground: hsl(100, 40%, 25%);

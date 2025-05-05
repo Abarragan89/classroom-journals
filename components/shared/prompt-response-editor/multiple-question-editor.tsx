@@ -67,9 +67,10 @@ export default function MultipleQuestionEditor({
             if (typingTimeoutRef.current) {
                 clearTimeout(typingTimeoutRef.current);
             }
-            typingTimeoutRef.current = setTimeout(() => {
-                handleSaveResponses();
+            typingTimeoutRef.current = setTimeout(async () => {
+                await handleSaveResponses();
                 setIsTyping(false);
+                inputRef.current?.focus()
             }, 5000); // Save after 5 seconds of inactivity
         }
         return () => clearTimeout(typingTimeoutRef.current);
@@ -101,7 +102,6 @@ export default function MultipleQuestionEditor({
             setStudentResponseData(updatedData);
             // Call the server action with the updated data
             await updateStudentResponse(updatedData, responseId);
-            toast('Answers Saved')
         } catch (error) {
             console.log('error saving to indexed db', error);
         } finally {
@@ -176,7 +176,7 @@ export default function MultipleQuestionEditor({
                             <input
                                 id="promptType"
                                 name="promptType"
-                                value='multi-question'
+                                value='ASSESSMENT'
                                 hidden
                                 readOnly
                             />
@@ -202,7 +202,7 @@ export default function MultipleQuestionEditor({
                                 readOnly
                             />
                             <div className="flex-center gap-x-7">
-                                <Button onClick={handleSaveResponses} variant='secondary' type="button">Save</Button>
+                                <Button onClick={() => { handleSaveResponses(); toast('Answers Saved!') }} variant='secondary' type="button">Save</Button>
                                 <SubmitFormBtn />
                             </div>
                         </form>
@@ -218,6 +218,7 @@ export default function MultipleQuestionEditor({
                         setJournalText={setJournalText}
                         journalText={journalText}
                         inputRef={inputRef}
+                        setIsTyping={setIsTyping}
                     />
                     <form onSubmit={(e) => saveAndContinue(e)}>
                         <SaveAndContinueBtns

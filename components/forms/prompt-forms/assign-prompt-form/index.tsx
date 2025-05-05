@@ -101,7 +101,7 @@ export default function AssignPromptForm({
                     readOnly
                     hidden
                 />
-                {promptType === 'single-question' &&
+                {promptType === 'BLOG' &&
                     <div className="flex items-center space-x-2">
                         <Switch
                             onCheckedChange={(e) => setIsPublic(e)}

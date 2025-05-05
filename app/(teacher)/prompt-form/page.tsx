@@ -16,7 +16,7 @@ export default async function CreatePrompt({
     if (!session) notFound()
 
     const teacherId = session?.user?.id as string
-    if (!teacherId || session?.user?.role !== 'teacher') notFound()
+    if (!teacherId || session?.user?.role !== 'TEACHER') notFound()
         
     const { type } = await searchParams;
 
@@ -26,14 +26,14 @@ export default async function CreatePrompt({
                 <Link href={'/prompt-library'} className="flex items-center hover:underline w-fit">
                     <ArrowLeftIcon className="mr-1" size={20} />Back to all Jots
                 </Link>
-                {type === 'single-question' ? (
+                {type.toUpperCase() === 'BLOG' ? (
                     <>
                         <h1 className="h1-bold mt-5">New Blog Prompt</h1>
                         <div className="max-w-[600px] mx-auto mt-5">
                             <SinglePromptForm teacherId={teacherId} />
                         </div>
                     </>
-                ) : type === 'multi-question' ? (
+                ) : type.toUpperCase() === 'ASSESSMENT' ? (
                     <>
                         <h1 className="h1-bold mt-5">New Assessment</h1>
                         <div className="max-w-[600px] mx-auto mt-5">

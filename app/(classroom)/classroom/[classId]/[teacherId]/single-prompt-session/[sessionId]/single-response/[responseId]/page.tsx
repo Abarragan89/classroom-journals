@@ -38,7 +38,7 @@ export default async function SingleResponse({
     }
 
     const questionsAndAnswers = response?.response as unknown as ResponseData[]
-    const isMultiQuestion = response?.promptSession?.promptType === 'multi-question';
+    const isMultiQuestion = response?.promptSession?.promptType === 'ASSESSMENT';
 
     return (
         <>
@@ -97,7 +97,7 @@ export default async function SingleResponse({
                                     responseId={responseId}
                                     studentId={teacherId}
                                     sessionId={sessionId}
-                                    discussionStatus={'open'}
+                                    discussionStatus={'OPEN'}
                                     isTeacherView={true}
                                     classroomId={classId}
                                 />

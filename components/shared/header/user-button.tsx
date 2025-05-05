@@ -61,7 +61,7 @@ export default async function UserButton({
                             </div>
                         </div>
                     </DropdownMenuLabel>
-                    {session.user.role === 'teacher' &&
+                    {session.user.role === 'TEACHER' &&
                         <DropdownMenuLabel className="p-0 mb-1">
                             <Button asChild className="w-full py-4 px-2 h-4 justify-start" variant='ghost'>
                                 <Link

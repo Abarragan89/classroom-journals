@@ -17,9 +17,9 @@ export default async function page() {
     const session = await auth() as Session;
 
     if (session) {
-        if (session?.user?.role === 'teacher') {
+        if (session?.user?.role === 'TEACHER') {
             redirect(`/classes`)
-        } else if (session?.user?.role === 'student') {
+        } else if (session?.user?.role === 'STUDENT') {
             redirect('/student-dashboard')
         }
     }
@@ -49,7 +49,7 @@ export default async function page() {
             username: 'Flor'
         },
         // @ts-expect-error: using Dummy Data
-        promptSession: { status: 'open', promptType: 'single-question' }
+        promptSession: { status: 'OPEN', promptType: 'BLOG' }
     }
 
     const dummyBlogText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget turpis id purus fermentum volutpat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer luctus libero non sem tincidunt, ut feugiat odio tempor. Donec sed felis nec erat egestas blandit sed eget metus. Sed blandit mi non turpis fermentum, a iaculis eros viverra. Fusce fringilla, sem in porta dictum, velit justo lobortis nunc, ut tincidunt nibh nisi nec magna.
@@ -173,7 +173,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                         studentId={'1'}
                         sessionId={'1'}
                         classroomId={'1'}
-                        discussionStatus={'open'}
+                        discussionStatus={'OPEN'}
                         commentCoolDown={20}
                     />
                 </section>

@@ -47,11 +47,11 @@ export default function AssignmentSectionClient({
             label: "All Assignments",
         },
         {
-            value: "multi-question",
+            value: "ASSESSMENT",
             label: "Assessments",
         },
         {
-            value: "single-question",
+            value: "BLOG",
             label: "Blog Prompts",
         }
     ]

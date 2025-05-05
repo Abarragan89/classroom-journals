@@ -8,7 +8,6 @@ export default function StudentAssignmentListItem({
     studentResponse: Response,
 }) {
 
-    const type = studentResponse?.promptSession?.promptType === 'multi-question' ? 'Assessment' : 'Blog';
     const hrefLink = studentResponse?.completionStatus === 'COMPLETE' ?
         `response-review/${studentResponse?.id}` : studentResponse?.completionStatus === 'RETURNED' ?
             `response-review/${studentResponse?.id}` : `/jot-response/${studentResponse.id}?q=0`
@@ -21,7 +20,7 @@ export default function StudentAssignmentListItem({
                     <p
                         className='text-2xl font-bold bg-input text-background p-1 px-3 rounded-full mr-3'
                     >
-                        {type.charAt(0)}
+                        {studentResponse?.promptSession?.promptType.charAt(0)}
                     </p>
                     <div className="flex flex-col relative w-full">
                         <p className='text-md font-bold line-clamp-1 text-foreground'>{studentResponse?.promptSession?.title}</p>

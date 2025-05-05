@@ -10,7 +10,7 @@ export default async function StudentGrades() {
     if (!session) notFound()
 
     const studentId = session?.user?.id as string
-    if (session?.user?.role !== 'student' || !studentId) {
+    if (session?.user?.role !== 'STUDENT' || !studentId) {
         notFound()
     }
 

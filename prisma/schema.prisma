@@ -113,6 +113,7 @@ model ClassUser {
   class   Classroom     @relation(fields: [classId], references: [id], onDelete: Cascade)
 
   @@id([userId, classId]) // Composite primary key
+  @@index([userId, role]) // For faster search ups
 }
 
 model Notification {

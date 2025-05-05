@@ -6,6 +6,7 @@ import { decryptText, generateClassCode, generateRandom5DigitNumber } from "../u
 import { GoogleProfile } from "next-auth/providers/google";
 import { encryptText } from "../utils";
 import crypto from 'crypto';
+import { ClassUserRole, TeacherAccountType } from "@prisma/client";
 
 
 // Get all Active google classroom classes that teacher is owner
@@ -79,7 +80,7 @@ export async function createClassroomWithGoogle(classroom: GoogleClassroom, teac
                 data: {
                     userId: teacherId,
                     classId: newClassroom.id,
-                    role: 'teacher'
+                    role: ClassUserRole.TEACHER
                 }
             })
 
@@ -106,12 +107,14 @@ export async function createClassroomWithGoogle(classroom: GoogleClassroom, teac
                         username: encryptedNickName,
                         iv: iv.toString('hex'), // Store the IV (Initialization Vector) used for encryption
                         password: encryptedPassword,
-                        commentCoolDown: 20
+                        commentCoolDown: 20,
+                        accountType: TeacherAccountType.BASIC
                     };
                 });
 
                 const addedStudents = await Promise.all(
-                    studentsToAdd.map((student: User) =>
+                    // I need to omit accountType to avoid typescript error becuase it infers accountType as string | undefined
+                    studentsToAdd.map((student: Omit<User, 'accountType'>) =>
                         prisma.user.upsert({
                             where: { googleId: student.googleId }, // Ensure uniqueness using email
                             update: {}, // If the student exists, do nothing
@@ -124,7 +127,7 @@ export async function createClassroomWithGoogle(classroom: GoogleClassroom, teac
                 const classUserAssociations = addedStudents?.map((student: User) => ({
                     userId: student.id, // Use the `userId` returned from the user table
                     classId: newClassroom.id,
-                    role: 'student',
+                    role: ClassUserRole.STUDENT
                 }));
 
 
@@ -238,7 +241,7 @@ export async function populateStudentRosterFromGoogle(classroom: GoogleClassroom
             const classUserAssociations = allStudents.map((student) => ({
                 userId: student.id,
                 classId: classId,
-                role: "student",
+                role: ClassUserRole.STUDENT
             }));
 
             // Make Classroom associations, skipping duplicates

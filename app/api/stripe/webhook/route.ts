@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 import Stripe from "stripe";
 import { subscriptionCancelled, subscriptionConfirmation, subscriptionPaymentFailed } from "@/lib/emails/stripe-emails";
 import { decryptText } from "@/lib/utils";
+import { AlertType, TeacherAccountType } from "@prisma/client";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2025-03-31.basil",
@@ -50,15 +51,15 @@ export async function POST(req: NextRequest) {
                     // testing case of 1 dollar
                     case 100:
                         futureDate.setDate(futureDate.getDate() + 1);
-                        accountType = 'Premium';
+                        accountType = 'PREMIUM';
                         break;
                     case 4999:
                         futureDate.setDate(futureDate.getDate() + 368);
-                        accountType = 'Standard';
+                        accountType = 'STANDARD';
                         break;
                     case 9999:
                         futureDate.setDate(futureDate.getDate() + 368);
-                        accountType = 'Premium';
+                        accountType = 'PREMIUM';
                         break;
                 }
 
@@ -91,7 +92,7 @@ export async function POST(req: NextRequest) {
                         customerId,
                         isCancelling: false,
                         subscriptionExpires: futureDate,
-                        accountType
+                        accountType: accountType === 'Standard' ? TeacherAccountType.STANDARD : TeacherAccountType.PREMIUM 
                     }
                 })
 
@@ -113,7 +114,7 @@ export async function POST(req: NextRequest) {
                 await prisma.alert.create({
                     data: {
                         userId: userFailedPayment?.id as string,
-                        type: 'payment',
+                        type: AlertType.PAYMENT,
                         message: 'Your payment was unsuccessful, please review you payment info and try again.'
                     }
                 })

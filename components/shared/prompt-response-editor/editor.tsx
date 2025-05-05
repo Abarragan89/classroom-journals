@@ -13,7 +13,8 @@ export default function Editor({
     jotType,
     characterLimit,
     isInReview = false,
-    isInDemo = false
+    isInDemo = false,
+    setIsTyping
 }: {
     journalText: string;
     setJournalText: React.Dispatch<React.SetStateAction<string>>;
@@ -21,6 +22,7 @@ export default function Editor({
     jotType?: string;
     characterLimit?: number,
     isInReview?: boolean,
+    setIsTyping?: React.Dispatch<React.SetStateAction<boolean>>;
     isInDemo?: boolean
 }) {
 
@@ -45,13 +47,14 @@ export default function Editor({
     }, [journalText]);
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (setIsTyping) setIsTyping(true)
         e.preventDefault(); // Prevent default behavior
         if (characterLimit && characterLimit <= cursorIndex && e.key !== "Backspace") {
             return;
         }
         let updatedText = journalText;
         let updatedCursor = cursorIndex;
-        if ( e.key === "Backspace" && cursorIndex > 0) {
+        if (e.key === "Backspace" && cursorIndex > 0) {
             updatedText = journalText.slice(0, cursorIndex - 1) + journalText.slice(cursorIndex);
             updatedCursor--;
         } else if (e.key.length === 1) {
@@ -104,7 +107,7 @@ export default function Editor({
                 onClick={() => hiddenInputRef.current?.focus()} // Focus input when div is clicked
                 className=
                 {`mx-auto w-full rounded-md outline-none border bg-background
-                    ${jotType === 'single-question' ? 'min-h-48' : ''}
+                    ${jotType === 'BLOG' ? 'min-h-48' : ''}
                     ${isFocused ? 'border-primary' : 'border-bg-accent'}
                 `}
             >

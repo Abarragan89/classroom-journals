@@ -16,11 +16,11 @@ export default function PromptFilterOptions({
 
     const traitFilterOptions = [
         {
-            value: "multi-question",
+            value: "ASSESSMENT",
             label: "Assessments",
         },
         {
-            value: "single-question",
+            value: "BLOG",
             label: "Blog Prompts",
         },
         {

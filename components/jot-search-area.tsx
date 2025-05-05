@@ -43,24 +43,28 @@ export default function JotSearchArea({
                 getFilteredSearch={getFilteredSearch}
                 categories={categories}
             />
-            <div className="mt-10 flex flex-wrap items-start gap-10 mb-10">
-                {/* Insert all the prompt jot cards here */}
-                {fetchedPrompts?.length > 0 && fetchedPrompts.map((prompt: Prompt) => (
-                    <PromptCard
-                        key={prompt.id}
-                        promptData={prompt}
-                        updatePromptData={setFetchedPrompts}
-                        classroomData={classroomData}
-                        teacherId={teacherId}
+            {/* Insert all the prompt jot cards here */}
+            {fetchedPrompts?.length > 0 ? (
+                <div className="mt-10 flex flex-wrap items-start gap-10 mb-10">
+                    {fetchedPrompts.map((prompt: Prompt) => (
+                        <PromptCard
+                            key={prompt.id}
+                            promptData={prompt}
+                            updatePromptData={setFetchedPrompts}
+                            classroomData={classroomData}
+                            teacherId={teacherId}
+                        />
+                    ))}
+                    <PaginationList
+                        searchOptionsRef={promptSearchOptions}
+                        getFilteredSearch={getFilteredSearch}
+                        totalItems={totalPromptCount}
+                        itemsPerPage={20}
                     />
-                ))}
-            </div>
-            <PaginationList
-                searchOptionsRef={promptSearchOptions}
-                getFilteredSearch={getFilteredSearch}
-                totalItems={totalPromptCount}
-                itemsPerPage={20}
-            />
+                </div>
+            ) : (
+                <p className="text-center italic text-2xl mt-10">No Jots in your Library</p>
+            )}
         </div>
     )
 }

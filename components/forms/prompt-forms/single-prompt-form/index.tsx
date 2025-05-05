@@ -221,7 +221,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
             />
             <input
                 id="prompt-type"
-                defaultValue='single-question'
+                defaultValue='BLOG'
                 name="prompt-type"
                 required
                 hidden

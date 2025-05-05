@@ -2,7 +2,7 @@
 import { prisma } from "@/db/prisma";
 import { promptSchema } from "../validators";
 import { SearchOptions, Question, Prompt } from "@/types";
-import { Prisma, ResponseStatus } from '@prisma/client';
+import { ClassUserRole, Prisma, PromptSessionStatus, PromptType, ResponseStatus } from '@prisma/client';
 
 // Create new prompt 
 export async function createNewPrompt(prevState: unknown, formData: FormData) {
@@ -44,7 +44,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         // Get Prompt Type
         const promptType = formData.get("prompt-type") as string;
 
-        if (promptType === 'single-question') {
+        if (promptType === 'BLOG') {
             // Add blog-title and blog-image questions if a journal prompt
             questions.push({ question: 'Add a Blog Title' })
             questions.push({ question: 'Add a Cover Photo' })
@@ -68,7 +68,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                 data: {
                     title: title.trim(),
                     teacherId,
-                    promptType,
+                    promptType: promptType === 'BLOG' ? PromptType.BLOG : PromptType.ASSESSMENT,
                     categoryId,
                     questions: questions as unknown as Prisma.InputJsonValue,
                 },
@@ -121,7 +121,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                     questions: createdPrompt.questions as Prisma.InputJsonValue,
                     assignedAt: new Date(),
                     classId: classId,
-                    status: 'open',
+                    status: PromptSessionStatus.OPEN
                 }));
 
                 // Create all the PromptSessions in one transaction
@@ -150,7 +150,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                         classId: {
                             in: classesAssignTo
                         },
-                        role: 'student'
+                        role: ClassUserRole.STUDENT
                     },
                     select: {
                         userId: true,
@@ -237,7 +237,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
 
         const promptType = formData.get("prompt-type") as string;
 
-        if (promptType === 'single-question') {
+        if (promptType === 'BLOG') {
             // Add blog-title and blog-image questions if a journal prompt
             questions.push({ question: 'Add a Blog Title' })
             questions.push({ question: 'Add a Cover Photo' })
@@ -281,7 +281,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
                     questions: updatedPrompt.questions as Prisma.InputJsonValue,
                     assignedAt: new Date(),
                     classId: classId,
-                    status: 'open',
+                    status: PromptSessionStatus.OPEN
                 }));
 
                 // Create all the PromptSessions in one transaction
@@ -401,7 +401,7 @@ export async function getFilterPrompts(filterOptions: SearchOptions) {
                 promptSession: filterOptions.filter === 'never-assigned'
                     ? { none: {} }
                     : undefined,
-                promptType: filterOptions.filter === 'single-question' || filterOptions.filter === 'multi-question'
+                promptType: filterOptions.filter === 'BLOG' || filterOptions.filter === 'ASSESSMENT'
                     ? filterOptions.filter
                     : undefined
             },
@@ -511,35 +511,39 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
                 questions: currentPrompt.questions as Prisma.InputJsonValue,
                 assignedAt: new Date(),
                 classId,
-                status: 'open',
+                status: PromptSessionStatus.OPEN
             }));
 
-            await tx.promptSession.createMany({
-                data: promptSessions,
-            });
-
-            // 2. Fetch the new prompt sessions
-            const createdPromptSessions = await tx.promptSession.findMany({
-                where: {
-                    promptId: currentPrompt.id,
-                    classId: { in: classesAssignTo },
-                },
-                select: {
-                    id: true,
-                    classId: true,
-                },
-            });
+            const createdPromptSessions = await Promise.all(
+                classesAssignTo.map((classId) =>
+                    tx.promptSession.create({
+                        data: {
+                            promptId: currentPrompt.id,
+                            title: currentPrompt.title,
+                            promptType: currentPrompt.promptType,
+                            isPublic: isPublic === 'true',
+                            questions: currentPrompt.questions as Prisma.InputJsonValue,
+                            assignedAt: new Date(),
+                            classId,
+                            status: PromptSessionStatus.OPEN,
+                        },
+                        select: {
+                            id: true,
+                            classId: true,
+                        },
+                    })
+                )
+            );
 
             // 3. Fetch class users
             const classUsers = await tx.classUser.findMany({
                 where: {
                     classId: { in: classesAssignTo },
-                    role: 'student',
+                    role: ClassUserRole.STUDENT,
                 },
                 select: {
                     userId: true,
                     classId: true,
-                    user: { select: { id: true } }
                 },
             });
 
@@ -548,7 +552,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
                 return createdPromptSessions
                     .filter((session) => session.classId === classUser.classId)
                     .map((session) => ({
-                        studentId: classUser.user.id,
+                        studentId: classUser.userId,
                         promptSessionId: session.id,
                         completionStatus: ResponseStatus.INCOMPLETE,
                         response: currentPrompt.questions as Prisma.InputJsonValue,

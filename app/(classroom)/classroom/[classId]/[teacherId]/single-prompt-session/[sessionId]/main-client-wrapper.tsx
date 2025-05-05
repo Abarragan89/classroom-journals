@@ -56,7 +56,7 @@ export default function MainClientWrapper({
     }
 
 
-    const classAverage = promptSessionData?.promptType === 'multi-question' ?
+    const classAverage = promptSessionData?.promptType === 'ASSESSMENT' ?
         calculateClassAverageAssessment()
         :
         calculateClassAverageBlog()
@@ -77,7 +77,7 @@ export default function MainClientWrapper({
                 </div>
             </div>
             {/* Bar chart */}
-            {promptSessionData?.promptType === 'multi-question' &&
+            {promptSessionData?.promptType === 'ASSESSMENT' &&
                 <DataClientWrapper
                     questions={(promptSessionData?.questions as unknown as Question[]) as unknown as Question[]}
                     responses={promptSessionData?.responses as unknown as Response[]}
@@ -85,7 +85,7 @@ export default function MainClientWrapper({
                 />
             }
 
-            {promptSessionData.promptType === 'multi-question' ? (
+            {promptSessionData.promptType === 'ASSESSMENT' ? (
                 <AssessmentTableData
                     promptSessionData={promptSessionData?.responses as unknown as Response[]}
                     teacherId={teacherId}

@@ -32,7 +32,7 @@ export default function PromptCard({
                 classroomData={classroomData}
                 teacherId={teacherId}
             />
-            {promptData.promptType === 'multi-question' ? (
+            {promptData.promptType === 'ASSESSMENT' ? (
                 <div className="w-full text-foreground bg-ring rounded-xl rounded-b-none h-[70px]">
                     <div className="p-3">
                         <p className="text-xl font-bold">{promptData?.category?.name}</p>

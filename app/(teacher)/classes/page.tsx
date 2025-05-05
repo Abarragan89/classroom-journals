@@ -14,7 +14,7 @@ export default async function Classes() {
 
     const teacherId = session?.user?.id as string
 
-    if (!teacherId || session?.user?.role !== 'teacher') notFound()
+    if (!teacherId || session?.user?.role !== 'TEACHER') notFound()
 
     const allClassrooms = await getAllClassrooms(teacherId) as Class[];
 

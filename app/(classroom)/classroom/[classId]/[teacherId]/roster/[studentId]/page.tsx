@@ -43,7 +43,7 @@ export default async function SingleStudentView({
                 {studentResponses?.length > 0 && studentResponses?.map((response: Response) => {
                     // Determine grade for blog and assessment
                     let score: string = 'N/A'
-                    if (response.promptSession?.promptType === 'single-question') {
+                    if (response.promptSession?.promptType === 'BLOG') {
                         score = ((response?.response as { score?: number }[] | undefined)?.[0]?.score)?.toString() ?? 'N/A'
                         score = score !== 'N/A' ? `${score}%` : score
                     } else {
@@ -58,7 +58,7 @@ export default async function SingleStudentView({
                                 <p
                                     className='text-2xl font-bold bg-input text-background p-1 px-3 rounded-full mr-3'
                                 >
-                                    {response?.promptSession?.promptType === 'single-question' ? 'B' : 'A'}
+                                    {response?.promptSession?.promptType === 'BLOG' ? 'B' : 'A'}
                                 </p>
                                 <div className="flex flex-col w-full">
                                     <p className='text-md font-bold line-clamp-1 text-foreground'>{response?.promptSession?.title}</p>

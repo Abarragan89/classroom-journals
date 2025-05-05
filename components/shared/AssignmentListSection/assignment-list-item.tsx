@@ -21,8 +21,6 @@ export default function AssignmentListItem({
     classSize?: number,
 }) {
 
-    const type = jotData.promptType === 'multi-question' ? 'Assessment' : 'Blog';
-
     return (
         <div className='relative'>
             <TooltipProvider>
@@ -34,7 +32,7 @@ export default function AssignmentListItem({
                                 <p
                                     className='text-2xl font-bold bg-input text-background p-1 px-3 rounded-full mr-3'
                                 >
-                                    {type.charAt(0)}
+                                    {jotData.promptType .charAt(0)}
                                 </p>
                                 <div className="flex flex-col relative">
                                     <p className='text-md font-bold line-clamp-1 text-foreground'>{jotData.title}</p>
@@ -53,11 +51,11 @@ export default function AssignmentListItem({
             </TooltipProvider>
             {/* This needs to outside the Link so user can click on questionPopup without linking  */}
             <div className="text-xs absolute text-input right-3 bottom-[6px]">
-                {jotData.promptType === 'multi-question' ? (
+                {jotData.promptType === 'ASSESSMENT' ? (
                     <QuestionPopup promptQuestions={jotData as unknown as Prompt} />
                 ) : (
-                    jotData.isPublic && jotData.promptType === 'single-question' ? (
-                        <p>Discussion: <span className={`font-bold pr-2 ${jotData.status === 'open' ? 'text-success' : 'text-destructive'}`}>{jotData.status}</span></p>
+                    jotData.isPublic && jotData.promptType === 'BLOG' ? (
+                        <p>Discussion: <span className={`font-bold pr-2 ${jotData.status === 'OPEN' ? 'text-success' : 'text-destructive'}`}>{jotData.status}</span></p>
                     ) : (
                         <p>Private</p>
                     ))}

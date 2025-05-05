@@ -4,7 +4,7 @@ import { decryptText } from "../utils";
 import { ResponseData, SearchOptions } from "@/types";
 import { InputJsonArray, JsonValue } from "@prisma/client/runtime/library";
 import { gradeResponseWithAI } from "./openai.action";
-import { ResponseStatus } from "@prisma/client";
+import { PromptType, ResponseStatus } from "@prisma/client";
 
 export async function createStudentResponse(prevState: unknown, formData: FormData) {
     try {
@@ -44,7 +44,7 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
         }
 
         // Grade it with AI Only if premium member and multiple questions
-        if (promptType === 'multi-question' && isTeacherPremium === 'true') {
+        if (promptType === 'ASSESSMENT' && isTeacherPremium === 'true') {
             let { output_text: scores } = await gradeResponseWithAI(gradeLevel, response)
             scores = JSON.parse(scores)
             response = response.map((res: ResponseData, index: number) => {
@@ -91,7 +91,7 @@ export async function updateASingleResponse(
 ) {
     try {
         // Grade it with AI Only if premium member
-        if (promptType === 'multi-question' && isTeacherPremium && gradeLevel) {
+        if (promptType === 'ASSESSMENT' && isTeacherPremium && gradeLevel) {
             let { output_text: scores } = await gradeResponseWithAI(gradeLevel, responseData)
             scores = JSON.parse(scores)
             responseData = responseData.map((res: ResponseData, index: number) => {
@@ -111,7 +111,6 @@ export async function updateASingleResponse(
                 submittedAt
             }
         })
-        console.log('data ', data)
         return { success: true, message: "Error fetching prompts. Try again." };
     } catch (error) {
         if (error instanceof Error) {
@@ -157,7 +156,7 @@ export async function submitStudentResponse(prevState: unknown, formData: FormDa
 
 
         // Grade it with AI Only if premium member and multiple questions
-        if (promptType === 'multi-question' && isTeacherPremium === 'true') {
+        if (promptType === 'ASSESSMENT' && isTeacherPremium === 'true') {
             let { output_text: scores } = await gradeResponseWithAI(gradeLevel, response)
             scores = JSON.parse(scores)
             response = response.map((res: ResponseData, index: number) => {
@@ -383,7 +382,7 @@ export async function getAllResponsesFromPompt(promptSessionId: string) {
             // Calculate Percentage score
             const responsesArr = (response?.response as unknown as ResponseData[])
             let score = "Not Graded"
-            const isMultiQuestion = response.promptSession.promptType === 'multi-question'
+            const isMultiQuestion = response.promptSession.promptType === PromptType.ASSESSMENT
 
             if (isMultiQuestion) {
                 const numberScore = responsesArr?.reduce((accum, currVal) => currVal?.score + accum, 0)
@@ -574,7 +573,7 @@ export async function getFilteredStudentResponses(filterOptions: SearchOptions) 
                         ? { contains: filterOptions.searchWords, mode: 'insensitive' }
                         : undefined,
                     promptType:
-                        filterOptions.filter === 'single-question' || filterOptions.filter === 'multi-question'
+                        filterOptions.filter === 'BLOG' || filterOptions.filter === 'ASSESSMENT'
                             ? filterOptions.filter
                             : undefined,
                 },
@@ -583,7 +582,7 @@ export async function getFilteredStudentResponses(filterOptions: SearchOptions) 
                 id: true,
                 studentId: true,
                 submittedAt: true,
-                isSubmittable: true,
+
                 promptSession: {
                     select: {
                         id: true,

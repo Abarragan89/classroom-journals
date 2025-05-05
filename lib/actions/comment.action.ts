@@ -1,6 +1,7 @@
 "use server"
 import { prisma } from "@/db/prisma"
 import { decryptText } from "../utils";
+import { ClassUserRole } from "@prisma/client";
 
 // add a comment to Response
 export async function addComment(
@@ -18,7 +19,7 @@ export async function addComment(
         const result = await prisma.$transaction(async (prisma) => {
             // Get teacher Id
             const teacherData = await prisma.classUser.findFirst({
-                where: { classId: classroomId, role: 'teacher' },
+                where: { classId: classroomId, role: ClassUserRole.TEACHER},
                 select: {
                     user: {
                         select: {
@@ -149,7 +150,7 @@ export async function replyComment(
         const result = await prisma.$transaction(async (prisma) => {
             // Get teacher Id
             const teacherData = await prisma.classUser.findFirst({
-                where: { classId: classroomId, role: 'teacher' },
+                where: { classId: classroomId, role: ClassUserRole.TEACHER },
                 select: {
                     user: {
                         select: {

@@ -71,9 +71,8 @@ export default function MyWorkClientWrapper({
     const completedTasks = studentResponsesData.map(response => {
         // If it's submittable, then it has been returned and should not be on this table
         if (response.completionStatus === 'COMPLETE') {
-            console.log('resposne ', response)
             let score: string = 'N/A'
-            if (response.promptSession?.promptType === 'single-question') {
+            if (response.promptSession?.promptType === 'BLOG') {
                 score = ((response?.response as { score?: number }[] | undefined)?.[0]?.score)?.toString() ?? 'N/A'
                 score = score !== 'N/A' ? `${score}%` : score
             } else {

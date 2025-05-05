@@ -68,11 +68,11 @@ export default function AssignmentListSection({
             label: "Oldest",
         },
         {
-            value: "multi-question",
+            value: "ASSESSMENT",
             label: "Assessments",
         },
         {
-            value: "single-question",
+            value: "BLOG",
             label: "Blog Prompts",
         },
     ]

@@ -32,7 +32,7 @@ export default function RequestNewUsernameForm({
     async function onSubmit(values: z.infer<typeof requestNewUsernameSchema>) {
         try {
             setIsSendingRequest(true)
-            const response = await createStudentRequest(studentId, teacherId, values.notificationText, 'username');
+            const response = await createStudentRequest(studentId, teacherId, values.notificationText, 'USERNAME');
             if (!response.success) {
                 throw new Error('error making new username request')
             }
@@ -62,7 +62,7 @@ export default function RequestNewUsernameForm({
                                 <Input
                                     {...field}
                                     placeholder='new username'
-                                    maxLength={20}
+                                    maxLength={15}
                                     onChange={(e) => field.onChange(e.target.value.replace(/\s/g, ''))}
                                 />
                             </FormControl>

@@ -57,33 +57,32 @@ export default function SingleQuestionReview({
         );
     };
 
-    const gradePercentage = `${questions?.[0]?.score}%`
+    const gradePercentage = questions?.[0].score !== undefined ?  `${questions?.[0]?.score}%` : 'N/A'
 
     return (
         <div className="w-full relative">
             <div className="flex-between mt-10">
                 {showGrades && (
-                    <p className='font-bold text-lg text-input ml-0 text-right mb-10'>Grade: <span
+                    <p className='font-bold text-lg text-input ml-0 text-right mb-5'>Grade: <span
                         className={`
                         ${parseInt(gradePercentage) >= 90 ? 'text-success' : parseInt(gradePercentage) >= 70 ? 'text-warning' : 'text-destructive'}
                         `}
                     >{gradePercentage}</span></p>
                 )}
-                {isPublic && (
-                    <div className="flex-end w-full">
-                        <Button asChild
-                            className='mb-10'
-                        >
-                            <Link
-                                href={`/discussion-board/${promptSessionId}/response/${responseId}`}
-                            >
-                                View Discussion
-                            </Link>
-                        </Button>
-                    </div>
-                )
-                }
             </div>
+            {isPublic && (
+                <div className="max-w-[700px] mx-auto w-full block">
+                    <Button asChild
+                        className='mb-5 w-full'
+                    >
+                        <Link
+                            href={`/discussion-board/${promptSessionId}/response/${responseId}`}
+                        >
+                            View Discussion
+                        </Link>
+                    </Button>
+                </div>
+            )}
             {allQuestions.slice(0, 2).map((responseData, index) => (
                 <Card className="w-full p-4 space-y-2 max-w-[700px] mx-auto mb-10 border border-border" key={index}>
                     <CardTitle className="p-2 leading-snug whitespace-pre-line">

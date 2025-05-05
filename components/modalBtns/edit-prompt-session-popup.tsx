@@ -37,7 +37,7 @@ export default function EditPromptSessionPopUp({
         setIsDiscussionOpenModal(false)
         setisPublicModal(false);
     }
-    const statusCapitalized = promptSessionStatus === 'open' ? 'Close' : 'Open'
+    const statusCapitalized = promptSessionStatus === 'OPEN' ? 'Close' : 'Open'
     const publicCapitalized = isSessionPublic ? 'private' : 'public'
 
     return (
@@ -85,10 +85,10 @@ export default function EditPromptSessionPopUp({
             </ResponsiveDialog>
 
             {/* Options Menu */}
-            {promptSessionType === 'single-question' && isSessionPublic ? (
+            {promptSessionType === 'BLOG' && isSessionPublic ? (
                 <p className='text-input text-left'>Discussion:
                     {
-                        promptSessionStatus === 'open' ? (
+                        promptSessionStatus === 'OPEN' ? (
                             <span className="text-success font-bold text-sm"> Open</span>
                         ) : (
                             <span className="text-destructive font-bold text-sm"> Closed</span>
@@ -96,18 +96,18 @@ export default function EditPromptSessionPopUp({
                     }
                 </p>
             ) : (
-                !isSessionPublic && promptSessionType !== 'multi-question' &&
+                !isSessionPublic && promptSessionType !== 'ASSESSMENT' &&
                 <p>Private</p>
             )}
-            <div className={`flex-end ${promptSessionType === 'multi-question' ? 'w-full' : ''} relative z-10`}>
+            <div className={`flex-end ${promptSessionType === 'ASSESSMENT' ? 'w-full' : ''} relative z-10`}>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Edit size={22} className="hover:cursor-pointer hover:text-accent text-foreground" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className='mr-[2.5rem]'>
-                        {promptSessionType === 'single-question' && isSessionPublic &&
+                        {promptSessionType === 'BLOG' && isSessionPublic &&
                             <DropdownMenuItem onClick={() => setIsDiscussionOpenModal(true)} className="hover:cursor-pointer rounded-md">
-                                {promptSessionStatus === 'open' ? (
+                                {promptSessionStatus === 'OPEN' ? (
                                     <>
                                         <X />{`${statusCapitalized} Discussion`}
                                     </>
@@ -118,7 +118,7 @@ export default function EditPromptSessionPopUp({
                                 )}
                             </DropdownMenuItem>
                         }
-                        {promptSessionType === 'single-question' &&
+                        {promptSessionType === 'BLOG' &&
                             <DropdownMenuItem onClick={() => setisPublicModal(true)} className="hover:cursor-pointer rounded-md">
                                 {isSessionPublic ? (
                                     <>

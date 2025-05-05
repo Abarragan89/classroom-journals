@@ -1,6 +1,7 @@
 "use server"
 import { prisma } from "@/db/prisma";
 import { decryptText, encryptText } from "../utils";
+import { ClassUserRole } from "@prisma/client";
 
 // This is for the students to see which requests they have made and their status
 export async function getTeacherSettingData(teacherId: string, classId: string) {
@@ -26,7 +27,7 @@ export async function getTeacherSettingData(teacherId: string, classId: string) 
             prisma.classUser.findMany({
                 where: {
                     classId: classId,
-                    role: 'student',
+                    role: ClassUserRole.STUDENT
                 },
                 select: {
                     userId: true,
@@ -206,7 +207,7 @@ export async function deleteTeacherAccount(teacherId: string) {
         const teacherClasses = await prisma.classUser.findMany({
             where: {
                 userId: teacherId,
-                role: 'teacher',
+                role: ClassUserRole.TEACHER
             },
             select: {
                 classId: true,
@@ -219,7 +220,7 @@ export async function deleteTeacherAccount(teacherId: string) {
             const studentClassUsers = await prisma.classUser.findMany({
                 where: {
                     classId: { in: classIds },
-                    role: 'student',
+                    role: ClassUserRole.STUDENT
                 },
                 select: {
                     userId: true,

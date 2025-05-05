@@ -23,7 +23,7 @@ export default async function ReviewAssessmentQuestions({
 
     return (
         <>
-            {promptSession?.promptType === 'multi-question' &&
+            {promptSession?.promptType === 'ASSESSMENT' &&
                 <h2 className="text-xl lg:text-2xl line-clamp-3 mt-5">{promptSession?.prompt?.title}</h2>
             }
             <ClientQuestionControls

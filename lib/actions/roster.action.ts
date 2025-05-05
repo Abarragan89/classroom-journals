@@ -3,6 +3,7 @@ import { prisma } from "@/db/prisma";
 import { newStudentSchema } from "../validators";
 import crypto from 'crypto'
 import { decryptText, encryptText, generateRandom5DigitNumber } from "../utils";
+import { ClassUserRole } from "@prisma/client";
 
 export async function addStudentToRoster(prevState: unknown, formData: FormData) {
     try {
@@ -20,7 +21,7 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
         const allStudentPasswords = await prisma.classUser.findMany({
             where: {
                 classId,
-                role: 'student'
+                role: ClassUserRole.STUDENT
             },
             select: {
                 user: {
@@ -59,7 +60,7 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
             data: {
                 classId,
                 userId: newStudent.id,
-                role: 'student'
+                role: ClassUserRole.STUDENT
             }
         })
         return { success: true, message: 'Student Successfully Added!', data: classId }
@@ -102,7 +103,7 @@ export async function editStudent(prevState: unknown, formData: FormData) {
             const allStudents = await prisma.classUser.findMany({
                 where: {
                     classId,
-                    role: 'student'
+                    role: ClassUserRole.STUDENT
                 },
                 select: {
                     user: {
@@ -191,7 +192,7 @@ export async function getStudentCountByClassId(classId: string) {
         const studentCount = await prisma.classUser.count({
             where: {
                 classId,
-                role: 'student'
+                role: ClassUserRole.STUDENT
             }
         });
 

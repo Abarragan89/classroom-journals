@@ -44,7 +44,7 @@ export default function MultiQuestionReview({
                 responseId,
                 responseData,
                 submittedAt,
-                'multi-question',
+                'ASSESSMENT',
                 isTeacherPremium,
                 gradeLevel
             )

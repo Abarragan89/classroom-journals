@@ -13,7 +13,7 @@ export default function QuestionPopup({ promptQuestions }: { promptQuestions: Pr
             <div className='flex-center'>
                 <PopoverTrigger asChild>
                     <p className='hover:cursor-pointer text-foreground hover:underline rounded-md py-[3px] px-2'>
-                        {promptQuestions?.promptType === 'multi-question' ? (
+                        {promptQuestions?.promptType === 'ASSESSMENT' ? (
                             'Questions: ' + promptQuestions?.questions?.length
                         ) : (
                             'Full Prompt'
@@ -24,7 +24,7 @@ export default function QuestionPopup({ promptQuestions }: { promptQuestions: Pr
             <PopoverContent className="w-80 p-3">
                 <p className='text-center'>Questions</p>
                 <Separator className='my-1 bg-ring' />
-                {promptQuestions?.promptType === 'multi-question' ? promptQuestions?.questions?.map((question, index) => (
+                {promptQuestions?.promptType === 'ASSESSMENT' ? promptQuestions?.questions?.map((question, index) => (
                     <div key={index} className="flex justif-start items-start text-sm mt-2">
                         <p className="mr-2">{`${index + 1}.`}</p>
                         <p className="mb-3" >{`${question.question}`}</p>

@@ -237,7 +237,7 @@ export default function MultiPromptForm({
             />
             <input
                 id="prompt-type"
-                defaultValue='multi-question'
+                defaultValue='ASSESSMENT'
                 name="prompt-type"
                 required
                 hidden

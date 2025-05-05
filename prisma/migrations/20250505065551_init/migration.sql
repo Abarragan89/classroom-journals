@@ -1,3 +1,27 @@
+-- CreateEnum
+CREATE TYPE "TeacherAccountType" AS ENUM ('BASIC', 'STANDARD', 'PREMIUM');
+
+-- CreateEnum
+CREATE TYPE "ClassUserRole" AS ENUM ('TEACHER', 'STUDENT');
+
+-- CreateEnum
+CREATE TYPE "AlertType" AS ENUM ('PAYMENT');
+
+-- CreateEnum
+CREATE TYPE "PromptType" AS ENUM ('BLOG', 'ASSESSMENT');
+
+-- CreateEnum
+CREATE TYPE "PromptSessionStatus" AS ENUM ('OPEN', 'CLOSED');
+
+-- CreateEnum
+CREATE TYPE "ResponseStatus" AS ENUM ('INCOMPLETE', 'COMPLETE', 'RETURNED');
+
+-- CreateEnum
+CREATE TYPE "StudentRequestStatus" AS ENUM ('PENDING', 'VIEWED');
+
+-- CreateEnum
+CREATE TYPE "StudentRequestType" AS ENUM ('USERNAME', 'PROMPT');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
@@ -7,7 +31,7 @@ CREATE TABLE "User" (
     "email" TEXT,
     "emailVerified" TIMESTAMP(6),
     "image" TEXT,
-    "accountType" TEXT NOT NULL DEFAULT 'Basic-Free',
+    "accountType" "TeacherAccountType" NOT NULL DEFAULT 'BASIC',
     "password" TEXT,
     "iv" TEXT,
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -80,7 +104,7 @@ CREATE TABLE "Classroom" (
 CREATE TABLE "ClassUser" (
     "userId" UUID NOT NULL,
     "classId" UUID NOT NULL,
-    "role" TEXT NOT NULL DEFAULT 'student',
+    "role" "ClassUserRole" NOT NULL DEFAULT 'STUDENT',
 
     CONSTRAINT "ClassUser_pkey" PRIMARY KEY ("userId","classId")
 );
@@ -103,7 +127,7 @@ CREATE TABLE "Notification" (
 CREATE TABLE "Alert" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "userId" UUID NOT NULL,
-    "type" TEXT NOT NULL,
+    "type" "AlertType" NOT NULL,
     "message" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "isRead" BOOLEAN NOT NULL DEFAULT false,
@@ -148,7 +172,7 @@ CREATE TABLE "Prompt" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "title" TEXT NOT NULL,
     "teacherId" UUID NOT NULL,
-    "promptType" TEXT NOT NULL,
+    "promptType" "PromptType" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "author" TEXT,
@@ -173,12 +197,12 @@ CREATE TABLE "PromptSession" (
     "promptId" UUID,
     "title" TEXT NOT NULL,
     "questions" JSONB NOT NULL,
-    "promptType" TEXT NOT NULL,
+    "promptType" "PromptType" NOT NULL,
     "isPublic" BOOLEAN NOT NULL DEFAULT true,
     "assignedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "areGradesVisible" BOOLEAN NOT NULL DEFAULT false,
     "classId" UUID NOT NULL,
-    "status" TEXT NOT NULL DEFAULT 'open',
+    "status" "PromptSessionStatus" NOT NULL DEFAULT 'OPEN',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -191,9 +215,10 @@ CREATE TABLE "Response" (
     "promptSessionId" UUID NOT NULL,
     "studentId" UUID NOT NULL,
     "response" JSONB NOT NULL,
-    "submittedAt" TIMESTAMP(3) NOT NULL,
+    "submittedAt" TIMESTAMP(3),
+    "completionStatus" "ResponseStatus" NOT NULL DEFAULT 'INCOMPLETE',
     "likeCount" INTEGER NOT NULL DEFAULT 0,
-    "isSubmittable" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Response_pkey" PRIMARY KEY ("id")
 );
@@ -203,8 +228,8 @@ CREATE TABLE "StudentRequest" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "studentId" UUID NOT NULL,
     "teacherId" UUID NOT NULL,
-    "status" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
+    "status" "StudentRequestStatus" NOT NULL,
+    "type" "StudentRequestType" NOT NULL,
     "text" TEXT NOT NULL,
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -219,6 +244,9 @@ CREATE UNIQUE INDEX "user_email_idx" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Classroom_classCode_key" ON "Classroom"("classCode");
+
+-- CreateIndex
+CREATE INDEX "ClassUser_userId_role_idx" ON "ClassUser"("userId", "role");
 
 -- CreateIndex
 CREATE INDEX "Comment_parentId_idx" ON "Comment"("parentId");

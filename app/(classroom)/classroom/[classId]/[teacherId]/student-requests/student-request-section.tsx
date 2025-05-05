@@ -38,7 +38,7 @@ export default function StudentRequestSection({
 
     async function approveRequest(studentId: string, requestText: string, responseId: string, requestType: string) {
         try {
-            if (requestType === 'username') {
+            if (requestType === 'USERNAME') {
                 const response = await approveUsernameChange(studentId, requestText, responseId)
                 if (!response) {
                     throw new Error("error approving new username")
@@ -89,7 +89,7 @@ export default function StudentRequestSection({
                     >
                         <CardContent>
                             <p className='text-md tracking-wider text-center mb-5'><span className="font-bold">{studentRequest.student.username}</span> is requesting a <span className="underline">{studentRequest.type}</span> :</p>
-                            {studentRequest.type === 'username' ? (
+                            {studentRequest.type === 'USERNAME' ? (
                                 <p className='text-center bg-background border border-border p-4 rounded-md mx-5 sm:mx-20'>{studentRequest.displayText}</p>
                             ) : (
                                 <p className='text-center bg-background border border-border p-4 rounded-md mx-5 sm:mx-20'>{studentRequest.text}</p>

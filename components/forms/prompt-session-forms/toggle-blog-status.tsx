@@ -23,10 +23,10 @@ export default function ToggleBlogStatus({
         message: ''
     })
 
-    const formVerb = promptSessionStatus === 'open' ? 'Closing' : 'Opening'
-    const statusCapitalized = promptSessionStatus === 'open' ? 'Close' : 'Open'
-    const newStatus = promptSessionStatus === 'open' ? 'closed' : 'open'
-    const modalText = promptSessionStatus === 'open' ?
+    const formVerb = promptSessionStatus === 'OPEN' ? 'Closing' : 'Opening'
+    const statusCapitalized = promptSessionStatus === 'OPEN' ? 'Close' : 'Open'
+    const newStatus = promptSessionStatus === 'OPEN' ? 'CLOSED' : 'OPEN'
+    const modalText = promptSessionStatus === 'OPEN' ?
         'Are you sure you want to close this discussion? Students will no longer be able to comment.'
         :
         'Are you sure you want to open this discussion? Students will be able to comment.'

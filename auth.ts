@@ -7,6 +7,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { User } from "./types";
 import { decryptText, encryptText } from "./lib/utils";
 import crypto from 'crypto';
+import { ClassUserRole } from "@prisma/client";
 
 declare module "next-auth" {
     interface Session extends DefaultSession {
@@ -66,7 +67,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         id: true,
                         users: {
                             where: {
-                                role: 'student',
+                                role: ClassUserRole.STUDENT,
                             },
                             select: { userId: true }
                         },
@@ -103,7 +104,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     id: loggedInStudent.id,
                     name: loggedInStudent.name,
                     username: loggedInStudent.username,
-                    role: 'student',
+                    role: 'STUDENT',
                     classroomId: classroom.id,
                     iv: loggedInStudent.iv
                 };
@@ -132,7 +133,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 // @ts-expect-error: let there be any here
                 session.user.id = token.sub;
                 // @ts-expect-error: let there be any here
-                session.user.role = token?.email ? 'teacher' : 'student';
+                session.user.role = token?.email ? 'TEACHER' : 'STUDENT';
                 session.user.name = token.name;
                 session.user.username = token.username as string;
                 // session.iv = user?.iv ? user.iv : token.iv

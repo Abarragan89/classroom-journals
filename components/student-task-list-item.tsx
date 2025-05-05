@@ -10,7 +10,7 @@ export default function StudentTaskListItem({ jotData }: { jotData: PromptSessio
         <Link href={`/jot-response/${jotData.id}?q=0`}>
             <article className='bg-card w-[350px] h-[150px] opacity-80 text-card-foreground px-5 py-2 rounded-lg border border-border hover:cursor-pointer hover:opacity-100'>
                 <div className="flex-between text-xs">
-                    {jotData.promptType === 'multi-question' ?
+                    {jotData.promptType === 'ASSESSMENT' ?
                         <p>Questions: {questionCount.length}</p>
                         :
                         <p>Blog</p>

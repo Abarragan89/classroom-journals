@@ -2,13 +2,13 @@
 import { prisma } from "@/db/prisma"
 import { decryptText, encryptText } from "../utils"
 import { Question } from "@/types"
-import { Prisma } from "@prisma/client"
+import { Prisma, PromptType, StudentRequestStatus, StudentRequestType } from "@prisma/client"
 
 export async function createStudentRequest(studentId: string, teacherId: string, text: string, type: string) {
     try {
         // get student iv to encrypt the text
         let userText: string = ''
-        if (type === 'username') {
+        if (type === 'USERNAME') {
             // get student Iv to encrpyt the potential username
             const studentIv = await prisma.user.findUnique({
                 where: { id: studentId },
@@ -30,8 +30,8 @@ export async function createStudentRequest(studentId: string, teacherId: string,
                 studentId,
                 teacherId,
                 text: userText,
-                type,
-                status: 'pending'
+                type: type === 'USERNAME' ? StudentRequestType.USERNAME : StudentRequestType.PROMPT,
+                status: StudentRequestStatus.PENDING
             }
         })
 
@@ -68,9 +68,8 @@ export async function getTeacherRequests(teacherId: string) {
                 createdAt: 'desc'
             }
         });
-
         const decyptedTeacherRequests = teacherRequests.map((studentRequest) => {
-            if (studentRequest.type === 'username') {
+            if (studentRequest.type === StudentRequestType.USERNAME) {
                 return ({
                     ...studentRequest,
                     text: studentRequest.text,
@@ -90,7 +89,6 @@ export async function getTeacherRequests(teacherId: string) {
                 })
             }
         })
-
         return decyptedTeacherRequests;
     } catch (error) {
         // Improved error logging
@@ -127,7 +125,7 @@ export async function getStudentRequests(studentId: string) {
 export async function getStudentRequestCount(teacherId: string) {
     try {
         const count = await prisma.studentRequest.count({
-            where: { teacherId, status: 'pending' },
+            where: { teacherId, status: StudentRequestStatus.PENDING },
         });
 
         return count
@@ -149,7 +147,7 @@ export async function markAllRequestsAsViewed(teacherId: string) {
         const count = await prisma.studentRequest.updateMany({
             where: { teacherId },
             data: {
-                status: 'viewed'
+                status: StudentRequestStatus.VIEWED
             }
         });
         return count
@@ -188,8 +186,7 @@ export async function approveUsernameChange(studentId: string, username: string,
         await prisma.studentRequest.delete({
             where: { id: responseId }
         })
-
-
+        
         return { success: true, message: 'Error adding student. Try again.' }
     } catch (error) {
         // Improved error logging
@@ -219,7 +216,7 @@ export async function approveNewPrompt(teacherId: string, requestText: string, r
                 data: {
                     title: requestText.trim(),
                     teacherId,
-                    promptType: 'single-question',
+                    promptType: PromptType.BLOG,
                     questions: questions as unknown as Prisma.InputJsonValue,
                 },
             });

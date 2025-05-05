@@ -24,7 +24,7 @@ export default async function ResponseReview({
     const classroomId = session?.classroomId
 
     const studentId = session?.user?.id as string
-    if (session?.user?.role !== 'student' || !studentId) {
+    if (session?.user?.role !== 'STUDENT' || !studentId) {
         notFound()
     }
 
@@ -46,11 +46,11 @@ export default async function ResponseReview({
                     Back to My Work
                 </Link>
                 <h1 className="font-bold mt-2 whitespace-pre-line">
-                    {singleResponse?.promptSession?.promptType === 'multi-question' && (
+                    {singleResponse?.promptSession?.promptType === 'ASSESSMENT' && (
                         singleResponse?.promptSession?.title
                     )}
                 </h1>
-                {singleResponse?.promptSession?.promptType === 'multi-question' ?
+                {singleResponse?.promptSession?.promptType === 'ASSESSMENT' ?
                     <ReviewWrapper
                         allQuestions={singleResponse?.response as unknown as ResponseData[]}
                         isSubmittable={singleResponse?.completionStatus === 'INCOMPLETE' || singleResponse?.completionStatus === 'RETURNED'}

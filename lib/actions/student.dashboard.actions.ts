@@ -2,6 +2,7 @@
 import { prisma } from "@/db/prisma"
 import { decryptText } from "../utils"
 import { ResponseData } from "@/types"
+import { ClassUserRole } from "@prisma/client"
 
 // Get and decrypt student username 
 export async function getDecyptedStudentUsername(studentId: string) {
@@ -34,7 +35,7 @@ export async function getTeacherId(classroomId: string) {
         const { userId: teacherId } = await prisma.classUser.findFirst({
             where: {
                 classId: classroomId,
-                role: 'teacher'
+                role: ClassUserRole.TEACHER
             },
             select: {
                 userId: true
@@ -84,7 +85,7 @@ export async function getFeaturedBlogs(classroomId: string) {
         const studentIds = await prisma.classUser.findMany({
             where: {
                 classId: classroomId,
-                role: 'student'
+                role: ClassUserRole.STUDENT
             },
             select: {
                 userId: true
@@ -137,7 +138,7 @@ export async function getFeaturedBlogs(classroomId: string) {
                 if (characterCount < 250) return;
 
                 // Convert submittedAt to Date
-                const submittedAtDate = new Date(blog.submittedAt);
+                const submittedAtDate = new Date(blog.submittedAt as Date);
                 const daysAgo = (today.getTime() - submittedAtDate.getTime()) / (1000 * 60 * 60 * 24); // days since submission
 
                 // Get interaction counts

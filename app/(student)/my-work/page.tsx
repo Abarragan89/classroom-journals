@@ -18,13 +18,11 @@ export default async function MyWork() {
 
 
     const studentId = session?.user?.id as string
-    if (session?.user?.role !== 'student' || !studentId) {
+    if (session?.user?.role !== 'STUDENT' || !studentId) {
         notFound()
     }
 
     const studentResponses = await getSingleStudentResponses(studentId) as unknown as Response[]
-
-    console.log('student response ', studentResponses)
 
     return (
         <>

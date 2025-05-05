@@ -38,7 +38,7 @@ export default function ClientQuestionControls({
 
     return (
         <>
-            {sessionType === 'multi-question' && (
+            {sessionType === 'ASSESSMENT' && (
                 <div className="flex-between max-w-[100px] my-3">
                     <BiChevronLeft
                         size={25}
@@ -57,7 +57,7 @@ export default function ClientQuestionControls({
                 </div>
             )}
             <p
-                className={`whitespace-pre-line my-5 font-bold ${sessionType === 'multi-question' ? 'text-center' : 'text-left'}`}
+                className={`whitespace-pre-line my-5 font-bold ${sessionType === 'ASSESSMENT' ? 'text-center' : 'text-left'}`}
             >{questions[currentQuestion].question}</p>
             <Separator className='mt-5 mb-2' />
             <div className='flex-between mb-9 mx-auto max-w-[500px]'>

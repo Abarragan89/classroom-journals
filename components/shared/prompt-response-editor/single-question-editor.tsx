@@ -62,7 +62,7 @@ export default function SinglePromptEditor({
             inputRef.current?.focus()
         }
     }, [questionNumber, studentResponseData])
-    
+
     // /** Auto-save logic */
     useEffect(() => {
         if (!isTyping) return
@@ -102,7 +102,6 @@ export default function SinglePromptEditor({
             setStudentResponseData(updatedData);
             // Call the server action with the updated data
             await updateStudentResponse(updatedData, responseId);
-            toast('Answers Saved')
         } catch (error) {
             console.log('error saving to indexed db', error);
         } finally {
@@ -151,7 +150,8 @@ export default function SinglePromptEditor({
                         setJournalText={setJournalText}
                         journalText={journalText}
                         inputRef={inputRef}
-                        jotType='single-question'
+                        setIsTyping={setIsTyping}
+                        jotType='BLOG'
                     />
                     <div className="flex flex-col justify-center items-center mb-20">
                         <form onSubmit={(e) => saveAndContinue(e)}>
@@ -231,7 +231,7 @@ export default function SinglePromptEditor({
                                     <input
                                         id="promptType"
                                         name="promptType"
-                                        value='single-question'
+                                        value='BLOG'
                                         hidden
                                         readOnly
                                     />
@@ -253,7 +253,7 @@ export default function SinglePromptEditor({
                                 <p className="text-center mb-3 font-bold">Ready to submit?</p>
                                 <div className="flex-center gap-5 mb-20">
                                     <Button variant='secondary' onClick={() => { handleSaveResponses(); toast('Answers Saved!') }} className="flex justify-center mx-auto">Save</Button>
-                                    <Button onClick={() => { setConfirmSubmission(true); handleSaveResponses() }}>Submit Responses</Button>
+                                    <Button onClick={() => { setConfirmSubmission(true) }}>Submit Responses</Button>
                                 </div>
                             </>
                         )}

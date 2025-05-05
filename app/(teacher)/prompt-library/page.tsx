@@ -10,7 +10,7 @@ export default async function PromptLibraryPage() {
     if (!session) notFound()
 
     const teacherId = session?.user?.id as string
-    if (!teacherId || session?.user?.role !== 'teacher') notFound()
+    if (!teacherId || session?.user?.role !== 'TEACHER') notFound()
 
     return (
         <>

@@ -19,7 +19,7 @@ export default async function StudentDashboard({
     if (!session) notFound()
 
     const studentId = session?.user?.id as string
-    if (session?.user?.role !== 'student' || !studentId) {
+    if (session?.user?.role !== 'STUDENT' || !studentId) {
         notFound()
     }
 
@@ -38,7 +38,7 @@ export default async function StudentDashboard({
         <div>
             <Header session={session} />
             <main className="wrapper">
-                {studentResponse?.promptSession?.promptType === 'multi-question' ?
+                {studentResponse?.promptSession?.promptType === 'ASSESSMENT' ?
                     <MultipleQuestionEditor
                         responseId={studentResponse.id}
                         studentResponse={studentResponse.response as unknown as ResponseData[]}

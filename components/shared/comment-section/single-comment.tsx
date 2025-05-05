@@ -166,7 +166,7 @@ export default function SingleComment({
             <p className="text-[1rem] mt-0 whitespace-pre-wrap break-words ml-[45px]">{commentData?.text}</p>
 
             {/* Conditionally render reply form */}
-            {showReplyTextarea && discussionStatus === 'open' &&
+            {showReplyTextarea && discussionStatus === 'OPEN' &&
                 <section className="relative max-w-[700px] mx-auto pb-2 pt-5" id="comment-section-main">
                     <form
                         onSubmit={(e) => addCommentReplyHandler(e)}
@@ -222,7 +222,7 @@ export default function SingleComment({
                         Cancel
                     </p>
                     :
-                    discussionStatus === 'open' &&
+                    discussionStatus === 'OPEN' &&
                     <p
                         onClick={() => setShowReplyTextarea(true)}
                         className="hover:cursor-pointer text-[.95rem] underline text-primary opacity-[0.7] hover:opacity-[1]"
