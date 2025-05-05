@@ -62,7 +62,7 @@ export default function RequestNewUsernameForm({
                                 <Input
                                     {...field}
                                     placeholder='new username'
-                                    maxLength={15}
+                                    maxLength={20}
                                     onChange={(e) => field.onChange(e.target.value.replace(/\s/g, ''))}
                                 />
                             </FormControl>

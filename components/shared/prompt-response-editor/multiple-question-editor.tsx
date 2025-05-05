@@ -68,9 +68,8 @@ export default function MultipleQuestionEditor({
                 clearTimeout(typingTimeoutRef.current);
             }
             typingTimeoutRef.current = setTimeout(async () => {
-                await handleSaveResponses();
                 setIsTyping(false);
-                inputRef.current?.focus()
+                await handleSaveResponses();
             }, 8000); // Save after 5 seconds of inactivity
         }
         return () => clearTimeout(typingTimeoutRef.current);
@@ -98,9 +97,6 @@ export default function MultipleQuestionEditor({
                     ? { ...q, answer: updatedAnswer }
                     : q
             );
-            // Update the state
-            // setStudentResponseData(updatedData);
-            // Call the server action with the updated data
             await updateStudentResponse(updatedData, responseId);
         } catch (error) {
             console.log('error saving to indexed db', error);
