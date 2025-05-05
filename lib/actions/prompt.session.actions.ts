@@ -174,6 +174,7 @@ export async function getSinglePromptSessionTeacherDashboard(sessionId: string) 
                         id: true,
                         submittedAt: true,
                         response: true,
+                        likeCount: true,
                         student: {
                             select: {
                                 id: true,

@@ -35,6 +35,7 @@ export default function BlogTableData({
                     <TableHead>Name</TableHead>
                     <TableHead>Score</TableHead>
                     <TableHead>Comments</TableHead>
+                    <TableHead>Likes</TableHead>
                     <TableHead>Submitted</TableHead>
                 </TableRow>
             </TableHeader>
@@ -60,6 +61,7 @@ export default function BlogTableData({
                         </TableCell>
                         <TableCell>{(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? '-'}%</TableCell>
                         <TableCell>{response?._count?.comments || 0}</TableCell>
+                        <TableCell>{response?.likeCount || 0}</TableCell>
                         <TableCell>{formatDateShort(response.submittedAt)}</TableCell>
                     </TableRow>
                 ))}
