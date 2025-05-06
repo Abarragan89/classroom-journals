@@ -5,7 +5,6 @@ import { FiMessageCircle } from "react-icons/fi";
 interface Props {
     title?: string;
     description?: string;
-    date?: string;
     likeCount: number;
     coverPhotoUrl?: string;
     totalCommentCount: number;
@@ -15,7 +14,6 @@ interface Props {
 export default function BlogCard({
     title,
     description,
-    // date,
     likeCount,
     coverPhotoUrl,
     totalCommentCount,

@@ -131,14 +131,12 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                 <Separator />
                 {/* Demo */}
                 <section className="py-16 px-6" id="app-demo-section">
-                    <div className="mb-16">
-                        <TextEditorDemo />
-                    </div>
+                    <TextEditorDemo />
                     {/* <Separator className='mt-10 mb-6' /> */}
                     <div className="flex flex-col items-center">
                         <h5 className="font-bold text-lg mb-1">Benefits</h5>
                         <div className="text-primary space-y-2">
-                            <p>- Cannot copy and paste text into the editor (try it!)</p>
+                            <p>- Cannot copy and paste text into the editor (TRY IT!)</p>
                             <p>- No distractions with font, font-sizes, formatting, images, etc.</p>
                             <p>- Word predication will not complete sentences</p>
                             <p>- Grammar or spelling mistakes will not be highlighted</p>

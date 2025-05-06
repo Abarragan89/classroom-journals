@@ -1,12 +1,10 @@
 "use client"
 import Editor from '@/components/shared/prompt-response-editor/editor'
 import React, { useRef, useState } from 'react'
-import { CornerLeftUp, CornerRightUp } from 'lucide-react';
 
 export default function TextEditorDemo() {
 
     const [journalText, setJournalText] = useState<string>('');
-    const inputRef = useRef<HTMLDivElement>(null);
 
     return (
         <>
@@ -26,12 +24,10 @@ export default function TextEditorDemo() {
                             <Editor
                                 setJournalText={setJournalText}
                                 journalText={journalText}
-                                inputRef={inputRef}
-                                isInDemo={true}
                             />
                         </div>
                         {/* Explaining the move cursor arrow */}
-                        <div className='absolute -left-2 -bottom-8 flex flex-col items-start z-0'>
+                        {/* <div className='absolute -left-2 -bottom-8 flex flex-col items-start z-0'>
                             <div className='w-[220px] border-2 border-accent rounded-full h-16'>
                             </div>
                             <div className="flex items-baseline ml-20">
@@ -43,9 +39,9 @@ export default function TextEditorDemo() {
                                     Move cursor
                                 </p>
                             </div>
-                        </div>
+                        </div> */}
                         {/* Explaining the new Paragraph */}
-                        <div className='absolute -bottom-8 right-0 flex flex-col items-end z-0'>
+                        {/* <div className='absolute -bottom-8 right-0 flex flex-col items-end z-0'>
                             <div className='w-[110px] border-2 border-accent rounded-full h-16'>
                             </div>
                             <div className="flex items-baseline mr-12">
@@ -57,7 +53,7 @@ export default function TextEditorDemo() {
                                     size={30}
                                 />
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </main>
