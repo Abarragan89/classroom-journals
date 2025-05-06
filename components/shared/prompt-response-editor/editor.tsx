@@ -124,7 +124,7 @@ export default function Editor({
                 onCopy={(e) => e.preventDefault()}
                 onCut={(e) => e.preventDefault()}
                 className={`
-                    bg-transparent outline-border border border-border font-mono shadow-border shadow-[inset_0px_0px_10px_0px_rgba(0,_0,_0,_0.1)] p-4 md:p-8 textarea-field-size-content
+                    bg-transparent outline-border border border-border font-mono shadow-border shadow-[inset_0px_0px_10px_0px_rgba(0,_0,_0,_0.1)] p-4 md:p-7 textarea-field-size-content
                     ${jotType === 'BLOG' ? 'min-h-48' : ''}
                 `}
                 value={journalText}
