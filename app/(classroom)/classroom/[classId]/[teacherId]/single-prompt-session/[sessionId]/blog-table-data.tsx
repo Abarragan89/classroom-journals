@@ -1,4 +1,5 @@
 "use client"
+import { Button } from "@/components/ui/button";
 import {
     Table,
     TableBody,
@@ -7,10 +8,14 @@ import {
     TableRow,
     TableCell
 } from "@/components/ui/table"
+import { createStudentResponse } from "@/lib/actions/response.action";
 import { formatDateShort } from "@/lib/utils";
-import { Response, User } from "@/types";
+import { Response, ResponseData, User } from "@/types";
 import { ClipboardCheckIcon } from "lucide-react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+
 
 export default function BlogTableData({
     promptSessionId,
@@ -19,7 +24,8 @@ export default function BlogTableData({
     notAssigned,
     incompleteResponses,
     completedResponses,
-    returnedResponses
+    returnedResponses,
+    promptSessionQuestions
 }: {
     promptSessionId: string;
     classId: string;
@@ -27,9 +33,29 @@ export default function BlogTableData({
     notAssigned: User[];
     incompleteResponses: Response[],
     completedResponses: Response[],
-    returnedResponses: Response[]
+    returnedResponses: Response[],
+    promptSessionQuestions: ResponseData[]
+
 
 }) {
+
+    const router = useRouter();
+    const queryClient = useQueryClient();
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    async function createStudentResponseHandler(studentId: string) {
+        try {
+            setIsLoading(true)
+            if (!studentId) return
+            const newResponse = await createStudentResponse(promptSessionId, studentId, promptSessionQuestions)
+            if (!newResponse) throw new Error('Error creating student response', newResponse)
+            queryClient.invalidateQueries({ queryKey: ['getSingleSessionData', promptSessionId] })
+        } catch (error) {
+            console.log('error creating student response', error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     return (
         <Table className="mt-3">
@@ -56,12 +82,11 @@ export default function BlogTableData({
                     return lastNameA.localeCompare(lastNameB);
                 }).map((response) => (
                     <TableRow key={response.id}>
-                        <TableCell>
-                            <Link
-                                className="hover:cursor-pointer hover:text-accent"
-                                href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`}>
-                                <ClipboardCheckIcon />
-                            </Link>
+                        <TableCell
+                            className="hover:cursor-pointer hover:text-accent"
+                            onClick={() => router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`)}
+                        >
+                            <ClipboardCheckIcon />
                         </TableCell>
                         <TableCell className="font-medium">
                             {response.student.name}
@@ -84,12 +109,11 @@ export default function BlogTableData({
                     return lastNameA.localeCompare(lastNameB);
                 }).map((response) => (
                     <TableRow key={response.id}>
-                        <TableCell>
-                            <Link
-                                className="hover:cursor-pointer hover:text-accent"
-                                href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`}>
-                                <ClipboardCheckIcon />
-                            </Link>
+                        <TableCell
+                            className="hover:cursor-pointer hover:text-accent"
+                            onClick={() => router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`)}
+                        >
+                            <ClipboardCheckIcon />
                         </TableCell>
                         <TableCell className="font-medium">
                             {response.student.name}
@@ -112,12 +136,11 @@ export default function BlogTableData({
                     return lastNameA.localeCompare(lastNameB);
                 }).map((response) => (
                     <TableRow key={response.id}>
-                        <TableCell>
-                            <Link
-                                className="hover:cursor-pointer hover:text-accent"
-                                href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`}>
-                                <ClipboardCheckIcon />
-                            </Link>
+                        <TableCell
+                            className="hover:cursor-pointer hover:text-accent"
+                            onClick={() => router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`)}
+                        >
+                            <ClipboardCheckIcon />
                         </TableCell>
                         <TableCell className="font-medium">
                             {response.student.name}
@@ -136,7 +159,15 @@ export default function BlogTableData({
                 )}
                 {notAssigned?.length > 0 && notAssigned.map((user) => (
                     <TableRow key={user.id}>
-                        <TableCell>&nbsp;</TableCell>
+                        <TableCell>
+                            <Button variant={'ghost'} onClick={() => createStudentResponseHandler(user.id)}>
+                                {isLoading ? (
+                                    '...'
+                                ) : (
+                                    'Assign'
+                                )}
+                            </Button>
+                        </TableCell>
                         <TableCell className="font-medium">{user.name}</TableCell>
                         <TableCell>-</TableCell>
                         <TableCell>-</TableCell>

@@ -73,6 +73,8 @@ export default function MainClientWrapper({
     const studentSubmittedIds = promptSessionData?.responses?.map(response => response.student.id);
     const notAssigned = classRoster.filter(student => !studentSubmittedIds?.includes(student.id))
 
+    // needed for creating a response to unassigned studnets
+    const promptSessionQuestions = promptSessionData.questions as unknown as ResponseData[];
 
     return (
         <div>
@@ -103,6 +105,7 @@ export default function MainClientWrapper({
                     completedResponses={completedResponses as Response[]}
                     incompleteResponses={incompleteResponses as Response[]}
                     returnedResponses={returnedResponses as Response[]}
+                    promptSessionQuestions={promptSessionQuestions}
                 />
             ) : (
                 // Journal Table
@@ -114,6 +117,7 @@ export default function MainClientWrapper({
                     completedResponses={completedResponses as Response[]}
                     incompleteResponses={incompleteResponses as Response[]}
                     returnedResponses={returnedResponses as Response[]}
+                    promptSessionQuestions={promptSessionQuestions}
                 />
             )}
         </div>

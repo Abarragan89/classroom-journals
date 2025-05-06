@@ -22,7 +22,7 @@ export default async function SinglePromptSession({
     if (!promptSession) {
         return <div>Prompt session not found</div>;
     }
-
+    
     const classRoster = await getAllStudents(classId) as User[]
 
     return (

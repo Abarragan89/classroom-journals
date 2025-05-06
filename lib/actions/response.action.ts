@@ -6,15 +6,13 @@ import { InputJsonArray, JsonValue } from "@prisma/client/runtime/library";
 import { gradeResponseWithAI } from "./openai.action";
 import { PromptType, ResponseStatus } from "@prisma/client";
 
-export async function createStudentResponse(prevState: unknown, formData: FormData) {
+// Create  a single response to a student
+export async function createStudentResponse(
+    promptSessionId: string,
+    studentId: string,
+    questions: ResponseData[],
+) {
     try {
-        const studentId = formData.get('studentId') as string;
-        const promptSessionId = formData.get('promptSessionId') as string;
-        const responseData = formData.get('responseData') as string;
-        const promptType = formData.get('promptType') as string;
-        const gradeLevel = formData.get('grade-level') as string;
-        const isTeacherPremium = formData.get('is-teacher-premium') as string
-        let response = JSON.parse(responseData);
 
         // Check to see if submission from student ahs already been made. 
         const existingResponses = await prisma.promptSession.findUnique({
@@ -43,25 +41,11 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
             };
         }
 
-        // Grade it with AI Only if premium member and multiple questions
-        if (promptType === 'ASSESSMENT' && isTeacherPremium === 'true') {
-            let { output_text: scores } = await gradeResponseWithAI(gradeLevel, response)
-            scores = JSON.parse(scores)
-            response = response.map((res: ResponseData, index: number) => {
-                if ((scores[index]) === null) {
-                    return ({ ...res })
-                } else {
-                    return ({ ...res, score: parseFloat(scores[index]) })
-                }
-            })
-        }
-
         await prisma.response.create({
             data: {
                 promptSessionId,
                 studentId,
-                response,
-                submittedAt: new Date(),
+                response: questions as unknown as InputJsonArray,
             }
         })
 
