@@ -58,7 +58,7 @@ export default function SinglePromptEditor({
             if (!current) return;
 
             if (questionNumber === '2') {
-                setJournalText(current.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png');
+                setJournalText(current?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png');
                 setCurrentQuestion(current.question);
                 return;
             }
@@ -126,10 +126,13 @@ export default function SinglePromptEditor({
             await handleSaveResponses();
             const nextQuestion = (Number(questionNumber) + 1).toString()
             router.push(`/jot-response/${responseId}?q=${nextQuestion}`)
+            setJournalText('')
         } catch (error) {
             console.log('error saving and continuing ', error)
         }
     }
+
+    console.log('student data ', studentResponseData)
 
     const SubmitFormBtn = () => {
         const { pending } = useFormStatus()
@@ -254,7 +257,7 @@ export default function SinglePromptEditor({
                                 <p className="text-center mb-3 font-bold">Ready to submit?</p>
                                 <div className="flex-center gap-5 mb-20">
                                     <Button variant='secondary' onClick={() => { handleSaveResponses(); toast('Answers Saved!') }} className="flex justify-center mx-auto">Save</Button>
-                                    <Button onClick={() => { setConfirmSubmission(true) }}>Submit Responses</Button>
+                                    <Button onClick={async () => { await handleSaveResponses(); setConfirmSubmission(true) }}>Submit Responses</Button>
                                 </div>
                             </>
                         )}

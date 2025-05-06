@@ -137,7 +137,6 @@ export default function Editor({
                 autoCapitalize="off"
                 spellCheck={false}
                 ref={editorRef}
-            // readOnly={isInReview}
             />
 
             <div className="flex space-x-14">
