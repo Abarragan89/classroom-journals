@@ -33,7 +33,7 @@ export default function DeleteResponseBtn({
                     classId={classId}
                 />
             </ResponsiveDialog>
-            <Button onClick={() => setIsDeleteModalOpen(true)} variant='link' className='text-destructive'>Delete Response</Button>
+            <Button onClick={() => setIsDeleteModalOpen(true)} variant='link' className='text-destructive'>Unassign</Button>
         </>
     )
 }

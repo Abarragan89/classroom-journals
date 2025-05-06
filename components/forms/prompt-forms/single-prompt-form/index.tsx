@@ -45,7 +45,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     const [isAddingCategory, setIsAddingCategory] = useState<boolean>(false)
     const [newCategoryName, setNewCategoryName] = useState<string>('');
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
-    const [isPublic, setIsPublic] = useState<boolean>(true);
+    const [isPublic, setIsPublic] = useState<boolean>(false);
     const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null)
     const [questions, setQuestions] = useState<Question[]>([
         { name: "question1", label: "Prompt", value: "" }

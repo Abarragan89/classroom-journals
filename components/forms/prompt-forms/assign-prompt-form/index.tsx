@@ -29,7 +29,7 @@ export default function AssignPromptForm({
     promptType: string,
     teacherId:string
 }) {
-    const [isPublic, setIsPublic] = useState<boolean>(true);
+    const [isPublic, setIsPublic] = useState<boolean>(false);
 
     const [state, action] = useActionState(assignPrompt, {
         success: false,
