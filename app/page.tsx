@@ -63,7 +63,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
             <main className="min-h-screen bg-background relative">
                 {/* Hero Section */}
                 <section className="py-20 px-6 text-center relative max-w-7xl mx-auto">
-                    <div className='hidden sm:flex items-baseline absolute -top-[28px] right-[142px] text-accent italic font-bold'>
+                    <div className='hidden sm:flex items-baseline text-sm absolute -top-[28px] right-[142px] text-accent italic font-bold'>
                         Try our different themes! <CornerRightUp />
                     </div>
                     <WelcomeToJotterBlog />
