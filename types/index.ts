@@ -9,6 +9,7 @@ export type User = {
     googleId?: string;
     password?: string;
     accountType?: string;
+    isAdmin?:boolean;
     iv?: string;
     email?: string;
     emailVerified?: Date;

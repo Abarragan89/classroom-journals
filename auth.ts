@@ -136,7 +136,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 session.user.role = token?.email ? 'TEACHER' : 'STUDENT';
                 session.user.name = token.name;
                 session.user.username = token.username as string;
-                // session.iv = user?.iv ? user.iv : token.iv
 
                 // Setting the classroomId is only needed or student login
                 if (token?.classroomId) {

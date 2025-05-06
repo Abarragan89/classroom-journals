@@ -17,6 +17,7 @@ export async function getAllSessionsInClass(classId: string) {
                         select: {
                             id: true,
                             studentId: true,
+                            completionStatus: true,
                         }
                     },
                     isPublic: true,

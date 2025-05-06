@@ -21,6 +21,8 @@ export default function AssignmentListItem({
     classSize?: number,
 }) {
 
+    const totalSubmissions = jotData?.responses?.filter(response => response.completionStatus === 'COMPLETE' || response.completionStatus === 'RETURNED').length
+    
     return (
         <div className='relative'>
             <TooltipProvider>
@@ -32,7 +34,7 @@ export default function AssignmentListItem({
                                 <p
                                     className='text-2xl font-bold bg-input text-background p-1 px-3 rounded-full mr-3'
                                 >
-                                    {jotData.promptType .charAt(0)}
+                                    {jotData.promptType.charAt(0)}
                                 </p>
                                 <div className="flex flex-col relative">
                                     <p className='text-md font-bold line-clamp-1 text-foreground'>{jotData.title}</p>
@@ -45,7 +47,7 @@ export default function AssignmentListItem({
                     </TooltipTrigger>
                     <TooltipContent className='min-w-[200px] space-y-1 p-2'>
                         <p><span className="font-bold">Category: </span> {jotData?.prompt?.category?.name ? jotData?.prompt?.category?.name : 'No Category'}</p>
-                        <p><span className="font-bold">Submissions: </span>{jotData?.responses?.length} / {classSize}</p>
+                        <p><span className="font-bold">Submissions: </span>{totalSubmissions} / {classSize}</p>
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>

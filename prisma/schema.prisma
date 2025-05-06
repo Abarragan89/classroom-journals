@@ -22,9 +22,10 @@ model User {
   email               String?            @unique(map: "user_email_idx")
   emailVerified       DateTime?          @db.Timestamp(6)
   image               String?
-  accountType         TeacherAccountType @default(BASIC) // 'Basic-Free' or 'Premium(monthly)' or 'Premium(yearly)' 
+  isAdmin             Boolean            @default(false)
+  accountType         TeacherAccountType @default(BASIC)
   password            String? // this password is only for student accounts and needs to be accessible to teacher
-  iv                  String? // this is used to encrypt student names, ensures no duplicates when same input is given
+  iv                  String? // this is used to encrypt student names, ensures no duplicates when same input is given when encrypting
   sessions            Session[]
   accounts            Account[]
   createdAt           DateTime           @default(now()) @db.Timestamp(6)
