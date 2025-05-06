@@ -140,7 +140,7 @@ export default function Editor({
             // readOnly={isInReview}
             />
 
-            <div className="flex space-x-4">
+            <div className="flex space-x-14">
                 {/* Undo Button */}
                 <button onTouchStart={handleUndo} onMouseDown={handleUndo} className="p-2 hover:text-primary rounded">
                     <Undo />
