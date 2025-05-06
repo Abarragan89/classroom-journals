@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { ResponseData } from '@/types'
 import Editor from '@/components/shared/prompt-response-editor/editor'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { updateASingleResponse } from '@/lib/actions/response.action';
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
@@ -26,7 +26,6 @@ export default function SingleQuestionReview({
 }) {
 
     const router = useRouter();
-    const inputRef = useRef<HTMLDivElement>(null);
     // Store full question objects, modifying only answers
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -57,7 +56,7 @@ export default function SingleQuestionReview({
         );
     };
 
-    const gradePercentage = questions?.[0].score !== undefined ?  `${questions?.[0]?.score}%` : 'N/A'
+    const gradePercentage = questions?.[0].score !== undefined ? `${questions?.[0]?.score}%` : 'N/A'
 
     return (
         <div className="w-full relative">
@@ -73,7 +72,7 @@ export default function SingleQuestionReview({
             {isPublic && (
                 <div className="max-w-[700px] mx-auto w-full block">
                     <Button asChild
-                        className='mb-5 w-full'
+                        className='mb-10 w-full'
                     >
                         <Link
                             href={`/discussion-board/${promptSessionId}/response/${responseId}`}
@@ -85,18 +84,16 @@ export default function SingleQuestionReview({
             )}
             {allQuestions.slice(0, 2).map((responseData, index) => (
                 <Card className="w-full p-4 space-y-2 max-w-[700px] mx-auto mb-10 border border-border" key={index}>
-                    <CardTitle className="p-2 leading-snug whitespace-pre-line">
+                    <CardTitle className="p-2 leading-snug font-bold whitespace-pre-line">
                         {responseData.question}
                     </CardTitle>
                     <CardContent className="p-3 pt-0">
-                        <p className="ml-1 mb-1 text-sm font-bold">Response:</p>
+                        {/* <p className="ml-1 mb-1 text-sm font-bold">Response:</p> */}
                         {isSubmittable ? (
                             <>
                                 <Editor
                                     setJournalText={(newText) => handleTextChange(index, newText as string)}
                                     journalText={responseData.answer}
-                                    inputRef={inputRef}
-                                    isInReview={true}
                                     characterLimit={index === 1 ? 70 : undefined}
                                 />
                             </>

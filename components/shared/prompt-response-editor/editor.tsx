@@ -1,172 +1,154 @@
-import { useEffect, useRef, useState } from "react";
-import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
-import { MdKeyboardDoubleArrowRight } from "react-icons/md";
-import { MdKeyboardArrowLeft } from "react-icons/md";
-import { MdKeyboardArrowRight } from "react-icons/md";
-import { MdOutlineSubdirectoryArrowLeft } from "react-icons/md";
+import { Textarea } from "@/components/ui/textarea";
+import { Redo, Undo } from "lucide-react";
+import { useRef} from "react";
 
 
 export default function Editor({
     journalText,
     setJournalText,
-    inputRef,
     jotType,
     characterLimit,
-    isInReview = false,
-    isInDemo = false,
     setIsTyping
 }: {
     journalText: string;
     setJournalText: React.Dispatch<React.SetStateAction<string>>;
-    inputRef: React.RefObject<HTMLDivElement | null>;
     jotType?: string;
     characterLimit?: number,
-    isInReview?: boolean,
     setIsTyping?: React.Dispatch<React.SetStateAction<boolean>>;
-    isInDemo?: boolean
 }) {
 
-    const hiddenInputRef = useRef<HTMLInputElement>(null);
-    // this ref will track if it's the first render
-    const hasInitialized = useRef(false);
-    const [cursorIndex, setCursorIndex] = useState<number>(journalText?.length);
-    const [isFocused, setIsFocused] = useState<boolean>(false);
+    // History for undo and redo
+    const historyRef = useRef<string[]>([]); // For storing past states (undo)
+    const redoRef = useRef<string[]>([]); // For storing future states (redo)
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-    useEffect(() => {
-        if (isFocused) {
-            hiddenInputRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    }, [isFocused])
+    // Undo function
+    const handleUndo = () => {
+        if (historyRef.current.length > 1) {
+            // Pop last state from history and save it to redo stack
+            const lastState = historyRef.current.pop() as string;
+            redoRef.current.push(lastState); // Push the last state to redo stack
+            const prevState = historyRef.current[historyRef.current.length - 1];
+            setJournalText(prevState); // Update textarea content to the previous state
 
-    useEffect(() => {
-        const loadedFromStorage = journalText.length > 0 && !hasInitialized.current;
-        if (loadedFromStorage) {
-            setCursorIndex(journalText.length);
-            hasInitialized.current = true;
+            if (textareaRef.current) {
+                textareaRef.current.value = prevState; // Update the textarea value
+            }
         }
-    }, [journalText]);
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        if (setIsTyping) setIsTyping(true)
-        e.preventDefault(); // Prevent default behavior
-        if (characterLimit && characterLimit <= cursorIndex && e.key !== "Backspace") {
-            return;
-        }
-        let updatedText = journalText;
-        let updatedCursor = cursorIndex;
-        if (e.key === "Backspace" && cursorIndex > 0) {
-            updatedText = journalText.slice(0, cursorIndex - 1) + journalText.slice(cursorIndex);
-            updatedCursor--;
-        } else if (e.key.length === 1) {
-            updatedText = journalText.slice(0, cursorIndex) + e.key + journalText.slice(cursorIndex);
-            updatedCursor++;
-        } else if (e.key === "Enter" && !journalText.endsWith("\n\n")) {
-            updatedText = journalText.slice(0, cursorIndex) + "\n\n" + journalText.slice(cursorIndex);
-            updatedCursor += 2;
-        } else if (e.key === "ArrowLeft" && cursorIndex > 0) {
-            updatedCursor--;
-        } else if (e.key === "ArrowRight" && cursorIndex < updatedText.length) {
-            updatedCursor++;
-        } else {
-            return;
-        }
-        setJournalText(updatedText);
-        setCursorIndex(updatedCursor);
     };
 
-    function moveCursor(spaces: number, direction: string) {
-        if (direction === 'back' && cursorIndex > 0) {
-            setCursorIndex((prev) => prev - spaces >= 0 ? prev - spaces : 0)
-        } else if (direction === 'forward' && cursorIndex < journalText.length) {
-            setCursorIndex((prev) => prev + spaces <= journalText.length ? prev + spaces : journalText.length)
-        }
-        hiddenInputRef?.current?.focus()
-    }
+    // Redo function
+    const handleRedo = () => {
+        if (redoRef.current.length > 0) {
+            const redoState = redoRef.current.pop() as string;
+            historyRef.current.push(redoState); // Push redo state back to history
+            setJournalText(redoState); // Update textarea content
 
-    function makeNewParagraph() {
-        let updatedText = journalText;
-        let updatedCursor = cursorIndex;
-        if (!journalText.endsWith("\n\n")) {
-            updatedText = journalText?.slice(0, cursorIndex) + "\n\n" + journalText.slice(cursorIndex);
-            updatedCursor += 2;
+            if (textareaRef.current) {
+                textareaRef.current.value = redoState; // Update the textarea value
+            }
         }
-        setJournalText(updatedText);
-        setCursorIndex(updatedCursor);
-        hiddenInputRef?.current?.focus()
-    }
+    };
+
+    const editorRef = useRef<HTMLTextAreaElement | null>(null)
+    // Handle text input changes
+    const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        if (setIsTyping) setIsTyping(true)
+        const newContent = e.target.value;
+        setJournalText(newContent);
+        // Add current content to history stack for undo
+        historyRef.current.push(newContent);
+        redoRef.current = [];
+    };
+
+    // Handle key down events (Tab and Enter keys)
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        const textarea = e.currentTarget;
+        if (e.key === 'Tab') {
+            // Prevent the default behavior (tab moves focus, we want to insert spaces instead)
+            e.preventDefault();
+
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const value = textarea.value;
+
+            const spaces = '     '; // 5 spaces
+            const newValue = value.substring(0, start) + spaces + value.substring(end);
+
+            setJournalText(newValue);
+
+            // Set cursor position after the inserted spaces
+            requestAnimationFrame(() => {
+                textarea.selectionStart = textarea.selectionEnd = start + spaces.length;
+            });
+
+        } else if (e.key === 'Enter') {
+            const value = textarea.value;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+
+            if (start === 0) {
+                e.preventDefault();
+                return;
+            }
+
+            // Check if the character before the cursor is a newline
+            const charBeforeCursor = value[start - 1];
+
+            if (charBeforeCursor === '\n') {
+                e.preventDefault(); // Block if already a newline before the cursor
+            } else {
+                e.preventDefault(); // Prevent default Enter behavior
+
+                // Insert two newlines at the cursor
+                const newValue = value.substring(0, start) + '\n\n' + value.substring(end);
+                setJournalText(newValue);
+
+                // Move cursor after the two newlines
+                requestAnimationFrame(() => {
+                    textarea.selectionStart = textarea.selectionEnd = start + 2;
+                });
+            }
+        }
+    };
 
     return (
-        <div className={`${isInReview ? '' : 'mb-5'} w-full mx-auto flex flex-col items-center relative`}>
-            {characterLimit && <p className="text-sm absolute right-2 top-[-20px]">{cursorIndex} / {characterLimit}</p>}
-            <div className="text-xs text-accent text-center">
+        <div className={`w-full mx-auto flex flex-col items-center relative mb-5`}>
+            {characterLimit && <p className="text-sm absolute right-2 top-[-5px]">{journalText.length} / {characterLimit}</p>}
+            <div className="text-xs text-accent text-center mb-1">
                 Press TAB or click the Textbox to start typing
             </div>
-            <div
-                ref={inputRef}
-                tabIndex={0}
-                onClick={() => hiddenInputRef.current?.focus()} // Focus input when div is clicked
-                className=
-                {`mx-auto w-full rounded-md outline-none border bg-background
+            <Textarea
+                onPaste={(e) => e.preventDefault()}
+                maxLength={characterLimit ?? undefined}
+                onCopy={(e) => e.preventDefault()}
+                onCut={(e) => e.preventDefault()}
+                className={`
+                    bg-transparent outline-border border border-border font-mono shadow-border shadow-[inset_0px_0px_10px_0px_rgba(0,_0,_0,_0.1)] p-8 textarea-field-size-content resize-none
                     ${jotType === 'BLOG' ? 'min-h-48' : ''}
-                    ${isFocused ? 'border-primary' : 'border-bg-accent'}
                 `}
-            >
-                <pre className="whitespace-pre-wrap w-full p-5">
-                    {journalText?.slice(0, cursorIndex)}
-                    <span className="bg-transparent border-b-2 border-b-primary">
-                        {journalText[cursorIndex] === "\n" ? "\n\u00A0" : journalText[cursorIndex] || "\u00A0"}
-                    </span>
-                    {journalText?.slice(cursorIndex + 1)}
-                </pre>
-            </div>
-            {/* Hidden input to capture mobile text input */}
-            <input
-                ref={hiddenInputRef}
-                type="text"
-                onKeyDown={handleKeyDown} // ← use this
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
+                value={journalText}
+                onChange={handleOnChange}
+                onKeyDown={handleKeyDown}  // Handle key down events
                 autoComplete="off"
                 autoCorrect="off"
-                spellCheck="false"
-                className="absolute opacity-0 pointer-events-none"
+                autoCapitalize="off"
+                spellCheck={false}
+                ref={editorRef}
+                // readOnly={isInReview}
             />
-            {/* {!isInReview && <p className="text-xs text-center mt-1 italic absolute">Click in the box to start typing</p>} */}
-            {!isInReview && !isInDemo && <p className="text-xs mt-1 flex text-accent">Use ARROW keys to move cursor (Mobile controls below):</p>}
-            <div className={`flex-between ${isInDemo ? 'mt-7' : 'mt-2'} w-full z-50`}>
-                <div className="flex">
-                    <div className="flex-start">
-                        <MdKeyboardDoubleArrowLeft
-                            onClick={() => moveCursor(10, 'back')}
-                            size={25}
-                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-accent"
-                        />
-                        <MdKeyboardArrowLeft
-                            onClick={() => moveCursor(1, 'back')}
-                            size={25}
-                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-accent"
-                        />
-                    </div>
-                    <div className="flex-start">
-                        <MdKeyboardArrowRight
-                            onClick={() => moveCursor(1, 'forward')}
-                            size={25}
-                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-accent"
-                        />
-                        <MdKeyboardDoubleArrowRight
-                            onClick={() => moveCursor(10, 'forward')}
-                            size={25}
-                            className="border border-border rounded-sm mx-3 hover:cursor-pointer hover:text-accent"
-                        />
-                    </div>
-                </div>
-                <MdOutlineSubdirectoryArrowLeft
-                    onClick={makeNewParagraph}
-                    className="border border-border rounded-sm mx-3 w-20 hover:cursor-pointer hover:text-accent"
-                    size={25}
-                />
-            </div>
 
+            <div className="flex space-x-4">
+                {/* Undo Button */}
+                <button onTouchStart={handleUndo} onMouseDown={handleUndo} className="p-2 hover:text-primary rounded">
+                    <Undo />
+                </button>
+
+                {/* Redo Button */}
+                <button onTouchStart={handleRedo} onMouseDown={handleRedo} className="p-2 hover:text-primary rounded">
+                    <Redo />
+                </button>
+            </div>
         </div>
     );
 }

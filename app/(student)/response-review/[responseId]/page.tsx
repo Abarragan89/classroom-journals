@@ -45,7 +45,7 @@ export default async function ResponseReview({
                     <ArrowLeftIcon className="mr-1" size={20} />
                     Back to My Work
                 </Link>
-                <h1 className="font-bold mt-2 whitespace-pre-line">
+                <h1 className="font-bold text-xl max-w-[650px] text-center mt-7 mx-auto whitespace-pre-line">
                     {singleResponse?.promptSession?.promptType === 'ASSESSMENT' && (
                         singleResponse?.promptSession?.title
                     )}

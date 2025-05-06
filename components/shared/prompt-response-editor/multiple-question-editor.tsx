@@ -1,6 +1,6 @@
 "use client";
 import { ResponseData } from "@/types";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import SaveAndContinueBtns from "@/components/buttons/save-and-continue";
 import { useRouter } from "next/navigation";
@@ -27,8 +27,7 @@ export default function MultipleQuestionEditor({
 
     const searchParams = useSearchParams();
     const questionNumber: string | number = searchParams.get('q') as string;
-    const router = useRouter();
-    const inputRef = useRef<HTMLDivElement>(null);
+    const router = useRouter();;
     const [journalText, setJournalText] = useState<string>("");
     const [studentResponseData, setStudentResponseData] = useState<ResponseData[]>(studentResponse);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
@@ -56,7 +55,6 @@ export default function MultipleQuestionEditor({
         if (questionNumber && studentResponseData) {
             setCurrentQuestion(studentResponseData?.[Number(questionNumber)]?.question)
             setJournalText(studentResponseData?.[Number(questionNumber)]?.answer ?? '')
-            inputRef.current?.focus()
         }
     }, [questionNumber, studentResponseData])
 
@@ -97,6 +95,7 @@ export default function MultipleQuestionEditor({
                     ? { ...q, answer: updatedAnswer }
                     : q
             );
+            setStudentResponseData(updatedData)
             await updateStudentResponse(updatedData, responseId);
         } catch (error) {
             console.log('error saving to indexed db', error);
@@ -117,11 +116,8 @@ export default function MultipleQuestionEditor({
             await handleSaveResponses();
             const nextQuestion = (Number(questionNumber) + 1).toString()
             router.push(`/jot-response/${responseId}?q=${nextQuestion}`)
-            setJournalText('');
         } catch (error) {
             console.log('error saving and continuing ', error)
-        } finally {
-            inputRef?.current?.focus()
         }
     }
 
@@ -209,11 +205,10 @@ export default function MultipleQuestionEditor({
                 // IF not final question, just show the editor and question with continue buttons
                 <>
                     <p className="absolute -top-16 right-0 text-sm">Question: {Number(questionNumber) + 1} / {studentResponse.length}</p>
-                    <p className="mt-16 mb-5 w-full mx-auto whitespace-pre-line text-left lg:text-lg">{currentQuestion}</p>
+                    <p className="mt-16 mb-5 w-full mx-auto whitespace-pre-line text-left lg:text-lg font-bold">{currentQuestion}</p>
                     <Editor
                         setJournalText={setJournalText}
                         journalText={journalText}
-                        inputRef={inputRef}
                         // setIsTyping={setIsTyping}
                     />
                     <form onSubmit={(e) => saveAndContinue(e)}>

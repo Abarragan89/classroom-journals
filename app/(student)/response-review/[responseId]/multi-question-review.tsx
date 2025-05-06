@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { ResponseData } from '@/types'
 import Editor from '@/components/shared/prompt-response-editor/editor'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { updateASingleResponse } from '@/lib/actions/response.action';
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
@@ -31,7 +31,6 @@ export default function MultiQuestionReview({
 }) {
 
     const router = useRouter();
-    const inputRef = useRef<HTMLDivElement>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
 
@@ -83,8 +82,8 @@ export default function MultiQuestionReview({
 
     return (
         <div className="w-full relative">
-            <p className="h2-bold text-input">Assessment Review</p>
-            <div className="flex-between mt-10">
+            {isSubmittable && <p className="h2-bold text-input text-center">Question Review</p>}
+            <div className="flex-between mt-7">
                 {showGrades && (
                     <p className='font-bold text-lg text-input ml-0 text-right mb-10'>Grade: <span
                         className={`
@@ -101,19 +100,17 @@ export default function MultiQuestionReview({
                             displayGradeUI(responseData?.score)
                         )}
                     </div>
-                    <CardTitle className="p-4 leading-snug text-center font-normal italic whitespace-pre-line">
+                    <CardTitle className="p-4 leading-snug text-center font-bold whitespace-pre-line">
                         <Separator className='mb-5' />
                         {responseData.question}
                     </CardTitle>
                     <CardContent className="p-3 pt-0 mt-0">
-                        <p className="ml-1 mb-1 text-sm font-bold">Answer:</p>
+                        {/* <p className="ml-1 mb-1 text-sm font-bold">Answer:</p> */}
                         {isSubmittable ? (
                             <>
                                 <Editor
                                     setJournalText={(newText) => handleTextChange(index, newText as string)}
                                     journalText={responseData.answer}
-                                    inputRef={inputRef}
-                                    isInReview={true}
                                 />
                             </>
                         ) : (

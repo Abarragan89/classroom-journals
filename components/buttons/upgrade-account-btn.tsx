@@ -13,8 +13,6 @@ export default function UpgradeAccountBtn({
         queryFn: () => determineSubscriptionAllowance(teacherId),
     })
 
-    console.log('data ', data)
-
     if (isPending) return
     if (error) {
         throw new Error('Cannot determine subscription status')

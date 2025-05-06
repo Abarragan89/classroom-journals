@@ -27,7 +27,7 @@ export default function SinglePromptEditor({
     const router = useRouter();
     const inputRef = useRef<HTMLDivElement>(null);
     const [journalText, setJournalText] = useState<string>("");
-    const studentResponseData = useRef<ResponseData[]>(studentResponse);
+    const [studentResponseData, setStudentResponseData] = useState<ResponseData[]>(studentResponse);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
@@ -53,8 +53,8 @@ export default function SinglePromptEditor({
 
     // This runs on every new page
     useEffect(() => {
-        if (questionNumber && studentResponseData.current) {
-            const current = studentResponseData.current[Number(questionNumber)];
+        if (questionNumber && studentResponseData) {
+            const current = studentResponseData[Number(questionNumber)];
             if (!current) return;
 
             if (questionNumber === '2') {
@@ -67,7 +67,7 @@ export default function SinglePromptEditor({
             setCurrentQuestion(current.question);
             inputRef.current?.focus();
         }
-    }, [questionNumber, studentResponseData.current]);
+    }, [questionNumber, studentResponseData]);
 
 
     // /** Auto-save logic */
@@ -99,14 +99,14 @@ export default function SinglePromptEditor({
         if (isSaving) return
         try {
             setIsSaving(true);
-            const updatedAnswer = journalText.trim();
-            studentResponseData.current = studentResponseData.current.map((q, index) =>
+            const updatedAnswer = journalText.trimEnd();
+            const updatedData = studentResponseData.map((q, index) =>
                 index === Number(questionNumber)
                     ? { ...q, answer: updatedAnswer }
                     : q
             );
-            // Call the server action with the updated data
-            await updateStudentResponse(studentResponseData.current, responseId);
+            setStudentResponseData(updatedData)
+            await updateStudentResponse(updatedData, responseId);
         } catch (error) {
             console.log('error saving to indexed db', error);
         } finally {
@@ -126,11 +126,8 @@ export default function SinglePromptEditor({
             await handleSaveResponses();
             const nextQuestion = (Number(questionNumber) + 1).toString()
             router.push(`/jot-response/${responseId}?q=${nextQuestion}`)
-            setJournalText('');
         } catch (error) {
             console.log('error saving and continuing ', error)
-        } finally {
-            inputRef?.current?.focus()
         }
     }
 
@@ -147,14 +144,13 @@ export default function SinglePromptEditor({
         <div className="w-full max-w-[900px] mx-auto relative px-5">
             <p className="absolute -top-10 right-0 text-sm">Blog Post</p>
             <ArrowBigLeft className="absolute -top-10 left-0 text-sm hover:cursor-pointer hover:text-accent" onClick={() => router.back()} />
-            <p className="mt-16 mb-5 w-full mx-auto whitespace-pre-line text-left text-primary lg:text-lg">{currentQuestion}</p>
+            <p className="mt-16 mb-5 w-full mx-auto whitespace-pre-line text-left text-primary lg:text-lg font-bold">{currentQuestion}</p>
             {/*  Show question if answer question */}
             {questionNumber === '0' && (
                 <>
                     <Editor
                         setJournalText={setJournalText}
                         journalText={journalText}
-                        inputRef={inputRef}
                         // setIsTyping={setIsTyping}
                         jotType='BLOG'
                     />
@@ -175,7 +171,6 @@ export default function SinglePromptEditor({
                     <Editor
                         setJournalText={setJournalText}
                         journalText={journalText}
-                        inputRef={inputRef}
                         // setIsTyping={setIsTyping}
                         characterLimit={70}
                     />
@@ -244,7 +239,7 @@ export default function SinglePromptEditor({
                                     <input
                                         id="responseData"
                                         name="responseData"
-                                        value={JSON.stringify(studentResponseData.current)}
+                                        value={JSON.stringify(studentResponseData)}
                                         hidden
                                         readOnly
                                     />

@@ -48,9 +48,9 @@
     --card-foreground: hsl(212.7 26.8% 83.9%);
     --accent: hsl(221, 61%, 64%);
     --accent-foreground: hsl(212, 89%, 7%);
-    --border: hsl(212, 44%, 18%);
+    --border: hsl(212, 50%, 23%);
     --input: hsl(215.4 16.3% 46.9%);
-    --ring: hsl(215.4 16.3% 46.9%);
+    --ring: hsl(212, 18%, 41%);
     --destructive: hsl(0, 100%, 50%);
     --warning: hsl(50, 98%, 43%);
     --warning-foreground: hsl(0, 0%, 7%);
@@ -73,7 +73,7 @@
     --foreground: hsl(210, 20%, 85%);
     --primary: hsl(107, 89%, 48%);
     --primary-foreground: hsl(0, 0%, 0%);
-    --secondary: hsl(73, 77%, 61%);
+    --secondary: hsla(73, 77%, 61%, 0.727);
     --secondary-foreground: hsl(180, 3%, 6%);
     --muted: hsla(135, 37%, 27%, 0.833);
     --muted-foreground: hsl(0, 0%, 59%);
@@ -81,10 +81,9 @@
     --card-foreground: hsl(210, 20%, 85%);
     --accent: hsl(75, 49%, 54%);
     --accent-foreground: hsl(0, 0%, 2%);
-    --border: hsl(109, 66%, 17%);
+    --border: hsla(109, 66%, 17%, 0.761);
     --input: hsl(210, 15%, 28%);
-    /* --ring: hsl(113, 74%, 26%); */
-    --ring: hsl(127, 69%, 27%);
+    --ring: hsl(128, 70%, 25%);
     --destructive: hsl(0, 100%, 50%);
     --warning: hsl(49, 84%, 48%);
     --warning-foreground: hsl(0, 0%, 7%);
@@ -103,7 +102,6 @@
   }
   .cupid {
     --background: hsl(330, 60%, 94%);
-    /* --foreground: hsl(0, 72%, 27%); */
     --foreground: hsl(0, 72%, 27%);
     --primary: hsl(340, 72%, 48%); /* Hot Pink */
     --primary-foreground: hsl(0, 0%, 100%);
@@ -115,9 +113,9 @@
     --card-foreground: hsl(0, 0%, 15%);
     --accent: hsl(320, 92%, 35%); /* Vibrant Pink */
     --accent-foreground: hsl(0, 0%, 100%);
-    --border: hsl(330, 40%, 60%);
+    --border: hsla(330, 40%, 60%, 0.639);
     --input: hsl(330, 30%, 50%);
-    --ring: hsl(340, 77%, 70%);
+    --ring: hsla(340, 76%, 70%, 0.816);
     --destructive: hsl(0, 79%, 50%);
     --warning: hsl(37, 95%, 45%);
     --warning-foreground: hsl(0, 0%, 10%);
@@ -136,21 +134,21 @@
   }
 
   .tuxedo {
-    --background: hsl(0, 0%, 7%); /* deep black */
-    --foreground: hsl(0, 0%, 95%); /* near-white text */
+    --background: hsl(0, 0%, 5%); /* deep black */
+    --foreground: hsl(0, 0%, 98%); /* near-white text */
     --primary: hsl(0, 0%, 100%); /* pure white, like a tux shirt */
     --primary-foreground: hsl(0, 0%, 8%); /* text on white */
     --secondary: hsl(0, 0%, 20%); /* charcoal gray, soft contrast */
     --secondary-foreground: hsl(0, 0%, 95%); /* light text */
     --muted: hsl(0, 0%, 15%); /* very dark muted background */
     --muted-foreground: hsl(0, 0%, 60%); /* medium gray text */
-    --card: hsl(0, 0%, 12%); /* soft black for cards */
+    --card: hsl(0, 0%, 8%); /* soft black for cards */
     --card-foreground: hsl(0, 0%, 95%); /* light text for readability */
     --accent: hsl(0, 0%, 60%); /* silver-gray accent */
     --accent-foreground: hsl(0, 0%, 10%); /* text on silver */
-    --border: hsl(0, 0%, 25%); /* subtle borders */
+    --border: hsl(0, 4%, 26%); /* subtle borders */
     --input: hsl(0, 2%, 33%); /* input field background */
-    --ring: hsl(0, 3%, 29%); /* mid-gray ring */
+    --ring: hsl(0, 0%, 29%); /* mid-gray ring */
     --destructive: hsl(0, 80%, 50%); /* red for delete/warning */
     --destructive-foreground: hsl(0, 0%, 100%);
     --warning: hsl(45, 90%, 55%); /* light goldenrod */
@@ -158,10 +156,10 @@
     --success: hsl(129, 75%, 35%); /* classy green */
     --popover: hsl(0, 0%, 12%);
     --popover-foreground: hsl(0, 0%, 90%);
-    --sidebar-background: hsl(0, 0%, 5%);
+    --sidebar-background: hsl(0, 0%, 3%);
     --sidebar-foreground: hsl(0, 0%, 90%);
     --sidebar-primary: hsl(0, 0%, 100%);
-    --sidebar-primary-foreground: hsl(0, 0%, 5%);
+    --sidebar-primary-foreground: hsl(0, 0%, 3%);
     --sidebar-accent: hsl(0, 0%, 50%);
     --sidebar-accent-foreground: hsl(0, 0%, 95%);
     --sidebar-border: hsl(0, 0%, 20%);
@@ -170,21 +168,21 @@
 
 
   .avocado {
-    --background: hsl(97, 71%, 92%); /* Pale avocado green for main content */
+    --background: hsl(96, 63%, 92%); /* Pale avocado green for main content */
     --foreground: hsl(99, 13%, 21%); /* Deep green text for contrast */
-    --primary: hsl(100, 70%, 40%); /* Avocado green */
+    --primary: hsl(100, 61%, 30%); /* Avocado green */
     --primary-foreground: hsl(0, 0%, 100%); /* White text */
     --secondary: hsl(30, 61%, 37%); /* Avocado pit brown */
     --secondary-foreground: hsl(46, 55%, 83%); /* Creamy highlight */
     --muted: hsl(99, 26%, 49%);
     --muted-foreground: hsl(100, 40%, 21%);
-    --card: hsl(60, 69%, 88%);
+    --card: hsl(60, 54%, 84%);
     --card-foreground: hsl(100, 40%, 25%);
     --accent: hsl(55, 28%, 36%); /* Avocado yellow */
     --accent-foreground: hsl(105, 41%, 85%);
-    --border: hsl(100, 20%, 80%);
+    --border: hsl(52, 29%, 67%);
     --input: hsl(100, 61%, 22%);
-    --ring: hsl(34, 58%, 42%);
+    --ring: hsl(33, 23%, 50%);
     --destructive: hsl(0, 70%, 50%);
     --destructive-foreground: hsl(0, 0%, 100%);
     --warning: hsl(45, 87%, 52%);
@@ -230,6 +228,10 @@
 
   .h3-bold {
     @apply font-bold text-xl lg:text-2xl;
+  }
+
+  .textarea-field-size-content {
+    field-sizing: content;
   }
 
   .custom-scrollbar::-webkit-scrollbar {
