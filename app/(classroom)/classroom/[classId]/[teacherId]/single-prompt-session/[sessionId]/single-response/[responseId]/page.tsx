@@ -47,19 +47,26 @@ export default async function SingleResponse({
                     <StudentComboBox
                         responses={rosterAlphabetized}
                     />
-                    <p className='text-input'>Submitted: {formatDateShort(response?.submittedAt)}</p>
-                    <div className="flex-between">
-                        <HandleToggleReturnStateBtn
-                            responseId={responseId}
-                            isCompleted={response?.completionStatus === 'COMPLETE'}
-                        />
-                        <DeleteResponseBtn
-                            responseId={responseId}
-                            sessionId={sessionId}
-                            teacherId={teacherId}
-                            classId={classId}
-                        />
-                    </div>
+                    {response?.submittedAt ? (
+                        <p className='text-input'>Submitted: {formatDateShort(response?.submittedAt)}</p>
+                        
+                    ) : (
+                        <p className='text-destructive font-bold text-lg'>Not Submitted</p>
+                    )}
+                    {response?.submittedAt && (
+                        <div className="flex-between">
+                            <HandleToggleReturnStateBtn
+                                responseId={responseId}
+                                isCompleted={response?.completionStatus === 'COMPLETE'}
+                            />
+                            <DeleteResponseBtn
+                                responseId={responseId}
+                                sessionId={sessionId}
+                                teacherId={teacherId}
+                                classId={classId}
+                            />
+                        </div>
+                    )}
                 </div>
                 <div className="max-w-[1200px] mx-auto relative">
                     {isMultiQuestion ? (
@@ -105,7 +112,7 @@ export default async function SingleResponse({
                         </div>
                     )}
                 </div>
-            </div >
+            </div>
             <PrintViewBlog
                 response={response}
             />

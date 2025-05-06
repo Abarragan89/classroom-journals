@@ -14,17 +14,21 @@ import Link from "next/link";
 import { responsePercentage, responseScore } from "@/lib/utils";
 
 export default function AssessmentTableData({
-    promptSessionData,
     promptSessionId,
     classId,
     teacherId,
-    notSubmitted,
+    notAssigned,
+    incompleteResponses,
+    completedResponses,
+    returnedResponses
 }: {
-    promptSessionData: Response[];
     promptSessionId: string;
     classId: string;
     teacherId: string;
-    notSubmitted: User[];
+    notAssigned: User[];
+    incompleteResponses: Response[],
+    completedResponses: Response[],
+    returnedResponses: Response[]
 }) {
 
     return (
@@ -39,10 +43,67 @@ export default function AssessmentTableData({
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow>
-                    <TableCell colSpan={6} className="text-center font-bold bg-background text-success">Submitted</TableCell>
-                </TableRow>
-                {(promptSessionData ?? []).sort((a, b) => {
+                {/* Completed Assignments */}
+                {completedResponses.length > 0 && (
+                    <TableRow>
+                        <TableCell colSpan={6} className="text-center font-bold bg-background text-success">Submitted</TableCell>
+                    </TableRow>
+                )}
+                {(completedResponses ?? []).sort((a, b) => {
+                    const lastNameA = a.student.name?.split(" ")[1] ?? "";
+                    const lastNameB = b.student.name?.split(" ")[1] ?? "";
+                    return lastNameA.localeCompare(lastNameB);
+                }).map((response) => (
+                    <TableRow key={response.id}>
+                        <TableCell>
+                            <Link
+                                className="hover:cursor-pointer hover:text-accent"
+                                href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`}>
+                                <ClipboardCheckIcon />
+                            </Link>
+                        </TableCell>
+                        <TableCell className="font-medium">
+                            {response.student.name}
+                        </TableCell>
+                        <TableCell>{responseScore(response.response as unknown as ResponseData[])}</TableCell>
+                        <TableCell>{responsePercentage(response.response as unknown as ResponseData[])}</TableCell>
+                        <TableCell>-</TableCell>
+                    </TableRow>
+                ))}
+
+                {/* INCOMPLETE ASSIGNMENTS */}
+                {incompleteResponses.length > 0 && (
+                    <TableRow>
+                        <TableCell colSpan={6} className="text-center font-bold bg-background text-destructive">Not Submitted</TableCell>
+                    </TableRow>
+                )}
+                {(incompleteResponses ?? []).sort((a, b) => {
+                    const lastNameA = a.student.name?.split(" ")[1] ?? "";
+                    const lastNameB = b.student.name?.split(" ")[1] ?? "";
+                    return lastNameA.localeCompare(lastNameB);
+                }).map((response) => (
+                    <TableRow key={response.id}>
+                        <Link
+                            className="hover:cursor-pointer hover:text-accent"
+                            href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`}>
+                            <ClipboardCheckIcon />
+                        </Link>
+                        <TableCell className="font-medium">
+                            {response.student.name}
+                        </TableCell>
+                        <TableCell>-</TableCell>
+                        <TableCell>-</TableCell>
+                        <TableCell>-</TableCell>
+                    </TableRow>
+                ))}
+
+                {/* RETURNED ASSIGNMENTS */}
+                {returnedResponses.length > 0 && (
+                    <TableRow>
+                        <TableCell colSpan={6} className="text-center font-bold bg-background text-warning">Returned</TableCell>
+                    </TableRow>
+                )}
+                {(returnedResponses ?? []).sort((a, b) => {
                     const lastNameA = a.student.name?.split(" ")[1] ?? "";
                     const lastNameB = b.student.name?.split(" ")[1] ?? "";
                     return lastNameA.localeCompare(lastNameB);
@@ -64,9 +125,9 @@ export default function AssessmentTableData({
                     </TableRow>
                 ))}
                 <TableRow>
-                    <TableCell colSpan={6} className="text-center font-bold bg-background text-destructive">Not Submitted</TableCell>
+                    <TableCell colSpan={6} className="text-center font-bold bg-background text-border">Not Assigned</TableCell>
                 </TableRow>
-                {notSubmitted?.length > 0 && notSubmitted.map((user) => (
+                {notAssigned?.length > 0 && notAssigned.map((user) => (
                     <TableRow key={user.id}>
                         <TableCell>&nbsp;</TableCell>
                         <TableCell className="font-medium">{user.name}</TableCell>

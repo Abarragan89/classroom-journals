@@ -165,16 +165,12 @@ export async function getSinglePromptSessionTeacherDashboard(sessionId: string) 
                 isPublic: true,
                 areGradesVisible: true,
                 responses: {
-                    where: {
-                        submittedAt: {
-                            not: null
-                        }
-                    },
                     select: {
                         id: true,
                         submittedAt: true,
                         response: true,
                         likeCount: true,
+                        completionStatus: true,
                         student: {
                             select: {
                                 id: true,

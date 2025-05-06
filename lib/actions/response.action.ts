@@ -74,7 +74,6 @@ export async function createStudentResponse(prevState: unknown, formData: FormDa
         } else {
             console.log("Unexpected error:", error);
         }
-
         return { success: false, message: "Error fetching prompts. Try again." };
     }
 }
@@ -617,7 +616,9 @@ export async function getFilteredStudentResponses(filterOptions: SearchOptions) 
     }
 }
 
-// Get Single Response for Resubmission
+// Get all responses associated with a response. 
+
+// Get Single Response for sub
 export async function getSingleResponseForReview(responseId: string) {
     try {
         const studentResponse = await prisma.response.findUnique({

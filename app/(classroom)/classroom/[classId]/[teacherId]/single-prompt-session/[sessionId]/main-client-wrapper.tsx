@@ -7,6 +7,7 @@ import { PromptSession, Question, User, Response, ResponseData } from '@/types'
 import { responsePercentage } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { getSinglePromptSessionTeacherDashboard } from '@/lib/actions/prompt.session.actions'
+import { ResponseStatus } from '@prisma/client'
 
 export default function MainClientWrapper({
     promptSession,
@@ -61,9 +62,17 @@ export default function MainClientWrapper({
         :
         calculateClassAverageBlog()
 
+
+    // grab all the respones with this promptSessionId
     // Get student list to show which students have not submitted
+    const completedResponses = promptSessionData?.responses?.filter(response => response.completionStatus === ResponseStatus.COMPLETE)
+    const incompleteResponses = promptSessionData?.responses?.filter(response => response.completionStatus === ResponseStatus.INCOMPLETE)
+    const returnedResponses = promptSessionData?.responses?.filter(response => response.completionStatus === ResponseStatus.RETURNED)
+
+    // Find out which student have not been assigned it.
     const studentSubmittedIds = promptSessionData?.responses?.map(response => response.student.id);
-    const notSubmitted = classRoster.filter(student => !studentSubmittedIds?.includes(student.id))
+    const notAssigned = classRoster.filter(student => !studentSubmittedIds?.includes(student.id))
+
 
     return (
         <div>
@@ -87,20 +96,24 @@ export default function MainClientWrapper({
 
             {promptSessionData.promptType === 'ASSESSMENT' ? (
                 <AssessmentTableData
-                    promptSessionData={promptSessionData?.responses as unknown as Response[]}
                     teacherId={teacherId}
                     promptSessionId={promptSessionData.id}
                     classId={classId}
-                    notSubmitted={notSubmitted}
+                    notAssigned={notAssigned}
+                    completedResponses={completedResponses as Response[]}
+                    incompleteResponses={incompleteResponses as Response[]}
+                    returnedResponses={returnedResponses as Response[]}
                 />
             ) : (
                 // Journal Table
                 <BlogTableData
-                    promptSessionData={promptSessionData.responses as unknown as Response[]}
                     teacherId={teacherId}
                     promptSessionId={promptSessionData.id}
                     classId={classId}
-                    notSubmitted={notSubmitted}
+                    notAssigned={notAssigned}
+                    completedResponses={completedResponses as Response[]}
+                    incompleteResponses={incompleteResponses as Response[]}
+                    returnedResponses={returnedResponses as Response[]}
                 />
             )}
         </div>

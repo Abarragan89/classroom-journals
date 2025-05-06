@@ -132,8 +132,6 @@ export default function SinglePromptEditor({
         }
     }
 
-    console.log('student data ', studentResponseData)
-
     const SubmitFormBtn = () => {
         const { pending } = useFormStatus()
         return (

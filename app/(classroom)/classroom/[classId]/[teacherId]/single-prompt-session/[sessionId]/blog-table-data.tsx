@@ -13,17 +13,21 @@ import { ClipboardCheckIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function BlogTableData({
-    promptSessionData,
     promptSessionId,
     classId,
     teacherId,
-    notSubmitted,
+    notAssigned,
+    incompleteResponses,
+    completedResponses,
+    returnedResponses
 }: {
-    promptSessionData: Response[];
     promptSessionId: string;
     classId: string;
     teacherId: string;
-    notSubmitted: User[];
+    notAssigned: User[];
+    incompleteResponses: Response[],
+    completedResponses: Response[],
+    returnedResponses: Response[]
 
 }) {
 
@@ -40,10 +44,13 @@ export default function BlogTableData({
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow>
-                    <TableCell colSpan={6} className="text-center font-bold bg-background text-success">Submitted</TableCell>
-                </TableRow>
-                {(promptSessionData ?? []).sort((a, b) => {
+                {/* Completed Assignments */}
+                {completedResponses.length > 0 && (
+                    <TableRow>
+                        <TableCell colSpan={6} className="text-center font-bold bg-background text-success">Submitted</TableCell>
+                    </TableRow>
+                )}
+                {(completedResponses ?? []).sort((a, b) => {
                     const lastNameA = a.student.name?.split(" ")[1] ?? "";
                     const lastNameB = b.student.name?.split(" ")[1] ?? "";
                     return lastNameA.localeCompare(lastNameB);
@@ -65,10 +72,69 @@ export default function BlogTableData({
                         <TableCell>{formatDateShort(response.submittedAt)}</TableCell>
                     </TableRow>
                 ))}
-                <TableRow>
-                    <TableCell colSpan={6} className="text-center font-bold bg-background text-destructive">Not Submitted</TableCell>
-                </TableRow>
-                {notSubmitted?.length > 0 && notSubmitted.map((user) => (
+                {/* INCOMPLETE ASSIGNMENTS */}
+                {incompleteResponses.length > 0 && (
+                    <TableRow>
+                        <TableCell colSpan={6} className="text-center font-bold bg-background text-destructive">Not Submitted</TableCell>
+                    </TableRow>
+                )}
+                {(incompleteResponses ?? []).sort((a, b) => {
+                    const lastNameA = a.student.name?.split(" ")[1] ?? "";
+                    const lastNameB = b.student.name?.split(" ")[1] ?? "";
+                    return lastNameA.localeCompare(lastNameB);
+                }).map((response) => (
+                    <TableRow key={response.id}>
+                        <TableCell>
+                            <Link
+                                className="hover:cursor-pointer hover:text-accent"
+                                href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`}>
+                                <ClipboardCheckIcon />
+                            </Link>
+                        </TableCell>
+                        <TableCell className="font-medium">
+                            {response.student.name}
+                        </TableCell>
+                        <TableCell>{(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? '-'}%</TableCell>
+                        <TableCell>{response?._count?.comments || 0}</TableCell>
+                        <TableCell>{response?.likeCount || 0}</TableCell>
+                        <TableCell>-</TableCell>
+                    </TableRow>
+                ))}
+                {/* RETURNED ASSIGNMENTS */}
+                {returnedResponses.length > 0 && (
+                    <TableRow>
+                        <TableCell colSpan={6} className="text-center font-bold bg-background text-warning">Returned</TableCell>
+                    </TableRow>
+                )}
+                {(returnedResponses ?? []).sort((a, b) => {
+                    const lastNameA = a.student.name?.split(" ")[1] ?? "";
+                    const lastNameB = b.student.name?.split(" ")[1] ?? "";
+                    return lastNameA.localeCompare(lastNameB);
+                }).map((response) => (
+                    <TableRow key={response.id}>
+                        <TableCell>
+                            <Link
+                                className="hover:cursor-pointer hover:text-accent"
+                                href={`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`}>
+                                <ClipboardCheckIcon />
+                            </Link>
+                        </TableCell>
+                        <TableCell className="font-medium">
+                            {response.student.name}
+                        </TableCell>
+                        <TableCell>{(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? '-'}%</TableCell>
+                        <TableCell>{response?._count?.comments || 0}</TableCell>
+                        <TableCell>{response?.likeCount || 0}</TableCell>
+                        <TableCell>{formatDateShort(response.submittedAt)}</TableCell>
+                    </TableRow>
+                ))}
+                {/* NOT ASSIGNED */}
+                {notAssigned.length > 0 && (
+                    <TableRow>
+                        <TableCell colSpan={6} className="text-center font-bold bg-background text-border">Not Assigned</TableCell>
+                    </TableRow>
+                )}
+                {notAssigned?.length > 0 && notAssigned.map((user) => (
                     <TableRow key={user.id}>
                         <TableCell>&nbsp;</TableCell>
                         <TableCell className="font-medium">{user.name}</TableCell>
