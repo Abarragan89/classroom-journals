@@ -282,3 +282,10 @@ model StudentRequest {
   student User @relation("RequestsByStudent", fields: [studentId], references: [id], onDelete: Cascade)
   teacher User @relation("RequestsToTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
 }
+
+model Image {
+  id        String   @id @default(cuid())
+  url       String   @unique
+  tags      String[] // searchable tags
+  createdAt DateTime @default(now())
+}

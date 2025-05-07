@@ -3,6 +3,7 @@ import { prisma } from '@/db/prisma'
 import { Session } from '@/types'
 import { notFound } from 'next/navigation'
 import React from 'react'
+import PhotoHubClient from './photo-hub-client'
 
 export default async function PhotoHub() {
     const session = await auth() as Session
@@ -20,6 +21,9 @@ export default async function PhotoHub() {
     if (!isAdmin?.isAdmin) return notFound();
 
     return (
-        <div>PhotoHub</div>
+        <main className='wrapper'>
+            <h1 className='h1-bold'>Photo Hub</h1>
+            <PhotoHubClient />
+        </main>
     )
 }

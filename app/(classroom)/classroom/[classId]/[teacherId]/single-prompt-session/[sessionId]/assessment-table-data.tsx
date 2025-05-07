@@ -90,7 +90,7 @@ export default function AssessmentTableData({
                         </TableCell>
                         <TableCell>{responseScore(response.response as unknown as ResponseData[])}</TableCell>
                         <TableCell>{responsePercentage(response.response as unknown as ResponseData[])}</TableCell>
-                        <TableCell>-</TableCell>
+                        <TableCell>{formatDateShort(response.submittedAt)}</TableCell>
                     </TableRow>
                 ))}
 
