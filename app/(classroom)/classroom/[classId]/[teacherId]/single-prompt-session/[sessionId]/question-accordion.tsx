@@ -90,6 +90,52 @@ export default function QuestionAccordion({
 
     const score = currentSubQuery.current.score;
     const label = scoreLabelMap[score as keyof typeof scoreLabelMap] ?? scoreLabelMap.default;
+
+    // Update the UI when updating grades in the modal
+    function handleScoreUpdateUI(
+        responseId: string,
+        oldScore: number,
+        question: string,
+        newScore: number,
+    ) {
+        setCurrentResponseData((prev) => {
+            // Clone previous state to avoid direct mutation
+            const updated = { ...prev };
+
+            // Defensive check
+            if (!updated[question]) return prev
+
+            // Clone the score groups
+            const questionScores = { ...updated[question] };
+
+            // Remove the response from the old score group
+            questionScores[oldScore] = questionScores[oldScore].filter(
+                (resp) => resp.responseId !== responseId
+            );
+
+            // Find the response object to move
+            const allResponses = Object.values(prev[question]).flat();
+            const responseToMove = allResponses.find((resp) => resp.responseId === responseId);
+
+            // If found, push it to the new score group
+            if (responseToMove) {
+                if (!questionScores[newScore]) {
+                    questionScores[newScore] = [];
+                }
+                // prevents duplicates
+                const alreadyExists = questionScores[newScore].some(
+                    (resp) => resp.responseId === responseId
+                );
+                if (!alreadyExists) {
+                    questionScores[newScore].push(responseToMove);
+                }
+            }
+            return {
+                ...prev,
+                [question]: questionScores,
+            };
+        });
+    }
     return (
         <>
             <ResponsiveDialog
@@ -115,6 +161,14 @@ export default function QuestionAccordion({
                                     responseId={data.responseId}
                                     questionNumber={currentSubQuery.current.questionNumber}
                                     currentScore={currentSubQuery.current.score}
+                                    updateUIQuestionAccordion={(newScore) =>
+                                        handleScoreUpdateUI(
+                                            data.responseId,
+                                            currentSubQuery.current.score,
+                                            currentSubQuery.current.question,
+                                            newScore
+                                        )
+                                    }
                                 />
                             </div>
                         </div>
