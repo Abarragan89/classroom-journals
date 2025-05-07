@@ -12,6 +12,8 @@ import { submitStudentResponse, updateStudentResponse } from "@/lib/actions/resp
 import { toast } from "sonner";
 import Editor from "./editor";
 import MultiQuestionReview from "@/app/(student)/response-review/[responseId]/multi-question-review";
+import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti'
 
 export default function MultipleQuestionEditor({
     studentResponse,
@@ -35,6 +37,9 @@ export default function MultipleQuestionEditor({
     // const [isTyping, setIsTyping] = useState(false);
     // const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
+    const [showConfetti, setShowConfetti] = useState<boolean>(false)
+    const { width, height } = useWindowSize()
+
     const [state, action] = useActionState(submitStudentResponse, {
         success: false,
         message: ''
@@ -42,9 +47,12 @@ export default function MultipleQuestionEditor({
 
     useEffect(() => {
         if (state?.success) {
+            setShowConfetti(true)
+            toast('Answers Submitted!')
             async function finishResponseHandler() {
-                router.push('/')
-                toast('Answers Submitted!')
+                setTimeout(() => {
+                    router.push('/')
+                }, 5000);
             }
             finishResponseHandler()
         }
@@ -130,9 +138,21 @@ export default function MultipleQuestionEditor({
         )
     }
 
-    if (questionNumber === 'blog-details') {
+    if (showConfetti && width && height) {
         return (
-            <p>Add title and image</p>
+            <div>
+                <Confetti
+                    width={width}
+                    height={height}
+                    numberOfPieces={2000}
+                    recycle={false}
+                    gravity={0.08}
+                    tweenDuration={5000}
+
+                />
+                <p className="flex-center mt-36 text-success h1-bold">Answers Submitted!</p>
+            </div>
+
         )
     }
 
@@ -209,7 +229,7 @@ export default function MultipleQuestionEditor({
                     <Editor
                         setJournalText={setJournalText}
                         journalText={journalText}
-                        // setIsTyping={setIsTyping}
+                    // setIsTyping={setIsTyping}
                     />
                     <form onSubmit={(e) => saveAndContinue(e)}>
                         <SaveAndContinueBtns
