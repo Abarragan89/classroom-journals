@@ -1,125 +1,116 @@
-// "use client"
-// import { addPhotoToLibrary } from "@/lib/actions/s3-upload";
-// import { useState } from "react"
-// import PulseLoader from "react-spinners/PulseLoader";
 
-// export default function PhotoHubClient() {
-
-//     const [file, setFile] = useState<File | null>(null)
-//     const [isUpLoading, setIsUploading] = useState<boolean>(false);
-//     const [fileIsAccepted, setFileIsAccepted] = useState<boolean>(false)
-//     const [imagePreview, setImagePreview] = useState<string | null>(null);
-//     const [message, setMessage] = useState<string>("");
-
-//     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-//         const file = event.target.files?.[0];
-//         setMessage("");
-//         if (file) {
-//             // 1.  Check file type
-//             const validTypes = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
-//             if (!validTypes.includes(file.type)) {
-//                 setMessage("Please upload a JPEG, PNG, or WebP image.");
-//                 event.target.value = ""; // Reset the input
-//                 return;
-//             }
-
-//             // 2. Check file size (max 3.75MB)
-//             const maxSizeMB = 3.75;
-//             if (file.size > maxSizeMB * 1024 * 1024) { // Convert MB to bytes
-//                 setMessage("File size must be less than 3.75MB.");
-//                 event.target.value = ""; // Reset the input
-//                 return;
-//             }
-
-//             // 3. Check image dimensions
-//             const img = new Image();
-//             img.src = URL.createObjectURL(file);
-//             img.onload = () => {
-//                 setFileIsAccepted(true);
-//                 setMessage("Add a description and Confirm Upload");
-
-//                 // 3. Set preview using user's file path
-//                 const reader = new FileReader();
-//                 reader.onload = () => setImagePreview(reader.result as string); // Set the image preview source
-//                 reader.readAsDataURL(file); // Read file as Data URL
-
-//                 // 4. If all checks pass, set the state variable to send to post request
-//                 setFile(file);
-//             };
-//             img.onerror = () => {
-//                 setFileIsAccepted(false);
-//                 setMessage("Invalid image file.");
-//                 event.target.value = ""; // Reset the input
-//             };
-//         }
-//     };
-
-//     async function handleSubmit(e: React.FormEvent) {
-//         e.preventDefault();
-//         if (!file) return;
-//         setIsUploading(true);
-//         const formData = new FormData();
-//         formData.append('file', file);
-//         formData.append('isCoverImage', 'true')
-
-//         try {
-//             // Post to the S3 Bucket
-//             const data = addPhotoToLibrary(formData)
-
-//             // Get the pictureURL
-//             // const { pictureURL } = data;
-
-
-//             setImagePreview(pictureURL);
-//             setMessage('');
-//         } catch (error) {
-//             console.error('Error uploading blog cover image:', error);
-//             setMessage('Failed to upload the image. Please try again.');
-//         } finally {
-//             setIsUploading(false);
-//             setFile(null);
-//         }
-//     }
-
-//     return (
-//         <div>
-//             {!file &&
-//                 <label
-//                     className={`block w-[90%] ${imagePreview ? 'w-fit px-4' : 'max-w-[260px]'} mt-5 mx-auto custom-small-btn bg-[var(--off-black)]`}
-//                     htmlFor="cover-image-upload"
-//                 >
-//                     {isUpLoading ?
-//                         <PulseLoader
-//                             loading={isUpLoading}
-//                             size={7}
-//                             aria-label="Loading Spinner"
-//                             data-testid="loader"
-//                             className="text-[var(--off-white)]"
-//                         />
-//                         :
-//                         imagePreview ?
-//                             'Change Cover Photo'
-//                             :
-//                             'Add Cover Photo'
-//                     }
-//                     <input
-//                         id="cover-image-upload"
-//                         type="file"
-//                         className="hidden"
-//                         accept="image/jpeg, image/png, image/webp"
-//                         onChange={(e) => handleFileChange(e)}
-//                     />
-//                 </label>
-//             }
-//         </div>
-//     )
-// }
-
-import React from 'react'
+'use client';
+import { addPhotoToLibrary } from '@/lib/actions/s3-upload';
+import { useFormStatus } from 'react-dom';
+import { useState, useActionState, useEffect } from 'react';
+import PulseLoader from 'react-spinners/PulseLoader';
+import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import { Input } from '@/components/ui/input';
 
 export default function PhotoHubClient() {
-    return (
-        <div>PhotoHubClient</div>
-    )
-}
+    const [file, setFile] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [message, setMessage] = useState<string>('');
 
+    const [state, action] = useActionState(addPhotoToLibrary, {
+        success: false,
+        message: ''
+    });
+
+    useEffect(() => {
+        if (state.success) {
+            setFile(null);
+            setImagePreview(null);
+            setMessage('');
+        }
+    }, [state]);
+
+    const validateFile = (file: File): string | null => {
+        const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+        const maxSizeMB = 3.75;
+
+        if (!validTypes.includes(file.type)) {
+            return 'Please upload a JPEG, PNG, or WebP image.';
+        }
+
+        if (file.size > maxSizeMB * 1024 * 1024) {
+            return 'File size must be less than 3.75MB.';
+        }
+
+        return null;
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        setMessage('');
+
+        if (!file) return;
+
+        const error = validateFile(file);
+        if (error) {
+            setMessage(error);
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => setImagePreview(reader.result as string);
+        reader.readAsDataURL(file);
+        setFile(file);
+    };
+
+    function SubmitButton() {
+        const { pending } = useFormStatus();
+        return (
+            <Button type="submit" disabled={pending}>
+                {pending ? (
+                    <PulseLoader size={7} className="text-primary" />
+                ) : (
+                    'Upload Image'
+                )}
+            </Button>
+        );
+    }
+
+    return (
+        <form action={action} className="mx-auto max-w-md">
+            <>
+                <Image
+                    src={imagePreview || "https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png"}
+                    alt="Preview"
+                    className="mt-4 rounded w-full max-w-2xl mx-auto h-auto"
+                    width={1920}
+                    height={1080}
+                />
+                <label htmlFor="tags" className="block mt-4">
+                    Tags (optional)
+                </label>
+                <Input type="text" name="tags" id="tags" />
+                <div className="flex-center mt-2">
+                    {file && (
+                        <SubmitButton />
+                    )}
+                    <Button className={`${file ? 'hidden' : ''}`} asChild>
+                        <label className="block mt-5 cursor-pointer" htmlFor="file">
+                            {file ? 'Change Photo' : 'Add Photo'}
+                            <input
+                                id="file"
+                                name="file"
+                                type="file"
+                                accept="image/jpeg, image/png, image/webp"
+                                onChange={handleFileChange}
+                                className="hidden"
+                            />
+                        </label>
+                    </Button>
+
+                </div>
+                {message && <p className="text-destructive text-sm mt-2">{message}</p>}
+                {state.success && <p className="text-success text-sm mt-2">Upload successful!</p>}
+                {state.message && !state.success && (
+                    <p className="text-destructive text-sm mt-2">{state.message}</p>
+                )}
+            </>
+        </form>
+    );
+}

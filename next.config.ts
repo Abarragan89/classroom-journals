@@ -2,32 +2,28 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  // images: {
-  //   remotePatterns: [
-  //     'lh3.googleusercontent.com',
-  //     'unfinished-pages.s3.us-east-2.amazonaws.com',
-  //     'profile.yahoo.com',
-  //     's.yimg.com',
-  //     'aol.com',
-  //     'profile.aol.com',
-  //     'apple.com',
-  //     'icloud.com',
-  //     'outlook.com',
-  //     'hotmail.com',
-  //     'profile.live.com',
-  //   ],
-  // },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '4mb'
+    }
+  },
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
-        port: '', 
+        port: '',
         pathname: '**', // This defines the URL pattern you want to allow
       },
       {
         protocol: 'https',
         hostname: 'unfinished-pages.s3.us-east-2.amazonaws.com',
+        port: '',
+        pathname: '/**', // Allow all paths under this hostname
+      },
+      {
+        protocol: 'https',
+        hostname: 'jotter-blog.s3.us-east-2.amazonaws.com',
         port: '',
         pathname: '/**', // Allow all paths under this hostname
       },

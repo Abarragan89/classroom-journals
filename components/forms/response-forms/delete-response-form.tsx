@@ -27,7 +27,7 @@ export default function DeleteResponseForm({
     //redirect if the state is success
     useEffect(() => {
         if (state.success) {
-            toast('Response Deleted!', {
+            toast('Assignment removed!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
             router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${sessionId}`);
@@ -42,14 +42,14 @@ export default function DeleteResponseForm({
                 type="submit"
                 className={`mx-auto block bg-destructive border-none`}
             >
-                {pending ? 'Deleting...' : 'Delete Response'}
+                {pending ? 'Removing...' : 'Remove Assignment'}
             </Button>
         );
     }
 
     return (
         <form action={action}>
-            <p className="mt-2 mb-5">Are you sure you want to delete this response</p>
+            <p className="mt-2 mb-5">Are you sure you want to remove this assignment from this student?</p>
             <input
                 type="hidden"
                 name="response-id"

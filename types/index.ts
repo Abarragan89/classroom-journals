@@ -9,7 +9,7 @@ export type User = {
     googleId?: string;
     password?: string;
     accountType?: string;
-    isAdmin?:boolean;
+    isAdmin?: boolean;
     iv?: string;
     email?: string;
     emailVerified?: Date;
@@ -212,4 +212,11 @@ export interface SubscriptionData {
     listItems: string[];
     payoutLink: string;
     teacherEmail: string;
+}
+
+export interface BlogImage {
+    id?: string;
+    url: string;
+    tags: string[];
+    createdAt?: Date;
 }

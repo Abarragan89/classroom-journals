@@ -11,8 +11,13 @@ import { useFormStatus } from "react-dom";
 import { updateStudentResponse, submitStudentResponse } from "@/lib/actions/response.action";
 import { toast } from "sonner";
 import Editor from "./editor";
+import { BlogImage } from "@/types";
 import Image from "next/image";
-import { imageUrls } from "@/data";
+import { getAllPhotos } from "@/lib/actions/s3-upload";
+import { ResponsiveDialog } from "@/components/responsive-dialog";
+import { Input } from "@/components/ui/input";
+import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti'
 
 export default function SinglePromptEditor({
     studentResponse,
@@ -31,9 +36,14 @@ export default function SinglePromptEditor({
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
+    const [isLoadingPhotos, setIsLoadingPhotos] = useState<boolean>(false)
+    const [allBlogPhotos, setAllBlogPhotos] = useState<BlogImage[] | null>(null)
+    const [openPhotoModal, setOpenPhotoModal] = useState<boolean>(false)
+    const [filteredBlogPhotos, setFilteredBlogPhotos] = useState<BlogImage[] | null>(null)
     // const [isTyping, setIsTyping] = useState(false);
     // const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-
+    const [showConfetti, setShowConfetti] = useState<boolean>(false)
+    const { width, height } = useWindowSize()
 
     const [state, action] = useActionState(submitStudentResponse, {
         success: false,
@@ -42,14 +52,30 @@ export default function SinglePromptEditor({
 
     useEffect(() => {
         if (state?.success) {
+            setShowConfetti(true)
+            toast('Blog Posted!')
             async function finishResponseHandler() {
-                router.push('/')
-                toast('Blog Posted!')
+                setTimeout(() => {
+                    router.push('/')
+                }, 5000);
             }
             finishResponseHandler()
         }
     }, [state.success])
 
+    async function fetchPhotos() {
+        if (allBlogPhotos !== null) return
+        try {
+            setIsLoadingPhotos(true)
+            const photos = await getAllPhotos() as BlogImage[]
+            setAllBlogPhotos(photos)
+            setFilteredBlogPhotos(photos)
+        } catch (error) {
+            console.log('error getting blog photos ', error)
+        } finally {
+            setIsLoadingPhotos(false)
+        }
+    }
 
     // This runs on every new page
     useEffect(() => {
@@ -84,6 +110,7 @@ export default function SinglePromptEditor({
     //     }
     //     return () => clearTimeout(typingTimeoutRef.current);
     // }, [journalText, isTyping]);
+
 
     // Go into fullscreen mode
     useEffect(() => {
@@ -141,127 +168,179 @@ export default function SinglePromptEditor({
         )
     }
 
-    return (
-        <div className="w-full max-w-[900px] mx-auto relative px-5">
-            <p className="absolute -top-10 right-0 text-sm">Blog Post</p>
-            <ArrowBigLeft className="absolute -top-10 left-0 text-sm hover:cursor-pointer hover:text-accent" onClick={() => router.back()} />
-            <p className="mt-16 mb-5 w-full mx-auto whitespace-pre-line text-left text-primary lg:text-lg font-bold">{currentQuestion}</p>
-            {/*  Show question if answer question */}
-            {questionNumber === '0' && (
-                <>
-                    <Editor
-                        setJournalText={setJournalText}
-                        journalText={journalText}
-                        // setIsTyping={setIsTyping}
-                        jotType='BLOG'
-                    />
-                    <div className="flex flex-col justify-center items-center mb-20">
-                        <form onSubmit={(e) => saveAndContinue(e)}>
-                            <SaveAndContinueBtns
-                                isSaving={isSaving}
-                                submitHandler={() => { handleSaveResponses(); toast('Answers Saved!') }}
-                            />
-                        </form>
-                    </div>
-                </>
-            )}
+    function filterPhotos(userText: string) {
+        setFilteredBlogPhotos(allBlogPhotos?.filter(img =>
+            img.tags.some(tag => tag.toLowerCase().includes(userText.toLowerCase()))
+        ) ?? []
+        );
+    }
 
-            {/* show Blog title input */}
-            {questionNumber === '1' && (
+    if (showConfetti && width && height) {
+        return (
+            <div>
+                <Confetti
+                    width={width}
+                    height={height}
+                    numberOfPieces={2000}
+                    recycle={false}
+                    gravity={0.08}
+                    tweenDuration={5000}
+
+                />
+                <p className="flex-center mt-36 text-success h1-bold">Blog Submitted!</p>
+            </div>
+
+        )
+    }
+
+    return (
+        <>
+            <ResponsiveDialog
+                isOpen={openPhotoModal}
+                setIsOpen={setOpenPhotoModal}
+                title="Photo Library"
+            >
                 <>
-                    <Editor
-                        setJournalText={setJournalText}
-                        journalText={journalText}
-                        // setIsTyping={setIsTyping}
-                        characterLimit={70}
-                    />
-                    <div className="flex flex-col justify-center items-center mb-20">
-                        <form onSubmit={(e) => saveAndContinue(e)}>
-                            <SaveAndContinueBtns
-                                isSaving={isSaving}
-                                submitHandler={() => { handleSaveResponses(); toast('Answers Saved!') }}
-                            />
-                        </form>
-                    </div>
-                </>
-            )}
-            {/* Show final image and submission */}
-            {questionNumber === '2' && (
-                <>
-                    {/* Save and Submit Buttons */}
-                    <div className="flex flex-col justify-center items-center">
-                        <Image
-                            src={journalText || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
-                            alt="blog cover photo"
-                            width={500}
-                            height={300}
-                            priority
-                            className="rounded-md max-h-[300px]"
-                        />
-                        <h3 className="h3-bold text-center mt-5">Photo Library</h3>
-                        <div className="max-h-[300px] w-[500px] mx-auto mb-10 overflow-y-scroll bg-card flex-center flex-wrap gap-10 mt-3 rounded-md py-10 custom-scrollbar">
-                            {imageUrls.map((img) => (
-                                <Image
-                                    key={img}
-                                    src={img}
-                                    alt="blog cover photo"
-                                    width={200}
-                                    height={100}
-                                    onClick={() => setJournalText(img)}
-                                    className="hover:cursor-pointer"
-                                />
-                            ))}
+                    {isLoadingPhotos ? (
+                        <div className="flex-center h-[355px]">
+                            <p>Loading...</p>
                         </div>
-                        {confirmSubmission ? (
-                            <div className="flex flex-col justify-center items-center">
-                                <p className="text-center text-success mb-3 font-bold">Are you sure you want to submit all your answers?</p>
-                                <form action={action} className="mt-5">
-                                    <input
-                                        id="responseId"
-                                        name="responseId"
-                                        value={responseId}
-                                        hidden
-                                        readOnly
+                    ) : (
+                        <>
+                            <Input
+                                type="text"
+                                placeholder="Search images..."
+                                onChange={(e) => filterPhotos(e.target.value)}
+                                className="mt-3"
+
+                            />
+                            <div className="h-[355px] mx-auto overflow-y-auto flex-center flex-wrap gap-3 custom-scrollbar py-5">
+                                {filteredBlogPhotos && filteredBlogPhotos.map((img) => (
+                                    <Image
+                                        key={img.id}
+                                        src={img.url}
+                                        alt="blog cover photo"
+                                        width={1920}
+                                        height={1080}
+                                        onClick={() => { setJournalText(img.url); setOpenPhotoModal(false) }}
+                                        className="hover:cursor-pointer rounded-sm hover:scale-105 max-w-[195px]"
                                     />
-                                    <input
-                                        id="blogImage"
-                                        name="blogImage"
-                                        value={journalText}
-                                        hidden
-                                        readOnly
-                                    />
-                                    <input
-                                        id="promptType"
-                                        name="promptType"
-                                        value='BLOG'
-                                        hidden
-                                        readOnly
-                                    />
-                                    <input
-                                        id="responseData"
-                                        name="responseData"
-                                        value={JSON.stringify(studentResponseData)}
-                                        hidden
-                                        readOnly
-                                    />
-                                    <div className="flex-center gap-x-7 mb-20">
-                                        <Button onClick={() => setConfirmSubmission(false)} variant='secondary' type="button">Cancel</Button>
-                                        <SubmitFormBtn />
-                                    </div>
-                                </form>
+                                ))}
                             </div>
-                        ) : (
-                            <>
-                                <p className="text-center mb-3 font-bold">Ready to submit?</p>
-                                <div className="flex-center gap-5 mb-20">
-                                    <Button variant='secondary' onClick={() => { handleSaveResponses(); toast('Answers Saved!') }} className="flex justify-center mx-auto">Save</Button>
-                                    <Button onClick={async () => { await handleSaveResponses(); setConfirmSubmission(true) }}>Submit Responses</Button>
-                                </div>
-                            </>
-                        )}
-                    </div>
+                        </>
+                    )}
                 </>
-            )}
-        </div>
+            </ResponsiveDialog>
+            <div className="w-full max-w-[900px] mx-auto relative px-5">
+                <p className="absolute -top-10 right-0 text-sm">Blog Post</p>
+                <ArrowBigLeft className="absolute -top-10 left-0 text-sm hover:cursor-pointer hover:text-accent" onClick={() => router.back()} />
+                <p className="mt-16 mb-5 w-full mx-auto whitespace-pre-line text-left text-primary lg:text-lg font-bold">{currentQuestion}</p>
+                {/*  Show question if answer question */}
+                {questionNumber === '0' && (
+                    <>
+                        <Editor
+                            setJournalText={setJournalText}
+                            journalText={journalText}
+                            // setIsTyping={setIsTyping}
+                            jotType='BLOG'
+                        />
+                        <div className="flex flex-col justify-center items-center mb-20">
+                            <form onSubmit={(e) => saveAndContinue(e)}>
+                                <SaveAndContinueBtns
+                                    isSaving={isSaving}
+                                    submitHandler={() => { handleSaveResponses(); toast('Answers Saved!') }}
+                                />
+                            </form>
+                        </div>
+                    </>
+                )}
+
+                {/* show Blog title input */}
+                {questionNumber === '1' && (
+                    <>
+                        <Editor
+                            setJournalText={setJournalText}
+                            journalText={journalText}
+                            // setIsTyping={setIsTyping}
+                            characterLimit={70}
+                        />
+                        <div className="flex flex-col justify-center items-center mb-20">
+                            <form onSubmit={(e) => saveAndContinue(e)}>
+                                <SaveAndContinueBtns
+                                    isSaving={isSaving}
+                                    submitHandler={() => { handleSaveResponses(); toast('Answers Saved!') }}
+                                />
+                            </form>
+                        </div>
+                    </>
+                )}
+                {/* Show final image and submission */}
+                {questionNumber === '2' && (
+                    <>
+                        {/* Save and Submit Buttons */}
+                        <div className="flex flex-col justify-center items-center">
+                            <Image
+                                src={journalText || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
+                                alt="blog cover photo"
+                                width={1920}
+                                height={1080}
+                                priority
+                                className="rounded-md max-w-md"
+                            />
+
+                            <Button className=" mt-4 mb-8" onClick={() => { setOpenPhotoModal(true); fetchPhotos() }}>Change Photo</Button>
+
+                            {confirmSubmission ? (
+                                <div className="flex flex-col justify-center items-center">
+                                    <p className="text-center text-success mb-3 font-bold">Are you sure you want to submit all your answers?</p>
+                                    <form action={action} className="mt-5">
+                                        <input
+                                            id="responseId"
+                                            name="responseId"
+                                            value={responseId}
+                                            hidden
+                                            readOnly
+                                        />
+                                        <input
+                                            id="blogImage"
+                                            name="blogImage"
+                                            value={journalText}
+                                            hidden
+                                            readOnly
+                                        />
+                                        <input
+                                            id="promptType"
+                                            name="promptType"
+                                            value='BLOG'
+                                            hidden
+                                            readOnly
+                                        />
+                                        <input
+                                            id="responseData"
+                                            name="responseData"
+                                            value={JSON.stringify(studentResponseData)}
+                                            hidden
+                                            readOnly
+                                        />
+                                        <div className="flex-center gap-x-7 mb-20">
+                                            <Button onClick={() => setConfirmSubmission(false)} variant='secondary' type="button">Cancel</Button>
+                                            <SubmitFormBtn />
+                                        </div>
+                                    </form>
+                                </div>
+                            ) : (
+                                <>
+                                    <p className="text-center mb-3 font-bold">Ready to submit?</p>
+                                    <div className="flex-center gap-5 mb-20">
+                                        {/* <Button variant='secondary' onClick={() => { handleSaveResponses(); toast('Answers Saved!') }} className="flex justify-center mx-auto">Save</Button> */}
+                                        <Button className="bg-success" onClick={async () => { await handleSaveResponses(); setConfirmSubmission(true) }}>Submit Responses</Button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </>
+                )}
+            </div>
+        </>
     );
 }

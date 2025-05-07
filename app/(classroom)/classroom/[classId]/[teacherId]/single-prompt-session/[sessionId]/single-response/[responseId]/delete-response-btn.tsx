@@ -24,7 +24,7 @@ export default function DeleteResponseBtn({
             <ResponsiveDialog
                 isOpen={isDeleteModalOpen}
                 setIsOpen={setIsDeleteModalOpen}
-                title="Delete Response"
+                title="Remove Assignment"
             >
                 <DeleteResponseForm
                     responseId={responseId}
@@ -33,7 +33,7 @@ export default function DeleteResponseBtn({
                     classId={classId}
                 />
             </ResponsiveDialog>
-            <Button onClick={() => setIsDeleteModalOpen(true)} variant='link' className='text-destructive'>Unassign</Button>
+            <Button onClick={() => setIsDeleteModalOpen(true)} variant='link' className='text-destructive'>Remove Assignment</Button>
         </>
     )
 }
