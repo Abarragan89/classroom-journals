@@ -2,7 +2,7 @@
 import { prisma } from "@/db/prisma"
 import { decryptText } from "../utils"
 import { ResponseData } from "@/types"
-import { ClassUserRole } from "@prisma/client"
+import { ClassUserRole, ResponseStatus } from "@prisma/client"
 
 // Get and decrypt student username 
 export async function getDecyptedStudentUsername(studentId: string) {
@@ -97,6 +97,7 @@ export async function getFeaturedBlogs(classroomId: string) {
         const featuredBlogs = await prisma.response.findMany({
             where: {
                 studentId: { in: studentIdArray },
+                completionStatus: ResponseStatus.COMPLETE
                 // likeCount: { gt: 2 }
             },
             select: {
