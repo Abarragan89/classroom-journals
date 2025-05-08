@@ -6,6 +6,7 @@ interface Props {
     title?: string;
     description?: string;
     likeCount: number;
+    date: string;
     coverPhotoUrl?: string;
     totalCommentCount: number;
     author: string;
@@ -17,6 +18,7 @@ export default function BlogCard({
     likeCount,
     coverPhotoUrl,
     totalCommentCount,
+    date,
     author
 }: Props) {
 
@@ -25,10 +27,10 @@ export default function BlogCard({
             {/* Your slide content here */}
             <Image
                 src={coverPhotoUrl ? coverPhotoUrl : "https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png"}
-                width={320}
-                height={180}
+                width={1920}
+                height={1080}
                 alt="Busts of Greek philosophers"
-                className="rounded-t-sm w-[320px] h-[180px]"
+                className="rounded-t-sm"
             />
             <div className="min-h-[200px]">
                 <div className="flex justify-between px-2 pt-1 text-input text-[0.875rem]">
@@ -47,13 +49,13 @@ export default function BlogCard({
                 <div className="flex flex-col justify-between h-[180px]">
                     <div className="flex-column justify-between rounded-b-sm pt-1 px-3">
                         <h3 className="text-primary text-[1.1rem] leading-tight font-bold">{title}</h3>
-                        <p className="mt-1 text-[.95rem] text-ring line-clamp-3">{description}</p>
+                        <p className="mt-1 text-[.95rem] text-ring line-clamp-5">{description}</p>
                     </div>
-                    {/* <div className="flex justify-between">
+                    <div className="flex justify-between">
                         <div className="flex justify-end px-2 text-input text-[0.875rem]">
                             <p className="text-[.875rem] text-input">{date}</p>
                         </div>
-                    </div> */}
+                    </div>
                 </div>
             </div>
         </div>

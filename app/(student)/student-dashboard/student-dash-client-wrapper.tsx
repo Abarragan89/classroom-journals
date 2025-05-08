@@ -12,6 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getFeaturedBlogs, getStudentRequests } from '@/lib/actions/student.dashboard.actions';
 import { useState } from 'react';
 import { getStudentResponsesDashboard } from '@/lib/actions/response.action';
+import { formatDateLong } from '@/lib/utils';
 
 export default function StudentDashClientWrapper({
   allCategories,
@@ -117,6 +118,7 @@ export default function StudentDashClientWrapper({
                 <BlogCard
                   likeCount={response?.likeCount as number}
                   author={response?.student?.username as string}
+                  date={formatDateLong(response?.submittedAt)}
                   totalCommentCount={response?._count?.comments as number}
                   title={(response?.response as unknown as ResponseData[])?.[1].answer as string}
                   description={(response?.response as unknown as ResponseData[])?.[0].answer as string}
