@@ -28,7 +28,7 @@ export default function MyWorkClientWrapper({
             return ({
                 id: response.id,
                 title: response?.promptSession?.title,
-                status: "Returned",
+                status: "Incomplete",
                 createdAt: formatDateMonthDayYear(response.submittedAt)
             })
         }
@@ -68,7 +68,7 @@ export default function MyWorkClientWrapper({
         }
     }).filter(Boolean) as unknown as Response[]
 
-
+console.log('')
     return (
         <>
             <div className="space-y-10">
