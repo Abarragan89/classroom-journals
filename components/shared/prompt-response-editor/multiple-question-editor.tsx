@@ -14,6 +14,7 @@ import Editor from "./editor";
 import MultiQuestionReview from "@/app/(student)/response-review/[responseId]/multi-question-review";
 import useWindowSize from 'react-use/lib/useWindowSize'
 import Confetti from 'react-confetti'
+import Link from "next/link";
 
 export default function MultipleQuestionEditor({
     studentResponse,
@@ -48,13 +49,6 @@ export default function MultipleQuestionEditor({
     useEffect(() => {
         if (state?.success) {
             setShowConfetti(true)
-            toast('Answers Submitted!')
-            async function finishResponseHandler() {
-                setTimeout(() => {
-                    router.push('/')
-                }, 5000);
-            }
-            finishResponseHandler()
         }
     }, [state.success])
 
@@ -144,13 +138,19 @@ export default function MultipleQuestionEditor({
                 <Confetti
                     width={width}
                     height={height}
-                    numberOfPieces={2000}
+                    numberOfPieces={1500}
                     recycle={false}
                     gravity={0.08}
-                    tweenDuration={5000}
-
+                    tweenDuration={4000}
                 />
-                <p className="flex-center mt-36 text-success h1-bold">Answers Submitted!</p>
+                <div className="animate-fall mt-48 flex flex-col items-center">
+                    <p className="text-primary font-bold text-5xl text-center">Answers Submitted!</p>
+                    <Button asChild className="mt-12">
+                        <Link href={'/'}>
+                            Finish
+                        </Link>
+                    </Button>
+                </div>
             </div>
 
         )
