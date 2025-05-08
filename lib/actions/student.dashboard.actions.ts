@@ -183,7 +183,6 @@ export async function getStudentRequests(studentId: string) {
         const studentRequests = await prisma.studentRequest.findMany({
             where: { studentId }
         })
-
         return studentRequests
     } catch (error) {
         console.log('error ', error)
