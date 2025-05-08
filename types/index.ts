@@ -217,6 +217,7 @@ export interface SubscriptionData {
 export interface BlogImage {
     id?: string;
     url: string;
+    category: string;
     tags: string[];
     createdAt?: Date;
 }

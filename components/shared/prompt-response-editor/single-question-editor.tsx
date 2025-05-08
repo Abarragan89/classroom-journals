@@ -18,6 +18,7 @@ import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Input } from "@/components/ui/input";
 import useWindowSize from 'react-use/lib/useWindowSize'
 import Confetti from 'react-confetti'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function SinglePromptEditor({
     studentResponse,
@@ -168,11 +169,15 @@ export default function SinglePromptEditor({
         )
     }
 
-    function filterPhotos(userText: string) {
+    function filterByTags(userText: string) {
         setFilteredBlogPhotos(allBlogPhotos?.filter(img =>
             img.tags.some(tag => tag.toLowerCase().includes(userText.toLowerCase()))
         ) ?? []
         );
+    }
+
+    function filterByCategory(category: string) {
+        setFilteredBlogPhotos(allBlogPhotos?.filter(img => img.category === category) ?? [])
     }
 
     if (showConfetti && width && height) {
@@ -193,6 +198,21 @@ export default function SinglePromptEditor({
         )
     }
 
+    const photoCategories = [
+        { label: "Academics", value: "academics" },
+        { label: "Social Studies", value: "history" },
+        { label: "Nature", value: "nature" },
+        { label: "Science", value: "science" },
+        { label: "Art", value: "art" },
+        { label: "Emotions", value: "emotions" },
+        { label: "Career", value: "career" },
+        { label: "Health", value: "health" },
+        { label: "Holidays/Seasons", value: "seasons" },
+        { label: "Sports", value: "sports" },
+        { label: "Designs", value: "designs" },
+        { label: "Family", value: "family" }
+    ]
+
     return (
         <>
             <ResponsiveDialog
@@ -210,10 +230,23 @@ export default function SinglePromptEditor({
                             <Input
                                 type="text"
                                 placeholder="Search images..."
-                                onChange={(e) => filterPhotos(e.target.value)}
+                                onChange={(e) => filterByTags(e.target.value)}
                                 className="mt-3"
 
                             />
+                            <Select name="category" onValueChange={(e) => filterByCategory(e)}>
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select a category" />
+                                </SelectTrigger>
+                                <SelectContent className="w-full">
+                                    <SelectGroup>
+                                        <SelectLabel>Category</SelectLabel>
+                                        {photoCategories.map((category) => (
+                                            <SelectItem key={category.value} value={category.value}>{category.label}</SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                             <div className="h-[355px] mx-auto overflow-y-auto flex-center flex-wrap gap-3 custom-scrollbar py-5">
                                 {filteredBlogPhotos && filteredBlogPhotos.map((img) => (
                                     <Image

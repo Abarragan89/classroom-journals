@@ -286,6 +286,7 @@ model StudentRequest {
 model Image {
   id        String   @id @default(cuid())
   url       String   @unique
+  category  String
   tags      String[] // searchable tags
   createdAt DateTime @default(now())
 }

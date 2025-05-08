@@ -142,7 +142,7 @@ export default function AddClassForm({
                         </SelectTrigger>
                         <SelectContent className="w-full">
                             <SelectGroup>
-                                <SelectLabel>Grade Levels</SelectLabel>
+                                <SelectLabel>Photo Categories</SelectLabel>
                                 {selectionGradeLevelOptions.map((option) => (
                                     <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
                                 ))}

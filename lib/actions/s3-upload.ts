@@ -71,10 +71,9 @@ export async function addPhotoToLibrary(prevData: unknown, formData: FormData) {
     try {
 
         const imageFile = formData.get('file');
-        const tags = formData.get('tags') as string
+        const tags = formData.get('tags') as string;
+        const category = formData.get('category') as string;
         const tagArr = tags.split(' ')
-
-        console.log('fimate file ', imageFile)
 
         if (!imageFile) {
             return { success: false, message: 'Not a photo file' }
@@ -89,7 +88,8 @@ export async function addPhotoToLibrary(prevData: unknown, formData: FormData) {
             await prisma.image.create({
                 data: {
                     url: pictureURL,
-                    tags: tagArr
+                    tags: tagArr,
+                    category,
                 }
             })
 

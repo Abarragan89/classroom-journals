@@ -7,6 +7,8 @@ import PulseLoader from 'react-spinners/PulseLoader';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 
 export default function PhotoHubClient() {
     const [file, setFile] = useState<File | null>(null);
@@ -72,20 +74,50 @@ export default function PhotoHubClient() {
         );
     }
 
+    const photoCategories = [
+        { label: "Academics", value: "academics" },
+        { label: "Social Studies", value: "history" },
+        { label: "Nature", value: "nature" },
+        { label: "Science", value: "science" },
+        { label: "Art", value: "art" },
+        { label: "Emotions", value: "emotions" },
+        { label: "Career", value: "career" },
+        { label: "Health", value: "health" },
+        { label: "Holidays/Seasons", value: "seasons" },
+        { label: "Sports", value: "sports" },
+        { label: "Designs", value: "designs" },
+        { label: "Family", value: "family" }
+    ]
     return (
         <form action={action} className="mx-auto max-w-md">
             <>
                 <Image
                     src={imagePreview || "https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png"}
                     alt="Preview"
-                    className="mt-4 rounded w-full max-w-2xl mx-auto h-auto"
+                    className="my-4 rounded w-full max-w-2xl mx-auto h-auto"
                     width={1920}
                     height={1080}
                 />
+                <Label htmlFor="category" className="text-right">
+                    Category
+                </Label>
+                <Select name="category">
+                    <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent className="w-full">
+                        <SelectGroup>
+                            <SelectLabel>Category</SelectLabel>
+                            {photoCategories.map((category) => (
+                                <SelectItem key={category.value} value={category.value}>{category.label}</SelectItem>
+                            ))}
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
                 <label htmlFor="tags" className="block mt-4">
-                    Tags (optional)
+                    Tags
                 </label>
-                <Input type="text" name="tags" id="tags" />
+                <Input type="text" name="tags" id="tags" required />
                 <div className="flex-center mt-2">
                     {file && (
                         <SubmitButton />
