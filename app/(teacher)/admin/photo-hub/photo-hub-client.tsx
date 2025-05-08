@@ -76,6 +76,7 @@ export default function PhotoHubClient() {
 
     const photoCategories = [
         { label: "Academics", value: "academics" },
+        { label: "Family", value: "family" },
         { label: "Social Studies", value: "history" },
         { label: "Nature", value: "nature" },
         { label: "Science", value: "science" },
@@ -86,7 +87,6 @@ export default function PhotoHubClient() {
         { label: "Holidays/Seasons", value: "seasons" },
         { label: "Sports", value: "sports" },
         { label: "Designs", value: "designs" },
-        { label: "Family", value: "family" }
     ]
     return (
         <form action={action} className="mx-auto max-w-md">
@@ -118,7 +118,7 @@ export default function PhotoHubClient() {
                     Tags
                 </label>
                 <Input type="text" name="tags" id="tags" required />
-                <div className="flex-center mt-2">
+                <div className="flex-center mt-5">
                     {file && (
                         <SubmitButton />
                     )}

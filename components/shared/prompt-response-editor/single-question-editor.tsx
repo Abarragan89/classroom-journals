@@ -170,8 +170,9 @@ export default function SinglePromptEditor({
     }
 
     function filterByTags(userText: string) {
+        // Sets user text to lower case and hypenates between multi words
         setFilteredBlogPhotos(allBlogPhotos?.filter(img =>
-            img.tags.some(tag => tag.toLowerCase().includes(userText.toLowerCase()))
+            img.tags.some(tag => tag.toLowerCase().includes(userText.toLowerCase().replace(/\s+/g, '-')))
         ) ?? []
         );
     }
@@ -201,16 +202,16 @@ export default function SinglePromptEditor({
     const photoCategories = [
         { label: "Academics", value: "academics" },
         { label: "Social Studies", value: "history" },
-        { label: "Nature", value: "nature" },
-        { label: "Science", value: "science" },
-        { label: "Art", value: "art" },
-        { label: "Emotions", value: "emotions" },
-        { label: "Career", value: "career" },
-        { label: "Health", value: "health" },
-        { label: "Holidays/Seasons", value: "seasons" },
-        { label: "Sports", value: "sports" },
-        { label: "Designs", value: "designs" },
-        { label: "Family", value: "family" }
+        { label: "Family", value: "family" },
+        // { label: "Nature", value: "nature" },
+        // { label: "Science", value: "science" },
+        // { label: "Art", value: "art" },
+        // { label: "Emotions", value: "emotions" },
+        // { label: "Career", value: "career" },
+        // { label: "Health", value: "health" },
+        // { label: "Holidays/Seasons", value: "seasons" },
+        // { label: "Sports", value: "sports" },
+        // { label: "Designs", value: "designs" },
     ]
 
     return (
