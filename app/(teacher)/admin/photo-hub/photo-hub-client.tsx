@@ -30,7 +30,7 @@ export default function PhotoHubClient() {
 
     const validateFile = (file: File): string | null => {
         const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
-        const maxSizeMB = 3.75;
+        const maxSizeMB = 5;
 
         if (!validTypes.includes(file.type)) {
             return 'Please upload a JPEG, PNG, or WebP image.';
