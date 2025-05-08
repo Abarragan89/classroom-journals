@@ -47,7 +47,7 @@ export default function BlogCard({
                     </div>
                 </div>
                 <div className="flex flex-col justify-between h-[180px]">
-                    <div className="flex-column justify-between rounded-b-sm pt-2 px-3">
+                    <div className="flex-column justify-between rounded-b-sm pt-2">
                         <h3 className="text-primary text-[1.1rem] leading-tight font-bold">{title}</h3>
                         <p className="mt-1 text-[.95rem] text-ring line-clamp-3">{description}</p>
                     </div>
