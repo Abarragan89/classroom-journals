@@ -27,7 +27,7 @@ export default function PhotoHubClient() {
             setFile(null);
             setImagePreview(null);
             setMessage('');
-
+            setSelectedCategory('')
         }
     }, [state]);
 
