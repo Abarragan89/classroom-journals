@@ -11,9 +11,11 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Label } from '@/components/ui/label';
 
 export default function PhotoHubClient() {
+
     const [file, setFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [message, setMessage] = useState<string>('');
+    const [selectedCategory, setSelectedCategory] = useState<string>('');
 
     const [state, action] = useActionState(addPhotoToLibrary, {
         success: false,
@@ -25,6 +27,7 @@ export default function PhotoHubClient() {
             setFile(null);
             setImagePreview(null);
             setMessage('');
+
         }
     }, [state]);
 
@@ -101,7 +104,7 @@ export default function PhotoHubClient() {
                 <Label htmlFor="category" className="text-right">
                     Category
                 </Label>
-                <Select name="category">
+                <Select name="category" value={selectedCategory} onValueChange={(value) => setSelectedCategory(value)}>
                     <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
