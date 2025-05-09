@@ -206,7 +206,7 @@ export default function SinglePromptEditor({
         { label: "Nature", value: "nature" },
         { label: "Science", value: "science" },
         { label: "Art", value: "art" },
-        // { label: "Emotions", value: "emotions" },
+        { label: "Emotions", value: "emotions" },
         // { label: "Career", value: "career" },
         // { label: "Health", value: "health" },
         // { label: "Holidays/Seasons", value: "seasons" },
