@@ -211,7 +211,7 @@ export default function SinglePromptEditor({
         { label: "Health", value: "health" },
         { label: "Holidays/Seasons", value: "seasons" },
         { label: "Sports", value: "sports" },
-        // { label: "Designs", value: "designs" },
+        { label: "Designs", value: "designs" },
     ]
 
     return (
