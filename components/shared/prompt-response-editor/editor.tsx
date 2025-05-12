@@ -8,13 +8,15 @@ export default function Editor({
     setJournalText,
     jotType,
     characterLimit,
-    setIsTyping
+    setIsTyping,
+    spellCheckEnabled
 }: {
     journalText: string;
     setJournalText: React.Dispatch<React.SetStateAction<string>>;
     jotType?: string;
     characterLimit?: number,
     setIsTyping?: React.Dispatch<React.SetStateAction<boolean>>;
+    spellCheckEnabled: boolean,
 }) {
 
     // History for undo and redo
@@ -135,7 +137,7 @@ export default function Editor({
                 autoComplete="off"
                 autoCorrect="off"
                 autoCapitalize="off"
-                spellCheck={false}
+                spellCheck={spellCheckEnabled}
                 ref={editorRef}
             />
 

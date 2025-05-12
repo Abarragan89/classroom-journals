@@ -17,7 +17,8 @@ export default function MultiQuestionReview({
     responseId,
     showGrades,
     isTeacherPremium,
-    gradeLevel
+    gradeLevel,
+    spellCheckEnabled
 }: {
     allQuestions: ResponseData[],
     setAllQuestions: React.Dispatch<React.SetStateAction<ResponseData[]>>
@@ -27,7 +28,8 @@ export default function MultiQuestionReview({
     responseId?: string,
     showGrades: boolean,
     isTeacherPremium: boolean,
-    gradeLevel: string
+    gradeLevel: string,
+    spellCheckEnabled: boolean
 }) {
 
     const router = useRouter();
@@ -111,6 +113,7 @@ export default function MultiQuestionReview({
                                 <Editor
                                     setJournalText={(newText) => handleTextChange(index, newText as string)}
                                     journalText={responseData.answer}
+                                    spellCheckEnabled={spellCheckEnabled}
                                 />
                             </>
                         ) : (

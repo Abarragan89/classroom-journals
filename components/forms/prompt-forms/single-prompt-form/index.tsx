@@ -50,6 +50,8 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     const [questions, setQuestions] = useState<Question[]>([
         { name: "question1", label: "Prompt", value: "" }
     ]);
+    const [enableSpellCheck, setEnableSpellCheck] = useState<boolean>(false);
+
 
     const router = useRouter()
 
@@ -169,7 +171,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                                 <Checkbox id={`classroom-assign-${classroom.id}`} value={classroom.id} name={`classroom-assign-${classroom.id}`} />
                                 <label
                                     htmlFor={`classroom-assign-${classroom.id}`}
-                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                 >
                                     {classroom.name}
                                 </label>
@@ -205,6 +207,35 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                         value={isPublic.toString()}
                     />
                 </div>
+            </div>
+            {/* this is making spell check enabled */}
+            <div className="flex items-center space-x-2 mt-3">
+                <Switch
+                    onCheckedChange={(e) => setEnableSpellCheck(e)}
+                    checked={enableSpellCheck}
+                />
+                <Label
+                    className="text-md ml-2"
+                >
+                    Enable Spell Check
+                </Label>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <CiCircleQuestion size={20} />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Text editor will spell check</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+                <input
+                    type='hidden'
+                    readOnly
+                    name='enable-spellcheck'
+                    id='enable-spellcheck'
+                    value={enableSpellCheck.toString()}
+                />
             </div>
             <input
                 type="hidden"

@@ -15,14 +15,16 @@ export default function SingleQuestionReview({
     responseId,
     showGrades,
     isPublic,
-    promptSessionId
+    promptSessionId,
+    spellCheckEnabled
 }: {
     questions: ResponseData[],
     isSubmittable: boolean,
     responseId: string,
     showGrades: boolean,
     isPublic: boolean,
-    promptSessionId: string
+    promptSessionId: string,
+    spellCheckEnabled: boolean
 }) {
 
     const router = useRouter();
@@ -95,6 +97,7 @@ export default function SingleQuestionReview({
                                     setJournalText={(newText) => handleTextChange(index, newText as string)}
                                     journalText={responseData.answer}
                                     characterLimit={index === 1 ? 70 : undefined}
+                                    spellCheckEnabled={spellCheckEnabled}
                                 />
                             </>
                         ) : (

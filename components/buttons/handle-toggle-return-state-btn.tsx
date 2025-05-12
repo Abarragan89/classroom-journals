@@ -37,14 +37,14 @@ export default function HandleToggleReturnStateBtn({
         <Button
           onClick={() => handleToggleReturnState('COMPLETE')}
         >
-          Collect Assignment
+          Collect
         </Button>
       ) : (
 
         <Button
           onClick={() => handleToggleReturnState('RETURNED')}
         >
-          Return to Student
+          Return
         </Button>
       )}
     </div>

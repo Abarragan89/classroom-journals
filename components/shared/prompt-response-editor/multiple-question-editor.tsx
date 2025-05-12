@@ -20,12 +20,14 @@ export default function MultipleQuestionEditor({
     studentResponse,
     isTeacherPremium,
     gradeLevel,
-    responseId
+    responseId,
+    spellCheckEnabled,
 }: {
     studentResponse: ResponseData[]
     isTeacherPremium: boolean,
     gradeLevel: string
-    responseId: string
+    responseId: string;
+    spellCheckEnabled: boolean;
 }) {
 
     const searchParams = useSearchParams();
@@ -37,6 +39,8 @@ export default function MultipleQuestionEditor({
     const [isSaving, setIsSaving] = useState<boolean>(false);
     // const [isTyping, setIsTyping] = useState(false);
     // const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+
 
     const [showConfetti, setShowConfetti] = useState<boolean>(false)
     const { width, height } = useWindowSize()
@@ -172,7 +176,7 @@ export default function MultipleQuestionEditor({
                         showGrades={false}
                         isTeacherPremium={isTeacherPremium}
                         gradeLevel={gradeLevel}
-
+                        spellCheckEnabled={spellCheckEnabled}
                     />
                     <div className="flex flex-col justify-center items-center">
                         <p className="text-center font-bold">Ready to Submit?</p>
@@ -229,6 +233,7 @@ export default function MultipleQuestionEditor({
                     <Editor
                         setJournalText={setJournalText}
                         journalText={journalText}
+                        spellCheckEnabled={spellCheckEnabled}
                     // setIsTyping={setIsTyping}
                     />
                     <form onSubmit={(e) => saveAndContinue(e)}>

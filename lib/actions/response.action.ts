@@ -225,6 +225,7 @@ export async function getSingleResponse(responseId: string) {
                 likes: true,
                 likeCount: true,
                 submittedAt: true,
+                spellCheckEnabled: true,
                 response: true,
                 completionStatus: true,
                 _count: {
@@ -611,6 +612,7 @@ export async function getSingleResponseForReview(responseId: string) {
                 id: true,
                 response: true,
                 completionStatus: true,
+                spellCheckEnabled: true,
                 promptSession: {
                     select: {
                         id: true,
@@ -676,6 +678,28 @@ export async function toggleHideShowGrades(promptSessionId: string, areGradesVis
         }
 
         return { success: false, message: "Error fetching prompts. Try again." };
+    }
+}
+
+// Get toggle spell check for a single response
+export async function toggleSpellCheck(responseId: string, spellCheckEnabled: boolean) {
+    try {
+        await prisma.response.update({
+            where: { id: responseId },
+            data: {
+                spellCheckEnabled
+            }
+        })
+        return { success: true, message: "Error toggling spell check." };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error fetching prompts:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+
+        return { success: false, message: "Error toggling Spell Check" };
     }
 }
 

@@ -23,7 +23,7 @@ export default function ScoreJournalForm({
     }
 
     return (
-        <div className="flex-end w-1/4 absolute right-3 -top-8">
+        <div className="flex-end">
             <Input
                 type="text"
                 name="journalScore"
@@ -33,8 +33,8 @@ export default function ScoreJournalForm({
                 maxLength={3}
                 onBlur={(e) => updateResponseScore(parseInt(e.target.value))}
             />
-            <p className="mx-2 text-md">/</p>
-            <p className="text-md mr-5">100 </p>
+            <p className="mx-2 text-lg">/</p>
+            <p className="text-lg">100 </p>
         </div>
     )
 }

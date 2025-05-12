@@ -10,7 +10,8 @@ export default function ReviewWrapper({
     responseId,
     showGrades,
     isTeacherPremium,
-    gradeLevel
+    gradeLevel,
+    spellCheckEnabled
 }: {
     allQuestions: ResponseData[],
     isSubmittable: boolean,
@@ -19,7 +20,8 @@ export default function ReviewWrapper({
     responseId?: string,
     showGrades: boolean
     isTeacherPremium: boolean,
-    gradeLevel: string
+    gradeLevel: string,
+    spellCheckEnabled: boolean
 }) {
 
     const [questions, setQuestions] = useState<ResponseData[]>(allQuestions)
@@ -33,6 +35,7 @@ export default function ReviewWrapper({
             showGrades={showGrades}
             isTeacherPremium={isTeacherPremium}
             gradeLevel={gradeLevel}
+            spellCheckEnabled={spellCheckEnabled}
         />
     )
 }

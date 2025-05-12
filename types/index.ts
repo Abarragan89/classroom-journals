@@ -87,7 +87,8 @@ export interface Response {
     likes: ResponseLike[];
     likeCount: number;
     blogImage?: string;
-    completionStatus: 'INCOMPLETE' | 'COMPLETE' | 'RETURNED'
+    completionStatus: 'INCOMPLETE' | 'COMPLETE' | 'RETURNED';
+    spellCheckEnabled: boolean;
     studentId: string;
     _count: { comments: number }
     response: JsonValue;

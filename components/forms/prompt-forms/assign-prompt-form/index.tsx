@@ -27,9 +27,10 @@ export default function AssignPromptForm({
     updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>,
     classroomData: Classroom[],
     promptType: string,
-    teacherId:string
+    teacherId: string
 }) {
     const [isPublic, setIsPublic] = useState<boolean>(false);
+    const [enableSpellCheck, setEnableSpellCheck] = useState<boolean>(false);
 
     const [state, action] = useActionState(assignPrompt, {
         success: false,
@@ -101,6 +102,7 @@ export default function AssignPromptForm({
                     readOnly
                     hidden
                 />
+                {/* Make it public switch */}
                 {promptType === 'BLOG' &&
                     <div className="flex items-center space-x-2">
                         <Switch
@@ -110,7 +112,7 @@ export default function AssignPromptForm({
                         <Label
                             className="text-md ml-2"
                         >
-                            Public
+                            Make Public
                         </Label>
                         <TooltipProvider>
                             <Tooltip>
@@ -131,6 +133,35 @@ export default function AssignPromptForm({
                         />
                     </div>
                 }
+                {/* this is making spell check enabled */}
+                <div className="flex items-center space-x-2">
+                    <Switch
+                        onCheckedChange={(e) => setEnableSpellCheck(e)}
+                        checked={enableSpellCheck}
+                    />
+                    <Label
+                        className="text-md ml-2"
+                    >
+                        Enable Spell Check
+                    </Label>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <CiCircleQuestion size={20} />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Text editor will spell check</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                    <input
+                        type='hidden'
+                        readOnly
+                        name='enable-spellcheck'
+                        id='enable-spellcheck'
+                        value={enableSpellCheck.toString()}
+                    />
+                </div>
                 <AssignButton />
                 {state && !state.success && (
                     <p className="text-center text-destructive">{state.message}</p>

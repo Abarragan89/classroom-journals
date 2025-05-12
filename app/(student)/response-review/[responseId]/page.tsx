@@ -58,6 +58,7 @@ export default async function ResponseReview({
                         showGrades={singleResponse?.promptSession?.areGradesVisible}
                         isTeacherPremium={isPremiumTeacher as boolean}
                         gradeLevel={grade as string}
+                        spellCheckEnabled={singleResponse?.spellCheckEnabled}
                     />
                     :
                     <SingleQuestionReview
@@ -67,6 +68,7 @@ export default async function ResponseReview({
                         showGrades={singleResponse?.promptSession?.areGradesVisible as boolean}
                         isPublic={singleResponse?.promptSession?.isPublic as boolean}
                         promptSessionId={singleResponse?.promptSession?.id as string}
+                        spellCheckEnabled={singleResponse?.spellCheckEnabled}
                     />
                 }
             </main>

@@ -68,7 +68,6 @@ export default function MyWorkClientWrapper({
         }
     }).filter(Boolean) as unknown as Response[]
 
-console.log('')
     return (
         <>
             <div className="space-y-10">

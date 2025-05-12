@@ -17,6 +17,9 @@ import { addPromptCategory, getAllPromptCategories } from "@/lib/actions/prompt.
 import CategorySection from "../single-prompt-form/category-section";
 import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
 import UpgradeAccountBtn from "@/components/buttons/upgrade-account-btn";
+import { Switch } from "@/components/ui/switch";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { CiCircleQuestion } from "react-icons/ci";
 
 interface Question {
     name: string;
@@ -47,6 +50,8 @@ export default function MultiPromptForm({
     const [categories, setCategories] = useState<PromptCategory[]>([]);
     const [newCategoryName, setNewCategoryName] = useState<string>('');
     const [isTeacherPremium, setIsTeacherPremium] = useState<boolean>(false);
+    const [enableSpellCheck, setEnableSpellCheck] = useState<boolean>(false);
+
 
     const [questions, setQuestions] = useState<Question[]>([
         { name: "question1", label: "Question 1", value: "" }
@@ -149,11 +154,11 @@ export default function MultiPromptForm({
     return (
         <form action={action} className="grid relative">
             {!isTeacherPremium &&
-            <div className="mb-5">
-                <UpgradeAccountBtn 
-                    teacherId={teacherId}
-                />
-            </div>
+                <div className="mb-5">
+                    <UpgradeAccountBtn
+                        teacherId={teacherId}
+                    />
+                </div>
             }
             <div className="mb-3">
                 <Label htmlFor="title" className="text-right text-md font-bold">
@@ -221,7 +226,7 @@ export default function MultiPromptForm({
                                 <Checkbox id={`classroom-assign-${classroom.id}`} value={classroom.id} name={`classroom-assign-${classroom.id}`} />
                                 <label
                                     htmlFor={`classroom-assign-${classroom.id}`}
-                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                 >
                                     {classroom.name}
                                 </label>
@@ -229,6 +234,35 @@ export default function MultiPromptForm({
                         ))}
                     </>
                 )}
+            </div>
+              {/* this is making spell check enabled */}
+            <div className="flex items-center space-x-2 mt-4">
+                <Switch
+                    onCheckedChange={(e) => setEnableSpellCheck(e)}
+                    checked={enableSpellCheck}
+                />
+                <Label
+                    className="text-md ml-2"
+                >
+                    Enable Spell Check
+                </Label>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <CiCircleQuestion size={20} />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Text editor will spell check</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+                <input
+                    type='hidden'
+                    readOnly
+                    name='enable-spellcheck'
+                    id='enable-spellcheck'
+                    value={enableSpellCheck.toString()}
+                />
             </div>
             <input
                 type="hidden"

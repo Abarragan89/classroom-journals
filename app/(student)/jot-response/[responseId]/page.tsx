@@ -33,7 +33,6 @@ export default async function StudentDashboard({
     const { isPremiumTeacher } = await determineSubscriptionAllowance(teacherId as string)
     const grade = await getClassroomGrade(classroomId as string)
 
-
     return (
         <div>
             <Header session={session} />
@@ -44,11 +43,13 @@ export default async function StudentDashboard({
                         studentResponse={studentResponse.response as unknown as ResponseData[]}
                         isTeacherPremium={isPremiumTeacher as boolean}
                         gradeLevel={grade as string}
+                        spellCheckEnabled={studentResponse?.spellCheckEnabled}
                     />
                     :
                     <SinglePromptEditor
                         studentResponse={studentResponse.response as unknown as ResponseData[]}
                         responseId={responseId}
+                        spellCheckEnabled={studentResponse?.spellCheckEnabled}
                     />
                 }
             </main>

@@ -24,9 +24,11 @@ import Link from "next/link";
 export default function SinglePromptEditor({
     studentResponse,
     responseId,
+    spellCheckEnabled
 }: {
     studentResponse: ResponseData[],
-    responseId: string
+    responseId: string,
+    spellCheckEnabled: boolean,
 }) {
 
     const searchParams = useSearchParams();
@@ -275,6 +277,7 @@ export default function SinglePromptEditor({
                         <Editor
                             setJournalText={setJournalText}
                             journalText={journalText}
+                            spellCheckEnabled={spellCheckEnabled}
                             // setIsTyping={setIsTyping}
                             jotType='BLOG'
                         />
@@ -295,6 +298,7 @@ export default function SinglePromptEditor({
                         <Editor
                             setJournalText={setJournalText}
                             journalText={journalText}
+                            spellCheckEnabled={spellCheckEnabled}
                             // setIsTyping={setIsTyping}
                             characterLimit={70}
                         />

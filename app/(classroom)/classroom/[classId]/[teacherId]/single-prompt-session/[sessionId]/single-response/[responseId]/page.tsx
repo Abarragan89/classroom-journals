@@ -3,7 +3,6 @@ import ScoreJournalForm from '@/components/forms/score-journal-form';
 import CommentSection from '@/components/shared/comment-section';
 import GradeResponseCard from '@/components/shared/grade-response-card';
 import { Separator } from '@/components/ui/separator';
-import { formatDateShort } from '@/lib/utils';
 import Image from 'next/image';
 import { Response, ResponseComment, ResponseData } from '@/types';
 import { getAllResponsesFromPompt, getSingleResponse } from '@/lib/actions/response.action';
@@ -11,6 +10,7 @@ import { StudentComboBox } from './student-combobox';
 import HandleToggleReturnStateBtn from '@/components/buttons/handle-toggle-return-state-btn';
 import DeleteResponseBtn from './delete-response-btn';
 import PrintViewBlog from './print-view';
+import ToggleSpellCheck from './toggle-spell-check';
 
 
 export default async function SingleResponse({
@@ -43,27 +43,36 @@ export default async function SingleResponse({
     return (
         <>
             <div className='mb-10 print:hidden'>
-                <div className="mb-5 space-y-3">
+                <div className="mb-5">
                     <StudentComboBox
                         responses={rosterAlphabetized}
                     />
-                    {response?.submittedAt ? (
-                        <p className='text-input'>Submitted: {formatDateShort(response?.submittedAt)}</p>
-                        
-                    ) : (
-                        <p className='text-destructive font-bold text-lg'>Not Submitted</p>
-                    )}
-                    {response?.submittedAt && (
-                        <div className="flex-between">
-                            <HandleToggleReturnStateBtn
-                                responseId={responseId}
-                                isCompleted={response?.completionStatus === 'COMPLETE'}
-                            />
-                            <DeleteResponseBtn
-                                responseId={responseId}
-                                sessionId={sessionId}
-                                teacherId={teacherId}
-                                classId={classId}
+                    <div className="flex-between items-end mt-8">
+                        <ToggleSpellCheck
+                            responseId={responseId}
+                            spellCheckEnabled={response?.spellCheckEnabled}
+                        />
+                        {response?.submittedAt && (
+                            <div className='flex-end gap-x-5'>
+                                <HandleToggleReturnStateBtn
+                                    responseId={responseId}
+                                    isCompleted={response?.completionStatus === 'COMPLETE'}
+                                />
+
+                                <DeleteResponseBtn
+                                    responseId={responseId}
+                                    sessionId={sessionId}
+                                    teacherId={teacherId}
+                                    classId={classId}
+                                />
+                            </div>
+                        )}
+                    </div>
+                    {!isMultiQuestion && (
+                        <div className='flex-end mt-5'>
+                            <ScoreJournalForm
+                                responseId={response?.id}
+                                currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
                             />
                         </div>
                     )}
@@ -75,14 +84,10 @@ export default async function SingleResponse({
                             responseId={responseId}
                         />
                     ) : (
-                        <div className='relative w-full'>
-                            <ScoreJournalForm
-                                responseId={response?.id}
-                                currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
-                            />
+                        <div className='w-full'>
                             <p className='text-md font-bold'>{response.promptSession?.title}</p>
 
-                            <div className="max-w-[700px] px-3 mx-auto mt-10">
+                            <div className="max-w-[700px] px-3 mx-auto mt-5">
                                 <BlogMetaDetails
                                     responseData={response}
                                     studentId={teacherId}

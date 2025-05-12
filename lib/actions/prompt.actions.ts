@@ -30,6 +30,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         // Get title for prompt(only searchable text)
         const title = formData.get("title") as string || "";
         const isPublic = formData.get('is-public');
+        const enbaledSpellCheck = formData.get('enable-spellcheck')
         let categoryId = formData.get("prompt-category") as string | null;
 
         if (categoryId === "no-category" || categoryId === undefined) {
@@ -165,6 +166,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
                         .map(session => ({
                             studentId: classUser.userId,
                             promptSessionId: session.id,
+                            spellCheckEnabled: enbaledSpellCheck === 'true' ? true : false,
                             completionStatus: ResponseStatus.INCOMPLETE,
                             response: createdPrompt.questions as Prisma.InputJsonValue, // or an empty object if you prefer
                         }));
@@ -220,6 +222,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
         const title = formData.get("title") as string || "";
         const isPublic = formData.get('is-public');
         let categoryId = formData.get("prompt-category") as string | null;
+        const enbaledSpellCheck = formData.get('enable-spellcheck')
 
         if (categoryId === "no-category" || categoryId === undefined) {
             categoryId = null;
@@ -271,6 +274,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
                     questions: questions as unknown as Prisma.InputJsonValue,
                 },
             });
+
             // Create PromptSessions if there are classes to assign
             if (classesAssignTo.length > 0) {
                 const promptSessions = classesAssignTo.map((classId) => ({
@@ -288,7 +292,55 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
                 await prisma.promptSession.createMany({
                     data: promptSessions,
                 });
-                return { success: true, message: 'Prompt Updated!' };
+                // Now create the Responses for each student
+
+                // Step 1: Fetch the new PromptSessions that were just created
+                const createdPromptSessions = await prisma.promptSession.findMany({
+                    where: {
+                        promptId: updatedPrompt.id,
+                        classId: {
+                            in: classesAssignTo,
+                        },
+                    },
+                    select: {
+                        id: true,
+                        classId: true,
+                    },
+                });
+
+
+                const classUsers = await prisma.classUser.findMany({
+                    where: {
+                        classId: {
+                            in: classesAssignTo
+                        },
+                        role: ClassUserRole.STUDENT
+                    },
+                    select: {
+                        userId: true,
+                        classId: true,
+                    }
+                })
+
+                // Step 3: Map each student to the correct PromptSession and build responses
+                const responsesToCreate = classUsers.flatMap(classUser => {
+                    return createdPromptSessions
+                        .filter(session => session.classId === classUser.classId)
+                        .map(session => ({
+                            studentId: classUser.userId,
+                            promptSessionId: session.id,
+                            spellCheckEnabled: enbaledSpellCheck === 'true' ? true : false,
+                            completionStatus: ResponseStatus.INCOMPLETE,
+                            response: updatedPrompt.questions as Prisma.InputJsonValue, // or an empty object if you prefer
+                        }));
+                });
+
+                // Step 4: Create all the responses
+                if (responsesToCreate.length > 0) {
+                    await prisma.response.createMany({
+                        data: responsesToCreate,
+                    });
+                }
             }
         })
         return { success: true, message: 'Prompt Updated!' };
@@ -473,6 +525,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
 
         const promptId = formData.get('promptId') as string;
         const isPublic = formData.get('is-public');
+        const enbaledSpellCheck = formData.get('enable-spellcheck')
         const classesAssignTo: string[] = [];
 
         formData.forEach((value, key) => {
@@ -543,6 +596,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
                     .map((session) => ({
                         studentId: classUser.userId,
                         promptSessionId: session.id,
+                        spellCheckEnabled: enbaledSpellCheck === 'true' ? true : false,
                         completionStatus: ResponseStatus.INCOMPLETE,
                         response: currentPrompt.questions as Prisma.InputJsonValue,
                     }));
