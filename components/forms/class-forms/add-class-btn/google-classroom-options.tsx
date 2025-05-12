@@ -5,6 +5,7 @@ import React from 'react'
 import { useState } from 'react'
 import { createClassroomWithGoogle } from '@/lib/actions/google.classroom.actions'
 import { useRouter } from 'next/navigation'
+import LoadingAnimation from '@/components/loading-animation'
 
 export default function GoogleClassroomOptions({
     googleClassrooms,
@@ -38,6 +39,7 @@ export default function GoogleClassroomOptions({
     if (isLoading) {
         return (
             <div className="flex-center min-h-[240px]">
+                <LoadingAnimation />
                 <p className='font-bold flex-center mt-[-60px]'>Creating Class...</p>
             </div>
         )

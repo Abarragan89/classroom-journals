@@ -28,7 +28,6 @@ export default function SingleQuestionReview({
 }) {
 
     const router = useRouter();
-    // Store full question objects, modifying only answers
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
     const [isLoading, setIsLoading] = useState<boolean>(false)
 

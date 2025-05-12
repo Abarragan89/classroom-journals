@@ -2,6 +2,7 @@
 import { Switch } from "@/components/ui/switch";
 import { toggleSpellCheck } from "@/lib/actions/response.action";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function ToggleSpellCheck({
     spellCheckEnabled,
@@ -18,6 +19,8 @@ export default function ToggleSpellCheck({
             const response = await toggleSpellCheck(responseId, isSpellCheckEnabled)
             if (response.success) {
                 setIsSpellCheckEnabled(isSpellCheckEnabled)
+                const toastString = isSpellCheckEnabled ? 'Spell Check is Enabled' : 'Spell Check is Disabled'
+                toast(toastString)
             }
         } catch (error) {
             console.log('error toggling grade visibility', error)

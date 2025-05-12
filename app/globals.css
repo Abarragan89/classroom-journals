@@ -38,7 +38,7 @@
   .dark {
     --background: hsl(222.2 84% 4.9%);
     --foreground: hsl(210 40% 98%);
-    --primary: hsl(212, 46%, 80%);
+    --primary: hsl(213, 45%, 80%);
     --primary-foreground: hsl(222.2 84% 4.9%);
     --secondary: hsl(206, 68%, 20%);
     --secondary-foreground: hsl(210 40% 98%);
@@ -169,7 +169,7 @@
 
   .avocado {
     --background: hsl(96, 63%, 92%); /* Pale avocado green for main content */
-    --foreground: hsl(99, 13%, 21%); /* Deep green text for contrast */
+    --foreground: hsl(103, 13%, 21%); /* Deep green text for contrast */
     --primary: hsl(100, 59%, 34%); /* Avocado green */
     --primary-foreground: hsl(0, 0%, 100%); /* White text */
     --secondary: hsl(30, 61%, 37%); /* Avocado pit brown */

@@ -17,6 +17,7 @@ import CategorySection from "./category-section";
 import { Switch } from "@/components/ui/switch"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { CiCircleQuestion } from "react-icons/ci";
+import LoadingAnimation from "@/components/loading-animation";
 
 
 
@@ -120,7 +121,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     if (!isLoaded) {
         return (
             <div className="min-h-full flex-center">
-                Loading...
+                <LoadingAnimation />
             </div>
         )
     }

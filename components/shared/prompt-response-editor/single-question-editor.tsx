@@ -20,6 +20,7 @@ import useWindowSize from 'react-use/lib/useWindowSize'
 import Confetti from 'react-confetti'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Link from "next/link";
+import LoadingAnimation from "@/components/loading-animation";
 
 export default function SinglePromptEditor({
     studentResponse,
@@ -44,8 +45,8 @@ export default function SinglePromptEditor({
     const [allBlogPhotos, setAllBlogPhotos] = useState<BlogImage[] | null>(null)
     const [openPhotoModal, setOpenPhotoModal] = useState<boolean>(false)
     const [filteredBlogPhotos, setFilteredBlogPhotos] = useState<BlogImage[] | null>(null)
-    // const [isTyping, setIsTyping] = useState(false);
-    // const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    const [isTyping, setIsTyping] = useState(false);
+    const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
     const [showConfetti, setShowConfetti] = useState<boolean>(false)
     const { width, height } = useWindowSize()
 
@@ -93,20 +94,20 @@ export default function SinglePromptEditor({
     }, [questionNumber, studentResponseData]);
 
 
-    // /** Auto-save logic */
-    // useEffect(() => {
-    //     if (!isTyping) return
-    //     if (isTyping) {
-    //         if (typingTimeoutRef.current) {
-    //             clearTimeout(typingTimeoutRef.current);
-    //         }
-    //         typingTimeoutRef.current = setTimeout(() => {
-    //             handleSaveResponses();
-    //             setIsTyping(false);
-    //         }, 8000); // Save after 5 seconds of inactivity
-    //     }
-    //     return () => clearTimeout(typingTimeoutRef.current);
-    // }, [journalText, isTyping]);
+    /** Auto-save logic */
+    useEffect(() => {
+        if (!isTyping) return
+        if (isTyping) {
+            if (typingTimeoutRef.current) {
+                clearTimeout(typingTimeoutRef.current);
+            }
+            typingTimeoutRef.current = setTimeout(() => {
+                handleSaveResponses();
+                setIsTyping(false);
+            }, 5000); // Save after 5 seconds of inactivity
+        }
+        return () => clearTimeout(typingTimeoutRef.current);
+    }, [journalText, isTyping]);
 
 
     // Go into fullscreen mode
@@ -140,6 +141,11 @@ export default function SinglePromptEditor({
 
     async function saveAndContinue(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        // Clear timeout so it doesn't go to next page
+        setIsTyping(false)
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current);
+        }
         if (journalText === '') {
             toast.error('Add Some Text!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
@@ -226,7 +232,7 @@ export default function SinglePromptEditor({
                 <>
                     {isLoadingPhotos ? (
                         <div className="flex-center h-[355px]">
-                            <p>Loading...</p>
+                            <LoadingAnimation />
                         </div>
                     ) : (
                         <>
@@ -269,7 +275,12 @@ export default function SinglePromptEditor({
             </ResponsiveDialog>
             <div className="w-full max-w-[900px] mx-auto relative px-5">
                 <p className="absolute -top-10 right-0 text-sm">Blog Post</p>
-                <ArrowBigLeft className="absolute -top-10 left-0 text-sm hover:cursor-pointer hover:text-accent" onClick={() => router.back()} />
+                <ArrowBigLeft className="absolute -top-10 left-0 text-sm hover:cursor-pointer hover:text-accent" onClick={() => {
+                    router.back();
+                    if (typingTimeoutRef.current) {
+                        clearTimeout(typingTimeoutRef.current);
+                    }
+                }} />
                 <p className="mt-16 mb-5 w-full mx-auto whitespace-pre-line text-left text-primary lg:text-lg font-bold">{currentQuestion}</p>
                 {/*  Show question if answer question */}
                 {questionNumber === '0' && (
@@ -278,7 +289,7 @@ export default function SinglePromptEditor({
                             setJournalText={setJournalText}
                             journalText={journalText}
                             spellCheckEnabled={spellCheckEnabled}
-                            // setIsTyping={setIsTyping}
+                            setIsTyping={setIsTyping}
                             jotType='BLOG'
                         />
                         <div className="flex flex-col justify-center items-center mb-20">
@@ -299,7 +310,7 @@ export default function SinglePromptEditor({
                             setJournalText={setJournalText}
                             journalText={journalText}
                             spellCheckEnabled={spellCheckEnabled}
-                            // setIsTyping={setIsTyping}
+                            setIsTyping={setIsTyping}
                             characterLimit={70}
                         />
                         <div className="flex flex-col justify-center items-center mb-20">

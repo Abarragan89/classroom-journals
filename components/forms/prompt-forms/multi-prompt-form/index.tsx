@@ -20,6 +20,7 @@ import UpgradeAccountBtn from "@/components/buttons/upgrade-account-btn";
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { CiCircleQuestion } from "react-icons/ci";
+import LoadingAnimation from "@/components/loading-animation";
 
 interface Question {
     name: string;
@@ -146,7 +147,7 @@ export default function MultiPromptForm({
     if (!isLoaded) {
         return (
             <div className="min-h-full flex-center">
-                Loading...
+                <LoadingAnimation />
             </div>
         )
     }
@@ -235,7 +236,7 @@ export default function MultiPromptForm({
                     </>
                 )}
             </div>
-              {/* this is making spell check enabled */}
+            {/* this is making spell check enabled */}
             <div className="flex items-center space-x-2 mt-4">
                 <Switch
                     onCheckedChange={(e) => setEnableSpellCheck(e)}

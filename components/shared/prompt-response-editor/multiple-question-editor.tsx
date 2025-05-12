@@ -1,6 +1,6 @@
 "use client";
 import { ResponseData } from "@/types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import SaveAndContinueBtns from "@/components/buttons/save-and-continue";
 import { useRouter } from "next/navigation";
@@ -37,8 +37,8 @@ export default function MultipleQuestionEditor({
     const [studentResponseData, setStudentResponseData] = useState<ResponseData[]>(studentResponse);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
-    // const [isTyping, setIsTyping] = useState(false);
-    // const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    const [isTyping, setIsTyping] = useState(false);
+    const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
 
 
@@ -64,20 +64,20 @@ export default function MultipleQuestionEditor({
         }
     }, [questionNumber, studentResponseData])
 
-    // /** Auto-save logic */
-    // useEffect(() => {
-    //     if (!isTyping) return
-    //     if (isTyping) {
-    //         if (typingTimeoutRef.current) {
-    //             clearTimeout(typingTimeoutRef.current);
-    //         }
-    //         typingTimeoutRef.current = setTimeout(async () => {
-    //             setIsTyping(false);
-    //             await handleSaveResponses();
-    //         }, 8000); // Save after 5 seconds of inactivity
-    //     }
-    //     return () => clearTimeout(typingTimeoutRef.current);
-    // }, [journalText, isTyping]);
+    /** Auto-save logic */
+    useEffect(() => {
+        if (!isTyping) return
+        if (isTyping) {
+            if (typingTimeoutRef.current) {
+                clearTimeout(typingTimeoutRef.current);
+            }
+            typingTimeoutRef.current = setTimeout(async () => {
+                setIsTyping(false);
+                await handleSaveResponses();
+            }, 5000); // Save after 5 seconds of inactivity
+        }
+        return () => clearTimeout(typingTimeoutRef.current);
+    }, [journalText, isTyping]);
 
 
     // Go into fullscreen mode
@@ -112,6 +112,10 @@ export default function MultipleQuestionEditor({
 
     async function saveAndContinue(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        setIsTyping(false)
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current);
+        }
         if (journalText === '') {
             toast.error('Add Some Text!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
@@ -163,7 +167,12 @@ export default function MultipleQuestionEditor({
     return (
         <div className="w-full max-w-[900px] mx-auto relative px-5 mb-32">
             {/* If finished the last question, show answer review */}
-            <div className="flex-start absolute -top-16 left-0 hover:cursor-pointer hover:text-accent" onClick={() => router.back()}>
+            <div className="flex-start absolute -top-16 left-0 hover:cursor-pointer hover:text-accent" onClick={() => {
+                router.back();
+                if (typingTimeoutRef.current) {
+                    clearTimeout(typingTimeoutRef.current);
+                }
+            }}>
                 <ArrowBigLeft className="" />
                 <p className="ml-1 text-md">Back</p>
             </div>
@@ -234,7 +243,7 @@ export default function MultipleQuestionEditor({
                         setJournalText={setJournalText}
                         journalText={journalText}
                         spellCheckEnabled={spellCheckEnabled}
-                    // setIsTyping={setIsTyping}
+                        setIsTyping={setIsTyping}
                     />
                     <form onSubmit={(e) => saveAndContinue(e)}>
                         <SaveAndContinueBtns
