@@ -107,31 +107,31 @@ export default function StudentDashClientWrapper({
             hasSentPromptRequest={hasSentPromptRequest}
           />
         </div>
-        <h3 className="h3-bold ml-1">Featured Blogs</h3>
-        {featuredBlogsData?.length > 0 ? (
-          <Carousel>
-            {featuredBlogsData.map((response) => (
-              <Link
-                key={response?.id}
-                href={`/discussion-board/${response?.promptSession?.id}/response/${response?.id}`}
-                className="embla__slide hover:shadow-[0_4px_10px_-3px_var(--secondary)] mx-5">
-                <BlogCard
-                  likeCount={response?.likeCount as number}
-                  author={response?.student?.username as string}
-                  date={formatDateLong(response?.submittedAt)}
-                  totalCommentCount={response?._count?.comments as number}
-                  title={(response?.response as unknown as ResponseData[])?.[1].answer as string}
-                  description={(response?.response as unknown as ResponseData[])?.[0].answer as string}
-                  coverPhotoUrl={(response?.response as unknown as ResponseData[])?.[2].answer as string}
-                />
-              </Link>
-            ))}
-          </Carousel>
-        ) : (
-          <p className="text-center text-lg font-bold">No Featured Blogs</p>
+        {featuredBlogsData?.length > 0 && (
+          <>
+            <h3 className="h3-bold ml-1">Featured Blogs</h3>
+            <Carousel>
+              {featuredBlogsData.map((response) => (
+                <Link
+                  key={response?.id}
+                  href={`/discussion-board/${response?.promptSession?.id}/response/${response?.id}`}
+                  className="embla__slide hover:shadow-[0_4px_10px_-3px_var(--secondary)] mx-5">
+                  <BlogCard
+                    likeCount={response?.likeCount as number}
+                    author={response?.student?.username as string}
+                    date={formatDateLong(response?.submittedAt)}
+                    totalCommentCount={response?._count?.comments as number}
+                    title={(response?.response as unknown as ResponseData[])?.[1].answer as string}
+                    description={(response?.response as unknown as ResponseData[])?.[0].answer as string}
+                    coverPhotoUrl={(response?.response as unknown as ResponseData[])?.[2].answer as string}
+                  />
+                </Link>
+              ))}
+            </Carousel>
+            <Separator className="mt-20 mb-10" />
+          </>
         )}
       </section>
-      <Separator className="mt-20 mb-10" />
       <section>
         <h3 className="h3-bold mb-2 ml-1">Assignments</h3>
         <AssignmentSectionClient
