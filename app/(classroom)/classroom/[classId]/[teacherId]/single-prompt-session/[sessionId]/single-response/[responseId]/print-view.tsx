@@ -59,7 +59,7 @@ export default function PrintViewBlog({
                     className="block mx-auto mb-5 h-[330px]"
                     priority
                 />
-                <p className="leading-[2rem] text-black text-[16px] sm:text-[19px]">{(response.response as unknown as ResponseData[])?.[0].answer}</p>
+                <p className="leading-[2rem] text-black text-[16px] sm:text-[19px] whitespace-pre-line">{(response.response as unknown as ResponseData[])?.[0].answer}</p>
             </div>
         </div>
     )
