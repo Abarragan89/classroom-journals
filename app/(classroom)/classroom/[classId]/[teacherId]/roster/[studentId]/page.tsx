@@ -18,6 +18,9 @@ export default async function SingleStudentView({
             iv: true,
             name: true,
             responses: {
+                where: {
+                    completionStatus: 'COMPLETE'
+                },
                 select: {
                     id: true,
                     response: true,

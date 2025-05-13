@@ -51,7 +51,7 @@ export function StudentComboBox({
                         className="text-xl sm:text-2xl py-5 px-5"
                     >
                         <div className="flex items-baseline">
-                            {responses?.[currentStudentIndex]?.student?.name} <span className="text-[1.2rem] ml-2">({responses?.[currentStudentIndex].score})</span>
+                            {responses?.[currentStudentIndex]?.student?.name} <span className="text-[1.1rem] ml-2">({responses?.[currentStudentIndex].score})</span>
                         </div>
                         <ChevronsUpDown className="opacity-50 ml-3" />
                     </Button>

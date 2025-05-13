@@ -47,7 +47,10 @@ export default async function SingleResponse({
                     <StudentComboBox
                         responses={rosterAlphabetized}
                     />
-                    <div className="flex-between items-end mt-8">
+                    {response?.completionStatus !== 'COMPLETE' && (
+                        <p className='mt-2 text-destructive font-bold'>Not Submitted</p>
+                    )}
+                    <div className="flex-between items-end mt-7">
                         <ToggleSpellCheck
                             responseId={responseId}
                             spellCheckEnabled={response?.spellCheckEnabled}

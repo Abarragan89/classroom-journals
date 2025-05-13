@@ -83,9 +83,9 @@ export default function StudentRosterOptionsMenu({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <Link href={`/classroom/${classId}/${session.user.id}/roster/${studentInfo.id}`}>
-                    <DropdownMenuItem className="hover:cursor-pointer rounded-md">
-                        <Eye />Work
-                    </DropdownMenuItem>
+                        <DropdownMenuItem className="hover:cursor-pointer rounded-md">
+                            <Eye />Work
+                        </DropdownMenuItem>
                     </Link>
                     <DropdownMenuItem onClick={() => setIsEditModalOpen(true)} className="hover:cursor-pointer rounded-md">
                         <Edit />Edit
