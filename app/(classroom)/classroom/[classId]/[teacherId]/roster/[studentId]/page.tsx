@@ -18,15 +18,11 @@ export default async function SingleStudentView({
             iv: true,
             name: true,
             responses: {
-                where: {
-                    completionStatus: {
-                        in: ['COMPLETE', 'RETURNED'],
-                    },
-                },
                 select: {
                     id: true,
                     response: true,
                     submittedAt: true,
+                    completionStatus: true,
                     promptSession: {
                         select: {
                             id: true,
@@ -34,6 +30,9 @@ export default async function SingleStudentView({
                             promptType: true,
                         }
                     }
+                },
+                orderBy: {
+                    createdAt: 'desc'
                 }
             }
         }
@@ -57,9 +56,20 @@ export default async function SingleStudentView({
                     return (
                         <Link
                             key={response.id}
-                            className='max-w-[700px] mx-auto' href={`/classroom/${classId}/${teacherId}/single-prompt-session/${response?.promptSession?.id}/single-response/${response.id}`}>
+                            className='max-w-[700px] mx-auto relative' href={`/classroom/${classId}/${teacherId}/single-prompt-session/${response?.promptSession?.id}/single-response/${response.id}`}>
                             {/* only show public or private if it is a blog, otherwise don't render */}
                             <article className='bg-card flex-start opacity-80 px-5 py-4 rounded-lg mb-4 border border-border hover:cursor-pointer hover:opacity-100'>
+                               {/* Status */}
+                                <p className="absolute text-xs text-input top-1 right-2">Status:
+                                    {response?.completionStatus === 'COMPLETE' ? (
+                                        <span className="text-success"> Complete</span>
+                                    ) : (
+                                        response?.completionStatus === 'RETURNED' ? (
+                                            <span className="text-warning"> Returned</span>
+                                        ) : (
+                                            <span className="text-destructive"> Incomplete</span>
+                                        ))}
+                                </p>
                                 <p
                                     className='text-2xl font-bold bg-input text-background p-1 px-3 rounded-full mr-3'
                                 >
@@ -68,7 +78,11 @@ export default async function SingleStudentView({
                                 <div className="flex flex-col w-full">
                                     <p className='text-md font-bold line-clamp-1 text-foreground'>{response?.promptSession?.title}</p>
                                     <div className="flex relative top-[8px] justify-between text-xs text-input">
-                                        <p>Submitted: {formatDateLong(response?.submittedAt, 'short')}</p>
+                                        {response?.completionStatus === 'INCOMPLETE' ? (
+                                            <p>Not Submitted</p>
+                                        ) : (
+                                            <p>Submitted: {formatDateLong(response?.submittedAt, 'short')}</p>
+                                        )}
                                         <p>Grade: {score}</p>
                                     </div>
                                 </div>

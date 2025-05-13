@@ -29,7 +29,7 @@ export default function ToggleSpellCheck({
 
     return (
         <div className='flex-start items-center justify-center space-x-2'>
-            <p className="text-sm text-center">Spell Check</p>
+            <p className="text-center">Spell Check</p>
             <Switch
                 className="text-sm mx-2"
                 onCheckedChange={(e) => toggleSpellCheckHandler(e)}
