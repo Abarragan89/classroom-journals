@@ -174,6 +174,11 @@ export default function SingleComment({
                     >
                         <div>
                             <Textarea
+                                onPaste={(e) => e.preventDefault()}
+                                onCopy={(e) => e.preventDefault()}
+                                onCut={(e) => e.preventDefault()}
+                                onDrop={(e) => e.preventDefault()}
+                                onDragOver={(e) => e.preventDefault()}
                                 placeholder="reply to comment..."
                                 rows={3}
                                 value={replyText}

@@ -99,6 +99,11 @@ export default function CommentSection({
                 >
                     <div className="mb-10">
                         <Textarea
+                            onPaste={(e) => e.preventDefault()}
+                            onCopy={(e) => e.preventDefault()}
+                            onCut={(e) => e.preventDefault()}
+                            onDrop={(e) => e.preventDefault()}
+                            onDragOver={(e) => e.preventDefault()}
                             placeholder="Add a comment..."
                             rows={3}
                             value={commentText}
