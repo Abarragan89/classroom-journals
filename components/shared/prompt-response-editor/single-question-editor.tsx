@@ -191,7 +191,7 @@ export default function SinglePromptEditor({
                     height={height}
                     numberOfPieces={1500}
                     recycle={false}
-                    gravity={0.08}
+                    gravity={0.06}
                     tweenDuration={4000}
                 />
                 <div className="animate-fall mt-48 flex flex-col items-center">

@@ -49,7 +49,7 @@ export default function GradeResponseCard({
 
     return (
         <>
-            <div className="mt-8 flex flex-wrap justify-start gap-10">
+            <div className="mt-8 flex flex-col justify-start gap-10">
                 {responseArr?.length > 0 && responseArr.map((responseData: ResponseData, index: number) => (
                     <Card className='w-full p-4 space-y-2 max-w-[500px] mx-auto' key={index}>
                         <div className="flex-between text-sm">

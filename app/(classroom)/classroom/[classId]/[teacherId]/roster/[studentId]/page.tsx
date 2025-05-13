@@ -19,7 +19,9 @@ export default async function SingleStudentView({
             name: true,
             responses: {
                 where: {
-                    completionStatus: 'COMPLETE'
+                    completionStatus: {
+                        in: ['COMPLETE', 'RETURNED'],
+                    },
                 },
                 select: {
                     id: true,
@@ -43,7 +45,7 @@ export default async function SingleStudentView({
         <div>
             <h2 className="text-2xl lg:text-3xl">{decryptText(studentData?.name as string, studentData?.iv as string)}</h2>
             <div className="mt-10">
-                {studentResponses?.length > 0 && studentResponses?.map((response: Response) => {
+                {studentResponses?.length > 0 ? studentResponses?.map((response: Response) => {
                     // Determine grade for blog and assessment
                     let score: string = 'N/A'
                     if (response.promptSession?.promptType === 'BLOG') {
@@ -73,7 +75,9 @@ export default async function SingleStudentView({
                             </article>
                         </Link>
                     )
-                })}
+                }) : (
+                    <p className="text-lg text-center italic">No Work Submitted</p>
+                )}
             </div>
         </div>
     )
