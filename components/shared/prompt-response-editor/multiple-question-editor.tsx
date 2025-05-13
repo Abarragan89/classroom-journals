@@ -146,9 +146,9 @@ export default function MultipleQuestionEditor({
                 <Confetti
                     width={width}
                     height={height}
-                    numberOfPieces={1500}
+                    numberOfPieces={1800}
                     recycle={false}
-                    gravity={0.06}
+                    gravity={0.1}
                     tweenDuration={4000}
                 />
                 <div className="animate-fall mt-48 flex flex-col items-center">
