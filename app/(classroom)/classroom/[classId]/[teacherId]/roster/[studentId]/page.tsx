@@ -56,18 +56,18 @@ export default async function SingleStudentView({
                     return (
                         <Link
                             key={response.id}
-                            className='max-w-[700px] mx-auto relative' href={`/classroom/${classId}/${teacherId}/single-prompt-session/${response?.promptSession?.id}/single-response/${response.id}`}>
+                            className='max-w-[600px] mx-auto relative' href={`/classroom/${classId}/${teacherId}/single-prompt-session/${response?.promptSession?.id}/single-response/${response.id}`}>
                             {/* only show public or private if it is a blog, otherwise don't render */}
                             <article className='bg-card flex-start opacity-80 px-5 py-4 rounded-lg mb-4 border border-border hover:cursor-pointer hover:opacity-100'>
                                {/* Status */}
-                                <p className="absolute text-xs text-input top-1 right-2">Status:
+                                <p className="absolute text-xs text-input top-1 right-2">
                                     {response?.completionStatus === 'COMPLETE' ? (
-                                        <span className="text-success"> Complete</span>
+                                        <span className="text-success">Complete</span>
                                     ) : (
                                         response?.completionStatus === 'RETURNED' ? (
-                                            <span className="text-warning"> Returned</span>
+                                            <span className="text-warning">Returned</span>
                                         ) : (
-                                            <span className="text-destructive"> Incomplete</span>
+                                            <span className="text-destructive">Incomplete</span>
                                         ))}
                                 </p>
                                 <p
@@ -76,8 +76,8 @@ export default async function SingleStudentView({
                                     {response?.promptSession?.promptType === 'BLOG' ? 'B' : 'A'}
                                 </p>
                                 <div className="flex flex-col w-full">
-                                    <p className='text-md font-bold line-clamp-1 text-foreground'>{response?.promptSession?.title}</p>
-                                    <div className="flex relative top-[8px] justify-between text-xs text-input">
+                                    <p className='text-md font-bold line-clamp-1 pt-1 text-foreground'>{response?.promptSession?.title}</p>
+                                    <div className="flex relative top-[5px] justify-between text-xs text-input">
                                         {response?.completionStatus === 'INCOMPLETE' ? (
                                             <p>Not Submitted</p>
                                         ) : (
