@@ -40,8 +40,8 @@ export default function AddGoogleStudents({
     if (isLoading) {
         return (
             <div className="flex-center min-h-[240px]">
-                <LoadingAnimation />
                 <p className='font-bold flex-center mt-[-60px]'>Creating Class...</p>
+                {/* <LoadingAnimation /> */}
             </div>
         )
     }

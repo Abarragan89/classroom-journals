@@ -7,15 +7,17 @@ import { useQuery } from '@tanstack/react-query';
 
 
 export default function StudentNavLinks({
-    studentId
+    studentId,
+    classId
 }: {
-    studentId: string
+    studentId: string,
+    classId: string
 }) {
     const pathname = usePathname().split('/')[1];
 
-    const { data: notificationCount} = useQuery({
+    const { data: notificationCount } = useQuery({
         queryKey: ['getStudentNotificationHeader', studentId],
-        queryFn: () => getUnreadUserNotifications(studentId) as unknown as number,
+        queryFn: () => getUnreadUserNotifications(studentId, classId) as unknown as number,
         placeholderData: 0
     })
 

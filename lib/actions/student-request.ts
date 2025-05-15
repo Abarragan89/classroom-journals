@@ -4,7 +4,7 @@ import { decryptText, encryptText } from "../utils"
 import { Question } from "@/types"
 import { Prisma, PromptType, StudentRequestStatus, StudentRequestType } from "@prisma/client"
 
-export async function createStudentRequest(studentId: string, teacherId: string, text: string, type: string) {
+export async function createStudentRequest(studentId: string, teacherId: string, text: string, type: string, classId: string) {
     try {
         // get student iv to encrypt the text
         let userText: string = ''
@@ -29,6 +29,7 @@ export async function createStudentRequest(studentId: string, teacherId: string,
             data: {
                 studentId,
                 teacherId,
+                classId,
                 text: userText,
                 type: type === 'USERNAME' ? StudentRequestType.USERNAME : StudentRequestType.PROMPT,
                 status: StudentRequestStatus.PENDING
@@ -50,11 +51,12 @@ export async function createStudentRequest(studentId: string, teacherId: string,
 }
 
 // These requests are for the teacher to see
-export async function getTeacherRequests(teacherId: string) {
+export async function getTeacherRequests(teacherId: string, classId: string) {
     try {
         const teacherRequests = await prisma.studentRequest.findMany({
             where: {
                 teacherId,
+                classId
             },
             include: {
                 student: {
@@ -122,10 +124,10 @@ export async function getStudentRequests(studentId: string) {
 }
 
 // This is for the teacher to get notifications if there are requests, work as notifications
-export async function getStudentRequestCount(teacherId: string) {
+export async function getStudentRequestCount(teacherId: string, classId: string) {
     try {
         const count = await prisma.studentRequest.count({
-            where: { teacherId, status: StudentRequestStatus.PENDING },
+            where: { teacherId, status: StudentRequestStatus.PENDING, classId },
         });
 
         return count
@@ -142,7 +144,7 @@ export async function getStudentRequestCount(teacherId: string) {
 }
 
 // This is for the students to see which requests they have made and their status
-export async function markAllRequestsAsViewed(teacherId: string) {
+export async function markAllRequestsAsViewed(teacherId: string, classId: string) {
     try {
         const count = await prisma.studentRequest.updateMany({
             where: { teacherId },
@@ -186,7 +188,7 @@ export async function approveUsernameChange(studentId: string, username: string,
         await prisma.studentRequest.delete({
             where: { id: responseId }
         })
-        
+
         return { success: true, message: 'Error adding student. Try again.' }
     } catch (error) {
         // Improved error logging

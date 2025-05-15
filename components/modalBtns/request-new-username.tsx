@@ -9,11 +9,13 @@ export default function RequestNewUsername({
     studentId,
     teacherId,
     hasSentUsernameRequest,
-    handleUIChange
+    handleUIChange,
+    classId,
 }: {
     studentId: string,
     teacherId: string,
     hasSentUsernameRequest: boolean;
+    classId: string;
     handleUIChange: (type: "username" | "prompt") => void;
 }) {
 
@@ -39,6 +41,7 @@ export default function RequestNewUsername({
                         teacherId={teacherId}
                         closeModal={closeModal}
                         handleUIChange={handleUIChange}
+                        classId={classId}
                     />
                 )}
 

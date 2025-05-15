@@ -99,12 +99,14 @@ export default function StudentDashClientWrapper({
             teacherId={teacherId}
             handleUIChange={handleRequestUIHandler}
             hasSentUsernameRequest={hasSentUsernameRequest}
+            classId={classroomId}
           />
           <SuggestPrompt
             studentId={studentId}
             teacherId={teacherId}
             handleUIChange={handleRequestUIHandler}
             hasSentPromptRequest={hasSentPromptRequest}
+            classId={classroomId}
           />
         </div>
         {featuredBlogsData?.length > 0 && (

@@ -11,9 +11,11 @@ import { useQueryClient } from '@tanstack/react-query';
 export default function StudentRequestSection({
     teacherId,
     studentRequests,
+    classId
 }: {
     teacherId: string;
-    studentRequests: StudentRequest[]
+    studentRequests: StudentRequest[];
+    classId: string
 }) {
 
 
@@ -22,8 +24,8 @@ export default function StudentRequestSection({
     const { error } = useQuery({
         queryKey: ['getStudentRequests', teacherId],
         queryFn: async () => {
-            const studentRequestData = await getTeacherRequests(teacherId) as unknown as StudentRequest[];
-            await markAllRequestsAsViewed(teacherId)
+            const studentRequestData = await getTeacherRequests(teacherId, classId) as unknown as StudentRequest[];
+            await markAllRequestsAsViewed(teacherId, classId)
             setAllRequests(studentRequestData)
             return studentRequestData
         },

@@ -1,10 +1,10 @@
 "use server";
 import { prisma } from "@/db/prisma";
 
-export async function getUserNotifications(userId: string) {
+export async function getUserNotifications(userId: string, classId: string) {
     try {
         const userNotifications = await prisma.notification.findMany({
-            where: { userId },
+            where: { userId, classId },
             select: {
                 id: true,
                 responseId: true,
@@ -32,10 +32,10 @@ export async function getUserNotifications(userId: string) {
     }
 }
 
-export async function getUnreadUserNotifications(userId: string) {
+export async function getUnreadUserNotifications(userId: string, classId: string) {
     try {
         const notificationCount = await prisma.notification.count({
-            where: { userId, isRead: false },
+            where: { userId, isRead: false, classId },
         });
         return notificationCount;
     } catch (error) {
@@ -49,10 +49,10 @@ export async function getUnreadUserNotifications(userId: string) {
     }
 }
 
-export async function markAllNotificationsAsRead(userId: string) {
+export async function markAllNotificationsAsRead(userId: string, classId: string) {
     try {
         const notificationCount = await prisma.notification.updateMany({
-            where: { userId, isRead: false },
+            where: { userId, isRead: false, classId },
             data: {
                 isRead: true,
             }
@@ -71,13 +71,13 @@ export async function markAllNotificationsAsRead(userId: string) {
 
 
 // Clear all user Notifications
-export async function clearAllNotifications(userId: string) {
+export async function clearAllNotifications(userId: string, classId: string) {
     try {
         if (!userId) {
             return { success: false, message: 'Missing user Id' }
         }
         await prisma.notification.deleteMany({
-            where: { userId }
+            where: { userId, classId }
         })
         return { success: false, message: 'All notifications deleted' }
     } catch (error) {

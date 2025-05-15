@@ -97,7 +97,10 @@ export async function getFeaturedBlogs(classroomId: string) {
         const featuredBlogs = await prisma.response.findMany({
             where: {
                 studentId: { in: studentIdArray },
-                completionStatus: ResponseStatus.COMPLETE
+                completionStatus: ResponseStatus.COMPLETE,
+                promptSession: {
+                    isPublic: true, // ✅ Filter by public prompt sessions
+                },
                 // likeCount: { gt: 2 }
             },
             select: {

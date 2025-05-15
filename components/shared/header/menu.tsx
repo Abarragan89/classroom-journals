@@ -25,7 +25,7 @@ export default function Menu({
     session: Session
     isAllowedToMakeNewClass: boolean;
 }) {
-
+    console.log('session ', session)
     const renderTeacherHeader = () => (
         <>
             <TeacherNavLinks />
@@ -40,7 +40,7 @@ export default function Menu({
     );
     const renderStudentHeader = () => (
         <>
-            <StudentNavLinks studentId={studentId as string} />
+            <StudentNavLinks studentId={studentId as string} classId={session?.classroomId as string} />
             <ModeToggle />
             <UserButton session={session as Session} />
         </>

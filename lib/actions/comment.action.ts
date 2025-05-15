@@ -112,6 +112,7 @@ export async function addComment(
                     userId: notifyUserId,
                     responseId,
                     message,
+                    classId: classroomId,
                     commentText: text
                 };
             });
@@ -257,6 +258,7 @@ export async function replyComment(
                     userId: notifyUserId,
                     responseId,
                     message,
+                    classId: classroomId,
                     commentText: text
                 };
             });

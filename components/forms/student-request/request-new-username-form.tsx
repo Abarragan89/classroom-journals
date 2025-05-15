@@ -13,12 +13,14 @@ export default function RequestNewUsernameForm({
     studentId,
     teacherId,
     closeModal,
-    handleUIChange
+    handleUIChange,
+    classId
 }: {
     studentId: string,
     teacherId: string,
     closeModal: () => void,
     handleUIChange: (type: "username" | "prompt") => void;
+    classId: string
 }) {
     const form = useForm<z.infer<typeof requestNewUsernameSchema>>({
         resolver: zodResolver(requestNewUsernameSchema),
@@ -32,7 +34,7 @@ export default function RequestNewUsernameForm({
     async function onSubmit(values: z.infer<typeof requestNewUsernameSchema>) {
         try {
             setIsSendingRequest(true)
-            const response = await createStudentRequest(studentId, teacherId, values.notificationText, 'USERNAME');
+            const response = await createStudentRequest(studentId, teacherId, values.notificationText, 'USERNAME', classId);
             if (!response.success) {
                 throw new Error('error making new username request')
             }

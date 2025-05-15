@@ -9,12 +9,14 @@ export default function SuggestPrompt({
     studentId,
     teacherId,
     hasSentPromptRequest,
-    handleUIChange
+    handleUIChange,
+    classId
 }: {
     studentId: string,
     teacherId: string,
     hasSentPromptRequest: boolean;
     handleUIChange: (type: "username" | "prompt") => void;
+    classId: string
 }) {
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -40,6 +42,7 @@ export default function SuggestPrompt({
                         teacherId={teacherId}
                         closeModal={closeModal}
                         handleUIChange={handleUIChange}
+                        classId={classId}
                     />
                 )}
             </ResponsiveDialog>

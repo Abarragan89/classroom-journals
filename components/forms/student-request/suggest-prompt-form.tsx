@@ -13,12 +13,14 @@ export default function SuggestPromptForm({
     studentId,
     teacherId,
     closeModal,
-    handleUIChange
+    handleUIChange,
+    classId
 }: {
     studentId: string,
     teacherId: string,
     closeModal: () => void,
-    handleUIChange: (type: "username" | "prompt") => void;
+    handleUIChange: (type: "username" | "prompt") => void,
+    classId: string
 }) {
     const form = useForm<z.infer<typeof requestNewPromptSchema>>({
         resolver: zodResolver(requestNewPromptSchema),
@@ -32,7 +34,7 @@ export default function SuggestPromptForm({
     async function onSubmit(values: z.infer<typeof requestNewPromptSchema>) {
         try {
             setIsSendingRequest(true)
-            const response = await createStudentRequest(studentId, teacherId, values.notificationText, 'PROMPT');
+            const response = await createStudentRequest(studentId, teacherId, values.notificationText, 'PROMPT', classId);
             if (!response.success) {
                 throw new Error('error making new username request')
             }

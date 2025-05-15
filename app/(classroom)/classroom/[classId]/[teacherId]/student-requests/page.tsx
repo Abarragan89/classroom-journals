@@ -9,18 +9,19 @@ export default async function StudentRequests({
     params: Promise<{ classId: string, teacherId: string }>
 }) {
 
-    const { teacherId } = await params;
+    const { teacherId, classId } = await params;
     if (!teacherId) notFound()
 
-    const studentRequests = await getTeacherRequests(teacherId) as unknown as StudentRequest[]
+    const studentRequests = await getTeacherRequests(teacherId, classId) as unknown as StudentRequest[]
 
     // mark requests as viewd
-    await markAllRequestsAsViewed(teacherId)
+    await markAllRequestsAsViewed(teacherId, classId)
 
     return (
         <div>
             <h2 className="text-2xl lg:text-3xl mt-2">Student Requests</h2>
             <StudentRequestSection
+                classId={classId}
                 teacherId={teacherId}
                 studentRequests={studentRequests}
             />

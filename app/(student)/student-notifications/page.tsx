@@ -16,12 +16,12 @@ export default async function StudentNotifications() {
         notFound()
     }
 
-    const classroomId = session?.classroomId
-    if (!classroomId) notFound()
+    const classId = session?.classroomId
+    if (!classId) notFound()
 
-    const userNotifications = await getUserNotifications(studentId) as unknown as UserNotification[]
+    const userNotifications = await getUserNotifications(studentId, classId) as unknown as UserNotification[]
 
-    if (userNotifications.length > 0) await markAllNotificationsAsRead(studentId)
+    if (userNotifications.length > 0) await markAllNotificationsAsRead(studentId, classId)
 
 
     return (
@@ -31,6 +31,7 @@ export default async function StudentNotifications() {
                 <h1 className="h2-bold mt-2 line-clamp-1">Notifications</h1>
                 <NotificationSection
                     userId={studentId}
+                    classId={classId}
                     notifications={userNotifications}
                 />
             </main>

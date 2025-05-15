@@ -16,9 +16,11 @@ import { useQueryClient } from "@tanstack/react-query";
 export default function NotificationSection({
     notifications,
     userId,
+    classId,
 }: {
     notifications: UserNotification[],
     userId: string,
+    classId: string,
 }) {
 
     const queryClient = useQueryClient()
@@ -27,9 +29,9 @@ export default function NotificationSection({
     const { error } = useQuery({
         queryKey: ['getUserNotifications', userId],
         queryFn: async () => {
-            const userNotifications = await getUserNotifications(userId) as unknown as UserNotification[]
+            const userNotifications = await getUserNotifications(userId, classId) as unknown as UserNotification[]
             setNotificaitonsState(userNotifications)
-            if (userNotifications.length > 0) await markAllNotificationsAsRead(userId)
+            if (userNotifications.length > 0) await markAllNotificationsAsRead(userId, classId)
             return userNotifications;
         },
         initialData: notifications,
@@ -44,7 +46,7 @@ export default function NotificationSection({
 
     async function clearNotifications() {
         try {
-            clearAllNotifications(userId)
+            clearAllNotifications(userId, classId)
             queryClient.invalidateQueries({
                 queryKey: ['getUserNotifications', userId],
             })
