@@ -38,9 +38,9 @@ export default function GoogleClassroomOptions({
 
     if (isLoading) {
         return (
-            <div className="flex-center min-h-[240px]">
-                <p className='font-bold flex-center mt-[-60px]'>Creating Class...</p>
-                {/* <LoadingAnimation /> */}
+            <div className="flex flex-col items-center justify-center min-h-[240px]">
+                <p className='font-bold mt-[-60px]'>Creating Class...</p>
+                <LoadingAnimation />
             </div>
         )
     }
