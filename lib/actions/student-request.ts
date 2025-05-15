@@ -147,7 +147,7 @@ export async function getStudentRequestCount(teacherId: string, classId: string)
 export async function markAllRequestsAsViewed(teacherId: string, classId: string) {
     try {
         const count = await prisma.studentRequest.updateMany({
-            where: { teacherId },
+            where: { teacherId, classId },
             data: {
                 status: StudentRequestStatus.VIEWED
             }
