@@ -123,7 +123,7 @@ export default function TypingTest({
                 if (!response.success) throw new Error('Error updating wpm highscore')
                 setCurrentHighScore(currentScore)
             } catch (error) {
-                console.log('error updating user highscore')
+                console.log('error updating user highscore', error)
             } finally {
                 refetch();
             }
@@ -246,8 +246,4 @@ export default function TypingTest({
         </>
     );
 };
-function getSinglePromptSessionTeacherDashboard(sessionId: any): unknown {
-    throw new Error('Function not implemented.');
-}
-
 
