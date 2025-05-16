@@ -91,15 +91,26 @@ export default function TypingTest({
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
         if (!started || finished) return;
+
         const value = e.target.value;
+        const index = value.length - 1;
+
+        // Block extra typing beyond the sample text
         if (value.length > randomSampleText.length) return;
+
+        // Prevent typing if the latest character is incorrect
+        if (value[index] !== randomSampleText[index]) return;
+
+        // Accept input
         setInput(value);
 
+        // End the test early if they complete the sample
         if (value.length === randomSampleText.length) {
             setFinished(true);
             clearInterval(intervalRef.current!);
         }
     };
+
 
     const getCharClass = (char: string, index: number): string => {
         if (!input[index]) return 'opacity-40';
