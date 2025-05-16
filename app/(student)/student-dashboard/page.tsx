@@ -7,7 +7,6 @@ import { getDecyptedStudentUsername, getFeaturedBlogs, getTeacherId } from "@/li
 import { getStudentRequests } from "@/lib/actions/student-request";
 import StudentDashClientWrapper from "./student-dash-client-wrapper";
 import { getStudentResponsesDashboard } from "@/lib/actions/response.action";
-import TypingTest from "@/components/shared/typing-test";
 
 export default async function StudentDashboard() {
 
