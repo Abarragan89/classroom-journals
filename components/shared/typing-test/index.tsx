@@ -74,8 +74,11 @@ export default function TypingTest({
     }, [started]);
 
     const calculateWPM = (): number => {
-        const numChars = inputRefState.current.length;
-        const wpm = parseFloat((numChars / 5).toFixed(1)); // since time is always 1 min
+        const correctChars = inputRefState.current
+            .split('')
+            .filter((char, idx) => char === randomSampleText[idx])
+            .length;
+        const wpm = parseFloat((correctChars / 5).toFixed(1)); // since time is always 1 min
         return wpm;
     };
 
