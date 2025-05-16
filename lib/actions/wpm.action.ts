@@ -51,7 +51,7 @@ export async function getUserWPM(userId: string) {
 export async function getWPMClassHighScores(classId: string) {
     try {
         const top10Typers = await prisma.classUser.findMany({
-            where: { classId: classId, role: { not: "TEACHER" } },
+            where: { classId: classId },
             orderBy: {
                 user: {
                     wpmSpeed: 'desc'

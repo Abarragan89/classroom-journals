@@ -16,7 +16,7 @@ import { ClassroomSwitcher } from "./classroom-switcher"
 import Link from "next/link"
 import { Classroom } from "@/types"
 import { usePathname } from "next/navigation"
-import { Home, User, FileText, Bell, ClipboardList, Settings } from "lucide-react"
+import { Home, User, Keyboard, Bell, ClipboardList, Settings, PenTool } from "lucide-react"
 import { getUnreadUserNotifications } from "@/lib/actions/notifications.action"
 import { getStudentRequestCount } from "@/lib/actions/student-request"
 import { useQuery } from "@tanstack/react-query"
@@ -50,7 +50,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
         items: [
           { title: "Assignments", icon: Home, slug: `/classroom/${currentClassroomId}/${teacherId}`, isActive: currentRoute === undefined, isLink: true },
           { title: "Roster", icon: User, slug: `/classroom/${currentClassroomId}/${teacherId}/roster`, isActive: currentRoute === 'roster', isLink: true },
-          { title: "Jots", icon: FileText, slug: `/classroom/${currentClassroomId}/${teacherId}/jots`, isActive: currentRoute === 'jots', isLink: true },
+          { title: "Jots", icon: PenTool, slug: `/classroom/${currentClassroomId}/${teacherId}/jots`, isActive: currentRoute === 'jots', isLink: true },
+          { title: "Typing Test", icon: Keyboard, slug: `/classroom/${currentClassroomId}/${teacherId}/typing-test`, isActive: currentRoute === 'typing-test', isLink: true },
           { title: "Notifications", icon: Bell, slug: `/classroom/${currentClassroomId}/${teacherId}/notifications`, isActive: currentRoute === 'notifications', isLink: true },
           { title: "Student Requests", icon: ClipboardList, slug: `/classroom/${currentClassroomId}/${teacherId}/student-requests`, isActive: currentRoute === 'student-requests', isLink: true },
           { title: "Class Settings", icon: Settings, slug: `/classroom/${currentClassroomId}/${teacherId}/settings`, isActive: currentRoute === 'settings', isLink: true },

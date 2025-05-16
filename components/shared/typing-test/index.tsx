@@ -156,7 +156,7 @@ export default function TypingTest({
                         gravity={0.05}
                         tweenDuration={4000}
                     />
-                    <div className="mt-4 bg-opacity-90 rounded-xl p-6 shadow-lg text-center z-40">
+                    <div className="mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40">
                         <h3 className="text-2xl font-bold mb-2">New High Score!</h3>
                         <p className="text-xl">{calculateWPM()} WPM!</p>
                         <Button className='mt-5' onClick={() => setShowConfetti(false)}>Done</Button>
