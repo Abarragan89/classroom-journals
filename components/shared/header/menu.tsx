@@ -25,7 +25,6 @@ export default function Menu({
     session: Session
     isAllowedToMakeNewClass: boolean;
 }) {
-    console.log('session ', session)
     const renderTeacherHeader = () => (
         <>
             <TeacherNavLinks />

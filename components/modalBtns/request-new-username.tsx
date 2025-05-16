@@ -49,7 +49,6 @@ export default function RequestNewUsername({
             </ResponsiveDialog>
             <Button
                 onClick={() => setIsModalOpen(true)}
-                className="relative top-[-20px]"
             >
                 <Plus /> Request
             </Button>

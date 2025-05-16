@@ -10,6 +10,7 @@ export type User = {
     password?: string;
     accountType?: string;
     isAdmin?: boolean;
+    wpmSpeed?: number;
     iv?: string;
     email?: string;
     emailVerified?: Date;

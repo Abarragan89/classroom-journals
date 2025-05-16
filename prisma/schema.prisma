@@ -23,6 +23,7 @@ model User {
   emailVerified       DateTime?          @db.Timestamp(6)
   image               String?
   isAdmin             Boolean            @default(false)
+  wpmSpeed            Float                @default(0.0)
   accountType         TeacherAccountType @default(BASIC)
   password            String? // this password is only for student accounts and needs to be accessible to teacher
   iv                  String? // this is used to encrypt student names, ensures no duplicates when same input is given when encrypting
@@ -121,7 +122,7 @@ model Notification {
   id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId      String   @db.Uuid
   responseId  String   @db.Uuid
-  classId     String?  @db.Uuid
+  classId     String   @db.Uuid
   url         String
   message     String
   commentText String?
@@ -275,7 +276,7 @@ model StudentRequest {
   id        String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   studentId String               @db.Uuid
   teacherId String               @db.Uuid
-  classId   String?              @db.Uuid
+  classId   String               @db.Uuid
   status    StudentRequestStatus // 'pending' || 'viewed' to let the notification show or not show
   type      StudentRequestType // 'username' || 'prompt'
   text      String

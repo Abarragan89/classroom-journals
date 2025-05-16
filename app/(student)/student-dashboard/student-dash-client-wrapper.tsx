@@ -93,7 +93,12 @@ export default function StudentDashClientWrapper({
         </div>
       )}
       <section>
-        <div className="flex-end space-x-5 relative">
+        <div className="flex-end space-x-5 relative -top-5 pb-5">
+          <Button asChild>
+            <Link href={'/typing-test'}>
+              Speed Test
+            </Link>
+          </Button>
           <RequestNewUsername
             studentId={studentId}
             teacherId={teacherId}
