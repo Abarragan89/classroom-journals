@@ -53,6 +53,7 @@ export default function SingleComment({
 
 
     async function addCommentReplyHandler(e: React.FormEvent<HTMLFormElement>) {
+        if (isLoading) return;
         e.preventDefault()
         // Check cool down time
         if (commentCoolDown === null) {

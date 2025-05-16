@@ -34,6 +34,7 @@ export default function CommentSection({
     const [commentText, setCommentText] = useState<string>('')
 
     async function addCommentHandler(e: React.FormEvent<HTMLFormElement>) {
+        if (isLoading) return;
         // student id === 1 if it is displayed as demo on landing page
         e.preventDefault();
         if (studentId === '1') {
