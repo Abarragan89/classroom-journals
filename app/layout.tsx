@@ -22,6 +22,39 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "JotterBlog",
   description: "Blogging Platform for Students",
+  keywords: [
+    "student writing platform",
+    "AI grading",
+    "classroom blogging",
+    "teacher writing tool",
+    "student assessments",
+    "exit tickets",
+    "classroom assessments",
+    "fight against AI",
+    "AI in the classroom"
+  ],
+  openGraph: {
+    title: "JotterBlog",
+    description: "Manage student writing and assessments. Share work as blog posts, auto-grade with AI, and write in a distraction-free, feedback-friendly classroom space.",
+    url: "https://www.jotterblog.com", // <-- update this to your domain
+    siteName: "JotterBlog",
+    images: [
+      {
+        url: "/images/open-graph-logo.png", // <-- Add your image here
+        width: 1200,
+        height: 630,
+        alt: "JotterBlog social preview",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "JotterBlog",
+    description: "Manage student writing and assessments. Share work as blog posts, auto-grade with AI, and write in a distraction-free, feedback-friendly classroom space.",
+    images: ["/images/open-graph-logo.png"],
+  },
 };
 
 export default async function RootLayout({

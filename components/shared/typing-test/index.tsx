@@ -85,7 +85,6 @@ export default function TypingTest({
 
     const handleStart = (): void => {
         setStarted(true);
-
         if (inputRef?.current) inputRef.current.focus();
     };
 
