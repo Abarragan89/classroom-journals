@@ -28,7 +28,7 @@ export default function TypingTest({
     // Ref is for data handler in the backend
     const inputRefState = useRef<string>(input);
     const [finished, setFinished] = useState(false);
-    const [timer, setTimer] = useState(6);
+    const [timer, setTimer] = useState(60);
     const [showConfetti, setShowConfetti] = useState<boolean>(false)
     const [currentHighScore, setCurrentHighScore] = useState<number>(userHighScore)
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
