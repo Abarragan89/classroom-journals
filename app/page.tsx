@@ -15,7 +15,7 @@ import { CornerRightUp } from "lucide-react";
 export default async function page() {
 
     const session = await auth() as Session;
-
+    console.log('session ', session)
     if (session) {
         if (session?.user?.role === 'TEACHER') {
             redirect(`/classes`)

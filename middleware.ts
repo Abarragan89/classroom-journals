@@ -1,8 +1,35 @@
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server'
 
-export async function middleware() {
+export async function middleware(request: NextRequest) {
+
+    // BLock all unauthorized db calls 
+    const { pathname } = request.nextUrl
+
+    const publicPaths = [
+        '/', // Home route
+        '/privacy-policy',
+        '/terms-of-service',
+        '/sign-in',
+        '/api/auth/callback/google',
+    ];
+
+    const isPublicPath = publicPaths.some(
+        (path) => pathname === path || pathname.startsWith(path + '/')
+    );
+
+    if (!isPublicPath) {
+        // Check your auth cookie(s)
+        const sessionToken =
+            request.cookies.get('authjs.session-token')?.value
+
+        if (!sessionToken) {
+            // No session → redirect to landing (or return 403)
+            return NextResponse.redirect(new URL('/', request.url))
+        }
+    }
+
     const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
-
     // Apply Content Security Policy (CSP)
     let cspHeader = '';
     if (process.env.NODE_ENV === 'production') {
@@ -26,6 +53,7 @@ export async function middleware() {
     const contentSecurityPolicyHeaderValue = cspHeader.replace(/\s{2,}/g, ' ').trim();
     response.headers.set('Content-Security-Policy', contentSecurityPolicyHeaderValue);
     response.headers.set('x-nonce', nonce);
+
     return response;
 }
 
