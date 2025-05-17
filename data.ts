@@ -1,63 +1,4 @@
-// export const imageUrls: string[] = [
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/17.png-1735541082906",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/18.png-1735685028803",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/21.png-1735892641213",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/Untitled%20design%20(17).png-1735541276179",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/Untitled%20design%20(24).png-1735541248335",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/Untitled%20design%20(31).png-1736030007040",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/Untitled%20design%20(33).png-1736827816535",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/Untitled%20design%20(36).png-1737069405911",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/Untitled%20design%20(37).png-1737096285817",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/Untitled%20design%20(38).png-1737521621694",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/Untitled%20design.png-1735599873736",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735528916161",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735528971436",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735529076063",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735529240112",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735529296093",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735529503687",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735529607691",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735529675989",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735531168543",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735531246586",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735531428730",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735531509687",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735531566787",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735531636155",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735536727600",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735536964307",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735537863367",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735537993619",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735538217779",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735538813327",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735600054404",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735600207987",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735698193267",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735698734874",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735699323258",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735699464259",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1735878439585",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1736054962347",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1736055450433",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1736057794289",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1736057992060",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1736058183496",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1736058369953",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1736139176757",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1737079288002",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1737079404119",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1737083338015",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1737083562441",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1737667401541",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/blob-1737667767994",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/user-cm5aat1xd0000ypbafj74yp1x-profile-pic.jpeg-1735704201096",
-//     "https://unfinished-pages.s3.us-east-2.amazonaws.com/user-cm5bmuyhh0001zizwly9lp1td-profile-pic.jpeg-1735709463754"
-// ]
-
-
 // Possible sample text for typing
-
 export const sampleTexts = [
     `"Always begin," she said, "with intention." Carefully, he placed his hands; then, he typed. The quick brown fox jumps over the lazy dog. Every sentence begins with thought. Practice builds precision. Clarity matters; punctuation shapes meaning. Watch, wait, then write. Time allows learning. Bold students seek challenge; quiet ones persist silently. Every attempt improves skill. Never fear mistakes. Just keep moving. A rhythm forms. Flow follows. Muscle memory guides your fingers. Letters appear, words grow. Sentences become stories. Practice daily. Repeat lessons. Type quotes, poems, essays. Engage your brain. Feel the keys. Know the board. Speed will come. Accuracy first. Sit tall; breathe deeply. Hands float, not press. Use every finger. Watch for errors. Fix gently. Improve slowly. Patience wins. Celebrate progress. Teach others. Share your tips. Growth inspires. Errors fade. Excellence stays. Stay with it. Show up. Write often. Type cleanly. Results come. Letters matter. Words count. Purpose drives. Confidence grows. Keep typing. Believe, and persist.`,
 
@@ -79,7 +20,7 @@ export const sampleTexts = [
     `"Quality over speed," the teacher said. "Every mark counts." Begin with care. Type deliberately. The quick brown fox jumps over the lazy dog. Each letter stretches your fingers. Practice helps. Use proper posture. Sit tall. Hands hover. Eyes forward. Feel the rhythm. Trust your hands. Learn slowly. Be accurate. Use punctuation well. Add quotation marks and commas. Semicolons are tools of clarity. Sentences shape meaning. Paragraphs express thoughts. Let words flow naturally. Repeat often. Write creatively. Type poems, stories, facts. Celebrate improvement. Measure time. Focus daily. Stay consistent. Don't fear mistakes. Let them guide growth. Learn key positions. Memorize patterns. Engage your senses. Hear the tap. See the screen. Read aloud. Share with friends. Help others. Confidence builds. Speed follows. Be mindful. Write what matters. Enjoy the journey. Stay dedicated. Track goals. Set milestones. Trust the process. Never quit. Keep typing. Let words lead. Make every letter count.`,
 
     `"Well done," he smiled. "Now type again." Typing is art. The quick brown fox jumps over the lazy dog. Every finger moves. Posture matters. Sit tall; back straight. Hands ready. Breathe. Begin slowly. Focus on accuracy. Use commas correctly. Don't forget quotation marks. Add semicolons. Practice clean lines. Write full thoughts. Use capital letters. Engage your fingers. Don't fear the challenge. Repetition builds speed. Accuracy creates fluency. Watch for common errors. Fix gently. Learn from them. Keep improving. Type quotes. Build vocabulary. Record your progress. Count words. Set daily goals. Smile often. Share your growth. Teach someone else. Punctuation adds life. Use it wisely. Words become stories. Stories carry messages. Type cleanly. Stay consistent. Form habits. Be patient. Let improvement come. Adjust as needed. Trust your pace. The journey matters. Let typing be joyful. Push forward. Show up daily. Finish strong. Always strive. Great results follow focus. Keep going.`,
-    
+
     `"Write with care," she noted. "Clarity follows consistency." The quick brown fox jumps over the lazy dog. Capital letters stand tall. Commas pause thoughts. Periods end them. Semicolons guide readers. Quotation marks capture voice. Use them all wisely. Practice with passion. Repeat phrases. Track growth. Sit properly. Fingers curved. Eyes ahead. Let your thoughts flow. Avoid rushing. Master basics. Letters make words. Words make ideas. Ideas create stories. Form habits. Fix errors. Learn layout. Trust memory. Engage daily. Begin fresh. Use effort. Respect punctuation. Style emerges. Improvement builds slowly. Celebrate accuracy. Stay calm. Work smart. Add rhythm. Balance repetition. Teach technique. Share your tips. Try quotes. Invent characters. Make progress visual. Focus on form. Be intentional. Feel your growth. Speed comes later. Lead with quality. Inspire confidence. Take breaks. Avoid fatigue. Move often. Keep notes. Track success. Smile often. Typing builds skill. Write boldly. Love the process. Enjoy the keys.`,
 
     `"Start small," he said. "Grow daily." The quick brown fox jumps over the lazy dog. Every stroke counts. Each letter matters. Type mindfully. Practice regularly. Use punctuation to communicate. Commas slow the pace. Semicolons connect ideas. Quotation marks capture dialogue. Capital letters shape tone. Begin with posture. Sit tall. Place fingers correctly. Hover, don't press. Breathe deeply. Focus hard. Trust your hands. Type what you know. Learn what you don't. Repeat often. Add variety. Use poems. Write lyrics. Tell stories. Practice facts. Memorize layouts. Avoid shortcuts. Respect structure. Feel the keys. Think aloud. Let words grow. Push gently. Fix errors. Stay relaxed. Appreciate effort. Accuracy wins. Speed follows. Results arrive. Don't quit. Teach others. Stay consistent. Smile during typing. Love your improvement. Take notes. Review progress. Aim high. Let letters dance. You're doing great. Keep the pace. Challenge your routine. Be proud. You are growing.`,

@@ -30,7 +30,7 @@ export default async function SingleResponse({
     const rosterAlphabetized = classRosterAndScores.sort((a, b) => {
         const lastNameA = a?.student?.name?.split(" ")[1] as string; // Get second word (last name)
         const lastNameB = b?.student?.name?.split(" ")[1] as string;
-        return lastNameA.localeCompare(lastNameB); // Sort alphabetically
+        return lastNameA?.localeCompare(lastNameB); // Sort alphabetically
     });
 
     if (!response) {

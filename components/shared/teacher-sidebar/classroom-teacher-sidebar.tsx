@@ -21,8 +21,6 @@ import { Home, User, Keyboard, Bell, ClipboardList, Settings, PenTool } from "lu
 import { getUnreadUserNotifications } from "@/lib/actions/notifications.action"
 import { getStudentRequestCount } from "@/lib/actions/student-request"
 import { useQuery } from "@tanstack/react-query"
-// import { listS3Urls } from "@/lib/actions/s3.download.action"
-// import { Button } from "@/components/ui/button"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & { classes: Classroom[] }) {
 
@@ -78,11 +76,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
             <SidebarGroupLabel className="opacity-70">{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-
-                {/* GET S3 BUCKET URLS BUTTON */}
-                {/* <Button onClick={listS3Urls}>GetUrls</Button> */}
-                {/* <Button onClick={getBedtimeStory}>TriggerChatGPT</Button> */}
-
                 {item.items.map((item) => {
                   const Icon = item.icon;
                   return (
