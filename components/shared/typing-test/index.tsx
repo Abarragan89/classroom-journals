@@ -28,7 +28,7 @@ export default function TypingTest({
     // Ref is for data handler in the backend
     const inputRefState = useRef<string>(input);
     const [finished, setFinished] = useState(false);
-    const [timer, setTimer] = useState(60);
+    const [timer, setTimer] = useState(6);
     const [showConfetti, setShowConfetti] = useState<boolean>(false)
     const [currentHighScore, setCurrentHighScore] = useState<number>(userHighScore)
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -145,20 +145,34 @@ export default function TypingTest({
 
     return (
         <>
-            {showConfetti && (
+            {finished && (
                 <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center">
-                    <Confetti
-                        width={width}
-                        height={height}
-                        numberOfPieces={1800}
-                        recycle={false}
-                        gravity={0.05}
-                        tweenDuration={4000}
-                    />
-                    <div className="mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40">
-                        <h3 className="text-2xl font-bold mb-2">New High Score!</h3>
-                        <p className="text-xl">{calculateWPM()} WPM!</p>
-                        <Button className='mt-5' onClick={() => setShowConfetti(false)}>Done</Button>
+                    {showConfetti && (
+                        <Confetti
+                            width={width}
+                            height={height}
+                            numberOfPieces={1800}
+                            recycle={false}
+                            gravity={0.05}
+                            tweenDuration={4000}
+                        />
+
+                    )}
+                    <div className="w-[350px] mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40">
+                        {showConfetti ? (
+                            <>
+                                <h3 className="text-2xl font-bold mb-2">New High Score!</h3>
+                                <p className='text-accent text-xl'>{calculateWPM()}</p>
+                                <p className="text-lg">WPM!</p>
+                            </>
+                        ) : (
+                            <>
+                                <h3 className="text-2xl font-bold mb-2">Your Score</h3>
+                                <p className='text-accent text-xl'>{calculateWPM()}</p>
+                                <p className="text-lg">WPM</p>
+                            </>
+                        )}
+                        <Button className='mt-5' onClick={() => { setShowConfetti(false); setFinished(false) }}>Done</Button>
                     </div>
                 </div>
             )}

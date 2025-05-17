@@ -185,7 +185,7 @@ export default function SinglePromptEditor({
 
     if (showConfetti && width && height) {
         return (
-            <div>
+            <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center">
                 <Confetti
                     width={width}
                     height={height}
@@ -194,9 +194,9 @@ export default function SinglePromptEditor({
                     gravity={0.1}
                     tweenDuration={4000}
                 />
-                <div className="animate-fall mt-48 flex flex-col items-center">
-                    <p className="text-primary font-bold text-5xl text-center">Blog Posted!</p>
-                    <Button asChild className="mt-12">
+                <div className="animate-fall w-[370px] mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40">
+                    <p className="text-primary font-bold text-xl text-center">Blog Posted!</p>
+                    <Button asChild className="mt-4">
                         <Link href={'/'}>
                             Finish
                         </Link>
