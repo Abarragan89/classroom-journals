@@ -71,8 +71,7 @@ export async function middleware(request: NextRequest) {
     const sessionToken = request.cookies.get("__Secure-authjs.session-token")?.value;
 
     if (!sessionToken || !session) {
-        const loginUrl = new URL("/", request.url);
-        return NextResponse.redirect(loginUrl);
+        return new NextResponse('Not Logged In', { status: 400 });
     }
 
     return response
