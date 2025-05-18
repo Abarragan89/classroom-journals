@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-    
+
     // Only enforce HTTPS in production
     if (process.env.NODE_ENV === 'production') {
         const proto = request.headers.get('x-forwarded-proto');
@@ -60,19 +60,19 @@ export async function middleware(request: NextRequest) {
     ];
 
     const { pathname } = request.nextUrl;
-    const method = request.method;
+    // const method = request.method;
 
     const isProtected = PROTECTED_PATHS.some((path) => pathname.startsWith(path));
 
 
-    // Disables sending post calls to page routes that trigger database to turn on
-    if (
-        process.env.NODE_ENV === "production" &&
-        isProtected &&
-        method !== "GET"
-    ) {
-        return new NextResponse("Method Not Allowed", { status: 405 });
-    }
+    // // Disables sending post calls to page routes that trigger database to turn on
+    // if (
+    //     process.env.NODE_ENV === "production" &&
+    //     isProtected &&
+    //     method !== "GET"
+    // ) {
+    //     return new NextResponse("Method Not Allowed", { status: 405 });
+    // }
 
     if (!isProtected) return response;
 
