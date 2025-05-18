@@ -50,8 +50,18 @@ export async function middleware(request: NextRequest) {
     ];
 
     const { pathname } = request.nextUrl;
+    const method = request.method;
 
     const isProtected = PROTECTED_PATHS.some((path) => pathname.startsWith(path));
+
+    if (
+        process.env.NODE_ENV === "production" &&
+        isProtected &&
+        method !== "GET"
+    ) {
+        return new NextResponse("Method Not Allowed", { status: 405 });
+    }
+
     if (!isProtected) return response;
 
     const sessionToken =
