@@ -1,5 +1,5 @@
-import { auth } from "@/auth"
-import { redirect } from "next/navigation";
+// import { auth } from "@/auth"
+// import { redirect } from "next/navigation";
 import Header from "@/components/shared/header";
 import { Response, Session } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -14,15 +14,15 @@ import { CornerRightUp } from "lucide-react";
 
 export default async function page() {
 
-    const session = await auth() as Session;
-    console.log('session ', session)
-    if (session) {
-        if (session?.user?.role === 'TEACHER') {
-            redirect(`/classes`)
-        } else if (session?.user?.role === 'STUDENT') {
-            redirect('/student-dashboard')
-        }
-    }
+    // const session = await auth() as Session;
+    // if (session) {
+    //     if (session?.user?.role === 'TEACHER') {
+    //         redirect(`/classes`)
+    //     } else if (session?.user?.role === 'STUDENT') {
+    //         redirect('/student-dashboard')
+    //     }
+    // }
+
     const response: Response = {
 
         id: '8097935b-c272-48f4-8c6d-289891cba124',
