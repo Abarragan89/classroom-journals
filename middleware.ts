@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from "next/server";
-import { auth } from './auth';
+// import { auth } from './auth';
 
 export async function middleware(request: NextRequest) {
 
@@ -66,11 +66,11 @@ export async function middleware(request: NextRequest) {
 
     if (!isProtected) return response;
 
-    const session = await auth();
+    // const session = await auth();
 
     const sessionToken = request.cookies.get("__Secure-authjs.session-token")?.value;
 
-    if (!sessionToken || !session) {
+    if (!sessionToken) {
         return new NextResponse('Not Logged In', { status: 400 });
     }
 
