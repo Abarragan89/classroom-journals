@@ -16,7 +16,7 @@ export type User = {
     emailVerified?: Date;
     image?: string;
     classCode: string;
-    role: "TEACHER" | "STUDENT";
+    role: "TEACHER" | "STUDENT" | "ADMIN";
     createdAt: Date;
     updatedAt: Date;
     subscriptionId: string;

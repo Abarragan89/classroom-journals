@@ -64,7 +64,6 @@ export async function middleware(request: NextRequest) {
     const isProtected = PROTECTED_PATHS.some((path) => pathname.startsWith(path));
 
     if (!isProtected) return response;
-
     const sessionToken = request.cookies.get("__Secure-authjs.session-token")?.value;
 
     if (!sessionToken) {

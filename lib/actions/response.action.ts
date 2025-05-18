@@ -1,11 +1,12 @@
 "use server";
 import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
-import { ResponseData, SearchOptions } from "@/types";
+import { ResponseData, SearchOptions, Session } from "@/types";
 import { InputJsonArray, JsonValue } from "@prisma/client/runtime/library";
 import { gradeResponseWithAI } from "./openai.action";
 import { PromptType, ResponseStatus } from "@prisma/client";
 import { auth } from "@/auth";
+import { requireAuth } from "./authorization.action";
 
 // Create  a single response to a student
 export async function createStudentResponse(
@@ -502,9 +503,9 @@ export async function getSingleStudentResponses(studentId: string) {
 // Get student responses for student Dashboard. Pagination count and only first 30
 export async function getStudentResponsesDashboard(studentId: string) {
     try {
-        const session = await auth()
-        if (!session) {
-            throw new Error("Unauthorized")
+        const session = await requireAuth();
+        if (session?.user?.id !== studentId) {
+            throw new Error("Forbidden");
         }
         const [totalCount, paginatedResponses] = await Promise.all([
             prisma.response.count({ where: { studentId } }),

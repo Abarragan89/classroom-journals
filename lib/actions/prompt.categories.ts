@@ -1,6 +1,7 @@
 "use server"
 import { prisma } from "@/db/prisma";
 import { auth } from "@/auth";
+import { requireAuth } from "./authorization.action";
 // Add Prompt Category
 export async function addPromptCategory(categoryName: string, userId: string) {
     try {
@@ -29,6 +30,10 @@ export async function addPromptCategory(categoryName: string, userId: string) {
 // Get All Prompt Categories
 export async function getAllPromptCategories(userId: string) {
     try {
+        const session = await requireAuth();
+        if (!session?.user?.id) {
+            throw new Error("Forbidden");
+        }
 
         const allCategories = await prisma.promptCategory.findMany({
             where: { userId },

@@ -21,6 +21,7 @@ declare module "next-auth" {
     interface User {
         iv?: string;
         username?: string,
+        role?: string,
     }
 }
 
@@ -132,7 +133,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 // Set the user ID from the token
                 // @ts-expect-error: let there be any here
                 session.user.id = token.sub;
-                // @ts-expect-error: let there be any here
                 session.user.role = token?.email ? 'TEACHER' : 'STUDENT';
                 session.user.name = token.name;
                 session.user.username = token.username as string;

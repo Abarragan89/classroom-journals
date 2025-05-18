@@ -3,15 +3,15 @@ import { prisma } from "@/db/prisma"
 import { decryptText } from "../utils"
 import { ResponseData } from "@/types"
 import { ClassUserRole, ResponseStatus } from "@prisma/client"
-import { auth } from "@/auth"
+import { requireAuth } from "./authorization.action"
 
 // Get and decrypt student username 
 export async function getDecyptedStudentUsername(studentId: string) {
     try {
         //Secure the route if access directly without route
-        const session = await auth()
-        if (!session) {
-            throw new Error("Unauthorized")
+        const session = await requireAuth();
+        if (session?.user?.id !== studentId) {
+            throw new Error("Forbidden");
         }
         // get student username
         const studentInfo = await prisma.user.findUnique({
@@ -38,10 +38,9 @@ export async function getDecyptedStudentUsername(studentId: string) {
 // Get teacherId form classroomId
 export async function getTeacherId(classroomId: string) {
     try {
-        //Secure the route if access directly without route
-        const session = await auth()
-        if (!session) {
-            throw new Error("Unauthorized")
+        const session = await requireAuth();
+        if (session?.classroomId !== classroomId) {
+            throw new Error("Forbidden");
         }
         const { userId: teacherId } = await prisma.classUser.findFirst({
             where: {
@@ -70,9 +69,9 @@ export async function getTeacherId(classroomId: string) {
 export async function getClassroomGrade(classroomId: string) {
     try {
         //Secure the route if access directly without route
-        const session = await auth()
-        if (!session) {
-            throw new Error("Unauthorized")
+        const session = await requireAuth();
+        if (session?.classroomId !== classroomId) {
+            throw new Error("Forbidden");
         }
 
         const { grade } = await prisma.classroom.findUnique({
@@ -99,9 +98,9 @@ export async function getClassroomGrade(classroomId: string) {
 export async function getFeaturedBlogs(classroomId: string) {
     try {
         //Secure the route if access directly without route
-        const session = await auth()
-        if (!session) {
-            throw new Error("Unauthorized")
+        const session = await requireAuth();
+        if (session?.classroomId !== classroomId) {
+            throw new Error("Forbidden");
         }
         // Get all student Ids in classroom
         const studentIds = await prisma.classUser.findMany({
@@ -205,9 +204,9 @@ export async function getFeaturedBlogs(classroomId: string) {
 export async function getStudentRequests(studentId: string) {
     try {
         //Secure the route if access directly without route
-        const session = await auth()
-        if (!session) {
-            throw new Error("Unauthorized")
+        const session = await requireAuth();
+        if (session?.user?.id !== studentId) {
+            throw new Error("Forbidden");
         }
         // get student username
         const studentRequests = await prisma.studentRequest.findMany({
