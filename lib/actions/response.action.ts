@@ -1,11 +1,10 @@
 "use server";
 import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
-import { ResponseData, SearchOptions, Session } from "@/types";
+import { ResponseData, SearchOptions } from "@/types";
 import { InputJsonArray, JsonValue } from "@prisma/client/runtime/library";
 import { gradeResponseWithAI } from "./openai.action";
 import { PromptType, ResponseStatus } from "@prisma/client";
-import { auth } from "@/auth";
 import { requireAuth } from "./authorization.action";
 
 // Create  a single response to a student
