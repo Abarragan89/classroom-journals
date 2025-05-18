@@ -3,6 +3,7 @@ import { prisma } from "@/db/prisma"
 import { decryptText, encryptText } from "../utils"
 import { Question } from "@/types"
 import { Prisma, PromptType, StudentRequestStatus, StudentRequestType } from "@prisma/client"
+import { auth } from "@/auth"
 
 export async function createStudentRequest(studentId: string, teacherId: string, text: string, type: string, classId: string) {
     try {
@@ -107,6 +108,10 @@ export async function getTeacherRequests(teacherId: string, classId: string) {
 // This is for the students to see which requests they have made and their status
 export async function getStudentRequests(studentId: string) {
     try {
+        const session = await auth()
+        if (!session) {
+            throw new Error("Unauthorized")
+        }
         const studentRequests = await prisma.studentRequest.findMany({
             where: { studentId },
         });

@@ -1,10 +1,13 @@
 "use server"
 import { prisma } from "@/db/prisma";
-
+import { auth } from "@/auth";
 // Add Prompt Category
 export async function addPromptCategory(categoryName: string, userId: string) {
     try {
-
+        const session = await auth()
+        if (!session) {
+            throw new Error("Unauthorized")
+        }
         const newCategory = await prisma.promptCategory.create({
             data: {
                 name: categoryName,
@@ -72,7 +75,7 @@ export async function deletePromptCategory(id: string) {
 export async function editPromptCategory(id: string, newCategoryName: string) {
     try {
         await prisma.promptCategory.update({
-            where: { id }, 
+            where: { id },
             data: {
                 name: newCategoryName
             }
