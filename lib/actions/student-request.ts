@@ -3,7 +3,6 @@ import { prisma } from "@/db/prisma"
 import { decryptText, encryptText } from "../utils"
 import { Question } from "@/types"
 import { Prisma, PromptType, StudentRequestStatus, StudentRequestType } from "@prisma/client"
-import { auth } from "@/auth"
 import { requireAuth } from "./authorization.action"
 
 export async function createStudentRequest(studentId: string, teacherId: string, text: string, type: string, classId: string) {
