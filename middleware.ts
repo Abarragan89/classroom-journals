@@ -2,6 +2,16 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
+    
+    // Only enforce HTTPS in production
+    if (process.env.NODE_ENV === 'production') {
+        const proto = request.headers.get('x-forwarded-proto');
+
+        if (proto !== 'https') {
+            return new NextResponse('HTTPS required', { status: 400 });
+        }
+    }
+
     // Apply Content Security Policy (CSP)
     const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
     let cspHeader = '';
@@ -54,6 +64,8 @@ export async function middleware(request: NextRequest) {
 
     const isProtected = PROTECTED_PATHS.some((path) => pathname.startsWith(path));
 
+
+    // Disables sending post calls to page routes that trigger database to turn on
     if (
         process.env.NODE_ENV === "production" &&
         isProtected &&
