@@ -9,15 +9,15 @@ export default async function StudentNotifications() {
 
     const session = await auth() as Session
 
-    if (!session) notFound()
+    if (!session) return notFound()
 
     const studentId = session?.user?.id as string
     if (session?.user?.role !== 'STUDENT' || !studentId) {
-        notFound()
+        return notFound()
     }
 
     const classId = session?.classroomId
-    if (!classId) notFound()
+    if (!classId) return notFound()
 
     const userNotifications = await getUserNotifications(studentId, classId) as unknown as UserNotification[]
 

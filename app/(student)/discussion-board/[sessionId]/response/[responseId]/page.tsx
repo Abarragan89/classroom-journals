@@ -19,7 +19,7 @@ export default async function SingleResponse({
     const studentId = session?.user?.id
     const classroomId = session?.classroomId
 
-    if (!session || !studentId || !classroomId) notFound()
+    if (!session || !studentId || !classroomId) return notFound()
 
     const { responseId, sessionId } = await params;
     const response = await getSingleResponse(responseId) as unknown as Response

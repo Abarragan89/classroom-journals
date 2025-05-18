@@ -10,7 +10,7 @@ export default async function StudentRequests({
 }) {
 
     const { teacherId, classId } = await params;
-    if (!teacherId) notFound()
+    if (!teacherId) return notFound()
 
     const studentRequests = await getTeacherRequests(teacherId, classId) as unknown as StudentRequest[]
 

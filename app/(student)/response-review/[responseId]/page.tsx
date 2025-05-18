@@ -19,13 +19,13 @@ export default async function ResponseReview({
 
     const session = await auth() as Session
 
-    if (!session) notFound()
+    if (!session)return notFound()
 
     const classroomId = session?.classroomId
 
     const studentId = session?.user?.id as string
     if (session?.user?.role !== 'STUDENT' || !studentId) {
-        notFound()
+       return notFound()
     }
 
     const { responseId } = await params

@@ -10,7 +10,7 @@ export default async function TypingTestPage({
 }) {
 
     const { teacherId, classId } = await params;
-    if (!teacherId || !classId) notFound()
+    if (!teacherId || !classId) return notFound()
 
     const studentHighScore = await getUserWPM(teacherId) as number
     const classTopTypers = await getWPMClassHighScores(classId) as User[]

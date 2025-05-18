@@ -21,16 +21,16 @@ export default async function DashboardLayout({
 
     const session = await auth()
 
-    if (!session) notFound()
+    if (!session) return notFound()
 
     const teacherId = session?.user?.id as string
-    if (!teacherId) notFound()
+    if (!teacherId) return notFound()
 
     // Get all classrooms to render 
     const teacherClasses = await getAllClassrooms(teacherId)
 
     const { classId } = await params
-    if (!classId) notFound()
+    if (!classId) return notFound()
 
     // Check if the authenticated teacher is part of the classroom and has the role of 'teacher'
     const isTeacherAuthorized = await prisma.classUser.findFirst({
@@ -42,7 +42,7 @@ export default async function DashboardLayout({
         select: { userId: true }
     });
 
-    if (!isTeacherAuthorized) notFound()
+    if (!isTeacherAuthorized) return notFound()
 
 
     const { isAllowedToMakeNewClass } = await determineSubscriptionAllowance(teacherId)

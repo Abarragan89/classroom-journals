@@ -8,10 +8,10 @@ export default async function PromptLibraryPage() {
 
     const session = await auth() as Session
 
-    if (!session) notFound()
+    if (!session) return notFound()
 
     const teacherId = session?.user?.id as string
-    if (!teacherId || session?.user?.role !== 'TEACHER') notFound()
+    if (!teacherId || session?.user?.role !== 'TEACHER') return notFound()
 
     const decryptedTeacher = await getTeacherAccountData(teacherId) as unknown as User
 
@@ -19,7 +19,7 @@ export default async function PromptLibraryPage() {
         <>
             <main className="wrapper">
                 <h1 className="h1-bold">My Account</h1>
-                <AccountClientWrapper 
+                <AccountClientWrapper
                     decryptedTeacher={decryptedTeacher}
                 />
 

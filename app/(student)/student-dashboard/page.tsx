@@ -8,26 +8,27 @@ import { getStudentRequests } from "@/lib/actions/student-request";
 import StudentDashClientWrapper from "./student-dash-client-wrapper";
 import { getStudentResponsesDashboard } from "@/lib/actions/response.action";
 
+
 export default async function StudentDashboard() {
 
     const session = await auth() as Session
 
-    if (!session) notFound()
+    if (!session) return notFound()
 
     const studentId = session?.user?.id as string
     if (session?.user?.role !== 'STUDENT' || !studentId) {
-        notFound()
+        return notFound()
     }
 
     const classroomId = session?.classroomId
 
-    if (!classroomId) notFound()
+    if (!classroomId) return notFound()
 
     const studentName = await getDecyptedStudentUsername(studentId)
     const teacherId = await getTeacherId(classroomId) as string
 
     if (!studentName || !teacherId) {
-        notFound()
+        return notFound()
     }
     const allPromptCategories = await getAllPromptCategories(teacherId) as unknown as PromptCategory[]
     const allResponses = await getStudentResponsesDashboard(studentId) as unknown as { responses: Response[], totalCount: number }

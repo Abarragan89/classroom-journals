@@ -16,11 +16,11 @@ export default async function StudentDashboard({
 
     const session = await auth() as Session
 
-    if (!session) notFound()
+    if (!session) return notFound()
 
     const studentId = session?.user?.id as string
     if (session?.user?.role !== 'STUDENT' || !studentId) {
-        notFound()
+        return notFound()
     }
 
     const classroomId = session?.classroomId

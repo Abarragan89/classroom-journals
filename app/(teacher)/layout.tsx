@@ -12,10 +12,10 @@ export default async function TeacherLayout({
 
     const session = await auth()
 
-    if (!session) notFound()
+    if (!session) return notFound()
 
     const teacherId = session?.user?.id as string
-    if (!teacherId) notFound()
+    if (!teacherId) return notFound()
 
     const { isAllowedToMakeNewClass } = await determineSubscriptionAllowance(teacherId)
 

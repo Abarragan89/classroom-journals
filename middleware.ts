@@ -1,34 +1,8 @@
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server'
-import { getToken } from 'next-auth/jwt';
 
-
-export async function middleware(request: NextRequest) {
-
-    // BLock all unauthorized db calls 
-    const { pathname } = request.nextUrl
-
-    const publicPaths = [
-        '/', // Home route
-        '/privacy-policy',
-        '/terms-of-service',
-        '/sign-in',
-        '/api/auth/callback/google',
-    ];
-
-    const isPublicPath = publicPaths.some(
-        (path) => pathname === path || pathname.startsWith(path + '/')
-    );
-
-    if (!isPublicPath) {
-        const token = await getToken({ req: request, secret: process.env.AUTH_SECRET });
-        if (!token) {
-            return NextResponse.redirect(new URL('/', request.url));
-        }
-    }
-
-
+export async function middleware() {
     const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+
     // Apply Content Security Policy (CSP)
     let cspHeader = '';
     if (process.env.NODE_ENV === 'production') {
@@ -52,7 +26,6 @@ export async function middleware(request: NextRequest) {
     const contentSecurityPolicyHeaderValue = cspHeader.replace(/\s{2,}/g, ' ').trim();
     response.headers.set('Content-Security-Policy', contentSecurityPolicyHeaderValue);
     response.headers.set('x-nonce', nonce);
-
     return response;
 }
 

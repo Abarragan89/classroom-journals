@@ -12,14 +12,14 @@ export default async function MyWork() {
 
     // Get Session Data
     const session = await auth() as Session
-    if (!session) notFound()
+    if (!session) return notFound()
     const classroomId = session?.classroomId
-    if (!classroomId) notFound()
+    if (!classroomId) return notFound()
 
 
     const studentId = session?.user?.id as string
     if (session?.user?.role !== 'STUDENT' || !studentId) {
-        notFound()
+        return notFound()
     }
 
     const studentResponses = await getSingleStudentResponses(studentId) as unknown as Response[]
@@ -35,11 +35,11 @@ export default async function MyWork() {
                 <h1 className="h1-bold mt-2 line-clamp-1">My Work</h1>
                 <div className="mt-5 space-y-5">
 
-                <MyWorkClientWrapper 
-                    studentResponses={studentResponses}
-                    studentId={studentId}
+                    <MyWorkClientWrapper
+                        studentResponses={studentResponses}
+                        studentId={studentId}
 
-                />
+                    />
                 </div>
             </main>
         </>
