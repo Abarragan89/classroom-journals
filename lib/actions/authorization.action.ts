@@ -15,6 +15,8 @@ export async function requireAuth() {
         throw new Error("Unauthorized");
     }
 
+    if (session?.user?.id === 'fc00c097-c0b9-427a-bf70-8ce6a5f56e80') throw new Error("Unauthorized");
+
     const userRole = session.user.role;
 
     if (!userRole || !ALLOWED_ROLES.includes(userRole.toUpperCase() as typeof ALLOWED_ROLES[number])) {
