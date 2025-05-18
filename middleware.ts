@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from "next/server";
+import { auth } from './auth';
 
 export async function middleware(request: NextRequest) {
 
@@ -60,29 +61,20 @@ export async function middleware(request: NextRequest) {
     ];
 
     const { pathname } = request.nextUrl;
-    // const method = request.method;
 
     const isProtected = PROTECTED_PATHS.some((path) => pathname.startsWith(path));
 
-
-    // // Disables sending post calls to page routes that trigger database to turn on
-    // if (
-    //     process.env.NODE_ENV === "production" &&
-    //     isProtected &&
-    //     method !== "GET"
-    // ) {
-    //     return new NextResponse("Method Not Allowed", { status: 405 });
-    // }
-
     if (!isProtected) return response;
 
-    const sessionToken =
-        request.cookies.get("__Secure-authjs.session-token")?.value;
+    const session = await auth();
 
-    if (!sessionToken) {
+    const sessionToken = request.cookies.get("__Secure-authjs.session-token")?.value;
+
+    if (!sessionToken || !session) {
         const loginUrl = new URL("/", request.url);
         return NextResponse.redirect(loginUrl);
     }
+
     return response
 }
 
