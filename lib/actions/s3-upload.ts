@@ -4,6 +4,7 @@ import {
     S3Client, PutObjectCommand,
     // DeleteObjectCommand
 } from '@aws-sdk/client-s3'
+import { requireAuth } from './authorization.action';
 
 
 const s3Client = new S3Client({
@@ -39,20 +40,25 @@ function getContentType(fileName: string): string {
 }
 
 export async function uploadFileToS3(file: Buffer, filename: string) {
-    const contentType = getContentType(filename);
-    const timestampedKey = `${filename}-${Date.now()}`;
+    try {
+        await requireAuth();
+        const contentType = getContentType(filename);
+        const timestampedKey = `${filename}-${Date.now()}`;
 
-    const s3Params = {
-        Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: timestampedKey,
-        Body: file,
-        ContentType: contentType
+        const s3Params = {
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Key: timestampedKey,
+            Body: file,
+            ContentType: contentType
+        }
+
+        const command = new PutObjectCommand(s3Params)
+        await s3Client.send(command)
+        const url = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${timestampedKey}`;
+        return url;
+    } catch (error) {
+        console.log('error uploading photo', error)
     }
-
-    const command = new PutObjectCommand(s3Params)
-    await s3Client.send(command)
-    const url = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${timestampedKey}`;
-    return url;
 }
 
 // // Function to delete a file from S3
@@ -69,7 +75,7 @@ export async function uploadFileToS3(file: Buffer, filename: string) {
 // Add user image to S3 and database
 export async function addPhotoToLibrary(prevData: unknown, formData: FormData) {
     try {
-
+        await requireAuth();
         const imageFile = formData.get('file');
         const tags = formData.get('tags') as string;
         const category = formData.get('category') as string;
@@ -87,7 +93,7 @@ export async function addPhotoToLibrary(prevData: unknown, formData: FormData) {
             // Save image to database and attach to User
             await prisma.image.create({
                 data: {
-                    url: pictureURL,
+                    url: pictureURL as string,
                     tags: tagArr,
                     category,
                 }

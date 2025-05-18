@@ -4,9 +4,11 @@ import { newStudentSchema } from "../validators";
 import crypto from 'crypto'
 import { decryptText, encryptText, generateRandom5DigitNumber } from "../utils";
 import { ClassUserRole } from "@prisma/client";
+import { requireAuth } from "./authorization.action";
 
 export async function addStudentToRoster(prevState: unknown, formData: FormData) {
     try {
+        await requireAuth();
         const { name, username } = newStudentSchema.parse({
             name: formData.get('name'),
             username: formData.get('username')
@@ -80,7 +82,7 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
 // Edit a student 
 export async function editStudent(prevState: unknown, formData: FormData) {
     try {
-
+        await requireAuth();
         const { name, username, commentCoolDown, password } = newStudentSchema.parse({
             name: formData.get('name'),
             username: formData.get('username'),
@@ -159,6 +161,9 @@ export async function editStudent(prevState: unknown, formData: FormData) {
 // delete student
 export async function deleteStudent(prevState: unknown, formData: FormData) {
     try {
+        const session = await requireAuth();
+        if (!session) throw new Error('Forbidden')
+            
         // Get studentId
         const studentId = formData.get('studentId')
         if (typeof studentId !== 'string') {
@@ -185,6 +190,9 @@ export async function deleteStudent(prevState: unknown, formData: FormData) {
 
 export async function getStudentCountByClassId(classId: string) {
     try {
+        const session = await requireAuth();
+        if (!session) throw new Error('Forbidden')
+
         if (typeof classId !== 'string') {
             throw new Error('Missing or invalid classId');
         }

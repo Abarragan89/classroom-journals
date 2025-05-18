@@ -1,14 +1,10 @@
 "use server"
 import { prisma } from "@/db/prisma";
-import { auth } from "@/auth";
 import { requireAuth } from "./authorization.action";
 // Add Prompt Category
 export async function addPromptCategory(categoryName: string, userId: string) {
     try {
-        const session = await auth()
-        if (!session) {
-            throw new Error("Unauthorized")
-        }
+        await requireAuth();
         const newCategory = await prisma.promptCategory.create({
             data: {
                 name: categoryName,
@@ -30,6 +26,7 @@ export async function addPromptCategory(categoryName: string, userId: string) {
 // Get All Prompt Categories
 export async function getAllPromptCategories(userId: string) {
     try {
+        await requireAuth();
         const session = await requireAuth();
         if (!session?.user?.id) {
             throw new Error("Forbidden");
@@ -59,7 +56,7 @@ export async function getAllPromptCategories(userId: string) {
 // Delete Prompt Category
 export async function deletePromptCategory(id: string) {
     try {
-
+        await requireAuth();
         await prisma.promptCategory.delete({
             where: { id }
         })
@@ -79,6 +76,7 @@ export async function deletePromptCategory(id: string) {
 // Delete Prompt Category
 export async function editPromptCategory(id: string, newCategoryName: string) {
     try {
+        await requireAuth();
         await prisma.promptCategory.update({
             where: { id },
             data: {

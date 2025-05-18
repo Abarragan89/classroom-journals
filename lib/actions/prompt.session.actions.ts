@@ -3,9 +3,11 @@ import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
 import { SearchOptions } from "@/types";
 import { PromptSessionStatus, ResponseStatus } from "@prisma/client";
+import { requireAuth } from "./authorization.action";
 
 export async function getAllSessionsInClass(classId: string) {
     try {
+        await requireAuth();
         const [totalCount, paginatedPrompts] = await Promise.all([
             prisma.promptSession.count({ where: { classId } }),
             prisma.promptSession.findMany({
@@ -56,6 +58,7 @@ export async function getAllSessionsInClass(classId: string) {
 
 export async function getAllSessionsInClassForStudent(classId: string) {
     try {
+        await requireAuth();
         const [totalCount, paginatedPrompts] = await Promise.all([
             prisma.promptSession.count({ where: { classId } }),
             prisma.promptSession.findMany({
@@ -93,6 +96,7 @@ export async function getAllSessionsInClassForStudent(classId: string) {
 
 export async function getSinglePromptSessionStudentDiscussion(promptId: string) {
     try {
+        await requireAuth();
         const allPromptSession = await prisma.promptSession.findUnique({
             where: { id: promptId },
             select: {
@@ -156,6 +160,7 @@ export async function getSinglePromptSessionStudentDiscussion(promptId: string) 
 // Get single prompt session with responses and student data for SinglePromptSession Page
 export async function getSinglePromptSessionTeacherDashboard(sessionId: string) {
     try {
+        await requireAuth();
         const promptSession = await prisma.promptSession.findUnique({
             where: { id: sessionId },
             select: {
@@ -232,6 +237,7 @@ export async function getSinglePromptSessionTeacherDashboard(sessionId: string) 
 // Delete Prompt
 export async function deletePromptSession(prevState: unknown, formData: FormData) {
     try {
+        await requireAuth();
         const promptId = formData.get('promptId') as string
 
         await prisma.promptSession.delete({
@@ -253,6 +259,7 @@ export async function deletePromptSession(prevState: unknown, formData: FormData
 // Toggle Blog Status
 export async function toggleBlogStatus(prevState: unknown, formData: FormData) {
     try {
+        await requireAuth();
         const promptStatus = formData.get('promptStatus') as string
         const promptId = formData.get('promptId') as string
 
@@ -278,6 +285,7 @@ export async function toggleBlogStatus(prevState: unknown, formData: FormData) {
 // Toggle Blog Status
 export async function togglePublicPrivateStatus(prevState: unknown, formData: FormData) {
     try {
+        await requireAuth();
         const promptStatus = formData.get('promptStatus') as string
         const promptId = formData.get('promptId') as string
 
@@ -304,6 +312,7 @@ export async function togglePublicPrivateStatus(prevState: unknown, formData: Fo
 // Get prompts based on filtered options
 export async function getFilteredPromptSessions(filterOptions: SearchOptions) {
     try {
+        await requireAuth();
         const allPrompts = await prisma.promptSession.findMany({
             where: {
                 // 1️ Filter by classroom if specified

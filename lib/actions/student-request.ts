@@ -4,9 +4,14 @@ import { decryptText, encryptText } from "../utils"
 import { Question } from "@/types"
 import { Prisma, PromptType, StudentRequestStatus, StudentRequestType } from "@prisma/client"
 import { auth } from "@/auth"
+import { requireAuth } from "./authorization.action"
 
 export async function createStudentRequest(studentId: string, teacherId: string, text: string, type: string, classId: string) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== studentId) {
+            throw new Error("Forbidden");
+        }
         // get student iv to encrypt the text
         let userText: string = ''
         if (type === 'USERNAME') {
@@ -54,6 +59,10 @@ export async function createStudentRequest(studentId: string, teacherId: string,
 // These requests are for the teacher to see
 export async function getTeacherRequests(teacherId: string, classId: string) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error("Forbidden");
+        }
         const teacherRequests = await prisma.studentRequest.findMany({
             where: {
                 teacherId,
@@ -108,9 +117,9 @@ export async function getTeacherRequests(teacherId: string, classId: string) {
 // This is for the students to see which requests they have made and their status
 export async function getStudentRequests(studentId: string) {
     try {
-        const session = await auth()
-        if (!session) {
-            throw new Error("Unauthorized")
+        const session = await requireAuth();
+        if (session?.user?.id !== studentId) {
+            throw new Error("Forbidden");
         }
         const studentRequests = await prisma.studentRequest.findMany({
             where: { studentId },
@@ -131,6 +140,10 @@ export async function getStudentRequests(studentId: string) {
 // This is for the teacher to get notifications if there are requests, work as notifications
 export async function getStudentRequestCount(teacherId: string, classId: string) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error("Forbidden");
+        }
         const count = await prisma.studentRequest.count({
             where: { teacherId, status: StudentRequestStatus.PENDING, classId },
         });
@@ -151,6 +164,10 @@ export async function getStudentRequestCount(teacherId: string, classId: string)
 // This is for the students to see which requests they have made and their status
 export async function markAllRequestsAsViewed(teacherId: string, classId: string) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error("Forbidden");
+        }
         const count = await prisma.studentRequest.updateMany({
             where: { teacherId, classId },
             data: {
@@ -173,6 +190,7 @@ export async function markAllRequestsAsViewed(teacherId: string, classId: string
 // This is for the students to see which requests they have made and their status
 export async function approveUsernameChange(studentId: string, username: string, responseId: string) {
     try {
+        await requireAuth();
         // Update the user with the new encrypted username
         await prisma.user.update({
             where: { id: studentId },
@@ -210,6 +228,10 @@ export async function approveUsernameChange(studentId: string, username: string,
 // This is for the students to see which requests they have made and their status
 export async function approveNewPrompt(teacherId: string, requestText: string, responseId: string) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error("Forbidden");
+        }
         // build up the questions for the prompt Session
         const questions: Question[] = [];
         // user only provides the initial question
@@ -258,6 +280,7 @@ export async function approveNewPrompt(teacherId: string, requestText: string, r
 // This is for the students to see which requests they have made and their status
 export async function declineStudentRequest(responseId: string) {
     try {
+        await requireAuth();
         // change the status of the request
         // await prisma.studentRequest.update({
         //     where: { id: responseId },

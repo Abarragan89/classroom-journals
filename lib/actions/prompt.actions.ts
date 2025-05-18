@@ -3,6 +3,7 @@ import { prisma } from "@/db/prisma";
 import { promptSchema } from "../validators";
 import { SearchOptions, Question, Prompt } from "@/types";
 import { ClassUserRole, Prisma, PromptSessionStatus, PromptType, ResponseStatus } from '@prisma/client';
+import { requireAuth } from "./authorization.action";
 
 // Create new prompt 
 export async function createNewPrompt(prevState: unknown, formData: FormData) {
@@ -11,6 +12,10 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         const teacherId = formData.get('teacherId')
         if (typeof teacherId !== 'string') {
             throw new Error('Missing teacher ID');
+        }
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
         }
 
         // make arrays for questions
@@ -204,6 +209,10 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
         if (typeof teacherId !== 'string') {
             throw new Error('Missing teacher ID');
         }
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
 
         const questions: Question[] = [];
         const classesAssignTo: string[] = []
@@ -359,6 +368,10 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
 // Get all prompts of Teacher
 export async function getAllTeacherPrompts(teacherId: string) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
         const [totalCount, paginatedPrompts] = await Promise.all([
             prisma.prompt.count({ where: { teacherId } }), // Get total count
             prisma.prompt.findMany({
@@ -401,6 +414,8 @@ export async function getAllTeacherPrompts(teacherId: string) {
 // Get a single prompt based on Id
 export async function getSinglePrompt(promptId: string) {
     try {
+        await requireAuth();
+
         const prompt = await prisma.prompt.findUnique({
             where: { id: promptId },
             include: {
@@ -440,6 +455,7 @@ export async function getSinglePrompt(promptId: string) {
 // Get prompts based on filtered options
 export async function getFilterPrompts(filterOptions: SearchOptions) {
     try {
+        await requireAuth();
         const allPrompts = await prisma.prompt.findMany({
             where: {
                 // 1️ Filter by classroom if specified
@@ -496,6 +512,10 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
     try {
         const teacherId = formData.get('teacherId') as string;
 
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
         // Check subscription and limits
         const promptSessionCount = await prisma.promptSession.count({
             where: {
@@ -644,6 +664,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
 // Delete Prompt
 export async function deletePrompt(prevState: unknown, formData: FormData) {
     try {
+        await requireAuth();
         const promptId = formData.get('promptId') as string
 
         await prisma.prompt.delete({

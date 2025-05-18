@@ -7,10 +7,15 @@ import { GoogleProfile } from "next-auth/providers/google";
 import { encryptText } from "../utils";
 import crypto from 'crypto';
 import { ClassUserRole, TeacherAccountType } from "@prisma/client";
+import { requireAuth } from "./authorization.action";
 
 
 // Get all Active google classroom classes that teacher is owner
 export async function getTeacherGoogleClassrooms(googleProviderId: string) {
+    const session = await requireAuth();
+    if (session?.user?.id !== googleProviderId) {
+        throw new Error('Forbidden');
+    }
     const accessToken = await getValidAccessToken()
     try {
         const res = await fetch(
@@ -39,7 +44,10 @@ export async function getTeacherGoogleClassrooms(googleProviderId: string) {
 
 // create class with google classroom roster
 export async function createClassroomWithGoogle(classroom: GoogleClassroom, teacherId: string) {
-
+    const session = await requireAuth();
+    if (session?.user?.id !== teacherId) {
+        throw new Error('Forbidden');
+    }
     try {
         const accessToken = await getValidAccessToken()
         const res = await fetch(
@@ -158,6 +166,10 @@ export async function createClassroomWithGoogle(classroom: GoogleClassroom, teac
 // Add to Roster from google classroom
 export async function populateStudentRosterFromGoogle(classroom: GoogleClassroom, teacherId: string, classId: string) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
         const accessToken = await getValidAccessToken()
         const res = await fetch(
             `https://classroom.googleapis.com/v1/courses/${classroom.id}/students`,

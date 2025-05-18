@@ -1,10 +1,15 @@
 "use server";
 import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
+import { requireAuth } from "./authorization.action";
 
 // Update Word per minute score
 export async function updateUserWpm(userId: string, wpm: number) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== userId) {
+            throw new Error("Forbidden");
+        }
         await prisma.user.update({
             where: { id: userId },
             data: {
@@ -27,6 +32,10 @@ export async function updateUserWpm(userId: string, wpm: number) {
 //  Get user word per minute score
 export async function getUserWPM(userId: string) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== userId) {
+            throw new Error("Forbidden");
+        }
         const userData = await prisma.user.findUnique({
             where: { id: userId },
             select: {
@@ -50,6 +59,7 @@ export async function getUserWPM(userId: string) {
 //  Get top 10 wpm scores in class 
 export async function getWPMClassHighScores(classId: string) {
     try {
+        await requireAuth();
         const top10Typers = await prisma.classUser.findMany({
             where: { classId: classId },
             orderBy: {

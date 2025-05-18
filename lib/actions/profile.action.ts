@@ -2,10 +2,15 @@
 import { prisma } from "@/db/prisma";
 import { decryptText, encryptText } from "../utils";
 import { ClassUserRole, TeacherAccountType } from "@prisma/client";
+import { requireAuth } from "./authorization.action";
 
 // This is for the students to see which requests they have made and their status
 export async function getTeacherSettingData(teacherId: string, classId: string) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
         const [teacherData, studentIdsArr, classInfo] = await Promise.all([
             prisma.user.findUnique({
                 where: { id: teacherId },
@@ -87,6 +92,10 @@ export async function getTeacherSettingData(teacherId: string, classId: string) 
 // Determine subscription allowance for adding prompts and classes
 export async function determineSubscriptionAllowance(teacherId: string) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
         // get teacher data to determine subscription status
         const teacherInfo = await prisma.user.findUnique({
             where: { id: teacherId },
@@ -103,7 +112,7 @@ export async function determineSubscriptionAllowance(teacherId: string) {
 
         // Determine if subscription is expired or not to render correc tUI
         const today = new Date();
-        const isSubscriptionActive = teacherInfo?.subscriptionExpires ? teacherInfo?.subscriptionExpires > today : false;        
+        const isSubscriptionActive = teacherInfo?.subscriptionExpires ? teacherInfo?.subscriptionExpires > today : false;
         const totalClasses = teacherInfo?._count.classes;
         const isPremiumTeacher = isSubscriptionActive && teacherInfo?.accountType === TeacherAccountType.PREMIUM
         const isAllowedToMakeNewClass = isSubscriptionActive && (totalClasses ?? 0) < 6 || (totalClasses ?? 0) < 1;
@@ -124,7 +133,10 @@ export async function determineSubscriptionAllowance(teacherId: string) {
 // update a teacher's username
 export async function updateUsername(username: string, teacherId: string) {
     try {
-
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
         // get the iv to update the name
         const teacher = await prisma.user.findUnique({
             where: { id: teacherId },
@@ -161,6 +173,10 @@ export async function updateUsername(username: string, teacherId: string) {
 
 export async function getTeacherAccountData(teacherId: string) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
         const teacherData = await prisma.user.findUnique({
             where: { id: teacherId },
             select: {
@@ -205,6 +221,10 @@ export async function getTeacherAccountData(teacherId: string) {
 }
 export async function deleteTeacherAccount(teacherId: string) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
         // 1. Find all classes the teacher owns
         const teacherClasses = await prisma.classUser.findMany({
             where: {

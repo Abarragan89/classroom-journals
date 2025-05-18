@@ -14,7 +14,10 @@ export async function createStudentResponse(
     questions: ResponseData[],
 ) {
     try {
-
+        const session = await requireAuth();
+        if (session?.user?.id !== studentId) {
+            throw new Error("Forbidden");
+        }
         // Check to see if submission from student ahs already been made. 
         const existingResponses = await prisma.promptSession.findUnique({
             where: { id: promptSessionId },
@@ -74,6 +77,7 @@ export async function updateASingleResponse(
     gradeLevel?: string
 ) {
     try {
+        await requireAuth();
         // Grade it with AI Only if premium member
         if (promptType === 'ASSESSMENT' && isTeacherPremium && gradeLevel) {
             let { output_text: scores } = await gradeResponseWithAI(gradeLevel, responseData)
@@ -111,6 +115,7 @@ export async function updateASingleResponse(
 // update the responseData only on the student response
 export async function updateStudentResponse(responseData: ResponseData[], responseId: string) {
     try {
+        await requireAuth();
         await prisma.response.update({
             where: { id: responseId },
             data: {
@@ -131,6 +136,7 @@ export async function updateStudentResponse(responseData: ResponseData[], respon
 
 export async function submitStudentResponse(prevState: unknown, formData: FormData) {
     try {
+        await requireAuth()
         const responseId = formData.get('responseId') as string;
         const responseData = formData.get('responseData') as string;
         const promptType = formData.get('promptType') as string;
@@ -175,6 +181,7 @@ export async function submitStudentResponse(prevState: unknown, formData: FormDa
 
 export async function gradeStudentResponse(responseId: string, question: number, score: number) {
     try {
+        await requireAuth();
         // Fetch the current response
         const existingResponse = await prisma.response.findUnique({
             where: { id: responseId },
@@ -216,6 +223,7 @@ export async function gradeStudentResponse(responseId: string, question: number,
 // Get a single response with comments for blog Display
 export async function getSingleResponse(responseId: string) {
     try {
+        await requireAuth();
         if (!responseId) {
             return { success: false, message: "Response Id required." }
         }
@@ -339,6 +347,7 @@ export async function getSingleResponse(responseId: string) {
 // Get all responses user's names and score for combobox in single Response
 export async function getAllResponsesFromPompt(promptSessionId: string) {
     try {
+        await requireAuth();
         if (!promptSessionId) {
             return { success: false, message: "Response Id required." }
         }
@@ -407,6 +416,7 @@ export async function getAllResponsesFromPompt(promptSessionId: string) {
 
 export async function toggleResponseLike(responseId: string, userId: string) {
     try {
+        await requireAuth();
         // Start a transaction
         await prisma.$transaction(async (prisma) => {
             // Check if the user has already liked the comment
@@ -456,6 +466,7 @@ export async function toggleResponseLike(responseId: string, userId: string) {
 // Get All responses from a single student for 'My-Work'
 export async function getSingleStudentResponses(studentId: string) {
     try {
+        await requireAuth();
         const studentResponses = await prisma.response.findMany({
             where: {
                 studentId
@@ -552,6 +563,7 @@ export async function getStudentResponsesDashboard(studentId: string) {
 // Filtered responses for student dashboard
 export async function getFilteredStudentResponses(filterOptions: SearchOptions) {
     try {
+        await requireAuth();
         const responses = await prisma.response.findMany({
             where: {
                 // Optional filter by prompt category
@@ -612,6 +624,7 @@ export async function getFilteredStudentResponses(filterOptions: SearchOptions) 
 // Get Single Response for sub
 export async function getSingleResponseForReview(responseId: string) {
     try {
+        await requireAuth();
         const studentResponse = await prisma.response.findUnique({
             where: { id: responseId },
             select: {
@@ -646,6 +659,7 @@ export async function getSingleResponseForReview(responseId: string) {
 // Get toggle return state of a single response
 export async function toggleReturnStateStatus(responseId: string, responseStatus: ResponseStatus) {
     try {
+        await requireAuth();
         await prisma.response.update({
             where: { id: responseId },
             data: {
@@ -668,6 +682,7 @@ export async function toggleReturnStateStatus(responseId: string, responseStatus
 // Get toggle return state of a single response
 export async function toggleHideShowGrades(promptSessionId: string, areGradesVisible: boolean) {
     try {
+        await requireAuth();
         await prisma.promptSession.update({
             where: { id: promptSessionId },
             data: {
@@ -690,6 +705,7 @@ export async function toggleHideShowGrades(promptSessionId: string, areGradesVis
 // Get toggle spell check for a single response
 export async function toggleSpellCheck(responseId: string, spellCheckEnabled: boolean) {
     try {
+        await requireAuth();
         await prisma.response.update({
             where: { id: responseId },
             data: {
@@ -712,6 +728,7 @@ export async function toggleSpellCheck(responseId: string, spellCheckEnabled: bo
 // Delete Response
 export async function deleteResponse(prevState: unknown, formData: FormData) {
     try {
+        await requireAuth();
         const responseId = formData.get('response-id') as string;
 
         if (!responseId) {

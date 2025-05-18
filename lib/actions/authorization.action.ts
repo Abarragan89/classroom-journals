@@ -3,10 +3,13 @@
 import { auth } from "@/auth"; // adjust if your auth import is different
 import { Session } from "@/types";
 
-const ALLOWED_ROLES = ["STUDENT", "TEACHER", "ADMIN"] as const;
 
 export async function requireAuth() {
+    const ALLOWED_ROLES = ["STUDENT", "TEACHER", "ADMIN"] as const;
+
     const session = await auth();
+
+    console.log('session ', session)
 
     if (!session || !session.user) {
         throw new Error("Unauthorized");

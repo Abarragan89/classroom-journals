@@ -2,6 +2,7 @@
 import { prisma } from "@/db/prisma"
 import { decryptText } from "../utils";
 import { ClassUserRole } from "@prisma/client";
+import { requireAuth } from "./authorization.action";
 
 // add a comment to Response
 export async function addComment(
@@ -12,6 +13,10 @@ export async function addComment(
     classroomId: string
 ) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== userId) {
+            throw new Error('Forbidden')
+        }
         if (!responseId || !text || !userId || !sessionId) {
             return { success: false, message: "Missing required fields" };
         }
@@ -19,7 +24,7 @@ export async function addComment(
         const result = await prisma.$transaction(async (prisma) => {
             // Get teacher Id
             const teacherData = await prisma.classUser.findFirst({
-                where: { classId: classroomId, role: ClassUserRole.TEACHER},
+                where: { classId: classroomId, role: ClassUserRole.TEACHER },
                 select: {
                     user: {
                         select: {
@@ -144,6 +149,10 @@ export async function replyComment(
     classroomId: string
 ) {
     try {
+        const session = await requireAuth();
+        if (session?.user?.id !== userId) {
+            throw new Error('Forbidden')
+        }
         if (!parentId || !text || !userId || !responseId) {
             return { success: false, message: "Missing required fields" };
         }
@@ -283,7 +292,10 @@ export async function replyComment(
 
 export async function toggleCommentLike(commentId: string, userId: string) {
     try {
-
+        const session = await requireAuth();
+        if (session?.user?.id !== userId) {
+            throw new Error('Forbidden')
+        }
         await prisma.$transaction(async (prisma) => {
             // Check if the user has already liked the comment
             const existingLike = await prisma.commentLike.findUnique({
@@ -332,6 +344,7 @@ export async function toggleCommentLike(commentId: string, userId: string) {
 // Delete a comment
 export async function deleteComment(commentId: string) {
     try {
+        await requireAuth();
         if (!commentId) {
             throw new Error('comment id is required')
         }
