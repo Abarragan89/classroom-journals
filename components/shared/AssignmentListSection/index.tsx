@@ -30,7 +30,7 @@ export default function AssignmentListSection({
         queryKey: ['assignmentListDash', classId],
         queryFn: async () => {
             const classdata = await getAllSessionsInClass(classId) as unknown as { prompts: PromptSession[], totalCount: number }
-            setFetchedPrompts(classdata?.prompts)
+            setFetchedPrompts(classdata?.prompts || [])
             return classdata.prompts
         },
         initialData: initialPrompts,
@@ -82,16 +82,14 @@ export default function AssignmentListSection({
         value: category.id,
         label: category.name
     }))
-
+    console.log('fetched prompts ', fetchedPrompts)
 
     return (
         <>
             < div className="flex flex-col-reverse items-end lg:flex-row lg:items-start justify-between">
-                {fetchedPrompts?.length <= 0 ? (
-                    <p className="flex-1 text-center">No Assignments</p>
-                ) : (
+                {fetchedPrompts && fetchedPrompts?.length > 0 ? (
                     <div className="flex-2 w-full lg:mr-10">
-                        {fetchedPrompts.map((prompt: PromptSession) => (
+                        {fetchedPrompts?.map((prompt: PromptSession) => (
                             <AssignmentListItem
                                 key={prompt.id}
                                 jotData={prompt}
@@ -107,6 +105,8 @@ export default function AssignmentListSection({
                             itemsPerPage={30}
                         />
                     </div>
+                ) : (
+                    <p className="flex-1 text-center">No Assignments</p>
                 )}
                 <div className="flex-1 sticky top-5 mb-5 w-full flex flex-wrap md:flex-col lg:flex-col items-stretch lg:min-w-[280px] gap-3">
                     {/* Search Bar (always full width) */}

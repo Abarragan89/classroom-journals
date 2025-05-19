@@ -55,6 +55,57 @@ export async function getAllSessionsInClass(classId: string) {
         return { success: false, message: 'Error creating prompt. Try again.' }
     }
 }
+// This gets all the sessions and student's score for scoresheet report
+export async function getAllSessionForScoresheet(classId: string) {
+    try {
+        await requireAuth();
+        const [totalCount, paginatedPrompts] = await Promise.all([
+            prisma.promptSession.count({ where: { classId } }),
+            prisma.promptSession.findMany({
+                where: { classId: classId },
+                orderBy: { createdAt: 'desc' },
+                select: {
+                    id: true,
+                    responses: {
+                        select: {
+                            id: true,
+                            studentId: true,
+                            completionStatus: true,
+                        }
+                    },
+                    isPublic: true,
+                    createdAt: true,
+                    promptType: true,
+                    title: true,
+                    status: true,
+                    questions: true,
+                    prompt: {
+                        select: {
+                            category: {
+                                select: {
+                                    name: true
+                                }
+                            }
+                        }
+                    }
+                },
+                take: 30
+            })
+
+        ])
+        return { totalCount, prompts: paginatedPrompts };
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log('Error creating new prompt:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+
+        return { success: false, message: 'Error creating prompt. Try again.' }
+    }
+}
 
 export async function getAllSessionsInClassForStudent(classId: string) {
     try {

@@ -31,8 +31,8 @@ export default function GoogleClassroomOptions({
             router.push(`/classroom/${classroomUrl}/${teacherId}`)
         } catch (error) {
             console.log('error creating classroom', error)
-        } finally {
             setIsLoading(false)
+        } finally {
         }
     }
 

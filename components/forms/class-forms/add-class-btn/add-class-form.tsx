@@ -34,6 +34,7 @@ export default function AddClassForm({
     updateGoogleClassrooms: (classes: GoogleClassroom[], isOpen: boolean) => void
 }) {
 
+
     const [state, action] = useActionState(createNewClass, {
         success: false,
         message: ''

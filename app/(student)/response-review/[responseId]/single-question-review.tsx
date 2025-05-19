@@ -1,13 +1,19 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
-import { ResponseData } from '@/types'
+import { BlogImage, ResponseData } from '@/types'
 import Editor from '@/components/shared/prompt-response-editor/editor'
 import { useState } from 'react'
 import { updateASingleResponse } from '@/lib/actions/response.action';
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import Link from 'next/link'
+import Image from 'next/image'
+import LoadingAnimation from '@/components/loading-animation'
+import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { getAllPhotos } from '@/lib/actions/s3-upload'
+import { ResponsiveDialog } from '@/components/responsive-dialog'
 
 export default function SingleQuestionReview({
     questions,
@@ -30,6 +36,11 @@ export default function SingleQuestionReview({
     const router = useRouter();
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoadingPhotos, setIsLoadingPhotos] = useState<boolean>(false)
+    const [allBlogPhotos, setAllBlogPhotos] = useState<BlogImage[] | null>(null)
+    const [openPhotoModal, setOpenPhotoModal] = useState<boolean>(false)
+    const [filteredBlogPhotos, setFilteredBlogPhotos] = useState<BlogImage[] | null>(null)
+
 
     async function updateResponsesHandler(responseData: ResponseData[]) {
         if (isLoading) return
@@ -48,6 +59,20 @@ export default function SingleQuestionReview({
         }
     }
 
+    async function fetchPhotos() {
+        if (allBlogPhotos !== null) return
+        try {
+            setIsLoadingPhotos(true)
+            const photos = await getAllPhotos() as BlogImage[]
+            setAllBlogPhotos(photos)
+            setFilteredBlogPhotos(photos)
+        } catch (error) {
+            console.log('error getting blog photos ', error)
+        } finally {
+            setIsLoadingPhotos(false)
+        }
+    }
+
     // Handle text change for a specific question
     const handleTextChange = (index: number, newAnswer: string) => {
         setAllQuestions(prevQuestions =>
@@ -57,7 +82,33 @@ export default function SingleQuestionReview({
         );
     };
 
-    const gradePercentage = questions?.[0].score !== undefined ? `${questions?.[0]?.score}%` : 'N/A'
+    function filterByTags(userText: string) {
+        // Sets user text to lower case and hypenates between multi words
+        setFilteredBlogPhotos(allBlogPhotos?.filter(img =>
+            img.tags.some(tag => tag.toLowerCase().includes(userText.toLowerCase().replace(/\s+/g, '-')))
+        ) ?? []
+        );
+    }
+
+    function filterByCategory(category: string) {
+        setFilteredBlogPhotos(allBlogPhotos?.filter(img => img.category === category) ?? [])
+    }
+
+    const photoCategories = [
+        { label: "Academics", value: "academics" },
+        { label: "Social Studies", value: "history" },
+        { label: "Family", value: "family" },
+        { label: "Nature", value: "nature" },
+        { label: "Science", value: "science" },
+        { label: "Art", value: "art" },
+        { label: "Emotions", value: "emotions" },
+        { label: "Career", value: "career" },
+        { label: "Health", value: "health" },
+        { label: "Holidays/Seasons", value: "seasons" },
+        { label: "Sports", value: "sports" },
+        { label: "Designs", value: "designs" },
+    ]
+    const gradePercentage = questions?.[0].score !== undefined ? `${questions?.[0]?.score}%` : 'N/A';
 
     return (
         <div className="w-full relative">
@@ -109,10 +160,80 @@ export default function SingleQuestionReview({
             ))}
             {isSubmittable &&
                 <div className="flex-center">
-                    <Button
-                        onClick={() => updateResponsesHandler(allQuestions)}
-                        className="mr-0 block mt-5 mb-10"
-                    >Submit</Button>
+                    <ResponsiveDialog
+                        isOpen={openPhotoModal}
+                        setIsOpen={setOpenPhotoModal}
+                        title="Photo Library"
+                    >
+                        <>
+                            {isLoadingPhotos ? (
+                                <div className="flex-center h-[355px]">
+                                    <LoadingAnimation />
+                                </div>
+                            ) : (
+                                <>
+                                    <Input
+                                        type="text"
+                                        placeholder="Search images..."
+                                        onChange={(e) => filterByTags(e.target.value)}
+                                        className="mt-3"
+
+                                    />
+                                    <Select name="category" onValueChange={(e) => filterByCategory(e)}>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Select a category" />
+                                        </SelectTrigger>
+                                        <SelectContent className="w-full">
+                                            <SelectGroup>
+                                                <SelectLabel>Category</SelectLabel>
+                                                {photoCategories.map((category) => (
+                                                    <SelectItem key={category.value} value={category.value}>{category.label}</SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                    <div className="h-[355px] mx-auto overflow-y-auto flex-center flex-wrap gap-3 custom-scrollbar py-5">
+                                        {filteredBlogPhotos && filteredBlogPhotos.map((img) => (
+                                            <Image
+                                                key={img.id}
+                                                src={img.url}
+                                                alt="blog cover photo"
+                                                width={1920}
+                                                height={1080}
+                                                onClick={() => {
+                                                    setAllQuestions(prev => {
+                                                        const updated = [...prev];
+                                                        updated[2] = { ...updated[2], answer: img.url };
+                                                        return updated;
+                                                    });
+                                                    setOpenPhotoModal(false)
+                                                }}
+                                                className="hover:cursor-pointer rounded-sm hover:scale-105 max-w-[195px]"
+                                            />
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+                        </>
+                    </ResponsiveDialog>
+                    <div className='flex flex-col justify-center items-center'>
+                        <Image
+                            src={allQuestions[2]?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
+                            alt="blog cover photo"
+                            width={1920}
+                            height={1080}
+                            priority
+                            className="rounded-md max-w-md"
+                        />
+                        <Button className=" mt-4 mb-8" onClick={() => { setOpenPhotoModal(true); fetchPhotos() }}>Change Photo</Button>
+                        <Button
+                            onClick={() => updateResponsesHandler(allQuestions)}
+                            className="mr-0 block mt-5 mb-10"
+                        >
+                            Submit
+                        </Button>
+                    </div>
+
                 </div>
             }
         </div>
