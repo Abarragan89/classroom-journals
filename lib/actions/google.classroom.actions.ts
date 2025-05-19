@@ -162,7 +162,6 @@ export async function createClassroomWithGoogle(classroom: GoogleClassroom, teac
     }
 }
 
-
 // Add to Roster from google classroom
 export async function populateStudentRosterFromGoogle(classroom: GoogleClassroom, teacherId: string, classId: string) {
     try {
