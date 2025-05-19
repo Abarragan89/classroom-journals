@@ -92,10 +92,7 @@ export async function getTeacherSettingData(teacherId: string, classId: string) 
 // Determine subscription allowance for adding prompts and classes
 export async function determineSubscriptionAllowance(teacherId: string) {
     try {
-        const session = await requireAuth();
-        if (session?.user?.id !== teacherId) {
-            throw new Error('Forbidden');
-        }
+        await requireAuth();
         // get teacher data to determine subscription status
         const teacherInfo = await prisma.user.findUnique({
             where: { id: teacherId },

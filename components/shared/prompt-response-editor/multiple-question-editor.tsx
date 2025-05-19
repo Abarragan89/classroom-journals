@@ -214,7 +214,7 @@ export default function MultipleQuestionEditor({
                             <input
                                 id="grade-level"
                                 name="grade-level"
-                                value={gradeLevel}
+                                value={gradeLevel === null ? '' : gradeLevel}
                                 hidden
                                 readOnly
                             />
