@@ -18,7 +18,6 @@ export default async function StudentGrades() {
     console.log('classroomId', classroomId)
 
 
-
     return (
         <>
             <Header session={session} studentId={studentId} />
