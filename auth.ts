@@ -155,7 +155,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 if (user) {
                     if (account) {
                         // pass the accessToken and provierAccount ID to the token to pass to the session
-                        token.googleProviderID = account?.providerAccountId;
+                        token.googleProviderID = account?.provider === 'google' ? account?.providerAccountId : '';
                         token.accessToken = account.access_token;
                         token.refreshToken = account.refresh_token; // Store refresh token
                         token.accessTokenExpires = Date.now() + account.expires_at! * 1000; // used to create a new token

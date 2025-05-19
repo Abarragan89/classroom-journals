@@ -13,7 +13,6 @@ import { requireAuth } from "./authorization.action";
 // Get all Active google classroom classes that teacher is owner
 export async function getTeacherGoogleClassrooms(googleProviderId: string) {
     const session = await requireAuth();
-    console.log('session', session)
     if (session?.googleProviderId !== googleProviderId) {
         throw new Error('Forbidden');
     }
