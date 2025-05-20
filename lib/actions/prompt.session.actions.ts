@@ -4,6 +4,7 @@ import { decryptText } from "../utils";
 import { SearchOptions } from "@/types";
 import { PromptSessionStatus, ResponseStatus } from "@prisma/client";
 import { requireAuth } from "./authorization.action";
+import ScoreSheet from "@/app/(classroom)/classroom/[classId]/[teacherId]/scoresheet/page";
 
 export async function getAllSessionsInClass(classId: string) {
     try {
@@ -59,41 +60,43 @@ export async function getAllSessionsInClass(classId: string) {
 export async function getAllSessionForScoresheet(classId: string) {
     try {
         await requireAuth();
-        const [totalCount, paginatedPrompts] = await Promise.all([
-            prisma.promptSession.count({ where: { classId } }),
-            prisma.promptSession.findMany({
-                where: { classId: classId },
-                orderBy: { createdAt: 'desc' },
-                select: {
-                    id: true,
-                    responses: {
-                        select: {
-                            id: true,
-                            studentId: true,
-                            completionStatus: true,
-                        }
-                    },
-                    isPublic: true,
-                    createdAt: true,
-                    promptType: true,
-                    title: true,
-                    status: true,
-                    questions: true,
-                    prompt: {
-                        select: {
-                            category: {
-                                select: {
-                                    name: true
-                                }
-                            }
-                        }
-                    }
-                },
-                take: 30
-            })
 
-        ])
-        return { totalCount, prompts: paginatedPrompts };
+        const classroomScores = await prisma.classroom.findUnique({
+            where: { id: classId }, // Use the provided classId
+            include: {
+                users: {
+                    where: { role: 'STUDENT' },
+                    include: {
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                iv: true,
+                                responses: {
+                                    where: {
+                                        promptSession: {
+                                            classId: classId,
+                                        },
+                                    },
+                                    include: {
+                                        promptSession: {
+                                            select: {
+                                                id: true,
+                                                title: true,
+                                                assignedAt: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+
+        return classroomScores
 
     } catch (error) {
         if (error instanceof Error) {
