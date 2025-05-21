@@ -584,7 +584,7 @@ export async function getFilteredStudentResponses(filterOptions: SearchOptions) 
                 id: true,
                 studentId: true,
                 submittedAt: true,
-
+                createdAt: true,
                 promptSession: {
                     select: {
                         id: true,
