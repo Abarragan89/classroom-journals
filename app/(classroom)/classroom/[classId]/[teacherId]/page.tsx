@@ -14,7 +14,7 @@ export default async function Classroom({
 }) {
     const { classId, teacherId } = await params;
 
-    const allPromptSessions = await getAllSessionsInClass(classId) as unknown as { prompts: PromptSession[], totalCount: number }
+    const allPromptSessions = await getAllSessionsInClass(classId, teacherId) as unknown as { prompts: PromptSession[], totalCount: number }
     let allPromptCategories = await getAllPromptCategories(teacherId) as unknown as PromptCategory[]
     const { count: studentCount } = await getStudentCountByClassId(classId)
     allPromptCategories = [{ id: '', name: 'All Categories...' }, ...allPromptCategories]

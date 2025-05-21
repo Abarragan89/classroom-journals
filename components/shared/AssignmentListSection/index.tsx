@@ -29,7 +29,7 @@ export default function AssignmentListSection({
     const { error } = useQuery({
         queryKey: ['assignmentListDash', classId],
         queryFn: async () => {
-            const classdata = await getAllSessionsInClass(classId) as unknown as { prompts: PromptSession[], totalCount: number }
+            const classdata = await getAllSessionsInClass(classId, teacherId) as unknown as { prompts: PromptSession[], totalCount: number }
             setFetchedPrompts(classdata?.prompts || [])
             return classdata.prompts
         },
@@ -50,7 +50,7 @@ export default function AssignmentListSection({
     });
 
     async function getFilteredSearch(filterOptions: SearchOptions) {
-        const filterPrompts = await getFilteredPromptSessions(filterOptions, classId) as unknown as PromptSession[]
+        const filterPrompts = await getFilteredPromptSessions(filterOptions, classId, teacherId) as unknown as PromptSession[]
         setFetchedPrompts(filterPrompts)
     }
 
