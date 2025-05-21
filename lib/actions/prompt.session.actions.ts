@@ -363,11 +363,12 @@ export async function togglePublicPrivateStatus(prevState: unknown, formData: Fo
 
 // Filter through promptsessions on classroom homepage
 // Get prompts based on filtered options
-export async function getFilteredPromptSessions(filterOptions: SearchOptions) {
+export async function getFilteredPromptSessions(filterOptions: SearchOptions, classId:string) {
     try {
         await requireAuth();
         const allPrompts = await prisma.promptSession.findMany({
             where: {
+                classId,
                 // 1️ Filter by classroom if specified
                 prompt: {
                     categoryId: filterOptions.category

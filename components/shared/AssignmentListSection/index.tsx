@@ -50,7 +50,7 @@ export default function AssignmentListSection({
     });
 
     async function getFilteredSearch(filterOptions: SearchOptions) {
-        const filterPrompts = await getFilteredPromptSessions(filterOptions) as unknown as PromptSession[]
+        const filterPrompts = await getFilteredPromptSessions(filterOptions, classId) as unknown as PromptSession[]
         setFetchedPrompts(filterPrompts)
     }
 

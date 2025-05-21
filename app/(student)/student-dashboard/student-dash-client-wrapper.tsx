@@ -145,6 +145,7 @@ export default function StudentDashClientWrapper({
           initialPrompts={allResponseData?.responses}
           promptCountTotal={allResponseData?.totalCount}
           categories={allCategories}
+          studentId={studentId}
         />
       </section>
     </>
