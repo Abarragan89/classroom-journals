@@ -24,6 +24,7 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
         }
 
         const session = await requireAuth();
+        
         if (session?.user?.id !== teacherId) {
             throw new Error("Forbidden");
         }

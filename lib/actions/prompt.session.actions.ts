@@ -5,9 +5,13 @@ import { SearchOptions } from "@/types";
 import { PromptSessionStatus, ResponseStatus } from "@prisma/client";
 import { requireAuth } from "./authorization.action";
 
-export async function getAllSessionsInClass(classId: string) {
+export async function getAllSessionsInClass(classId: string, teacherId: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
+        
         const [totalCount, paginatedPrompts] = await Promise.all([
             prisma.promptSession.count({ where: { classId } }),
             prisma.promptSession.findMany({
@@ -363,9 +367,12 @@ export async function togglePublicPrivateStatus(prevState: unknown, formData: Fo
 
 // Filter through promptsessions on classroom homepage
 // Get prompts based on filtered options
-export async function getFilteredPromptSessions(filterOptions: SearchOptions, classId:string) {
+export async function getFilteredPromptSessions(filterOptions: SearchOptions, classId: string, teacherId: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
         const allPrompts = await prisma.promptSession.findMany({
             where: {
                 classId,
