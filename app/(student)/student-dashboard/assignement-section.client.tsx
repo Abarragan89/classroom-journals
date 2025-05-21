@@ -12,12 +12,14 @@ interface Props {
     initialPrompts: Response[];
     promptCountTotal: number
     categories: PromptCategory[],
+    studentId: string
 
 }
 export default function AssignmentSectionClient({
     initialPrompts,
     promptCountTotal,
     categories,
+    studentId
 }: Props) {
 
     const [fetchedPrompts, setFetchedPrompts] = useState<Response[]>(initialPrompts)
@@ -32,7 +34,7 @@ export default function AssignmentSectionClient({
     });
 
     async function getFilteredSearch(filterOptions: SearchOptions) {
-        const filterPrompts = await getFilteredStudentResponses(filterOptions) as unknown as Response[];
+        const filterPrompts = await getFilteredStudentResponses(filterOptions, studentId) as unknown as Response[];
         setFetchedPrompts(filterPrompts)
     }
 

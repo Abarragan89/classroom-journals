@@ -189,6 +189,7 @@ model CommentLike {
 enum PromptType {
   BLOG
   ASSESSMENT
+  THREAD
 }
 
 model Prompt {

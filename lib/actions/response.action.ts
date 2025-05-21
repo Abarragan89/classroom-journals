@@ -561,11 +561,12 @@ export async function getStudentResponsesDashboard(studentId: string) {
 }
 
 // Filtered responses for student dashboard
-export async function getFilteredStudentResponses(filterOptions: SearchOptions) {
+export async function getFilteredStudentResponses(filterOptions: SearchOptions, studentId: string) {
     try {
         await requireAuth();
         const responses = await prisma.response.findMany({
             where: {
+                studentId,
                 // Optional filter by prompt category
                 promptSession: {
                     prompt: {
