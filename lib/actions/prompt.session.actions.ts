@@ -4,7 +4,6 @@ import { decryptText } from "../utils";
 import { SearchOptions } from "@/types";
 import { PromptSessionStatus, ResponseStatus } from "@prisma/client";
 import { requireAuth } from "./authorization.action";
-import ScoreSheet from "@/app/(classroom)/classroom/[classId]/[teacherId]/scoresheet/page";
 
 export async function getAllSessionsInClass(classId: string) {
     try {
