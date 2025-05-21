@@ -27,8 +27,9 @@ export default function TypingTest({
     const [input, setInput] = useState<string>('');
     // Ref is for data handler in the backend
     const inputRefState = useRef<string>(input);
-    const [finished, setFinished] = useState(false);
-    const [timer, setTimer] = useState(60);
+    const [finished, setFinished] = useState<boolean>(false);
+    const [needsReset, setNeedsReset] = useState<boolean>()
+    const [timer, setTimer] = useState(2);
     const [showConfetti, setShowConfetti] = useState<boolean>(false)
     const [currentHighScore, setCurrentHighScore] = useState<number>(userHighScore)
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -63,6 +64,7 @@ export default function TypingTest({
                     if (prev <= 1) {
                         clearInterval(intervalRef.current!);
                         setFinished(true);
+                        setNeedsReset(true)
                         return 0;
                     }
                     return prev - 1;
@@ -121,8 +123,8 @@ export default function TypingTest({
     function resetHandler(): void {
         setStarted(false)
         setInput('')
-        setFinished(false)
-        setShowConfetti(false)
+        setRandomSampleText('')
+        setNeedsReset(false)
         setTimer(60)
     }
 
@@ -206,7 +208,13 @@ export default function TypingTest({
                 <Textarea
                     ref={inputRef}
                     value={input}
+                    tabIndex={0}
                     onChange={(e) => handleChange(e)}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+                        if (e.key === 'Tab') {
+                            e.preventDefault(); // Prevent tabbing out
+                        }
+                    }}
                     className="opacity-0 absolute -top-[9999px] left-0"
                     disabled={finished}
                     placeholder="Start typing here..."
@@ -214,7 +222,7 @@ export default function TypingTest({
                 />
 
                 <div className='flex justify-between items-baseline'>
-                    {started && !finished && (
+                    {started && !finished && !needsReset && (
                         <div className="text-lg font-semibold">
                             Time left: {timer}s
                         </div>
@@ -227,7 +235,7 @@ export default function TypingTest({
                             Start Typing Test
                         </Button>
                     )}
-                    {finished && (
+                    {needsReset && (
                         <Button
                             variant='secondary'
                             className='mb-3'
