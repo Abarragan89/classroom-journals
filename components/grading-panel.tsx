@@ -27,7 +27,6 @@ export default function GradingPanel({
 
     async function updateResponseScore(score: number) {
         try {
-            console.log('teacher id asd;lkja;sdflk', teacherId)
             setIsGrading(true)
             await gradeStudentResponse(responseId, questionNumber, score, teacherId)
             if (updateScoreUIHandler) {
