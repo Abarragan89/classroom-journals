@@ -82,7 +82,6 @@ export default function AssignmentListSection({
         value: category.id,
         label: category.name
     }))
-    console.log('fetched prompts ', fetchedPrompts)
 
     return (
         <>

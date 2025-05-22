@@ -195,7 +195,6 @@ export async function submitStudentResponse(prevState: unknown, formData: FormDa
 
 export async function gradeStudentResponse(responseId: string, question: number, score: number, teacherId: string) {
     try {
-        console.log('teacher id ', teacherId)
         const session = await requireAuth();
         if (session?.user?.id !== teacherId) {
             throw new Error("Forbidden");
