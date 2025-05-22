@@ -17,7 +17,7 @@ export default function QuipsClientWraper() {
             >
                 Make
             </ResponsiveDialog>
-            <Button className="absolute top-[40px] right-0">
+            <Button onClick={() => setIsModalOpen(true)} className="absolute top-[40px] right-0">
                 <Plus /> New Quip
             </Button>
         </>

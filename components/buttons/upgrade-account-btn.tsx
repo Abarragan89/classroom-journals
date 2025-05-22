@@ -11,6 +11,7 @@ export default function UpgradeAccountBtn({
     const { isPending, error, data } = useQuery({
         queryKey: ['teacher-sub-status', teacherId],
         queryFn: () => determineSubscriptionAllowance(teacherId),
+        refetchOnReconnect: false,
     })
 
     if (isPending) return

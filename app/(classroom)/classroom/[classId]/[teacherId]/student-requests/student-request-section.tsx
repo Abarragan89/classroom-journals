@@ -29,7 +29,8 @@ export default function StudentRequestSection({
             setAllRequests(studentRequestData)
             return studentRequestData
         },
-        initialData: studentRequests
+        initialData: studentRequests,
+        refetchOnReconnect: false,
     })
 
     if (error) {
