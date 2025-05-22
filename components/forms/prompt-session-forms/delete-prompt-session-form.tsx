@@ -15,7 +15,7 @@ export default function DeletePromptSessionForm({
 }) {
 
     const router = useRouter();
-    const { classId, teacherId} = useParams();
+    const { classId, teacherId } = useParams();
 
     const [state, action] = useActionState(deletePromptSession, {
         success: false,
@@ -57,6 +57,12 @@ export default function DeletePromptSessionForm({
                     defaultValue={promptSessionId}
                     id="promptId"
                     name="promptId"
+                />
+                <input
+                    hidden
+                    defaultValue={teacherId}
+                    id="teacherId"
+                    name="teacherId"
                 />
             </div>
             <DeleteButton />

@@ -18,7 +18,8 @@ export default function MultiQuestionReview({
     showGrades,
     isTeacherPremium,
     gradeLevel,
-    spellCheckEnabled
+    spellCheckEnabled,
+    studentId
 }: {
     allQuestions: ResponseData[],
     setAllQuestions: React.Dispatch<React.SetStateAction<ResponseData[]>>
@@ -29,7 +30,8 @@ export default function MultiQuestionReview({
     showGrades: boolean,
     isTeacherPremium: boolean,
     gradeLevel: string,
-    spellCheckEnabled: boolean
+    spellCheckEnabled: boolean,
+    studentId: string
 }) {
 
     const router = useRouter();
@@ -42,12 +44,13 @@ export default function MultiQuestionReview({
             setIsLoading(true)
             const submittedAt = new Date()
             const updatedResponse = await updateASingleResponse(
+                studentId,
                 responseId,
                 responseData,
                 submittedAt,
                 'ASSESSMENT',
                 isTeacherPremium,
-                gradeLevel
+                gradeLevel,
             )
             if (updatedResponse.success) {
                 router.push('/my-work')

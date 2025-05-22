@@ -29,7 +29,7 @@ export default function TypingTest({
     const inputRefState = useRef<string>(input);
     const [finished, setFinished] = useState<boolean>(false);
     const [needsReset, setNeedsReset] = useState<boolean>()
-    const [timer, setTimer] = useState(2);
+    const [timer, setTimer] = useState(60);
     const [showConfetti, setShowConfetti] = useState<boolean>(false)
     const [currentHighScore, setCurrentHighScore] = useState<number>(userHighScore)
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -41,7 +41,7 @@ export default function TypingTest({
 
     const { data: classScores, refetch } = useQuery({
         queryKey: ['getClassHighScores', classId],
-        queryFn: () => getWPMClassHighScores(classId) as unknown as User[],
+        queryFn: () => getWPMClassHighScores(classId, studentId) as unknown as User[],
         initialData: classHighScores,
     })
 

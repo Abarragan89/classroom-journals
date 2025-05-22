@@ -41,7 +41,7 @@ export default function StudentRequestSection({
     async function approveRequest(studentId: string, requestText: string, responseId: string, requestType: string) {
         try {
             if (requestType === 'USERNAME') {
-                const response = await approveUsernameChange(studentId, requestText, responseId)
+                const response = await approveUsernameChange(studentId, requestText, responseId, teacherId)
                 if (!response) {
                     throw new Error("error approving new username")
                 }
@@ -65,7 +65,7 @@ export default function StudentRequestSection({
 
     async function declineRequest(responseId: string) {
         try {
-            const response = await declineStudentRequest(responseId)
+            const response = await declineStudentRequest(responseId, teacherId)
             if (!response) {
                 throw new Error("error approving new username")
             }

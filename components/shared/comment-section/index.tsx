@@ -74,11 +74,12 @@ export default function CommentSection({
         }
     }
 
-    async function deleteCommentHandler(commendId: string) {
+    async function deleteCommentHandler(commentId: string) {
         try {
-            const response = await deleteComment(commendId)
+            // studentId here is actually teacherId in this context
+            const response = await deleteComment(commentId, studentId)
             if (response.success) {
-                setAllComments(prev => prev.filter(comment => comment.id !== commendId))
+                setAllComments(prev => prev.filter(comment => comment.id !== commentId))
                 toast.error(`Comment Deleted`, {
                     style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
                 })

@@ -6,17 +6,19 @@ import { toast } from "sonner";
 
 export default function ToggleSpellCheck({
     spellCheckEnabled,
-    responseId
+    responseId,
+    teacherId
 }: {
     spellCheckEnabled: boolean,
-    responseId: string
+    responseId: string,
+    teacherId: string
 }) {
 
     const [isSpellCheckEnabled, setIsSpellCheckEnabled] = useState<boolean>(spellCheckEnabled)
 
     async function toggleSpellCheckHandler(isSpellCheckEnabled: boolean) {
         try {
-            const response = await toggleSpellCheck(responseId, isSpellCheckEnabled)
+            const response = await toggleSpellCheck(responseId, isSpellCheckEnabled, teacherId)
             if (response.success) {
                 setIsSpellCheckEnabled(isSpellCheckEnabled)
                 const toastString = isSpellCheckEnabled ? 'Spell Check is Enabled' : 'Spell Check is Disabled'

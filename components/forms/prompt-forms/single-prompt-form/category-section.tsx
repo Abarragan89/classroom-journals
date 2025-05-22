@@ -18,7 +18,8 @@ export default function CategorySection({
     setNewCategoryName,
     handleAddCategory,
     setCategories,
-    isAddingCategory
+    isAddingCategory,
+    teacherId
 }: {
     categories: PromptCategory[],
     editingPrompt?: Prompt,
@@ -26,7 +27,8 @@ export default function CategorySection({
     setNewCategoryName: React.Dispatch<React.SetStateAction<string>>,
     handleAddCategory: (categoryName: string) => void,
     setCategories: React.Dispatch<React.SetStateAction<PromptCategory[]>>
-    isAddingCategory: boolean
+    isAddingCategory: boolean,
+    teacherId: string
 }) {
 
     const [showDeleteCategoryModal, setShowDeleteCategoryModal] = useState<boolean>(false);
@@ -38,7 +40,7 @@ export default function CategorySection({
 
     async function deleteCategoryHandler() {
         try {
-            await deletePromptCategory(promptId)
+            await deletePromptCategory(promptId, teacherId)
             setCategories(prev => [...prev.filter(category => category.id !== promptId)])
             setPromptId('')
             setShowDeleteCategoryModal(false)
@@ -50,7 +52,7 @@ export default function CategorySection({
 
     async function editCategoryHandler() {
         try {
-            await editPromptCategory(promptId, renamedCategory)
+            await editPromptCategory(promptId, renamedCategory, teacherId)
             setCategories(prev => [...prev.map(category => category.id === promptId ? { ...category, name: renamedCategory } : category)])
             setPromptId('')
             setShowEditCategoryModal(false)

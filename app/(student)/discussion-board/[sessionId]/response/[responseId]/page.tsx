@@ -22,7 +22,7 @@ export default async function SingleResponse({
     if (!session || !studentId || !classroomId) return notFound()
 
     const { responseId, sessionId } = await params;
-    const response = await getSingleResponse(responseId) as unknown as Response
+    const response = await getSingleResponse(responseId, studentId) as unknown as Response
 
     const promptStatus = response?.promptSession?.status
 

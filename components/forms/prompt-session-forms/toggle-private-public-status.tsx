@@ -10,12 +10,14 @@ export default function TogglePrivatePublicStatus({
     promptSessionId,
     isPublic,
     closeModal,
-    setPromptSessionStatus
+    setPromptSessionStatus,
+    teacherId
 }: {
     promptSessionId: string,
     isPublic: boolean,
     setPromptSessionStatus: React.Dispatch<React.SetStateAction<boolean>>
     closeModal: () => void,
+    teacherId: string
 }) {
 
     const [state, action] = useActionState(togglePublicPrivateStatus, {
@@ -71,6 +73,12 @@ export default function TogglePrivatePublicStatus({
                     defaultValue={newStatusString}
                     id="promptStatus"
                     name="promptStatus"
+                />
+                <input
+                    hidden
+                    defaultValue={teacherId}
+                    id="teacherId"
+                    name="teacherId"
                 />
             </div>
             <UpdateButton />

@@ -6,15 +6,17 @@ import { toast } from "sonner";
 export default function ScoreJournalForm({
     currentScore,
     responseId,
+    teacherId,
 }: {
     currentScore: number | string,
     responseId: string,
+    teacherId: string
 }) {
 
 
     async function updateResponseScore(score: number) {
         try {
-            await gradeStudentResponse(responseId, 0, score)
+            await gradeStudentResponse(responseId, 0, score, teacherId)
             toast('Grade Update!')
         } catch (error) {
             console.log('error updating score ', error)

@@ -9,13 +9,13 @@ export default async function ReviewAssessmentQuestions({
     params: Promise<{ classId: string, teacherId: string, sessionId: string }>
 }) {
 
-    const { sessionId } = await params;
+    const { sessionId, teacherId } = await params;
 
     if (!sessionId) {
         return <div>No session ID provided</div>;
     }
 
-    const promptSession = await getSinglePromptSessionTeacherDashboard(sessionId) as unknown as PromptSession
+    const promptSession = await getSinglePromptSessionTeacherDashboard(sessionId, teacherId) as unknown as PromptSession
 
     if (!promptSession) {
         return <div>Prompt session not found</div>;

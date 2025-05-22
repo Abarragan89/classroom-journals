@@ -17,13 +17,13 @@ export default async function SinglePromptSession({
         return <div>No session ID provided</div>;
     }
 
-    const promptSession = await getSinglePromptSessionTeacherDashboard(sessionId) as unknown as PromptSession
+    const promptSession = await getSinglePromptSessionTeacherDashboard(sessionId, teacherId) as unknown as PromptSession
 
     if (!promptSession) {
         return <div>Prompt session not found</div>;
     }
-    
-    const classRoster = await getAllStudents(classId) as User[]
+
+    const classRoster = await getAllStudents(classId, teacherId) as User[]
 
     return (
         <div>

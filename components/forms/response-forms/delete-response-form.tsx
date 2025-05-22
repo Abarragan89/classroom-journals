@@ -57,6 +57,13 @@ export default function DeleteResponseForm({
                 readOnly
                 defaultValue={responseId}
             />
+            <input
+                type="hidden"
+                name="teacherId"
+                id="teacherId"
+                readOnly
+                defaultValue={teacherId}
+            />
             <DeleteButton />
         </form>
     )

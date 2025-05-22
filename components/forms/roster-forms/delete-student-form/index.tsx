@@ -77,6 +77,13 @@ export default function DeleteStudentForm({
                     id="studentId"
                     name="studentId"
                 />
+                <input
+                    type="hidden"
+                    name="teacherId"
+                    id="teacherId"
+                    value={session.user.id}
+                    hidden
+                />
             </div>
             <DeleteButton />
             {state && !state.success && (

@@ -5,17 +5,19 @@ import { Switch } from "@/components/ui/switch";
 
 export default function ToggleGradesVisible({
   promptSessionId,
-  gradesVisibility
+  gradesVisibility,
+  teacherId
 }: {
   promptSessionId: string,
   gradesVisibility: boolean
+  teacherId: string
 }) {
 
   const [areGradesVisible, setAreGradesVisible] = useState<boolean>(gradesVisibility)
 
   async function toggleGradeVisibiltyHandler(areGradesVisible: boolean) {
     try {
-      const response = await toggleHideShowGrades(promptSessionId, areGradesVisible)
+      const response = await toggleHideShowGrades(promptSessionId, areGradesVisible, teacherId)
       if (response.success) {
         setAreGradesVisible(areGradesVisible)
       }
@@ -32,7 +34,7 @@ export default function ToggleGradesVisible({
       ) : (
         <p className="text-sm text-destructive">Scores are not visible to students</p>
       )}
-      
+
       <span className="text-sm mt-2">Hide</span>
       <Switch
         className="text-sm mx-2"

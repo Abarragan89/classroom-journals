@@ -21,9 +21,11 @@ export default async function StudentDashboardLayout({
 
     if (!session) return notFound()
 
+    const classId = session?.classroomId as string
+
     const { sessionId } = await params;
 
-    const promptSession = await getSinglePromptSessionStudentDiscussion(sessionId) as unknown as PromptSession
+    const promptSession = await getSinglePromptSessionStudentDiscussion(sessionId, classId) as unknown as PromptSession
 
     return (
         <SidebarProvider>

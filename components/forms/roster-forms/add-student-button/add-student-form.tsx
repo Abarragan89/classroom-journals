@@ -94,7 +94,15 @@ export default function AddStudentForm({
             <input
                 type="hidden"
                 name="classId"
+                id="classId"
                 value={classId}
+                hidden
+            />
+            <input
+                type="hidden"
+                name="teacherId"
+                id="teacherId"
+                value={session.user.id}
                 hidden
             />
             {state && !state.success === false && (

@@ -10,13 +10,15 @@ export default function GradingPanel({
     questionNumber,
     updateScoreUIHandler,
     currentScore,
-    updateUIQuestionAccordion
+    updateUIQuestionAccordion,
+    teacherId
 }: {
-    responseId: string,
-    questionNumber: number,
+    responseId: string;
+    questionNumber: number;
     updateScoreUIHandler?: (questionNumber: number, score: number) => void;
     updateUIQuestionAccordion?: (newScore: number) => void;
-    currentScore: number
+    currentScore: number;
+    teacherId: string;
 }) {
 
     const [isGrading, setIsGrading] = useState<boolean>(false)
@@ -25,8 +27,9 @@ export default function GradingPanel({
 
     async function updateResponseScore(score: number) {
         try {
+            console.log('teacher id asd;lkja;sdflk', teacherId)
             setIsGrading(true)
-            await gradeStudentResponse(responseId, questionNumber, score)
+            await gradeStudentResponse(responseId, questionNumber, score, teacherId)
             if (updateScoreUIHandler) {
                 updateScoreUIHandler(questionNumber, score)
             } else if (updateUIQuestionAccordion) {

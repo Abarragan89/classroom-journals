@@ -20,10 +20,10 @@ export default async function Roster({
   params: Promise<{ classId: string, teacherId: string }>
 }) {
 
-  const { classId } = await params;
+  const { classId, teacherId } = await params;
 
-  const studentRoster = (await getAllStudents(classId)) as unknown as User[];
-  const  classCode  = await prisma.classroom.findUnique({
+  const studentRoster = (await getAllStudents(classId, teacherId)) as unknown as User[];
+  const classCode = await prisma.classroom.findUnique({
     where: { id: classId },
     select: {
       classCode: true

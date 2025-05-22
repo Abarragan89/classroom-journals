@@ -113,28 +113,28 @@ export async function getTeacherRequests(teacherId: string, classId: string) {
     }
 }
 
-// This is for the students to see which requests they have made and their status
-export async function getStudentRequests(studentId: string) {
-    try {
-        const session = await requireAuth();
-        if (session?.user?.id !== studentId) {
-            throw new Error("Forbidden");
-        }
-        const studentRequests = await prisma.studentRequest.findMany({
-            where: { studentId },
-        });
-        return studentRequests
-    } catch (error) {
-        // Improved error logging
-        if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
-            console.error(error.stack); // Log stack trace for better debugging
-        } else {
-            console.log('Unexpected error:', error);
-        }
-        return { success: false, message: 'Error adding student. Try again.' }
-    }
-}
+// // This is for the students to see which requests they have made and their status
+// export async function getStudentRequests(studentId: string) {
+//     try {
+//         const session = await requireAuth();
+//         if (session?.user?.id !== studentId) {
+//             throw new Error("Forbidden");
+//         }
+//         const studentRequests = await prisma.studentRequest.findMany({
+//             where: { studentId },
+//         });
+//         return studentRequests
+//     } catch (error) {
+//         // Improved error logging
+//         if (error instanceof Error) {
+//             console.log('Error creating new prompt:', error.message);
+//             console.error(error.stack); // Log stack trace for better debugging
+//         } else {
+//             console.log('Unexpected error:', error);
+//         }
+//         return { success: false, message: 'Error adding student. Try again.' }
+//     }
+// }
 
 // This is for the teacher to get notifications if there are requests, work as notifications
 export async function getStudentRequestCount(teacherId: string, classId: string) {
@@ -187,9 +187,12 @@ export async function markAllRequestsAsViewed(teacherId: string, classId: string
 }
 
 // This is for the students to see which requests they have made and their status
-export async function approveUsernameChange(studentId: string, username: string, responseId: string) {
+export async function approveUsernameChange(studentId: string, username: string, responseId: string, teacherId: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error("Forbidden");
+        }
         // Update the user with the new encrypted username
         await prisma.user.update({
             where: { id: studentId },
@@ -277,9 +280,12 @@ export async function approveNewPrompt(teacherId: string, requestText: string, r
 }
 
 // This is for the students to see which requests they have made and their status
-export async function declineStudentRequest(responseId: string) {
+export async function declineStudentRequest(responseId: string, teacherId: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error("Forbidden");
+        }
         // change the status of the request
         // await prisma.studentRequest.update({
         //     where: { id: responseId },

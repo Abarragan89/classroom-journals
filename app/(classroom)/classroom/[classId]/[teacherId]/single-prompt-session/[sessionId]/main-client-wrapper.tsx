@@ -26,7 +26,7 @@ export default function MainClientWrapper({
 
     const { data: promptSessionData } = useQuery({
         queryKey: ['getSingleSessionData', sessionId],
-        queryFn: () => getSinglePromptSessionTeacherDashboard(sessionId) as unknown as PromptSession,
+        queryFn: () => getSinglePromptSessionTeacherDashboard(sessionId, teacherId) as unknown as PromptSession,
         initialData: promptSession,
     })
 
@@ -84,6 +84,7 @@ export default function MainClientWrapper({
                     <ToggleGradesVisible
                         promptSessionId={promptSessionData?.id}
                         gradesVisibility={promptSessionData?.areGradesVisible}
+                        teacherId={teacherId}
                     />
                 </div>
             </div>
@@ -93,6 +94,7 @@ export default function MainClientWrapper({
                     questions={(promptSessionData?.questions as unknown as Question[]) as unknown as Question[]}
                     responses={promptSessionData?.responses as unknown as Response[]}
                     sessionId={sessionId}
+                    teacherId={teacherId}
                 />
             }
 

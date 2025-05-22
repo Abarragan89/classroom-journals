@@ -22,12 +22,14 @@ export default function MultipleQuestionEditor({
     gradeLevel,
     responseId,
     spellCheckEnabled,
+    studentId
 }: {
     studentResponse: ResponseData[]
     isTeacherPremium: boolean,
     gradeLevel: string
     responseId: string;
     spellCheckEnabled: boolean;
+    studentId: string;
 }) {
 
     const searchParams = useSearchParams();
@@ -102,7 +104,7 @@ export default function MultipleQuestionEditor({
                     : q
             );
             setStudentResponseData(updatedData)
-            await updateStudentResponse(updatedData, responseId);
+            await updateStudentResponse(updatedData, responseId, studentId);
         } catch (error) {
             console.log('error saving to indexed db', error);
         } finally {
@@ -185,6 +187,7 @@ export default function MultipleQuestionEditor({
                         isTeacherPremium={isTeacherPremium}
                         gradeLevel={gradeLevel}
                         spellCheckEnabled={spellCheckEnabled}
+                        studentId={studentId}
                     />
                     <div className="flex flex-col justify-center items-center">
                         <p className="text-center font-bold">Ready to Submit?</p>
@@ -222,6 +225,13 @@ export default function MultipleQuestionEditor({
                                 id="is-teacher-premium"
                                 name="is-teacher-premium"
                                 value={isTeacherPremium ? 'true' : 'false'}
+                                hidden
+                                readOnly
+                            />
+                            <input
+                                id="studentId"
+                                name="studentId"
+                                value={studentId}
                                 hidden
                                 readOnly
                             />

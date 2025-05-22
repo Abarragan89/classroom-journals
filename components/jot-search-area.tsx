@@ -32,7 +32,7 @@ export default function JotSearchArea({
     });
 
     async function getFilteredSearch(filterOptions: SearchOptions) {
-        const filterPrompts = await getFilterPrompts(filterOptions) as unknown as Prompt[]
+        const filterPrompts = await getFilterPrompts(filterOptions, teacherId) as unknown as Prompt[]
         setFetchedPrompts(filterPrompts)
     }
 

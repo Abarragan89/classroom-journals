@@ -10,7 +10,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 
-export default function DeleteClassForm({ classroomId, closeModal }: { classroomId: string, closeModal: () => void }) {
+export default function DeleteClassForm({ classroomId, closeModal, teacherId }: { classroomId: string, closeModal: () => void, teacherId: string }) {
 
     const [state, action] = useActionState(deleteClassroom, {
         success: false,
@@ -25,7 +25,7 @@ export default function DeleteClassForm({ classroomId, closeModal }: { classroom
             closeModal()
             router.push(pathname); // Navigates without losing state instantly
             toast.error('Class Deleted!', {
-                style: {background: 'hsl(0 84.2% 60.2%)', color: 'white'}
+                style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
         }
     }, [state, router, pathname])
@@ -64,6 +64,12 @@ export default function DeleteClassForm({ classroomId, closeModal }: { classroom
                     defaultValue={classroomId}
                     id="classroomId"
                     name="classroomId"
+                />
+                <input
+                    hidden
+                    defaultValue={teacherId}
+                    id="teacherId"
+                    name="teacherId"
                 />
             </div>
             <DeleteButton />

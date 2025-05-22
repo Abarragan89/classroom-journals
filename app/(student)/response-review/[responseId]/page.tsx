@@ -19,18 +19,18 @@ export default async function ResponseReview({
 
     const session = await auth() as Session
 
-    if (!session)return notFound()
+    if (!session) return notFound()
 
     const classroomId = session?.classroomId
 
     const studentId = session?.user?.id as string
     if (session?.user?.role !== 'STUDENT' || !studentId) {
-       return notFound()
+        return notFound()
     }
 
     const { responseId } = await params
 
-    const singleResponse = await getSingleResponseForReview(responseId) as unknown as Response
+    const singleResponse = await getSingleResponseForReview(responseId, studentId) as unknown as Response
 
     const teacherId = await getTeacherId(classroomId as string)
 
@@ -58,6 +58,7 @@ export default async function ResponseReview({
                         showGrades={singleResponse?.promptSession?.areGradesVisible}
                         isTeacherPremium={isPremiumTeacher as boolean}
                         gradeLevel={grade as string}
+                        studentId={studentId}
                         spellCheckEnabled={singleResponse?.spellCheckEnabled}
                     />
                     :
@@ -69,6 +70,7 @@ export default async function ResponseReview({
                         isPublic={singleResponse?.promptSession?.isPublic as boolean}
                         promptSessionId={singleResponse?.promptSession?.id as string}
                         spellCheckEnabled={singleResponse?.spellCheckEnabled}
+                        studentId={studentId}
                     />
                 }
             </main>

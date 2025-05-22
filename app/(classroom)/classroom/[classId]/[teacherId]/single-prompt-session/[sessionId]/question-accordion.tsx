@@ -30,11 +30,13 @@ export default function QuestionAccordion({
     responses,
     startRange,
     endRange,
+    teacherId
 }: {
     questions: Question[];
     responses: Response[];
     startRange: number;
     endRange: number;
+    teacherId: string;
 }) {
     const [currentResponseData, setCurrentResponseData] = useState<OrganizedResponses>({});
     const currentSubQuery = useRef<{ question: string; score: number, questionNumber: number }>({
@@ -161,6 +163,7 @@ export default function QuestionAccordion({
                                     responseId={data.responseId}
                                     questionNumber={currentSubQuery.current.questionNumber}
                                     currentScore={currentSubQuery.current.score}
+                                    teacherId={teacherId}
                                     updateUIQuestionAccordion={(newScore) =>
                                         handleScoreUpdateUI(
                                             data.responseId,

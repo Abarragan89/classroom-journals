@@ -4,7 +4,10 @@ import { requireAuth } from "./authorization.action";
 // Add Prompt Category
 export async function addPromptCategory(categoryName: string, userId: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+        if (session?.user?.id !== userId) {
+            throw new Error('Forbidden');
+        }
         const newCategory = await prisma.promptCategory.create({
             data: {
                 name: categoryName,
@@ -26,7 +29,6 @@ export async function addPromptCategory(categoryName: string, userId: string) {
 // Get All Prompt Categories
 export async function getAllPromptCategories(userId: string) {
     try {
-        await requireAuth();
         const session = await requireAuth();
         if (!session?.user?.id) {
             throw new Error("Forbidden");
@@ -54,9 +56,14 @@ export async function getAllPromptCategories(userId: string) {
 
 
 // Delete Prompt Category
-export async function deletePromptCategory(id: string) {
+export async function deletePromptCategory(id: string, teacherId: string) {
     try {
-        await requireAuth();
+
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
+
         await prisma.promptCategory.delete({
             where: { id }
         })
@@ -74,9 +81,12 @@ export async function deletePromptCategory(id: string) {
 }
 
 // Delete Prompt Category
-export async function editPromptCategory(id: string, newCategoryName: string) {
+export async function editPromptCategory(id: string, newCategoryName: string, teacherId: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
         await prisma.promptCategory.update({
             where: { id },
             data: {

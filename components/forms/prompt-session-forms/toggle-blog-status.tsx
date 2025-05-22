@@ -10,12 +10,14 @@ export default function ToggleBlogStatus({
     promptSessionId,
     promptSessionStatus,
     closeModal,
-    setPromptSessionStatus
+    setPromptSessionStatus,
+    teacherId
 }: {
     promptSessionId: string,
     promptSessionStatus: string,
     setPromptSessionStatus: React.Dispatch<React.SetStateAction<string>>
     closeModal: () => void,
+    teacherId: string
 }) {
 
     const [state, action] = useActionState(toggleBlogStatus, {
@@ -72,6 +74,12 @@ export default function ToggleBlogStatus({
                     defaultValue={newStatus}
                     id="promptStatus"
                     name="promptStatus"
+                />
+                <input
+                    hidden
+                    defaultValue={teacherId}
+                    id="teacherId"
+                    name="teacherId"
                 />
             </div>
             <UpdateButton />

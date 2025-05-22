@@ -71,7 +71,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                 setClassrooms(classes as Classroom[]);
 
                 if (existingPromptId) {
-                    const promptData = await getSinglePrompt(existingPromptId) as unknown as Prompt
+                    const promptData = await getSinglePrompt(existingPromptId, teacherId) as unknown as Prompt
                     setQuestions([{ name: "question1", label: "Prompt", value: promptData.questions[0].question }])
                     setEditingPrompt(promptData)
                 }
@@ -159,6 +159,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                 categories={categories}
                 editingPrompt={editingPrompt as Prompt}
                 isAddingCategory={isAddingCategory}
+                teacherId={teacherId}
             />
 
             {/* Assign to a classroom */}

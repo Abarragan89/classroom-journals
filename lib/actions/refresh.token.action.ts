@@ -6,7 +6,10 @@ import { requireAuth } from "./authorization.action";
 
 async function refreshAccessToken(refreshToken: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+        if (session?.refreshToken !== refreshToken) {
+            throw new Error('Forbidden')
+        }
         const response = await fetch("https://oauth2.googleapis.com/token", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
