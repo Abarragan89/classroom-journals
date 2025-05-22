@@ -35,6 +35,7 @@ export default function NotificationSection({
             return userNotifications;
         },
         initialData: notifications,
+        refetchOnReconnect: false,
     })
 
     if (error) {

@@ -18,7 +18,8 @@ export default function StudentNavLinks({
     const { data: notificationCount } = useQuery({
         queryKey: ['getStudentNotificationHeader', studentId],
         queryFn: () => getUnreadUserNotifications(studentId, classId) as unknown as number,
-        placeholderData: 0
+        placeholderData: 0,
+        refetchOnReconnect: false,
     })
 
     return (

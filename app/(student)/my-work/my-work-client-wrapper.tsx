@@ -19,7 +19,8 @@ export default function MyWorkClientWrapper({
     const { data: studentResponsesData } = useQuery({
         queryKey: ['getStudentResponseData', studentId],
         queryFn: () => getSingleStudentResponses(studentId) as unknown as Response[],
-        initialData: studentResponses
+        initialData: studentResponses,
+        refetchOnReconnect: false,
     })
 
     // Determine Returned Work 
