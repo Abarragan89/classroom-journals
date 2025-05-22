@@ -115,7 +115,8 @@ export default function SingleComment({
 
     async function deleteReplyCommentHandler(commendId: string) {
         try {
-            const response = await deleteComment(commendId)
+            // Student Id is actually teacher Id in teacherView=True context
+            const response = await deleteComment(commendId, studentId)
             if (response.success) {
                 setReplyCommentState(prev => prev.filter(comment => comment.id !== commendId))
                 toast.error(`Comment Deleted`, {

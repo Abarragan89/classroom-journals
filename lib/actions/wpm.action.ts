@@ -57,9 +57,12 @@ export async function getUserWPM(userId: string) {
 }
 
 //  Get top 10 wpm scores in class 
-export async function getWPMClassHighScores(classId: string) {
+export async function getWPMClassHighScores(classId: string, userId: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+        if (session?.user?.id !== userId) {
+            throw new Error("Forbidden");
+        }
         const top10Typers = await prisma.classUser.findMany({
             where: { classId: classId },
             orderBy: {

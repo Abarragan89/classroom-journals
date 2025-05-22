@@ -342,9 +342,13 @@ export async function toggleCommentLike(commentId: string, userId: string) {
 }
 
 // Delete a comment
-export async function deleteComment(commentId: string) {
+export async function deleteComment(commentId: string, teacherId: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
+
         if (!commentId) {
             throw new Error('comment id is required')
         }

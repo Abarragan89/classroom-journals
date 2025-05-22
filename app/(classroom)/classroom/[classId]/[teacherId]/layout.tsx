@@ -47,7 +47,7 @@ export default async function DashboardLayout({
 
     const { isAllowedToMakeNewClass } = await determineSubscriptionAllowance(teacherId)
     // Get Class Data
-    const classroomData = await getSingleClassroom(classId) as Class;
+    const classroomData = await getSingleClassroom(classId, teacherId) as Class;
 
     return (
         <SidebarProvider>

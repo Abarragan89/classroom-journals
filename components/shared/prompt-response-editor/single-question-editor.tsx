@@ -25,11 +25,13 @@ import LoadingAnimation from "@/components/loading-animation";
 export default function SinglePromptEditor({
     studentResponse,
     responseId,
-    spellCheckEnabled
+    spellCheckEnabled,
+    studentId
 }: {
     studentResponse: ResponseData[],
     responseId: string,
     spellCheckEnabled: boolean,
+    studentId: string
 }) {
 
     const searchParams = useSearchParams();
@@ -131,7 +133,7 @@ export default function SinglePromptEditor({
                     : q
             );
             setStudentResponseData(updatedData)
-            await updateStudentResponse(updatedData, responseId);
+            await updateStudentResponse(updatedData, responseId, studentId);
         } catch (error) {
             console.log('error saving to indexed db', error);
         } finally {
@@ -368,6 +370,13 @@ export default function SinglePromptEditor({
                                             id="responseData"
                                             name="responseData"
                                             value={JSON.stringify(studentResponseData)}
+                                            hidden
+                                            readOnly
+                                        />
+                                        <input
+                                            id="studentId"
+                                            name="studentId"
+                                            value={studentId}
                                             hidden
                                             readOnly
                                         />

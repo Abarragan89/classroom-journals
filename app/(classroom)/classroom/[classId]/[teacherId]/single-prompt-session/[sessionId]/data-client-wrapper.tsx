@@ -8,10 +8,12 @@ import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 export default function DataClientWrapper({
     questions,
     responses,
+    teacherId
 }: {
     questions: Question[];
     responses: Response[];
     sessionId: string;
+    teacherId: string
 }) {
 
     const [currentQuestions, setCurrentQuestions] = useState<{ start: number, end: number }>({ start: 0, end: questions.length >= 4 ? 4 : questions.length })
@@ -59,6 +61,7 @@ export default function DataClientWrapper({
                         responses={responses as unknown as Response[]}
                         startRange={currentQuestions.start}
                         endRange={currentQuestions.end}
+                        teacherId={teacherId}
                     />
                 </div>
             </div>

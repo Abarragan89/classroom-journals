@@ -412,9 +412,13 @@ export async function getAllTeacherPrompts(teacherId: string) {
 }
 
 // Get a single prompt based on Id
-export async function getSinglePrompt(promptId: string) {
+export async function getSinglePrompt(promptId: string, teacherId: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
 
         const prompt = await prisma.prompt.findUnique({
             where: { id: promptId },
@@ -453,11 +457,16 @@ export async function getSinglePrompt(promptId: string) {
 }
 
 // Get prompts based on filtered options
-export async function getFilterPrompts(filterOptions: SearchOptions) {
+export async function getFilterPrompts(filterOptions: SearchOptions, teacherId: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
         const allPrompts = await prisma.prompt.findMany({
             where: {
+                teacherId,
                 // 1️ Filter by classroom if specified
                 categoryId: filterOptions.category
                     ? filterOptions.category
@@ -664,7 +673,12 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
 // Delete Prompt
 export async function deletePrompt(prevState: unknown, formData: FormData) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+
+        const teacherId = formData.get('teacherId') as string
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
         const promptId = formData.get('promptId') as string
 
         await prisma.prompt.delete({

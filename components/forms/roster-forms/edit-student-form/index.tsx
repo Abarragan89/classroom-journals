@@ -142,6 +142,13 @@ export default function EditStudentForm({
             />
             <input
                 type="hidden"
+                name="teacherId"
+                id="teacherId"
+                value={session.user.id}
+                hidden
+            />
+            <input
+                type="hidden"
                 name="classId"
                 value={classId}
                 readOnly

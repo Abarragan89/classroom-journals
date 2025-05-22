@@ -24,7 +24,7 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
         }
 
         const session = await requireAuth();
-        
+
         if (session?.user?.id !== teacherId) {
             throw new Error("Forbidden");
         }
@@ -160,9 +160,12 @@ export async function getAllClassroomIds(teacherId: string) {
 }
 
 // Get a single Classroom
-export async function getSingleClassroom(classroomId: string) {
+export async function getSingleClassroom(classroomId: string, teacherId: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
         const classroom = await prisma.classroom.findUnique({
             where: { id: classroomId }
         })
@@ -212,9 +215,14 @@ export async function updateClassInfo(prevState: unknown, formData: FormData) {
 }
 
 // Get all Students in a classroom 
-export async function getAllStudents(classId: string) {
+export async function getAllStudents(classId: string, teacherId: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
+
         const allStudents = await prisma.classUser.findMany({
             where: {
                 classId: classId,
@@ -257,7 +265,13 @@ export async function getAllStudents(classId: string) {
 // Delete Classroom
 export async function deleteClassroom(prevState: unknown, formData: FormData) {
     try {
-        await requireAuth();
+        const teacherId = formData.get('teacherId') as string
+        const session = await requireAuth();
+
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
+
         const classroomId = formData.get('classroomId') as string
 
         const studentUsers = await prisma.classUser.findMany({

@@ -61,6 +61,7 @@ export default function OptionsMenu({
                     promptTitle={promptData.title}
                     closeModal={closeModal}
                     updatePromptData={updatePromptData}
+                    teacherId={teacherId}
                 />
             </ResponsiveDialog>
 

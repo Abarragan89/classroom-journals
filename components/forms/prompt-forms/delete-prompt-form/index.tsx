@@ -11,12 +11,14 @@ export default function DeletePromptForm({
     promptId,
     promptTitle,
     closeModal,
-    updatePromptData
+    updatePromptData,
+    teacherId
 }: {
     promptId: string,
     promptTitle: string,
     closeModal: () => void,
-    updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
+    updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>,
+    teacherId: string
 }) {
 
     const [state, action] = useActionState(deletePrompt, {
@@ -62,6 +64,12 @@ export default function DeletePromptForm({
                     defaultValue={promptId}
                     id="promptId"
                     name="promptId"
+                />
+                <input
+                    hidden
+                    defaultValue={teacherId}
+                    id="teacherId"
+                    name="teacherId"
                 />
             </div>
             <DeleteButton />

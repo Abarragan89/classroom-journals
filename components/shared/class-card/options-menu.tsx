@@ -13,7 +13,7 @@ import EditClassForm from '@/components/forms/class-forms/edit-class-form';
 import { Class } from '@/types';
 
 
-export default function OptionsMenu({ classData }: { classData: Class }) {
+export default function OptionsMenu({ classData, teacherId }: { classData: Class, teacherId: string }) {
     const [mounted, setMounted] = useState<boolean>(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
@@ -53,7 +53,11 @@ export default function OptionsMenu({ classData }: { classData: Class }) {
                 title={`Delete ${classData.name}`}
                 description='Confirm class deletion'
             >
-                <DeleteClassForm classroomId={classData.id} closeModal={closeDeleteModal} />
+                <DeleteClassForm
+                    teacherId={teacherId}
+                    classroomId={classData.id}
+                    closeModal={closeDeleteModal}
+                />
             </ResponsiveDialog>
 
             {/* Options Menu */}

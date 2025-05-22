@@ -17,13 +17,16 @@ export default function ClassCard({ classData, teacherId }: { classData: Class, 
     return (
         <Card className="w-[350px] relative shadow-sm shadow-accent active:shadow-none">
             {/* Absolutely positions options menu with responsive dialogs */}
-            <OptionsMenu classData={classData} />
+            <OptionsMenu
+                teacherId={teacherId}
+                classData={classData}
+            />
             <Link
                 href={`/classroom/${classData.id}/${teacherId}`}
                 className="hover:cursor-pointer"
             >
                 <CardHeader className="flex flex-row justify-between">
-                    <div> 
+                    <div>
                         <CardTitle className="line-clamp-1">{classData.name}</CardTitle>
                         <CardDescription>{classData.year}</CardDescription>
                     </div>

@@ -77,7 +77,7 @@ export default function MultiPromptForm({
                 setIsTeacherPremium(isSubscriptionActive as boolean)
                 // Get existing prompt if in search params
                 if (existingPromptId) {
-                    const promptData = await getSinglePrompt(existingPromptId) as unknown as Prompt
+                    const promptData = await getSinglePrompt(existingPromptId, teacherId) as unknown as Prompt
                     setQuestions(promptData.questions.map((q: { question: string }, index) => ({
                         name: `question${index + 1}`,
                         label: `Question ${index + 1}`,
@@ -214,6 +214,7 @@ export default function MultiPromptForm({
                 categories={categories}
                 editingPrompt={editingPrompt as Prompt}
                 isAddingCategory={isAddingCategory}
+                teacherId={teacherId}
             />
 
             {/* Assign to a classroom */}

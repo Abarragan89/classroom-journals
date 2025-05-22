@@ -35,8 +35,6 @@ export default function BlogTableData({
     completedResponses: Response[],
     returnedResponses: Response[],
     promptSessionQuestions: ResponseData[]
-
-
 }) {
 
     const router = useRouter();
@@ -47,7 +45,7 @@ export default function BlogTableData({
         try {
             setIsLoading(true)
             if (!studentId) return
-            const newResponse = await createStudentResponse(promptSessionId, studentId, promptSessionQuestions)
+            const newResponse = await createStudentResponse(promptSessionId, studentId, teacherId, promptSessionQuestions)
             if (!newResponse) throw new Error('Error creating student response', newResponse)
             queryClient.invalidateQueries({ queryKey: ['getSingleSessionData', promptSessionId] })
         } catch (error) {

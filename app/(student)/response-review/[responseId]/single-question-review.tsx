@@ -22,7 +22,8 @@ export default function SingleQuestionReview({
     showGrades,
     isPublic,
     promptSessionId,
-    spellCheckEnabled
+    spellCheckEnabled,
+    studentId
 }: {
     questions: ResponseData[],
     isSubmittable: boolean,
@@ -30,7 +31,8 @@ export default function SingleQuestionReview({
     showGrades: boolean,
     isPublic: boolean,
     promptSessionId: string,
-    spellCheckEnabled: boolean
+    spellCheckEnabled: boolean,
+    studentId: string
 }) {
 
     const router = useRouter();
@@ -47,7 +49,7 @@ export default function SingleQuestionReview({
         try {
             setIsLoading(true)
             const submittedAt = new Date()
-            const updatedResponse = await updateASingleResponse(responseId, responseData, submittedAt)
+            const updatedResponse = await updateASingleResponse(studentId, responseId, responseData, submittedAt)
             if (updatedResponse.success) {
                 router.push('/my-work')
                 toast('Assignment Submitted!')

@@ -8,9 +8,11 @@ import { ResponseStatus } from '@prisma/client'
 export default function HandleToggleReturnStateBtn({
   isCompleted,
   responseId,
+  teacherId
 }: {
   isCompleted: boolean,
-  responseId: string
+  responseId: string,
+  teacherId: string,
 }) {
 
   const [isSubmittable, setIsSubmittaisSubmittable] = useState<boolean>(!isCompleted)
@@ -18,7 +20,7 @@ export default function HandleToggleReturnStateBtn({
 
   async function handleToggleReturnState(newState: ResponseStatus) {
     try {
-      const response = await toggleReturnStateStatus(responseId, newState)
+      const response = await toggleReturnStateStatus(responseId, newState, teacherId)
       if (response.success) {
         setIsSubmittaisSubmittable(newState === 'RETURNED' ? true : false)
         toast('Assignment Returned')

@@ -20,7 +20,7 @@ export default async function StudentNotifications() {
     if (!classId) return notFound()
 
     const studentHighScore = await getUserWPM(studentId) as number
-    const classTopTypers = await getWPMClassHighScores(classId) as User[]
+    const classTopTypers = await getWPMClassHighScores(classId, studentId) as User[]
 
     return (
         <>

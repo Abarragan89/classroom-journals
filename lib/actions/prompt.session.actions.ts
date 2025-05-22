@@ -5,13 +5,14 @@ import { SearchOptions } from "@/types";
 import { PromptSessionStatus, ResponseStatus } from "@prisma/client";
 import { requireAuth } from "./authorization.action";
 
+// This is for teacher to get all session in dashboard
 export async function getAllSessionsInClass(classId: string, teacherId: string) {
     try {
         const session = await requireAuth();
         if (session?.user?.id !== teacherId) {
             throw new Error('Forbidden')
         }
-        
+
         const [totalCount, paginatedPrompts] = await Promise.all([
             prisma.promptSession.count({ where: { classId } }),
             prisma.promptSession.findMany({
@@ -60,100 +61,105 @@ export async function getAllSessionsInClass(classId: string, teacherId: string) 
     }
 }
 // This gets all the sessions and student's score for scoresheet report
-export async function getAllSessionForScoresheet(classId: string) {
+// export async function getAllSessionForScoresheet(classId: string) {
+//     try {
+//         await requireAuth();
+
+//         const classroomScores = await prisma.classroom.findUnique({
+//             where: { id: classId }, // Use the provided classId
+//             include: {
+//                 users: {
+//                     where: { role: 'STUDENT' },
+//                     include: {
+//                         user: {
+//                             select: {
+//                                 id: true,
+//                                 name: true,
+//                                 iv: true,
+//                                 responses: {
+//                                     where: {
+//                                         promptSession: {
+//                                             classId: classId,
+//                                         },
+//                                     },
+//                                     include: {
+//                                         promptSession: {
+//                                             select: {
+//                                                 id: true,
+//                                                 title: true,
+//                                                 assignedAt: true,
+//                                             },
+//                                         },
+//                                     },
+//                                 },
+//                             },
+//                         },
+//                     },
+//                 },
+//             },
+//         });
+
+
+//         return classroomScores
+
+//     } catch (error) {
+//         if (error instanceof Error) {
+//             console.log('Error creating new prompt:', error.message);
+//             console.error(error.stack); // Log stack trace for better debugging
+//         } else {
+//             console.log('Unexpected error:', error);
+//         }
+
+//         return { success: false, message: 'Error creating prompt. Try again.' }
+//     }
+// }
+
+// This is for student Dashboard
+// export async function getAllSessionsInClassForStudent(classId: string) {
+//     try {
+//         await requireAuth();
+//         const [totalCount, paginatedPrompts] = await Promise.all([
+//             prisma.promptSession.count({ where: { classId } }),
+//             prisma.promptSession.findMany({
+//                 where: { classId: classId },
+//                 orderBy: { createdAt: 'desc' },
+//                 select: {
+//                     id: true,
+//                     responses: {
+//                         select: {
+//                             id: true,
+//                             studentId: true,
+//                         }
+//                     },
+//                     createdAt: true,
+//                     promptType: true,
+//                     title: true,
+//                     status: true,
+//                 }
+//             })
+
+//         ])
+//         return { totalCount, prompts: paginatedPrompts };
+
+//     } catch (error) {
+//         if (error instanceof Error) {
+//             console.log('Error creating new prompt:', error.message);
+//             console.error(error.stack); // Log stack trace for better debugging
+//         } else {
+//             console.log('Unexpected error:', error);
+//         }
+
+//         return { success: false, message: 'Error creating prompt. Try again.' }
+//     }
+// }
+
+// This is for studen discussion board
+export async function getSinglePromptSessionStudentDiscussion(promptId: string, classId: string) {
     try {
-        await requireAuth();
-
-        const classroomScores = await prisma.classroom.findUnique({
-            where: { id: classId }, // Use the provided classId
-            include: {
-                users: {
-                    where: { role: 'STUDENT' },
-                    include: {
-                        user: {
-                            select: {
-                                id: true,
-                                name: true,
-                                iv: true,
-                                responses: {
-                                    where: {
-                                        promptSession: {
-                                            classId: classId,
-                                        },
-                                    },
-                                    include: {
-                                        promptSession: {
-                                            select: {
-                                                id: true,
-                                                title: true,
-                                                assignedAt: true,
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        });
-
-
-        return classroomScores
-
-    } catch (error) {
-        if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
-            console.error(error.stack); // Log stack trace for better debugging
-        } else {
-            console.log('Unexpected error:', error);
+        const session = await requireAuth();
+        if (session?.classroomId !== classId) {
+            throw new Error('Forbidden');
         }
-
-        return { success: false, message: 'Error creating prompt. Try again.' }
-    }
-}
-
-export async function getAllSessionsInClassForStudent(classId: string) {
-    try {
-        await requireAuth();
-        const [totalCount, paginatedPrompts] = await Promise.all([
-            prisma.promptSession.count({ where: { classId } }),
-            prisma.promptSession.findMany({
-                where: { classId: classId },
-                orderBy: { createdAt: 'desc' },
-                select: {
-                    id: true,
-                    responses: {
-                        select: {
-                            id: true,
-                            studentId: true,
-                        }
-                    },
-                    createdAt: true,
-                    promptType: true,
-                    title: true,
-                    status: true,
-                }
-            })
-
-        ])
-        return { totalCount, prompts: paginatedPrompts };
-
-    } catch (error) {
-        if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
-            console.error(error.stack); // Log stack trace for better debugging
-        } else {
-            console.log('Unexpected error:', error);
-        }
-
-        return { success: false, message: 'Error creating prompt. Try again.' }
-    }
-}
-
-export async function getSinglePromptSessionStudentDiscussion(promptId: string) {
-    try {
-        await requireAuth();
         const allPromptSession = await prisma.promptSession.findUnique({
             where: { id: promptId },
             select: {
@@ -215,9 +221,12 @@ export async function getSinglePromptSessionStudentDiscussion(promptId: string) 
 }
 
 // Get single prompt session with responses and student data for SinglePromptSession Page
-export async function getSinglePromptSessionTeacherDashboard(sessionId: string) {
+export async function getSinglePromptSessionTeacherDashboard(sessionId: string, teacherId: string) {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
         const promptSession = await prisma.promptSession.findUnique({
             where: { id: sessionId },
             select: {
@@ -294,7 +303,11 @@ export async function getSinglePromptSessionTeacherDashboard(sessionId: string) 
 // Delete Prompt
 export async function deletePromptSession(prevState: unknown, formData: FormData) {
     try {
-        await requireAuth();
+        const teacherId = formData.get('teacherId') as string
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
         const promptId = formData.get('promptId') as string
 
         await prisma.promptSession.delete({
@@ -313,10 +326,15 @@ export async function deletePromptSession(prevState: unknown, formData: FormData
     }
 }
 
+
 // Toggle Blog Status
 export async function toggleBlogStatus(prevState: unknown, formData: FormData) {
     try {
-        await requireAuth();
+        const teacherId = formData.get('teacherId') as string
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
         const promptStatus = formData.get('promptStatus') as string
         const promptId = formData.get('promptId') as string
 
@@ -342,7 +360,11 @@ export async function toggleBlogStatus(prevState: unknown, formData: FormData) {
 // Toggle Blog Status
 export async function togglePublicPrivateStatus(prevState: unknown, formData: FormData) {
     try {
-        await requireAuth();
+        const teacherId = formData.get('teacherId') as string
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
         const promptStatus = formData.get('promptStatus') as string
         const promptId = formData.get('promptId') as string
 

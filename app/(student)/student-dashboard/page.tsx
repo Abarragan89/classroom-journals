@@ -4,7 +4,7 @@ import { PromptCategory, Response, Session, StudentRequest } from "@/types";
 import { notFound } from "next/navigation";
 import { getAllPromptCategories } from "@/lib/actions/prompt.categories";
 import { getDecyptedStudentUsername, getFeaturedBlogs, getTeacherId } from "@/lib/actions/student.dashboard.actions";
-import { getStudentRequests } from "@/lib/actions/student-request";
+import { getStudentRequests } from "@/lib/actions/student.dashboard.actions";
 import StudentDashClientWrapper from "./student-dash-client-wrapper";
 import { getStudentResponsesDashboard } from "@/lib/actions/response.action";
 

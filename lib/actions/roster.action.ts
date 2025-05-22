@@ -8,7 +8,12 @@ import { requireAuth } from "./authorization.action";
 
 export async function addStudentToRoster(prevState: unknown, formData: FormData) {
     try {
-        await requireAuth();
+        const teacherId = formData.get('teacherId') as string;
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
+
         const { name, username } = newStudentSchema.parse({
             name: formData.get('name'),
             username: formData.get('username')
@@ -17,7 +22,7 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
         // Get classId and StudentId
         const classId = formData.get('classId')
         if (typeof classId !== 'string') {
-            throw new Error('Missing teacher ID');
+            throw new Error('Missing class ID');
         }
 
         const allStudentPasswords = await prisma.classUser.findMany({
@@ -82,7 +87,12 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
 // Edit a student 
 export async function editStudent(prevState: unknown, formData: FormData) {
     try {
-        await requireAuth();
+        const teacherId = formData.get('teacherId') as string;
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
+
         const { name, username, commentCoolDown, password } = newStudentSchema.parse({
             name: formData.get('name'),
             username: formData.get('username'),
@@ -161,9 +171,12 @@ export async function editStudent(prevState: unknown, formData: FormData) {
 // delete student
 export async function deleteStudent(prevState: unknown, formData: FormData) {
     try {
+        const teacherId = formData.get('teacherId') as string;
         const session = await requireAuth();
-        if (!session) throw new Error('Forbidden')
-            
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
+
         // Get studentId
         const studentId = formData.get('studentId')
         if (typeof studentId !== 'string') {
@@ -188,10 +201,12 @@ export async function deleteStudent(prevState: unknown, formData: FormData) {
     }
 }
 
-export async function getStudentCountByClassId(classId: string) {
+export async function getStudentCountByClassId(classId: string, teacherId: string) {
     try {
         const session = await requireAuth();
-        if (!session) throw new Error('Forbidden')
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
 
         if (typeof classId !== 'string') {
             throw new Error('Missing or invalid classId');

@@ -66,6 +66,7 @@ export default function EditPromptSessionPopUp({
                     promptSessionStatus={promptSessionStatus}
                     setPromptSessionStatus={setPromptSessionStatus}
                     closeModal={closeModal}
+                    teacherId={teacherId}
                 />
             </ResponsiveDialog>
 
@@ -81,6 +82,7 @@ export default function EditPromptSessionPopUp({
                     isPublic={isSessionPublic}
                     setPromptSessionStatus={setIsSessionPublic}
                     closeModal={closeModal}
+                    teacherId={teacherId}
                 />
             </ResponsiveDialog>
 

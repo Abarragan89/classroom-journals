@@ -24,8 +24,8 @@ export default async function SingleResponse({
         return <div>No response ID provided</div>;
     }
 
-    const response = await getSingleResponse(responseId) as unknown as Response;
-    const classRosterAndScores = await getAllResponsesFromPompt(sessionId) as unknown as Response[]
+    const response = await getSingleResponse(responseId, teacherId) as unknown as Response;
+    const classRosterAndScores = await getAllResponsesFromPompt(sessionId, teacherId) as unknown as Response[]
 
     const rosterAlphabetized = classRosterAndScores.sort((a, b) => {
         const lastNameA = a?.student?.name?.split(" ")[1] as string; // Get second word (last name)
@@ -54,11 +54,13 @@ export default async function SingleResponse({
                         <ToggleSpellCheck
                             responseId={responseId}
                             spellCheckEnabled={response?.spellCheckEnabled}
+                            teacherId={teacherId}
                         />
                         {response?.submittedAt && (
                             <div className='flex-end gap-x-5'>
                                 <HandleToggleReturnStateBtn
                                     responseId={responseId}
+                                    teacherId={teacherId}
                                     isCompleted={response?.completionStatus === 'COMPLETE'}
                                 />
 
@@ -74,6 +76,7 @@ export default async function SingleResponse({
                     {!isMultiQuestion && (
                         <div className='flex-end mt-5'>
                             <ScoreJournalForm
+                                teacherId={teacherId}
                                 responseId={response?.id}
                                 currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
                             />
@@ -85,6 +88,7 @@ export default async function SingleResponse({
                         <GradeResponseCard
                             questionsAndAnswers={questionsAndAnswers}
                             responseId={responseId}
+                            teacherId={teacherId}
                         />
                     ) : (
                         <div className='w-full'>
