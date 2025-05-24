@@ -136,6 +136,7 @@ model Notification {
 
 enum AlertType {
   PAYMENT
+  NEWQUIP
 }
 
 model Alert {
@@ -189,7 +190,7 @@ model CommentLike {
 enum PromptType {
   BLOG
   ASSESSMENT
-  THREAD
+  QUIP
 }
 
 model Prompt {

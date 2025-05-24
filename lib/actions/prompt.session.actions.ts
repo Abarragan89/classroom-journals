@@ -2,10 +2,10 @@
 import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
 import { SearchOptions } from "@/types";
-import { PromptSessionStatus, ResponseStatus } from "@prisma/client";
+import { PromptSessionStatus, PromptType, ResponseStatus } from "@prisma/client";
 import { requireAuth } from "./authorization.action";
 
-// This is for teacher to get all session in dashboard
+// This is for teacher to get all Assignments in dashboard
 export async function getAllSessionsInClass(classId: string, teacherId: string) {
     try {
         const session = await requireAuth();
@@ -16,7 +16,12 @@ export async function getAllSessionsInClass(classId: string, teacherId: string) 
         const [totalCount, paginatedPrompts] = await Promise.all([
             prisma.promptSession.count({ where: { classId } }),
             prisma.promptSession.findMany({
-                where: { classId: classId },
+                where: {
+                    classId,
+                    promptType: {
+                        in: [PromptType.ASSESSMENT, PromptType.BLOG]
+                    }
+                },
                 orderBy: { createdAt: 'desc' },
                 select: {
                     id: true,
@@ -161,7 +166,12 @@ export async function getSinglePromptSessionStudentDiscussion(promptId: string, 
             throw new Error('Forbidden');
         }
         const allPromptSession = await prisma.promptSession.findUnique({
-            where: { id: promptId },
+            where: {
+                id: promptId,
+                promptType: {
+                    in: [PromptType.ASSESSMENT, PromptType.BLOG]
+                }
+            },
             select: {
                 id: true,
                 questions: true,
@@ -228,7 +238,7 @@ export async function getSinglePromptSessionTeacherDashboard(sessionId: string, 
             throw new Error('Forbidden');
         }
         const promptSession = await prisma.promptSession.findUnique({
-            where: { id: sessionId },
+            where: { id: sessionId, },
             select: {
                 status: true,
                 id: true,
@@ -410,7 +420,9 @@ export async function getFilteredPromptSessions(filterOptions: SearchOptions, cl
                     : undefined,
                 promptType: filterOptions.filter === 'BLOG' || filterOptions.filter === 'ASSESSMENT'
                     ? filterOptions.filter
-                    : undefined
+                    : {
+                        in: ['BLOG', 'ASSESSMENT'],
+                    },
             },
             select: {
                 id: true,

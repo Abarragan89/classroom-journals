@@ -500,7 +500,10 @@ export async function getSingleStudentResponses(studentId: string) {
         }
         const studentResponses = await prisma.response.findMany({
             where: {
-                studentId
+                studentId,
+                promptSession: {
+                    promptType: { in: ['BLOG', 'ASSESSMENT'] },
+                }
             },
             select: {
                 id: true,
@@ -551,7 +554,12 @@ export async function getStudentResponsesDashboard(studentId: string) {
         const [totalCount, paginatedResponses] = await Promise.all([
             prisma.response.count({ where: { studentId } }),
             prisma.response.findMany({
-                where: { studentId },
+                where: {
+                    studentId,
+                    promptSession: {
+                        promptType: { in: ['BLOG', 'ASSESSMENT'] },
+                    }
+                },
                 orderBy: { createdAt: 'desc' },
                 select: {
                     id: true,
@@ -613,7 +621,8 @@ export async function getFilteredStudentResponses(filterOptions: SearchOptions, 
                     promptType:
                         filterOptions.filter === 'BLOG' || filterOptions.filter === 'ASSESSMENT'
                             ? filterOptions.filter
-                            : undefined,
+                            : { in: ['BLOG', 'ASSESSMENT'] },
+
                 },
             },
             select: {

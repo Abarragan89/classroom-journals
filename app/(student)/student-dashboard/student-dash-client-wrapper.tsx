@@ -13,6 +13,7 @@ import { getFeaturedBlogs, getStudentRequests } from '@/lib/actions/student.dash
 import { useState } from 'react';
 import { getStudentResponsesDashboard } from '@/lib/actions/response.action';
 import { formatDateLong } from '@/lib/utils';
+import QuipLink from './quip-link';
 
 export default function StudentDashClientWrapper({
   allCategories,
@@ -97,6 +98,7 @@ export default function StudentDashClientWrapper({
       )}
       <section>
         <div className="flex-end space-x-5 relative -top-5 pb-5">
+          <QuipLink />
           <Button asChild>
             <Link href={'/typing-test'}>
               Speed Test

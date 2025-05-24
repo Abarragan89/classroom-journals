@@ -1,0 +1,238 @@
+"use server"
+import { prisma } from "@/db/prisma";
+import { requireAuth } from "./authorization.action";
+import { AlertType, ClassUserRole, PromptSessionStatus, PromptType } from "@prisma/client";
+import { ResponseData } from "@/types";
+import { InputJsonArray } from "@prisma/client/runtime/library";
+
+export async function createNewQuip(
+    quipText: string,
+    classId: string,
+    teacherId: string
+) {
+    try {
+        // Authenticate User
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
+        // Check subscription and limits
+        const promptSessionCount = await prisma.promptSession.count({
+            where: {
+                prompt: {
+                    teacherId,
+                },
+            },
+        });
+
+        const currentTeacherClassData = await prisma.user.findUnique({
+            where: { id: teacherId },
+            select: {
+                subscriptionExpires: true,
+                _count: { select: { prompts: true } }
+            }
+        });
+
+        const today = new Date();
+        const { subscriptionExpires } = currentTeacherClassData || {};
+        const isSubscribed = subscriptionExpires && subscriptionExpires > today;
+
+        const isAllowedToAssign = isSubscribed || (!isSubscribed && promptSessionCount < 5);
+
+        if (!isAllowedToAssign) {
+            throw new Error('You need to delete some assignments or upgrade your account before you can assign a new quip')
+        }
+
+        // generate quip question
+        const questions = [{
+            question: quipText,
+        }]
+
+        // Create Prompt session
+        const newQuip = await prisma.promptSession.create({
+            data: {
+                title: 'Quip',
+                isPublic: true,
+                promptType: PromptType.QUIP,
+                assignedAt: new Date(),
+                status: PromptSessionStatus.OPEN,
+                questions,
+                classId
+            }
+        })
+
+        // 3. Fetch class users
+        const classUsers = await prisma.classUser.findMany({
+            where: {
+                classId: classId,
+                role: ClassUserRole.STUDENT,
+            },
+            select: {
+                userId: true,
+            },
+        });
+
+        const alertsData = classUsers.map((classUser) => ({
+            userId: classUser.userId,
+            type: AlertType.NEWQUIP,
+            message: "You have a new Quip!"
+        }));
+
+        // Create Notifications about Quip
+        await prisma.alert.createMany({
+            data: alertsData,
+            skipDuplicates: true, // optional, skips if alert with same unique fields already exists
+        });
+
+        return newQuip;
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error assigning prompt:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+        return false
+    }
+}
+
+// get quips by classroom
+export async function getAllQuips(
+    classId: string,
+    userId: string
+) {
+    try {
+        // Authenticate User
+        const session = await requireAuth();
+        if (session?.user?.id !== userId) {
+            throw new Error('Forbidden');
+        }
+
+        const allQuips = await prisma.promptSession.findMany({
+            where: {
+                promptType: PromptType.QUIP,
+                classId,
+            },
+            select: {
+                id: true,
+                questions: true,
+                assignedAt: true,
+                responses: {
+                    select: {
+                        studentId: true
+                    }
+                }
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        })
+
+        return allQuips;
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error assigning prompt:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+        return { success: false, message: "Error assigning prompt. Try again." };
+    }
+}
+
+// Response to a quip 
+export async function respondToQuip(
+    responseText: ResponseData[],
+    studentId: string,
+    promptSessionId: string
+) {
+    try {
+        // Authenticate User
+        const session = await requireAuth();
+        if (session?.user?.id !== studentId) {
+            throw new Error('Forbidden');
+        }
+
+        const userResponse = await prisma.response.create({
+            data: {
+                response: responseText as unknown as InputJsonArray,
+                studentId,
+                promptSessionId,
+            }
+        })
+
+        return userResponse;
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error assigning prompt:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+        return { success: false, message: "Error assigning prompt. Try again." };
+    }
+}
+
+// Response to a quip 
+export async function deleteQuip(
+    teacherId: string,
+    promptSessionId: string
+) {
+    try {
+        // Authenticate User
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden');
+        }
+
+        await prisma.promptSession.delete({
+            where: {
+                id: promptSessionId
+            }
+        })
+        return true
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error deleting quip:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+        return { success: false, message: "Error assigning prompt. Try again." };
+    }
+}
+
+// Get all Responses for a single quip
+export async function getReponsesForQuip(
+    userId: string,
+    promptSessionId: string
+) {
+    try {
+        // Authenticate User
+        const session = await requireAuth();
+        if (session?.user?.id !== userId) {
+            throw new Error('Forbidden');
+        }
+
+        const responses = await prisma.response.findMany({
+            where: {
+                promptSessionId
+            }
+        })
+
+        return responses;
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error deleting quip:", error.message);
+            console.error(error.stack);
+        } else {
+            console.log("Unexpected error:", error);
+        }
+        return { success: false, message: "Error assigning prompt. Try again." };
+    }
+}
