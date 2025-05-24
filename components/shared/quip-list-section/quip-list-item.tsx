@@ -13,16 +13,19 @@ import { ResponsiveDialog } from '@/components/responsive-dialog'
 import AnswerQuip from '@/components/forms/quip-forms/answer-quip'
 import { deleteQuip, getReponsesForQuip } from '@/lib/actions/quips.action'
 import { ClassUserRole } from '@prisma/client'
+import { useQueryClient } from '@tanstack/react-query'
 
 
 export default function QuipListItem({
     singleQuip,
     userId,
     role,
+    classId
 }: {
     singleQuip: PromptSession;
     userId: string;
-    role: ClassUserRole
+    role: ClassUserRole;
+    classId: string;
 }) {
 
     const [openModal, setOpenModal] = useState<boolean>(false)
@@ -30,7 +33,7 @@ export default function QuipListItem({
     const [isComplete, setIsComplete] = useState<boolean>(singleQuip?.responses?.some(res => res.studentId === userId) || false)
     const [studentResponses, setStudentResponses] = useState<Response[] | null>(null)
     const [showResponses, setShowResponses] = useState<boolean>(false)
-
+    const queryClient = useQueryClient();
 
     // Set complete status
     useEffect(() => {
@@ -57,7 +60,10 @@ export default function QuipListItem({
     async function deleteQuipHandler() {
         try {
             if (role !== ClassUserRole.TEACHER) return;
-            await deleteQuip(userId, singleQuip.id)
+            const deletedQuip = await deleteQuip(userId, singleQuip.id) as PromptSession
+            queryClient.setQueryData<PromptSession[]>(['getAllQuips', classId], old =>
+                (old || []).filter(q => q.id !== deletedQuip.id)
+            );
             setOpenDeleteModal(false)
         } catch (error) {
             console.log('error deleting quip ', error)

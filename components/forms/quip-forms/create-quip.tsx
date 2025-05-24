@@ -15,19 +15,17 @@ import {
 } from "@/components/ui/form"
 import { toast } from "sonner";
 import { PromptSession } from "@/types";
-import { SetStateAction } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 export default function CreateQuipForm({
     classId,
     teacherId,
     closeModal,
-    setCurrentQuips
 }: {
     classId: string;
     teacherId: string;
     closeModal: () => void;
-    setCurrentQuips: React.Dispatch<SetStateAction<PromptSession[]>>
 }) {
 
     const formSchema = z.object({
@@ -45,10 +43,15 @@ export default function CreateQuipForm({
         },
     })
 
+    const queryClient = useQueryClient();
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             const newQuip = await createNewQuip(values.qiupText, values.classId, values.teacherId) as PromptSession
-            setCurrentQuips(prev => [newQuip, ...prev])
+            queryClient.setQueryData<PromptSession[]>(['getAllQuips', classId], old => [
+                newQuip,
+                ...(old || []),
+            ]);
             closeModal();
             toast('Quip Posted!')
         } catch (error) {

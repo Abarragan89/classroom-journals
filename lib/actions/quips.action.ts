@@ -188,12 +188,15 @@ export async function deleteQuip(
             throw new Error('Forbidden');
         }
 
-        await prisma.promptSession.delete({
+        const deletedQuip = await prisma.promptSession.delete({
             where: {
                 id: promptSessionId
+            },
+            select: {
+                id: true
             }
         })
-        return true
+        return deletedQuip
 
     } catch (error) {
         if (error instanceof Error) {

@@ -4,35 +4,72 @@ import QuipListItem from "./quip-list-item"
 import { ClassUserRole } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { getAllQuips } from "@/lib/actions/quips.action";
+import { Button } from "@/components/ui/button"
+import { Plus } from "lucide-react"
+import CreateQuipForm from "@/components/forms/quip-forms/create-quip"
+import { ResponsiveDialog } from "@/components/responsive-dialog"
+import { useState } from "react";
+
 
 export default function QuipListSection({
-    allQuips,
     userId,
     role,
     classId
 }: {
-    allQuips: PromptSession[];
     userId: string
     role: ClassUserRole;
     classId: string
 }) {
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
     // Get the prompt sessions
-    const { data: allQuipData } = useQuery({
+    const { data: currentQuips = [] } = useQuery({
         queryKey: ['getAllQuips', classId],
-        queryFn: () => getAllQuips(classId, userId) as unknown as PromptSession[],
-        initialData: allQuips,
+        queryFn: async () => {
+            return await getAllQuips(classId, userId) as PromptSession[];
+        },
         refetchOnReconnect: false,
-    })
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        staleTime: Infinity, // never mark as stale
+    });
+
+
+
+    function closeModal() {
+        setIsModalOpen(false)
+    }
 
     return (
         <section>
-            {allQuipData?.length > 0 && allQuipData.map((singleQuip) => (
+            {role === "TEACHER" && (
+                <>
+                    <ResponsiveDialog
+                        isOpen={isModalOpen}
+                        setIsOpen={setIsModalOpen}
+                        title="Create Quip"
+                    >
+                        <CreateQuipForm
+                            classId={classId}
+                            teacherId={userId}
+                            closeModal={closeModal}
+                        />
+                    </ResponsiveDialog>
+                    <div className="flex-end my-4">
+                        <Button onClick={() => setIsModalOpen(true)} className="">
+                            <Plus /> New Quip
+                        </Button>
+                    </div>
+                </>
+
+            )}
+            {currentQuips && currentQuips?.length > 0 && currentQuips.map((singleQuip) => (
                 <QuipListItem
                     singleQuip={singleQuip}
                     key={singleQuip.id}
                     userId={userId}
                     role={role}
+                    classId={classId}
                 />
             ))}
         </section>
