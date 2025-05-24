@@ -28,7 +28,10 @@ export default function MainClientWrapper({
         queryKey: ['getSingleSessionData', sessionId],
         queryFn: () => getSinglePromptSessionTeacherDashboard(sessionId, teacherId) as unknown as PromptSession,
         initialData: promptSession,
+        refetchOnMount: false,
         refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
+        staleTime: Infinity,
     })
 
 

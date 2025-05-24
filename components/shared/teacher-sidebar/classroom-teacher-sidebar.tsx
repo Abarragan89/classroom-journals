@@ -40,13 +40,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
   const { data: notificationCount } = useQuery({
     queryKey: ['getUserNotifications', teacherId],
     queryFn: () => getUnreadUserNotifications(teacherId, currentClassroomId) as unknown as number,
+    refetchOnMount: false,
     refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   })
 
   const { data: studentRequestCount } = useQuery({
     queryKey: ['getStudentRequestCount', teacherId],
     queryFn: () => getStudentRequestCount(teacherId, currentClassroomId) as unknown as number,
+    refetchOnMount: false,
     refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   })
 
 
