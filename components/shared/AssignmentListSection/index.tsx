@@ -34,7 +34,10 @@ export default function AssignmentListSection({
             return classdata.prompts
         },
         initialData: initialPrompts,
+        refetchOnMount: false,
         refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
+        staleTime: Infinity,
     })
 
     if (error) {
