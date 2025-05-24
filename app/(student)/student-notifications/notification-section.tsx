@@ -35,7 +35,10 @@ export default function NotificationSection({
             return userNotifications;
         },
         initialData: notifications,
+        refetchOnMount: false,
         refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
+        staleTime: Infinity,
     })
 
     if (error) {

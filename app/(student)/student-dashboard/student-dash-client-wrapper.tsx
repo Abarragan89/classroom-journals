@@ -38,7 +38,10 @@ export default function StudentDashClientWrapper({
     queryKey: ['getAllStudentResponses', classroomId],
     queryFn: () => getStudentResponsesDashboard(studentId) as unknown as { responses: Response[], totalCount: number },
     initialData: allResponses,
+    refetchOnMount: false,
     refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   })
 
   // Get the student requests
@@ -51,7 +54,10 @@ export default function StudentDashClientWrapper({
       return requests
     },
     initialData: studentRequests,
+    refetchOnMount: false,
     refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   })
 
   // Get the Featured Blogs
@@ -59,7 +65,10 @@ export default function StudentDashClientWrapper({
     queryKey: ['getFeaturedBlogs', classroomId],
     queryFn: () => getFeaturedBlogs(classroomId) as unknown as Response[],
     initialData: featuredBlogs,
+    refetchOnMount: false,
     refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   })
 
   const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'username'))
