@@ -9,6 +9,7 @@ import { Plus } from "lucide-react"
 import CreateQuipForm from "@/components/forms/quip-forms/create-quip"
 import { ResponsiveDialog } from "@/components/responsive-dialog"
 import { useState } from "react";
+import { Accordion } from "@/components/ui/accordion";
 
 
 export default function QuipListSection({
@@ -63,15 +64,19 @@ export default function QuipListSection({
                 </>
 
             )}
-            {currentQuips && currentQuips?.length > 0 && currentQuips.map((singleQuip) => (
-                <QuipListItem
-                    singleQuip={singleQuip}
-                    key={singleQuip.id}
-                    userId={userId}
-                    role={role}
-                    classId={classId}
-                />
-            ))}
+            <Accordion className='mx-5 mt-10' type="single" collapsible>
+                {currentQuips && currentQuips?.length > 0 && currentQuips.map((singleQuip, index) => (
+                    <QuipListItem
+                        singleQuip={singleQuip}
+                        key={singleQuip.id}
+                        userId={userId}
+                        role={role}
+                        classId={classId}
+                        indexNumber={(index + 1).toString()}
+                    />
+
+                ))}
+            </Accordion>
         </section>
     )
 }

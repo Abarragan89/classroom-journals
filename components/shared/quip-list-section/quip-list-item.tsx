@@ -1,9 +1,7 @@
 "use client"
-// import { formatDateShort } from '@/lib/utils'
 import { PromptSession, Question, Response, ResponseData } from '@/types'
 import React, { useEffect, useState } from 'react'
 import {
-    Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
@@ -14,18 +12,23 @@ import AnswerQuip from '@/components/forms/quip-forms/answer-quip'
 import { deleteQuip, getReponsesForQuip } from '@/lib/actions/quips.action'
 import { ClassUserRole } from '@prisma/client'
 import { useQueryClient } from '@tanstack/react-query'
-
+import LoadingAnimation from '@/components/loading-animation'
+import { formatDateMonthDayYear } from '@/lib/utils'
+import { Trash2, } from 'lucide-react'
+import QuipSingleResponse from './quip-single-response'
 
 export default function QuipListItem({
     singleQuip,
     userId,
     role,
-    classId
+    classId,
+    indexNumber
 }: {
     singleQuip: PromptSession;
     userId: string;
     role: ClassUserRole;
     classId: string;
+    indexNumber: string
 }) {
 
     const [openModal, setOpenModal] = useState<boolean>(false)
@@ -35,15 +38,15 @@ export default function QuipListItem({
     const [showResponses, setShowResponses] = useState<boolean>(false)
     const queryClient = useQueryClient();
 
+
+
     // Set complete status
     useEffect(() => {
         setIsComplete(singleQuip?.responses?.some(res => res.studentId === userId) || false)
     }, [singleQuip])
 
     useEffect(() => {
-        console.log('gettting the data')
         if ((isComplete || role === "TEACHER") && showResponses) {
-            console.log('getting the data..')
             getStudentResponses()
         }
     }, [isComplete, role, showResponses])
@@ -80,6 +83,8 @@ export default function QuipListItem({
         }
     }
 
+
+
     const quipQuestion = (singleQuip?.questions as Question[])[0]?.question
 
     return (
@@ -107,38 +112,55 @@ export default function QuipListItem({
                     Delete Quip
                 </Button>
             </ResponsiveDialog>
-            <Accordion className='mx-5' type="single" collapsible>
-                <AccordionItem value="item-1">
-                    <AccordionTrigger onClick={() => setShowResponses(true)}>
-                        <p className='text-md font-bold line-clamp-1 text-foreground'>{quipQuestion}</p>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        {role === ClassUserRole.TEACHER && (
-                            <div className='flex-end'>
-                                <Button onClick={() => setOpenDeleteModal(true)} variant='link' className='text-destructive'>
-                                    Delete Quip
-                                </Button>
+            <AccordionItem value={`item-${indexNumber}`} className='relative'>
+                <div className="flex flex-col mt-1">
+                    <div className='flex'>
+                        <p className="w-[40px] h-[40px] bg-primary text-primary-foreground rounded-full flex items-center justify-center">
+                            {'M'}
+                        </p>
+                        <div className="flex-between">
+                            <div className='ml-2 text-input'>
+                                <p className="leading-5 text-sm">{singleQuip?.author}</p>
+                                <p className="leading-5 text-sm">{formatDateMonthDayYear(singleQuip?.assignedAt)}</p>
                             </div>
-                        )}
-                        {isComplete || role !== ClassUserRole.STUDENT ? (
-                            studentResponses && studentResponses.map((response) => {
-                                console.log('response ', response)
-                                return (
-                                    <p key={response.id}>
-                                        {(response?.response as unknown as ResponseData[])[0]?.answer}
-                                    </p>
-                                )
-                            })
-                        ) : (
-                            <div className="flex-center">
-                                <Button onClick={() => setOpenModal(true)}>
-                                    Response to Quip
-                                </Button>
-                            </div>
-                        )}
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
+                            {role === ClassUserRole.TEACHER && (
+                                <p onClick={(e) => { setOpenDeleteModal(true); e.stopPropagation(); }} className='text-destructive absolute top-1 -right-[2px]'>
+                                    <Trash2
+                                        className='hover:cursor-pointer opacity-80 hover:opacity-100'
+                                        size={18}
+                                    />
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+                <AccordionTrigger onClick={() => setShowResponses(true)} className='py-2 items-start'>
+                    <p className='text-md font-bold text-foreground mx-12 tracking-wide'>{quipQuestion}</p>
+                </AccordionTrigger>
+                <AccordionContent>
+                    {isComplete || role !== ClassUserRole.STUDENT ? (
+                        studentResponses ? studentResponses.map((response) => (
+                            <QuipSingleResponse
+                                key={response.id}
+                                responseId={response.id}
+                                responseText={(response?.response as unknown as ResponseData[])[0]?.answer}
+                                userId={userId}
+                                responseDate={response?.createdAt}
+                                responseLikes={response?.likes}
+                                likeCount={response?.likeCount}
+                            />
+                        )) : (
+                            <LoadingAnimation />
+                        )
+                    ) : (
+                        <div className="flex-center">
+                            <Button onClick={() => setOpenModal(true)}>
+                                Response to Quip
+                            </Button>
+                        </div>
+                    )}
+                </AccordionContent>
+            </AccordionItem >
         </>
     )
 }

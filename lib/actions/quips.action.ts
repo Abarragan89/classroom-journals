@@ -4,6 +4,7 @@ import { requireAuth } from "./authorization.action";
 import { AlertType, ClassUserRole, PromptSessionStatus, PromptType } from "@prisma/client";
 import { ResponseData } from "@/types";
 import { InputJsonArray } from "@prisma/client/runtime/library";
+import { decryptText } from "../utils";
 
 export async function createNewQuip(
     quipText: string,
@@ -19,15 +20,14 @@ export async function createNewQuip(
         // Check subscription and limits
         const promptSessionCount = await prisma.promptSession.count({
             where: {
-                prompt: {
-                    teacherId,
-                },
+                classId
             },
         });
 
         const currentTeacherClassData = await prisma.user.findUnique({
             where: { id: teacherId },
             select: {
+                username: true,
                 subscriptionExpires: true,
                 _count: { select: { prompts: true } }
             }
@@ -38,6 +38,10 @@ export async function createNewQuip(
         const isSubscribed = subscriptionExpires && subscriptionExpires > today;
 
         const isAllowedToAssign = isSubscribed || (!isSubscribed && promptSessionCount < 5);
+
+        console.log('is subscribed ', isSubscribed)
+        console.log('prompt session coutn ', promptSessionCount)
+        console.log('isa allowed to assign ', isAllowedToAssign)
 
         if (!isAllowedToAssign) {
             throw new Error('You need to delete some assignments or upgrade your account before you can assign a new quip')
@@ -57,7 +61,8 @@ export async function createNewQuip(
                 assignedAt: new Date(),
                 status: PromptSessionStatus.OPEN,
                 questions,
-                classId
+                classId,
+                author: currentTeacherClassData?.username
             }
         })
 
@@ -84,7 +89,7 @@ export async function createNewQuip(
             skipDuplicates: true, // optional, skips if alert with same unique fields already exists
         });
 
-        return newQuip;
+        return { success: true, message: 'Quip added!', data: newQuip }
 
     } catch (error) {
         if (error instanceof Error) {
@@ -93,7 +98,7 @@ export async function createNewQuip(
         } else {
             console.log("Unexpected error:", error);
         }
-        return false
+        return { success: false, message: error, data: null }
     }
 }
 
@@ -109,6 +114,14 @@ export async function getAllQuips(
             throw new Error('Forbidden');
         }
 
+        // get author's last name for decryption
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { iv: true }
+        })
+
+        if (!user) return { success: false, message: "Author not found" };
+
         const allQuips = await prisma.promptSession.findMany({
             where: {
                 promptType: PromptType.QUIP,
@@ -118,6 +131,7 @@ export async function getAllQuips(
                 id: true,
                 questions: true,
                 assignedAt: true,
+                author: true,
                 responses: {
                     select: {
                         studentId: true
@@ -129,7 +143,12 @@ export async function getAllQuips(
             }
         })
 
-        return allQuips;
+        const decryptedQuips = allQuips.map(quip => ({
+            ...quip,
+            author: decryptText(quip.author as string, user.iv as string),
+        }))
+
+        return decryptedQuips;
 
     } catch (error) {
         if (error instanceof Error) {
@@ -224,9 +243,23 @@ export async function getReponsesForQuip(
         const responses = await prisma.response.findMany({
             where: {
                 promptSessionId
+            },
+            select: {
+                response: true,
+                id: true,
+                createdAt: true,
+                studentId: true,
+                likeCount: true,
+                likes: {
+                    select: {
+                        userId: true
+                    }
+                }
+            },
+            orderBy: {
+                likeCount: 'desc'
             }
         })
-
         return responses;
 
     } catch (error) {

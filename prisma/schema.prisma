@@ -233,6 +233,8 @@ model PromptSession {
   classId          String              @db.Uuid // relate it to which side it is attached to
   status           PromptSessionStatus @default(OPEN)
   responses        Response[]
+  // This is mainly for threads when a student suggests a thread and it is accepted
+  author        String?
   // Relationship
   prompt           Prompt?             @relation(fields: [promptId], references: [id], onDelete: SetNull)
   class            Classroom           @relation(fields: [classId], references: [id], onDelete: Cascade)
