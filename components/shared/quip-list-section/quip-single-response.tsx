@@ -63,7 +63,7 @@ export default function QuipSingleResponse({
         <div className="mt-2">
             <div className='ml-12 flex'>
                 <p className="w-[35px] h-[35px] bg-primary text-primary-foreground rounded-full flex items-center justify-center">
-                    {'M'}
+                    {responseAuthor.charAt(0)}
                 </p>
                 <div className="flex justify-between w-full items-start">
                     <div className='ml-2 text-input'>

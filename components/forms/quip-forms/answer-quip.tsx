@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormMessage,
@@ -60,12 +59,9 @@ export default function AnswerQuip({
                     name="responseText"
                     render={({ field }) => (
                         <FormItem>
-                            <FormDescription>
-                                {quipQuestion}
-                            </FormDescription>
                             <FormControl>
                                 <Textarea
-                                    rows={4}
+                                    rows={3}
                                     placeholder="Your response..." {...field}
                                     onPaste={(e) => e.preventDefault()}
                                     onCopy={(e) => e.preventDefault()}
