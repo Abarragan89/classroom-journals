@@ -77,13 +77,10 @@ export default function QuipListItem({
         try {
             const responses = await getReponsesForQuip(userId, singleQuip.id) as Response[];
             setStudentResponses(responses)
-            console.log('responses ', responses)
         } catch (error) {
             console.log('error getting student reponses to quips', error)
         }
     }
-
-
 
     const quipQuestion = (singleQuip?.questions as Question[])[0]?.question
 
@@ -120,7 +117,7 @@ export default function QuipListItem({
                         </p>
                         <div className="flex-between">
                             <div className='ml-2 text-input'>
-                                <p className="leading-5 text-sm">{singleQuip?.author}</p>
+                                <p className="leading-5 text-sm">{singleQuip?.author?.username}</p>
                                 <p className="leading-5 text-sm">{formatDateMonthDayYear(singleQuip?.assignedAt)}</p>
                             </div>
                             {role === ClassUserRole.TEACHER && (
@@ -153,7 +150,7 @@ export default function QuipListItem({
                             <LoadingAnimation />
                         )
                     ) : (
-                        <div className="flex-center">
+                        <div className="flex-center mt-4 mb-2">
                             <Button onClick={() => setOpenModal(true)}>
                                 Response to Quip
                             </Button>

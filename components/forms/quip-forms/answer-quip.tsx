@@ -67,6 +67,11 @@ export default function AnswerQuip({
                                 <Textarea
                                     rows={4}
                                     placeholder="Your response..." {...field}
+                                    onPaste={(e) => e.preventDefault()}
+                                    onCopy={(e) => e.preventDefault()}
+                                    onCut={(e) => e.preventDefault()}
+                                    onDrop={(e) => e.preventDefault()}
+                                    onDragOver={(e) => e.preventDefault()}
                                 />
                             </FormControl>
                             <FormMessage />

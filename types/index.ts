@@ -70,7 +70,8 @@ export type PromptSession = {
     isPublic: boolean;
     promptType: string;
     studentResponseId?: string;
-    author?: string;
+    authorId?: string;
+    author?: User;
     category: PromptCategory;
     prompt?: Prompt;
     areGradesVisible: boolean;

@@ -27,7 +27,6 @@ export async function createNewQuip(
         const currentTeacherClassData = await prisma.user.findUnique({
             where: { id: teacherId },
             select: {
-                username: true,
                 subscriptionExpires: true,
                 _count: { select: { prompts: true } }
             }
@@ -39,9 +38,6 @@ export async function createNewQuip(
 
         const isAllowedToAssign = isSubscribed || (!isSubscribed && promptSessionCount < 5);
 
-        console.log('is subscribed ', isSubscribed)
-        console.log('prompt session coutn ', promptSessionCount)
-        console.log('isa allowed to assign ', isAllowedToAssign)
 
         if (!isAllowedToAssign) {
             throw new Error('You need to delete some assignments or upgrade your account before you can assign a new quip')
@@ -62,8 +58,24 @@ export async function createNewQuip(
                 status: PromptSessionStatus.OPEN,
                 questions,
                 classId,
-                author: currentTeacherClassData?.username
-            }
+                authorId: teacherId
+            },
+            select: {
+                id: true,
+                questions: true,
+                assignedAt: true,
+                author: {
+                    select: {
+                        username: true,
+                        iv: true
+                    }
+                },
+                responses: {
+                    select: {
+                        studentId: true
+                    }
+                }
+            },
         })
 
         // 3. Fetch class users
@@ -89,7 +101,14 @@ export async function createNewQuip(
             skipDuplicates: true, // optional, skips if alert with same unique fields already exists
         });
 
-        return { success: true, message: 'Quip added!', data: newQuip }
+        const decryptedQuip = {
+            ...newQuip,
+            author: {
+                username: decryptText(newQuip?.author?.username as string, newQuip?.author?.iv as string),
+            }
+        }
+
+        return { success: true, message: 'Quip added!', data: decryptedQuip }
 
     } catch (error) {
         if (error instanceof Error) {
@@ -114,14 +133,6 @@ export async function getAllQuips(
             throw new Error('Forbidden');
         }
 
-        // get author's last name for decryption
-        const user = await prisma.user.findUnique({
-            where: { id: userId },
-            select: { iv: true }
-        })
-
-        if (!user) return { success: false, message: "Author not found" };
-
         const allQuips = await prisma.promptSession.findMany({
             where: {
                 promptType: PromptType.QUIP,
@@ -131,7 +142,12 @@ export async function getAllQuips(
                 id: true,
                 questions: true,
                 assignedAt: true,
-                author: true,
+                author: {
+                    select: {
+                        username: true,
+                        iv: true
+                    }
+                },
                 responses: {
                     select: {
                         studentId: true
@@ -143,9 +159,10 @@ export async function getAllQuips(
             }
         })
 
+
         const decryptedQuips = allQuips.map(quip => ({
             ...quip,
-            author: decryptText(quip.author as string, user.iv as string),
+            author: decryptText(quip?.author?.username as string, quip?.author?.iv as string),
         }))
 
         return decryptedQuips;

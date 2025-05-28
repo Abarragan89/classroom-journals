@@ -6,6 +6,7 @@ import { ArrowLeftIcon } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import QuipListSection from "@/components/shared/quip-list-section"
+import { clearAllQuipAlerts } from "@/lib/actions/alert.action"
 
 
 export default async function ClassroomQuips() {
@@ -22,8 +23,10 @@ export default async function ClassroomQuips() {
         return notFound()
     }
 
-    const allQuips = await getAllQuips(classroomId, studentId) as PromptSession[]
+    const allQuips = await getAllQuips(classroomId, studentId) as unknown as PromptSession[]
 
+    // clear all alerts when user gets to this page
+    await clearAllQuipAlerts(studentId)
 
     return (
         <>

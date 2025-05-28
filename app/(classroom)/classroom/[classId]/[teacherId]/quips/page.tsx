@@ -19,8 +19,7 @@ export default async function Quips({
         return notFound();
     }
 
-    const allQuips = await getAllQuips(classId, teacherId) as PromptSession[]
-
+    const allQuips = await getAllQuips(classId, teacherId) as unknown as PromptSession[]
 
     return (
         <>

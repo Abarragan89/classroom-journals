@@ -20,6 +20,7 @@ export default function QuipsClientWraper({
     return (
         <>
             <QuipListSection
+                allQuips={allQuips}
                 role={role}
                 userId={teacherId}
                 classId={classId}

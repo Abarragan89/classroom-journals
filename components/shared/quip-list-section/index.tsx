@@ -15,11 +15,13 @@ import { Accordion } from "@/components/ui/accordion";
 export default function QuipListSection({
     userId,
     role,
-    classId
+    classId,
+    allQuips
 }: {
     userId: string
     role: ClassUserRole;
-    classId: string
+    classId: string;
+    allQuips: PromptSession[]
 }) {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
@@ -27,15 +29,14 @@ export default function QuipListSection({
     const { data: currentQuips = [] } = useQuery({
         queryKey: ['getAllQuips', classId],
         queryFn: async () => {
-            return await getAllQuips(classId, userId) as PromptSession[];
+            return await getAllQuips(classId, userId) as unknown as PromptSession[];
         },
+        initialData: allQuips,
         refetchOnReconnect: false,
         refetchOnWindowFocus: false,
         refetchOnMount: false,
-        staleTime: Infinity, // never mark as stale
+        staleTime: Infinity,
     });
-
-
 
     function closeModal() {
         setIsModalOpen(false)

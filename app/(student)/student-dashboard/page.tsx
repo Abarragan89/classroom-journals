@@ -7,6 +7,7 @@ import { getDecyptedStudentUsername, getFeaturedBlogs, getTeacherId } from "@/li
 import { getStudentRequests } from "@/lib/actions/student.dashboard.actions";
 import StudentDashClientWrapper from "./student-dash-client-wrapper";
 import { getStudentResponsesDashboard } from "@/lib/actions/response.action";
+import { getAllQuipAlerts } from "@/lib/actions/alert.action";
 
 
 export default async function StudentDashboard() {
@@ -36,6 +37,8 @@ export default async function StudentDashboard() {
     const featuredBlogs = await getFeaturedBlogs(classroomId) as unknown as Response[]
     const studentRequests = await getStudentRequests(studentId) as unknown as StudentRequest[]
 
+    const quipAlerts = await getAllQuipAlerts(studentId) as number
+
     return (
         <>
             <Header session={session} studentId={studentId} />
@@ -49,6 +52,7 @@ export default async function StudentDashboard() {
                     studentId={studentId}
                     teacherId={teacherId}
                     classroomId={classroomId}
+                    quipAlerts={quipAlerts}
                 />
             </main>
         </>
