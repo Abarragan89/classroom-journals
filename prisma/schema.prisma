@@ -23,7 +23,7 @@ model User {
   emailVerified       DateTime?          @db.Timestamp(6)
   image               String?
   isAdmin             Boolean            @default(false)
-  wpmSpeed            Float                @default(0.0)
+  wpmSpeed            Float              @default(0.0)
   accountType         TeacherAccountType @default(BASIC)
   password            String? // this password is only for student accounts and needs to be accessible to teacher
   iv                  String? // this is used to encrypt student names, ensures no duplicates when same input is given when encrypting
@@ -49,6 +49,7 @@ model User {
   isCancelling        Boolean?
   subscriptionExpires DateTime?
   Alert               Alert[]
+  PromptSession       PromptSession[]
 }
 
 model Account {
@@ -136,6 +137,7 @@ model Notification {
 
 enum AlertType {
   PAYMENT
+  NEWQUIP
 }
 
 model Alert {
@@ -189,7 +191,7 @@ model CommentLike {
 enum PromptType {
   BLOG
   ASSESSMENT
-  THREAD
+  QUIP
 }
 
 model Prompt {
@@ -232,7 +234,10 @@ model PromptSession {
   classId          String              @db.Uuid // relate it to which side it is attached to
   status           PromptSessionStatus @default(OPEN)
   responses        Response[]
+  // This is mainly for threads when a student suggests a thread and it is accepted
+  authorId         String?             @db.Uuid
   // Relationship
+  author           User?               @relation(fields: [authorId], references: [id], onDelete: SetNull)
   prompt           Prompt?             @relation(fields: [promptId], references: [id], onDelete: SetNull)
   class            Classroom           @relation(fields: [classId], references: [id], onDelete: Cascade)
   createdAt        DateTime            @default(now())

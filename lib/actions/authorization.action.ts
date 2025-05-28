@@ -9,8 +9,6 @@ export async function requireAuth() {
 
     const session = await auth();
 
-    console.log('session ', session)
-
     if (!session || !session.user) {
         throw new Error("Unauthorized");
     }

@@ -13,6 +13,8 @@ import { getFeaturedBlogs, getStudentRequests } from '@/lib/actions/student.dash
 import { useState } from 'react';
 import { getStudentResponsesDashboard } from '@/lib/actions/response.action';
 import { formatDateLong } from '@/lib/utils';
+import QuipLink from './quip-link';
+import { getAllQuipAlerts } from '@/lib/actions/alert.action';
 
 export default function StudentDashClientWrapper({
   allCategories,
@@ -21,7 +23,9 @@ export default function StudentDashClientWrapper({
   studentRequests,
   studentId,
   teacherId,
-  classroomId
+  classroomId,
+  quipAlerts
+
 }: {
   allCategories: PromptCategory[];
   allResponses: { responses: Response[], totalCount: number },
@@ -29,7 +33,8 @@ export default function StudentDashClientWrapper({
   studentRequests: StudentRequest[],
   studentId: string;
   teacherId: string;
-  classroomId: string
+  classroomId: string;
+  quipAlerts: number;
 }) {
 
 
@@ -71,6 +76,18 @@ export default function StudentDashClientWrapper({
     staleTime: Infinity,
   })
 
+  // Get the StudentAlert Queries 
+  const { data: quipAlertCount } = useQuery({
+    queryKey: ['getQueryAlerts', studentId],
+    queryFn: () => getAllQuipAlerts(studentId) as unknown as number,
+    initialData: quipAlerts,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  })
+  
+
   const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'username'))
   const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'prompt'))
 
@@ -106,6 +123,9 @@ export default function StudentDashClientWrapper({
       )}
       <section>
         <div className="flex-end space-x-5 relative -top-5 pb-5">
+          <QuipLink
+            quipAlerts={quipAlertCount}
+          />
           <Button asChild>
             <Link href={'/typing-test'}>
               Speed Test

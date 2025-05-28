@@ -7,6 +7,7 @@ import { headers } from 'next/headers';
 import Footer from "@/components/footer";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import TanstackQueryProvider from "@/components/providers/tanstack-query-provider";
+import AbsentUserChecker from "@/components/absent-user-checker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -82,6 +83,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <AbsentUserChecker />
             <Toaster />
             <div className="flex min-h-screen flex-col">
               <div className="flex-1">

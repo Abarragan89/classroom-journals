@@ -20,7 +20,7 @@ import { usePathname } from "next/navigation"
 import {
   Home, User, Keyboard, Bell, Settings, PenTool,
   //  Table, 
-  // MessageCircle,
+  MessageCircle,
   Inbox
 } from "lucide-react"
 import { getUnreadUserNotifications } from "@/lib/actions/notifications.action"
@@ -64,7 +64,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
           { title: "Assignments", icon: Home, slug: `/classroom/${currentClassroomId}/${teacherId}`, isActive: currentRoute === undefined, isLink: true },
           { title: "Roster", icon: User, slug: `/classroom/${currentClassroomId}/${teacherId}/roster`, isActive: currentRoute === 'roster', isLink: true },
           { title: "Jots", icon: PenTool, slug: `/classroom/${currentClassroomId}/${teacherId}/jots`, isActive: currentRoute === 'jots', isLink: true },
-          // { title: "Quips", icon: MessageCircle, slug: `/classroom/${currentClassroomId}/${teacherId}/quips`, isActive: currentRoute === 'quips', isLink: true },
+          { title: "Quips", icon: MessageCircle, slug: `/classroom/${currentClassroomId}/${teacherId}/quips`, isActive: currentRoute === 'quips', isLink: true },
           { title: "Notifications", icon: Bell, slug: `/classroom/${currentClassroomId}/${teacherId}/notifications`, isActive: currentRoute === 'notifications', isLink: true },
           // { title: "Score Sheet", icon: Table, slug: `/classroom/${currentClassroomId}/${teacherId}/scoresheet`, isActive: currentRoute === 'scoresheet', isLink: true },
           { title: "Typing Test", icon: Keyboard, slug: `/classroom/${currentClassroomId}/${teacherId}/typing-test`, isActive: currentRoute === 'typing-test', isLink: true },

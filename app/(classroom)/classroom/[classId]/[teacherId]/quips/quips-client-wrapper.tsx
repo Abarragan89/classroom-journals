@@ -1,25 +1,30 @@
 "use client"
 import { useState } from "react"
-import { ResponsiveDialog } from "@/components/responsive-dialog"
-import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
 
-export default function QuipsClientWraper() {
+import { PromptSession } from "@/types";
+import QuipListSection from "@/components/shared/quip-list-section"
+import { ClassUserRole } from "@prisma/client"
 
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+export default function QuipsClientWraper({
+    classId,
+    teacherId,
+    allQuips,
+    role,
+}: {
+    classId: string;
+    teacherId: string;
+    allQuips: PromptSession[]
+    role: ClassUserRole
+}) {
 
     return (
         <>
-            <ResponsiveDialog
-                isOpen={isModalOpen}
-                setIsOpen={setIsModalOpen}
-                title="New Quip"
-            >
-                Make
-            </ResponsiveDialog>
-            <Button onClick={() => setIsModalOpen(true)} className="absolute top-[40px] right-0">
-                <Plus /> New Quip
-            </Button>
+            <QuipListSection
+                allQuips={allQuips}
+                role={role}
+                userId={teacherId}
+                classId={classId}
+            />
         </>
     )
 }

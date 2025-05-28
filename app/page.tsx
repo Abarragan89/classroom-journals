@@ -1,9 +1,7 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation";
 import Header from "@/components/shared/header";
-import { Response, 
-    Session 
-} from "@/types";
+import { Response, Session } from "@/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,6 +15,7 @@ import { CornerRightUp } from "lucide-react";
 export default async function page() {
 
     const session = await auth() as Session;
+
     if (session) {
         if (session?.user?.role === 'TEACHER') {
             redirect(`/classes`)

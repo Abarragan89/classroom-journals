@@ -59,18 +59,19 @@ export type Prompt = z.infer<typeof promptSchema> & {
     teacherId: string;
     classes?: Classroom[]
     promptSession?: PromptSession[];
-
 }
 
 export type PromptSession = {
     id: string;
     promptId: string | null;
     title: string;
-    questions: JsonValue;
+    questions: JsonValue | Question[];
     assignedAt: Date;
     isPublic: boolean;
     promptType: string;
     studentResponseId?: string;
+    authorId?: string;
+    author?: User;
     category: PromptCategory;
     prompt?: Prompt;
     areGradesVisible: boolean;
