@@ -271,13 +271,26 @@ export async function getReponsesForQuip(
                     select: {
                         userId: true
                     }
+                },
+                student: {
+                    select: {
+                        username: true,
+                        iv: true
+                    }
                 }
             },
             orderBy: {
                 likeCount: 'desc'
             }
         })
-        return responses;
+
+        const decryptedResponses = responses.map(prev => ({
+            ...prev,
+            student: {
+                username: decryptText(prev?.student?.username as string, prev?.student?.iv as string)
+            }
+        }))
+        return decryptedResponses;
 
     } catch (error) {
         if (error instanceof Error) {

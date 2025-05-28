@@ -13,7 +13,8 @@ export default function QuipSingleResponse({
     responseText,
     responseDate,
     responseLikes,
-    likeCount
+    likeCount,
+    responseAuthor
 }: {
     responseId: string;
     userId: string;
@@ -21,6 +22,7 @@ export default function QuipSingleResponse({
     responseDate: Date;
     responseLikes: ResponseLike[];
     likeCount: number;
+    responseAuthor: string
 }) {
 
     const [isBlogLikedByUser, setIsBlogLikeByUser] = useState<boolean>(responseLikes?.some((like) => like.userId === userId));
@@ -56,6 +58,9 @@ export default function QuipSingleResponse({
             }
         }
     }
+
+
+    console.log('response ',)
     return (
         <div className="mt-2">
             <div className='ml-12 flex'>
@@ -64,7 +69,7 @@ export default function QuipSingleResponse({
                 </p>
                 <div className="flex justify-between w-full items-start">
                     <div className='ml-2 text-input'>
-                        <p className="leading-5 text-xs">{'Anthony Barragan'}</p>
+                        <p className="leading-5 text-xs">{responseAuthor}</p>
                         <p className="leading-5 text-xs">{formatDateMonthDayYear(responseDate)}</p>
                     </div>
                     <div className="flex mt-[2px] text-input">
