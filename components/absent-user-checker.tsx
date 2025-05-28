@@ -3,9 +3,9 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-const MAX_VISITS = 4;
+const MAX_VISITS = 5;
 // Add a callBackUrl so it goes back to the exact same page
-const REDIRECT_URL = "https://your-username.github.io/site-offline/";
+const REDIRECT_URL = "https://abarragan89.github.io/jotter-blog-still-there/";
 
 export default function AbsentUserChecker() {
     const pathname = usePathname();
