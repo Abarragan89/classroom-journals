@@ -59,8 +59,6 @@ export default function QuipSingleResponse({
         }
     }
 
-
-    console.log('response ',)
     return (
         <div className="mt-2">
             <div className='ml-12 flex'>
