@@ -6,8 +6,6 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Button } from '@/components/ui/button'
-import { ResponsiveDialog } from '@/components/responsive-dialog'
 import AnswerQuip from '@/components/forms/quip-forms/answer-quip'
 import { deleteQuip, getReponsesForQuip } from '@/lib/actions/quips.action'
 import { ClassUserRole } from '@prisma/client'
@@ -85,35 +83,11 @@ export default function QuipListItem({
     const quipQuestion = (singleQuip?.questions as Question[])[0]?.question
 
     return (
-        <>
-            <ResponsiveDialog
-                isOpen={openModal}
-                setIsOpen={setOpenModal}
-                title="Answer Quip"
-            >
-                <AnswerQuip
-                    closeModal={closeModal}
-                    studentId={userId}
-                    promptSessionId={singleQuip.id}
-                    quipQuestion={quipQuestion}
-                    completeStatusTrue={completeStatusTrue}
-                />
-            </ResponsiveDialog>
-            <ResponsiveDialog
-                isOpen={openDeleteModal}
-                setIsOpen={setOpenDeleteModal}
-                title="Delete Quip"
-            >
-                <p className='text-center'>Are you sure you want to delete this quip?</p>
-                <Button variant='destructive' onClick={deleteQuipHandler} className='mx-auto'>
-                    Delete Quip
-                </Button>
-            </ResponsiveDialog>
             <AccordionItem value={`item-${indexNumber}`} className='relative'>
                 <div className="flex flex-col mt-1">
                     <div className='flex'>
                         <p className="w-[40px] h-[40px] bg-primary text-primary-foreground rounded-full flex items-center justify-center">
-                            {'M'}
+                            {singleQuip?.author?.charAt(0)}
                         </p>
                         <div className="flex-between">
                             <div className='ml-2 text-input'>
@@ -151,14 +125,17 @@ export default function QuipListItem({
                             <LoadingAnimation />
                         )
                     ) : (
-                        <div className="flex-center mt-4 mb-2">
-                            <Button onClick={() => setOpenModal(true)}>
-                                Response to Quip
-                            </Button>
+                        <div className='sm:mx-14'>
+                            <AnswerQuip
+                                closeModal={closeModal}
+                                studentId={userId}
+                                promptSessionId={singleQuip.id}
+                                quipQuestion={quipQuestion}
+                                completeStatusTrue={completeStatusTrue}
+                            />
                         </div>
                     )}
                 </AccordionContent>
             </AccordionItem >
-        </>
     )
 }
