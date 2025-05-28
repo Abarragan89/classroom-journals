@@ -1,6 +1,4 @@
 "use client"
-import { useState } from "react"
-
 import { PromptSession } from "@/types";
 import QuipListSection from "@/components/shared/quip-list-section"
 import { ClassUserRole } from "@prisma/client"
