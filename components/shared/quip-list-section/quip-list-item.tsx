@@ -6,6 +6,8 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Button } from '@/components/ui/button'
+import { ResponsiveDialog } from '@/components/responsive-dialog'
 import AnswerQuip from '@/components/forms/quip-forms/answer-quip'
 import { deleteQuip, getReponsesForQuip } from '@/lib/actions/quips.action'
 import { ClassUserRole } from '@prisma/client'
@@ -29,7 +31,6 @@ export default function QuipListItem({
     indexNumber: string
 }) {
 
-    const [openModal, setOpenModal] = useState<boolean>(false)
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
     const [isComplete, setIsComplete] = useState<boolean>(singleQuip?.responses?.some(res => res.studentId === userId) || false)
     const [studentResponses, setStudentResponses] = useState<Response[] | null>(null)
@@ -48,11 +49,6 @@ export default function QuipListItem({
             getStudentResponses()
         }
     }, [isComplete, role, showResponses])
-
-    // Fetch the response data for the 
-    function closeModal() {
-        setOpenModal(false)
-    }
 
     function completeStatusTrue() {
         setIsComplete(true)
@@ -83,6 +79,17 @@ export default function QuipListItem({
     const quipQuestion = (singleQuip?.questions as Question[])[0]?.question
 
     return (
+        <>
+            <ResponsiveDialog
+                isOpen={openDeleteModal}
+                setIsOpen={setOpenDeleteModal}
+                title="Delete Quip"
+            >
+                <p className='text-center'>Are you sure you want to delete this quip?</p>
+                <Button variant='destructive' onClick={deleteQuipHandler} className='mx-auto'>
+                    Delete Quip
+                </Button>
+            </ResponsiveDialog>
             <AccordionItem value={`item-${indexNumber}`} className='relative'>
                 <div className="flex flex-col mt-1">
                     <div className='flex'>
@@ -127,7 +134,6 @@ export default function QuipListItem({
                     ) : (
                         <div className='sm:mx-14'>
                             <AnswerQuip
-                                closeModal={closeModal}
                                 studentId={userId}
                                 promptSessionId={singleQuip.id}
                                 quipQuestion={quipQuestion}
@@ -137,5 +143,6 @@ export default function QuipListItem({
                     )}
                 </AccordionContent>
             </AccordionItem >
+        </>
     )
 }
