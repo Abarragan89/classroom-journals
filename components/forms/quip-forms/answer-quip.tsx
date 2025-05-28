@@ -15,13 +15,11 @@ import {
 import { toast } from "sonner";
 
 export default function AnswerQuip({
-    closeModal,
     studentId,
     promptSessionId,
     quipQuestion,
     completeStatusTrue
 }: {
-    closeModal: () => void;
     studentId: string;
     promptSessionId: string;
     quipQuestion: string;
@@ -45,7 +43,6 @@ export default function AnswerQuip({
             const responseData = [{ question: quipQuestion, answer: values.responseText, score: 0 }]
             await respondToQuip(responseData, studentId, promptSessionId)
             completeStatusTrue();
-            closeModal();
             toast('Response Posted')
         } catch (error) {
             console.log('erroring making new quip', error)
