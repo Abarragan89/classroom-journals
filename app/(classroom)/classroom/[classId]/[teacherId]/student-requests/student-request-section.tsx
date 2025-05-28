@@ -30,10 +30,10 @@ export default function StudentRequestSection({
             return studentRequestData
         },
         initialData: studentRequests,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
+        // refetchOnMount: false,
+        // refetchOnReconnect: false,
+        // refetchOnWindowFocus: false,
+        // staleTime: Infinity,
     })
 
     if (error) {
