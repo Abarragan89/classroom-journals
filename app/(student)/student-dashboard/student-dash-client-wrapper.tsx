@@ -43,10 +43,10 @@ export default function StudentDashClientWrapper({
     queryKey: ['getAllStudentResponses', classroomId],
     queryFn: () => getStudentResponsesDashboard(studentId) as unknown as { responses: Response[], totalCount: number },
     initialData: allResponses,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
+    // refetchOnMount: false,
+    // refetchOnReconnect: false,
+    // refetchOnWindowFocus: false,
+    // staleTime: Infinity,
   })
 
   // Get the student requests
@@ -59,10 +59,10 @@ export default function StudentDashClientWrapper({
       return requests
     },
     initialData: studentRequests,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
+    // refetchOnMount: false,
+    // refetchOnReconnect: false,
+    // refetchOnWindowFocus: false,
+    // staleTime: Infinity,
   })
 
   // Get the Featured Blogs
@@ -70,10 +70,10 @@ export default function StudentDashClientWrapper({
     queryKey: ['getFeaturedBlogs', classroomId],
     queryFn: () => getFeaturedBlogs(classroomId) as unknown as Response[],
     initialData: featuredBlogs,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
+    // refetchOnMount: false,
+    // refetchOnReconnect: false,
+    // refetchOnWindowFocus: false,
+    // staleTime: Infinity,
   })
 
   // Get the StudentAlert Queries 
@@ -81,10 +81,10 @@ export default function StudentDashClientWrapper({
     queryKey: ['getQueryAlerts', studentId],
     queryFn: () => getAllQuipAlerts(studentId) as unknown as number,
     initialData: quipAlerts,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
+    // refetchOnMount: false,
+    // refetchOnReconnect: false,
+    // refetchOnWindowFocus: false,
+    // staleTime: Infinity,
   })
   
 

@@ -35,10 +35,10 @@ export default function NotificationSection({
             return userNotifications;
         },
         initialData: notifications,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
+        // refetchOnMount: false,
+        // refetchOnReconnect: false,
+        // refetchOnWindowFocus: false,
+        // staleTime: Infinity,
     })
 
     if (error) {
@@ -81,7 +81,7 @@ export default function NotificationSection({
                                         className="h-[85px] w-full text-xs flex flex-col justify-between items-center opacity-80 hover:opacity-100"
                                     >
                                         <p className="text-center">{notification.message}</p>
-                                        <p className="text-sm text-center italic font-bold text-foreground my-2 line-clamp-2">&ldquo;{notification?.commentText}&rdquo;</p>
+                                        <p className="text-sm text-center italic font-bold text-foreground my-2 line-clamp-2 break-words">&ldquo;{notification?.commentText}&rdquo;</p>
                                         <p>on: {formatDateLong(notification.createdAt)}</p>
                                     </Link>
 
