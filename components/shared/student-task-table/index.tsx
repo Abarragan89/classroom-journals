@@ -33,9 +33,9 @@ export default function StudentTodoTable<TData, TValue>({
     })
 
     return (
-        <div className="rounded-md border border-input">
+        // <div>
             <Table>
-                <TableHeader className="rounded-lg">
+                <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
                             {headerGroup.headers.map((header) => {
@@ -76,6 +76,6 @@ export default function StudentTodoTable<TData, TValue>({
                     )}
                 </TableBody>
             </Table>
-        </div>
+        // </div>
     )
 }
