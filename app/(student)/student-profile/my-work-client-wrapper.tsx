@@ -76,14 +76,14 @@ export default function MyWorkClientWrapper({
         <>
             <div className="space-y-10">
                 <div>
-                    <h2 className="text-lg font-bold text-center mb-1">Tasks To Do</h2>
+                    <h2 className="font-bold text-center mb-1">Tasks To Do</h2>
                     <StudentTodoTable
                         columns={tasksTodoColumns}
                         data={tasksToDo}
                     />
                 </div>
                 <div>
-                    <h2 className="text-lg font-bold text-center mb-1">Completed Tasks</h2>
+                    <h2 className="font-bold text-center mb-1">Completed Tasks</h2>
                     <StudentTodoTable
                         columns={gradedTasksColumns}
                         data={completedTasks}
