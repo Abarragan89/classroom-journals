@@ -25,6 +25,7 @@ export default function StudentTodoTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
+    
     const table = useReactTable({
         data,
         columns,
@@ -32,7 +33,7 @@ export default function StudentTodoTable<TData, TValue>({
     })
 
     return (
-        <div className="rounded-md border">
+        <div className="rounded-md border border-input">
             <Table>
                 <TableHeader className="rounded-lg">
                     {table.getHeaderGroups().map((headerGroup) => (

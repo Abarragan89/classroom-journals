@@ -103,9 +103,8 @@ export async function createNewQuip(
 
         const decryptedQuip = {
             ...newQuip,
-            author: {
-                username: decryptText(newQuip?.author?.username as string, newQuip?.author?.iv as string),
-            }
+            author: decryptText(newQuip?.author?.username as string, newQuip?.author?.iv as string),
+
         }
 
         return { success: true, message: 'Quip added!', data: decryptedQuip }
