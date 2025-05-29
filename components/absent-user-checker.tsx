@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-const MAX_VISITS = process.env.NODE_ENV === "development" ? 10 : 3;
+const MAX_VISITS = process.env.NODE_ENV === "development" ? 100 : 3;
 // Add a callBackUrl so it goes back to the exact same page
 const REDIRECT_URL = "https://abarragan89.github.io/jotter-blog-still-there/";
 

@@ -229,3 +229,53 @@ export async function getStudentCountByClassId(classId: string, teacherId: strin
         return { success: false, count: 0 };
     }
 }
+
+// Get single student information for Student Profile
+export async function getSingleStudentInformation(studentId: string, classId: string) {
+    try {
+        const session = await requireAuth();
+        if (session?.user?.id !== studentId || session?.classroomId !== classId) {
+            throw new Error('Forbidden')
+        }
+
+        if (typeof classId !== 'string') {
+            throw new Error('Missing or invalid classId');
+        }
+
+        const studentInfo = await prisma.user.findUnique({
+            where: { id: studentId },
+            select: {
+                id: true,
+                username: true,
+                name: true,
+                iv: true,
+            }
+        });
+
+        const teacherId = await prisma.classUser.findFirst({
+            where: {
+                classId,
+                role: "TEACHER"
+            },
+            select: {
+                userId: true,
+            }
+        })
+
+        const decryptedStudentInfo = {
+            ...studentInfo,
+            username: decryptText(studentInfo?.username as string, studentInfo?.iv as string),
+            name: decryptText(studentInfo?.name as string, studentInfo?.iv as string),
+            iv: null
+        }
+
+        return { success: true, message: 'student found', data: decryptedStudentInfo, teacherId: teacherId?.userId };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log('Error fetching student count:', error.message);
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, message: 'Count not find user info', data: null, teacherId: null };
+    }
+}
