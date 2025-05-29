@@ -1,7 +1,6 @@
 "use client"
 import BlogCard from '@/components/blog-card';
 import Carousel from '@/components/carousel';
-import RequestNewUsername from '@/components/modalBtns/request-new-username';
 import SuggestPrompt from '@/components/modalBtns/suggest-prompt';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -55,7 +54,6 @@ export default function StudentDashClientWrapper({
     queryFn: async () => {
       const requests = await getStudentRequests(studentId) as unknown as StudentRequest[]
       setHasSentPromptRequest(requests?.some(req => req.type === 'prompt'))
-      setHasSentUsernameRequest(requests?.some(req => req.type === 'username'))
       return requests
     },
     initialData: studentRequests,
@@ -87,9 +85,7 @@ export default function StudentDashClientWrapper({
     // staleTime: Infinity,
   })
 
-
   const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'username'))
-  const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'prompt'))
 
   function handleRequestUIHandler() {
     setHasSentPromptRequest(true)

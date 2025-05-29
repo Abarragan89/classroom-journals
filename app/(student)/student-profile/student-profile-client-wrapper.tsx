@@ -34,7 +34,7 @@ export default function StudentProfileClientWrapper({
         // staleTime: Infinity,
     })
 
-    const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(studentRequests?.some(req => req.type === 'prompt'))
+    const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'prompt'))
 
     function handleRequestUIHandler() {
         setHasSentUsernameRequest(true)
