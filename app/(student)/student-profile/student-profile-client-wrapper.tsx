@@ -42,7 +42,7 @@ export default function StudentProfileClientWrapper({
 
     return (
         <section className="mt-8">
-            <h3 className="text-lg mb-1">Student Information</h3>
+            <h3 className="h3-bold mb-1">Student Information</h3>
             <div className="md:flex-between space-y-5 md:space-y-0">
                 <div className="w-full md:mr-3 min-w-[275px]">
                     <Label>Name</Label>

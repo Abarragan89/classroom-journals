@@ -1,11 +1,15 @@
 import { auth } from '@/auth'
 import Header from '@/components/shared/header'
 import { getSingleStudentInformation } from '@/lib/actions/roster.action'
-import { Session, StudentRequest, User } from '@/types'
+import { Session, StudentRequest, User, Response } from '@/types'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import StudentProfileClientWrapper from './student-profile-client-wrapper'
 import { getStudentRequests } from '@/lib/actions/student.dashboard.actions'
+import { getSingleStudentResponses } from '@/lib/actions/response.action'
+import MyWorkClientWrapper from './my-work-client-wrapper'
+import { Separator } from '@/components/ui/separator'
+
 
 export default async function StudentProfile() {
 
@@ -27,6 +31,8 @@ export default async function StudentProfile() {
 
     const studentRequests = await getStudentRequests(studentInfo?.id) as unknown as StudentRequest[]
     const teacherId = studentData.teacherId as unknown as string
+    const studentResponses = await getSingleStudentResponses(studentId) as unknown as Response[]
+
 
     return (
         <>
@@ -37,6 +43,13 @@ export default async function StudentProfile() {
                     studentRequests={studentRequests}
                     classId={classId}
                     teacherId={teacherId}
+                />
+                <Separator className='mt-10 mb-9' />
+                <h2 className='h3-bold'>My Work</h2>
+                <MyWorkClientWrapper
+                    studentResponses={studentResponses}
+                    studentId={studentId}
+
                 />
             </main>
         </>
