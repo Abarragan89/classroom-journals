@@ -1,6 +1,5 @@
 'use client'
 import { Button } from '../ui/button'
-import { Plus } from 'lucide-react'
 import { ResponsiveDialog } from '../responsive-dialog'
 import { useState } from 'react'
 import RequestNewUsernameForm from '../forms/student-request/request-new-username-form'
@@ -16,7 +15,7 @@ export default function RequestNewUsername({
     teacherId: string,
     hasSentUsernameRequest: boolean;
     classId: string;
-    handleUIChange: (type: "username" | "prompt") => void;
+    handleUIChange: () => void;
 }) {
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -44,13 +43,13 @@ export default function RequestNewUsername({
                         classId={classId}
                     />
                 )}
-
-
             </ResponsiveDialog>
             <Button
+                variant='link'
                 onClick={() => setIsModalOpen(true)}
+                className='absolute -top-1 right-0'
             >
-                <Plus /> Request
+                Change
             </Button>
         </>
     )

@@ -1,6 +1,5 @@
 'use client'
 import { Button } from '../ui/button'
-import { Plus } from 'lucide-react'
 import { ResponsiveDialog } from '../responsive-dialog'
 import { useState } from 'react'
 import SuggestPromptForm from '../forms/student-request/suggest-prompt-form'
@@ -31,8 +30,8 @@ export default function SuggestPrompt({
             <ResponsiveDialog
                 isOpen={isModalOpen}
                 setIsOpen={setIsModalOpen}
-                title='Suggest a Prompt'
-                description='Suggest a Prompt'
+                title='Suggest a blog prompt to your teacher'
+                description='Suggest a blog prompt to your teacher'
             >
                 {hasSentPromptRequest ? (
                     <p className='text-accent text-center mx-5 pb-5'>You already have a pending request. You can only send one prompt suggestion at a time</p>
@@ -49,7 +48,7 @@ export default function SuggestPrompt({
             <Button
                 onClick={() => setIsModalOpen(true)}
             >
-                <Plus /> Prompt
+                Suggestion
             </Button>
         </>
     )

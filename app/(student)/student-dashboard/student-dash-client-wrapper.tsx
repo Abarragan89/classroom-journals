@@ -86,17 +86,13 @@ export default function StudentDashClientWrapper({
     // refetchOnWindowFocus: false,
     // staleTime: Infinity,
   })
-  
+
 
   const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'username'))
   const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'prompt'))
 
-  function handleRequestUIHandler(type: 'prompt' | 'username') {
-    if (type === 'prompt') {
-      setHasSentPromptRequest(true)
-    } else if (type === 'username') {
-      setHasSentUsernameRequest(true)
-    }
+  function handleRequestUIHandler() {
+    setHasSentPromptRequest(true)
   }
 
   const lastestTaskToDo = allResponseData?.responses.find(res => res.completionStatus === 'INCOMPLETE' || res.completionStatus === 'RETURNED')
@@ -131,13 +127,7 @@ export default function StudentDashClientWrapper({
               Speed Test
             </Link>
           </Button>
-          <RequestNewUsername
-            studentId={studentId}
-            teacherId={teacherId}
-            handleUIChange={handleRequestUIHandler}
-            hasSentUsernameRequest={hasSentUsernameRequest}
-            classId={classroomId}
-          />
+
           <SuggestPrompt
             studentId={studentId}
             teacherId={teacherId}
