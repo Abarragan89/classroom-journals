@@ -20,10 +20,10 @@ export default function MyWorkClientWrapper({
         queryKey: ['getStudentResponseData', studentId],
         queryFn: () => getSingleStudentResponses(studentId) as unknown as Response[],
         initialData: studentResponses,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
+        // refetchOnMount: false,
+        // refetchOnReconnect: false,
+        // refetchOnWindowFocus: false,
+        // staleTime: Infinity,
     })
 
     // Determine Returned Work 
@@ -75,15 +75,15 @@ export default function MyWorkClientWrapper({
     return (
         <>
             <div className="space-y-10">
-                <div className="md:w-[90%] mx-auto">
-                    <h2 className="h3-bold text-center mb-1">Tasks To Do</h2>
+                <div>
+                    <h2 className="font-bold text-center mb-1">Tasks To Do</h2>
                     <StudentTodoTable
                         columns={tasksTodoColumns}
                         data={tasksToDo}
                     />
                 </div>
-                <div className="md:w-[90%] mx-auto">
-                    <h2 className="h3-bold text-center mb-1">Completed Tasks</h2>
+                <div>
+                    <h2 className="font-bold text-center mb-1">Completed Tasks</h2>
                     <StudentTodoTable
                         columns={gradedTasksColumns}
                         data={completedTasks}

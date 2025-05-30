@@ -1,5 +1,5 @@
 'use client'
-import { Bell, ClipboardPen, LayoutDashboard } from 'lucide-react'
+import { Bell, LayoutDashboard, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
 import { getUnreadUserNotifications } from '@/lib/actions/notifications.action';
@@ -19,10 +19,10 @@ export default function StudentNavLinks({
         queryKey: ['getStudentNotificationHeader', studentId],
         queryFn: () => getUnreadUserNotifications(studentId, classId) as unknown as number,
         placeholderData: 0,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
+        // refetchOnMount: false,
+        // refetchOnReconnect: false,
+        // refetchOnWindowFocus: false,
+        // staleTime: Infinity,
     })
 
     return (
@@ -34,12 +34,11 @@ export default function StudentNavLinks({
             `}>
                 <LayoutDashboard size={16} className='mr-1' />Dashboard
             </Link>
-
-            <Link href={`/my-work`} className={`
+            <Link href={`/student-profile`} className={`
                 flex-center hover:cursor-pointer hover:text-foreground min-w-[90px] text-sm
-                ${pathname === 'my-work' ? 'text-foreground underline' : 'text-accent'}    
+                ${pathname === 'student-profile' ? 'text-foreground underline' : 'text-accent'}    
                 `}>
-                <ClipboardPen size={16} className='mr-1' />My Work
+                <User size={17} className='mr-1' />Profile
             </Link>
             <div className='relative'>
                 {notificationCount !== undefined && notificationCount > 0 && (

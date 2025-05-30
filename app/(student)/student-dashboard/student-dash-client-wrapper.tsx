@@ -1,7 +1,6 @@
 "use client"
 import BlogCard from '@/components/blog-card';
 import Carousel from '@/components/carousel';
-import RequestNewUsername from '@/components/modalBtns/request-new-username';
 import SuggestPrompt from '@/components/modalBtns/suggest-prompt';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -43,10 +42,10 @@ export default function StudentDashClientWrapper({
     queryKey: ['getAllStudentResponses', classroomId],
     queryFn: () => getStudentResponsesDashboard(studentId) as unknown as { responses: Response[], totalCount: number },
     initialData: allResponses,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
+    // refetchOnMount: false,
+    // refetchOnReconnect: false,
+    // refetchOnWindowFocus: false,
+    // staleTime: Infinity,
   })
 
   // Get the student requests
@@ -55,14 +54,13 @@ export default function StudentDashClientWrapper({
     queryFn: async () => {
       const requests = await getStudentRequests(studentId) as unknown as StudentRequest[]
       setHasSentPromptRequest(requests?.some(req => req.type === 'prompt'))
-      setHasSentUsernameRequest(requests?.some(req => req.type === 'username'))
       return requests
     },
     initialData: studentRequests,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
+    // refetchOnMount: false,
+    // refetchOnReconnect: false,
+    // refetchOnWindowFocus: false,
+    // staleTime: Infinity,
   })
 
   // Get the Featured Blogs
@@ -70,10 +68,10 @@ export default function StudentDashClientWrapper({
     queryKey: ['getFeaturedBlogs', classroomId],
     queryFn: () => getFeaturedBlogs(classroomId) as unknown as Response[],
     initialData: featuredBlogs,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
+    // refetchOnMount: false,
+    // refetchOnReconnect: false,
+    // refetchOnWindowFocus: false,
+    // staleTime: Infinity,
   })
 
   // Get the StudentAlert Queries 
@@ -81,22 +79,16 @@ export default function StudentDashClientWrapper({
     queryKey: ['getQueryAlerts', studentId],
     queryFn: () => getAllQuipAlerts(studentId) as unknown as number,
     initialData: quipAlerts,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
+    // refetchOnMount: false,
+    // refetchOnReconnect: false,
+    // refetchOnWindowFocus: false,
+    // staleTime: Infinity,
   })
-  
 
   const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'username'))
-  const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'prompt'))
 
-  function handleRequestUIHandler(type: 'prompt' | 'username') {
-    if (type === 'prompt') {
-      setHasSentPromptRequest(true)
-    } else if (type === 'username') {
-      setHasSentUsernameRequest(true)
-    }
+  function handleRequestUIHandler() {
+    setHasSentPromptRequest(true)
   }
 
   const lastestTaskToDo = allResponseData?.responses.find(res => res.completionStatus === 'INCOMPLETE' || res.completionStatus === 'RETURNED')
@@ -131,13 +123,7 @@ export default function StudentDashClientWrapper({
               Speed Test
             </Link>
           </Button>
-          <RequestNewUsername
-            studentId={studentId}
-            teacherId={teacherId}
-            handleUIChange={handleRequestUIHandler}
-            hasSentUsernameRequest={hasSentUsernameRequest}
-            classId={classroomId}
-          />
+
           <SuggestPrompt
             studentId={studentId}
             teacherId={teacherId}

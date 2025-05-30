@@ -43,10 +43,10 @@ export default function TypingTest({
         queryKey: ['getClassHighScores', classId],
         queryFn: () => getWPMClassHighScores(classId, studentId) as unknown as User[],
         initialData: classHighScores,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
+        // refetchOnMount: false,
+        // refetchOnReconnect: false,
+        // refetchOnWindowFocus: false,
+        // staleTime: Infinity,
     })
 
     useEffect(() => {

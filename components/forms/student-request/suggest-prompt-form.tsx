@@ -56,14 +56,10 @@ export default function SuggestPromptForm({
                     name="notificationText"
                     render={({ field }) => (
                         <FormItem>
-                            {/* <FormDescription className=''>
-                                Request you name be changed
-                            </FormDescription> */}
-                            {/* <FormLabel>Username</FormLabel> */}
                             <FormControl>
                                 <Textarea
                                     {...field}
-                                    placeholder='enter a blog prompt'
+                                    placeholder='enter your prompt suggestion...'
                                 />
                             </FormControl>
                         </FormItem>
