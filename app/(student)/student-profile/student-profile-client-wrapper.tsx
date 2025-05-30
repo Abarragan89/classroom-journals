@@ -6,6 +6,7 @@ import { getStudentRequests } from '@/lib/actions/student.dashboard.actions';
 import { StudentRequest, User } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import ChangeAvatar from '@/components/shared/change-avatar';
 
 export default function StudentProfileClientWrapper({
     studentInfo,
@@ -43,6 +44,12 @@ export default function StudentProfileClientWrapper({
     return (
         <section className="mt-8">
             <h3 className="h3-bold mb-1">Student Information</h3>
+            <div className="my-5">
+                <ChangeAvatar
+                    userId={studentInfo?.id}
+                    avatarSrc=''
+                />
+            </div>
             <div className="md:flex-between space-y-5 md:space-y-0">
                 <div className="w-full md:mr-3 min-w-[275px]">
                     <Label>Name</Label>

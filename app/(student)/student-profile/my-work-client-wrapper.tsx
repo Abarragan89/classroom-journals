@@ -33,7 +33,7 @@ export default function MyWorkClientWrapper({
                 id: response.id,
                 title: response?.promptSession?.title,
                 status: "Incomplete",
-                createdAt: formatDateMonthDayYear(response.submittedAt)
+                createdAt: formatDateMonthDayYear(response.createdAt)
             })
         }
     }).filter(Boolean)
@@ -44,7 +44,7 @@ export default function MyWorkClientWrapper({
                 id: response.id,
                 title: response?.promptSession?.title,
                 status: "Returned",
-                createdAt: formatDateMonthDayYear(response.submittedAt)
+                createdAt: formatDateMonthDayYear(response.createdAt)
             })
         }
     }).filter(Boolean)

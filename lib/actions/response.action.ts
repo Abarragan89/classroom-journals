@@ -508,13 +508,8 @@ export async function getSingleStudentResponses(studentId: string) {
             select: {
                 id: true,
                 response: true,
+                createdAt: true,
                 submittedAt: true,
-                // likeCount: true,
-                // _count: {
-                //     select: {
-                //         comments: true,
-                //     }
-                // },
                 completionStatus: true,
                 promptSession: {
                     select: {
