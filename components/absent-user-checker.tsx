@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-const MAX_VISITS = 2;
+const MAX_VISITS = 10;
 const REDIRECT_URL = "https://abarragan89.github.io/jotter-blog-still-there/";
 
 export default function AbsentUserChecker() {
