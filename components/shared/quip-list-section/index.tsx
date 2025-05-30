@@ -32,10 +32,10 @@ export default function QuipListSection({
             return await getAllQuips(classId, userId) as unknown as PromptSession[];
         },
         initialData: allQuips,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        staleTime: Infinity,
+        // refetchOnReconnect: false,
+        // refetchOnWindowFocus: false,
+        // refetchOnMount: false,
+        // staleTime: Infinity,
     });
 
     function closeModal() {
