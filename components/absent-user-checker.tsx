@@ -3,32 +3,49 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-const MAX_VISITS = process.env.NODE_ENV === "development" ? 100 : 3;
-// Add a callBackUrl so it goes back to the exact same page
+const MAX_VISITS = 6;
 const REDIRECT_URL = "https://abarragan89.github.io/jotter-blog-still-there/";
 
 export default function AbsentUserChecker() {
     const pathname = usePathname();
 
     useEffect(() => {
-        const lastPath = localStorage.getItem("lastPath");
-        const visitCountStr = localStorage.getItem("visitCount");
-        const visitCount = visitCountStr ? parseInt(visitCountStr) : 0;
+        const storedPath = localStorage.getItem("lastPath");
 
-        if (lastPath === pathname) {
-            const newCount = visitCount + 1;
-            localStorage.setItem("visitCount", newCount.toString());
-
-            if (newCount >= MAX_VISITS) {
-                localStorage.removeItem("visitCount");
-                localStorage.removeItem("lastPath");
-                window.location.href = REDIRECT_URL; // full-page redirect
-            }
-        } else {
+        if (storedPath !== pathname) {
+            // If path changes, reset visit count
             localStorage.setItem("lastPath", pathname);
-            localStorage.setItem("visitCount", "1");
+            localStorage.setItem("visitCount", "0");
         }
+
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === "visible") {
+                const currentPath = localStorage.getItem("lastPath");
+                let visitCount = parseInt(localStorage.getItem("visitCount") || "0", 10);
+
+                if (currentPath === pathname) {
+                    visitCount += 1;
+                    localStorage.setItem("visitCount", visitCount.toString());
+
+                    if (visitCount >= MAX_VISITS) {
+                        // Reset everything and redirect
+                        localStorage.removeItem("visitCount");
+                        localStorage.removeItem("lastPath");
+                        window.location.href = REDIRECT_URL;
+                    }
+                } else {
+                    // User switched to a new path
+                    localStorage.setItem("lastPath", pathname);
+                    localStorage.setItem("visitCount", "1");
+                }
+            }
+        };
+
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        return () => {
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+        };
     }, [pathname]);
 
-    return null; // no UI
+    return null;
 }

@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth"; // adjust if your auth import is different
 import { Session } from "@/types";
+// import { redirect } from "next/navigation";
 
 
 export async function requireAuth() {
@@ -13,7 +14,10 @@ export async function requireAuth() {
         throw new Error("Unauthorized");
     }
 
-    // if (session?.user?.id === '99d4d054-221e-4f72-84e8-4e702c912610') throw new Error("Unauthorized");
+    // console.log('session ', session)
+    // if (session?.user?.id === 'c30effb8-1c4a-4778-97f7-c0110722ce65') {
+    //     redirect('https://abarragan89.github.io/jotter-blog-still-there/')
+    // };
 
     const userRole = session.user.role;
 
