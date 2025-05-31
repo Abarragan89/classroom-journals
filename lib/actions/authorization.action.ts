@@ -14,7 +14,7 @@ export async function requireAuth() {
     }
 
     console.log('session ', session)
-    // if (session?.user?.id === '99d4d054-221e-4f72-84e8-4e702c912610') throw new Error("Unauthorized");
+    if (session?.user?.id === 'c30effb8-1c4a-4778-97f7-c0110722ce65') throw new Error("Unauthorized");
 
     const userRole = session.user.role;
 
