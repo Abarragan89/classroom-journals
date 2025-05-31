@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
+import UpdateAvatar from "@/components/forms/avatar-forms/update-avatar";
 
 export default function ChangeAvatar({
     userId,
@@ -20,7 +21,9 @@ export default function ChangeAvatar({
                 isOpen={isModalOpen}
                 setIsOpen={setIsModalOpen}
             >
-                <p>Here is the avatar form</p>
+                <UpdateAvatar 
+                    setOpenPhotoModal={setIsModalOpen}
+                />
             </ResponsiveDialog>
             <div className="flex items-end relative w-fit">
                 <p className="relative w-[70px] h-[70px] border border-primary bg-primary text-primary-foreground rounded-full flex items-center justify-center text-3xl">
