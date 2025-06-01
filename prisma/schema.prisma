@@ -24,6 +24,7 @@ model User {
   image               String?
   isAdmin             Boolean            @default(false)
   wpmSpeed            Float              @default(0.0)
+  avatarURL           String?             
   accountType         TeacherAccountType @default(BASIC)
   password            String? // this password is only for student accounts and needs to be accessible to teacher
   iv                  String? // this is used to encrypt student names, ensures no duplicates when same input is given when encrypting

@@ -90,6 +90,7 @@ export default function PhotoHubClient() {
         { label: "Holidays/Seasons", value: "seasons" },
         { label: "Sports", value: "sports" },
         { label: "Designs", value: "designs" },
+        { label: "Avatar", value: "avatar" },
     ]
     return (
         <form action={action} className="mx-auto max-w-md">
