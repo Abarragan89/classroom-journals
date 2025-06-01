@@ -101,6 +101,7 @@ export default function UpdateAvatar({
                     </>
                 )}
             </> */}
+            <p>hi</p>
         </form>
     )
 }
