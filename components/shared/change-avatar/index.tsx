@@ -5,12 +5,14 @@ import { Button } from "@/components/ui/button";
 // import UpdateAvatar from "@/components/forms/avatar-forms/update-avatar";
 
 export default function ChangeAvatar({
-    // userId,
-    // avatarSrc
+    userId,
+    avatarSrc
 }: {
-    // userId: string;
-    // avatarSrc: string;
+    userId: string;
+    avatarSrc: string;
 }) {
+
+    console.log(userId, avatarSrc)
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
