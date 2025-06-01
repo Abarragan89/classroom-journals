@@ -33,8 +33,48 @@ export default function UpdateAvatar({
     const photos = [
         {
             id: 'awef',
-            url: '/images/logo.png'
-        }
+            url: '/images/demo-avatars/1.png'
+        },
+        {
+            id: 'awef',
+            url: '/images/demo-avatars/2.png'
+        },
+        {
+            id: 'awef',
+            url: '/images/demo-avatars/3.png'
+        },
+        {
+            id: 'awef',
+            url: '/images/demo-avatars/4.png'
+        },
+        {
+            id: 'awef',
+            url: '/images/demo-avatars/5.png'
+        },
+        {
+            id: 'awef',
+            url: '/images/demo-avatars/6.png'
+        },
+        {
+            id: 'awef',
+            url: '/images/demo-avatars/7.png'
+        },
+        {
+            id: 'awef',
+            url: '/images/demo-avatars/8.png'
+        },
+        {
+            id: 'awef',
+            url: '/images/demo-avatars/9.png'
+        },
+        {
+            id: 'awef',
+            url: '/images/demo-avatars/10.png'
+        },
+        {
+            id: 'awef',
+            url: '/images/demo-avatars/11.png'
+        },
     ]
     return (
         <form>
@@ -46,13 +86,13 @@ export default function UpdateAvatar({
                 ) : (
                     <>
                         <div className="h-[355px] mx-auto overflow-y-auto flex-center flex-wrap gap-3 custom-scrollbar">
-                            {allAvatarPhotos && allAvatarPhotos.map((img) => (
+                            {photos && photos.map((img) => (
                                 <Image
                                     key={img.id}
                                     src={img.url}
                                     alt="blog cover photo"
-                                    width={1920}
-                                    height={1080}
+                                    width={1024}
+                                    height={1024}
                                     onClick={() => { setImageUrl(img.url); setOpenPhotoModal(false) }}
                                     className="hover:cursor-pointer hover:scale-105 rounded-full w-[80px] h-[80px]"
                                 />
