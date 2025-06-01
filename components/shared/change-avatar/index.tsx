@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
-import UpdateAvatar from "@/components/forms/avatar-forms/update-avatar";
+// import UpdateAvatar from "@/components/forms/avatar-forms/update-avatar";
 
 export default function ChangeAvatar({
     // userId,
