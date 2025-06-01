@@ -6,10 +6,12 @@
 // import Image from "next/image";
 
 export default function UpdateAvatar({
-    // setOpenPhotoModal
+    setOpenPhotoModal
 }: {
-    // setOpenPhotoModal: React.Dispatch<React.SetStateAction<boolean>>
+    setOpenPhotoModal: React.Dispatch<React.SetStateAction<boolean>>
 }) {
+
+    console.log(setOpenPhotoModal)
 
     // const [isLoadingPhotos, setIsLoadingPhotos] = useState<boolean>(false);
     // const [allAvatarPhotos, setAllAvatarPhotos] = useState<BlogImage[] | null>(null)
