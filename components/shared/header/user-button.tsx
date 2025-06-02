@@ -43,7 +43,7 @@ export default function UserButton({
                                 alt="blog cover photo"
                                 width={1024}
                                 height={1024}
-                                className="rounded-full w-[40px] h-[40px]"
+                                className="rounded-full w-[36px] h-[36px]"
                             />
                         </Button>
                     </div>
