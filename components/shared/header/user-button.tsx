@@ -9,7 +9,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
-import { LogOut, User, UserIcon } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import Image from "next/image";
 import { Session } from "@/types";
 import { useQuery } from "@tanstack/react-query";
@@ -18,18 +18,8 @@ import { getUserAvatarURL } from "@/lib/actions/profile.action";
 export default function UserButton({
     session
 }: {
-    session?: Session
+    session: Session
 }) {
-
-    if (!session) {
-        return (
-            <Button asChild>
-                <Link href='/sign-in'>
-                    <UserIcon /> Sign In
-                </Link>
-            </Button>
-        )
-    }
 
     // Get the Featured Blogs
     const { data: avatarURL } = useQuery({

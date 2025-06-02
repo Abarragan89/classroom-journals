@@ -1,6 +1,6 @@
 import ModeToggle from "./mode-toggle"
 import UserButton from "./user-button"
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVertical, Link, UserIcon } from "lucide-react";
 import {
     SheetContent,
     SheetDescription,
@@ -13,6 +13,7 @@ import StudentNavLinks from "./student-nav-links";
 import TeacherNavLinks from "./teacher-nav-links";
 import { Separator } from "@/components/ui/separator";
 import { Session } from "@/types";
+import { Button } from "@/components/ui/button";
 
 export default function Menu({
     teacherId,
@@ -48,7 +49,11 @@ export default function Menu({
     const renderGuestMenu = () => (
         <>
             <ModeToggle />
-            <UserButton session={session as Session} />
+            <Button asChild>
+                <Link href='/sign-in'>
+                    <UserIcon /> Sign In
+                </Link>
+            </Button>
         </>
     );
 
