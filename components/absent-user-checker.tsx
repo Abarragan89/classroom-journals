@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-const MAX_VISITS = process.env.NODE_ENV === "development" ? 1000 : 6;
+const MAX_VISITS = process.env.NODE_ENV === "development" ? 1000 : 4;
 const REDIRECT_URL = "https://abarragan89.github.io/jotter-blog-still-there/";
 
 export default function AbsentUserChecker() {
