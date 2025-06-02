@@ -64,7 +64,6 @@ export default function Menu({
         } else if (studentId) {
             return renderStudentHeader();
         } else {
-            console.log('hey hter ')
             return renderGuestMenu();
         }
     };
