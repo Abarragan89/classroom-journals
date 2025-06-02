@@ -198,6 +198,20 @@ export async function respondToQuip(
             throw new Error('Forbidden');
         }
 
+        const allResponses = await prisma.response.findMany({
+            where: {
+                promptSessionId
+            },
+            select: {
+                studentId: true,
+            }
+        })
+
+        const hasAlreadyAnswered = allResponses.some(res => res.studentId === studentId)
+        if (hasAlreadyAnswered) {
+            throw new Error('Only one submission is allowed')
+        }
+
         const userResponse = await prisma.response.create({
             data: {
                 response: responseText as unknown as InputJsonArray,

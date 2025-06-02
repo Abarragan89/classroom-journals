@@ -121,7 +121,7 @@ export default function QuipListItem({
                     <p className='text-md font-bold text-foreground mx-12 tracking-wide'>{quipQuestion}</p>
                 </AccordionTrigger>
                 <AccordionContent>
-                    {isComplete || role !== ClassUserRole.STUDENT ? (
+                    {!isComplete || role !== ClassUserRole.STUDENT ? (
                         studentResponses ? studentResponses.map((response) => (
                             <QuipSingleResponse
                                 key={response.id}
