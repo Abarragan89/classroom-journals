@@ -107,6 +107,7 @@ export default function CommentSection({
                             onDrop={(e) => e.preventDefault()}
                             onDragOver={(e) => e.preventDefault()}
                             placeholder="Add a comment..."
+                            required={true}
                             rows={3}
                             value={commentText}
                             className="pr-5 h-[90px] resize-none"
