@@ -28,7 +28,7 @@ export async function addComment(
                 select: {
                     user: {
                         select: {
-                            id: true
+                            id: true,
                         }
                     }
                 }
@@ -48,6 +48,7 @@ export async function addComment(
                         select: {
                             username: true,
                             iv: true,
+                            avatarURL: true,
                         }
                     },
                     createdAt: true,
@@ -92,6 +93,7 @@ export async function addComment(
             const formattedComment = {
                 ...newComment,
                 user: {
+                    avatarURL: newComment?.user?.avatarURL,
                     username: decryptText(newComment.user.username as string, newComment.user.iv as string)
                 }
             };
@@ -164,7 +166,7 @@ export async function replyComment(
                 select: {
                     user: {
                         select: {
-                            id: true
+                            id: true,
                         }
                     }
                 }
@@ -185,6 +187,7 @@ export async function replyComment(
                         select: {
                             username: true,
                             iv: true,
+                            avatarURL: true
                         }
                     },
                     createdAt: true,
@@ -242,6 +245,7 @@ export async function replyComment(
             const formattedComment = {
                 ...newComment,
                 user: {
+                    avatarURL: newComment?.user?.avatarURL,
                     username: decryptText(newComment.user.username as string, newComment.user.iv as string)
                 }
             };

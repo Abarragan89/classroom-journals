@@ -134,10 +134,16 @@ export async function addPhotoToLibrary(prevData: unknown, formData: FormData) {
 // }
 
 
-// Get all photos from prisma
+// Get all photos from prisma for blogs
 export async function getAllPhotos() {
     try {
-        const allPhotos = await prisma.image.findMany({})
+        const allPhotos = await prisma.image.findMany({
+            where: {
+                category: {
+                    not: 'avatar'
+                }
+            }
+        })
         return allPhotos
     } catch (error) {
         console.error('Error uploading photo 123 ', error);

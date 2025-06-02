@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link"
 import { signOutUser } from "@/lib/actions/auth.action"
 import {
@@ -11,8 +12,10 @@ import { Button } from "@/components/ui/button";
 import { LogOut, User, UserIcon } from "lucide-react";
 import Image from "next/image";
 import { Session } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import { getUserAvatarURL } from "@/lib/actions/profile.action";
 
-export default async function UserButton({
+export default function UserButton({
     session
 }: {
     session?: Session
@@ -28,28 +31,31 @@ export default async function UserButton({
         )
     }
 
-    const firstInitial = session?.user?.username?.charAt(0).toUpperCase() ?? 'U'
+    // Get the Featured Blogs
+    const { data: avatarURL } = useQuery({
+        queryKey: ['getUserAvatar', session?.user?.id],
+        queryFn: () => getUserAvatarURL(session?.user?.id) as unknown as string,
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
+        staleTime: Infinity,
+    })
+
 
     return (
         <div className="flex gap-2 items-center">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <div className="flex items-center">
-                        {session?.user?.image ?
-                            <Button className="flex items-center justify-center ml-2 bg-transparent px-0 shadow-none">
-                                <Image
-                                    className="rounded-full"
-                                    src={session.user.image}
-                                    alt="user profile image"
-                                    width={30}
-                                    height={30}
-                                />
-                            </Button>
-                            :
-                            <Button className="relative w-8 h-8 rounded-full ml-2 flex items-center justify-center">
-                                {firstInitial}
-                            </Button>
-                        }
+                        <Button className="flex items-center justify-center ml-2 bg-transparent px-0 shadow-none">
+                            <Image
+                                src={avatarURL || '/images/demo-avatars/1.png'}
+                                alt="blog cover photo"
+                                width={1024}
+                                height={1024}
+                                className="rounded-full w-[40px] h-[40px]"
+                            />
+                        </Button>
                     </div>
                 </DropdownMenuTrigger>
 

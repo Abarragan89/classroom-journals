@@ -16,6 +16,7 @@ import LoadingAnimation from '@/components/loading-animation'
 import { formatDateMonthDayYear } from '@/lib/utils'
 import { Trash2, } from 'lucide-react'
 import QuipSingleResponse from './quip-single-response'
+import Image from 'next/image'
 
 export default function QuipListItem({
     singleQuip,
@@ -93,12 +94,16 @@ export default function QuipListItem({
             <AccordionItem value={`item-${indexNumber}`} className='relative'>
                 <div className="flex flex-col mt-1">
                     <div className='flex'>
-                        <p className="w-[40px] h-[40px] bg-primary text-primary-foreground rounded-full flex items-center justify-center">
-                            {singleQuip?.author?.charAt(0)}
-                        </p>
+                        <Image
+                            src={singleQuip?.author?.avatarURL || '/images/demo-avatars/1.png'}
+                            alt="blog cover photo"
+                            width={1024}
+                            height={1024}
+                            className="rounded-full w-[40px] h-[40px]"
+                        />
                         <div className="flex-between">
                             <div className='ml-2 text-input'>
-                                <p className="leading-5 text-sm">{singleQuip?.author}</p>
+                                <p className="leading-5 text-sm">{singleQuip?.author?.username}</p>
                                 <p className="leading-5 text-sm">{formatDateMonthDayYear(singleQuip?.assignedAt)}</p>
                             </div>
                             {role === ClassUserRole.TEACHER && (
@@ -126,6 +131,7 @@ export default function QuipListItem({
                                 responseDate={response?.createdAt}
                                 responseLikes={response?.likes}
                                 likeCount={response?.likeCount}
+                                authorAvatarUrl={response?.student?.avatarURL as string}
                                 responseAuthor={response?.student?.username as string}
                             />
                         )) : (

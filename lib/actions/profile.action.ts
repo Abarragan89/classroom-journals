@@ -182,6 +182,7 @@ export async function getTeacherAccountData(teacherId: string) {
                 iv: true,
                 email: true,
                 accountType: true,
+                avatarURL: true,
                 id: true,
                 image: true,
                 subscriptionExpires: true,
@@ -195,6 +196,7 @@ export async function getTeacherAccountData(teacherId: string) {
             image: teacherData?.image,
             id: teacherData?.id,
             isCancelling: teacherData?.isCancelling,
+            avatarURL: teacherData?.avatarURL,
             accountType: teacherData?.accountType,
             subscriptionExpires: teacherData?.subscriptionExpires,
             customerId: teacherData?.customerId,
@@ -287,3 +289,61 @@ export async function deleteTeacherAccount(teacherId: string) {
         return { success: false, message: 'Error adding student. Try again.' }
     }
 }
+
+// Update user Avatar
+// update a teacher's username
+export async function updateUserAvatar(avatarURL: string, userId: string) {
+    try {
+        const session = await requireAuth();
+        if (session?.user?.id !== userId) {
+            throw new Error('Forbidden');
+        }
+        // get the iv to update the name
+        await prisma.user.update({
+            where: { id: userId },
+            data: {
+                avatarURL: avatarURL,
+            }
+        })
+
+    } catch (error) {
+        // Improved error logging
+        if (error instanceof Error) {
+            console.log('error updating avatar:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error updating avatar. Try again.' }
+    }
+}
+
+export async function getUserAvatarURL(userId: string) {
+    try {
+        const session = await requireAuth();
+        if (session?.user?.id !== userId) {
+            throw new Error('Forbidden');
+        }
+        // get the iv to update the name
+        const userInfo = await prisma.user.findUnique({
+            where: { id: userId },
+            select: {
+                avatarURL: true,
+            }
+        })
+
+        return userInfo?.avatarURL
+
+    } catch (error) {
+        // Improved error logging
+        if (error instanceof Error) {
+            console.log('error updating avatar:', error.message);
+            console.error(error.stack); // Log stack trace for better debugging
+        } else {
+            console.log('Unexpected error:', error);
+        }
+        return { success: false, message: 'Error updating avatar. Try again.' }
+    }
+}
+
+

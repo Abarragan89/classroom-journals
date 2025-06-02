@@ -12,6 +12,7 @@ export type User = {
     isAdmin?: boolean;
     wpmSpeed?: number;
     iv?: string;
+    avatarURL?: string;
     email?: string;
     emailVerified?: Date;
     image?: string;
@@ -71,7 +72,7 @@ export type PromptSession = {
     promptType: string;
     studentResponseId?: string;
     authorId?: string;
-    author?: string;
+    author?: User;
     category: PromptCategory;
     prompt?: Prompt;
     areGradesVisible: boolean;

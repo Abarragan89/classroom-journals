@@ -4,6 +4,7 @@ import { toggleCommentLike } from "@/lib/actions/comment.action";
 import { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
+import Image from "next/image";
 
 export default function CommentReplySection({
     replyCommentData,
@@ -54,9 +55,13 @@ export default function CommentReplySection({
     return (
         <div className="mb-4 border-l ps-4">
             <div className="flex items-center">
-                <p className="relative w-9 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center">
-                    {replyCommentData?.user?.username?.charAt(0).toUpperCase()}
-                </p>
+                <Image
+                    src={replyCommentData?.user?.avatarURL || '/images/demo-avatars/1.png'}
+                    alt="blog cover photo"
+                    width={1024}
+                    height={1024}
+                    className="rounded-full w-[40px] h-[40px]"
+                />
                 <div className="flex justify-between items-center w-full ml-3">
                     <div>
                         <p className="leading-none text-[.95rem] mb-1 text-primary">{replyCommentData?.user?.username}</p>
@@ -87,7 +92,7 @@ export default function CommentReplySection({
                     </div>
                 </div>
             </div>
-            <p className="px-[45px] whitespace-pre-wrap break-words mt-1">{replyCommentData?.text}</p>
+            <p className="px-[55px] whitespace-pre-wrap break-words mt-1">{replyCommentData?.text}</p>
         </div>
     )
 }
