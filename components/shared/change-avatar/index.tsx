@@ -24,11 +24,13 @@ export default function ChangeAvatar({
                 isOpen={isModalOpen}
                 setIsOpen={setIsModalOpen}
             >
-                <UpdateAvatar
-                    setOpenPhotoModal={setIsModalOpen}
-                    userId={userId}
-                    setCurrentAvatar={setCurrentAvatar}
-                />
+                {isModalOpen && (
+                    <UpdateAvatar
+                        setOpenPhotoModal={setIsModalOpen}
+                        userId={userId}
+                        setCurrentAvatar={setCurrentAvatar}
+                    />
+                )}
             </ResponsiveDialog>
             <div className="flex items-end relative w-fit mt-3 mb-5">
                 <Image

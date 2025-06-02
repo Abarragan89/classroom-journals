@@ -103,14 +103,14 @@ export default function UpdateAvatar({
     return (
         <form>
             <>
-                {isLoadingPhotos ? (
+                {(isLoadingPhotos || !allAvatarPhotos) ? (
                     <div className="flex-center h-[355px]">
                         <LoadingAnimation />
                     </div>
                 ) : (
                     <>
                         <div className="h-[355px] mx-auto overflow-y-auto flex-center flex-wrap gap-3 custom-scrollbar">
-                            {photos && photos.map((img) => (
+                            {allAvatarPhotos && allAvatarPhotos.map((img) => (
                                 <Image
                                     key={img.id}
                                     src={img.url}
