@@ -186,6 +186,7 @@ export default function SingleComment({
                                 onCut={(e) => e.preventDefault()}
                                 onDrop={(e) => e.preventDefault()}
                                 onDragOver={(e) => e.preventDefault()}
+                                required={true}
                                 placeholder="reply to comment..."
                                 rows={3}
                                 value={replyText}

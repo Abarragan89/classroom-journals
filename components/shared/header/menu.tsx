@@ -1,6 +1,6 @@
 import ModeToggle from "./mode-toggle"
 import UserButton from "./user-button"
-import { EllipsisVertical, Link, UserIcon } from "lucide-react";
+import { EllipsisVertical, UserIcon } from "lucide-react";
 import {
     SheetContent,
     SheetDescription,
@@ -14,6 +14,7 @@ import TeacherNavLinks from "./teacher-nav-links";
 import { Separator } from "@/components/ui/separator";
 import { Session } from "@/types";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Menu({
     teacherId,
@@ -50,7 +51,7 @@ export default function Menu({
         <>
             <ModeToggle />
             <Button asChild>
-                <Link href='/sign-in'>
+                <Link href='/sign-in' className="flex gap-x-2">
                     <UserIcon /> Sign In
                 </Link>
             </Button>
@@ -58,11 +59,14 @@ export default function Menu({
     );
 
     const renderMenuOptions = () => {
+        console.log('teacherId ', teacherId)
+        console.log('student ID', studentId)
         if (teacherId) {
             return renderTeacherHeader()
         } else if (studentId) {
             return renderStudentHeader();
         } else {
+            console.log('hey hter ')
             return renderGuestMenu();
         }
     };
