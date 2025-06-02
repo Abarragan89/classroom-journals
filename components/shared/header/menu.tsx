@@ -59,8 +59,6 @@ export default function Menu({
     );
 
     const renderMenuOptions = () => {
-        console.log('teacherId ', teacherId)
-        console.log('student ID', studentId)
         if (teacherId) {
             return renderTeacherHeader()
         } else if (studentId) {
