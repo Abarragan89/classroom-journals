@@ -273,7 +273,8 @@ export async function getSingleResponse(responseId: string, userId: string) {
                         user: {
                             select: {
                                 username: true,
-                                iv: true
+                                iv: true,
+                                avatarURL: true,
                             }
                         },
                         replies: {
@@ -284,7 +285,8 @@ export async function getSingleResponse(responseId: string, userId: string) {
                                 user: {
                                     select: {
                                         username: true,
-                                        iv: true
+                                        iv: true,
+                                        avatarURL: true,
                                     }
                                 },
                                 likes: {
@@ -317,6 +319,7 @@ export async function getSingleResponse(responseId: string, userId: string) {
                     select: {
                         id: true,
                         username: true,
+                        avatarURL: true,
                         name: true,
                         iv: true,
                     }
@@ -334,6 +337,7 @@ export async function getSingleResponse(responseId: string, userId: string) {
         const formattedResponse = {
             ...response,
             student: {
+                avatarURL: response?.student.avatarURL,
                 id: response?.student.id,
                 name: decryptText(response?.student.name as string, response?.student.iv as string),
                 username: decryptText(response?.student.username as string, response?.student.iv as string)

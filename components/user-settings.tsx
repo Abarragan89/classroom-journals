@@ -10,6 +10,7 @@ import { toast } from "sonner"
 import { Button } from "./ui/button"
 import { ResponsiveDialog } from "./responsive-dialog"
 import { signOutUser } from "@/lib/actions/auth.action"
+import ChangeAvatar from "./shared/change-avatar"
 
 export default function UserSettings({
     teacherData,
@@ -74,6 +75,10 @@ export default function UserSettings({
             </ResponsiveDialog>
             <section className="mt-8">
                 <h3 className="text-lg mb-1">Account Information</h3>
+                <ChangeAvatar
+                    userId={teacherData?.id}
+                    avatarSrc={teacherData?.avatarURL as string}
+                />
                 <div className="md:flex-between space-y-5 md:space-y-0">
                     <div className="w-full md:mr-3 min-w-[275px]">
                         <Label>Username</Label>

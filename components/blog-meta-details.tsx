@@ -8,6 +8,7 @@ import Link from "next/link";
 import { toggleResponseLike } from "@/lib/actions/response.action";
 import { formatDateMonthDayYear } from "@/lib/utils";
 import { PrinterIcon } from "lucide-react";
+import Image from "next/image";
 
 interface Props {
     responseData: Response,
@@ -65,9 +66,13 @@ export default function BlogMetaDetails({
             <h1 className="max-w-[700px] mx-auto leading-[2rem] sm:leading-[2.2rem] text-[30px] sm:text-[36px] mb-[18px] font-[700]">{(responseData?.response as { answer: string }[])?.[1]?.answer}</h1>
             {/* Author information */}
             <section className="flex max-w-[700px] mx-auto">
-                <p className="relative w-[43px] h-[40px] bg-primary text-primary-foreground rounded-full flex items-center justify-center">
-                    {responseData?.student?.username?.charAt(0).toUpperCase()}
-                </p>
+                <Image
+                    src={responseData?.student?.avatarURL || '/images/demo-avatars/1.png'}
+                    alt="blog cover photo"
+                    width={1024}
+                    height={1024}
+                    className="rounded-full w-[40px] h-[40px]"
+                />
                 <div className="ml-2 w-full text-sm text-input flex-between">
                     <div>
                         <p className="leading-5">{responseData.student.username}</p>

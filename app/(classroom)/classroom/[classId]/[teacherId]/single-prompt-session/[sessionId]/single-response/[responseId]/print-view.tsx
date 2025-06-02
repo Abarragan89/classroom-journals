@@ -13,13 +13,17 @@ export default function PrintViewBlog({
 
     return (
         <div className='hidden print:block text-slate-400'>
-            <div className="max-w-[700px] px-3 mx-auto">
+            <div className="max-w-[700px] mx-auto">
                 <h1 className="mx-auto text-slate-700 leading-[2rem] sm:leading-[2.2rem] text-[30px] sm:text-[36px] mb-[18px] font-[700]">{(response?.response as { answer: string }[])?.[1]?.answer}</h1>
                 {/* Author information */}
                 <section className="flex mx-auto">
-                    <p className="relative w-[43px] h-[40px] border border-slate-400 bg-slate-300 rounded-full flex items-center justify-center">
-                        {response?.student?.username?.charAt(0).toUpperCase()}
-                    </p>
+                    <Image
+                        src={response?.student?.avatarURL || '/images/demo-avatars/1.png'}
+                        alt="blog cover photo"
+                        width={1024}
+                        height={1024}
+                        className="rounded-full w-[40px] h-[40px] border border-slate-700"
+                    />
                     <div className="ml-2 w-full text-sm">
                         <p className="leading-5">{response.student.username}</p>
                         <div className="flex justify-between w-full">
@@ -54,12 +58,12 @@ export default function PrintViewBlog({
                 <Image
                     src={(response?.response as { answer: string }[])?.[2]?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
                     width={700}
-                    height={330}
+                    height={394}
                     alt={'blog cover photo'}
-                    className="block mx-auto mb-5 h-[330px]"
+                    className="block mx-auto mb-5 h-[394px]"
                     priority
                 />
-                <p className="leading-[2rem] text-black text-[16px] sm:text-[19px] whitespace-pre-line">{(response.response as unknown as ResponseData[])?.[0].answer}</p>
+                <p className="leading-[2rem] text-black text-[14px] sm:text-[19px] whitespace-pre-line">{(response.response as unknown as ResponseData[])?.[0].answer}</p>
             </div>
         </div>
     )

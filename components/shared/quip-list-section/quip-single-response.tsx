@@ -6,6 +6,7 @@ import { ResponseLike } from "@/types";
 import { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
+import Image from "next/image";
 
 export default function QuipSingleResponse({
     responseId,
@@ -14,7 +15,8 @@ export default function QuipSingleResponse({
     responseDate,
     responseLikes,
     likeCount,
-    responseAuthor
+    responseAuthor,
+    authorAvatarUrl
 }: {
     responseId: string;
     userId: string;
@@ -22,7 +24,8 @@ export default function QuipSingleResponse({
     responseDate: Date;
     responseLikes: ResponseLike[];
     likeCount: number;
-    responseAuthor: string
+    responseAuthor: string;
+    authorAvatarUrl: string
 }) {
 
     const [isBlogLikedByUser, setIsBlogLikeByUser] = useState<boolean>(responseLikes?.some((like) => like.userId === userId));
@@ -62,9 +65,13 @@ export default function QuipSingleResponse({
     return (
         <div className="mt-2">
             <div className='ml-12 flex'>
-                <p className="w-[35px] h-[35px] bg-primary text-primary-foreground rounded-full flex items-center justify-center">
-                    {responseAuthor.charAt(0)}
-                </p>
+                <Image
+                    src={authorAvatarUrl || '/images/demo-avatars/1.png'}
+                    alt="blog cover photo"
+                    width={1024}
+                    height={1024}
+                    className="rounded-full w-[35px] h-[35px]"
+                />
                 <div className="flex justify-between w-full items-start">
                     <div className='ml-2 text-input'>
                         <p className="leading-5 text-xs">{responseAuthor}</p>

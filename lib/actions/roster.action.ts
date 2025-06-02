@@ -249,6 +249,7 @@ export async function getSingleStudentInformation(studentId: string, classId: st
                 username: true,
                 name: true,
                 iv: true,
+                avatarURL: true,
             }
         });
 

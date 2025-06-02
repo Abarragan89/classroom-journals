@@ -67,7 +67,8 @@ export async function createNewQuip(
                 author: {
                     select: {
                         username: true,
-                        iv: true
+                        iv: true,
+                        avatarURL: true,
                     }
                 },
                 responses: {
@@ -103,7 +104,10 @@ export async function createNewQuip(
 
         const decryptedQuip = {
             ...newQuip,
-            author: decryptText(newQuip?.author?.username as string, newQuip?.author?.iv as string),
+            author: {
+                username: decryptText(newQuip?.author?.username as string, newQuip?.author?.iv as string),
+                avatarURL: newQuip?.author?.avatarURL
+            },
 
         }
 
@@ -144,7 +148,8 @@ export async function getAllQuips(
                 author: {
                     select: {
                         username: true,
-                        iv: true
+                        iv: true,
+                        avatarURL: true,
                     }
                 },
                 responses: {
@@ -161,7 +166,10 @@ export async function getAllQuips(
 
         const decryptedQuips = allQuips.map(quip => ({
             ...quip,
-            author: decryptText(quip?.author?.username as string, quip?.author?.iv as string),
+            author: {
+                username: decryptText(quip?.author?.username as string, quip?.author?.iv as string),
+                avatarURL: quip?.author?.avatarURL
+            },
         }))
 
         return decryptedQuips;
@@ -274,7 +282,8 @@ export async function getReponsesForQuip(
                 student: {
                     select: {
                         username: true,
-                        iv: true
+                        iv: true,
+                        avatarURL: true,
                     }
                 }
             },
@@ -286,6 +295,7 @@ export async function getReponsesForQuip(
         const decryptedResponses = responses.map(prev => ({
             ...prev,
             student: {
+                avatarURL: prev.student.avatarURL,
                 username: decryptText(prev?.student?.username as string, prev?.student?.iv as string)
             }
         }))

@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
-// import UpdateAvatar from "@/components/forms/avatar-forms/update-avatar";
+import UpdateAvatar from "@/components/forms/avatar-forms/update-avatar";
+import Image from "next/image";
 
 export default function ChangeAvatar({
     userId,
@@ -12,9 +13,9 @@ export default function ChangeAvatar({
     avatarSrc: string;
 }) {
 
-    console.log(userId, avatarSrc)
-
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const [currentAvatar, setCurrentAvatar] = useState<string>(avatarSrc)
+
 
     return (
         <>
@@ -23,15 +24,20 @@ export default function ChangeAvatar({
                 isOpen={isModalOpen}
                 setIsOpen={setIsModalOpen}
             >
-                {/* <UpdateAvatar 
+                <UpdateAvatar
                     setOpenPhotoModal={setIsModalOpen}
-                /> */}
-                <>j</>
+                    userId={userId}
+                    setCurrentAvatar={setCurrentAvatar}
+                />
             </ResponsiveDialog>
-            <div className="flex items-end relative w-fit">
-                <p className="relative w-[70px] h-[70px] border border-primary bg-primary text-primary-foreground rounded-full flex items-center justify-center text-3xl">
-                    {'M'}
-                </p>
+            <div className="flex items-end relative w-fit mt-3 mb-5">
+                <Image
+                    src={currentAvatar || '/images/demo-avatars/1.png'}
+                    alt="blog cover photo"
+                    width={1024}
+                    height={1024}
+                    className="hover:cursor-pointer hover:scale-105 rounded-full w-[80px] h-[80px]"
+                />
                 <Button onClick={() => setIsModalOpen(true)} variant={'link'} className="p-0 text-xs absolute -bottom-3 -right-10">
                     Change
                 </Button>

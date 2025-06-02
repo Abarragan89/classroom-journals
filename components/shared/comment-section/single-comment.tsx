@@ -10,6 +10,7 @@ import { ChevronLeft, ChevronDown, SendHorizonalIcon } from "lucide-react";
 import { deleteComment, replyComment, toggleCommentLike } from "@/lib/actions/comment.action";
 import CommentReplySection from "./comment-reply-section";
 import { toast } from "sonner";
+import Image from "next/image";
 
 export default function SingleComment({
     commentData,
@@ -132,9 +133,13 @@ export default function SingleComment({
     return (
         <div className="mb-10 mx-4">
             <div className="flex items-center">
-                <p className="relative w-9 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center mr-2">
-                    {commentData?.user?.username?.charAt(0).toUpperCase()}
-                </p>
+                <Image
+                    src={commentData?.user?.avatarURL || '/images/demo-avatars/1.png'}
+                    alt="blog cover photo"
+                    width={1024}
+                    height={1024}
+                    className="rounded-full w-[40px] h-[40px] mr-2"
+                />
                 <div className="flex justify-between items-center w-full">
                     <div>
                         <p className="leading-0 text-[.95rem] text-primary">{commentData?.user?.username}</p>
@@ -165,7 +170,7 @@ export default function SingleComment({
                     </div>
                 </div>
             </div>
-            <p className="text-[1rem] mt-0 whitespace-pre-wrap break-words ml-[45px]">{commentData?.text}</p>
+            <p className="text-[1rem] mt-0 whitespace-pre-wrap break-words ml-[50px]">{commentData?.text}</p>
 
             {/* Conditionally render reply form */}
             {showReplyTextarea && discussionStatus === 'OPEN' &&
