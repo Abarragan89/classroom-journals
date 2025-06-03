@@ -9,7 +9,7 @@ const REDIRECT_URL = "https://abarragan89.github.io/jotter-blog-still-there/";
 
 // Minimum gap (ms) between two counted wakes.
 // If visibilitychange and focus fire within this window, we only count once.
-const DEDUPE_WINDOW_MS = 1000; // 1 second
+const DEDUPE_WINDOW_MS = 7 * 60 * 1000; // 8 minutes
 
 export default function AbsentUserChecker() {
     const pathname = usePathname();
