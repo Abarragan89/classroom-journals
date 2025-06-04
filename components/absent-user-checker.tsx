@@ -6,7 +6,7 @@ export default function AbsentUserChecker() {
     const REDIRECT_URL = "https://abarragan89.github.io/jotter-blog-still-there/";
     const [state, setState] = useState<string>('Active')
     const [count, setCount] = useState<number>(0)
-    const [remaining, setRemaining] = useState<number>(10000)
+    const [remaining, setRemaining] = useState<number>(30000)
 
     const onIdle = () => {
         setState('Idle')
@@ -24,7 +24,7 @@ export default function AbsentUserChecker() {
         onIdle,
         onActive,
         onAction,
-        timeout: 10_000,
+        timeout: 30_000,
         throttle: 1000
     })
 
