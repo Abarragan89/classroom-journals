@@ -41,7 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
     queryKey: ['getUserNotifications', teacherId],
     queryFn: () => getUnreadUserNotifications(teacherId, currentClassroomId) as unknown as number,
     // refetchOnMount: false,
-    // refetchOnReconnect: false,
+    refetchOnReconnect: false,
     // refetchOnWindowFocus: false,
     // staleTime: Infinity,
   })
@@ -50,7 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
     queryKey: ['getStudentRequestCount', teacherId],
     queryFn: () => getStudentRequestCount(teacherId, currentClassroomId) as unknown as number,
     // refetchOnMount: false,
-    // refetchOnReconnect: false,
+    refetchOnReconnect: false,
     // refetchOnWindowFocus: false,
     // staleTime: Infinity,
   })

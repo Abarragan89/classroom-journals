@@ -29,7 +29,7 @@ export default function MainClientWrapper({
         queryFn: () => getSinglePromptSessionTeacherDashboard(sessionId, teacherId) as unknown as PromptSession,
         initialData: promptSession,
         // refetchOnMount: false,
-        // refetchOnReconnect: false,
+        refetchOnReconnect: false,
         // refetchOnWindowFocus: false,
         // staleTime: Infinity,
     })

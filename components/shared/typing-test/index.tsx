@@ -44,7 +44,7 @@ export default function TypingTest({
         queryFn: () => getWPMClassHighScores(classId, studentId) as unknown as User[],
         initialData: classHighScores,
         // refetchOnMount: false,
-        // refetchOnReconnect: false,
+        refetchOnReconnect: false,
         // refetchOnWindowFocus: false,
         // staleTime: Infinity,
     })

@@ -43,7 +43,7 @@ export default function StudentDashClientWrapper({
     queryFn: () => getStudentResponsesDashboard(studentId) as unknown as { responses: Response[], totalCount: number },
     initialData: allResponses,
     // refetchOnMount: false,
-    // refetchOnReconnect: false,
+    refetchOnReconnect: false,
     // refetchOnWindowFocus: false,
     // staleTime: Infinity,
   })
@@ -58,7 +58,7 @@ export default function StudentDashClientWrapper({
     },
     initialData: studentRequests,
     // refetchOnMount: false,
-    // refetchOnReconnect: false,
+    refetchOnReconnect: false,
     // refetchOnWindowFocus: false,
     // staleTime: Infinity,
   })
@@ -69,7 +69,7 @@ export default function StudentDashClientWrapper({
     queryFn: () => getFeaturedBlogs(classroomId) as unknown as Response[],
     initialData: featuredBlogs,
     // refetchOnMount: false,
-    // refetchOnReconnect: false,
+    refetchOnReconnect: false,
     // refetchOnWindowFocus: false,
     // staleTime: Infinity,
   })
@@ -80,7 +80,7 @@ export default function StudentDashClientWrapper({
     queryFn: () => getAllQuipAlerts(studentId) as unknown as number,
     initialData: quipAlerts,
     // refetchOnMount: false,
-    // refetchOnReconnect: false,
+    refetchOnReconnect: false,
     // refetchOnWindowFocus: false,
     // staleTime: Infinity,
   })

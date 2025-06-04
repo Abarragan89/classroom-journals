@@ -20,7 +20,7 @@ export default function StudentNavLinks({
         queryFn: () => getUnreadUserNotifications(studentId, classId) as unknown as number,
         placeholderData: 0,
         // refetchOnMount: false,
-        // refetchOnReconnect: false,
+        refetchOnReconnect: false,
         // refetchOnWindowFocus: false,
         // staleTime: Infinity,
     })
