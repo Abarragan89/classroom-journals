@@ -21,7 +21,7 @@ export default function MyWorkClientWrapper({
         queryFn: () => getSingleStudentResponses(studentId) as unknown as Response[],
         initialData: studentResponses,
         // refetchOnMount: false,
-        // refetchOnReconnect: false,
+        refetchOnReconnect: false,
         // refetchOnWindowFocus: false,
         // staleTime: Infinity,
     })

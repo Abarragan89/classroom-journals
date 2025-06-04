@@ -12,7 +12,7 @@ export default function UpgradeAccountBtn({
         queryKey: ['teacher-sub-status', teacherId],
         queryFn: () => determineSubscriptionAllowance(teacherId),
         // refetchOnMount: false,
-        // refetchOnReconnect: false,
+        refetchOnReconnect: false,
         // refetchOnWindowFocus: false,
         // staleTime: Infinity,
     })

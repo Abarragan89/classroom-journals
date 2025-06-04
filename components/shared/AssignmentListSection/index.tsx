@@ -35,7 +35,7 @@ export default function AssignmentListSection({
         },
         initialData: initialPrompts,
         // refetchOnMount: false,
-        // refetchOnReconnect: false,
+        refetchOnReconnect: false,
         // refetchOnWindowFocus: false,
         // staleTime: Infinity,
     })

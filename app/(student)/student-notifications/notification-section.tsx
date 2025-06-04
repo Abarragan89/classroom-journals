@@ -36,7 +36,7 @@ export default function NotificationSection({
         },
         initialData: notifications,
         // refetchOnMount: false,
-        // refetchOnReconnect: false,
+        refetchOnReconnect: false,
         // refetchOnWindowFocus: false,
         // staleTime: Infinity,
     })
