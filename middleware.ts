@@ -73,8 +73,27 @@ export async function middleware(request: NextRequest) {
     return response
 }
 
+// export const config = {
+//     matcher: [
+//         '/((?!_next/static|_next/image|favicon.ico).*)', // Apply middleware to all routes
+//     ],
+// };
+
 export const config = {
     matcher: [
-        '/((?!_next/static|_next/image|favicon.ico).*)', // Apply middleware to all routes
-    ],
-};
+        '/student-dashboard/:path*',
+        '/classes/:path*',
+        '/classroom/:path*',
+        '/discussion-board/:path*',
+        '/jot-response/:path*',
+        '/my-work/:path*',
+        '/response-review/:path*',
+        '/student-grades/:path*',
+        '/student-notifications/:path*',
+        '/typing-test/:path*',
+        '/admin/:path*',
+        '/prompt-form/:path*',
+        '/prompt-library/:path*',
+        '/teacher-account/:path*',
+    ]
+}
