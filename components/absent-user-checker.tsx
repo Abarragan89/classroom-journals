@@ -41,8 +41,5 @@ export default function AbsentUserChecker() {
         return () => clearInterval(interval);
     }, [remaining]);
 
-
-    console.log('remianing ', remaining)
-    console.log('state ', state)
     return null
 }
