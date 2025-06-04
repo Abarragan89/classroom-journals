@@ -56,7 +56,8 @@ export async function middleware(request: NextRequest) {
         "/admin",
         "/prompt-form",
         "/prompt-library",
-        "/teacher-account"
+        "/teacher-account", 
+        "/classroom-quips"
     ];
 
     const { pathname } = request.nextUrl;
@@ -81,6 +82,8 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
+        '/',
+        'classroom-quips',
         '/student-dashboard/:path*',
         '/classes/:path*',
         '/classroom/:path*',
