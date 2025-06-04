@@ -83,7 +83,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
     matcher: [
         '/',
-        'classroom-quips',
+        '/classroom-quips',
         '/student-dashboard/:path*',
         '/classes/:path*',
         '/classroom/:path*',
