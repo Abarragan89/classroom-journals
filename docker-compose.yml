@@ -1,0 +1,79 @@
+services:
+  jotterblog:
+    build:
+      secrets:
+        - DATABASE_URL
+        - AUTH_SECRET
+        - AUTH_URL
+        - AUTH_GOOGLE_ID
+        - AUTH_GOOGLE_SECRET
+        - ENCRYPTION_KEY
+        - OPENAI_API_KEY
+        - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+        - STRIPE_SECRET_KEY
+        - STRIPE_WEBHOOK_SECRET
+        - NEXT_PUBLIC_BASE_URL
+        - NEXT_PUBLIC_STANDARD_SUBSCRIPTION_LINK
+        - NEXT_PUBLIC_PREMIUM_SUBSCRIPTION_LINK
+        - SENDGRID_API_KEY
+        - SENDGRID_ACCOUNT_EMAIL
+        - AWS_S3_REGION
+        - AWS_S3_ACCESS_KEY_ID
+        - AWS_S3_SECRET_ACCESS_KEY
+        - AWS_S3_BUCKET_NAME
+      context: .
+secrets:
+  DATABASE_URL:
+    environment: DATABASE_URL
+  AUTH_SECRET:
+    environment: AUTH_SECRET
+  AUTH_URL:
+    environment: AUTH_URL
+  AUTH_GOOGLE_ID:
+    environment: AUTH_GOOGLE_ID
+  AUTH_GOOGLE_SECRET:
+    environment: AUTH_GOOGLE_SECRET
+  ENCRYPTION_KEY:
+    environment: ENCRYPTION_KEY
+  OPENAI_API_KEY:
+    environment: OPENAI_API_KEY
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
+    environment: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  STRIPE_SECRET_KEY:
+    environment: STRIPE_SECRET_KEY
+  STRIPE_WEBHOOK_SECRET:
+    environment: STRIPE_WEBHOOK_SECRET
+  NEXT_PUBLIC_BASE_URL:
+    environment: NEXT_PUBLIC_BASE_URL
+  NEXT_PUBLIC_STANDARD_SUBSCRIPTION_LINK:
+    environment: NEXT_PUBLIC_STANDARD_SUBSCRIPTION_LINK
+  NEXT_PUBLIC_PREMIUM_SUBSCRIPTION_LINK:
+    environment: NEXT_PUBLIC_PREMIUM_SUBSCRIPTION_LINK
+  SENDGRID_API_KEY:
+    environment: SENDGRID_API_KEY
+  SENDGRID_ACCOUNT_EMAIL:
+    environment: SENDGRID_ACCOUNT_EMAIL
+  AWS_S3_REGION:
+    environment: AWS_S3_REGION
+  AWS_S3_ACCESS_KEY_ID:
+    environment: AWS_S3_ACCESS_KEY_ID
+  AWS_S3_SECRET_ACCESS_KEY:
+    environment: AWS_S3_SECRET_ACCESS_KEY
+  AWS_S3_BUCKET_NAME:
+    environment: AWS_S3_BUCKET_NAME
+
+
+# services:
+#   jotterblog:
+#     build:
+#       context: .
+#       secrets:
+#         - KEY_ONE
+#         - KEY_TWO
+#         - ...
+# secrets:
+#   KEY_ONE:
+#     environment: KEY_ONE
+#   KEY_TWO:
+#     environment: KEY_TWO
+
