@@ -47,11 +47,13 @@ export interface Classroom {
     createdAt?: Date;
     updatedAt?: Date;
 }
+
 export interface Question {
     question: string;
     answer?: string;
     score?: number;
 }
+
 export type Prompt = z.infer<typeof promptSchema> & {
     id: string;
     createdAt: Date;
