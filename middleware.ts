@@ -3,6 +3,8 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
 
+    const response = NextResponse.next();
+
     // Only enforce HTTPS in production
     if (process.env.NODE_ENV === 'production') {
         const proto = request.headers.get('x-forwarded-proto');
@@ -32,53 +34,12 @@ export async function middleware(request: NextRequest) {
             upgrade-insecure-requests;
         `;
     }
-    const response = NextResponse.next();
     const contentSecurityPolicyHeaderValue = cspHeader.replace(/\s{2,}/g, ' ').trim();
     response.headers.set('Content-Security-Policy', contentSecurityPolicyHeaderValue);
     response.headers.set('x-nonce', nonce);
 
-    // Skip middleware logic in development
-    if (process.env.NODE_ENV !== "production") {
-        return response;
-    }
-
-    const PROTECTED_PATHS = [
-        "/student-dashboard",
-        "/classes",
-        "/classroom",
-        "/discussion-board",
-        "/jot-response",
-        "/my-work",
-        "/response-review",
-        "/student-grades",
-        "/student-notifications",
-        "/typing-test",
-        "/admin",
-        "/prompt-form",
-        "/prompt-library",
-        "/teacher-account", 
-        "/classroom-quips"
-    ];
-
-    const { pathname } = request.nextUrl;
-
-    const isProtected = PROTECTED_PATHS.some((path) => pathname.startsWith(path));
-
-    if (!isProtected) return response;
-    const sessionToken = request.cookies.get("__Secure-authjs.session-token")?.value;
-
-    if (!sessionToken) {
-        return new NextResponse('Not Logged In', { status: 400 });
-    }
-
     return response
 }
-
-// export const config = {
-//     matcher: [
-//         '/((?!_next/static|_next/image|favicon.ico).*)', // Apply middleware to all routes
-//     ],
-// };
 
 export const config = {
     matcher: [
