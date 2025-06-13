@@ -36,7 +36,7 @@ export async function createNewQuip(
         const { subscriptionExpires } = currentTeacherClassData || {};
         const isSubscribed = subscriptionExpires && subscriptionExpires > today;
 
-        const isAllowedToAssign = isSubscribed || (!isSubscribed && promptSessionCount < 5);
+        const isAllowedToAssign = isSubscribed || (!isSubscribed && promptSessionCount < 3);
 
 
         if (!isAllowedToAssign) {

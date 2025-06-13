@@ -109,7 +109,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             let isAllowedToAssign = false;
             if (isSubscribed) {
                 isAllowedToAssign = true;
-            } else if (!isSubscribed && promptSessionCount < 5) {
+            } else if (!isSubscribed && promptSessionCount < 3) {
                 isAllowedToAssign = true;
             }
 
@@ -546,7 +546,7 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
         const { subscriptionExpires } = currentTeacherClassData || {};
         const isSubscribed = subscriptionExpires && subscriptionExpires > today;
 
-        const isAllowedToAssign = isSubscribed || (!isSubscribed && promptSessionCount < 5);
+        const isAllowedToAssign = isSubscribed || (!isSubscribed && promptSessionCount < 3);
 
         if (!isAllowedToAssign) {
             return { success: false, message: 'Assignment limit reached. You can create prompts, but assigning them to classes requires account upgrade or deleting old assignments' };
