@@ -47,7 +47,6 @@ export interface Classroom {
     createdAt?: Date;
     updatedAt?: Date;
 }
-
 export interface Question {
     question: string;
     answer?: string;
