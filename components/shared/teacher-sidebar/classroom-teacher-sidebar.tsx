@@ -21,7 +21,8 @@ import {
   Home, User, Keyboard, Bell, Settings, PenTool,
   //  Table, 
   MessageCircle,
-  Inbox
+  Inbox,
+  Grid3x3
 } from "lucide-react"
 import { getUnreadUserNotifications } from "@/lib/actions/notifications.action"
 import { getStudentRequestCount } from "@/lib/actions/student-request"
@@ -69,6 +70,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
           // { title: "Score Sheet", icon: Table, slug: `/classroom/${currentClassroomId}/${teacherId}/scoresheet`, isActive: currentRoute === 'scoresheet', isLink: true },
           { title: "Typing Test", icon: Keyboard, slug: `/classroom/${currentClassroomId}/${teacherId}/typing-test`, isActive: currentRoute === 'typing-test', isLink: true },
           { title: "Student Requests", icon: Inbox, slug: `/classroom/${currentClassroomId}/${teacherId}/student-requests`, isActive: currentRoute === 'student-requests', isLink: true },
+          // { title: "My Rubrics", icon: Grid3x3, slug: `/classroom/${currentClassroomId}/${teacherId}/my-rubrics`, isActive: currentRoute === 'my-rubrics', isLink: true },
           { title: "Class Settings", icon: Settings, slug: `/classroom/${currentClassroomId}/${teacherId}/settings`, isActive: currentRoute === 'settings', isLink: true },
         ],
       },
