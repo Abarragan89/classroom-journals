@@ -6,6 +6,7 @@ export default async function Jots({
     params: Promise<{ classId: string, teacherId: string }>
 }) {
     const { teacherId } = await params
+    console.log('teacehrid', teacherId)
 
     return (
         <MyRubricSection

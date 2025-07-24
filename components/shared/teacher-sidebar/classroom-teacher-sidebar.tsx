@@ -21,8 +21,7 @@ import {
   Home, User, Keyboard, Bell, Settings, PenTool,
   //  Table, 
   MessageCircle,
-  Inbox,
-  Grid3x3
+  Inbox
 } from "lucide-react"
 import { getUnreadUserNotifications } from "@/lib/actions/notifications.action"
 import { getStudentRequestCount } from "@/lib/actions/student-request"
