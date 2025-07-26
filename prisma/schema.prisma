@@ -24,7 +24,7 @@ model User {
   image               String?
   isAdmin             Boolean            @default(false)
   wpmSpeed            Float              @default(0.0)
-  avatarURL           String?             
+  avatarURL           String?
   accountType         TeacherAccountType @default(BASIC)
   password            String? // this password is only for student accounts and needs to be accessible to teacher
   iv                  String? // this is used to encrypt student names, ensures no duplicates when same input is given when encrypting
@@ -301,3 +301,37 @@ model Image {
   tags      String[] // searchable tags
   createdAt DateTime @default(now())
 }
+
+// Rubric Model
+model RubricTemplate {
+  id     String @id @default(cuid())
+  title  String
+  rubric Json
+  // Example of rubric JSON structure
+  // {
+  //   "categories": [
+  //     {
+  //       "name": "Organization",
+  //       "scores": [
+  //         { "score": 4, "description": "Clear and logical structure" },
+  //         { "score": 3, "description": "Mostly organized with minor lapses" },
+  //         { "score": 2, "description": "Some structure but inconsistent" },
+  //         { "score": 1, "description": "Disorganized and confusing" }
+  //       ]
+  //     },
+  //     {
+  //       "name": "Grammar",
+  //       "scores": [
+  //         { "score": 4, "description": "No grammatical errors" },
+  //         { "score": 3, "description": "Few minor errors" },
+  //         { "score": 2, "description": "Several noticeable errors" },
+  //         { "score": 1, "description": "Frequent grammatical mistakes" }
+  //       ]
+  //     }
+  //   ]
+  // }
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+

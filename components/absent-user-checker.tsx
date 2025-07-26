@@ -29,18 +29,18 @@ export default function AbsentUserChecker() {
         throttle: 1000
     })
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const secs = Math.ceil(getRemainingTime() / 1000);
-            if (secs !== remaining) {
-                setRemaining(secs);
-            }
-            if (secs <= 0) {
-                window.location.href = REDIRECT_URL;
-            }
-        }, 1000);
-        return () => clearInterval(interval);
-    }, [remaining]);
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         const secs = Math.ceil(getRemainingTime() / 1000);
+    //         if (secs !== remaining) {
+    //             setRemaining(secs);
+    //         }
+    //         if (secs <= 0) {
+    //             window.location.href = REDIRECT_URL;
+    //         }
+    //     }, 1000);
+    //     return () => clearInterval(interval);
+    // }, [remaining]);
 
     return null
 }
