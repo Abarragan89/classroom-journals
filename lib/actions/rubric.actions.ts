@@ -20,7 +20,6 @@ export async function createRubric(teacherId: string, rubricData: InputJsonValue
             },
         })
 
-        console.log('New rubric created:', newRubric);
         return { success: true, message: 'Rubric created successfully', rubric: newRubric };
     } catch (error) {
         // Improved error logging
@@ -53,6 +52,26 @@ export async function getRubricById(rubricId: string) {
         return rubric;
     } catch (error) {
         console.error('Error fetching rubric:', error);
+        throw error; // Re-throw the error for further handling
+    }
+}
+
+// Grab all rubrics for a teacher
+export async function getRubricsByTeacherId(teacherId: string) {
+    try {
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error("Forbidden");
+        }
+
+        const rubrics = await prisma.rubricTemplate.findMany({
+            where: { teacherId },
+            orderBy: { createdAt: 'desc' },
+        });
+
+        return rubrics;
+    } catch (error) {
+        console.error('Error fetching rubrics:', error);
         throw error; // Re-throw the error for further handling
     }
 }

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { classSchema, promptSchema } from "@/lib/validators";
+import { classSchema, promptSchema, rubricSchema } from "@/lib/validators";
 import { JsonValue } from "@prisma/client/runtime/library";
 
 export type User = {
@@ -225,4 +225,11 @@ export interface BlogImage {
     category: string;
     tags: string[];
     createdAt?: Date;
+}
+
+export type Rubric = z.infer<typeof rubricSchema> & {
+    id: string;
+    teacherId: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
