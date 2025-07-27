@@ -43,3 +43,14 @@ export const requestNewUsernameSchema = z.object({
 export const requestNewPromptSchema = z.object({
     notificationText: z.string().min(2),
 })
+
+export const rubricsSchema = z.object({
+    categories: z.array(
+        z.object({
+            name: z.string().min(1, 'Category name is required'),
+            criteriaByScore: z.array(z.string().min(1, 'Criteria is required')),
+            scoreLevel: z.array(z.string().min(1, 'Score level is required'))
+        })
+    ).min(1, 'At least one category is required'),
+    rubricName: z.string().min(1, 'Rubric name is required')
+})

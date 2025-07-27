@@ -9,7 +9,7 @@ export async function signInWithMagicLink(prevState: unknown, formData: FormData
         signInFormSchema.parse({
             email: formData.get('email')
         })
-        await signIn("sendgrid", formData)
+        await signIn("resend", formData)
         return { success: true, message: 'Signed in successfully' }
     } catch (error) {
         // redirect is part of the normal flow and this lets Auth handle the redirect without crashing

@@ -24,7 +24,7 @@ model User {
   image               String?
   isAdmin             Boolean            @default(false)
   wpmSpeed            Float              @default(0.0)
-  avatarURL           String?             
+  avatarURL           String?
   accountType         TeacherAccountType @default(BASIC)
   password            String? // this password is only for student accounts and needs to be accessible to teacher
   iv                  String? // this is used to encrypt student names, ensures no duplicates when same input is given when encrypting
@@ -51,6 +51,7 @@ model User {
   subscriptionExpires DateTime?
   Alert               Alert[]
   PromptSession       PromptSession[]
+  rubricTemplates     RubricTemplate[]
 }
 
 model Account {
@@ -300,4 +301,15 @@ model Image {
   category  String
   tags      String[] // searchable tags
   createdAt DateTime @default(now())
+}
+
+// Rubric Model
+model RubricTemplate {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title     String
+  rubric    Json // JSON object containing the rubric structure
+  teacherId String   @db.Uuid
+  teacher   User     @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -10,8 +10,7 @@ export default async function Jots({
 
     return (
         <MyRubricSection
-            // teacherId={teacherId}
-            // inClassroom={true}
+            teacherId={teacherId}
         />
     )
 }

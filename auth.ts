@@ -1,5 +1,6 @@
 import NextAuth, { DefaultSession } from "next-auth";
-import Sendgrid from "next-auth/providers/sendgrid";
+// import Sendgrid from "next-auth/providers/sendgrid";
+import Resend from "next-auth/providers/resend";
 import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db/prisma";
@@ -30,9 +31,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     trustHost: true,
     secret: process.env.AUTH_SECRET,
     providers: [
-        Sendgrid({
-            apiKey: process.env.SENDGRID_API_KEY,
-            from: `"JotterBlog" <${process.env.SENDGRID_ACCOUNT_EMAIL}>`
+        Resend({
+            apiKey: process.env.RESEND_API_KEY,
+            from: `"JotterBlog" <${process.env.RESEND_ACCOUNT_EMAIL}>`
         }),
         Google({
             clientId: process.env.AUTH_GOOGLE_ID!,
