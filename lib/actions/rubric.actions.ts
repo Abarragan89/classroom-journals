@@ -1,17 +1,27 @@
 "use server";
 import { prisma } from "@/db/prisma";
 import { requireAuth } from "./authorization.action";
+import { InputJsonValue } from "@prisma/client/runtime/library";
 
 
 // This is for the teacher to get notifications if there are requests, work as notifications
-export async function createRubric(teacherId: string, rubricData: JSON) {
+export async function createRubric(teacherId: string, rubricData: InputJsonValue, title: string) {
     try {
         const session = await requireAuth();
         if (session?.user?.id !== teacherId) {
             throw new Error("Forbidden");
         }
-        
-        const 
+
+        const newRubric = await prisma.rubricTemplate.create({
+            data: {
+                teacherId: teacherId,
+                rubric: rubricData,
+                title
+            },
+        })
+
+        console.log('New rubric created:', newRubric);
+        return { success: true, message: 'Rubric created successfully', rubric: newRubric };
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
@@ -21,5 +31,28 @@ export async function createRubric(teacherId: string, rubricData: JSON) {
             console.log('Unexpected error:', error);
         }
         return { success: false, message: 'Error adding student. Try again.' }
+    }
+}
+
+// get a single rubric by id
+export async function getRubricById(rubricId: string) {
+    try {
+        const session = await requireAuth();
+        if (!session) {
+            throw new Error("Unauthorized");
+        }
+        
+        const rubric = await prisma.rubricTemplate.findUnique({
+            where: { id: rubricId },
+        });
+
+        if (!rubric) {
+            throw new Error("Rubric not found");
+        }
+
+        return rubric;
+    } catch (error) {
+        console.error('Error fetching rubric:', error);
+        throw error; // Re-throw the error for further handling
     }
 }

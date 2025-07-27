@@ -51,6 +51,7 @@ model User {
   subscriptionExpires DateTime?
   Alert               Alert[]
   PromptSession       PromptSession[]
+  rubricTemplates     RubricTemplate[]
 }
 
 model Account {
@@ -304,34 +305,11 @@ model Image {
 
 // Rubric Model
 model RubricTemplate {
-  id     String @id @default(cuid())
-  title  String
-  rubric Json
-  // Example of rubric JSON structure
-  // {
-  //   "categories": [
-  //     {
-  //       "name": "Organization",
-  //       "scores": [
-  //         { "score": 4, "description": "Clear and logical structure" },
-  //         { "score": 3, "description": "Mostly organized with minor lapses" },
-  //         { "score": 2, "description": "Some structure but inconsistent" },
-  //         { "score": 1, "description": "Disorganized and confusing" }
-  //       ]
-  //     },
-  //     {
-  //       "name": "Grammar",
-  //       "scores": [
-  //         { "score": 4, "description": "No grammatical errors" },
-  //         { "score": 3, "description": "Few minor errors" },
-  //         { "score": 2, "description": "Several noticeable errors" },
-  //         { "score": 1, "description": "Frequent grammatical mistakes" }
-  //       ]
-  //     }
-  //   ]
-  // }
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title     String
+  rubric    Json // JSON object containing the rubric structure
+  teacherId String   @db.Uuid
+  teacher   User     @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-

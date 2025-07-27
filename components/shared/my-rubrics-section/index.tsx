@@ -22,7 +22,6 @@ import {
     FormControl,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
@@ -30,6 +29,7 @@ import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
+import { createRubric } from "@/lib/actions/rubric.actions"
 
 const rubricSchema = z.object({
     categories: z.array(
@@ -43,7 +43,7 @@ const rubricSchema = z.object({
 
 type RubricFormData = z.infer<typeof rubricSchema>
 
-export default function MyRubricSection() {
+export default function MyRubricSection({ teacherId }: { teacherId: string }) {
     const [scoreLevels, setScoreLevels] = useState(["1", "2", "3", "4"])
 
     const form = useForm<RubricFormData>({
@@ -97,8 +97,9 @@ export default function MyRubricSection() {
         })
     }
 
-    const onSubmit = (data: RubricFormData) => {
-        const payload = {
+    const onSubmit = async (data: RubricFormData) => {
+        // Transform categories to have scores and criteria in the expected format
+        const { categories } = {
             categories: data.categories.map(cat => ({
                 name: cat.name,
                 criteria: cat.criteriaByScore.reverse().map((criteria, i, arr) => ({
@@ -107,7 +108,18 @@ export default function MyRubricSection() {
                 }))
             }))
         };
-        console.log("Rubric submitted:", payload)
+
+        // Call the createRubric action
+        try {
+            await createRubric(teacherId, categories, data.rubricName)
+            form.reset()
+        } catch (error) {
+            console.error('Error creating rubric:', error);
+            return {
+                success: false, message: 'Error creating rubric. Please try again.'
+
+            }
+        }
     }
 
     return (

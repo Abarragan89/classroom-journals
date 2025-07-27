@@ -1,21 +1,20 @@
-import sgMail, { MailDataRequired } from '@sendgrid/mail';
-sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
+import { CreateEmailOptions, Resend } from 'resend';
 
 interface CustomerDetails {
     customerEmail: string,
     customerName: string,
     hostedInvoice?: string,
 }
+
+const resend = new Resend(process.env.RESEND_API_KEY as string);
+
 ///////////////////////////// Send Confirmation Email /////////////////////////////////////////
 export async function subscriptionConfirmation(customerDetails: CustomerDetails): Promise<void> {
 
     // 1. Create the email template and send messages
     const messageId = `<${customerDetails.customerName}-${new Date().toISOString()}@unfinishedpages.com>`
-    const message: MailDataRequired = {
-        from: {
-            email: process.env.SENDGRID_ACCOUNT_EMAIL as string,
-            name: 'JotterBlog'
-        },
+    const message: CreateEmailOptions = {
+        from: `JotterBlog <${process.env.RESEND_ACCOUNT_EMAIL}>`,
         to: customerDetails.customerEmail as string,
         subject: `Subscription Confirmation`,
         html: `
@@ -31,7 +30,7 @@ export async function subscriptionConfirmation(customerDetails: CustomerDetails)
         }
     };
 
-    sgMail.send(message).catch((error) => {
+    resend.emails.send(message).catch((error) => {
         console.error(`Failed to send email`, error.response?.body || error.message);
         return null;
     });
@@ -41,11 +40,8 @@ export async function subscriptionConfirmation(customerDetails: CustomerDetails)
 export async function subscriptionPaymentFailed(customerDetails: CustomerDetails): Promise<void> {
     // 1. Create the email template and send messages
     const messageId = `<${customerDetails.customerName}-${new Date().toISOString()}@unfinishedpages.com>`
-    const message: MailDataRequired = {
-        from: {
-            email: process.env.SENDGRID_ACCOUNT_EMAIL as string,
-            name: 'JotterBlog'
-        },
+    const message: CreateEmailOptions = {
+        from: `JotterBlog <${process.env.RESEND_ACCOUNT_EMAIL}>`,
         to: customerDetails.customerEmail as string,
         subject: `Payment Unsuccessful`,
         html: `
@@ -63,7 +59,7 @@ export async function subscriptionPaymentFailed(customerDetails: CustomerDetails
         }
     };
 
-    sgMail.send(message).catch((error) => {
+    resend.emails.send(message).catch((error) => {
         console.error(`Failed to send email`, error.response?.body || error.message);
         return null;
     });
@@ -74,11 +70,8 @@ export async function subscriptionPaymentFailed(customerDetails: CustomerDetails
 export async function subscriptionCancelled(customerDetails: CustomerDetails): Promise<void> {
     // 1. Create the email template and send messages
     const messageId = `<${customerDetails.customerName}-${new Date().toISOString()}@unfinishedpages.com>`
-    const message: MailDataRequired = {
-        from: {
-            email: process.env.SENDGRID_ACCOUNT_EMAIL as string,
-            name: 'JotterBlog'
-        },
+    const message: CreateEmailOptions = {
+        from: `JotterBlog <${process.env.RESEND_ACCOUNT_EMAIL}>`,
         to: customerDetails.customerEmail as string,
         subject: `Subscription Cancelled`,
         html: `
@@ -94,7 +87,7 @@ export async function subscriptionCancelled(customerDetails: CustomerDetails): P
         }
     };
 
-    sgMail.send(message).catch((error) => {
+    resend.emails.send(message).catch((error) => {
         console.error(`Failed to send email`, error.response?.body || error.message);
         return null;
     });
