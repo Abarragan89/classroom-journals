@@ -49,6 +49,7 @@ model User {
   subscriptionId      String?
   isCancelling        Boolean?
   subscriptionExpires DateTime?
+  openAIAllowance     Int?               @default(150)
   Alert               Alert[]
   PromptSession       PromptSession[]
   rubricTemplates     RubricTemplate[]

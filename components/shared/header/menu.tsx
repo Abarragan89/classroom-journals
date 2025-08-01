@@ -30,6 +30,7 @@ export default function Menu({
     const renderTeacherHeader = () => (
         <>
             <TeacherNavLinks />
+
             <ActionSubMenu
                 teacherId={teacherId as string}
                 session={session as Session}

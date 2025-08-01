@@ -2,6 +2,7 @@
 import { ResponseData, Rubric, AIGradingResult } from "@/types";
 import OpenAI from "openai";
 import { requireAuth } from "./authorization.action";
+import { prisma } from "@/db/prisma";
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY, // make sure this is set in your .env
@@ -56,9 +57,28 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
     }
 }
 
-export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, gradeLevel?: string): Promise<AIGradingResult> {
+export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, gradeLevel?: string, responseId?: string): Promise<AIGradingResult> {
     try {
-        await requireAuth();
+        const session = await requireAuth();
+        const teacherId = session?.user?.id;
+
+        if (!teacherId) {
+            throw new Error('Authentication required');
+        }
+
+        // Check AI allowance before processing
+        const teacher = await prisma.user.findUnique({
+            where: { id: teacherId },
+            select: { openAIAllowance: true, accountType: true }
+        });
+
+        if (!teacher?.openAIAllowance || teacher.openAIAllowance <= 0) {
+            return {
+                success: false,
+                message: 'AI grading allowance exhausted. Allowance resets with your next billing cycle.',
+                error: 'No allowance remaining'
+            };
+        }
 
         const gradeLevelString = gradeLevel
             ? `Grade this according to ${gradeLevel} level standards.`
@@ -132,6 +152,16 @@ export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, 
             parsedResult.comment = parsedResult.comment.substring(0, 497) + '...';
         }
 
+        // Deduct allowance AFTER successful AI call
+        await prisma.user.update({
+            where: { id: teacherId },
+            data: {
+                openAIAllowance: {
+                    decrement: 1
+                }
+            }
+        });
+
         return {
             success: true,
             scores: parsedResult.scores,
@@ -145,6 +175,39 @@ export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, 
             message: 'Failed to grade with AI. Please try again.',
             error: error instanceof Error ? error.message : 'Unknown error'
         };
+    }
+}
+
+// Get current AI allowance for a teacher
+export async function getTeacherAIAllowance(): Promise<number> {
+    try {
+        const session = await requireAuth();
+        const teacherId = session?.user?.id;
+
+        if (!teacherId) {
+            return 0;
+        }
+
+        const teacher = await prisma.user.findUnique({
+            where: { id: teacherId },
+            select: { openAIAllowance: true }
+        });
+
+        return teacher?.openAIAllowance || 0;
+    } catch (error) {
+        console.error('Error getting AI allowance:', error);
+        return 0;
+    }
+}
+
+// Check if AI grading is available
+export async function canUseAIGrading(): Promise<boolean> {
+    try {
+        const allowance = await getTeacherAIAllowance();
+        return allowance > 0;
+    } catch (error) {
+        console.error('Error checking AI grading availability:', error);
+        return false;
     }
 }
 

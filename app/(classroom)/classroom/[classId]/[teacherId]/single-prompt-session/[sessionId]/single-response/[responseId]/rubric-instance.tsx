@@ -1,12 +1,12 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableRow, TableHeader } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 import { Rubric, RubricGradingInstance, RubricGrade } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { gradeRubricWithAI } from '@/lib/actions/openai.action'
+import { gradeRubricWithAI, getTeacherAIAllowance } from '@/lib/actions/openai.action'
 import { toast } from "sonner"
 
 interface RubricInstanceProps {
@@ -32,6 +32,18 @@ export default function RubricInstance({
     const [hasChanges, setHasChanges] = useState(false);
     const [comment, setComment] = useState(existingGrade?.comment || '');
     const [isAIGrading, setIsAIGrading] = useState(false);
+    const [aiAllowance, setAiAllowance] = useState<number>(0);
+
+    // Fetch AI allowance when component mounts
+    useEffect(() => {
+        async function fetchAllowance() {
+            if (isPremiumTeacher) {
+                const allowance = await getTeacherAIAllowance();
+                setAiAllowance(allowance);
+            }
+        }
+        fetchAllowance();
+    }, [isPremiumTeacher]);
 
     const [gradingInstance, setGradingInstance] = useState<RubricGradingInstance>(() => {
         // If we have an existing grade, initialize with those scores
@@ -155,9 +167,14 @@ export default function RubricInstance({
             return;
         }
 
+        if (aiAllowance <= 0) {
+            toast.error('AI grading allowance exhausted. Allowance resets with your next billing cycle.');
+            return;
+        }
+
         setIsAIGrading(true);
         try {
-            const result = await gradeRubricWithAI(rubric, studentWriting);
+            const result = await gradeRubricWithAI(rubric, studentWriting, undefined, responseId);
 
             if (result.success && result.scores && result.comment) {
                 // Update the grading instance with AI scores
@@ -177,6 +194,9 @@ export default function RubricInstance({
 
                 setGradingInstance(updatedInstance);
                 setComment(result.comment);
+
+                // Decrement local allowance
+                setAiAllowance(prev => prev - 1);
 
                 // Check for changes and notify parent
                 checkForChanges(updatedInstance, result.comment);
@@ -227,14 +247,32 @@ export default function RubricInstance({
                 </div>
                 {onSave && (
                     <div className="flex gap-3 items-center">
+
+                        {/* AI Grading Button */}
                         {isPremiumTeacher && (
-                            <Button
-                                onClick={handleAIGrading}
-                                disabled={isAIGrading || !studentWriting.trim()}
-                            >
-                                {isAIGrading ? 'Grading...' : 'Autograde with AI!'}
-                            </Button>
+                            <div className="flex flex-col items-center space-y-2">
+                                {aiAllowance > 0 ? (
+                                    <Button
+                                        onClick={handleAIGrading}
+                                        disabled={isAIGrading || !studentWriting.trim()}
+                                        className="w-full"
+                                    >
+                                        {isAIGrading ? "Grading with AI..." : `Autograde with AI! (${aiAllowance} credits left)`}
+                                    </Button>
+                                ) : (
+                                    <div className="text-center">
+                                        <p className="text-destructive text-sm font-medium">
+                                            AI grading allowance exhausted
+                                        </p>
+                                        <p className="text-muted-foreground text-xs">
+                                            Resets with next billing cycle
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
                         )}
+
+
                         {isComplete && (existingGrade && !hasChanges ? (
                             <Button disabled className="opacity-50 cursor-not-allowed">
                                 No Changes
@@ -244,6 +282,8 @@ export default function RubricInstance({
                                 {existingGrade ? 'Update Grade' : 'Save Grade'}
                             </Button>
                         ))}
+
+
                     </div>
                 )}
             </div>
@@ -325,6 +365,8 @@ export default function RubricInstance({
                     {comment.length}/500 characters
                 </p>
             </div>
+
+
         </div>
     )
 }

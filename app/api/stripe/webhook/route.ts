@@ -47,19 +47,23 @@ export async function POST(req: NextRequest) {
                 const now = new Date();
                 const futureDate = new Date(now);
                 let accountType: TeacherAccountType = TeacherAccountType.BASIC;
+                let newAIAllowance = 0;
                 switch (amountPaid) {
                     // testing case of 1 dollar
                     case 100:
                         futureDate.setDate(futureDate.getDate() + 1);
                         accountType = TeacherAccountType.PREMIUM;
+                        newAIAllowance = 150;
                         break;
                     case 4999:
                         futureDate.setDate(futureDate.getDate() + 368);
                         accountType = TeacherAccountType.STANDARD;
+                        newAIAllowance = 0;
                         break;
                     case 9999:
                         futureDate.setDate(futureDate.getDate() + 368);
                         accountType = TeacherAccountType.PREMIUM
+                        newAIAllowance = 150;
                         break;
                 }
 
@@ -92,7 +96,8 @@ export async function POST(req: NextRequest) {
                         customerId,
                         isCancelling: false,
                         subscriptionExpires: futureDate,
-                        accountType
+                        accountType,
+                        openAIAllowance: newAIAllowance
                     }
                 })
 
