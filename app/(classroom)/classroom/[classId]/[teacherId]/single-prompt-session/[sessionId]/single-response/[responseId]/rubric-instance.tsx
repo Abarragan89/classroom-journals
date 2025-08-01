@@ -1,9 +1,11 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import { Table, TableBody, TableCell, TableHead, TableRow, TableHeader, TableCaption } from '@/components/ui/table'
+import React, { useState } from 'react'
+import { Table, TableBody, TableCell, TableHead, TableRow, TableHeader } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 import { Rubric, RubricGradingInstance, RubricGrade } from '@/types'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
 
 interface RubricInstanceProps {
     rubric: Rubric;
@@ -11,6 +13,7 @@ interface RubricInstanceProps {
     existingGrade?: RubricGrade; // Add this to accept saved grades
     onGradeChange?: (grade: RubricGrade) => void;
     onSave?: (grade: RubricGrade) => void;
+    isPremiumTeacher?: boolean;
 }
 
 export default function RubricInstance({
@@ -18,8 +21,12 @@ export default function RubricInstance({
     responseId,
     existingGrade,
     onGradeChange,
-    onSave
+    onSave,
+    isPremiumTeacher = false
 }: RubricInstanceProps) {
+
+    const [hasChanges, setHasChanges] = useState(false);
+    const [comment, setComment] = useState(existingGrade?.comment || '');
 
     const [gradingInstance, setGradingInstance] = useState<RubricGradingInstance>(() => {
         // If we have an existing grade, initialize with those scores
@@ -27,7 +34,7 @@ export default function RubricInstance({
             return {
                 id: rubric.id,
                 title: rubric.title,
-                categories: rubric.categories.map((cat, catIdx) => {
+                categories: rubric.categories.map((cat) => {
                     // Find the corresponding saved category score
                     const savedCategory = existingGrade.categories.find(saved => saved.name === cat.name);
                     let selectedScore: number | undefined = undefined;
@@ -59,6 +66,30 @@ export default function RubricInstance({
         };
     }); console.log('Initial Grading Instance:', gradingInstance)
 
+    // Function to check if current state matches the existing grade
+    const checkForChanges = (instance: RubricGradingInstance, currentComment?: string) => {
+        if (!existingGrade) {
+            // If there's no existing grade, any selection or comment counts as a change
+            const hasGradeSelections = instance.categories.some(cat => cat.selectedScore !== undefined);
+            const hasCommentText = (currentComment || '').trim().length > 0;
+            setHasChanges(hasGradeSelections || hasCommentText);
+            return;
+        }
+
+        // Compare current selections with existing grade
+        const currentGrade = calculateGrade(instance);
+        const hasGradeChanges = existingGrade.categories.some((savedCat, idx) => {
+            const currentCat = currentGrade.categories[idx];
+            return currentCat && currentCat.selectedScore !== savedCat.selectedScore;
+        });
+
+        // Check if comment has changed
+        const commentToCheck = currentComment !== undefined ? currentComment : comment;
+        const hasCommentChanges = (existingGrade.comment || '') !== commentToCheck;
+
+        setHasChanges(hasGradeChanges || hasCommentChanges);
+    };
+
     const handleClick = (catIdx: number, scoreIdx: number) => {
         const updatedInstance = {
             ...gradingInstance,
@@ -70,10 +101,26 @@ export default function RubricInstance({
         }
         setGradingInstance(updatedInstance)
 
+        // Check for changes after updating the instance
+        checkForChanges(updatedInstance);
+
         // Calculate and notify about grade changes
         if (onGradeChange) {
             const grade = calculateGrade(updatedInstance)
+            grade.comment = comment; // Include current comment
             onGradeChange(grade)
+        }
+    }
+
+    const handleCommentChange = (newComment: string) => {
+        setComment(newComment);
+        checkForChanges(gradingInstance, newComment);
+
+        // Notify parent about grade changes including comment
+        if (onGradeChange) {
+            const grade = calculateGrade(gradingInstance);
+            grade.comment = newComment;
+            onGradeChange(grade);
         }
     }
 
@@ -92,7 +139,8 @@ export default function RubricInstance({
             responseId: responseId || '',
             categories,
             totalScore,
-            maxTotalScore
+            maxTotalScore,
+            comment
         }
     }
 
@@ -100,6 +148,8 @@ export default function RubricInstance({
         if (onSave) {
             const grade = calculateGrade(gradingInstance)
             onSave(grade)
+            // Reset hasChanges after successful save
+            setHasChanges(false)
         }
     }
 
@@ -121,15 +171,32 @@ export default function RubricInstance({
                     )}
                 </div>
                 {onSave && isComplete && (
-                    <Button onClick={handleSave} className="ml-4">
-                        {existingGrade ? 'Update Grade' : 'Save Grade'}
-                    </Button>
+                    <div className="flex gap-3 items-center">
+                        {isPremiumTeacher && (
+                            <Button
+                                onClick={() => {
+                                    // TODO: Implement AI grading functionality
+                                    console.log('Grade with AI clicked');
+                                }}
+                            >
+                                Autograde with AI!
+                            </Button>
+                        )}
+                        {existingGrade && !hasChanges ? (
+                            <Button disabled className="opacity-50 cursor-not-allowed">
+                                No Changes
+                            </Button>
+                        ) : (
+                            <Button onClick={handleSave}>
+                                {existingGrade ? 'Update Grade' : 'Save Grade'}
+                            </Button>
+                        )}
+                    </div>
                 )}
             </div>
 
             <div className="overflow-x-auto">
                 <Table className="min-w-[920px]">
-                    <TableCaption>Grade using this rubric by selecting criteria for each category.</TableCaption>
                     <TableHeader>
                         <TableRow>
                             <TableHead>Category</TableHead>
@@ -186,6 +253,24 @@ export default function RubricInstance({
                         ))}
                     </TableBody>
                 </Table>
+            </div>
+
+            {/* Comment Section */}
+            <div className="mt-6 space-y-2">
+                <Label htmlFor="rubric-comment" className="text-sm font-medium">
+                    Optional Comment
+                </Label>
+                <Textarea
+                    id="rubric-comment"
+                    placeholder="Add an optional comment about this rubric grade..."
+                    value={comment}
+                    onChange={(e) => handleCommentChange(e.target.value)}
+                    className="min-h-[80px] resize-none"
+                    maxLength={500}
+                />
+                <p className="text-xs text-muted-foreground text-right">
+                    {comment.length}/500 characters
+                </p>
             </div>
         </div>
     )

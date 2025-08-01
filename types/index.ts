@@ -268,6 +268,7 @@ export type RubricGrade = {
     }[];
     totalScore: number;
     maxTotalScore: number;
+    comment?: string; // Optional comment from teacher
 }
 
 

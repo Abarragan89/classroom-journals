@@ -327,6 +327,7 @@ model RubricGrade {
   totalScore      Int // Sum of all selected scores
   maxTotalScore   Int // Sum of all max scores
   percentageScore Int // Calculated percentage (totalScore/maxTotalScore * 100)
+  comment         String? // Optional comment from teacher
   gradedAt        DateTime @default(now())
   updatedAt       DateTime @updatedAt
 

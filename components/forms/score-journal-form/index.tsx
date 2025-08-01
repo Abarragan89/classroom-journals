@@ -15,10 +15,12 @@ export default function ScoreJournalForm({
     currentScore,
     responseId,
     teacherId,
+    isPremiumTeacher = false,
 }: {
     currentScore: number | string,
     responseId: string,
-    teacherId: string
+    teacherId: string,
+    isPremiumTeacher?: boolean
 }) {
 
     const [showRubicDialog, setShowRubricDialog] = useState(false);
@@ -68,7 +70,8 @@ export default function ScoreJournalForm({
                     responseId: mostRecentGrade.responseId,
                     categories: mostRecentGrade.categories as any, // eslint-disable-line @typescript-eslint/no-explicit-any
                     totalScore: mostRecentGrade.totalScore,
-                    maxTotalScore: mostRecentGrade.maxTotalScore
+                    maxTotalScore: mostRecentGrade.maxTotalScore,
+                    comment: mostRecentGrade.comment || undefined
                 };
 
                 setCurrentGrade(savedGrade);
@@ -178,7 +181,8 @@ export default function ScoreJournalForm({
                 teacherId,
                 grade.categories,
                 grade.totalScore,
-                grade.maxTotalScore
+                grade.maxTotalScore,
+                grade.comment
             );
 
             if (rubricResult.success) {
@@ -240,8 +244,8 @@ export default function ScoreJournalForm({
                                         key={rubricItem.id}
                                         onClick={() => !isCurrentlyLoading && handleRubricSelect(rubricItem)}
                                         className={`p-2 flex justify-between items-center ${isCurrentlyLoading
-                                                ? 'cursor-not-allowed opacity-50'
-                                                : 'hover:bg-accent hover:text-accent-foreground cursor-pointer'
+                                            ? 'cursor-not-allowed opacity-50'
+                                            : 'hover:bg-accent hover:text-accent-foreground cursor-pointer'
                                             }`}
                                     >
                                         <span>{rubricItem.title}</span>
@@ -336,6 +340,7 @@ export default function ScoreJournalForm({
                         existingGrade={currentGrade || undefined}
                         onGradeChange={handleGradeChange}
                         onSave={handleSaveGrade}
+                        isPremiumTeacher={isPremiumTeacher}
                     />
                 </div>
             )}

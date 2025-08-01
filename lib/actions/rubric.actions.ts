@@ -150,7 +150,8 @@ export async function saveRubricGrade(
     teacherId: string,
     categories: any[], // Array of {name, selectedScore, maxScore}
     totalScore: number,
-    maxTotalScore: number
+    maxTotalScore: number,
+    comment?: string // Optional comment from teacher
 ) {
     try {
         const session = await requireAuth();
@@ -173,6 +174,7 @@ export async function saveRubricGrade(
                 totalScore,
                 maxTotalScore,
                 percentageScore,
+                comment,
                 updatedAt: new Date()
             },
             create: {
@@ -182,7 +184,8 @@ export async function saveRubricGrade(
                 categories,
                 totalScore,
                 maxTotalScore,
-                percentageScore
+                percentageScore,
+                comment
             }
         });
 
