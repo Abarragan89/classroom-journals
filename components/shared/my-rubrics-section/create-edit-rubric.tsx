@@ -162,11 +162,8 @@ export default function CreateEditRubric({
 
     // handle delete rubric
     const handleDeleteRubric = async () => {
-
-        console.log('in the handle delete rubric')
         if (!currentRubric) return;
 
-        console.log("moving forward with delete")
         try {
             await deleteRubric(currentRubric.id)
             onRubricUpdate('deleted')

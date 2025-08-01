@@ -12,6 +12,7 @@ import {
 import { useTheme } from "next-themes"
 import { SunIcon, MoonIcon, ComputerIcon, Heart, Sprout } from 'lucide-react'
 import { FaUserTie } from "react-icons/fa";
+import { PiNewspaperClipping } from "react-icons/pi";
 
 
 export default function ModeToggle() {
@@ -37,7 +38,7 @@ export default function ModeToggle() {
             case 'cupid':
                 return <Heart />
             case 'light':
-                return <SunIcon />
+                return <PiNewspaperClipping />
             case 'tuxedo':
                 return <FaUserTie />
             case 'avocado':
@@ -64,7 +65,7 @@ export default function ModeToggle() {
                         Dark
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'light'} onClick={() => setTheme('light')}>
-                        Light
+                        Paper
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'cupid'} onClick={() => setTheme('cupid')}>
                         Cupid

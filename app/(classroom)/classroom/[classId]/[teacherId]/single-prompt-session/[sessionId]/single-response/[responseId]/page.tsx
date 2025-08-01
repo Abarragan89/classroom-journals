@@ -74,13 +74,13 @@ export default async function SingleResponse({
                         )}
                     </div>
                     {!isMultiQuestion && (
-                        <div className='flex-end mt-5'>
+                        // <div className='flex-end mt-5'>
                             <ScoreJournalForm
                                 teacherId={teacherId}
                                 responseId={response?.id}
                                 currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
                             />
-                        </div>
+                        // </div>
                     )}
                 </div>
                 <div className="max-w-[1200px] mx-auto relative">
