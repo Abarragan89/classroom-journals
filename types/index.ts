@@ -236,5 +236,39 @@ export type Rubric = z.infer<typeof rubricSchema> & {
 
 export type RubricFormData = z.infer<typeof rubricSchema>
 
+// Type for lightweight rubric list items (only id and title)
+export type RubricListItem = {
+    id: string;
+    title: string;
+    createdAt: Date;
+}
+
+// Type for rubric instance used in grading
+export type RubricGradingInstance = {
+    id: string;
+    title: string;
+    categories: {
+        name: string;
+        criteria: {
+            description: string;
+            score: number;
+        }[];
+        selectedScore?: number; // The currently selected score for this category
+    }[];
+}
+
+// Type for saving rubric grades (This is what we save to the database)
+export type RubricGrade = {
+    rubricId: string;
+    responseId: string;
+    categories: {
+        name: string;
+        selectedScore: number;
+        maxScore: number;
+    }[];
+    totalScore: number;
+    maxTotalScore: number;
+}
+
 
 
