@@ -11,7 +11,7 @@ export default async function Jots({
 
     const teacherRubrics = await getRubricsByTeacherId(teacherId) as unknown as Rubric[]
 
-    console.log("Teacher Rubrics:", teacherRubrics)
+
     return (
         <MyRubricSection
             teacherId={teacherId}

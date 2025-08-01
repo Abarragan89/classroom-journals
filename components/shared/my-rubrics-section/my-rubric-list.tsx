@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button"
 import {
     Table,
     TableBody,
@@ -11,35 +12,48 @@ import {
 import { Rubric } from "@/types"
 
 export default function MyRubricList({
-    teacherRubrics
+    teacherRubrics,
+    toggleShowMyRubrics
 }: {
-    teacherRubrics: Rubric[]
+    teacherRubrics: Rubric[],
+    toggleShowMyRubrics: (rubricData: Rubric) => void
 }) {
 
+    if (teacherRubrics.length === 0) {
+        return (
+            <p className="text-center text-muted-foreground my-3">
+                You have no rubrics yet. Create one to get started!
+            </p>
+        )
+    }
+
     return (
-        <Table>
-            <TableCaption>A list of your recent invoices.</TableCaption>
-            <TableHeader>
-                <TableRow>
-                    <TableHead className="w-[100px]">Name</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {teacherRubrics.map((rubric) => (
-                    <TableRow key={rubric.id}>
-                        <TableCell className="font-medium">{rubric.title}</TableCell>
-                        {/* <TableCell>{rubric.paymentStatus}</TableCell>
-                        <TableCell>{rubric.paymentMethod}</TableCell>
-                        <TableCell className="text-right">{rubric.totalAmount}</TableCell> */}
+        <>
+            <p className="text-center text-success my-3">Upgrade to Premium to have AI automatically grade blogs using these rubrics</p>
+            <Table className="rounded-lg">
+                <TableCaption>Use these rubrics when grading student journals/essays.</TableCaption>
+                <TableHeader className="rounded-t-lg">
+                    <TableRow>
+                        <TableHead className="w-[100px]">My Rubrics</TableHead>
                     </TableRow>
-                ))}
-            </TableBody>
-            {/* <TableFooter>
-                <TableRow>
-                    <TableCell colSpan={3}>Total</TableCell>
-                    <TableCell className="text-right">$2,500.00</TableCell>
-                </TableRow>
-            </TableFooter> */}
-        </Table>
+                </TableHeader>
+                <TableBody>
+                    {teacherRubrics.map((rubric: Rubric) => (
+                        <TableRow key={rubric.id}>
+                            <TableCell
+                                onClick={() => toggleShowMyRubrics(rubric)}
+                                className="font-medium line-clamp-1 cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                            >
+                                {rubric.title}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                    </TableRow>
+                </TableFooter>
+            </Table>
+        </>
     )
 }

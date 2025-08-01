@@ -233,3 +233,8 @@ export type Rubric = z.infer<typeof rubricSchema> & {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export type RubricFormData = z.infer<typeof rubricSchema>
+
+
+
