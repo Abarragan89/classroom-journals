@@ -1,5 +1,5 @@
 "use server"
-import { ResponseData } from "@/types";
+import { ResponseData, Rubric, AIGradingResult } from "@/types";
 import OpenAI from "openai";
 import { requireAuth } from "./authorization.action";
 
@@ -53,6 +53,98 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
     } catch (error) {
         console.log('error wiht open ai autograde ', error)
         return { output_text: 'error' }
+    }
+}
+
+export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, gradeLevel?: string): Promise<AIGradingResult> {
+    try {
+        await requireAuth();
+
+        const gradeLevelString = gradeLevel
+            ? `Grade this according to ${gradeLevel} level standards.`
+            : `Grade this according to appropriate educational standards.`;
+
+        // Format rubric categories and criteria for the AI
+        const rubricDescription = rubric.categories.map((category, catIndex) => {
+            const criteriaList = category.criteria.map((criterion, critIndex) =>
+                `${criterion.score} points: ${criterion.description}`
+            ).join('\n    ');
+
+            return `Category ${catIndex + 1}: ${category.name}\n  Criteria:\n    ${criteriaList}`;
+        }).join('\n\n');
+
+        const systemPrompt = `
+            You are an expert teacher using a rubric to grade student writing. ${gradeLevelString}
+            
+            Your task is to:
+            1. Score each category based on the rubric criteria
+            2. Provide constructive feedback
+            
+            RUBRIC:
+            ${rubricDescription}
+            
+            REQUIREMENTS:
+            - Score each category using ONLY the exact point values from the rubric criteria
+            - Provide feedback that is positive, constructive, and under 500 characters
+            - Include what the student did well, areas for improvement, and specific suggestions
+            - Be encouraging while being honest about areas needing work
+            
+            RESPONSE FORMAT (respond with valid JSON only):
+            {
+                "scores": [score1, score2, score3, ...],
+                "comment": "Your feedback here (under 500 characters)"
+            }
+            
+            The scores array should contain one score for each category in the order they appear in the rubric.
+        `;
+
+        const response = await openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+                {
+                    role: "system",
+                    content: systemPrompt.trim()
+                },
+                {
+                    role: "user",
+                    content: `Please grade this student writing:\n\n${studentWriting}`
+                }
+            ],
+            temperature: 0.3,
+            max_tokens: 800,
+            response_format: { type: "json_object" }
+        });
+
+        const result = response.choices[0]?.message?.content;
+        if (!result) {
+            throw new Error('No response from OpenAI');
+        }
+
+        const parsedResult = JSON.parse(result);
+
+        // Validate the response structure
+        if (!parsedResult.scores || !Array.isArray(parsedResult.scores) || !parsedResult.comment) {
+            throw new Error('Invalid response format from OpenAI');
+        }
+
+        // Ensure comment is under 500 characters
+        if (parsedResult.comment.length > 500) {
+            parsedResult.comment = parsedResult.comment.substring(0, 497) + '...';
+        }
+
+        return {
+            success: true,
+            scores: parsedResult.scores,
+            comment: parsedResult.comment
+        };
+
+    } catch (error) {
+        console.error('Error with OpenAI rubric grading:', error);
+        return {
+            success: false,
+            message: 'Failed to grade with AI. Please try again.',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        };
     }
 }
 

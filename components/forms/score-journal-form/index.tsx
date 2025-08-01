@@ -16,11 +16,13 @@ export default function ScoreJournalForm({
     responseId,
     teacherId,
     isPremiumTeacher = false,
+    studentWriting = '',
 }: {
     currentScore: number | string,
     responseId: string,
     teacherId: string,
-    isPremiumTeacher?: boolean
+    isPremiumTeacher?: boolean,
+    studentWriting?: string,
 }) {
 
     const [showRubicDialog, setShowRubricDialog] = useState(false);
@@ -341,6 +343,7 @@ export default function ScoreJournalForm({
                         onGradeChange={handleGradeChange}
                         onSave={handleSaveGrade}
                         isPremiumTeacher={isPremiumTeacher}
+                        studentWriting={studentWriting}
                     />
                 </div>
             )}

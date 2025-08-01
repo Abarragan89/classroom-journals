@@ -82,6 +82,7 @@ export default async function SingleResponse({
                             responseId={response?.id}
                             currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
                             isPremiumTeacher={subscriptionData?.isPremiumTeacher === true}
+                            studentWriting={(response.response as unknown as ResponseData[])?.[0]?.answer || ''}
                         />
                         // </div>
                     )}

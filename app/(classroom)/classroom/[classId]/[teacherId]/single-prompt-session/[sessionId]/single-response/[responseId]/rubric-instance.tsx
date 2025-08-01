@@ -6,6 +6,8 @@ import { Rubric, RubricGradingInstance, RubricGrade } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { gradeRubricWithAI } from '@/lib/actions/openai.action'
+import { toast } from "sonner"
 
 interface RubricInstanceProps {
     rubric: Rubric;
@@ -14,6 +16,7 @@ interface RubricInstanceProps {
     onGradeChange?: (grade: RubricGrade) => void;
     onSave?: (grade: RubricGrade) => void;
     isPremiumTeacher?: boolean;
+    studentWriting?: string; // Student's writing to be graded by AI
 }
 
 export default function RubricInstance({
@@ -22,11 +25,13 @@ export default function RubricInstance({
     existingGrade,
     onGradeChange,
     onSave,
-    isPremiumTeacher = false
+    isPremiumTeacher = false,
+    studentWriting = ''
 }: RubricInstanceProps) {
 
     const [hasChanges, setHasChanges] = useState(false);
     const [comment, setComment] = useState(existingGrade?.comment || '');
+    const [isAIGrading, setIsAIGrading] = useState(false);
 
     const [gradingInstance, setGradingInstance] = useState<RubricGradingInstance>(() => {
         // If we have an existing grade, initialize with those scores
@@ -144,6 +149,56 @@ export default function RubricInstance({
         }
     }
 
+    const handleAIGrading = async () => {
+        if (!studentWriting.trim()) {
+            toast.error('No student writing found to grade');
+            return;
+        }
+
+        setIsAIGrading(true);
+        try {
+            const result = await gradeRubricWithAI(rubric, studentWriting);
+
+            if (result.success && result.scores && result.comment) {
+                // Update the grading instance with AI scores
+                const updatedInstance = {
+                    ...gradingInstance,
+                    categories: gradingInstance.categories.map((cat, idx) => {
+                        // Find the criterion that matches the AI's score for this category
+                        const aiScore = result.scores![idx];
+                        const criterionIndex = cat.criteria.findIndex(criterion => criterion.score === aiScore);
+
+                        return {
+                            ...cat,
+                            selectedScore: criterionIndex >= 0 ? criterionIndex : undefined
+                        };
+                    })
+                };
+
+                setGradingInstance(updatedInstance);
+                setComment(result.comment);
+
+                // Check for changes and notify parent
+                checkForChanges(updatedInstance, result.comment);
+
+                if (onGradeChange) {
+                    const grade = calculateGrade(updatedInstance);
+                    grade.comment = result.comment;
+                    onGradeChange(grade);
+                }
+
+                toast.success('AI grading completed successfully!');
+            } else {
+                toast.error(result.message || 'Failed to grade with AI');
+            }
+        } catch (error) {
+            console.error('Error during AI grading:', error);
+            toast.error('Failed to grade with AI. Please try again.');
+        } finally {
+            setIsAIGrading(false);
+        }
+    };
+
     const handleSave = () => {
         if (onSave) {
             const grade = calculateGrade(gradingInstance)
@@ -170,19 +225,17 @@ export default function RubricInstance({
                         </p>
                     )}
                 </div>
-                {onSave && isComplete && (
+                {onSave && (
                     <div className="flex gap-3 items-center">
                         {isPremiumTeacher && (
                             <Button
-                                onClick={() => {
-                                    // TODO: Implement AI grading functionality
-                                    console.log('Grade with AI clicked');
-                                }}
+                                onClick={handleAIGrading}
+                                disabled={isAIGrading || !studentWriting.trim()}
                             >
-                                Autograde with AI!
+                                {isAIGrading ? 'Grading...' : 'Autograde with AI!'}
                             </Button>
                         )}
-                        {existingGrade && !hasChanges ? (
+                        {isComplete && (existingGrade && !hasChanges ? (
                             <Button disabled className="opacity-50 cursor-not-allowed">
                                 No Changes
                             </Button>
@@ -190,7 +243,7 @@ export default function RubricInstance({
                             <Button onClick={handleSave}>
                                 {existingGrade ? 'Update Grade' : 'Save Grade'}
                             </Button>
-                        )}
+                        ))}
                     </div>
                 )}
             </div>

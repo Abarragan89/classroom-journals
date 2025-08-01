@@ -271,5 +271,14 @@ export type RubricGrade = {
     comment?: string; // Optional comment from teacher
 }
 
+// Type for AI grading results
+export type AIGradingResult = {
+    success: boolean;
+    scores?: number[];
+    comment?: string;
+    message?: string;
+    error?: string;
+}
+
 
 
