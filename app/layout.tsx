@@ -75,7 +75,7 @@ export default async function RootLayout({
         nonce={nonce}
       >
         <TanstackQueryProvider>
-          {/* <ReactQueryDevtools initialIsOpen={true} /> */}
+          <ReactQueryDevtools initialIsOpen={true} />
           <ThemeProvider
             attribute='class'
             themes={["light", "dark", "tech", "cupid", "tuxedo", "avocado"]}

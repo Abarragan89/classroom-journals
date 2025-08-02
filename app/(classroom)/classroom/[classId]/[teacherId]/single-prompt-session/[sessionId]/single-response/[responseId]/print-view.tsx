@@ -27,8 +27,6 @@ export default function PrintViewBlog({
         staleTime: Infinity,
     })
 
-    console.log('currentResponse in print view', currentResponse)
-
     return (
         <>
             <div className='hidden print:block text-slate-400 w-full'>

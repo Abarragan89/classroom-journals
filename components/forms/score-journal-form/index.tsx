@@ -32,7 +32,7 @@ export default function ScoreJournalForm({
     const [currentRubric, setCurrentRubric] = useState<Rubric | null>(null);
     const [rubricList, setRubricList] = useState<RubricListItem[]>([]);
     const [currentGrade, setCurrentGrade] = useState<RubricGrade | null>(null);
-    const [existingGrades, setExistingGrades] = useState<any[]>([]); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const [existingGrade, setExistingGrade] = useState<RubricGrade | null>(null);
     const [loadingRubric, setLoadingRubric] = useState(false);
     const [loadingRubricList, setLoadingRubricList] = useState(false);
     const { theme } = useTheme();
@@ -45,17 +45,25 @@ export default function ScoreJournalForm({
 
     // Load existing rubric grades when component mounts
     useEffect(() => {
-        loadExistingGrades();
+        loadExistingGrade();
     }, [responseId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    async function loadExistingGrades() {
+    async function loadExistingGrade() {
         try {
             const grades = await getRubricGradesForResponse(responseId);
-            setExistingGrades(grades || []);
+            const mostRecentGrade = grades && grades.length > 0 ? grades[0] : null;
 
-            // If there are existing grades, automatically set the most recent one as current
-            if (grades && grades.length > 0) {
-                const mostRecentGrade = grades[0]; // They're ordered by gradedAt desc
+            if (mostRecentGrade) {
+                // Set the existing grade
+                const savedGrade: RubricGrade = {
+                    rubricId: mostRecentGrade.rubricId,
+                    responseId: mostRecentGrade.responseId,
+                    categories: mostRecentGrade.categories as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+                    totalScore: mostRecentGrade.totalScore,
+                    maxTotalScore: mostRecentGrade.maxTotalScore,
+                    comment: mostRecentGrade.comment || undefined
+                };
+                setExistingGrade(savedGrade);
 
                 // Convert the saved grade back to a Rubric format for display
                 const rubricForDisplay: Rubric = {
@@ -66,23 +74,13 @@ export default function ScoreJournalForm({
                     createdAt: new Date(),
                     updatedAt: new Date()
                 };
-
                 setCurrentRubric(rubricForDisplay);
-
-                // Set the current grade to show the saved scores
-                const savedGrade: RubricGrade = {
-                    rubricId: mostRecentGrade.rubricId,
-                    responseId: mostRecentGrade.responseId,
-                    categories: mostRecentGrade.categories as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-                    totalScore: mostRecentGrade.totalScore,
-                    maxTotalScore: mostRecentGrade.maxTotalScore,
-                    comment: mostRecentGrade.comment || undefined
-                };
-
                 setCurrentGrade(savedGrade);
+            } else {
+                setExistingGrade(null);
             }
         } catch (error) {
-            console.error('Error loading existing grades:', error);
+            console.error('Error loading existing grade:', error);
             // Don't show error toast for this, as it's not critical
         }
     }
@@ -92,26 +90,22 @@ export default function ScoreJournalForm({
             // First, save the new 100-point score
             await gradeStudentResponse(responseId, 0, score, teacherId);
 
-            // If there are existing rubric grades, delete them since we're now using 100-point grading
-            if (existingGrades.length > 0) {
+            // If there is an existing rubric grade, delete it since we're now using 100-point grading
+            if (existingGrade) {
                 try {
-                    // Delete all existing rubric grades for this response
-                    for (const existingGrade of existingGrades) {
-                        await deleteRubricGrade(responseId, existingGrade.rubricId, teacherId);
-                    }
+                    await deleteRubricGrade(responseId, existingGrade.rubricId, teacherId);
 
-                    // Refresh the existing grades list
-                    await loadExistingGrades();
+                    // Refresh the existing grade
+                    await loadExistingGrade();
 
                     // Clear current rubric state since we're now using 100-point grading
                     setCurrentRubric(null);
                     setCurrentGrade(null);
 
-                    console.log('Existing rubric grades deleted due to new 100-point score');
                 } catch (rubricError) {
-                    console.error('Error deleting existing rubric grades:', rubricError);
+                    console.error('Error deleting existing rubric grade:', rubricError);
                     // Don't fail the main grade update if rubric deletion fails
-                    toast('Grade updated, but failed to clean up rubric grades');
+                    toast('Grade updated, but failed to clean up rubric grade');
                     return;
                 }
             }
@@ -177,6 +171,16 @@ export default function ScoreJournalForm({
 
     const handleSaveGrade = async (grade: RubricGrade) => {
         try {
+            // If there's an existing rubric grade, delete it first (to replace it)
+            if (existingGrade && existingGrade.rubricId !== grade.rubricId) {
+                try {
+                    await deleteRubricGrade(responseId, existingGrade.rubricId, teacherId);
+                } catch (deleteError) {
+                    console.error('Error deleting previous rubric grade:', deleteError);
+                    // Continue with saving the new grade even if deletion fails
+                }
+            }
+
             // Save the detailed rubric grade data
             const rubricResult = await saveRubricGrade(
                 responseId,
@@ -192,8 +196,8 @@ export default function ScoreJournalForm({
                 // Also update the response score with the percentage
                 await gradeStudentResponse(responseId, 0, rubricResult.grade?.percentageScore || 0, teacherId);
 
-                // Refresh existing grades to show the new grade
-                await loadExistingGrades();
+                // Refresh existing grade to show the new grade
+                await loadExistingGrade();
 
                 // Invalidate the response query to refresh the data for print view
                 await queryClient.invalidateQueries({
@@ -279,7 +283,7 @@ export default function ScoreJournalForm({
             {/* Show the Input to Grade */}
             {currentRubric === null ? (
                 <>
-                    {existingGrades.length > 0 && (
+                    {existingGrade && (
                         <div className="flex justify-end mt-5">
                             <div>
                                 <p className="text-sm text-muted-foreground">
@@ -287,7 +291,7 @@ export default function ScoreJournalForm({
                                     <span
                                         onClick={async () => {
                                             // Load the most recent rubric grade and show it
-                                            await loadExistingGrades();
+                                            await loadExistingGrade();
                                         }}
                                         className="text-accent underline hover:text-accent/80 cursor-pointer"
                                     >
@@ -342,7 +346,7 @@ export default function ScoreJournalForm({
                         studentWriting={studentWriting}
                     />
                 </div>
-            )}s
+            )}
         </>
     )
 }

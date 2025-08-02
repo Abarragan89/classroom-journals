@@ -144,14 +144,20 @@ export async function deleteRubric(rubricId: string) {
 }
 
 // Save a rubric grade for a student response
+type RubricCategoryGrade = {
+    name: string;
+    selectedScore: number;
+    maxScore: number;
+};
+
 export async function saveRubricGrade(
     responseId: string,
     rubricId: string,
     teacherId: string,
-    categories: any[], // Array of {name, selectedScore, maxScore}
+    categories: RubricCategoryGrade[],
     totalScore: number,
     maxTotalScore: number,
-    comment?: string // Optional comment from teacher
+    comment?: string
 ) {
     try {
         const session = await requireAuth();
@@ -161,7 +167,6 @@ export async function saveRubricGrade(
 
         const percentageScore = Math.round((totalScore / maxTotalScore) * 100);
 
-        // Use upsert to either create or update the rubric grade
         const rubricGrade = await prisma.rubricGrade.upsert({
             where: {
                 responseId_rubricId: {
@@ -196,40 +201,6 @@ export async function saveRubricGrade(
             return { success: false, message: error.message };
         }
         return { success: false, message: 'Error saving rubric grade. Try again.' };
-    }
-}
-
-// Get rubric grade for a specific response
-export async function getRubricGrade(responseId: string, rubricId?: string) {
-    try {
-        const session = await requireAuth();
-        if (!session) {
-            throw new Error("Unauthorized");
-        }
-
-        const where: any = { responseId };
-        if (rubricId) {
-            where.rubricId = rubricId;
-        }
-
-        const rubricGrade = await prisma.rubricGrade.findFirst({
-            where,
-            include: {
-                rubric: {
-                    select: {
-                        id: true,
-                        title: true,
-                        categories: true
-                    }
-                }
-            },
-            orderBy: { gradedAt: 'desc' } // Get the most recent grade if multiple exist
-        });
-
-        return rubricGrade;
-    } catch (error) {
-        console.error('Error fetching rubric grade:', error);
-        throw error;
     }
 }
 

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableRow, TableHeader } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
-import { Rubric, RubricGradingInstance, RubricGrade, RubricGradeDisplay } from '@/types'
+import { Rubric, RubricGradingInstance, RubricGrade } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
@@ -33,6 +33,7 @@ export default function RubricInstance({
     const [hasChanges, setHasChanges] = useState(false);
     const [comment, setComment] = useState(existingGrade?.comment || '');
     const [isAIGrading, setIsAIGrading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const [aiAllowance, setAiAllowance] = useState<number>(0);
     // const [isPrintMode, setIsPrintMode] = useState(false);
 
@@ -83,7 +84,8 @@ export default function RubricInstance({
                 selectedScore: undefined
             }))
         };
-    }); console.log('Initial Grading Instance:', gradingInstance)
+    });
+
 
     // Function to check if current state matches the existing grade
     const checkForChanges = (instance: RubricGradingInstance, currentComment?: string) => {
@@ -176,7 +178,7 @@ export default function RubricInstance({
 
         setIsAIGrading(true);
         try {
-            const result = await gradeRubricWithAI(rubric, studentWriting, undefined, responseId);
+            const result = await gradeRubricWithAI(rubric, studentWriting, undefined);
 
             if (result.success && result.scores && result.comment) {
                 // Update the grading instance with AI scores
@@ -221,12 +223,19 @@ export default function RubricInstance({
         }
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (onSave) {
-            const grade = calculateGrade(gradingInstance)
-            onSave(grade)
-            // Reset hasChanges after successful save
-            setHasChanges(false)
+            setIsSaving(true);
+            try {
+                const grade = calculateGrade(gradingInstance)
+                await onSave(grade)
+                // Reset hasChanges after successful save
+                setHasChanges(false)
+            } catch (error) {
+                console.error('Error saving grade:', error);
+            } finally {
+                setIsSaving(false);
+            }
         }
     }
 
@@ -288,8 +297,8 @@ export default function RubricInstance({
                                 No Changes
                             </Button>
                         ) : (
-                            <Button onClick={handleSave}>
-                                Save Grade
+                            <Button onClick={handleSave} disabled={isSaving}>
+                                {isSaving ? "Saving..." : "Save Grade"}
                             </Button>
                         ))}
 

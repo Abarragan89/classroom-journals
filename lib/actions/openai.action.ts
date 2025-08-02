@@ -57,7 +57,7 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
     }
 }
 
-export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, gradeLevel?: string, responseId?: string): Promise<AIGradingResult> {
+export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, gradeLevel?: string): Promise<AIGradingResult> {
     try {
         const session = await requireAuth();
         const teacherId = session?.user?.id;
@@ -86,7 +86,7 @@ export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, 
 
         // Format rubric categories and criteria for the AI
         const rubricDescription = rubric.categories.map((category, catIndex) => {
-            const criteriaList = category.criteria.map((criterion, critIndex) =>
+            const criteriaList = category.criteria.map((criterion) =>
                 `${criterion.score} points: ${criterion.description}`
             ).join('\n    ');
 
