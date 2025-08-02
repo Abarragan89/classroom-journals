@@ -86,7 +86,7 @@ export default function MultiQuestionReview({
     const gradePercentage = responsePercentage(allQuestions)
 
     return (
-        <div className="w-full relative">
+        <div className="max-w-[650px] mx-auto w-full relative">
             {isSubmittable && <p className="h2-bold text-input text-center">Question Review</p>}
             <div className="flex-between mt-7">
                 {showGrades && (
@@ -98,7 +98,7 @@ export default function MultiQuestionReview({
                 )}
             </div>
             {allQuestions?.map((responseData, index) => (
-                <Card className="w-full max-w-[650px] p-4 space-y-2 border border-border  mx-auto mb-10 relative" key={index}>
+                <Card className="p-4 space-y-2 border border-border  mx-auto mb-10 relative" key={index}>
                     <div className="flex-between left-5 right-5 absolute top-2 text-sm">
                         <p className='text-accent font-bold'>Question {index + 1}</p>
                         {showGrades && (

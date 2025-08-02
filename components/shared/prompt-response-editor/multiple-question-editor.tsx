@@ -148,10 +148,14 @@ export default function MultipleQuestionEditor({
                 <Confetti
                     width={width}
                     height={height}
-                    numberOfPieces={1800}
+                    numberOfPieces={2000}
                     recycle={false}
-                    gravity={0.1}
-                    tweenDuration={4000}
+                    gravity={0.3}
+                    tweenDuration={2000}
+                    initialVelocityY={20}
+                    initialVelocityX={5}
+                    wind={0.01}
+                    friction={0.99}
                 />
                 <div className="w-[370px] mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40 animate-fall">
                     <p className="text-primary font-bold text-xl text-center">Answers Submitted!</p>

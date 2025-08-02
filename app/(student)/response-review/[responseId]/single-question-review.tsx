@@ -113,7 +113,7 @@ export default function SingleQuestionReview({
     const gradePercentage = questions?.[0].score !== undefined ? `${questions?.[0]?.score}%` : 'N/A';
 
     return (
-        <div className="w-full relative">
+        <div className=" max-w-[700px] mx-auto w-full relative">
             <div className="flex-between mt-10">
                 {showGrades && (
                     <p className='font-bold text-lg text-input ml-0 text-right mb-5'>Grade: <span
@@ -124,7 +124,7 @@ export default function SingleQuestionReview({
                 )}
             </div>
             {isPublic && (
-                <div className="max-w-[700px] mx-auto w-full block">
+                <div className=" w-full block">
                     <Button asChild
                         className='mb-10 w-full'
                     >
