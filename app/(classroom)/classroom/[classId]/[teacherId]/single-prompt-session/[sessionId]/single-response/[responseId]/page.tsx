@@ -77,7 +77,6 @@ export default async function SingleResponse({
                     </div>
                     {!isMultiQuestion && (
                         <ScoreJournalForm
-                            response={response}
                             teacherId={teacherId}
                             responseId={response?.id}
                             currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
@@ -128,11 +127,12 @@ export default async function SingleResponse({
                     )}
                 </div>
             </div>
-            {/* {!isMultiQuestion && (
+            {!isMultiQuestion && (
                 <PrintViewBlog
                     response={response}
+                    teacherId={teacherId}
                 />
-            )} */}
+            )}
         </>
     );
 }

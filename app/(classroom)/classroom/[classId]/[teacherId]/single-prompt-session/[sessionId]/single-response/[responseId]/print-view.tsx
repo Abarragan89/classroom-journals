@@ -1,5 +1,4 @@
 "use client"
-
 import { formatDateMonthDayYear } from '@/lib/utils'
 import { Response, ResponseData } from '@/types'
 import Image from 'next/image'
@@ -7,32 +6,47 @@ import Link from 'next/link'
 import { BiMessageRounded } from 'react-icons/bi'
 import { FaHeart, FaRegHeart } from 'react-icons/fa'
 import RubricDisplay from '@/components/rubric-display'
+import { getSingleResponse } from '@/lib/actions/response.action'
+import { useQuery } from '@tanstack/react-query'
 
 export default function PrintViewBlog({
     response,
+    teacherId
 }: {
     response: Response,
+    teacherId: string
 }) {
+    // Use TanStack Query with initial data
+    const { data: currentResponse } = useQuery({
+        queryKey: ['response', response.id],
+        queryFn: () => getSingleResponse(response.id, teacherId) as unknown as Response,
+        initialData: response,
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
+        staleTime: Infinity,
+    })
 
+    console.log('currentResponse in print view', currentResponse)
 
     return (
         <>
             <div className='hidden print:block text-slate-400 w-full'>
                 <div className="max-w-[700px] mx-auto">
-                    <h1 className="mx-auto text-slate-700 leading-[2rem] sm:leading-[2.2rem] text-[30px] sm:text-[36px] mb-[18px] font-[700]">{(response?.response as { answer: string }[])?.[1]?.answer}</h1>
+                    <h1 className="mx-auto text-slate-700 leading-[2rem] sm:leading-[2.2rem] text-[30px] sm:text-[36px] mb-[18px] font-[700]">{(currentResponse?.response as { answer: string }[])?.[1]?.answer}</h1>
                     {/* Author information */}
                     <section className="flex mx-auto">
                         <Image
-                            src={response?.student?.avatarURL || '/images/demo-avatars/1.png'}
+                            src={currentResponse?.student?.avatarURL || '/images/demo-avatars/1.png'}
                             alt="blog cover photo"
                             width={1024}
                             height={1024}
                             className="rounded-full w-[40px] h-[40px] border border-slate-700"
                         />
                         <div className="ml-2 w-full text-sm">
-                            <p className="leading-5">{response.student.username}</p>
+                            <p className="leading-5">{currentResponse?.student?.username}</p>
                             <div className="flex justify-between w-full">
-                                <p className="leading-5">{formatDateMonthDayYear(response?.submittedAt)}</p>
+                                <p className="leading-5">{formatDateMonthDayYear(currentResponse?.submittedAt)}</p>
                             </div>
                         </div>
                     </section>
@@ -48,7 +62,7 @@ export default function PrintViewBlog({
                                     className="text-[1.5rem] mr-[4px] hover:cursor-pointer"
                                 />
                             }
-                            <p className="mr-5 text-[.95rem]">{response.likeCount}</p>
+                            <p className="mr-5 text-[.95rem]">{currentResponse?.likeCount}</p>
                             <Link
                                 href="#comment-section-main"
                             >
@@ -56,24 +70,24 @@ export default function PrintViewBlog({
                                     className="text-[1.5rem] mr-[2px] hover:cursor-pointer"
                                 />
                             </Link>
-                            <p className="text-[.95rem]">{response?._count?.comments ?? 0}</p>
+                            <p className="text-[.95rem]">{currentResponse?._count?.comments ?? 0}</p>
                         </div>
                     </section>
 
                     <Image
-                        src={(response?.response as { answer: string }[])?.[2]?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
+                        src={(currentResponse?.response as { answer: string }[])?.[2]?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
                         width={700}
                         height={394}
                         alt={'blog cover photo'}
                         className="block mx-auto mb-5 h-[394px]"
                         priority
                     />
-                    <p className="leading-[2rem] text-black text-[14px] sm:text-[19px] whitespace-pre-line">{(response.response as unknown as ResponseData[])?.[0].answer}</p>
+                    <p className="leading-[2rem] text-black text-[14px] sm:text-[19px] whitespace-pre-line">{(currentResponse?.response as unknown as ResponseData[])?.[0].answer}</p>
 
                 </div>
 
                 {/* Rubric Grading Results - On its own page after blog content */}
-                {response?.rubricGrades && response.rubricGrades.length > 0 && (
+                {currentResponse?.rubricGrades && currentResponse.rubricGrades.length > 0 && (
                     <div
                         className="print:block"
                         style={{
@@ -87,8 +101,8 @@ export default function PrintViewBlog({
                     >
                         <div style={{ marginTop: 0, paddingTop: 0 }}>
                             <RubricDisplay
-                                rubricGrade={response.rubricGrades[0]}
-                                studentName={response.student.name || response.student.username}
+                                rubricGrade={currentResponse?.rubricGrades[0]}
+                                studentName={currentResponse?.student?.name || currentResponse?.student?.username}
                                 isPrintView={true}
                             />
                         </div>

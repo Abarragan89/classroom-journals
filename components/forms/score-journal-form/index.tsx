@@ -10,23 +10,23 @@ import { Rubric, RubricGrade, RubricListItem } from "@/types";
 import { FadeLoader } from 'react-spinners';
 import { useTheme } from "next-themes";
 import RubricInstance from "@/app/(classroom)/classroom/[classId]/[teacherId]/single-prompt-session/[sessionId]/single-response/[responseId]/rubric-instance";
-import PrintViewBlog from "@/app/(classroom)/classroom/[classId]/[teacherId]/single-prompt-session/[sessionId]/single-response/[responseId]/print-view";
-import { Response } from '@/types'
+import { useQueryClient } from '@tanstack/react-query'
+
 export default function ScoreJournalForm({
-    response,
     currentScore,
     responseId,
     teacherId,
     isPremiumTeacher = false,
     studentWriting = '',
 }: {
-    response: Response,
     currentScore: number | string,
     responseId: string,
     teacherId: string,
     isPremiumTeacher?: boolean,
     studentWriting?: string,
 }) {
+
+    const queryClient = useQueryClient()
 
     const [showRubicDialog, setShowRubricDialog] = useState(false);
     const [currentRubric, setCurrentRubric] = useState<Rubric | null>(null);
@@ -115,7 +115,6 @@ export default function ScoreJournalForm({
                     return;
                 }
             }
-
             toast('Grade Updated!');
         } catch (error) {
             console.log('error updating score ', error);
@@ -124,7 +123,6 @@ export default function ScoreJournalForm({
     }
 
     async function getRubricList() {
-        console.log('fetching rubric list for teacherId:', teacherId)
         setLoadingRubricList(true);
         try {
             const response = await getRubricListByTeacherId(teacherId);
@@ -197,11 +195,12 @@ export default function ScoreJournalForm({
                 // Refresh existing grades to show the new grade
                 await loadExistingGrades();
 
-                console.log('Rubric grade saved:', grade);
-                console.log('Database result:', rubricResult);
+                // Invalidate the response query to refresh the data for print view
+                await queryClient.invalidateQueries({
+                    queryKey: ['response', responseId]
+                })
 
-                const isUpdate = currentGrade !== null;
-                toast(isUpdate ? 'Rubric grade updated successfully!' : 'Rubric grade saved successfully!');
+                toast('Rubric grade saved successfully!');
             } else {
                 toast(rubricResult.message || 'Failed to save rubric grade');
             }
@@ -343,22 +342,7 @@ export default function ScoreJournalForm({
                         studentWriting={studentWriting}
                     />
                 </div>
-            )}
-            <PrintViewBlog
-                response={response}
-            />
-
-            {/* Show the Rubric to Grade  */}
-
-            {/* {currentRubric && (
-                <div className="flex flex-col items-center justify-center">
-                    <p className="text-lg font-bold mb-2">{currentRubric.title}</p>
-                    <RubricInstance
-                        rubric={currentRubric}
-                    />
-                </div>
-            )} */}
-
+            )}s
         </>
     )
 }
