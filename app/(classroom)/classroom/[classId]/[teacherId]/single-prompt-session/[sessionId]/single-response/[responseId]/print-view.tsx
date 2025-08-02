@@ -72,7 +72,7 @@ export default function PrintViewBlog({
 
                 </div>
 
-                {/* Rubric Grading Results - Rotated to fit more content */}
+                {/* Rubric Grading Results - On its own page after blog content */}
                 {response?.rubricGrades && response.rubricGrades.length > 0 && (
                     <div
                         className="print:block"
@@ -80,31 +80,18 @@ export default function PrintViewBlog({
                             pageBreakBefore: 'always',
                             width: '100%',
                             minHeight: '100vh',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
+                            display: 'block', // Changed from 'flex' to 'block'
+                            margin: 0,
+                            padding: 0, // Ensure no padding
                         }}
                     >
-                        {response.rubricGrades.map((rubricGrade, index) => (
-                            <div
-                                key={index}
-                                style={{
-                                    transform: 'rotate(90deg)',
-                                    transformOrigin: 'center center',
-                                    width: '100vh', // Use viewport height as width when rotated
-                                    height: '100vw', // Use viewport width as height when rotated
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}
-                            >
-                                <RubricDisplay
-                                    rubricGrade={rubricGrade}
-                                    studentName={response.student.name || response.student.username}
-                                    isPrintView={true}
-                                />
-                            </div>
-                        ))}
+                        <div style={{ marginTop: 0, paddingTop: 0 }}>
+                            <RubricDisplay
+                                rubricGrade={response.rubricGrades[0]}
+                                studentName={response.student.name || response.student.username}
+                                isPrintView={true}
+                            />
+                        </div>
                     </div>
                 )}
             </div>

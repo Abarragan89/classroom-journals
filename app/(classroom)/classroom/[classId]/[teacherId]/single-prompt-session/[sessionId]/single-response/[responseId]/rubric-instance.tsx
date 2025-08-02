@@ -9,7 +9,6 @@ import { Label } from '@/components/ui/label'
 import { gradeRubricWithAI, getTeacherAIAllowance } from '@/lib/actions/openai.action'
 import { toast } from "sonner"
 import { PrinterIcon } from 'lucide-react'
-import RubricDisplay from '@/components/rubric-display'
 
 interface RubricInstanceProps {
     rubric: Rubric;
@@ -19,7 +18,6 @@ interface RubricInstanceProps {
     onSave?: (grade: RubricGrade) => void;
     isPremiumTeacher?: boolean;
     studentWriting?: string; // Student's writing to be graded by AI
-    studentName?: string; // Add student name for print view
 }
 
 export default function RubricInstance({
@@ -30,14 +28,13 @@ export default function RubricInstance({
     onSave,
     isPremiumTeacher = false,
     studentWriting = '',
-    studentName
 }: RubricInstanceProps) {
 
     const [hasChanges, setHasChanges] = useState(false);
     const [comment, setComment] = useState(existingGrade?.comment || '');
     const [isAIGrading, setIsAIGrading] = useState(false);
     const [aiAllowance, setAiAllowance] = useState<number>(0);
-    const [isPrintMode, setIsPrintMode] = useState(false);
+    // const [isPrintMode, setIsPrintMode] = useState(false);
 
     // Fetch AI allowance when component mounts
     useEffect(() => {
@@ -233,45 +230,6 @@ export default function RubricInstance({
         }
     }
 
-    const handlePrint = () => {
-        if (!isComplete) {
-            toast.error('Please complete the rubric grading before printing');
-            return;
-        }
-
-        setIsPrintMode(true);
-
-        // Wait for the content to render, then trigger print
-        setTimeout(() => {
-            window.print();
-        }, 300);
-
-        // Reset print mode after print dialog closes
-        setTimeout(() => {
-            setIsPrintMode(false);
-        }, 1000);
-    };
-
-    // Transform current grading data to RubricGradeDisplay format for the print view
-    // const createRubricGradeDisplay = (): RubricGradeDisplay => {
-    //     const currentGrade = calculateGrade(gradingInstance);
-
-    //     return {
-    //         id: 'temp-print-id',
-    //         categories: currentGrade.categories,
-    //         totalScore: currentGrade.totalScore,
-    //         maxTotalScore: currentGrade.maxTotalScore,
-    //         percentageScore: Math.round((currentGrade.totalScore / currentGrade.maxTotalScore) * 100),
-    //         comment: comment,
-    //         gradedAt: new Date(),
-    //         rubric: {
-    //             id: rubric.id,
-    //             title: rubric.title,
-    //             categories: rubric.categories
-    //         }
-    //     };
-    // };
-
     // Get the score levels from the first category's criteria length
     const scoreLevels = rubric.categories[0]?.criteria.map((_, idx) => (idx + 1).toString()) || []
     const currentGrade = calculateGrade(gradingInstance)
@@ -292,7 +250,7 @@ export default function RubricInstance({
                             <PrinterIcon
                                 className="ml-2 hover:text-accent cursor-pointer"
                                 size={23}
-                                onClick={handlePrint}
+                                onClick={() => window.print()}
                             />
                         </div>
                     )}
@@ -417,19 +375,6 @@ export default function RubricInstance({
                     {comment.length}/500 characters
                 </p>
             </div>
-
-            {/* Print View - Use existing RubricDisplay component */}
-            {/* {isPrintMode && (
-                <div className="p-6 bg-white text-black">
-                    <div>
-                        <RubricDisplay
-                            rubricGrade={createRubricGradeDisplay()}
-                            studentName={studentName}
-                            isPrintView={true}
-                        />
-                    </div>
-                </div>
-            )} */}
         </div>
     )
 }

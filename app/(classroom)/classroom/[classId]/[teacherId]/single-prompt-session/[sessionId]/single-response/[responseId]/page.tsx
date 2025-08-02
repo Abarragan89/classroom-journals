@@ -42,8 +42,6 @@ export default async function SingleResponse({
     const questionsAndAnswers = response?.response as unknown as ResponseData[]
     const isMultiQuestion = response?.promptSession?.promptType === 'ASSESSMENT';
 
-    console.log('response', response);
-
     return (
         <>
             <div className='mb-10 print:hidden'>
@@ -78,15 +76,14 @@ export default async function SingleResponse({
                         )}
                     </div>
                     {!isMultiQuestion && (
-                        // <div className='flex-end mt-5'>
                         <ScoreJournalForm
+                            response={response}
                             teacherId={teacherId}
                             responseId={response?.id}
                             currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
                             isPremiumTeacher={subscriptionData?.isPremiumTeacher === true}
                             studentWriting={(response.response as unknown as ResponseData[])?.[0]?.answer || ''}
                         />
-                        // </div>
                     )}
                 </div>
                 <div className="max-w-[1200px] mx-auto relative">
@@ -131,11 +128,11 @@ export default async function SingleResponse({
                     )}
                 </div>
             </div>
-            {!isMultiQuestion && (
+            {/* {!isMultiQuestion && (
                 <PrintViewBlog
                     response={response}
                 />
-            )}
+            )} */}
         </>
     );
 }

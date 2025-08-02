@@ -7,17 +7,20 @@ import { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getRubricListByTeacherId, getRubricById, saveRubricGrade, getRubricGradesForResponse, deleteRubricGrade } from "@/lib/actions/rubric.actions";
 import { Rubric, RubricGrade, RubricListItem } from "@/types";
-import RubricInstance from "@/app/(classroom)/classroom/[classId]/[teacherId]/single-prompt-session/[sessionId]/single-response/[responseId]/rubric-instance";
 import { FadeLoader } from 'react-spinners';
 import { useTheme } from "next-themes";
-
+import RubricInstance from "@/app/(classroom)/classroom/[classId]/[teacherId]/single-prompt-session/[sessionId]/single-response/[responseId]/rubric-instance";
+import PrintViewBlog from "@/app/(classroom)/classroom/[classId]/[teacherId]/single-prompt-session/[sessionId]/single-response/[responseId]/print-view";
+import { Response } from '@/types'
 export default function ScoreJournalForm({
+    response,
     currentScore,
     responseId,
     teacherId,
     isPremiumTeacher = false,
     studentWriting = '',
 }: {
+    response: Response,
     currentScore: number | string,
     responseId: string,
     teacherId: string,
@@ -239,7 +242,6 @@ export default function ScoreJournalForm({
                             </p>
                         ) : (
                             rubricList.map((rubricItem: RubricListItem) => {
-                                const hasExistingGrade = existingGrades.some(grade => grade.rubricId === rubricItem.id);
                                 const isCurrentlyLoading = loadingRubric;
                                 return (
                                     <div
@@ -252,11 +254,6 @@ export default function ScoreJournalForm({
                                     >
                                         <span>{rubricItem.title}</span>
                                         <div className="flex items-center gap-2">
-                                            {hasExistingGrade && (
-                                                <span className="text-xs bg-accent text-accent-foreground px-2 py-1 rounded">
-                                                    Previously graded
-                                                </span>
-                                            )}
                                             {isCurrentlyLoading && (
                                                 <div className="flex items-center gap-1">
                                                     <FadeLoader
@@ -347,7 +344,9 @@ export default function ScoreJournalForm({
                     />
                 </div>
             )}
-
+            <PrintViewBlog
+                response={response}
+            />
 
             {/* Show the Rubric to Grade  */}
 
