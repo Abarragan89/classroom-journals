@@ -2,6 +2,7 @@ import { prisma } from "@/db/prisma";
 import { decryptText, formatDateLong, responsePercentage } from "@/lib/utils";
 import { Response, ResponseData } from "@/types";
 import Link from "next/link";
+
 export default async function SingleStudentView({
     params
 }: {

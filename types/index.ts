@@ -103,6 +103,20 @@ export interface Response {
     submittedAt: Date;
     createdAt: Date;
     student: User;
+    rubricGrades?: Array<{
+        id: string;
+        categories: any;
+        totalScore: number;
+        maxTotalScore: number;
+        percentageScore: number;
+        comment?: string;
+        gradedAt: Date;
+        rubric: {
+            id: string;
+            title: string;
+            categories: any;
+        };
+    }>;
 }
 
 export interface ResponseData {

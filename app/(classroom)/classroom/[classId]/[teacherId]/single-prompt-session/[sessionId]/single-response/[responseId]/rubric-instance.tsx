@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { gradeRubricWithAI, getTeacherAIAllowance } from '@/lib/actions/openai.action'
 import { toast } from "sonner"
+import { PrinterIcon } from 'lucide-react'
 
 interface RubricInstanceProps {
     rubric: Rubric;
@@ -235,14 +236,21 @@ export default function RubricInstance({
 
     return (
         <div className="mt-4">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center">
                 <div>
                     <h3 className="text-lg font-bold">{gradingInstance.title}</h3>
                     {isComplete && (
-                        <p className="text-accent font-semibold">
-                            Total Score: {currentGrade.totalScore}/{currentGrade.maxTotalScore}
-                            ({Math.round((currentGrade.totalScore / currentGrade.maxTotalScore) * 100)}%)
-                        </p>
+                        <div className='flex items-start justify-start'>
+                            <p className="text-accent font-semibold">
+                                Total Score: {currentGrade.totalScore}/{currentGrade.maxTotalScore}
+                                ({Math.round((currentGrade.totalScore / currentGrade.maxTotalScore) * 100)}%)
+                            </p>
+                            {/* Print Btn */}
+                            <PrinterIcon
+                                className="ml-2 hover:text-accent cursor-pointer"
+                                size={23}
+                            />
+                        </div>
                     )}
                 </div>
                 {onSave && (
@@ -279,7 +287,7 @@ export default function RubricInstance({
                             </Button>
                         ) : (
                             <Button onClick={handleSave}>
-                                {existingGrade ? 'Update Grade' : 'Save Grade'}
+                                Save Grade
                             </Button>
                         ))}
 
@@ -288,7 +296,7 @@ export default function RubricInstance({
                 )}
             </div>
 
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto mt-3">
                 <Table className="min-w-[920px]">
                     <TableHeader>
                         <TableRow>

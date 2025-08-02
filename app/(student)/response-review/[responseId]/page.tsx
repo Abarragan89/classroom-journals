@@ -71,6 +71,8 @@ export default async function ResponseReview({
                         promptSessionId={singleResponse?.promptSession?.id as string}
                         spellCheckEnabled={singleResponse?.spellCheckEnabled}
                         studentId={studentId}
+                        rubricGrades={singleResponse?.rubricGrades}
+                        studentName={singleResponse?.student?.name}
                     />
                 }
             </main>

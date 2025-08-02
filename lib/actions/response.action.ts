@@ -679,6 +679,30 @@ export async function getSingleResponseForReview(responseId: string, studentId: 
                 response: true,
                 completionStatus: true,
                 spellCheckEnabled: true,
+                rubricGrades: {
+                    select: {
+                        id: true,
+                        categories: true,
+                        totalScore: true,
+                        maxTotalScore: true,
+                        percentageScore: true,
+                        comment: true,
+                        gradedAt: true,
+                        rubric: {
+                            select: {
+                                id: true,
+                                title: true,
+                                categories: true
+                            }
+                        }
+                    }
+                },
+                student: {
+                    select: {
+                        name: true,
+                        iv: true
+                    }
+                },
                 promptSession: {
                     select: {
                         id: true,
@@ -691,7 +715,16 @@ export async function getSingleResponseForReview(responseId: string, studentId: 
                 }
             }
         })
-        return studentResponse
+
+        // Decrypt the student name if it exists
+        const decryptedResponse = studentResponse ? {
+            ...studentResponse,
+            student: studentResponse.student ? {
+                name: decryptText(studentResponse.student.name as string, studentResponse.student.iv as string)
+            } : null
+        } : null;
+
+        return decryptedResponse
     } catch (error) {
         if (error instanceof Error) {
             console.log("Error fetching prompts:", error.message);

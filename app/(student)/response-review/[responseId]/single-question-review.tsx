@@ -14,6 +14,22 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { getAllPhotos } from '@/lib/actions/s3-upload'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
+import RubricDisplay from '@/components/rubric-display'
+
+interface RubricGrade {
+    id: string;
+    categories: any;
+    totalScore: number;
+    maxTotalScore: number;
+    percentageScore: number;
+    comment?: string;
+    gradedAt: Date;
+    rubric: {
+        id: string;
+        title: string;
+        categories: any;
+    };
+}
 
 export default function SingleQuestionReview({
     questions,
@@ -23,7 +39,9 @@ export default function SingleQuestionReview({
     isPublic,
     promptSessionId,
     spellCheckEnabled,
-    studentId
+    studentId,
+    rubricGrades,
+    studentName
 }: {
     questions: ResponseData[],
     isSubmittable: boolean,
@@ -32,7 +50,9 @@ export default function SingleQuestionReview({
     isPublic: boolean,
     promptSessionId: string,
     spellCheckEnabled: boolean,
-    studentId: string
+    studentId: string,
+    rubricGrades?: RubricGrade[],
+    studentName?: string
 }) {
 
     const router = useRouter();
@@ -116,17 +136,26 @@ export default function SingleQuestionReview({
         <div className=" max-w-[700px] mx-auto w-full relative">
             <div className="flex-between mt-10">
                 {showGrades && (
-                    <p className='font-bold text-lg text-input ml-0 text-right mb-5'>Grade: <span
-                        className={`
-                        ${parseInt(gradePercentage) >= 90 ? 'text-success' : parseInt(gradePercentage) >= 70 ? 'text-warning' : 'text-destructive'}
-                        `}
-                    >{gradePercentage}</span></p>
+                    <div className="flex items-start">
+                        <p className='font-bold text-lg text-input ml-0 text-right'>Grade: <span
+                            className={`
+                            ${parseInt(gradePercentage) >= 90 ? 'text-success' : parseInt(gradePercentage) >= 70 ? 'text-warning' : 'text-destructive'}
+                            `}
+                        >{gradePercentage}</span></p>
+                        {rubricGrades && rubricGrades.length > 0 && (
+                            <RubricDisplay
+                                rubricGrade={rubricGrades[0]}
+                                studentName={studentName}
+                                isPrintView={false}
+                            />
+                        )}
+                    </div>
                 )}
             </div>
             {isPublic && (
                 <div className=" w-full block">
                     <Button asChild
-                        className='mb-10 w-full'
+                        className='my-5 w-full'
                     >
                         <Link
                             href={`/discussion-board/${promptSessionId}/response/${responseId}`}
