@@ -1,4 +1,6 @@
 import MyRubricSection from "@/components/shared/my-rubrics-section"
+import { getRubricsByTeacherId } from "@/lib/actions/rubric.actions"
+import { Rubric } from "@/types"
 
 export default async function Jots({
     params
@@ -6,11 +8,14 @@ export default async function Jots({
     params: Promise<{ classId: string, teacherId: string }>
 }) {
     const { teacherId } = await params
-    console.log('teacehrid', teacherId)
+
+    const teacherRubrics = await getRubricsByTeacherId(teacherId) as unknown as Rubric[]
+
 
     return (
         <MyRubricSection
             teacherId={teacherId}
+            teacherRubrics={teacherRubrics}
         />
     )
 }

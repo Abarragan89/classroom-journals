@@ -44,13 +44,18 @@ export const requestNewPromptSchema = z.object({
     notificationText: z.string().min(2),
 })
 
-export const rubricsSchema = z.object({
+export const rubricSchema = z.object({
     categories: z.array(
         z.object({
-            name: z.string().min(1, 'Category name is required'),
-            criteriaByScore: z.array(z.string().min(1, 'Criteria is required')),
-            scoreLevel: z.array(z.string().min(1, 'Score level is required'))
+            name: z.string().min(1, "Required"),
+            criteria: z.array(
+                z.object({
+                    description: z.string().min(1, "Required"),
+                    score: z.number().min(1, "Score must be at least 1")
+                })
+            ).min(1, "At least one criterion is required")
         })
-    ).min(1, 'At least one category is required'),
-    rubricName: z.string().min(1, 'Rubric name is required')
+    ).min(1, "At least one category is required"),
+    
+    title: z.string().min(1, "Rubric name is required")
 })

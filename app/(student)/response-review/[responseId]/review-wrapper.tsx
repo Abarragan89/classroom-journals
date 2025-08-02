@@ -23,7 +23,7 @@ export default function ReviewWrapper({
     isTeacherPremium: boolean,
     gradeLevel: string,
     spellCheckEnabled: boolean,
-    studentId:string
+    studentId: string
 }) {
 
     const [questions, setQuestions] = useState<ResponseData[]>(allQuestions)

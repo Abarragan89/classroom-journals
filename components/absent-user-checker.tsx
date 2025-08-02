@@ -13,7 +13,7 @@ export default function AbsentUserChecker() {
     }
 
     const onActive = () => {
-        if (state) {}
+        if (state) { }
         setState('Active')
     }
 

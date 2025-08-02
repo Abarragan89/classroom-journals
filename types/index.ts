@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { classSchema, promptSchema } from "@/lib/validators";
+import { classSchema, promptSchema, rubricSchema } from "@/lib/validators";
 import { JsonValue } from "@prisma/client/runtime/library";
 
 export type User = {
@@ -103,6 +103,20 @@ export interface Response {
     submittedAt: Date;
     createdAt: Date;
     student: User;
+    rubricGrades?: Array<{
+        id: string;
+        categories: any;
+        totalScore: number;
+        maxTotalScore: number;
+        percentageScore: number;
+        comment?: string;
+        gradedAt: Date;
+        rubric: {
+            id: string;
+            title: string;
+            categories: any;
+        };
+    }>;
 }
 
 export interface ResponseData {
@@ -226,3 +240,75 @@ export interface BlogImage {
     tags: string[];
     createdAt?: Date;
 }
+
+export type Rubric = z.infer<typeof rubricSchema> & {
+    id: string;
+    teacherId: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export type RubricFormData = z.infer<typeof rubricSchema>
+
+// Type for lightweight rubric list items (only id and title)
+export type RubricListItem = {
+    id: string;
+    title: string;
+    createdAt: Date;
+}
+
+// Type for rubric instance used in grading
+export type RubricGradingInstance = {
+    id: string;
+    title: string;
+    categories: {
+        name: string;
+        criteria: {
+            description: string;
+            score: number;
+        }[];
+        selectedScore?: number; // The currently selected score for this category
+    }[];
+}
+
+// Type for saving rubric grades (This is what we save to the database)
+export type RubricGrade = {
+    rubricId: string;
+    responseId: string;
+    categories: {
+        name: string;
+        selectedScore: number;
+        maxScore: number;
+    }[];
+    totalScore: number;
+    maxTotalScore: number;
+    comment?: string; // Optional comment from teacher
+}
+
+// Type for AI grading results
+export type AIGradingResult = {
+    success: boolean;
+    scores?: number[];
+    comment?: string;
+    message?: string;
+    error?: string;
+}
+
+// Type for displaying rubric grades with full rubric information (used in student view)
+export interface RubricGradeDisplay {
+    id: string;
+    categories: any; // JSON data
+    totalScore: number;
+    maxTotalScore: number;
+    percentageScore: number;
+    comment?: string;
+    gradedAt: Date;
+    rubric: {
+        id: string;
+        title: string;
+        categories: any; // JSON data
+    };
+}
+
+
+

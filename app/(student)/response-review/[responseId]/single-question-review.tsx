@@ -1,7 +1,7 @@
 'use client'
+import { RubricGradeDisplay, ResponseData, BlogImage } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
-import { BlogImage, ResponseData } from '@/types'
 import Editor from '@/components/shared/prompt-response-editor/editor'
 import { useState } from 'react'
 import { updateASingleResponse } from '@/lib/actions/response.action';
@@ -14,6 +14,20 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { getAllPhotos } from '@/lib/actions/s3-upload'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
+import RubricDisplay from '@/components/rubric-display'
+
+interface SingleQuestionReviewProps {
+    questions: ResponseData[],
+    isSubmittable: boolean,
+    responseId: string,
+    showGrades: boolean,
+    isPublic: boolean,
+    promptSessionId: string,
+    spellCheckEnabled: boolean,
+    studentId: string,
+    rubricGrades?: RubricGradeDisplay[],
+    studentName?: string
+}
 
 export default function SingleQuestionReview({
     questions,
@@ -23,17 +37,10 @@ export default function SingleQuestionReview({
     isPublic,
     promptSessionId,
     spellCheckEnabled,
-    studentId
-}: {
-    questions: ResponseData[],
-    isSubmittable: boolean,
-    responseId: string,
-    showGrades: boolean,
-    isPublic: boolean,
-    promptSessionId: string,
-    spellCheckEnabled: boolean,
-    studentId: string
-}) {
+    studentId,
+    rubricGrades,
+    studentName
+}: SingleQuestionReviewProps) {
 
     const router = useRouter();
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
@@ -113,20 +120,29 @@ export default function SingleQuestionReview({
     const gradePercentage = questions?.[0].score !== undefined ? `${questions?.[0]?.score}%` : 'N/A';
 
     return (
-        <div className="w-full relative">
+        <div className=" max-w-[700px] mx-auto w-full relative">
             <div className="flex-between mt-10">
                 {showGrades && (
-                    <p className='font-bold text-lg text-input ml-0 text-right mb-5'>Grade: <span
-                        className={`
-                        ${parseInt(gradePercentage) >= 90 ? 'text-success' : parseInt(gradePercentage) >= 70 ? 'text-warning' : 'text-destructive'}
-                        `}
-                    >{gradePercentage}</span></p>
+                    <div className="flex items-start">
+                        <p className='font-bold text-lg text-input ml-0 text-right'>Grade: <span
+                            className={`
+                            ${parseInt(gradePercentage) >= 90 ? 'text-success' : parseInt(gradePercentage) >= 70 ? 'text-warning' : 'text-destructive'}
+                            `}
+                        >{gradePercentage}</span></p>
+                        {rubricGrades && rubricGrades.length > 0 && (
+                            <RubricDisplay
+                                rubricGrade={rubricGrades[0]}
+                                studentName={studentName}
+                                isPrintView={false}
+                            />
+                        )}
+                    </div>
                 )}
             </div>
             {isPublic && (
-                <div className="max-w-[700px] mx-auto w-full block">
+                <div className=" w-full block">
                     <Button asChild
-                        className='mb-10 w-full'
+                        className='my-5 w-full'
                     >
                         <Link
                             href={`/discussion-board/${promptSessionId}/response/${responseId}`}

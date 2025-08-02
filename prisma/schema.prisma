@@ -49,9 +49,11 @@ model User {
   subscriptionId      String?
   isCancelling        Boolean?
   subscriptionExpires DateTime?
+  openAIAllowance     Int?               @default(150)
   Alert               Alert[]
   PromptSession       PromptSession[]
   rubricTemplates     RubricTemplate[]
+  rubricGrades        RubricGrade[] // Grades given by this teacher
 }
 
 model Account {
@@ -264,6 +266,7 @@ model Response {
   likes             ResponseLike[]
   notifications     Notification[]
   comments          Comment[]
+  rubricGrades      RubricGrade[] // Rubric grades for this response
   createdAt         DateTime       @default(now())
   // Relationship
   promptSession     PromptSession  @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
@@ -305,11 +308,36 @@ model Image {
 
 // Rubric Model
 model RubricTemplate {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title     String
-  rubric    Json // JSON object containing the rubric structure
-  teacherId String   @db.Uuid
-  teacher   User     @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title      String
+  categories Json // JSON object containing the rubric structure
+  teacherId  String        @db.Uuid
+  teacher    User          @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  grades     RubricGrade[] // Relation to actual grades using this rubric
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+}
+
+// Model to store actual rubric grades for student responses
+model RubricGrade {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  responseId      String   @db.Uuid
+  rubricId        String   @db.Uuid
+  teacherId       String   @db.Uuid
+  categories      Json // JSON array of category grades: {name, selectedScore, maxScore}
+  totalScore      Int // Sum of all selected scores
+  maxTotalScore   Int // Sum of all max scores
+  percentageScore Int // Calculated percentage (totalScore/maxTotalScore * 100)
+  comment         String? // Optional comment from teacher
+  gradedAt        DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  response Response       @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  rubric   RubricTemplate @relation(fields: [rubricId], references: [id], onDelete: Cascade)
+  teacher  User           @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@unique([responseId, rubricId]) // Ensure one grade per response per rubric
+  @@index([responseId]) // Index for faster lookups by response
+  @@index([teacherId]) // Index for faster lookups by teacher
 }

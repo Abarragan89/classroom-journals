@@ -41,9 +41,9 @@ export default async function ResponseReview({
         <div>
             <Header session={session} studentId={studentId} />
             <main className="wrapper">
-                <Link href='/my-work' className="flex items-center hover:underline w-fit print:hidden">
+                <Link href='/' className="flex items-center hover:underline w-fit print:hidden">
                     <ArrowLeftIcon className="mr-1" size={20} />
-                    Back to My Work
+                    Back To Dashboard
                 </Link>
                 <h1 className="font-bold text-xl max-w-[650px] text-center mt-7 mx-auto whitespace-pre-line">
                     {singleResponse?.promptSession?.promptType === 'ASSESSMENT' && (
@@ -71,6 +71,8 @@ export default async function ResponseReview({
                         promptSessionId={singleResponse?.promptSession?.id as string}
                         spellCheckEnabled={singleResponse?.spellCheckEnabled}
                         studentId={studentId}
+                        rubricGrades={singleResponse?.rubricGrades}
+                        studentName={singleResponse?.student?.name}
                     />
                 }
             </main>
