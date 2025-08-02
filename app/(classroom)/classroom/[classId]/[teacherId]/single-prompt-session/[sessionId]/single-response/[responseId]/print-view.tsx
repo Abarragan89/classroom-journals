@@ -5,11 +5,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { BiMessageRounded } from 'react-icons/bi'
 import { FaHeart, FaRegHeart } from 'react-icons/fa'
+import RubricDisplay from '@/components/rubric-display'
+
 export default function PrintViewBlog({
     response,
 }: {
     response: Response,
 }) {
+
 
     return (
         <div className='hidden print:block text-slate-400'>
@@ -64,7 +67,23 @@ export default function PrintViewBlog({
                     priority
                 />
                 <p className="leading-[2rem] text-black text-[14px] sm:text-[19px] whitespace-pre-line">{(response.response as unknown as ResponseData[])?.[0].answer}</p>
+
+                {/* Rubric Grading Results */}
+                {response?.rubricGrades && response.rubricGrades.length > 0 && (
+                    <div className="mt-8 page-break-before">
+                        {response.rubricGrades.map((rubricGrade, index) => (
+                            <RubricDisplay
+                                key={index}
+                                rubricGrade={rubricGrade}
+                                studentName={response.student.name || response.student.username}
+                                isPrintView={true}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
+
+
         </div>
     )
 }

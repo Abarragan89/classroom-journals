@@ -262,6 +262,7 @@ export async function getSingleResponse(responseId: string, userId: string) {
                 _count: {
                     select: { comments: true }
                 },
+
                 comments: {
                     where: {
                         parentId: null
@@ -328,6 +329,24 @@ export async function getSingleResponse(responseId: string, userId: string) {
                     select: {
                         status: true,
                         promptType: true,
+                    }
+                },
+                rubricGrades: {
+                    select: {
+                        id: true,
+                        categories: true,
+                        totalScore: true,
+                        maxTotalScore: true,
+                        percentageScore: true,
+                        comment: true,
+                        gradedAt: true,
+                        rubric: {
+                            select: {
+                                id: true,
+                                title: true,
+                                categories: true
+                            }
+                        }
                     }
                 }
             }

@@ -294,5 +294,21 @@ export type AIGradingResult = {
     error?: string;
 }
 
+// Type for displaying rubric grades with full rubric information (used in student view)
+export interface RubricGradeDisplay {
+    id: string;
+    categories: any; // JSON data
+    totalScore: number;
+    maxTotalScore: number;
+    percentageScore: number;
+    comment?: string;
+    gradedAt: Date;
+    rubric: {
+        id: string;
+        title: string;
+        categories: any; // JSON data
+    };
+}
+
 
 

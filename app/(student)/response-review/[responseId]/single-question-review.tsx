@@ -1,7 +1,7 @@
 'use client'
+import { RubricGradeDisplay, ResponseData, BlogImage } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
-import { BlogImage, ResponseData } from '@/types'
 import Editor from '@/components/shared/prompt-response-editor/editor'
 import { useState } from 'react'
 import { updateASingleResponse } from '@/lib/actions/response.action';
@@ -16,19 +16,17 @@ import { getAllPhotos } from '@/lib/actions/s3-upload'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
 import RubricDisplay from '@/components/rubric-display'
 
-interface RubricGrade {
-    id: string;
-    categories: any;
-    totalScore: number;
-    maxTotalScore: number;
-    percentageScore: number;
-    comment?: string;
-    gradedAt: Date;
-    rubric: {
-        id: string;
-        title: string;
-        categories: any;
-    };
+interface SingleQuestionReviewProps {
+    questions: ResponseData[],
+    isSubmittable: boolean,
+    responseId: string,
+    showGrades: boolean,
+    isPublic: boolean,
+    promptSessionId: string,
+    spellCheckEnabled: boolean,
+    studentId: string,
+    rubricGrades?: RubricGradeDisplay[],
+    studentName?: string
 }
 
 export default function SingleQuestionReview({
@@ -42,18 +40,7 @@ export default function SingleQuestionReview({
     studentId,
     rubricGrades,
     studentName
-}: {
-    questions: ResponseData[],
-    isSubmittable: boolean,
-    responseId: string,
-    showGrades: boolean,
-    isPublic: boolean,
-    promptSessionId: string,
-    spellCheckEnabled: boolean,
-    studentId: string,
-    rubricGrades?: RubricGrade[],
-    studentName?: string
-}) {
+}: SingleQuestionReviewProps) {
 
     const router = useRouter();
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
