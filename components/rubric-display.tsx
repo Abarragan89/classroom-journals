@@ -43,9 +43,9 @@ export default function RubricDisplay({ rubricGrade, studentName, isPrintView = 
 
             {/* Print View - Direct Content */}
             <div className="hidden print:block w-full text-black bg-white">
-                <div className="p-6">
+                <div>
                     {/* Header for Print */}
-                    <h2 className="text-xl font-semibold text-black mb-6 text-center">
+                    <h2 className="text-lg font-semibold text-black mb-2 text-center">
                         Grading Results
                     </h2>
 
@@ -70,7 +70,7 @@ export default function RubricDisplay({ rubricGrade, studentName, isPrintView = 
                         <Table>
                             <TableHeader>
                                 <TableRow className="border-b border-black">
-                                    <TableHead className="w-48 min-w-48 border-r border-black text-black">Category</TableHead>
+                                    <TableHead className="w-36 border-r border-black text-black">Category</TableHead>
                                     {scoreLevels.map(level => (
                                         <TableHead key={level} className="text-center min-w-32 border-r border-black last:border-r-0 text-black">
                                             {level} {level === 1 ? 'Point' : 'Points'}
