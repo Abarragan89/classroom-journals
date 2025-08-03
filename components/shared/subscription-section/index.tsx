@@ -21,8 +21,8 @@ export default function SubscriptionSection({
         listItems: [
             'Classroom Blogging Platform',
             'Anti-Cheat Student Text Editor',
-            '1 Classroom',
-            // 'Up to 10 Assignments',
+            'Up to 1 Classroom',
+            'Create Custom Rubrics',
             'Student Data Visualized in Graphs',
         ],
         payoutLink: '',
@@ -38,29 +38,26 @@ export default function SubscriptionSection({
             'All features in Basic Plus:',
             'Up to 6 Classrooms',
             'Unlimited Assignments',
-            'All student data saved'
+            'Unlimited student data saved'
         ],
         payoutLink: process.env.NEXT_PUBLIC_STANDARD_SUBSCRIPTION_LINK as string,
         teacherEmail: teacherData?.email as string
     }
 
     const premiumPlanData: SubscriptionData = {
-        name: 'Premium - AI Enhanced',
+        name: 'Premium - AI Enhanced!',
         price: 99,
         frequency: 'yr',
-        description: 'Automatically grades your assessments with AI! - Your New Best Friend',
+        description: 'Automatically grades with AI! - Your New Best Friend',
         listItems: [
             'All features in Standard Plus:',
-            'AI-Graded Assessments',
-            'Handles short answer questions',
+            'AI-Graded Exit Tickets / Assessments (unlimited)',
+            'AI-Graded Essays / Blogs with custom rubrics (150 credits/month)',
             'Save hours on grading!',
         ],
         payoutLink: process.env.NEXT_PUBLIC_PREMIUM_SUBSCRIPTION_LINK as string,
         teacherEmail: teacherData?.email as string
     }
-
-
-
 
 
     return (

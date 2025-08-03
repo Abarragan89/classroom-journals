@@ -92,3 +92,31 @@ export async function subscriptionCancelled(customerDetails: CustomerDetails): P
         return null;
     });
 }
+
+///////////////////////////// AI Credit Purchase Successful /////////////////////////////////////////
+export async function creditsPurchaseConfirmation(customerDetails: Omit<CustomerDetails, 'customerName'>): Promise<void> {
+
+    // 1. Create the email template and send messages
+    const messageId = `<credits-purchase-${new Date().toISOString()}@unfinishedpages.com>`
+    const message: CreateEmailOptions = {
+        from: `JotterBlog <${process.env.RESEND_ACCOUNT_EMAIL}>`,
+        to: customerDetails.customerEmail as string,
+        subject: `Purchase Confirmation`,
+        html: `
+                <p style="color: #555;">Thank you for your Purchase! You now have 100 AI credits to automatically grade student Essays!</p>
+                <p style="color: #555;">Refill your credits at any time. If you are a Premium user, any unused credits will roll over to the next month.</p>
+                <p style="color: #555;">Here is a link to your receipt:</p>
+                <p style="color: #555;">${customerDetails.hostedInvoice}</p>
+                <p style="color: #555;">If you have any questions, you can find our contact information on the Account page.</p>
+                <p style="color: #555;">- JotterBlog</p>
+            `,
+        headers: {
+            'Message-ID': messageId,
+        }
+    };
+
+    resend.emails.send(message).catch((error) => {
+        console.error(`Failed to send email`, error.response?.body || error.message);
+        return null;
+    });
+}

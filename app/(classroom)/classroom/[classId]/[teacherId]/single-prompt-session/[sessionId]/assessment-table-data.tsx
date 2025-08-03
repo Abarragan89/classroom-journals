@@ -155,7 +155,7 @@ export default function AssessmentTableData({
                 {notAssigned?.length > 0 && notAssigned.map((user) => (
                     <TableRow key={user.id}>
                         <TableCell>
-                            <Button variant={'ghost'} onClick={() => createStudentResponseHandler(user.id)}>
+                            <Button variant={'secondary'} onClick={() => createStudentResponseHandler(user.id)}>
                                 {isLoading ? (
                                     '...'
                                 ) : (
