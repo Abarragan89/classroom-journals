@@ -342,7 +342,6 @@ export default function ScoreJournalForm({
                         existingGrade={currentGrade || undefined}
                         onGradeChange={handleGradeChange}
                         onSave={handleSaveGrade}
-                        isPremiumTeacher={isPremiumTeacher}
                         studentWriting={studentWriting}
                     />
                 </div>

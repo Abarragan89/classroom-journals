@@ -17,7 +17,6 @@ interface RubricInstanceProps {
     existingGrade?: RubricGrade; // Add this to accept saved grades
     onGradeChange?: (grade: RubricGrade) => void;
     onSave?: (grade: RubricGrade) => void;
-    isPremiumTeacher?: boolean;
     studentWriting?: string; // Student's writing to be graded by AI
 }
 
@@ -27,7 +26,6 @@ export default function RubricInstance({
     existingGrade,
     onGradeChange,
     onSave,
-    isPremiumTeacher = false,
     studentWriting = '',
 }: RubricInstanceProps) {
 
@@ -281,7 +279,6 @@ export default function RubricInstance({
                                         AI grading allowance exhausted
                                     </p>
                                     <p className="text-muted-foreground text-sm">
-                                        Resets with next billing cycle or {' '}
                                         <span
                                             onClick={() => {
                                                 checkout({
@@ -291,7 +288,7 @@ export default function RubricInstance({
                                             }}
                                             className="text-primary hover:underline hover:cursor-pointer hover:text-accent"
                                         >
-                                            Add credits.</span>
+                                            Click here to add credits</span>
                                     </p>
                                 </div>
                             )}
