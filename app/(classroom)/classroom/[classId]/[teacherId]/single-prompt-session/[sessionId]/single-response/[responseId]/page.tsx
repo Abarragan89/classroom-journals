@@ -6,7 +6,6 @@ import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
 import { Response, ResponseComment, ResponseData } from '@/types';
 import { getAllResponsesFromPompt, getSingleResponse } from '@/lib/actions/response.action';
-import { determineSubscriptionAllowance } from '@/lib/actions/profile.action';
 import { StudentComboBox } from './student-combobox';
 import HandleToggleReturnStateBtn from '@/components/buttons/handle-toggle-return-state-btn';
 import DeleteResponseBtn from './delete-response-btn';
@@ -27,7 +26,6 @@ export default async function SingleResponse({
 
     const response = await getSingleResponse(responseId, teacherId) as unknown as Response;
     const classRosterAndScores = await getAllResponsesFromPompt(sessionId, teacherId) as unknown as Response[]
-    const subscriptionData = await determineSubscriptionAllowance(teacherId);
 
     const rosterAlphabetized = classRosterAndScores.sort((a, b) => {
         const lastNameA = a?.student?.name?.split(" ")[1] as string; // Get second word (last name)
@@ -80,7 +78,6 @@ export default async function SingleResponse({
                             teacherId={teacherId}
                             responseId={response?.id}
                             currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
-                            isPremiumTeacher={subscriptionData?.isPremiumTeacher === true}
                             studentWriting={(response.response as unknown as ResponseData[])?.[0]?.answer || ''}
                         />
                     )}

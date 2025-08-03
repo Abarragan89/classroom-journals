@@ -16,13 +16,11 @@ export default function ScoreJournalForm({
     currentScore,
     responseId,
     teacherId,
-    isPremiumTeacher = false,
     studentWriting = '',
 }: {
     currentScore: number | string,
     responseId: string,
     teacherId: string,
-    isPremiumTeacher?: boolean,
     studentWriting?: string,
 }) {
 
