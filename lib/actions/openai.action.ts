@@ -69,10 +69,14 @@ export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, 
         // Check AI allowance before processing
         const teacher = await prisma.user.findUnique({
             where: { id: teacherId },
-            select: { openAIAllowance: true, accountType: true }
+            select: { openAIAllowance: true, accountType: true, purchasedCredits: true }
         });
 
-        if (!teacher?.openAIAllowance || teacher.openAIAllowance <= 0) {
+        const monthlyAllowance = teacher?.openAIAllowance || 0;
+        const purchasedCredits = teacher?.purchasedCredits || 0;
+        const totalAllowance = monthlyAllowance + purchasedCredits;
+
+        if (!totalAllowance || totalAllowance <= 0) {
             return {
                 success: false,
                 message: 'AI grading allowance exhausted. Allowance resets with your next billing cycle.',
@@ -152,15 +156,26 @@ export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, 
             parsedResult.comment = parsedResult.comment.substring(0, 497) + '...';
         }
 
-        // Deduct allowance AFTER successful AI call
-        await prisma.user.update({
-            where: { id: teacherId },
-            data: {
-                openAIAllowance: {
-                    decrement: 1
+        // Deduct allowance AFTER successful AI call Deduct Purchased Credits first
+        if (purchasedCredits > 0) {
+            await prisma.user.update({
+                where: { id: teacherId },
+                data: {
+                    purchasedCredits: {
+                        decrement: 1
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            await prisma.user.update({
+                where: { id: teacherId },
+                data: {
+                    openAIAllowance: {
+                        decrement: 1
+                    }
+                }
+            });
+        }
 
         return {
             success: true,
@@ -190,24 +205,18 @@ export async function getTeacherAIAllowance(): Promise<number> {
 
         const teacher = await prisma.user.findUnique({
             where: { id: teacherId },
-            select: { openAIAllowance: true }
+            select: { openAIAllowance: true, purchasedCredits: true }
         });
 
-        return teacher?.openAIAllowance || 0;
+        // Fix: Handle null values properly
+        const monthlyAllowance = teacher?.openAIAllowance || 0;
+        const purchasedCredits = teacher?.purchasedCredits || 0;
+
+        return monthlyAllowance + purchasedCredits;
+
     } catch (error) {
         console.error('Error getting AI allowance:', error);
         return 0;
-    }
-}
-
-// Check if AI grading is available
-export async function canUseAIGrading(): Promise<boolean> {
-    try {
-        const allowance = await getTeacherAIAllowance();
-        return allowance > 0;
-    } catch (error) {
-        console.error('Error checking AI grading availability:', error);
-        return false;
     }
 }
 

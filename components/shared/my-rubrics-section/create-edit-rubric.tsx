@@ -320,11 +320,11 @@ export default function CreateEditRubric({
                         </div>
 
                         <div className="flex gap-4 mt-6">
-                            <Button type="button" onClick={addCategory}>Add Category</Button>
-                            <Button type="button" onClick={addScoreLevel}>Add Score Level</Button>
+                            <Button type="button" onClick={addCategory} variant="secondary">Add Category</Button>
+                            <Button type="button" onClick={addScoreLevel} variant="secondary">Add Score Level</Button>
                             {/* If currentRubric, then Update, else Submit */}
                             {currentRubric ? (
-                                <Button type="submit" variant="secondary">Update Rubric</Button>
+                                <Button type="submit">Update Rubric</Button>
                             ) : (
                                 <Button type="submit">Create Rubric</Button>
                             )}

@@ -10,16 +10,17 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function POST(req: NextRequest) {
+
     const session = await auth() as Session;
     if (!session || !session.user?.email) {
         return new Response("Unauthorized", { status: 401 });
     }
 
-    const { priceId } = await req.json();
+    const { priceId, mode } = await req.json();
 
     try {
         const checkoutSession = await stripe.checkout.sessions.create({
-            mode: 'subscription',
+            mode,
             line_items: [{ price: priceId, quantity: 1 }],
             customer_email: session.user.email,
             success_url: `${process.env.NEXT_PUBLIC_BASE_URL}`,

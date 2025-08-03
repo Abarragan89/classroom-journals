@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import { gradeRubricWithAI, getTeacherAIAllowance } from '@/lib/actions/openai.action'
 import { toast } from "sonner"
 import { PrinterIcon } from 'lucide-react'
+import { checkout } from '@/lib/stripe/checkout'
 
 interface RubricInstanceProps {
     rubric: Rubric;
@@ -35,18 +36,15 @@ export default function RubricInstance({
     const [isAIGrading, setIsAIGrading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [aiAllowance, setAiAllowance] = useState<number>(0);
-    // const [isPrintMode, setIsPrintMode] = useState(false);
 
     // Fetch AI allowance when component mounts
     useEffect(() => {
         async function fetchAllowance() {
-            if (isPremiumTeacher) {
-                const allowance = await getTeacherAIAllowance();
-                setAiAllowance(allowance);
-            }
+            const allowance = await getTeacherAIAllowance();
+            setAiAllowance(allowance);
         }
         fetchAllowance();
-    }, [isPremiumTeacher]);
+    }, []);
 
     const [gradingInstance, setGradingInstance] = useState<RubricGradingInstance>(() => {
         // If we have an existing grade, initialize with those scores
@@ -268,28 +266,36 @@ export default function RubricInstance({
                     <div className="flex gap-3 items-center">
 
                         {/* AI Grading Button */}
-                        {isPremiumTeacher && (
-                            <div className="flex flex-col items-center space-y-2">
-                                {aiAllowance > 0 ? (
-                                    <Button
-                                        onClick={handleAIGrading}
-                                        disabled={isAIGrading || !studentWriting.trim()}
-                                        className="w-full"
-                                    >
-                                        {isAIGrading ? "Grading with AI..." : `Autograde with AI! (${aiAllowance} credits left)`}
-                                    </Button>
-                                ) : (
-                                    <div className="text-center">
-                                        <p className="text-destructive text-sm font-medium">
-                                            AI grading allowance exhausted
-                                        </p>
-                                        <p className="text-muted-foreground text-xs">
-                                            Resets with next billing cycle
-                                        </p>
-                                    </div>
-                                )}
-                            </div>
-                        )}
+                        <div className="flex flex-col items-center space-y-2">
+                            {aiAllowance > 0 ? (
+                                <Button
+                                    onClick={handleAIGrading}
+                                    disabled={isAIGrading || !studentWriting.trim()}
+                                    className="w-full"
+                                >
+                                    {isAIGrading ? "Grading with AI..." : `Autograde with AI! (${aiAllowance} credits left)`}
+                                </Button>
+                            ) : (
+                                <div className="text-center">
+                                    <p className="text-destructive text-sm font-medium">
+                                        AI grading allowance exhausted
+                                    </p>
+                                    <p className="text-muted-foreground text-sm">
+                                        Resets with next billing cycle or {' '}
+                                        <span
+                                            onClick={() => {
+                                                checkout({
+                                                    priceId: process.env.NEXT_PUBLIC_AI_CREDITS_LINK as string,
+                                                    mode: "payment"
+                                                });
+                                            }}
+                                            className="text-primary hover:underline hover:cursor-pointer hover:text-accent"
+                                        >
+                                            Add credits.</span>
+                                    </p>
+                                </div>
+                            )}
+                        </div>
 
 
                         {isComplete && (existingGrade && !hasChanges ? (

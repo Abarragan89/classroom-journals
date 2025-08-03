@@ -1,9 +1,15 @@
 // lib/stripe/checkout.ts
-export async function checkout({ priceId }: { priceId: string }) {
+export async function checkout({
+    priceId,
+    mode = 'subscription'
+}: {
+    priceId: string,
+    mode: 'subscription' | 'payment'
+}) {
     try {
         const res = await fetch("/api/stripe/checkout", {
             method: "POST",
-            body: JSON.stringify({ priceId }),
+            body: JSON.stringify({ priceId, mode }),
         });
 
         const data = await res.json();

@@ -1,7 +1,7 @@
 import { prisma } from "@/db/prisma";
 import { NextRequest } from "next/server";
 import Stripe from "stripe";
-import { subscriptionCancelled, subscriptionConfirmation, subscriptionPaymentFailed } from "@/lib/emails/stripe-emails";
+import { creditsPurchaseConfirmation, subscriptionCancelled, subscriptionConfirmation, subscriptionPaymentFailed } from "@/lib/emails/stripe-emails";
 import { decryptText } from "@/lib/utils";
 import { AlertType, TeacherAccountType } from "@prisma/client";
 
@@ -32,6 +32,46 @@ export async function POST(req: NextRequest) {
     try {
         // Handle the event
         switch (event.type) {
+
+            // This is for one-time payments, not subscriptions
+            case 'checkout.session.completed':
+                const purchaseHasBeenMade = event.data.object;
+                const isCreditPurchase = purchaseHasBeenMade.amount_total
+                const customerEmailCredit = purchaseHasBeenMade.customer_email as string;
+
+                if (isCreditPurchase === 500) {
+                    // Get receipt URL from payment intent
+                    let receiptUrl = '';
+                    if (purchaseHasBeenMade.payment_intent) {
+                        try {
+                            const paymentIntent = await stripe.paymentIntents.retrieve(
+                                purchaseHasBeenMade.payment_intent as string,
+                                { expand: ['latest_charge'] }
+                            );
+
+                            const charge = paymentIntent.latest_charge as Stripe.Charge;
+                            receiptUrl = charge.receipt_url || '';
+                        } catch (error) {
+                            console.error('Error retrieving payment intent:', error);
+                        }
+                    }
+
+                    await prisma.user.update({
+                        where: { email: customerEmailCredit },
+                        data: {
+                            purchasedCredits: { // Use separate field
+                                increment: 100
+                            }
+                        }
+                    });
+
+                    await creditsPurchaseConfirmation({
+                        customerEmail: customerEmailCredit,
+                        hostedInvoice: receiptUrl
+                    });
+                }
+                break;
+            // If a subscription is created or updated
             case 'invoice.paid':
                 // 1. Get important data to update teacher and email the user
                 const invoiceHasBeenPaid = event.data.object;
@@ -43,6 +83,7 @@ export async function POST(req: NextRequest) {
 
                 // get the amont paid to determine which subscription it is. 
                 const amountPaid = invoiceHasBeenPaid.amount_paid
+
                 // set variables to update depending on the plan
                 const now = new Date();
                 const futureDate = new Date(now);
@@ -67,13 +108,13 @@ export async function POST(req: NextRequest) {
                         break;
                 }
 
-                // updating the status of the teacher. Need to get student list length
-                // and word problem list length in case we need to delete
+                // Get the teacher to update their information
                 const teacher = await prisma.user.findUnique({
                     where: { email: customerEmail },
                     select: {
                         id: true,
                         subscriptionId: true,
+                        purchasedCredits: true,
                     }
                 });
 
@@ -102,6 +143,7 @@ export async function POST(req: NextRequest) {
                 })
 
                 break;
+
             // If payment fails
             case 'invoice.payment_failed':
                 const invoicePaymentFailed = event.data.object;
