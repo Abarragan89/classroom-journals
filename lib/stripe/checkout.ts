@@ -4,7 +4,7 @@ export async function checkout({
     mode = 'subscription'
 }: {
     priceId: string,
-    mode: 'subscription' | 'payment'
+    mode?: 'subscription' | 'payment'
 }) {
     try {
         const res = await fetch("/api/stripe/checkout", {
