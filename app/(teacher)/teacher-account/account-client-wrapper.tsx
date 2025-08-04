@@ -18,7 +18,7 @@ export default function AccountClientWrapper({ decryptedTeacher }: { decryptedTe
             <UserSettings
                 teacherData={teacherData as unknown as User}
             />
-            <Separator className="my-10" />
+            <Separator className="my-7" />
 
             <SubscriptionSection
                 teacherData={teacherData as unknown as User}

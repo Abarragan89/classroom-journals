@@ -2,6 +2,8 @@
 import { useState } from "react"
 import SubscriptionCard from "./subscription-card"
 import { SubscriptionData, User } from "@/types"
+import { Button } from "@/components/ui/button"
+import { checkout } from "@/lib/stripe/checkout"
 
 export default function SubscriptionSection({
     teacherData,
@@ -22,8 +24,8 @@ export default function SubscriptionSection({
             'Classroom Blogging Platform',
             'Anti-Cheat Student Text Editor',
             'Up to 1 Classroom',
-            'Create Custom Rubrics',
-            'Student Data Visualized in Graphs',
+            'Grade with Custom Rubrics',
+            'Create Assessments Exit/Tickets'
         ],
         payoutLink: '',
         teacherEmail: teacherData?.email as string
@@ -36,9 +38,10 @@ export default function SubscriptionSection({
         description: 'Level up with more classrooms and unlimited assignments.',
         listItems: [
             'All features in Basic Plus:',
-            'Up to 6 Classrooms',
+            'Create up to 6 Classrooms',
             'Unlimited Assignments',
-            'Unlimited student data saved'
+            'Unlimited student data saved',
+            'Graphical Student Data Visualizations',
         ],
         payoutLink: process.env.NEXT_PUBLIC_STANDARD_SUBSCRIPTION_LINK as string,
         teacherEmail: teacherData?.email as string
@@ -53,6 +56,7 @@ export default function SubscriptionSection({
             'All features in Standard Plus:',
             'AI-Graded Exit Tickets / Assessments (unlimited)',
             'AI-Graded Essays / Blogs with custom rubrics (150 credits/month)',
+            'Instant student feedback',
             'Save hours on grading!',
         ],
         payoutLink: process.env.NEXT_PUBLIC_PREMIUM_SUBSCRIPTION_LINK as string,
@@ -61,9 +65,36 @@ export default function SubscriptionSection({
 
 
     return (
-        <section className='mb-20' id="subscription-section">
-            <h3 className="text-lg">Subscription Plans</h3>
-            <p className="text-input mb-5">cancel anytime</p>
+        <section className='mb-10' id="subscription-section">
+
+            {/* <div className="flex justify-between mb-5"> */}
+            <div>
+                <h3 className="text-lg">Subscription Plans</h3>
+                <p className="text-input">cancel anytime</p>
+                {/* AI Credits Banner */}
+                <div>
+                    <article className="w-full">
+                        <div className="my-5">
+                            <p className="mb-1 text-sm">
+                                Let AI grade essays with your custom rubrics with <span className="underline">no subscription?</span>
+                            </p>
+                            <Button
+                                className="bg-success"
+                                onClick={() => {
+                                    checkout({
+                                        priceId: process.env.NEXT_PUBLIC_AI_CREDITS_LINK as string,
+                                        mode: 'payment',
+                                    });
+                                }}                        
+                            >
+                                One-time Purchase to Buy AI Credits
+                            </Button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            {/* </div> */}
+
             <div className="flex flex-col md:flex-row flex-wrap gap-10 mx-auto">
                 <SubscriptionCard
                     subscriptionData={freePlanData}
