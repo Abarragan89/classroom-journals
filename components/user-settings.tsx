@@ -130,7 +130,7 @@ export default function UserSettings({
                             Payment Settings
                         </Link>
                     }
-                    <div className="flex flex-col items-center space-y-1">
+                    <div className="flex flex-col items-center space-y-2">
                         <Button disabled={isCancelling === false} variant='destructive' onClick={() => setIsModalOpen(true)} >
                             Delete Account
                         </Button>
