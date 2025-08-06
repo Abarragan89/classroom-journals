@@ -168,7 +168,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 className="rounded-lg mb-4 w-full h-auto"
                             />
                             <h3 className="text-xl font-semibold mb-3">Quick Quips</h3>
-                            <p className="text-primary flex-grow">Quick, Twitter-style prompts where students respond without seeing others' answers first. Perfect for instant engagement and honest feedback!</p>
+                            <p className="text-primary flex-grow">Quick, Twitter-style prompts where students respond without seeing others&apos; answers first. Perfect for instant engagement and honest feedback!</p>
                         </div>
                     </div>
                 </section>
