@@ -80,11 +80,32 @@ export default {
 					'0%': { transform: 'translateY(-100%)', opacity: '0' },
 					'100%': { transform: 'translateY(0)', opacity: '1' },
 				},
+				'bounce-down': {
+					'0%': {
+						transform: 'translateY(-60px)',
+						opacity: '0'
+					},
+					'60%': {
+						transform: 'translateY(8px)',
+						opacity: '1'
+					},
+					'80%': {
+						transform: 'translateY(-4px)'
+					},
+					'90%': {
+						transform: 'translateY(2px)'
+					},
+					'100%': {
+						transform: 'translateY(0)',
+						opacity: '1'
+					}
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				fall: 'fall 1.5s ease-out forwards',
+				'bounce-down': 'bounce-down 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1.4s forwards',
 			}
 		}
 	},

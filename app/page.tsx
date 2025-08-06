@@ -53,9 +53,11 @@ export default async function page() {
         promptSession: { status: 'OPEN', promptType: 'BLOG' }
     }
 
-    const dummyBlogText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget turpis id purus fermentum volutpat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer luctus libero non sem tincidunt, ut feugiat odio tempor. Donec sed felis nec erat egestas blandit sed eget metus. Sed blandit mi non turpis fermentum, a iaculis eros viverra. Fusce fringilla, sem in porta dictum, velit justo lobortis nunc, ut tincidunt nibh nisi nec magna.
+    const dummyBlogText = `Shakespeare's Romeo and Juliet is often dismissed as a simple love story, but beneath the romantic tragedy lies a powerful exploration of youth rebellion against societal constraints. The young lovers don't just defy their feuding families—they challenge an entire social system that prioritizes family honor over individual happiness. Their secret marriage, clandestine meetings, and ultimate sacrifice represent a direct rebellion against the adult world's expectations and the rigid social structures of Verona. In this light, Romeo and Juliet becomes less about star-crossed romance and more about the eternal conflict between youthful idealism and established authority.
 
-Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volutpat imperdiet leo. Nullam tristique congue felis, vitae vulputate ante sollicitudin a. Vivamus non diam sapien. In dignissim justo sem, nec posuere nulla tincidunt nec. Integer cursus nisl non magna efficitur, a fermentum nulla accumsan. Donec et eros a risus ultrices malesuada.`
+The play's portrayal of adults reveals Shakespeare's critique of generational power dynamics. The Capulets and Montagues are trapped in a cycle of inherited hatred they can no longer even explain, while figures like Friar Lawrence and the Nurse, despite their good intentions, ultimately fail the young protagonists. The adults in Romeo and Juliet are either actively harmful or ineffectively helpful, creating a world where youth must forge their own path. This pattern reflects the universal experience of young people who feel misunderstood by the older generation and must choose between conformity and authentic self-expression.
+
+Rather than viewing the tragic ending as a cautionary tale against youthful passion, we might read it as an indictment of a society that forces its young people into impossible situations. Romeo and Juliet's deaths serve as the ultimate act of rebellion—a final rejection of a world that offers them no viable path to happiness. Their sacrifice ultimately transforms Verona, ending the ancient feud and proving that sometimes youth's idealistic vision of how the world should be is more powerful than adult pragmatism. In this reading, the play becomes a testament to the transformative power of young people who refuse to accept the status quo, even at the ultimate cost.`
 
 
     return (
@@ -64,21 +66,21 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
             <main className="min-h-screen bg-background relative">
                 {/* Hero Section */}
                 <section className="py-20 px-6 text-center relative max-w-7xl mx-auto">
-                    <div className='hidden sm:flex items-baseline text-sm absolute -top-[28px] right-[142px] text-accent italic font-bold'>
+                    <div className='hidden sm:flex items-baseline text-md absolute -top-[28px] right-[142px] text-accent italic font-bold opacity-0 animate-bounce-down'>
                         Try our different themes! <CornerRightUp />
                     </div>
                     <WelcomeToJotterBlog />
-                    <p className="text-lg sm:text-xl max-w-2xl mx-auto mb-6 text-primary">
-                        The only platform that lets AI grade student essays and journals using <span className="font-bold text-accent">your custom rubrics</span> — plus auto-grade assessments and create sharable student blogs.
+                    <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-6 text-primary">
+                        A modern tool for teachers to manage student writing. Let AI grade student essays and journals using <span className="font-bold text-accent">your custom rubrics</span>, auto-grade assessments, and turn student essays into sharable blogs!
                     </p>
 
                     {/* New AI Rubric Feature Highlight */}
-                    <div className="bg-card border border-accent rounded-lg p-4 max-w-2xl mx-auto mb-6">
-                        <p className="text-accent font-semibold mb-2">🚀 NEW: AI Rubric Grading!</p>
+                    {/* <div className="bg-card border border-accent rounded-lg p-4 max-w-2xl mx-auto mb-6">
+                        <p className="font-semibold mb-2">🚀 NEW: AI Rubric Grading!</p>
                         <p className="text-sm text-primary">
                             Upload your custom rubrics and let AI grade essays instantly. Save hours while maintaining your teaching standards.
                         </p>
-                    </div>
+                    </div> */}
                     <div className="flex justify-center gap-4 flex-wrap">
                         <Link href="/sign-in">
                             <Button size="lg">Get Started</Button>
@@ -100,63 +102,74 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                 </section>
                 <Separator />
                 {/* Features */}
-                <section className="py-16 px-6 max-w-6xl mx-auto grid gap-8 sm:grid-cols-3 text-center">
-                    <div className="mx-5 md:mx-0">
-                        <Image
-                            src='/images/custom-rubric.png'
-                            width={700}
-                            height={394}
-                            alt="assessment data screenshot"
-                            className="rounded-lg mb-4 mt-6"
-                        />
-                        <h3 className="text-xl font-semibold mb-2">🤖 AI Rubric Grading</h3>
-                        <p className="text-primary">Create custom rubrics and let AI grade student essays and journals instantly. Maintain your teaching standards while saving hours of grading time!</p>
-                    </div>
-                    <div className="mx-5 md:mx-0">
-                        <h3 className="text-xl font-semibold mb-2">Auto-Graded Assessments</h3>
-                        <p className="text-primary">Let AI grade your assessments and exit tickets. No need to make it multiple-choice, just let AI handle it!</p>
-                        <Image
-                            src='/images/assessment-data.png'
-                            width={700}
-                            height={394}
-                            alt="assessment data screenshot"
-                            className="rounded-lg mb-4 mt-6"
-                        />
-                    </div>
-                    <div className="mx-5 md:mx-0 flex flex-col-reverse sm:flex-col">
-                        <Image
-                            src='/images/featured-blogs.png'
-                            width={700}
-                            height={394}
-                            alt="featured blogs screenshot"
-                            className="rounded-lg mb-4 mt-10 sm:mt-0"
-                        />
-                        <div className="flex-col sm:flex-col">
-                            <h3 className="text-xl font-semibold mb-2">Sharable Blogs</h3>
-                            <p className="text-primary">Turn student writing into blog posts for peers to comment and like. Set blogs to private to keep some assignments personal.</p>
+                <section className="py-16 px-6 max-w-7xl mx-auto">
+                    <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-6 justify-items-center">
+                        {/* Card 1 - AI Rubric Grading (Image first) */}
+                        <div className="rounded-lg p-6 shadow-md shadow-border border border-card flex flex-col lg:col-span-2 w-full max-w-[395px]">
+                            <Image
+                                src='/images/custom-rubric.png'
+                                width={400}
+                                height={225}
+                                alt="AI rubric grading screenshot"
+                                className="rounded-lg mb-4 w-full h-auto"
+                            />
+                            <h3 className="text-xl font-semibold mb-3">AI Rubric Grading</h3>
+                            <p className="text-primary flex-grow">Create custom rubrics and let AI grade student essays and journals instantly. Maintain your teaching standards while saving hours of grading time!</p>
                         </div>
-                    </div>
-                    <div className="mx-5 md:mx-0">
-                        <h3 className="text-xl font-semibold mb-2">AI Anti-Cheat</h3>
-                        <p className="text-primary">Custom text editor disables copy and paste, word prediction and spell check. Know exactly how well your students write.</p>
-                        <Image
-                            src='/images/text-editor.png'
-                            width={700}
-                            height={394}
-                            alt="student text-editor screenshot"
-                            className="rounded-lg mb-4 mt-5 sm:mt-0"
-                        />
-                    </div>
-                    <div className="mx-5 md:mx-0">
-                        <h3 className="text-xl font-semibold mb-2">Quick Quips</h3>
-                        <p className="text-primary">Introducing Quips! Similar to tweets. Post a prompt to have students respond. Students cannot see other responses until they response. Quick and easy feedback!</p>
-                        <Image
-                            src='/images/quip-demo.png'
-                            width={700}
-                            height={394}
-                            alt="student text-editor screenshot"
-                            className="rounded-lg mb-4 mt-5 sm:mt-0"
-                        />
+
+                        {/* Card 2 - Auto-Graded Assessments (Text first) */}
+                        <div className="rounded-lg p-6 shadow-md shadow-border border border-card flex flex-col lg:col-span-2 w-full max-w-[395px]">
+                            <h3 className="text-xl font-semibold mb-3">Auto-Graded Assessments</h3>
+                            <p className="text-primary mb-4 flex-grow">Let AI grade your assessments and exit tickets. No need to make it multiple-choice, just let AI handle it and get instant data!</p>
+                            <Image
+                                src='/images/assessment-data.png'
+                                width={400}
+                                height={225}
+                                alt="assessment data screenshot"
+                                className="rounded-lg w-full h-auto"
+                            />
+                        </div>
+
+                        {/* Card 3 - Sharable Blogs (Image first) */}
+                        <div className="rounded-lg p-6 shadow-md shadow-border border border-card flex flex-col lg:col-span-2 w-full max-w-[395px]">
+                            <Image
+                                src='/images/featured-blogs.png'
+                                width={400}
+                                height={225}
+                                alt="featured blogs screenshot"
+                                className="rounded-lg mb-4 w-full h-auto"
+                            />
+                            <h3 className="text-xl font-semibold mb-3">Sharable Blogs</h3>
+                            <p className="text-primary flex-grow">
+                                Student writing is automatically transformed into beautiful blog posts for peers to comment and like. You can also set blogs to private for personal assignments.
+                            </p>
+                        </div>
+
+                        {/* Card 4 - AI Anti-Cheat (Text first) */}
+                        <div className="rounded-lg p-6 shadow-md shadow-border border border-card flex flex-col md:col-span-1 lg:col-span-2 lg:col-start-2 w-full max-w-[395px]">
+                            <h3 className="text-xl font-semibold mb-3">AI Anti-Cheat</h3>
+                            <p className="text-primary mb-4 flex-grow">Custom text editor disables copy and paste, word prediction and spell check. Know exactly how well your students write.</p>
+                            <Image
+                                src='/images/text-editor.png'
+                                width={400}
+                                height={225}
+                                alt="student text-editor screenshot"
+                                className="rounded-lg w-full h-auto"
+                            />
+                        </div>
+
+                        {/* Card 5 - Quick Quips (Image first) */}
+                        <div className="rounded-lg p-6 shadow-md shadow-border border border-card flex flex-col md:col-span-2 md:col-start-1 lg:col-span-2 w-full max-w-[395px]">
+                            <Image
+                                src='/images/quip-demo.png'
+                                width={400}
+                                height={225}
+                                alt="quip demo screenshot"
+                                className="rounded-lg mb-4 w-full h-auto"
+                            />
+                            <h3 className="text-xl font-semibold mb-3">Quick Quips</h3>
+                            <p className="text-primary flex-grow">Quick, Twitter-style prompts where students respond without seeing others' answers first. Perfect for instant engagement and honest feedback!</p>
+                        </div>
                     </div>
                 </section>
                 <Separator />
@@ -207,7 +220,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                         commentCoolDown={20}
                     />
                 </section>
-                <Separator />
+                {/* <Separator />
                 <section className="py-16 px-6">
                     <h2 className='h1-bold text-center'>AI Graded Assessments</h2>
                     <h3 className='font-bold text-sm text-center mb-5'>Making Data-Driven Teaching Simple and Effective</h3>
@@ -227,7 +240,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                             <p>- Graph data shows class and student performance</p>
                         </div>
                     </div>
-                </section>
+                </section> */}
                 <Separator />
 
                 {/* Call to Action */}
@@ -237,7 +250,7 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                         Sign up today and let JotterBlog help you manage student writing and assessment
                     </p>
                     <Link href="sign-in">
-                        <Button size="lg">Join Now!</Button>
+                        <Button>Join Now!</Button>
                     </Link>
                 </section>
             </main>
