@@ -69,8 +69,16 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                     </div>
                     <WelcomeToJotterBlog />
                     <p className="text-lg sm:text-xl max-w-2xl mx-auto mb-6 text-primary">
-                        A modern tool for teachers to manage student writing, automatically grade assessments with AI, and create sharable student blogs — all in one place.
+                        The only platform that lets AI grade student essays and journals using <span className="font-bold text-accent">your custom rubrics</span> — plus auto-grade assessments and create sharable student blogs.
                     </p>
+
+                    {/* New AI Rubric Feature Highlight */}
+                    <div className="bg-card border border-accent rounded-lg p-4 max-w-2xl mx-auto mb-6">
+                        <p className="text-accent font-semibold mb-2">🚀 NEW: AI Rubric Grading!</p>
+                        <p className="text-sm text-primary">
+                            Upload your custom rubrics and let AI grade essays instantly. Save hours while maintaining your teaching standards.
+                        </p>
+                    </div>
                     <div className="flex justify-center gap-4 flex-wrap">
                         <Link href="/sign-in">
                             <Button size="lg">Get Started</Button>
@@ -92,16 +100,27 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                 </section>
                 <Separator />
                 {/* Features */}
-                <section className="py-16 px-6 max-w-6xl mx-auto grid gap-6 sm:grid-cols-3 text-center">
+                <section className="py-16 px-6 max-w-6xl mx-auto grid gap-8 sm:grid-cols-3 text-center">
+                    <div className="mx-5 md:mx-0">
+                        <Image
+                            src='/images/custom-rubric.png'
+                            width={700}
+                            height={394}
+                            alt="assessment data screenshot"
+                            className="rounded-lg mb-4 mt-6"
+                        />
+                        <h3 className="text-xl font-semibold mb-2">🤖 AI Rubric Grading</h3>
+                        <p className="text-primary">Create custom rubrics and let AI grade student essays and journals instantly. Maintain your teaching standards while saving hours of grading time!</p>
+                    </div>
                     <div className="mx-5 md:mx-0">
                         <h3 className="text-xl font-semibold mb-2">Auto-Graded Assessments</h3>
-                        <p className="text-primary">Let AI grade your assessments. No need to make it multiple-choice, just let AI handle it!</p>
+                        <p className="text-primary">Let AI grade your assessments and exit tickets. No need to make it multiple-choice, just let AI handle it!</p>
                         <Image
                             src='/images/assessment-data.png'
                             width={700}
                             height={394}
                             alt="assessment data screenshot"
-                            className="rounded-lg mb-4 mt-10 sm:mt-0"
+                            className="rounded-lg mb-4 mt-6"
                         />
                     </div>
                     <div className="mx-5 md:mx-0 flex flex-col-reverse sm:flex-col">
@@ -122,6 +141,17 @@ Aliquam bibendum sapien id magna congue, nec fermentum velit convallis. In volut
                         <p className="text-primary">Custom text editor disables copy and paste, word prediction and spell check. Know exactly how well your students write.</p>
                         <Image
                             src='/images/text-editor.png'
+                            width={700}
+                            height={394}
+                            alt="student text-editor screenshot"
+                            className="rounded-lg mb-4 mt-5 sm:mt-0"
+                        />
+                    </div>
+                    <div className="mx-5 md:mx-0">
+                        <h3 className="text-xl font-semibold mb-2">Quick Quips</h3>
+                        <p className="text-primary">Introducing Quips! Similar to tweets. Post a prompt to have students respond. Students cannot see other responses until they response. Quick and easy feedback!</p>
+                        <Image
+                            src='/images/quip-demo.png'
                             width={700}
                             height={394}
                             alt="student text-editor screenshot"
