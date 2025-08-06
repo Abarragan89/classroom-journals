@@ -175,7 +175,7 @@ export default function Editor({
                 onDrop={(e) => e.preventDefault()}
                 onDragOver={(e) => e.preventDefault()}
                 className={`
-                    md:text-lg bg-transparent outline-border border border-border font-mono shadow-border shadow-[inset_0px_0px_10px_0px_rgba(0,_0,_0,_0.1)] p-4 md:p-7 textarea-field-size-content
+                    md:text-lg bg-transparent outline-border border border-border shadow-border shadow-[inset_0px_0px_10px_0px_rgba(0,_0,_0,_0.1)] p-4 md:p-7 textarea-field-size-content
                     ${jotType === 'BLOG' ? 'min-h-48' : ''}
                 `}
                 value={journalText}
