@@ -21,12 +21,13 @@ export default function JotTypeModal({
             isOpen={isModalOpen}
             setIsOpen={setIsModalOpen}
             title={`Choose Jot Type`}
-            description='Choose between blog prompt or mulit-question assessment'
+            description='Choose between essay/journal prompt or multi-question assessment'
         >
-            <div className="flex flex-col justify-center space-y-6 mx-auto my-5">
+            <p className="text-muted-foreground">Jots appear in your library and can be assigned to classes</p>
+            <div className="flex flex-col justify-center space-y-6 mx-auto my-3">
                 <Button asChild>
                     <Link onClick={closeModal} href={`/prompt-form?type=blog&callbackUrl=${pathname}`}>
-                        Blog Prompt
+                        Essay/Journal Prompt
                     </Link>
                 </Button>
                 <Button asChild>
