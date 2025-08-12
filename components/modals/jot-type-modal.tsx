@@ -27,12 +27,12 @@ export default function JotTypeModal({
             <div className="flex flex-col justify-center space-y-6 mx-auto my-3">
                 <Button asChild>
                     <Link onClick={closeModal} href={`/prompt-form?type=blog&callbackUrl=${pathname}`}>
-                        Essay/Journal Prompt
+                        Essay / Journal Prompt
                     </Link>
                 </Button>
                 <Button asChild>
                     <Link onClick={closeModal} href={`/prompt-form?type=assessment&callbackUrl=${pathname}`}>
-                        Multi-Question Assessment
+                        Exit-Ticket / Assessment
                     </Link>
                 </Button>
             </div>
