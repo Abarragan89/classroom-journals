@@ -1,5 +1,10 @@
 import type { NextConfig } from 'next';
 
+// Bundle analyzer
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const nextConfig: NextConfig = {
   output: 'standalone',
 
@@ -94,8 +99,10 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '4mb'
     },
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
-    serverComponentsExternalPackages: ['@prisma/client'],
   },
+
+  // Server external packages
+  serverExternalPackages: ['@prisma/client'],
 
   // Caching and performance optimizations
   headers: async () => [
@@ -151,4 +158,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

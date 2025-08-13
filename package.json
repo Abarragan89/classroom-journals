@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "npx prisma generate && npx prisma migrate deploy && next build"
@@ -70,6 +71,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@next/bundle-analyzer": "^15.4.6",
     "@prisma/client": "6.9.0",
     "@tanstack/eslint-plugin-query": "^5.73.3",
     "@tanstack/react-query-devtools": "^5.74.6",
