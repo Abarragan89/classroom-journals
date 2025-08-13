@@ -1,5 +1,5 @@
 "use client"
-import Editor from '@/components/shared/prompt-response-editor/editor'
+import Editor from '@/components/shared/prompt-response-editor/editor';
 import React, { useState } from 'react'
 
 export default function TextEditorDemo() {
