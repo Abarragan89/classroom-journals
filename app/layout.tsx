@@ -8,7 +8,6 @@ import Footer from "@/components/footer";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import TanstackQueryProvider from "@/components/providers/tanstack-query-provider";
 import AbsentUserChecker from "@/components/absent-user-checker";
-import PerformanceMonitor from "@/components/performance-monitor";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -88,9 +87,6 @@ export default async function RootLayout({
           >
             <AbsentUserChecker />
             <Toaster />
-            {process.env.NODE_ENV === 'development' && (
-              <PerformanceMonitor />
-            )}
             <div className="flex min-h-screen flex-col">
               <div className="flex-1">
                 {children}
