@@ -69,8 +69,8 @@ export default function BlogMetaDetails({
                 <Image
                     src={responseData?.student?.avatarURL || '/images/demo-avatars/1.png'}
                     alt="blog cover photo"
-                    width={1024}
-                    height={1024}
+                    width={40}
+                    height={40}
                     className="rounded-full w-[40px] h-[40px]"
                 />
                 <div className="ml-2 w-full text-sm text-input flex-between">

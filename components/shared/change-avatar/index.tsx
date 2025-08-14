@@ -36,8 +36,8 @@ export default function ChangeAvatar({
                 <Image
                     src={currentAvatar || '/images/demo-avatars/1.png'}
                     alt="blog cover photo"
-                    width={1024}
-                    height={1024}
+                    width={80}
+                    height={80}
                     className="hover:cursor-pointer hover:scale-105 rounded-full w-[80px] h-[80px]"
                 />
                 <Button onClick={() => setIsModalOpen(true)} variant={'link'} className="p-0 text-xs absolute -bottom-3 -right-10">

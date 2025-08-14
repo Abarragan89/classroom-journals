@@ -268,8 +268,8 @@ export default function SinglePromptEditor({
                                         key={img.id}
                                         src={img.url}
                                         alt="blog cover photo"
-                                        width={1920}
-                                        height={1080}
+                                        width={195}
+                                        height={110}
                                         onClick={() => { setJournalText(img.url); setOpenPhotoModal(false) }}
                                         className="hover:cursor-pointer rounded-sm hover:scale-105 max-w-[195px]"
                                     />
@@ -337,8 +337,8 @@ export default function SinglePromptEditor({
                             <Image
                                 src={journalText || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
                                 alt="blog cover photo"
-                                width={1920}
-                                height={1080}
+                                width={448}
+                                height={252}
                                 priority
                                 className="rounded-md max-w-md"
                             />
