@@ -66,12 +66,13 @@ export default async function RootLayout({
 
   const headersList = await headers();
   const nonce = headersList.get('x-nonce');
+  if (!nonce) return
 
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        {...(nonce && { nonce })}
+        nonce={nonce}
       >
         <TanstackQueryProvider>
           {process.env.NODE_ENV === 'development' && (
