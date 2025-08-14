@@ -97,8 +97,8 @@ export default function QuipListItem({
                         <Image
                             src={singleQuip?.author?.avatarURL || '/images/demo-avatars/1.png'}
                             alt="blog cover photo"
-                            width={1024}
-                            height={1024}
+                            width={40}
+                            height={40}
                             className="rounded-full w-[40px] h-[40px]"
                         />
                         <div className="flex-between">

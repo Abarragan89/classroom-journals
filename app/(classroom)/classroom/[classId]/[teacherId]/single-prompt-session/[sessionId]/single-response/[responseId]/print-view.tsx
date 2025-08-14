@@ -37,8 +37,8 @@ export default function PrintViewBlog({
                         <Image
                             src={currentResponse?.student?.avatarURL || '/images/demo-avatars/1.png'}
                             alt="blog cover photo"
-                            width={1024}
-                            height={1024}
+                            width={38}
+                            height={38}
                             className="rounded-full w-[40px] h-[40px] border border-slate-700"
                         />
                         <div className="ml-2 w-full text-sm">

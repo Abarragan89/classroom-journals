@@ -58,8 +58,8 @@ export default function CommentReplySection({
                 <Image
                     src={replyCommentData?.user?.avatarURL || '/images/demo-avatars/1.png'}
                     alt="blog cover photo"
-                    width={1024}
-                    height={1024}
+                    width={80}
+                    height={80}
                     className="rounded-full w-[40px] h-[40px]"
                 />
                 <div className="flex justify-between items-center w-full ml-3">

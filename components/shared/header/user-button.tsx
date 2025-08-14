@@ -41,8 +41,8 @@ export default function UserButton({
                             <Image
                                 src={avatarURL || '/images/demo-avatars/1.png'}
                                 alt="blog cover photo"
-                                width={1024}
-                                height={1024}
+                                width={36}
+                                height={36}
                                 className="rounded-full w-[36px] h-[36px]"
                             />
                         </Button>

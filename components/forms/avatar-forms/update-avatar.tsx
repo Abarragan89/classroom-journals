@@ -115,8 +115,8 @@ export default function UpdateAvatar({
                                     key={img.id}
                                     src={img.url}
                                     alt="blog cover photo"
-                                    width={1024}
-                                    height={1024}
+                                    width={80}
+                                    height={80}
                                     onClick={() => { updateUserAvatarHandler(img.url); setOpenPhotoModal(false) }}
                                     className="hover:cursor-pointer hover:scale-105 rounded-full w-[80px] h-[80px]"
                                 />

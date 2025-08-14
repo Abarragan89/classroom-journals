@@ -68,8 +68,8 @@ export default function QuipSingleResponse({
                 <Image
                     src={authorAvatarUrl || '/images/demo-avatars/1.png'}
                     alt="blog cover photo"
-                    width={1024}
-                    height={1024}
+                    width={35}
+                    height={35}
                     className="rounded-full w-[35px] h-[35px]"
                 />
                 <div className="flex justify-between w-full items-start">
