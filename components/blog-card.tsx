@@ -27,10 +27,15 @@ export default function BlogCard({
             {/* Your slide content here */}
             <Image
                 src={coverPhotoUrl ? coverPhotoUrl : "https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png"}
-                width={1920}
-                height={1080}
-                alt="Busts of Greek philosophers"
+                width={298}
+                height={167}
+                alt={title ? `Cover image for ${title}` : "Blog post cover image"}
                 className="rounded-t-sm"
+                priority={true}
+                loading="eager"
+                fetchPriority="high"
+                sizes="298px"
+                quality={75}
             />
             <div className="min-h-[200px] px-2 ">
                 <div className="flex justify-between pt-1 text-input text-[0.875rem]">
