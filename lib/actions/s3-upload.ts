@@ -49,7 +49,8 @@ export async function uploadFileToS3(file: Buffer, filename: string) {
             Bucket: process.env.AWS_S3_BUCKET_NAME,
             Key: timestampedKey,
             Body: file,
-            ContentType: contentType
+            ContentType: contentType,
+            ContentDisposition: `inline; filename="${timestampedKey}"`
         }
 
         const command = new PutObjectCommand(s3Params)
