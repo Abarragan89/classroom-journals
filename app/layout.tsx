@@ -67,47 +67,33 @@ export default async function RootLayout({
   const headersList = await headers();
   const nonce = headersList.get('x-nonce');
 
-  // Don't return early - this breaks image optimization!
-  // Instead, handle missing nonce gracefully
-  const validNonce = nonce || 'fallback-nonce';
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        nonce={validNonce}
+        {...(nonce && { nonce })}
       >
-        {/* Only render content if we have a proper nonce */}
-        {nonce ? (
-          <TanstackQueryProvider>
-            {process.env.NODE_ENV === 'development' && (
-              <ReactQueryDevtools initialIsOpen={false} />
-            )}
-            <ThemeProvider
-              attribute='class'
-              themes={["light", "dark", "tech", "cupid", "tuxedo", "avocado"]}
-              defaultTheme="light"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <AbsentUserChecker />
-              <Toaster />
-              <div className="flex min-h-screen flex-col">
-                <div className="flex-1">
-                  {children}
-                </div>
+        <TanstackQueryProvider>
+          {process.env.NODE_ENV === 'development' && (
+            <ReactQueryDevtools initialIsOpen={false} />
+          )}
+          <ThemeProvider
+            attribute='class'
+            themes={["light", "dark", "tech", "cupid", "tuxedo", "avocado"]}
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <AbsentUserChecker />
+            <Toaster />
+            <div className="flex min-h-screen flex-col">
+              <div className="flex-1">
+                {children}
               </div>
-              <Footer />
-            </ThemeProvider>
-          </TanstackQueryProvider>
-        ) : (
-          <div className="flex min-h-screen items-center justify-center">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-              <p className="mt-4 text-muted-foreground">Loading...</p>
             </div>
-          </div>
-        )}
+            <Footer />
+          </ThemeProvider>
+        </TanstackQueryProvider>
       </body>
     </html>
   );
