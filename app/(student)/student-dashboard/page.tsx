@@ -12,28 +12,56 @@ import { getAllQuipAlerts } from "@/lib/actions/alert.action";
 
 export default async function StudentDashboard() {
 
-    const session = await auth() as Session
+    // const session = await auth() as Session
 
-    if (!session) return notFound()
+    // if (!session) return notFound()
 
-    const studentId = session?.user?.id as string
-    if (session?.user?.role !== 'STUDENT' || !studentId) {
-        return notFound()
+    // const studentId = session?.user?.id as string
+    // if (session?.user?.role !== 'STUDENT' || !studentId) {
+    //     return notFound()
+    // }
+
+    // const classroomId = session?.classroomId
+
+    // if (!classroomId) return notFound()
+
+    // // STEP 1: Get dependencies first (run in parallel)
+    // const [studentName, teacherId] = await Promise.all([
+    //     getDecyptedStudentUsername(studentId),
+    //     getTeacherId(classroomId)
+    // ]);
+
+    // if (!studentName || !teacherId) {
+    //     return notFound()
+    // }
+
+
+    const session = (await auth()) as Session;
+    console.log('session', session);
+
+    if (!session) return notFound();
+
+    const studentId = session.user?.id as string;
+    if (session.user?.role !== "STUDENT" || !studentId) {
+        return notFound();
     }
 
-    const classroomId = session?.classroomId
+    const classroomId = session.classroomId;
+    if (!classroomId) return notFound();
 
-    if (!classroomId) return notFound()
-
-    // STEP 1: Get dependencies first (run in parallel)
-    const [studentName, teacherId] = await Promise.all([
-        getDecyptedStudentUsername(studentId),
-        getTeacherId(classroomId)
+    // STEP 1: Fetch dependencies in parallel
+    const [studentNameRes, teacherIdRes] = await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/student-dashboard/username?studentId=${studentId}`),
+        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/student-dashboard/get-teacher-id?classroomId=${classroomId}`),
     ]);
 
-    if (!studentName || !teacherId) {
-        return notFound()
-    }
+    console.log('studentNameRes', studentNameRes);
+    console.log('teacherIdRes', teacherIdRes);
+
+    if (!studentNameRes.ok || !teacherIdRes.ok) return notFound();
+
+    const { username: studentName } = await studentNameRes.json();
+    const { teacherId } = await teacherIdRes.json();
 
     // STEP 2: Get all remaining data in parallel
     const [
