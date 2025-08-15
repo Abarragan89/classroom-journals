@@ -124,6 +124,16 @@ const nextConfig: NextConfig = {
         },
       ],
     },
+    // Add caching for pages (but not API routes)
+    {
+      source: '/((?!api|_next/static|_next/image).*)',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'public, max-age=300, stale-while-revalidate=60', // 5 min cache
+        },
+      ],
+    },
     {
       source: '/api/(.*)',
       headers: [

@@ -50,7 +50,8 @@ export async function uploadFileToS3(file: Buffer, filename: string) {
             Key: timestampedKey,
             Body: file,
             ContentType: contentType,
-            ContentDisposition: `inline; filename="${timestampedKey}"`
+            ContentDisposition: `inline; filename="${timestampedKey}"`,
+            CacheControl: 'public, max-age=31536000' // 1 year cache for images
         }
 
         const command = new PutObjectCommand(s3Params)
