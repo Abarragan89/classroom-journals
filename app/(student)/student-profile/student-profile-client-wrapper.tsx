@@ -2,7 +2,7 @@
 import RequestNewUsername from '@/components/modalBtns/request-new-username';
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { getStudentRequests } from '@/lib/actions/student.dashboard.actions';
+import { getStudentRequests } from '@/lib/server/student-dashboard';
 import { StudentRequest, User } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';

@@ -14,9 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
 import { Classroom, Prompt, PromptCategory } from "@/types";
 import { addPromptCategory } from "@/lib/actions/prompt.categories";
-import { getAllPromptCategories } from "@/lib/server/student-dashboard";
 import CategorySection from "../single-prompt-form/category-section";
-import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
 import UpgradeAccountBtn from "@/components/buttons/upgrade-account-btn";
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -72,10 +70,21 @@ export default function MultiPromptForm({
             if (teacherId) {
                 const data = await getAllClassroomIds(teacherId); // Fetch classroom IDs
                 setClassrooms(data as Classroom[]);
-                const categoryData = await getAllPromptCategories(teacherId) as PromptCategory[]
-                setCategories(categoryData)
-                const { isSubscriptionActive } = await determineSubscriptionAllowance(teacherId)
-                setIsTeacherPremium(isSubscriptionActive as boolean)
+
+                // Fetch categories via API route
+                const categoryResponse = await fetch(`/api/prompt-categories?userId=${teacherId}`);
+                if (categoryResponse.ok) {
+                    const { categories: categoryData } = await categoryResponse.json();
+                    setCategories(categoryData as PromptCategory[]);
+                }
+
+                // Fetch subscription allowance via API route
+                const subscriptionResponse = await fetch(`/api/profile/subscription-allowance?teacherId=${teacherId}`);
+                if (subscriptionResponse.ok) {
+                    const { subscriptionData } = await subscriptionResponse.json();
+                    setIsTeacherPremium(subscriptionData.isSubscriptionActive as boolean);
+                }
+
                 // Get existing prompt if in search params
                 if (existingPromptId) {
                     const promptData = await getSinglePrompt(existingPromptId, teacherId) as unknown as Prompt

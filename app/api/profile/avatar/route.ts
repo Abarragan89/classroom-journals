@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAllPromptCategories } from "@/lib/server/student-dashboard";
+import { getUserAvatarURL } from "@/lib/server/profile";
 
 export async function GET(req: NextRequest) {
     try {
@@ -10,11 +10,11 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: "Missing userId" }, { status: 400 });
         }
 
-        const categories = await getAllPromptCategories(userId);
+        const avatarURL = await getUserAvatarURL(userId);
 
-        return NextResponse.json({ categories });
+        return NextResponse.json({ avatarURL });
     } catch (error) {
-        console.error("Error getting prompt categories:", error);
+        console.error("Error getting user avatar URL:", error);
 
         if (error instanceof Error) {
             if (error.message === "Forbidden") {

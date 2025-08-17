@@ -8,7 +8,7 @@ import { PromptCategory, StudentRequest, Response, ResponseData } from '@/types'
 import Link from 'next/link';
 import AssignmentSectionClient from './assignement-section.client';
 import { useQuery } from '@tanstack/react-query';
-import { getStudentRequests } from '@/lib/actions/student.dashboard.actions';
+import { getStudentRequests } from '@/lib/server/student-dashboard';
 import { useState } from 'react';
 import { getStudentResponsesDashboard } from '@/lib/actions/response.action';
 import { formatDateLong } from '@/lib/utils';

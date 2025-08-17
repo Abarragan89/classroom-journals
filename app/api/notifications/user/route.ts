@@ -1,20 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAllPromptCategories } from "@/lib/server/student-dashboard";
+import { getUserNotifications } from "@/lib/server/notifications";
 
 export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
         const userId = searchParams.get("userId");
+        const classId = searchParams.get("classId");
 
         if (!userId) {
             return NextResponse.json({ error: "Missing userId" }, { status: 400 });
         }
 
-        const categories = await getAllPromptCategories(userId);
+        if (!classId) {
+            return NextResponse.json({ error: "Missing classId" }, { status: 400 });
+        }
 
-        return NextResponse.json({ categories });
+        const notifications = await getUserNotifications(userId, classId);
+
+        return NextResponse.json({ notifications });
     } catch (error) {
-        console.error("Error getting prompt categories:", error);
+        console.error("Error getting user notifications:", error);
 
         if (error instanceof Error) {
             if (error.message === "Forbidden") {

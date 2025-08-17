@@ -13,7 +13,6 @@ import { LogOut, User } from "lucide-react";
 import Image from "next/image";
 import { Session } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { getUserAvatarURL } from "@/lib/actions/profile.action";
 
 export default function UserButton({
     session
@@ -24,7 +23,14 @@ export default function UserButton({
     // Get the Featured Blogs
     const { data: avatarURL } = useQuery({
         queryKey: ['getUserAvatar', session?.user?.id],
-        queryFn: () => getUserAvatarURL(session?.user?.id) as unknown as string,
+        queryFn: async () => {
+            const response = await fetch(`/api/profile/avatar?userId=${session?.user?.id}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch avatar URL');
+            }
+            const { avatarURL } = await response.json();
+            return avatarURL as string;
+        },
         refetchOnMount: false,
         refetchOnReconnect: false,
         refetchOnWindowFocus: false,

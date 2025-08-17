@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import Header from "@/components/shared/header";
-import { getUserNotifications, markAllNotificationsAsRead } from "@/lib/actions/notifications.action";
+import { markAllNotificationsAsRead } from "@/lib/actions/notifications.action";
+import { getUserNotifications } from "@/lib/server/notifications";
 import { Session, UserNotification } from "@/types";
 import { notFound } from "next/navigation";
 import NotificationSection from "./notification-section";

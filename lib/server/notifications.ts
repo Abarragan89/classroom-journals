@@ -1,21 +1,30 @@
-"use server";
+import { requireAuth } from "../actions/authorization.action";
 import { prisma } from "@/db/prisma";
-import { requireAuth } from "./authorization.action";
 
-export async function markAllNotificationsAsRead(userId: string, classId: string) {
+export async function getUserNotifications(userId: string, classId: string) {
     try {
         const session = await requireAuth();
         if (session?.user?.id !== userId) {
             throw new Error('Forbidden');
         }
-
-        const notificationCount = await prisma.notification.updateMany({
-            where: { userId, isRead: false, classId },
-            data: {
+        const userNotifications = await prisma.notification.findMany({
+            where: { userId, classId },
+            select: {
+                id: true,
+                responseId: true,
+                url: true,
+                message: true,
+                commentText: true,
+                createdAt: true,
                 isRead: true,
-            }
+            },
+            orderBy: {
+                createdAt: 'desc'
+            },
+            take: 200
         });
-        return notificationCount;
+
+        return userNotifications;
     } catch (error) {
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);
@@ -27,22 +36,16 @@ export async function markAllNotificationsAsRead(userId: string, classId: string
     }
 }
 
-
-// Clear all user Notifications
-export async function clearAllNotifications(userId: string, classId: string) {
+export async function getUnreadUserNotifications(userId: string, classId: string) {
     try {
         const session = await requireAuth();
         if (session?.user?.id !== userId) {
             throw new Error('Forbidden');
         }
-        
-        if (!userId) {
-            return { success: false, message: 'Missing user Id' }
-        }
-        await prisma.notification.deleteMany({
-            where: { userId, classId }
-        })
-        return { success: false, message: 'All notifications deleted' }
+        const notificationCount = await prisma.notification.count({
+            where: { userId, isRead: false, classId },
+        });
+        return notificationCount;
     } catch (error) {
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);

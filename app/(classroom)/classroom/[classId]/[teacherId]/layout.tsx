@@ -8,7 +8,7 @@ import { Class, Classroom, Session } from "@/types";
 import { getAllClassrooms, getSingleClassroom } from "@/lib/actions/classroom.actions";
 import { prisma } from "@/db/prisma";
 import DynamicHeader from "@/components/dynamic-header";
-import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
+import { determineSubscriptionAllowance } from "@/lib/server/profile";
 import { ClassUserRole } from "@prisma/client";
 
 export default async function DashboardLayout({

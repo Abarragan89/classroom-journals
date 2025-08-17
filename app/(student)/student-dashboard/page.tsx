@@ -2,16 +2,16 @@ import { auth } from "@/auth";
 import Header from "@/components/shared/header";
 import { PromptCategory, Response, Session, StudentRequest } from "@/types";
 import { notFound } from "next/navigation";
-import { getStudentRequests } from "@/lib/actions/student.dashboard.actions";
 
 import StudentDashClientWrapper from "./student-dash-client-wrapper";
 import { getStudentResponsesDashboard } from "@/lib/actions/response.action";
 import { getAllQuipAlerts } from "@/lib/actions/alert.action";
-import { 
-    getStudentName, 
-    getTeacherId, 
-    getAllPromptCategories, 
-    getFeaturedBlogs 
+import {
+    getStudentName,
+    getTeacherId,
+    getAllPromptCategories,
+    getFeaturedBlogs,
+    getStudentRequests
 } from "@/lib/server/student-dashboard";
 
 

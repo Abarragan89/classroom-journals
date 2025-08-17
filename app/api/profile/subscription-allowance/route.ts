@@ -1,24 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAllPromptCategories } from "@/lib/server/student-dashboard";
+import { determineSubscriptionAllowance } from "@/lib/server/profile";
 
 export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
-        const userId = searchParams.get("userId");
+        const teacherId = searchParams.get("teacherId");
 
-        if (!userId) {
-            return NextResponse.json({ error: "Missing userId" }, { status: 400 });
+        if (!teacherId) {
+            return NextResponse.json({ error: "Missing teacherId" }, { status: 400 });
         }
 
-        const categories = await getAllPromptCategories(userId);
+        const subscriptionData = await determineSubscriptionAllowance(teacherId);
 
-        return NextResponse.json({ categories });
+        return NextResponse.json({ subscriptionData });
     } catch (error) {
-        console.error("Error getting prompt categories:", error);
+        console.error("Error determining subscription allowance:", error);
 
         if (error instanceof Error) {
             if (error.message === "Forbidden") {
                 return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+            }
+            if (error.message === "Teacher not found") {
+                return NextResponse.json({ error: "Teacher not found" }, { status: 404 });
             }
             if (error.message === "Unauthorized") {
                 return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

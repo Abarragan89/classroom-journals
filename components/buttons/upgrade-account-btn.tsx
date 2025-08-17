@@ -1,7 +1,6 @@
 'use client'
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { determineSubscriptionAllowance } from '@/lib/actions/profile.action';
 
 export default function UpgradeAccountBtn({
     teacherId
@@ -10,7 +9,14 @@ export default function UpgradeAccountBtn({
 }) {
     const { isPending, error, data } = useQuery({
         queryKey: ['teacher-sub-status', teacherId],
-        queryFn: () => determineSubscriptionAllowance(teacherId),
+        queryFn: async () => {
+            const response = await fetch(`/api/profile/subscription-allowance?teacherId=${teacherId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch subscription allowance');
+            }
+            const { subscriptionData } = await response.json();
+            return subscriptionData;
+        },
         // refetchOnMount: false,
         refetchOnReconnect: false,
         // refetchOnWindowFocus: false,

@@ -2,7 +2,7 @@
 import { Bell, LayoutDashboard, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
-import { getUnreadUserNotifications } from '@/lib/actions/notifications.action';
+// import { getUnreadUserNotifications } from '@/lib/actions/notifications.action';
 import { useQuery } from '@tanstack/react-query';
 
 
@@ -17,7 +17,14 @@ export default function StudentNavLinks({
 
     const { data: notificationCount } = useQuery({
         queryKey: ['getStudentNotificationHeader', studentId],
-        queryFn: () => getUnreadUserNotifications(studentId, classId) as unknown as number,
+        queryFn: async () => {
+            const response = await fetch(`/api/notifications/unread?userId=${studentId}&classId=${classId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch unread notifications');
+            }
+            const { unreadCount } = await response.json();
+            return unreadCount as number;
+        },
         placeholderData: 0,
         // refetchOnMount: false,
         refetchOnReconnect: false,
