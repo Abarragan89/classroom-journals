@@ -4,7 +4,7 @@ import JotSearchArea from "@/components/jot-search-area";
 import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
 import { Classroom } from "@/types";
 import CreateNewJot from "@/components/modalBtns/create-new-jot";
-import { getAllPromptCategories } from "@/lib/actions/prompt.categories";
+import { getAllPromptCategories } from "@/lib/server/student-dashboard";
 
 export default async function PromptLibrary({
     teacherId,

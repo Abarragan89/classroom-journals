@@ -2,66 +2,70 @@ import { auth } from "@/auth";
 import Header from "@/components/shared/header";
 import { PromptCategory, Response, Session, StudentRequest } from "@/types";
 import { notFound } from "next/navigation";
-import { getAllPromptCategories } from "@/lib/actions/prompt.categories";
-import { getDecyptedStudentUsername, getFeaturedBlogs, getTeacherId } from "@/lib/actions/student.dashboard.actions";
 import { getStudentRequests } from "@/lib/actions/student.dashboard.actions";
+
 import StudentDashClientWrapper from "./student-dash-client-wrapper";
 import { getStudentResponsesDashboard } from "@/lib/actions/response.action";
 import { getAllQuipAlerts } from "@/lib/actions/alert.action";
+import { 
+    getStudentName, 
+    getTeacherId, 
+    getAllPromptCategories, 
+    getFeaturedBlogs 
+} from "@/lib/server/student-dashboard";
 
 
 export default async function StudentDashboard() {
 
-    // const session = await auth() as Session
+    const session = await auth() as Session
 
-    // if (!session) return notFound()
+    if (!session) return notFound()
 
-    // const studentId = session?.user?.id as string
-    // if (session?.user?.role !== 'STUDENT' || !studentId) {
-    //     return notFound()
-    // }
+    const studentId = session?.user?.id as string
+    if (session?.user?.role !== 'STUDENT' || !studentId) {
+        return notFound()
+    }
 
-    // const classroomId = session?.classroomId
+    const classroomId = session?.classroomId
 
-    // if (!classroomId) return notFound()
+    if (!classroomId) return notFound()
 
-    // // STEP 1: Get dependencies first (run in parallel)
-    // const [studentName, teacherId] = await Promise.all([
-    //     getDecyptedStudentUsername(studentId),
-    //     getTeacherId(classroomId)
-    // ]);
+    const featuredBlogs1 = await getFeaturedBlogs(classroomId);
+    console.log('featuredBlogs', featuredBlogs1);
+
+    // STEP 1: Get dependencies first (run in parallel)
+    const [studentName, teacherId] = await Promise.all([
+        getStudentName(studentId),
+        getTeacherId(classroomId)
+    ]);
+
+
+    // const studentName = await getDecyptedStudentUsername(studentId);
+    // const teacherId = await getTeacherId(classroomId);
 
     // if (!studentName || !teacherId) {
     //     return notFound()
     // }
 
 
-    const session = (await auth()) as Session;
-    console.log('session', session);
+    // const session = (await auth()) as Session;
+    // console.log('session asdfasdf', session);
 
-    if (!session) return notFound();
+    // if (!session) return notFound();
 
-    const studentId = session.user?.id as string;
-    if (session.user?.role !== "STUDENT" || !studentId) {
-        return notFound();
-    }
+    // const studentId = session.user?.id as string;
+    // if (session.user?.role !== "STUDENT" || !studentId) {
+    //     return notFound();
+    // }
 
-    const classroomId = session.classroomId;
-    if (!classroomId) return notFound();
+    // const classroomId = session?.classroomId
+    // if (!classroomId) return notFound()
 
-    // STEP 1: Fetch dependencies in parallel
-    const [studentNameRes, teacherIdRes] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/student-dashboard/username?studentId=${studentId}`),
-        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/student-dashboard/get-teacher-id?classroomId=${classroomId}`),
-    ]);
+    // const [teacherId, studentName] = await Promise.all([
+    //     getTeacherId(classroomId),
+    //     getStudentName(studentId)
+    // ]);
 
-    console.log('studentNameRes', studentNameRes);
-    console.log('teacherIdRes', teacherIdRes);
-
-    if (!studentNameRes.ok || !teacherIdRes.ok) return notFound();
-
-    const { username: studentName } = await studentNameRes.json();
-    const { teacherId } = await teacherIdRes.json();
 
     // STEP 2: Get all remaining data in parallel
     const [
@@ -77,6 +81,13 @@ export default async function StudentDashboard() {
         getStudentRequests(studentId),
         getAllQuipAlerts(studentId)
     ]);
+
+    // const allPromptCategories = await getAllPromptCategories(teacherId as string);
+    // const allResponses = await getStudentResponsesDashboard(studentId);
+    // const featuredBlogs = await getFeaturedBlogs(classroomId);
+    // const studentRequests = await getStudentRequests(studentId);
+    // const quipAlerts = await getAllQuipAlerts(studentId);
+
 
     return (
         <>

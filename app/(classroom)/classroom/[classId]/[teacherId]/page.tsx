@@ -4,7 +4,7 @@ import { PromptCategory, PromptSession } from "@/types";
 import { Plus } from "lucide-react";
 import { getStudentCountByClassId } from "@/lib/actions/roster.action";
 import Link from "next/link";
-import { getAllPromptCategories } from "@/lib/actions/prompt.categories";
+import { getAllPromptCategories } from "@/lib/server/student-dashboard";
 import AssignmentListSection from "@/components/shared/AssignmentListSection";
 
 export default async function Classroom({

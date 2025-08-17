@@ -11,7 +11,8 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox"
 import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
 import { Classroom, Prompt, PromptCategory } from "@/types";
-import { addPromptCategory, getAllPromptCategories } from "@/lib/actions/prompt.categories";
+import { addPromptCategory } from "@/lib/actions/prompt.categories";
+import { getAllPromptCategories } from "@/lib/server/student-dashboard";
 import { useSearchParams } from "next/navigation";
 import CategorySection from "./category-section";
 import { Switch } from "@/components/ui/switch"

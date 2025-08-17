@@ -13,7 +13,8 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox"
 import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
 import { Classroom, Prompt, PromptCategory } from "@/types";
-import { addPromptCategory, getAllPromptCategories } from "@/lib/actions/prompt.categories";
+import { addPromptCategory } from "@/lib/actions/prompt.categories";
+import { getAllPromptCategories } from "@/lib/server/student-dashboard";
 import CategorySection from "../single-prompt-form/category-section";
 import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
 import UpgradeAccountBtn from "@/components/buttons/upgrade-account-btn";

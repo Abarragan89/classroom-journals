@@ -1,6 +1,5 @@
 import { auth } from '@/auth'
 import Header from '@/components/shared/header'
-import { getSingleResponseForReview } from '@/lib/actions/response.action'
 import { Response, ResponseData, Session } from '@/types'
 import { notFound } from 'next/navigation'
 import React from 'react'
@@ -8,8 +7,10 @@ import SingleQuestionReview from './single-question-review'
 import Link from 'next/link'
 import { ArrowLeftIcon } from 'lucide-react'
 import ReviewWrapper from './review-wrapper'
-import { getClassroomGrade, getTeacherId } from '@/lib/actions/student.dashboard.actions'
 import { determineSubscriptionAllowance } from '@/lib/actions/profile.action'
+import { getSingleResponseForReview } from '@/lib/actions/response.action'
+import { getClassroomGrade } from '@/lib/server/student-dashboard'
+import { getTeacherId } from '@/lib/server/student-dashboard'
 
 export default async function ResponseReview({
     params
@@ -29,11 +30,9 @@ export default async function ResponseReview({
     }
 
     const { responseId } = await params
-
-    const singleResponse = await getSingleResponseForReview(responseId, studentId) as unknown as Response
-
     const teacherId = await getTeacherId(classroomId as string)
-
+    
+    const singleResponse = await getSingleResponseForReview(responseId, studentId) as unknown as Response
     const { isPremiumTeacher } = await determineSubscriptionAllowance(teacherId as string)
     const grade = await getClassroomGrade(classroomId as string)
 

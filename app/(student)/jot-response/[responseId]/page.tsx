@@ -5,7 +5,8 @@ import { notFound } from "next/navigation";
 import MultipleQuestionEditor from "@/components/shared/prompt-response-editor/multiple-question-editor";
 import SinglePromptEditor from "@/components/shared/prompt-response-editor/single-question-editor";
 import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
-import { getClassroomGrade, getTeacherId } from "@/lib/actions/student.dashboard.actions";
+import { getClassroomGrade } from "@/lib/server/student-dashboard";
+import { getTeacherId } from "@/lib/server/student-dashboard";
 import { getSingleResponseForReview } from "@/lib/actions/response.action";
 
 export default async function StudentDashboard({

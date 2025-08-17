@@ -8,7 +8,7 @@ import { PromptCategory, StudentRequest, Response, ResponseData } from '@/types'
 import Link from 'next/link';
 import AssignmentSectionClient from './assignement-section.client';
 import { useQuery } from '@tanstack/react-query';
-import { getFeaturedBlogs, getStudentRequests } from '@/lib/actions/student.dashboard.actions';
+import { getStudentRequests } from '@/lib/actions/student.dashboard.actions';
 import { useState } from 'react';
 import { getStudentResponsesDashboard } from '@/lib/actions/response.action';
 import { formatDateLong } from '@/lib/utils';
@@ -66,7 +66,14 @@ export default function StudentDashClientWrapper({
   // Get the Featured Blogs
   const { data: featuredBlogsData } = useQuery({
     queryKey: ['getFeaturedBlogs', classroomId],
-    queryFn: () => getFeaturedBlogs(classroomId) as unknown as Response[],
+    queryFn: async () => {
+      const response = await fetch(`/api/student-dashboard/featured-blogs?classroomId=${classroomId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch featured blogs');
+      }
+      const { featuredBlogs } = await response.json();
+      return featuredBlogs as Response[];
+    },
     initialData: featuredBlogs,
     // refetchOnMount: false,
     refetchOnReconnect: false,
