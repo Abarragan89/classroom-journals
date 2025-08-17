@@ -13,7 +13,6 @@ import { useState } from 'react';
 import { getStudentResponsesDashboard } from '@/lib/actions/response.action';
 import { formatDateLong } from '@/lib/utils';
 import QuipLink from './quip-link';
-import { getAllQuipAlerts } from '@/lib/actions/alert.action';
 
 export default function StudentDashClientWrapper({
   allCategories,
@@ -84,7 +83,14 @@ export default function StudentDashClientWrapper({
   // Get the StudentAlert Queries 
   const { data: quipAlertCount } = useQuery({
     queryKey: ['getQueryAlerts', studentId],
-    queryFn: () => getAllQuipAlerts(studentId) as unknown as number,
+    queryFn: async () => {
+      const response = await fetch(`/api/alerts/quips?userId=${studentId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch quip alerts');
+      }
+      const { quipAlerts } = await response.json();
+      return quipAlerts as number;
+    },
     initialData: quipAlerts,
     // refetchOnMount: false,
     refetchOnReconnect: false,
@@ -93,13 +99,12 @@ export default function StudentDashClientWrapper({
   })
 
   const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'username'))
-
+  const lastestTaskToDo = allResponseData?.responses.find(res => res.completionStatus === 'INCOMPLETE' || res.completionStatus === 'RETURNED')
+  
   function handleRequestUIHandler() {
     setHasSentPromptRequest(true)
   }
-
-  const lastestTaskToDo = allResponseData?.responses.find(res => res.completionStatus === 'INCOMPLETE' || res.completionStatus === 'RETURNED')
-
+  
   return (
     <>
       {lastestTaskToDo && (

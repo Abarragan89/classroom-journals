@@ -11,7 +11,7 @@ import { createNewPrompt, getSinglePrompt, updateAPrompt } from "@/lib/actions/p
 import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox"
-import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
+import { getAllClassroomIds } from "@/lib/server/classroom";
 import { Classroom, Prompt, PromptCategory } from "@/types";
 import { addPromptCategory } from "@/lib/actions/prompt.categories";
 import CategorySection from "../single-prompt-form/category-section";

@@ -1,4 +1,4 @@
-import { getAllStudents } from "@/lib/actions/classroom.actions";
+import { getAllStudents } from "@/lib/server/classroom";
 import {
   Table,
   TableBody,

@@ -1,6 +1,6 @@
 import { User } from "@/types";
 import { PromptSession } from "@/types";
-import { getAllStudents } from "@/lib/actions/classroom.actions";
+import { getAllStudents } from "@/lib/server/classroom";
 import EditPromptSessionPopUp from "@/components/modalBtns/edit-prompt-session-popup";
 import { getSinglePromptSessionTeacherDashboard } from '@/lib/actions/prompt.session.actions';
 import MainClientWrapper from "./main-client-wrapper";

@@ -1,7 +1,7 @@
 import { getAllTeacherPrompts } from "@/lib/actions/prompt.actions";
 import { Prompt, PromptCategory } from "@/types";
 import JotSearchArea from "@/components/jot-search-area";
-import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
+import { getAllClassroomIds } from "@/lib/server/classroom";
 import { Classroom } from "@/types";
 import CreateNewJot from "@/components/modalBtns/create-new-jot";
 import { getAllPromptCategories } from "@/lib/server/student-dashboard";
@@ -26,7 +26,7 @@ export default async function PromptLibrary({
                 <div className="flex-between relative">
                     <h1 className={`${inClassroom ? 'text-2xl lg:text-3xl mt-2' : 'h1-bold'}`}>Jot Library</h1>
                     <div className="absolute top-[40px] right-0">
-                        <CreateNewJot 
+                        <CreateNewJot
                         />
                     </div>
                 </div>

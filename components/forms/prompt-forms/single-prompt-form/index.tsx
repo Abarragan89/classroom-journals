@@ -9,7 +9,7 @@ import { toast } from "sonner"
 import { createNewPrompt, getSinglePrompt, updateAPrompt } from "@/lib/actions/prompt.actions";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox"
-import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
+import { getAllClassroomIds } from "@/lib/server/classroom";
 import { Classroom, Prompt, PromptCategory } from "@/types";
 import { addPromptCategory } from "@/lib/actions/prompt.categories";
 import { getAllPromptCategories } from "@/lib/server/student-dashboard";
