@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { getAllSessionsInClass } from "@/lib/actions/prompt.session.actions"
+import { getAllSessionsInClass } from "@/lib/server/prompt-sessions";
 import { PromptCategory, PromptSession } from "@/types";
 import { Plus } from "lucide-react";
 import { getStudentCountByClassId } from "@/lib/actions/roster.action";

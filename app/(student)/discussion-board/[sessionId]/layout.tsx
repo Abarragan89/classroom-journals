@@ -3,7 +3,7 @@ import { DiscussionSidebar } from "@/components/shared/discussion-sidebar";
 import Header from "@/components/shared/header";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { getSinglePromptSessionStudentDiscussion } from "@/lib/actions/prompt.session.actions";
+import { getSinglePromptSessionStudentDiscussion } from "@/lib/server/prompt-sessions";
 import { PromptSession, Session } from "@/types";
 import { notFound } from "next/navigation";
 

@@ -5,7 +5,7 @@ import GradeResponseCard from '@/components/shared/grade-response-card';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
 import { Response, ResponseComment, ResponseData } from '@/types';
-import { getAllResponsesFromPompt, getSingleResponse } from '@/lib/actions/response.action';
+import { getSingleResponse, getAllResponsesFromPrompt } from '@/lib/server/responses';
 import { StudentComboBox } from './student-combobox';
 import HandleToggleReturnStateBtn from '@/components/buttons/handle-toggle-return-state-btn';
 import DeleteResponseBtn from './delete-response-btn';
@@ -25,7 +25,7 @@ export default async function SingleResponse({
     }
 
     const response = await getSingleResponse(responseId, teacherId) as unknown as Response;
-    const classRosterAndScores = await getAllResponsesFromPompt(sessionId, teacherId) as unknown as Response[]
+    const classRosterAndScores = await getAllResponsesFromPrompt(sessionId, teacherId) as unknown as Response[]
 
     const rosterAlphabetized = classRosterAndScores.sort((a, b) => {
         const lastNameA = a?.student?.name?.split(" ")[1] as string; // Get second word (last name)

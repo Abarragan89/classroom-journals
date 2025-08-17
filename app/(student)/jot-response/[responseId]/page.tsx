@@ -7,7 +7,7 @@ import SinglePromptEditor from "@/components/shared/prompt-response-editor/singl
 import { determineSubscriptionAllowance } from "@/lib/server/profile";
 import { getClassroomGrade } from "@/lib/server/student-dashboard";
 import { getTeacherId } from "@/lib/server/student-dashboard";
-import { getSingleResponseForReview } from "@/lib/actions/response.action";
+import { getSingleResponseForReview } from "@/lib/server/responses";
 
 export default async function StudentDashboard({
     params

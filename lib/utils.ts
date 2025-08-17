@@ -21,6 +21,7 @@ export function generateClassCode(excludeArr: string[]): string {
 }
 
 export function formatDateShort(date: Date): string {
+  date = new Date(date);
   const month = date.getMonth() + 1; // Months are zero-indexed, so we add 1
   const day = date.getDate();
   const year = date.getFullYear().toString().slice(-2); // Get last 2 digits of the year
@@ -29,6 +30,7 @@ export function formatDateShort(date: Date): string {
 }
 
 export function formatDateLong(date: Date, weekdayLength: 'long' | 'short' = 'long'): string {
+  date = new Date(date)
   const options: Intl.DateTimeFormatOptions = { weekday: weekdayLength, month: 'long', day: 'numeric' };
   return date.toLocaleDateString('en-US', options);
 }

@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { ArrowLeftIcon } from 'lucide-react'
 import ReviewWrapper from './review-wrapper'
 import { determineSubscriptionAllowance } from '@/lib/server/profile'
-import { getSingleResponseForReview } from '@/lib/actions/response.action'
+import { getSingleResponseForReview } from '@/lib/server/responses'
 import { getClassroomGrade } from '@/lib/server/student-dashboard'
 import { getTeacherId } from '@/lib/server/student-dashboard'
 

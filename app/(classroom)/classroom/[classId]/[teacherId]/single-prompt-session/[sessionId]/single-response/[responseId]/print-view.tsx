@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { BiMessageRounded } from 'react-icons/bi'
 import { FaHeart, FaRegHeart } from 'react-icons/fa'
 import RubricDisplay from '@/components/rubric-display'
-import { getSingleResponse } from '@/lib/actions/response.action'
 import { useQuery } from '@tanstack/react-query'
 
 export default function PrintViewBlog({
@@ -19,12 +18,19 @@ export default function PrintViewBlog({
     // Use TanStack Query with initial data
     const { data: currentResponse } = useQuery({
         queryKey: ['response', response.id],
-        queryFn: () => getSingleResponse(response.id, teacherId) as unknown as Response,
+        queryFn: async () => {
+            const res = await fetch(`/api/responses/${response.id}?userId=${teacherId}`);
+            if (!res.ok) {
+                throw new Error('Failed to fetch response');
+            }
+            const data = await res.json();
+            return data.response as Response;
+        },
         initialData: response,
-        refetchOnMount: false,
+        // refetchOnMount: false,
         refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
+        // refetchOnWindowFocus: false,
+        // staleTime: Infinity,
     })
 
     return (

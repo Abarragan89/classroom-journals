@@ -6,7 +6,6 @@ import BlogTableData from './blog-table-data'
 import { PromptSession, Question, User, Response, ResponseData } from '@/types'
 import { responsePercentage } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
-import { getSinglePromptSessionTeacherDashboard } from '@/lib/actions/prompt.session.actions'
 import { ResponseStatus } from '@prisma/client'
 
 export default function MainClientWrapper({
@@ -23,10 +22,16 @@ export default function MainClientWrapper({
     sessionId: string
 }) {
 
-
     const { data: promptSessionData } = useQuery({
         queryKey: ['getSingleSessionData', sessionId],
-        queryFn: () => getSinglePromptSessionTeacherDashboard(sessionId, teacherId) as unknown as PromptSession,
+        queryFn: async () => {
+            const response = await fetch(`/api/prompt-sessions/${sessionId}?teacherId=${teacherId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch prompt session');
+            }
+            const { promptSession } = await response.json();
+            return promptSession as PromptSession;
+        },
         initialData: promptSession,
         // refetchOnMount: false,
         refetchOnReconnect: false,

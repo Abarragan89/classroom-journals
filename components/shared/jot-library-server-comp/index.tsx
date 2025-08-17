@@ -1,4 +1,4 @@
-import { getAllTeacherPrompts } from "@/lib/actions/prompt.actions";
+import { getAllTeacherPrompts } from "@/lib/server/prompts";
 import { Prompt, PromptCategory } from "@/types";
 import JotSearchArea from "@/components/jot-search-area";
 import { getAllClassroomIds } from "@/lib/server/classroom";

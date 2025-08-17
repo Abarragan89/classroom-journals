@@ -6,13 +6,11 @@ import { useActionState, useState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner"
-import { createNewPrompt, getSinglePrompt, updateAPrompt } from "@/lib/actions/prompt.actions";
+import { createNewPrompt, updateAPrompt } from "@/lib/actions/prompt.actions";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox"
-import { getAllClassroomIds } from "@/lib/server/classroom";
 import { Classroom, Prompt, PromptCategory } from "@/types";
 import { addPromptCategory } from "@/lib/actions/prompt.categories";
-import { getAllPromptCategories } from "@/lib/server/student-dashboard";
 import { useSearchParams } from "next/navigation";
 import CategorySection from "./category-section";
 import { Switch } from "@/components/ui/switch"
@@ -20,14 +18,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { CiCircleQuestion } from "react-icons/ci";
 import LoadingAnimation from "@/components/loading-animation";
 
-
-
 interface Question {
     name: string;
     label: string;
     value: string;
 }
-
 
 export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
 
@@ -66,17 +61,48 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     useEffect(() => {
         const fetchClassrooms = async () => {
             if (teacherId) {
-                const classes = await getAllClassroomIds(teacherId); // Fetch classroom IDs
-                const categoryData = await getAllPromptCategories(teacherId) as PromptCategory[]
-                setCategories(categoryData)
-                setClassrooms(classes as Classroom[]);
+                // Create array of promises for parallel execution
+                const promises = [
+                    fetch(`/api/classrooms/ids?teacherId=${teacherId}`), // Fetch classroom IDs
+                    fetch(`/api/prompt-categories?userId=${teacherId}`) // Fetch categories
+                ];
 
+                // Add prompt fetch if editing existing prompt
                 if (existingPromptId) {
-                    const promptData = await getSinglePrompt(existingPromptId, teacherId) as unknown as Prompt
-                    setQuestions([{ name: "question1", label: "Prompt", value: promptData.questions[0].question }])
-                    setEditingPrompt(promptData)
+                    promises.push(fetch(`/api/prompts/${existingPromptId}?teacherId=${teacherId}`));
                 }
-                setIsLoaded(true)
+
+                try {
+                    const results = await Promise.all(promises);
+
+                    // Process classroom data (first result)
+                    const classroomResponse = results[0] as Response;
+                    if (classroomResponse.ok) {
+                        const { classrooms } = await classroomResponse.json();
+                        setClassrooms(classrooms as Classroom[]);
+                    }
+
+                    // Process categories data (second result)
+                    const categoryResponse = results[1] as Response;
+                    if (categoryResponse.ok) {
+                        const { categories: categoryData } = await categoryResponse.json();
+                        setCategories(categoryData as PromptCategory[]);
+                    }
+
+                    // Process prompt data if it exists (third result, optional)
+                    if (existingPromptId && results[2]) {
+                        const promptResponse = results[2] as Response;
+                        if (promptResponse.ok) {
+                            const { prompt: promptData } = await promptResponse.json();
+                            setQuestions([{ name: "question1", label: "Prompt", value: promptData.questions[0].question }]);
+                            setEditingPrompt(promptData as Prompt);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+
+                setIsLoaded(true);
             }
         };
         fetchClassrooms();

@@ -1,6 +1,6 @@
 import { auth } from "@/auth"
 import Header from "@/components/shared/header"
-import { getAllQuips } from "@/lib/actions/quips.action"
+import { getAllQuips } from "@/lib/server/quips"
 import { PromptSession, Session } from "@/types"
 import { ArrowLeftIcon } from "lucide-react"
 import Link from "next/link"

@@ -6,7 +6,6 @@ import TraitFilterCombobox from "@/components/shared/prompt-filter-options/trait
 import PaginationList from "@/components/shared/prompt-filter-options/pagination-list"
 import StudentAssignmentListItem from "./student-assignment-list-item"
 import { PromptCategory, Response } from "@/types"
-import { getFilteredStudentResponses } from "@/lib/actions/response.action"
 
 interface Props {
     initialPrompts: Response[];
@@ -34,8 +33,18 @@ export default function AssignmentSectionClient({
     });
 
     async function getFilteredSearch(filterOptions: SearchOptions) {
-        const filterPrompts = await getFilteredStudentResponses(filterOptions, studentId) as unknown as Response[];
-        setFetchedPrompts(filterPrompts)
+        const response = await fetch(`/api/responses/student/${studentId}/filtered`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(filterOptions)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch filtered student responses');
+        }
+
+        const data = await response.json();
+        setFetchedPrompts(data.responses as Response[]);
     }
 
     useEffect(() => {

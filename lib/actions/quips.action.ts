@@ -124,68 +124,7 @@ export async function createNewQuip(
     }
 }
 
-// get quips by classroom
-export async function getAllQuips(
-    classId: string,
-    userId: string
-) {
-    try {
-        // Authenticate User
-        const session = await requireAuth();
-        if (session?.user?.id !== userId) {
-            throw new Error('Forbidden');
-        }
-
-        const allQuips = await prisma.promptSession.findMany({
-            where: {
-                promptType: PromptType.QUIP,
-                classId,
-            },
-            select: {
-                id: true,
-                questions: true,
-                assignedAt: true,
-                author: {
-                    select: {
-                        username: true,
-                        iv: true,
-                        avatarURL: true,
-                    }
-                },
-                responses: {
-                    select: {
-                        studentId: true
-                    }
-                }
-            },
-            orderBy: {
-                createdAt: 'desc'
-            }
-        })
-
-
-        const decryptedQuips = allQuips.map(quip => ({
-            ...quip,
-            author: {
-                username: decryptText(quip?.author?.username as string, quip?.author?.iv as string),
-                avatarURL: quip?.author?.avatarURL
-            },
-        }))
-
-        return decryptedQuips;
-
-    } catch (error) {
-        if (error instanceof Error) {
-            console.log("Error assigning prompt:", error.message);
-            console.error(error.stack);
-        } else {
-            console.log("Unexpected error:", error);
-        }
-        return { success: false, message: "Error assigning prompt. Try again." };
-    }
-}
-
-// Response to a quip 
+// Response to a quip
 export async function respondToQuip(
     responseText: ResponseData[],
     studentId: string,

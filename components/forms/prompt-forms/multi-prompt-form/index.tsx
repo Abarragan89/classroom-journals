@@ -7,11 +7,10 @@ import { useActionState, useState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner"
-import { createNewPrompt, getSinglePrompt, updateAPrompt } from "@/lib/actions/prompt.actions";
+import { createNewPrompt, updateAPrompt } from "@/lib/actions/prompt.actions";
 import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox"
-import { getAllClassroomIds } from "@/lib/server/classroom";
 import { Classroom, Prompt, PromptCategory } from "@/types";
 import { addPromptCategory } from "@/lib/actions/prompt.categories";
 import CategorySection from "../single-prompt-form/category-section";
@@ -68,38 +67,62 @@ export default function MultiPromptForm({
     useEffect(() => {
         const fetchClassrooms = async () => {
             if (teacherId) {
-                const data = await getAllClassroomIds(teacherId); // Fetch classroom IDs
-                setClassrooms(data as Classroom[]);
+                // Create array of promises for parallel execution
+                const promises = [
+                    fetch(`/api/classrooms/ids?teacherId=${teacherId}`), // Fetch classroom IDs
+                    fetch(`/api/prompt-categories?userId=${teacherId}`),
+                    fetch(`/api/profile/subscription-allowance?teacherId=${teacherId}`)
+                ];
 
-                // Fetch categories via API route
-                const categoryResponse = await fetch(`/api/prompt-categories?userId=${teacherId}`);
-                if (categoryResponse.ok) {
-                    const { categories: categoryData } = await categoryResponse.json();
-                    setCategories(categoryData as PromptCategory[]);
-                }
-
-                // Fetch subscription allowance via API route
-                const subscriptionResponse = await fetch(`/api/profile/subscription-allowance?teacherId=${teacherId}`);
-                if (subscriptionResponse.ok) {
-                    const { subscriptionData } = await subscriptionResponse.json();
-                    setIsTeacherPremium(subscriptionData.isSubscriptionActive as boolean);
-                }
-
-                // Get existing prompt if in search params
+                // Add prompt fetch if editing existing prompt
                 if (existingPromptId) {
-                    const promptData = await getSinglePrompt(existingPromptId, teacherId) as unknown as Prompt
-                    setQuestions(promptData.questions.map((q: { question: string }, index) => ({
-                        name: `question${index + 1}`,
-                        label: `Question ${index + 1}`,
-                        value: q.question || "", // Ensure there's always a value
-                    })));
-                    setEditingPrompt(promptData)
+                    promises.push(fetch(`/api/prompts/${existingPromptId}?teacherId=${teacherId}`));
                 }
-                setIsLoaded(true)
+
+                try {
+                    const results = await Promise.all(promises);
+
+                    // Process classroom data (first result)
+                    const classroomResponse = results[0] as Response;
+                    if (classroomResponse.ok) {
+                        const { classrooms: classroomData } = await classroomResponse.json();
+                        setClassrooms(classroomData as Classroom[]);
+                    }                    // Process categories data (second result)
+                    const categoryResponse = results[1] as Response;
+                    if (categoryResponse.ok) {
+                        const { categories: categoryData } = await categoryResponse.json();
+                        setCategories(categoryData as PromptCategory[]);
+                    }
+
+                    // Process subscription data (third result)
+                    const subscriptionResponse = results[2] as Response;
+                    if (subscriptionResponse.ok) {
+                        const { subscriptionData } = await subscriptionResponse.json();
+                        setIsTeacherPremium(subscriptionData.isSubscriptionActive as boolean);
+                    }
+
+                    // Process prompt data if it exists (fourth result, optional)
+                    if (existingPromptId && results[3]) {
+                        const promptResponse = results[3] as Response;
+                        if (promptResponse.ok) {
+                            const { prompt: promptData } = await promptResponse.json();
+                            setQuestions(promptData.questions.map((q: { question: string }, index: number) => ({
+                                name: `question${index + 1}`,
+                                label: `Question ${index + 1}`,
+                                value: q.question || "", // Ensure there's always a value
+                            })));
+                            setEditingPrompt(promptData as Prompt);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+
+                setIsLoaded(true);
             }
         };
         fetchClassrooms();
-    }, [teacherId]);
+    }, [teacherId, existingPromptId]);
 
 
     // redirect if the state is success

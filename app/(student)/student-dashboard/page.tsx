@@ -2,9 +2,8 @@ import { auth } from "@/auth";
 import Header from "@/components/shared/header";
 import { PromptCategory, Response, Session, StudentRequest } from "@/types";
 import { notFound } from "next/navigation";
-
 import StudentDashClientWrapper from "./student-dash-client-wrapper";
-import { getStudentResponsesDashboard } from "@/lib/actions/response.action";
+import { getStudentResponsesDashboard } from "@/lib/server/responses";
 import { getAllQuipAlerts } from "@/lib/server/alerts";
 import {
     getStudentName,

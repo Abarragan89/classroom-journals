@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import QuipsClientWraper from "./quips-client-wrapper";
-import { getAllQuips } from "@/lib/actions/quips.action";
+import { getAllQuips } from "@/lib/server/quips";
 import { notFound } from "next/navigation";
 import { PromptSession } from "@/types";
 import { ClassUserRole } from "@prisma/client";

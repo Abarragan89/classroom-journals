@@ -4,7 +4,6 @@ import { useState, useRef } from "react"
 import PromptFilterOptions from "./shared/prompt-filter-options"
 import PromptCard from "./shared/prompt-card"
 import { SearchOptions } from "@/types"
-import { getFilterPrompts } from "@/lib/actions/prompt.actions"
 import { Classroom } from "@/types"
 import PaginationList from "./shared/prompt-filter-options/pagination-list"
 
@@ -32,8 +31,26 @@ export default function JotSearchArea({
     });
 
     async function getFilteredSearch(filterOptions: SearchOptions) {
-        const filterPrompts = await getFilterPrompts(filterOptions, teacherId) as unknown as Prompt[]
-        setFetchedPrompts(filterPrompts)
+        try {
+            const queryParams = new URLSearchParams({
+                teacherId: teacherId,
+                category: filterOptions.category || "",
+                searchWords: filterOptions.searchWords || "",
+                filter: filterOptions.filter || "",
+                paginationSkip: filterOptions.paginationSkip.toString()
+            });
+
+            const response = await fetch(`/api/prompts/filtered?${queryParams}`);
+            if (response.ok) {
+                const { prompts } = await response.json();
+                console.log('Fetched prompts:', prompts);
+                setFetchedPrompts(prompts as Prompt[]);
+            } else {
+                console.error('Failed to fetch filtered prompts:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching filtered prompts:', error);
+        }
     }
 
     return (

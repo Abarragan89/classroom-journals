@@ -1,4 +1,4 @@
-import { getSinglePromptSessionTeacherDashboard } from '@/lib/actions/prompt.session.actions';
+import { getSinglePromptSessionTeacherDashboard } from '@/lib/server/prompt-sessions';
 import { PromptSession, Question } from '@/types';
 import React from 'react'
 import ClientQuestionControls from './client-question-controls';

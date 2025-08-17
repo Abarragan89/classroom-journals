@@ -2,7 +2,7 @@ import { User } from "@/types";
 import { PromptSession } from "@/types";
 import { getAllStudents } from "@/lib/server/classroom";
 import EditPromptSessionPopUp from "@/components/modalBtns/edit-prompt-session-popup";
-import { getSinglePromptSessionTeacherDashboard } from '@/lib/actions/prompt.session.actions';
+import { getSinglePromptSessionTeacherDashboard } from "@/lib/server/prompt-sessions";
 import MainClientWrapper from "./main-client-wrapper";
 
 export default async function SinglePromptSession({

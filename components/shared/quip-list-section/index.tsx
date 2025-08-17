@@ -3,7 +3,6 @@ import { PromptSession } from "@/types"
 import QuipListItem from "./quip-list-item"
 import { ClassUserRole } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { getAllQuips } from "@/lib/actions/quips.action";
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import CreateQuipForm from "@/components/forms/quip-forms/create-quip"
@@ -29,7 +28,12 @@ export default function QuipListSection({
     const { data: currentQuips = [] } = useQuery({
         queryKey: ['getAllQuips', classId],
         queryFn: async () => {
-            return await getAllQuips(classId, userId) as unknown as PromptSession[];
+            const response = await fetch(`/api/quips?classId=${classId}&userId=${userId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch quips');
+            }
+            const data = await response.json();
+            return data.quips as PromptSession[];
         },
         initialData: allQuips,
         refetchOnReconnect: false,

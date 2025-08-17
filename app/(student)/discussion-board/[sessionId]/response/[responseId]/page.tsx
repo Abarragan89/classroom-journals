@@ -2,7 +2,7 @@ import BlogMetaDetails from "@/components/blog-meta-details";
 import CommentSection from "@/components/shared/comment-section";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
-import { getSingleResponse } from "@/lib/actions/response.action"
+import { getSingleResponse } from "@/lib/server/responses";
 import { Response, ResponseComment, ResponseData, Session } from "@/types";
 import { auth } from "@/auth";
 import { notFound } from "next/navigation";

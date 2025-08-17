@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import React from 'react'
 import StudentProfileClientWrapper from './student-profile-client-wrapper'
 import { getStudentRequests } from '@/lib/server/student-dashboard'
-import { getSingleStudentResponses } from '@/lib/actions/response.action'
+import { getSingleStudentResponses } from '@/lib/server/responses'
 import MyWorkClientWrapper from './my-work-client-wrapper'
 import { Separator } from '@/components/ui/separator'
 

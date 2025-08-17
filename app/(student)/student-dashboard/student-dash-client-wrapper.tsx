@@ -10,7 +10,6 @@ import AssignmentSectionClient from './assignement-section.client';
 import { useQuery } from '@tanstack/react-query';
 import { getStudentRequests } from '@/lib/server/student-dashboard';
 import { useState } from 'react';
-import { getStudentResponsesDashboard } from '@/lib/actions/response.action';
 import { formatDateLong } from '@/lib/utils';
 import QuipLink from './quip-link';
 
@@ -39,7 +38,14 @@ export default function StudentDashClientWrapper({
   // Get the prompt sessions
   const { data: allResponseData } = useQuery({
     queryKey: ['getAllStudentResponses', classroomId],
-    queryFn: () => getStudentResponsesDashboard(studentId) as unknown as { responses: Response[], totalCount: number },
+    queryFn: async () => {
+      const response = await fetch(`/api/responses/student/${studentId}/dashboard`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch student responses dashboard');
+      }
+      const data = await response.json();
+      return data as { responses: Response[], totalCount: number };
+    },
     initialData: allResponses,
     // refetchOnMount: false,
     refetchOnReconnect: false,
@@ -100,11 +106,11 @@ export default function StudentDashClientWrapper({
 
   const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'username'))
   const lastestTaskToDo = allResponseData?.responses.find(res => res.completionStatus === 'INCOMPLETE' || res.completionStatus === 'RETURNED')
-  
+
   function handleRequestUIHandler() {
     setHasSentPromptRequest(true)
   }
-  
+
   return (
     <>
       {lastestTaskToDo && (
