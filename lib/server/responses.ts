@@ -322,7 +322,7 @@ export async function getFilteredStudentResponses(filterOptions: SearchOptions, 
         select: {
             id: true,
             studentId: true,
-            submittedAt: true,
+            completionStatus: true,
             createdAt: true,
             promptSession: {
                 select: {
@@ -330,6 +330,7 @@ export async function getFilteredStudentResponses(filterOptions: SearchOptions, 
                     title: true,
                     createdAt: true,
                     promptType: true,
+                    areGradesVisible: true,
                     prompt: {
                         select: {
                             category: {

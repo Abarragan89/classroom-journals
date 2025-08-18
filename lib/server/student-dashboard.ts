@@ -47,6 +47,7 @@ export async function getAllPromptCategories(userId: string) {
 
 // Get classroom Grade for AI
 export async function getClassroomGrade(classroomId: string) {
+    
     const session = await requireAuth();
     if (session?.classroomId !== classroomId) {
         throw new Error("Forbidden");
@@ -163,7 +164,7 @@ export async function getFeaturedBlogs(classroomId: string) {
 // Get student Requests
 export async function getStudentRequests(studentId: string) {
     const session = await requireAuth();
-    
+
     if (session?.user?.id !== studentId) {
         throw new Error("Forbidden");
     }

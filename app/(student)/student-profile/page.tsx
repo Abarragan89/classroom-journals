@@ -25,6 +25,8 @@ export default async function StudentProfile() {
     const classId = session?.classroomId as string
     const teacherId = session?.teacherId as string
 
+    console.log('classId', classId, 'teacherId', teacherId)
+
     if (!classId) return notFound()
 
     const studentData = await getSingleStudentInformation(studentId, classId)

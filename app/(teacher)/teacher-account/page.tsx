@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { notFound } from "next/navigation";
 import { Session, User } from "@/types";
-import { getTeacherAccountData } from "@/lib/actions/profile.action";
+import { getTeacherAccountData } from "@/lib/server/profile";
 import AccountClientWrapper from "./account-client-wrapper";
 
 export default async function PromptLibraryPage() {
