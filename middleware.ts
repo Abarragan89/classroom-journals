@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
             script-src 'self' 'nonce-${nonce}' https://cdn.jsdelivr.net https://vercel.live/_next-live/feedback/;
             style-src 'self' 'unsafe-inline';
             img-src 'self' blob: data: https://unfinished-pages.s3.us-east-2.amazonaws.com https://*.googleusercontent.com https://*.yahoo.com https://*.outlook.com https://authjs.dev/;
-            font-src 'self';
+            font-src 'self' data:;
             object-src 'none';
             base-uri 'self';
             form-action 'self';

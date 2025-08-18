@@ -2,7 +2,6 @@
 import { Bell, LayoutDashboard, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
-// import { getUnreadUserNotifications } from '@/lib/actions/notifications.action';
 import { useQuery } from '@tanstack/react-query';
 
 
@@ -36,13 +35,13 @@ export default function StudentNavLinks({
         <>
 
             <Link href={`/student-dashboard`} className={`
-            flex-center hover:cursor-pointer hover:text-foreground text-sm
+            flex-start hover:cursor-pointer hover:text-foreground text-sm
             ${pathname === 'student-dashboard' ? 'text-foreground underline' : 'text-accent'}  
             `}>
                 <LayoutDashboard size={16} className='mr-1' />Dashboard
             </Link>
             <Link href={`/student-profile`} className={`
-                flex-center hover:cursor-pointer hover:text-foreground min-w-[90px] text-sm
+                flex-center hover:cursor-pointer hover:text-foreground text-sm
                 ${pathname === 'student-profile' ? 'text-foreground underline' : 'text-accent'}    
                 `}>
                 <User size={17} className='mr-1' />Profile
