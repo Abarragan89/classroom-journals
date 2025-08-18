@@ -1,7 +1,7 @@
 "use server"
 import { prisma } from "@/db/prisma";
 import { promptSchema } from "../validators";
-import { SearchOptions, Question, Prompt } from "@/types";
+import { Question, Prompt } from "@/types";
 import { ClassUserRole, Prisma, PromptSessionStatus, PromptType, ResponseStatus } from '@prisma/client';
 import { requireAuth } from "./authorization.action";
 

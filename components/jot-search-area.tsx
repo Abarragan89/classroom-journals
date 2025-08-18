@@ -43,7 +43,6 @@ export default function JotSearchArea({
             const response = await fetch(`/api/prompts/filtered?${queryParams}`);
             if (response.ok) {
                 const { prompts } = await response.json();
-                console.log('Fetched prompts:', prompts);
                 setFetchedPrompts(prompts as Prompt[]);
             } else {
                 console.error('Failed to fetch filtered prompts:', response.statusText);

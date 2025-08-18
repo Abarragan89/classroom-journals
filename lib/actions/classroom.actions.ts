@@ -2,7 +2,6 @@
 import { prisma } from "@/db/prisma";
 import { classSchema } from "../validators";
 import { generateClassCode } from "../utils";
-import { decryptText } from "../utils";
 import { ClassUserRole } from "@prisma/client";
 import { requireAuth } from "./authorization.action";
 

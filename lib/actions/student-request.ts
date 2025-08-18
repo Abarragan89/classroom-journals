@@ -1,6 +1,6 @@
 "use server"
 import { prisma } from "@/db/prisma"
-import { decryptText, encryptText } from "../utils"
+import { encryptText } from "../utils"
 import { Question } from "@/types"
 import { Prisma, PromptType, StudentRequestStatus, StudentRequestType } from "@prisma/client"
 import { requireAuth } from "./authorization.action"

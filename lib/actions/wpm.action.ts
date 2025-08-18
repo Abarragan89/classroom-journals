@@ -1,6 +1,5 @@
 "use server";
 import { prisma } from "@/db/prisma";
-import { decryptText } from "../utils";
 import { requireAuth } from "./authorization.action";
 
 // Update Word per minute score
