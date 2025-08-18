@@ -4,7 +4,7 @@ import { SearchOptions } from '@/types';
 
 export async function POST(
     request: NextRequest,
-    { params }: { params: { studentId: string } }
+    { params }: { params: Promise<{ studentId: string }> }
 ) {
     try {
         const { studentId } = await params;

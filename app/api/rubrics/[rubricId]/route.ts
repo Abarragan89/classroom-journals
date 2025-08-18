@@ -3,7 +3,7 @@ import { getRubricById } from '@/lib/server/rubrics';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { rubricId: string } }
+    { params }: { params: Promise<{ rubricId: string }> }
 ) {
     try {
         const { rubricId } = await params;
