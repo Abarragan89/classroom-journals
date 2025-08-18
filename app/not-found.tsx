@@ -2,6 +2,7 @@
 import { APP_NAME } from "@/lib/constants"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import { signOutUser } from "@/lib/actions/auth.action"
 
 export default function NotFoundPage() {
     return (
@@ -19,6 +20,9 @@ export default function NotFoundPage() {
                 <p className="text-destructive">Cound not find requested page</p>
                 <Button variant='outline' className="mt-4 ml-2" onClick={() => (window.location.href = '/')}>
                     Back To Home
+                </Button>
+                <Button variant='outline' className="mt-4 ml-2" onClick={signOutUser}>
+                    Sign Out
                 </Button>
             </div>
         </div>
