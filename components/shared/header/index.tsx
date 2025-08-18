@@ -29,7 +29,7 @@ export default function Header({
                             alt={`${APP_NAME} logo`}
                             height={50}
                             width={50}
-                            priority={true}
+                            priority
                             className="rounded-2xl"
                         />
                     </Link>
