@@ -160,6 +160,7 @@ export interface Session {
     refreshToken: string;
     iv: string;
     classroomId?: string;
+    teacherId?: string;
 }
 
 export interface CommentLike {

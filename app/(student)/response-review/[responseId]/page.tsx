@@ -10,7 +10,6 @@ import ReviewWrapper from './review-wrapper'
 import { determineSubscriptionAllowance } from '@/lib/server/profile'
 import { getSingleResponseForReview } from '@/lib/server/responses'
 import { getClassroomGrade } from '@/lib/server/student-dashboard'
-import { getTeacherId } from '@/lib/server/student-dashboard'
 
 export default async function ResponseReview({
     params
@@ -22,15 +21,16 @@ export default async function ResponseReview({
 
     if (!session) return notFound()
 
-    const classroomId = session?.classroomId
 
     const studentId = session?.user?.id as string
     if (session?.user?.role !== 'STUDENT' || !studentId) {
         return notFound()
     }
 
+    const classroomId = session?.classroomId
+    const teacherId = session?.teacherId
+    
     const { responseId } = await params
-    const teacherId = await getTeacherId(classroomId as string)
 
     const singleResponse = await getSingleResponseForReview(responseId, studentId) as unknown as Response
     const { isPremiumTeacher } = await determineSubscriptionAllowance(teacherId as string)

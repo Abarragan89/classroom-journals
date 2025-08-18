@@ -49,16 +49,6 @@ export async function getSingleStudentInformation(studentId: string, classId: st
         throw new Error('Student not found');
     }
 
-    const teacherId = await prisma.classUser.findFirst({
-        where: {
-            classId,
-            role: "TEACHER"
-        },
-        select: {
-            userId: true,
-        }
-    });
-
     const decryptedStudentInfo = {
         ...studentInfo,
         username: decryptText(studentInfo.username as string, studentInfo.iv as string),
@@ -68,6 +58,5 @@ export async function getSingleStudentInformation(studentId: string, classId: st
 
     return {
         studentInfo: decryptedStudentInfo,
-        teacherId: teacherId?.userId
     };
 }

@@ -4,35 +4,6 @@ import { ClassUserRole, ResponseStatus } from "@prisma/client"
 import { decryptText } from "../utils"
 import { ResponseData } from "@/types"
 
-export async function getTeacherId(classroomId: string) {
-    if (!classroomId) {
-        throw new Error("Missing classroomId")
-    }
-
-    // Auth check
-    const session = await requireAuth()
-    if (session?.classroomId !== classroomId) {
-        throw new Error("Forbidden")
-    }
-
-    // Query DB
-    const teacher = await prisma.classUser.findFirst({
-        where: {
-            classId: classroomId,
-            role: ClassUserRole.TEACHER,
-        },
-        select: {
-            userId: true,
-        },
-    })
-
-    if (!teacher) {
-        throw new Error("Teacher not found")
-    }
-
-    return teacher.userId
-}
-
 export async function getStudentName(studentId: string) {
     if (!studentId) {
         throw new Error("Missing studentId")
@@ -192,6 +163,7 @@ export async function getFeaturedBlogs(classroomId: string) {
 // Get student Requests
 export async function getStudentRequests(studentId: string) {
     const session = await requireAuth();
+    
     if (session?.user?.id !== studentId) {
         throw new Error("Forbidden");
     }

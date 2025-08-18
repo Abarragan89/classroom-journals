@@ -2,7 +2,6 @@
 import RequestNewUsername from '@/components/modalBtns/request-new-username';
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { getStudentRequests } from '@/lib/server/student-dashboard';
 import { StudentRequest, User } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -21,21 +20,29 @@ export default function StudentProfileClientWrapper({
 }) {
 
     // Get the student requests
-    const { data: studentRequestData } = useQuery({
-        queryKey: ['getStudentUsernameRequests', classId],
-        queryFn: async () => {
-            const requests = await getStudentRequests(studentInfo?.id) as unknown as StudentRequest[]
-            setHasSentUsernameRequest(requests?.some(req => req.type === 'username'))
-            return requests
-        },
-        initialData: studentRequests,
-        // refetchOnMount: false,
-        refetchOnReconnect: false,
-        // refetchOnWindowFocus: false,
-        // staleTime: Infinity,
-    })
+    // const { data: studentRequestData } = useQuery({
+    //     queryKey: ['getStudentUsernameRequests', classId],
+    //     queryFn: async () => {
+    //         const response = await fetch(`/api/student-requests/student/${studentInfo?.id}`);
+    //         console.log('studentRequestData before', response);
+    //         if (!response.ok) {
+    //             throw new Error('Failed to fetch student requests');
+    //         }
+    //         const data = await response.json();
+    //         console.log('studentRequestData', data);
+    //         const requests = data.studentRequests as StudentRequest[];
+    //         setHasSentUsernameRequest(requests?.some(req => req.type === 'username'))
+    //         return requests
+    //     },
+    //     initialData: studentRequests,
+    //     // refetchOnMount: false,
+    //     refetchOnReconnect: false,
+    //     // refetchOnWindowFocus: false,
+    //     // staleTime: Infinity,
+    // })
 
-    const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'prompt'))
+    // const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'prompt'))
+    const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(studentRequests?.some(req => req.type === 'prompt'))
 
     function handleRequestUIHandler() {
         setHasSentUsernameRequest(true)

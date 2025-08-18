@@ -7,7 +7,6 @@ import { getStudentResponsesDashboard } from "@/lib/server/responses";
 import { getAllQuipAlerts } from "@/lib/server/alerts";
 import {
     getStudentName,
-    getTeacherId,
     getAllPromptCategories,
     getFeaturedBlogs,
     getStudentRequests
@@ -17,6 +16,7 @@ import {
 export default async function StudentDashboard() {
 
     const session = await auth() as Session
+
     if (!session) return notFound()
 
     const studentId = session?.user?.id as string
@@ -27,26 +27,25 @@ export default async function StudentDashboard() {
     const classroomId = session?.classroomId
     if (!classroomId) return notFound()
 
-    // STEP 1: Get dependencies first (run in parallel)
-    const [studentName, teacherId] = await Promise.all([
-        getStudentName(studentId),
-        getTeacherId(classroomId)
-    ]);
+    const teacherId = session?.teacherId
+    if (!teacherId) return notFound()
 
 
-    // STEP 2: Get all remaining data in parallel
+    // Get all remaining data in parallel
     const [
         allPromptCategories,
         allResponses,
         featuredBlogs,
         studentRequests,
-        quipAlerts
+        quipAlerts,
+        studentName
     ] = await Promise.all([
         getAllPromptCategories(teacherId as string),
         getStudentResponsesDashboard(studentId),
         getFeaturedBlogs(classroomId),
         getStudentRequests(studentId),
-        getAllQuipAlerts(studentId)
+        getAllQuipAlerts(studentId),
+        getStudentName(studentId)
     ]);
 
     return (

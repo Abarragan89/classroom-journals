@@ -22,13 +22,14 @@ export default async function StudentProfile() {
         return notFound()
     }
 
-    const classId = session?.classroomId
+    const classId = session?.classroomId as string
+    const teacherId = session?.teacherId as string
+
     if (!classId) return notFound()
 
     const studentData = await getSingleStudentInformation(studentId, classId)
     const studentInfo = studentData.studentInfo as unknown as User
     const studentRequests = await getStudentRequests(studentInfo?.id) as unknown as StudentRequest[]
-    const teacherId = studentData.teacherId as unknown as string
     const studentResponses = await getSingleStudentResponses(studentId) as unknown as Response[]
 
 

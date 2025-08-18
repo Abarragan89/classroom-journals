@@ -6,7 +6,6 @@ import MultipleQuestionEditor from "@/components/shared/prompt-response-editor/m
 import SinglePromptEditor from "@/components/shared/prompt-response-editor/single-question-editor";
 import { determineSubscriptionAllowance } from "@/lib/server/profile";
 import { getClassroomGrade } from "@/lib/server/student-dashboard";
-import { getTeacherId } from "@/lib/server/student-dashboard";
 import { getSingleResponseForReview } from "@/lib/server/responses";
 
 export default async function StudentDashboard({
@@ -23,14 +22,12 @@ export default async function StudentDashboard({
     if (session?.user?.role !== 'STUDENT' || !studentId) {
         return notFound()
     }
-
     const classroomId = session?.classroomId
+    const teacherId = session?.teacherId
 
     const { responseId } = await params
 
     const studentResponse = await getSingleResponseForReview(responseId, studentId) as unknown as Response
-
-    const teacherId = await getTeacherId(classroomId as string)
     const { isPremiumTeacher } = await determineSubscriptionAllowance(teacherId as string)
     const grade = await getClassroomGrade(classroomId as string)
 
