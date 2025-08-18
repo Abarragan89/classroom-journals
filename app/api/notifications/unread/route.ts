@@ -1,4 +1,3 @@
-// app/api/notifications/unread/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getUnreadUserNotifications } from "@/lib/server/notifications";
 

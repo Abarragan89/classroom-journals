@@ -8,7 +8,6 @@ import { PromptCategory, StudentRequest, Response, ResponseData } from '@/types'
 import Link from 'next/link';
 import AssignmentSectionClient from './assignement-section.client';
 import { useQuery } from '@tanstack/react-query';
-import { getStudentRequests } from '@/lib/server/student-dashboard';
 import { useState } from 'react';
 import { formatDateLong } from '@/lib/utils';
 import QuipLink from './quip-link';
@@ -57,9 +56,14 @@ export default function StudentDashClientWrapper({
   const { data: studentRequestData } = useQuery({
     queryKey: ['getStudentRequests', classroomId],
     queryFn: async () => {
-      const requests = await getStudentRequests(studentId) as unknown as StudentRequest[]
-      setHasSentPromptRequest(requests?.some(req => req.type === 'prompt'))
-      return requests
+      const response = await fetch(`/api/student-requests/student/${studentId}?classroomId=${classroomId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch student requests');
+      }
+      const { studentRequests } = await response.json();
+      console.log('Student Requests:', studentRequests);
+      setHasSentPromptRequest(studentRequests?.some((req: StudentRequest) => req.type === 'prompt'))
+      return studentRequests
     },
     initialData: studentRequests,
     // refetchOnMount: false,
@@ -104,7 +108,7 @@ export default function StudentDashClientWrapper({
     // staleTime: Infinity,
   })
 
-  const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'username'))
+  const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(studentRequestData?.some((req: StudentRequest) => req.type === 'username'))
   const lastestTaskToDo = allResponseData?.responses.find(res => res.completionStatus === 'INCOMPLETE' || res.completionStatus === 'RETURNED')
 
   function handleRequestUIHandler() {
