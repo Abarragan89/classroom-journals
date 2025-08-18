@@ -3,7 +3,7 @@ import { getRubricGradesForResponse } from '@/lib/server/rubrics';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { responseId: string } }
+    { params }: { params: Promise<{ responseId: string }> }
 ) {
     try {
         const { responseId } = await params;

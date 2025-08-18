@@ -3,7 +3,7 @@ import { getStudentResponsesDashboard } from '@/lib/server/responses';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { studentId: string } }
+    { params }: { params: Promise<{ studentId: string }> }
 ) {
     try {
 
