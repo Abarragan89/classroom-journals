@@ -3,7 +3,7 @@ import { getSinglePrompt } from "@/lib/server/prompts";
 
 export async function GET(
     req: NextRequest,
-    { params }: { params: { promptId: string } }
+    { params }: { params: Promise<{ promptId: string }> }
 ) {
     try {
         const { promptId } = await params;
