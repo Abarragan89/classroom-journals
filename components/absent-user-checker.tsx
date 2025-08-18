@@ -73,7 +73,7 @@ export default function AbsentUserChecker() {
         onActive,
         onAction,
         // timeout: 600_000, // 10 min
-        timeout: 60, // 10 min
+        timeout: 600_000, // 10 min
         throttle: 1000,
     })
 
