@@ -13,24 +13,27 @@ import StudentRosterRow from "@/components/shared/student-roster-row";
 import PringLoginBtn from "@/components/buttons/print-login";
 import PrintViewLogins from "./print-view-logins";
 import { prisma } from "@/db/prisma";
+import { notFound } from "next/navigation";
 
 export default async function Roster({
   params
 }: {
   params: Promise<{ classId: string, teacherId: string }>
 }) {
+  const session = await auth() as Session;
+  // return not found 
+  if (!session) return notFound();
 
   const { classId, teacherId } = await params;
 
-  const studentRoster = (await getAllStudents(classId, teacherId)) as unknown as User[];
-  const classCode = await prisma.classroom.findUnique({
-    where: { id: classId },
-    select: {
-      classCode: true
-    }
-  })
+  const [studentRoster, classCode] = await Promise.all([
+    getAllStudents(classId, teacherId) as unknown as User[],
+    prisma.classroom.findUnique({
+      where: { id: classId },
+      select: { classCode: true }
+    })
+  ]);   
 
-  const session = await auth() as Session;
 
   return (
     <>

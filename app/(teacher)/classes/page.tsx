@@ -9,11 +9,9 @@ import UpgradeAccountBtn from "@/components/buttons/upgrade-account-btn";
 export default async function Classes() {
 
     const session = await auth() as Session
-
     if (!session) return notFound()
 
     const teacherId = session?.user?.id as string
-
     if (!teacherId || session?.user?.role !== 'TEACHER') return notFound()
 
     const allClassrooms = await getAllClassrooms(teacherId) as Class[];

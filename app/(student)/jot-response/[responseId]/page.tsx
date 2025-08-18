@@ -27,9 +27,11 @@ export default async function StudentDashboard({
 
     const { responseId } = await params
 
-    const studentResponse = await getSingleResponseForReview(responseId, studentId) as unknown as Response
-    const { isPremiumTeacher } = await determineSubscriptionAllowance(teacherId as string)
-    const grade = await getClassroomGrade(classroomId as string)
+    const [studentResponse, { isPremiumTeacher }, grade] = await Promise.all([
+        getSingleResponseForReview(responseId, studentId) as unknown as Response,
+        determineSubscriptionAllowance(teacherId as string),
+        getClassroomGrade(classroomId as string)
+    ])
 
     return (
         <div>

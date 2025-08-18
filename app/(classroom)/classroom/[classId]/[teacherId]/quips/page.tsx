@@ -12,7 +12,6 @@ export default async function Quips({
 }) {
 
     const { classId, teacherId } = await params;
-
     const session = await auth();
 
     if (session?.user?.id !== teacherId) {

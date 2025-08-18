@@ -19,8 +19,10 @@ export default async function StudentNotifications() {
     const classId = session?.classroomId
     if (!classId) return notFound()
 
-    const studentHighScore = await getUserWPM(studentId) as number
-    const classTopTypers = await getWPMClassHighScores(classId, studentId) as User[]
+    const [studentHighScore, classTopTypers] = await Promise.all([
+        getUserWPM(studentId) as unknown as number,
+        getWPMClassHighScores(classId, studentId) as unknown as User[]
+    ])
 
     return (
         <>

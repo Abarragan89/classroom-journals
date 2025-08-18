@@ -20,9 +20,10 @@ export default async function StudentNotifications() {
     const classId = session?.classroomId
     if (!classId) return notFound()
 
-    const userNotifications = await getUserNotifications(studentId, classId) as unknown as UserNotification[]
-
-    if (userNotifications.length > 0) await markAllNotificationsAsRead(studentId, classId)
+    const [userNotifications] = await Promise.all([
+        getUserNotifications(studentId, classId) as unknown as UserNotification[],
+        markAllNotificationsAsRead(studentId, classId)
+    ])
 
 
     return (

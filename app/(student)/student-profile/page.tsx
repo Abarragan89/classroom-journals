@@ -25,11 +25,8 @@ export default async function StudentProfile() {
     const classId = session?.classroomId as string
     const teacherId = session?.teacherId as string
 
-    console.log('classId', classId, 'teacherId', teacherId)
-
     if (!classId) return notFound()
 
-    // 🔥 FIX: Use Promise.all and handle data properly
     const [
         studentData,
         studentRequests,
@@ -42,7 +39,6 @@ export default async function StudentProfile() {
 
     const studentInfo = studentData.studentInfo as unknown as User;
 
-    // 🔥 FIX: Add safety checks
     if (!studentInfo || !studentRequests || !studentResponses) {
         console.error('Missing data:', { studentInfo, studentRequests, studentResponses });
         return notFound();

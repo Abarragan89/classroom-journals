@@ -29,12 +29,14 @@ export default async function ResponseReview({
 
     const classroomId = session?.classroomId
     const teacherId = session?.teacherId
-    
+
     const { responseId } = await params
 
-    const singleResponse = await getSingleResponseForReview(responseId, studentId) as unknown as Response
-    const { isPremiumTeacher } = await determineSubscriptionAllowance(teacherId as string)
-    const grade = await getClassroomGrade(classroomId as string)
+    const [singleResponse, { isPremiumTeacher }, grade] = await Promise.all([
+        getSingleResponseForReview(responseId, studentId) as unknown as Response,
+        determineSubscriptionAllowance(teacherId as string),
+        getClassroomGrade(classroomId as string)
+    ])
 
     return (
         <div>

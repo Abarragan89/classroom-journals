@@ -23,10 +23,10 @@ export default async function ClassroomQuips() {
         return notFound()
     }
 
-    const allQuips = await getAllQuips(classroomId, studentId) as unknown as PromptSession[]
-
-    // clear all alerts when user gets to this page
-    await clearAllQuipAlerts(studentId)
+    const [allQuips] = await Promise.all([
+        getAllQuips(classroomId, studentId) as unknown as PromptSession[],
+        clearAllQuipAlerts(studentId)
+    ])
 
     return (
         <>
