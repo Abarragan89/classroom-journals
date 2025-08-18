@@ -23,7 +23,7 @@ export async function signInWithMagicLink(prevState: unknown, formData: FormData
 // Sign in with google 
 export async function signInWithGoogle() {
     try {
-        await signIn("google")
+        await signIn("google", {redirectTo: '/classes'})
         return { success: true, message: 'Signed in successfully' }
     } catch (error) {
         // redirect is part of the normal flow and this lets Auth handle the redirect without crashing
