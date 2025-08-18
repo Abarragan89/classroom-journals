@@ -10,7 +10,7 @@ export async function GET(
 
         const studentRequests = await getStudentRequests(studentId);
 
-        return NextResponse.json(studentRequests);
+        return NextResponse.json({ studentRequests });
     } catch (error) {
         console.error('Error fetching student requests:', error);
 

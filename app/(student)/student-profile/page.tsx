@@ -29,26 +29,42 @@ export default async function StudentProfile() {
 
     if (!classId) return notFound()
 
-    const studentData = await getSingleStudentInformation(studentId, classId)
-    const studentInfo = studentData.studentInfo as unknown as User
-    const studentRequests = await getStudentRequests(studentInfo?.id) as unknown as StudentRequest[]
-    const studentResponses = await getSingleStudentResponses(studentId) as unknown as Response[]
+    // 🔥 FIX: Use Promise.all and handle data properly
+    const [
+        studentData,
+        studentRequests,
+        studentResponses
+    ] = await Promise.all([
+        getSingleStudentInformation(studentId, classId),
+        getStudentRequests(studentId),
+        getSingleStudentResponses(studentId)
+    ]);
+
+    const studentInfo = studentData.studentInfo as unknown as User;
+
+    // 🔥 FIX: Add safety checks
+    if (!studentInfo || !studentRequests || !studentResponses) {
+        console.error('Missing data:', { studentInfo, studentRequests, studentResponses });
+        return notFound();
+    }
 
 
     return (
         <>
             <Header session={session} studentId={studentId} />
             <main className="wrapper">
-                <StudentProfileClientWrapper
-                    studentInfo={studentInfo}
-                    studentRequests={studentRequests}
-                    classId={classId}
-                    teacherId={teacherId}
-                />
+                <div suppressHydrationWarning>
+                    <StudentProfileClientWrapper
+                        studentInfo={studentInfo}
+                        studentRequests={studentRequests as unknown as StudentRequest[]}
+                        classId={classId}
+                        teacherId={teacherId}
+                    />
+                </div>
                 <Separator className='mt-10 mb-9' />
                 <h2 className='h3-bold'>My Work</h2>
                 <MyWorkClientWrapper
-                    studentResponses={studentResponses}
+                    studentResponses={studentResponses as unknown as Response[]}
                     studentId={studentId}
 
                 />

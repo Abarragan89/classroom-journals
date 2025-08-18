@@ -24,25 +24,22 @@ export default function StudentProfileClientWrapper({
         queryKey: ['getStudentUsernameRequests', classId],
         queryFn: async () => {
             const response = await fetch(`/api/student-requests/student/${studentInfo?.id}`);
-            console.log('studentRequestData before', response);
             if (!response.ok) {
                 throw new Error('Failed to fetch student requests');
             }
             const data = await response.json();
-            console.log('studentRequestData', data);
             const requests = data.studentRequests as StudentRequest[];
-            setHasSentUsernameRequest(requests?.some(req => req.type === 'username'))
+            setHasSentUsernameRequest(requests?.some(req => req.type === 'USERNAME') || false);
             return requests
         },
         initialData: studentRequests,
-        // refetchOnMount: false,
         refetchOnReconnect: false,
-        // refetchOnWindowFocus: false,
-        // staleTime: Infinity,
     })
 
-    // const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'prompt'))
-    const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'prompt'))
+    // 🔥 FIX: Initialize state properly
+    const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(
+        Array.isArray(studentRequests) ? studentRequestData.some(req => req.type === 'USERNAME') : false
+    )
 
     function handleRequestUIHandler() {
         setHasSentUsernameRequest(true)
