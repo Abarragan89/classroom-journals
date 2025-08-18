@@ -74,13 +74,6 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                         A modern tool for teachers to manage student writing. Let AI grade student essays and journals using <span className="font-bold text-accent">your custom rubrics</span>, auto-grade assessments, and turn student essays into sharable blogs!
                     </p>
 
-                    {/* New AI Rubric Feature Highlight */}
-                    {/* <div className="bg-card border border-accent rounded-lg p-4 max-w-2xl mx-auto mb-6">
-                        <p className="font-semibold mb-2">🚀 NEW: AI Rubric Grading!</p>
-                        <p className="text-sm text-primary">
-                            Upload your custom rubrics and let AI grade essays instantly. Save hours while maintaining your teaching standards.
-                        </p>
-                    </div> */}
                     <div className="flex justify-center gap-4 flex-wrap">
                         <Link href="/sign-in">
                             <Button size="lg">Get Started</Button>
@@ -97,6 +90,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                             height={15}
                             alt='Google Classroom Logo'
                             className="rounded-lg"
+                            priority
                         />
                     </div>
                 </section>
@@ -112,6 +106,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 height={225}
                                 alt="AI rubric grading screenshot"
                                 className="rounded-lg mb-4 w-full h-auto"
+                                priority
                             />
                             <h3 className="text-xl font-semibold mb-3">AI Rubric Grading</h3>
                             <p className="text-primary flex-grow">Create custom rubrics and let AI grade student essays and journals instantly. Maintain your teaching standards while saving hours of grading time!</p>
@@ -127,6 +122,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 height={225}
                                 alt="assessment data screenshot"
                                 className="rounded-lg w-full h-auto"
+                                priority
                             />
                         </div>
 
@@ -138,6 +134,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 height={225}
                                 alt="featured blogs screenshot"
                                 className="rounded-lg mb-4 w-full h-auto"
+                                priority
                             />
                             <h3 className="text-xl font-semibold mb-3">Sharable Blogs</h3>
                             <p className="text-primary flex-grow">
@@ -155,6 +152,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 height={225}
                                 alt="student text-editor screenshot"
                                 className="rounded-lg w-full h-auto"
+                                priority
                             />
                         </div>
 
@@ -166,6 +164,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 height={225}
                                 alt="quip demo screenshot"
                                 className="rounded-lg mb-4 w-full h-auto"
+                                priority
                             />
                             <h3 className="text-xl font-semibold mb-3">Quick Quips</h3>
                             <p className="text-primary flex-grow">Quick, Twitter-style prompts where students respond without seeing others&apos; answers first. Perfect for instant engagement and honest feedback!</p>
