@@ -1,5 +1,5 @@
 import MyRubricSection from "@/components/shared/my-rubrics-section"
-import { getRubricsByTeacherId } from "@/lib/actions/rubric.actions"
+import { getRubricsByTeacherId } from "@/lib/server/rubrics";
 import { Rubric } from "@/types"
 
 export default async function Jots({

@@ -1,4 +1,5 @@
-import { getTeacherRequests, markAllRequestsAsViewed } from "@/lib/actions/student-request"
+import { markAllRequestsAsViewed } from "@/lib/actions/student-request"
+import { getTeacherRequests } from "@/lib/server/student-requests";
 import StudentRequestSection from "./student-request-section";
 import { StudentRequest } from "@/types";
 import { notFound } from "next/navigation";

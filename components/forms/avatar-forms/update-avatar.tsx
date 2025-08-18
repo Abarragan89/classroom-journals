@@ -1,7 +1,6 @@
 "use client"
 import LoadingAnimation from "@/components/loading-animation";
 import { updateUserAvatar } from "@/lib/actions/profile.action";
-import { getAllAvatarPhotos } from "@/lib/actions/s3-upload";
 import { BlogImage } from "@/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -31,10 +30,14 @@ export default function UpdateAvatar({
         if (allAvatarPhotos !== null) return
         try {
             setIsLoadingPhotos(true)
-            const photos = await getAllAvatarPhotos() as BlogImage[]
-            setAllAvatarPhotos(photos)
+            const response = await fetch('/api/images/avatars');
+            if (!response.ok) {
+                throw new Error('Failed to fetch avatar photos');
+            }
+            const data = await response.json();
+            setAllAvatarPhotos(data.avatars);
         } catch (error) {
-            console.log('error getting blog photos ', error)
+            console.log('error getting avatar photos ', error)
         } finally {
             setIsLoadingPhotos(false)
         }

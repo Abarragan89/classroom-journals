@@ -1,6 +1,6 @@
 import { auth } from '@/auth'
 import Header from '@/components/shared/header'
-import { getSingleStudentInformation } from '@/lib/actions/roster.action'
+import { getSingleStudentInformation } from '@/lib/server/roster'
 import { Session, StudentRequest, User, Response } from '@/types'
 import { notFound } from 'next/navigation'
 import React from 'react'
@@ -26,9 +26,7 @@ export default async function StudentProfile() {
     if (!classId) return notFound()
 
     const studentData = await getSingleStudentInformation(studentId, classId)
-    const studentInfo = studentData.data as unknown as User
-
-
+    const studentInfo = studentData.studentInfo as unknown as User
     const studentRequests = await getStudentRequests(studentInfo?.id) as unknown as StudentRequest[]
     const teacherId = studentData.teacherId as unknown as string
     const studentResponses = await getSingleStudentResponses(studentId) as unknown as Response[]

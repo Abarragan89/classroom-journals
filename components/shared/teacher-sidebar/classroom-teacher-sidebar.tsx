@@ -23,7 +23,6 @@ import {
   Inbox,
   Grid3x3
 } from "lucide-react"
-import { getStudentRequestCount } from "@/lib/actions/student-request"
 import { useQuery } from "@tanstack/react-query"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & { classes: Classroom[] }) {
@@ -54,7 +53,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
 
   const { data: studentRequestCount } = useQuery({
     queryKey: ['getStudentRequestCount', teacherId],
-    queryFn: () => getStudentRequestCount(teacherId, currentClassroomId) as unknown as number,
+    queryFn: async () => {
+      const response = await fetch(`/api/student-requests/count/${teacherId}/${currentClassroomId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch student request count');
+      }
+      const data = await response.json();
+      return data.count as number;
+    },
     // refetchOnMount: false,
     refetchOnReconnect: false,
     // refetchOnWindowFocus: false,

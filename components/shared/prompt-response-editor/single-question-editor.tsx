@@ -13,7 +13,6 @@ import { toast } from "sonner";
 import Editor from "./editor";
 import { BlogImage } from "@/types";
 import Image from "next/image";
-import { getAllPhotos } from "@/lib/actions/s3-upload";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Input } from "@/components/ui/input";
 import useWindowSize from 'react-use/lib/useWindowSize'
@@ -67,9 +66,13 @@ export default function SinglePromptEditor({
         if (allBlogPhotos !== null) return
         try {
             setIsLoadingPhotos(true)
-            const photos = await getAllPhotos() as BlogImage[]
-            setAllBlogPhotos(photos)
-            setFilteredBlogPhotos(photos)
+            const response = await fetch('/api/images/photos');
+            if (!response.ok) {
+                throw new Error('Failed to fetch photos');
+            }
+            const data = await response.json();
+            setAllBlogPhotos(data.photos);
+            setFilteredBlogPhotos(data.photos);
         } catch (error) {
             console.log('error getting blog photos ', error)
         } finally {

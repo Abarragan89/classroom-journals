@@ -6,7 +6,9 @@ export async function GET(
     { params }: { params: { studentId: string } }
 ) {
     try {
-        const result = await getStudentResponsesDashboard(params.studentId);
+
+        const { studentId } = await params
+        const result = await getStudentResponsesDashboard(studentId);
 
         return NextResponse.json(result);
     } catch (error) {

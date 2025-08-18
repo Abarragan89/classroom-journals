@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { getRubricListByTeacherId, getRubricById, saveRubricGrade, getRubricGradesForResponse, deleteRubricGrade } from "@/lib/actions/rubric.actions";
+import { saveRubricGrade, deleteRubricGrade } from "@/lib/actions/rubric.actions";
 import { Rubric, RubricGrade, RubricListItem } from "@/types";
 import { FadeLoader } from 'react-spinners';
 import { useTheme } from "next-themes";
@@ -48,7 +48,12 @@ export default function ScoreJournalForm({
 
     async function loadExistingGrade() {
         try {
-            const grades = await getRubricGradesForResponse(responseId);
+            const response = await fetch(`/api/rubrics/response/${responseId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch rubric grades');
+            }
+            const data = await response.json();
+            const grades = data.rubricGrades;
             const mostRecentGrade = grades && grades.length > 0 ? grades[0] : null;
 
             if (mostRecentGrade) {
@@ -117,8 +122,12 @@ export default function ScoreJournalForm({
     async function getRubricList() {
         setLoadingRubricList(true);
         try {
-            const response = await getRubricListByTeacherId(teacherId);
-            setRubricList(response || []);
+            const response = await fetch(`/api/rubrics/teacher/${teacherId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch rubric list');
+            }
+            const data = await response.json();
+            setRubricList(data.rubrics || []);
         } catch (error) {
             console.error('Error fetching rubric list:', error);
             toast('Failed to fetch rubrics');
@@ -131,7 +140,12 @@ export default function ScoreJournalForm({
         setLoadingRubric(true);
         try {
             // Fetch the full rubric data when one is selected
-            const fullRubric = await getRubricById(rubricListItem.id) as Rubric;
+            const response = await fetch(`/api/rubrics/${rubricListItem.id}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch rubric details');
+            }
+            const data = await response.json();
+            const fullRubric = data.rubric as Rubric;
             setCurrentRubric(fullRubric);
             setCurrentGrade(null); // Reset grade when selecting new rubric
             setShowRubricDialog(false);

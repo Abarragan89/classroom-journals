@@ -6,9 +6,9 @@ export async function GET(
     { params }: { params: { promptId: string } }
 ) {
     try {
+        const { promptId } = await params;
         const { searchParams } = new URL(req.url);
         const teacherId = searchParams.get("teacherId");
-        const { promptId } = params;
 
         if (!teacherId) {
             return NextResponse.json({ error: "Missing teacherId" }, { status: 400 });

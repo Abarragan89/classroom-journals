@@ -6,6 +6,7 @@ export async function GET(
     { params }: { params: { responseId: string } }
 ) {
     try {
+        const { responseId } = await params;
         const { searchParams } = new URL(request.url);
         const userId = searchParams.get('userId');
 
@@ -16,7 +17,7 @@ export async function GET(
             );
         }
 
-        const response = await getSingleResponse(params.responseId, userId);
+        const response = await getSingleResponse(responseId, userId);
 
         return NextResponse.json({ response });
     } catch (error) {

@@ -1,6 +1,6 @@
-"use server"
 import { S3Client, ListObjectsV2Command } from '@aws-sdk/client-s3'
 import { requireAuth } from './authorization.action';
+
 const s3Client = new S3Client({
   region: process.env.AWS_S3_REGION as string,
   credentials: {

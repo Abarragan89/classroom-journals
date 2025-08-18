@@ -7,9 +7,10 @@ export async function POST(
     { params }: { params: { studentId: string } }
 ) {
     try {
+        const { studentId } = await params;
         const filterOptions: SearchOptions = await request.json();
 
-        const responses = await getFilteredStudentResponses(filterOptions, params.studentId);
+        const responses = await getFilteredStudentResponses(filterOptions, studentId);
 
         return NextResponse.json({ responses });
     } catch (error) {

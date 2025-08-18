@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSingleStudentResponses } from '@/lib/server/responses';
+import { getRubricListByTeacherId } from '@/lib/server/rubrics';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { studentId: string } }
+    { params }: { params: { teacherId: string } }
 ) {
     try {
-        const { studentId } = await params;
-        const responses = await getSingleStudentResponses(studentId);
+        const { teacherId } = await params;
 
-        return NextResponse.json({ responses });
+        const rubrics = await getRubricListByTeacherId(teacherId);
+
+        return NextResponse.json({ rubrics });
     } catch (error) {
-        console.error('Error fetching student responses:', error);
+        console.error('Error fetching rubric list for teacher:', error);
 
         if (error instanceof Error) {
             if (error.message === 'Forbidden') {

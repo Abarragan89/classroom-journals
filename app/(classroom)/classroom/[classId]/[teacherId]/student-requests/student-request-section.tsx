@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { approveUsernameChange, declineStudentRequest, approveNewPrompt, getTeacherRequests, markAllRequestsAsViewed } from '@/lib/actions/student-request';
+import { approveUsernameChange, declineStudentRequest, approveNewPrompt, markAllRequestsAsViewed } from '@/lib/actions/student-request';
 import { StudentRequest } from '@/types';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
@@ -24,7 +24,12 @@ export default function StudentRequestSection({
     const { error } = useQuery({
         queryKey: ['getStudentRequests', teacherId],
         queryFn: async () => {
-            const studentRequestData = await getTeacherRequests(teacherId, classId) as unknown as StudentRequest[];
+            const response = await fetch(`/api/student-requests/teacher/${teacherId}/${classId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch teacher requests');
+            }
+            const data = await response.json();
+            const studentRequestData = data.teacherRequests as StudentRequest[];
             await markAllRequestsAsViewed(teacherId, classId)
             setAllRequests(studentRequestData)
             return studentRequestData

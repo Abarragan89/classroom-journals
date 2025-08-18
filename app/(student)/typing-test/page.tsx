@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import Header from "@/components/shared/header";
 import TypingTest from "@/components/shared/typing-test";
-import { getUserWPM, getWPMClassHighScores } from "@/lib/actions/wpm.action";
+import { getUserWPM, getWPMClassHighScores } from "@/lib/server/typing-test";
 import { Session, User } from "@/types";
 import { notFound } from "next/navigation";
 

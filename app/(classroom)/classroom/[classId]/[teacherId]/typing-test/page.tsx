@@ -1,5 +1,5 @@
 import TypingTest from "@/components/shared/typing-test";
-import { getUserWPM, getWPMClassHighScores } from "@/lib/actions/wpm.action";
+import { getUserWPM, getWPMClassHighScores } from "@/lib/server/typing-test";
 import { User } from "@/types";
 import { notFound } from "next/navigation";
 

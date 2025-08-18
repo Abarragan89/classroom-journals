@@ -3,7 +3,6 @@ import { prisma } from "@/db/prisma";
 import { requireAuth } from "./authorization.action";
 import { InputJsonValue } from "@prisma/client/runtime/library";
 
-
 // This is for the teacher to get notifications if there are requests, work as notifications
 export async function createRubric(teacherId: string, rubricData: InputJsonValue, title: string) {
     try {
@@ -30,74 +29,6 @@ export async function createRubric(teacherId: string, rubricData: InputJsonValue
             console.log('Unexpected error:', error);
         }
         return { success: false, message: 'Error adding student. Try again.' }
-    }
-}
-
-// get a single rubric by id
-export async function getRubricById(rubricId: string) {
-    try {
-        const session = await requireAuth();
-        if (!session) {
-            throw new Error("Unauthorized");
-        }
-
-        const rubric = await prisma.rubricTemplate.findUnique({
-            where: { id: rubricId },
-        });
-
-        if (!rubric) {
-            throw new Error("Rubric not found");
-        }
-
-        return rubric;
-    } catch (error) {
-        console.error('Error fetching rubric:', error);
-        throw error; // Re-throw the error for further handling
-    }
-}
-
-// Grab all rubrics for a teacher (lightweight - only id and title)
-export async function getRubricListByTeacherId(teacherId: string) {
-    try {
-        const session = await requireAuth();
-        if (session?.user?.id !== teacherId) {
-            throw new Error("Forbidden");
-        }
-
-        const rubrics = await prisma.rubricTemplate.findMany({
-            where: { teacherId },
-            select: {
-                id: true,
-                title: true,
-                createdAt: true
-            },
-            orderBy: { createdAt: 'desc' },
-        });
-
-        return rubrics;
-    } catch (error) {
-        console.error('Error fetching rubric list:', error);
-        throw error; // Re-throw the error for further handling
-    }
-}
-
-// Grab all rubrics for a teacher (full data - keep for backward compatibility)
-export async function getRubricsByTeacherId(teacherId: string) {
-    try {
-        const session = await requireAuth();
-        if (session?.user?.id !== teacherId) {
-            throw new Error("Forbidden");
-        }
-
-        const rubrics = await prisma.rubricTemplate.findMany({
-            where: { teacherId },
-            orderBy: { createdAt: 'desc' },
-        });
-
-        return rubrics;
-    } catch (error) {
-        console.error('Error fetching rubrics:', error);
-        throw error; // Re-throw the error for further handling
     }
 }
 
@@ -201,35 +132,6 @@ export async function saveRubricGrade(
             return { success: false, message: error.message };
         }
         return { success: false, message: 'Error saving rubric grade. Try again.' };
-    }
-}
-
-// Get all rubric grades for a response (if multiple rubrics were used)
-export async function getRubricGradesForResponse(responseId: string) {
-    try {
-        const session = await requireAuth();
-        if (!session) {
-            throw new Error("Unauthorized");
-        }
-
-        const rubricGrades = await prisma.rubricGrade.findMany({
-            where: { responseId },
-            include: {
-                rubric: {
-                    select: {
-                        id: true,
-                        title: true,
-                        categories: true
-                    }
-                }
-            },
-            orderBy: { gradedAt: 'desc' }
-        });
-
-        return rubricGrades;
-    } catch (error) {
-        console.error('Error fetching rubric grades:', error);
-        throw error;
     }
 }
 
