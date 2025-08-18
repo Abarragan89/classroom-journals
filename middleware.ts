@@ -5,7 +5,7 @@ export async function middleware(request: NextRequest) {
 
     const response = NextResponse.next();
 
-    // Only enforce HTTPS in production
+    // Only enforce HTTPS in productio
     if (process.env.NODE_ENV === 'production') {
         const proto = request.headers.get('x-forwarded-proto');
 

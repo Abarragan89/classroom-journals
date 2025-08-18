@@ -12,8 +12,8 @@ export default function GoogleButton() {
         success: true,
         message: ''
     })
+    
     const { pending } = useFormStatus()
-
     const searchParams = useSearchParams();
 
     // This error will appear if email is already registered with magic link
