@@ -18,11 +18,15 @@ declare module "next-auth" {
         googleProviderId?: string | unknown
         iv?: Buffer | unknown
         username?: string
+        classroomId?: string // Add classroomId to session
+        teacherId?: string // Add teacherId to session
     }
     interface User {
         iv?: string;
         username?: string,
         role?: string,
+        classroomId?: string // Add classroomId to user
+        teacherId?: string // Add teacherId to user
     }
 }
 
@@ -102,13 +106,30 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     throw new Error("Invalid password or not a student in this class.");
                 }
 
+                // Attach the teacher ID
+                const teacher = await prisma.classUser.findFirst({
+                    where: {
+                        classId: classroom.id,
+                        role: ClassUserRole.TEACHER,
+                    },
+                    select: {
+                        userId: true,
+                    },
+                })
+
+                // if no teacher found, throw error
+                if (!teacher) {
+                    throw new Error("Teacher not found.");
+                }
+
                 return {
                     id: loggedInStudent.id,
                     name: loggedInStudent.name,
                     username: loggedInStudent.username,
                     role: 'STUDENT',
                     classroomId: classroom.id,
-                    iv: loggedInStudent.iv
+                    iv: loggedInStudent.iv,
+                    teacherId: teacher.userId
                 };
             },
         }),
@@ -138,10 +159,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 session.user.name = token.name;
                 session.user.username = token.username as string;
 
-                // Setting the classroomId is only needed or student login
+                // Setting the classroomId and teacherId for student sessions
                 if (token?.classroomId) {
-                    // @ts-expect-error: let there be any here
-                    session.classroomId = token.classroomId
+                    session.classroomId = token.classroomId as string
+                }
+                if (token?.teacherId) {
+                    session.teacherId = token.teacherId as string
                 }
             }
             // It there is an update, set the user name
@@ -160,10 +183,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         token.accessToken = account.access_token;
                         token.refreshToken = account.refresh_token; // Store refresh token
                         token.accessTokenExpires = Date.now() + account.expires_at! * 1000; // used to create a new token
-                        // @ts-expect-error: let there be any here
+                        // Store student-specific data in token
                         if (user?.classroomId) {
-                            // @ts-expect-error: let there be any here
                             token.classroomId = user.classroomId
+                        }
+                        if (user?.teacherId) {
+                            token.teacherId = user.teacherId
                         }
                     }
 

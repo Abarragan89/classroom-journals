@@ -2,7 +2,6 @@
 import { prisma } from "@/db/prisma";
 import { classSchema } from "../validators";
 import { generateClassCode } from "../utils";
-import { decryptText } from "../utils";
 import { ClassUserRole } from "@prisma/client";
 import { requireAuth } from "./authorization.action";
 
@@ -100,82 +99,6 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
     }
 }
 
-// Get all Teacher Classes
-export async function getAllClassrooms(teacherId: string) {
-    try {
-        const session = await requireAuth();
-        if (session?.user?.id !== teacherId) {
-            throw new Error("Forbidden");
-        }
-        const allClasses = await prisma.classroom.findMany({
-            where: {
-                users: {
-                    some: {
-                        userId: teacherId,
-                        role: ClassUserRole.TEACHER
-                    }
-                }
-            },
-            orderBy: {
-                updatedAt: 'desc'
-            }
-        })
-        return allClasses
-    } catch (error) {
-        console.log('error creating classroom', error)
-        return { success: false, message: 'Error creating class. Try again.' }
-    }
-}
-
-// Get all Teacher Classes
-export async function getAllClassroomIds(teacherId: string) {
-    try {
-        const session = await requireAuth();
-        if (session?.user?.id !== teacherId) {
-            throw new Error("Forbidden");
-        }
-        const allClasses = await prisma.classroom.findMany({
-            where: {
-                users: {
-                    some: {
-                        userId: teacherId,
-                        role: ClassUserRole.TEACHER
-                    }
-                }
-            },
-            select: {
-                id: true,
-                name: true,
-                updatedAt: true,
-            },
-            orderBy: {
-                updatedAt: 'desc'
-            }
-        })
-        return allClasses
-    } catch (error) {
-        console.log('error creating classroom', error)
-        return { success: false, message: 'Error creating class. Try again.' }
-    }
-}
-
-// Get a single Classroom
-export async function getSingleClassroom(classroomId: string, teacherId: string) {
-    try {
-        const session = await requireAuth();
-        if (session?.user?.id !== teacherId) {
-            throw new Error('Forbidden')
-        }
-        const classroom = await prisma.classroom.findUnique({
-            where: { id: classroomId }
-        })
-        return classroom
-    } catch (error) {
-        console.log('error getting single classroom', error);
-        return { success: false, message: 'Error finding class. Try again.' }
-    }
-}
-
 // Update Class Info
 export async function updateClassInfo(prevState: unknown, formData: FormData) {
     try {
@@ -214,53 +137,6 @@ export async function updateClassInfo(prevState: unknown, formData: FormData) {
     }
 }
 
-// Get all Students in a classroom 
-export async function getAllStudents(classId: string, teacherId: string) {
-    try {
-        const session = await requireAuth();
-
-        if (session?.user?.id !== teacherId) {
-            throw new Error('Forbidden')
-        }
-
-        const allStudents = await prisma.classUser.findMany({
-            where: {
-                classId: classId,
-                role: ClassUserRole.STUDENT
-            },
-            select: {
-                user: {
-                    select: {
-                        id: true,
-                        name: true, // Encrypted name
-                        iv: true,
-                        updatedAt: true,
-                        username: true,
-                        password: true,
-                        commentCoolDown: true,
-                    }
-                }
-            }
-        });
-
-        // Decrypt each student's name
-        const decryptedStudents = allStudents
-            .filter(studentObj => studentObj.user) // Ensure user exists
-            .map(({ user }) => ({ // Destructure `user` from `studentObj`
-                id: user.id,
-                updatedAt: user.updatedAt,
-                commentCoolDown: user.commentCoolDown,
-                username: decryptText(user.username as string, user.iv as string),
-                password: decryptText(user.password as string, user.iv as string),
-                name: decryptText(user.name as string, user.iv as string) // Decrypt name
-            }));
-        return decryptedStudents
-    } catch (error) {
-        console.log('error deleting class', error)
-        return { success: true, message: 'Error deleting class' }
-
-    }
-}
 
 // Delete Classroom
 export async function deleteClassroom(prevState: unknown, formData: FormData) {

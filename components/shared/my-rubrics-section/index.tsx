@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button"
 import CreateEditRubric from "./create-edit-rubric"
 import MyRubricList from "./my-rubric-list"
 import { Rubric } from "@/types"
-import { getRubricsByTeacherId } from "@/lib/actions/rubric.actions"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
@@ -28,7 +27,14 @@ export default function MyRubricSection({
     // Use Tanstack Query to fetch data and use teacherRubrics prop if available
     const { data: allRubrics } = useQuery({
         queryKey: ['rubrics', teacherId],
-        queryFn: () => getRubricsByTeacherId(teacherId) as unknown as Rubric[],
+        queryFn: async () => {
+            const response = await fetch(`/api/rubrics/teacher/${teacherId}/full`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch teacher rubrics');
+            }
+            const data = await response.json();
+            return data.rubrics as Rubric[];
+        },
         initialData: teacherRubrics || []
     })
 

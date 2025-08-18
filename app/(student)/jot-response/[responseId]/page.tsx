@@ -4,9 +4,9 @@ import { Response, ResponseData, Session } from "@/types";
 import { notFound } from "next/navigation";
 import MultipleQuestionEditor from "@/components/shared/prompt-response-editor/multiple-question-editor";
 import SinglePromptEditor from "@/components/shared/prompt-response-editor/single-question-editor";
-import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
-import { getClassroomGrade, getTeacherId } from "@/lib/actions/student.dashboard.actions";
-import { getSingleResponseForReview } from "@/lib/actions/response.action";
+import { determineSubscriptionAllowance } from "@/lib/server/profile";
+import { getClassroomGrade } from "@/lib/server/student-dashboard";
+import { getSingleResponseForReview } from "@/lib/server/responses";
 
 export default async function StudentDashboard({
     params
@@ -22,16 +22,16 @@ export default async function StudentDashboard({
     if (session?.user?.role !== 'STUDENT' || !studentId) {
         return notFound()
     }
-
     const classroomId = session?.classroomId
+    const teacherId = session?.teacherId
 
     const { responseId } = await params
 
-    const studentResponse = await getSingleResponseForReview(responseId, studentId) as unknown as Response
-
-    const teacherId = await getTeacherId(classroomId as string)
-    const { isPremiumTeacher } = await determineSubscriptionAllowance(teacherId as string)
-    const grade = await getClassroomGrade(classroomId as string)
+    const [studentResponse, { isPremiumTeacher }, grade] = await Promise.all([
+        getSingleResponseForReview(responseId, studentId) as unknown as Response,
+        determineSubscriptionAllowance(teacherId as string),
+        getClassroomGrade(classroomId as string)
+    ])
 
     return (
         <div>

@@ -1,6 +1,6 @@
 "use server"
 import { prisma } from "@/db/prisma"
-import { decryptText, encryptText } from "../utils"
+import { encryptText } from "../utils"
 import { Question } from "@/types"
 import { Prisma, PromptType, StudentRequestStatus, StudentRequestType } from "@prisma/client"
 import { requireAuth } from "./authorization.action"
@@ -44,88 +44,6 @@ export async function createStudentRequest(studentId: string, teacherId: string,
         return { success: true, message: 'Request has been made' }
     } catch (error) {
         console.log('error ', error)
-        // Improved error logging
-        if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
-            console.error(error.stack); // Log stack trace for better debugging
-        } else {
-            console.log('Unexpected error:', error);
-        }
-        return { success: false, message: 'Error adding student. Try again.' }
-    }
-}
-
-// These requests are for the teacher to see
-export async function getTeacherRequests(teacherId: string, classId: string) {
-    try {
-        const session = await requireAuth();
-        if (session?.user?.id !== teacherId) {
-            throw new Error("Forbidden");
-        }
-        const teacherRequests = await prisma.studentRequest.findMany({
-            where: {
-                teacherId,
-                classId
-            },
-            include: {
-                student: {
-                    select: {
-                        username: true,
-                        iv: true,
-                    }
-                }
-            },
-            orderBy: {
-                createdAt: 'desc'
-            }
-        });
-        const decyptedTeacherRequests = teacherRequests.map((studentRequest) => {
-            if (studentRequest.type === StudentRequestType.USERNAME) {
-                return ({
-                    ...studentRequest,
-                    text: studentRequest.text,
-                    displayText: decryptText(studentRequest.text as string, studentRequest.student.iv as string),
-                    student: {
-                        username: decryptText(studentRequest.student.username as string, studentRequest.student.iv as string),
-                        id: true,
-                    }
-                })
-            } else {
-                return ({
-                    ...studentRequest,
-                    student: {
-                        username: decryptText(studentRequest.student.username as string, studentRequest.student.iv as string),
-                        id: true,
-                    }
-                })
-            }
-        })
-        return decyptedTeacherRequests;
-    } catch (error) {
-        // Improved error logging
-        if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
-            console.error(error.stack); // Log stack trace for better debugging
-        } else {
-            console.log('Unexpected error:', error);
-        }
-        return { success: false, message: 'Error adding student. Try again.' }
-    }
-}
-
-// This is for the teacher to get notifications if there are requests, work as notifications
-export async function getStudentRequestCount(teacherId: string, classId: string) {
-    try {
-        const session = await requireAuth();
-        if (session?.user?.id !== teacherId) {
-            throw new Error("Forbidden");
-        }
-        const count = await prisma.studentRequest.count({
-            where: { teacherId, status: StudentRequestStatus.PENDING, classId },
-        });
-
-        return count
-    } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
             console.log('Error creating new prompt:', error.message);

@@ -2,8 +2,7 @@ import { auth } from "@/auth";
 import Header from "@/components/shared/header";
 import { notFound } from "next/navigation";
 import { Session } from "@/types";
-import { determineSubscriptionAllowance } from "@/lib/actions/profile.action";
-
+import { determineSubscriptionAllowance } from "@/lib/server/profile";
 export default async function TeacherLayout({
     children,
 }: Readonly<{

@@ -2,7 +2,6 @@
 import { useState } from "react";
 import {
     clearAllNotifications,
-    getUserNotifications,
     markAllNotificationsAsRead
 } from "@/lib/actions/notifications.action";
 import { UserNotification } from "@/types";
@@ -29,10 +28,18 @@ export default function NotificationSection({
     const { error } = useQuery({
         queryKey: ['getUserNotifications', userId],
         queryFn: async () => {
-            const userNotifications = await getUserNotifications(userId, classId) as unknown as UserNotification[]
-            setNotificaitonsState(userNotifications)
-            if (userNotifications.length > 0) await markAllNotificationsAsRead(userId, classId)
-            return userNotifications;
+            // ✅ Use API route instead of server action
+            const response = await fetch(`/api/notifications/user?userId=${userId}&classId=${classId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch notifications');
+            }
+            const { notifications: userNotifications } = await response.json();
+
+            setNotificaitonsState(userNotifications);
+            if (userNotifications.length > 0) {
+                await markAllNotificationsAsRead(userId, classId);
+            }
+            return userNotifications as UserNotification[];
         },
         initialData: notifications,
         // refetchOnMount: false,
@@ -40,7 +47,6 @@ export default function NotificationSection({
         // refetchOnWindowFocus: false,
         // staleTime: Infinity,
     })
-
     if (error) {
         throw new Error('Error getting user notifications')
     }

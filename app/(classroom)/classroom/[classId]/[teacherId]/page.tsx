@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { getAllSessionsInClass } from "@/lib/actions/prompt.session.actions"
+import { getAllSessionsInClass } from "@/lib/server/prompt-sessions";
 import { PromptCategory, PromptSession } from "@/types";
 import { Plus } from "lucide-react";
-import { getStudentCountByClassId } from "@/lib/actions/roster.action";
+import { getStudentCountByClassId } from "@/lib/server/roster";
 import Link from "next/link";
-import { getAllPromptCategories } from "@/lib/actions/prompt.categories";
+import { getAllPromptCategories } from "@/lib/server/student-dashboard";
 import AssignmentListSection from "@/components/shared/AssignmentListSection";
 
 export default async function Classroom({
@@ -16,7 +16,7 @@ export default async function Classroom({
 
     const allPromptSessions = await getAllSessionsInClass(classId, teacherId) as unknown as { prompts: PromptSession[], totalCount: number }
     let allPromptCategories = await getAllPromptCategories(teacherId) as unknown as PromptCategory[]
-    const { count: studentCount } = await getStudentCountByClassId(classId, teacherId)
+    const studentCount = await getStudentCountByClassId(classId, teacherId)
     allPromptCategories = [{ id: '', name: 'All Categories...' }, ...allPromptCategories]
 
 

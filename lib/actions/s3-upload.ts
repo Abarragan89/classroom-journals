@@ -134,36 +134,3 @@ export async function addPhotoToLibrary(prevData: unknown, formData: FormData) {
 //         return NextResponse.json({ error: error }, { status: 500 });
 //     }
 // }
-
-
-// Get all photos from prisma for blogs
-export async function getAllPhotos() {
-    try {
-        const allPhotos = await prisma.image.findMany({
-            where: {
-                category: {
-                    not: 'avatar'
-                }
-            }
-        })
-        return allPhotos
-    } catch (error) {
-        console.error('Error uploading photo 123 ', error);
-        return { success: false, message: 'Error uploading photo' }
-    }
-}
-
-export async function getAllAvatarPhotos() {
-    try {
-        await requireAuth();
-        const allPhotos = await prisma.image.findMany({
-            where: {
-                category: 'avatar'
-            }
-        })
-        return allPhotos
-    } catch (error) {
-        console.error('Error uploading photo 123 ', error);
-        return { success: false, message: 'Error uploading photo' }
-    }
-}

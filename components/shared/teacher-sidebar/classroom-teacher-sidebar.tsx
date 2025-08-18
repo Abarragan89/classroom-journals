@@ -19,13 +19,10 @@ import { Classroom } from "@/types"
 import { usePathname } from "next/navigation"
 import {
   Home, User, Keyboard, Bell, Settings, PenTool,
-  //  Table, 
   MessageCircle,
   Inbox,
   Grid3x3
 } from "lucide-react"
-import { getUnreadUserNotifications } from "@/lib/actions/notifications.action"
-import { getStudentRequestCount } from "@/lib/actions/student-request"
 import { useQuery } from "@tanstack/react-query"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & { classes: Classroom[] }) {
@@ -40,7 +37,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
 
   const { data: notificationCount } = useQuery({
     queryKey: ['getUserNotifications', teacherId],
-    queryFn: () => getUnreadUserNotifications(teacherId, currentClassroomId) as unknown as number,
+    queryFn: async () => {
+      const response = await fetch(`/api/notifications/unread?userId=${teacherId}&classId=${currentClassroomId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch unread notifications');
+      }
+      const { unreadCount } = await response.json();
+      return unreadCount as number;
+    },
     // refetchOnMount: false,
     refetchOnReconnect: false,
     // refetchOnWindowFocus: false,
@@ -49,7 +53,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
 
   const { data: studentRequestCount } = useQuery({
     queryKey: ['getStudentRequestCount', teacherId],
-    queryFn: () => getStudentRequestCount(teacherId, currentClassroomId) as unknown as number,
+    queryFn: async () => {
+      const response = await fetch(`/api/student-requests/count/${teacherId}/${currentClassroomId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch student request count');
+      }
+      const data = await response.json();
+      return data.count as number;
+    },
     // refetchOnMount: false,
     refetchOnReconnect: false,
     // refetchOnWindowFocus: false,

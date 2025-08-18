@@ -1,6 +1,5 @@
 import { auth } from '@/auth'
 import Header from '@/components/shared/header'
-import { getSingleResponseForReview } from '@/lib/actions/response.action'
 import { Response, ResponseData, Session } from '@/types'
 import { notFound } from 'next/navigation'
 import React from 'react'
@@ -8,8 +7,9 @@ import SingleQuestionReview from './single-question-review'
 import Link from 'next/link'
 import { ArrowLeftIcon } from 'lucide-react'
 import ReviewWrapper from './review-wrapper'
-import { getClassroomGrade, getTeacherId } from '@/lib/actions/student.dashboard.actions'
-import { determineSubscriptionAllowance } from '@/lib/actions/profile.action'
+import { determineSubscriptionAllowance } from '@/lib/server/profile'
+import { getSingleResponseForReview } from '@/lib/server/responses'
+import { getClassroomGrade } from '@/lib/server/student-dashboard'
 
 export default async function ResponseReview({
     params
@@ -21,21 +21,22 @@ export default async function ResponseReview({
 
     if (!session) return notFound()
 
-    const classroomId = session?.classroomId
 
     const studentId = session?.user?.id as string
     if (session?.user?.role !== 'STUDENT' || !studentId) {
         return notFound()
     }
 
+    const classroomId = session?.classroomId
+    const teacherId = session?.teacherId
+
     const { responseId } = await params
 
-    const singleResponse = await getSingleResponseForReview(responseId, studentId) as unknown as Response
-
-    const teacherId = await getTeacherId(classroomId as string)
-
-    const { isPremiumTeacher } = await determineSubscriptionAllowance(teacherId as string)
-    const grade = await getClassroomGrade(classroomId as string)
+    const [singleResponse, { isPremiumTeacher }, grade] = await Promise.all([
+        getSingleResponseForReview(responseId, studentId) as unknown as Response,
+        determineSubscriptionAllowance(teacherId as string),
+        getClassroomGrade(classroomId as string)
+    ])
 
     return (
         <div>

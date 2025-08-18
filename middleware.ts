@@ -47,6 +47,7 @@ export const config = {
         '/sign-in',
         '/classroom-quips',
         '/student-dashboard/:path*',
+        '/student-profile/:path*',
         '/classes/:path*',
         '/classroom/:path*',
         '/discussion-board/:path*',

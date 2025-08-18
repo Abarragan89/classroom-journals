@@ -1,8 +1,8 @@
 import { User } from "@/types";
 import { PromptSession } from "@/types";
-import { getAllStudents } from "@/lib/actions/classroom.actions";
+import { getAllStudents } from "@/lib/server/classroom";
 import EditPromptSessionPopUp from "@/components/modalBtns/edit-prompt-session-popup";
-import { getSinglePromptSessionTeacherDashboard } from '@/lib/actions/prompt.session.actions';
+import { getSinglePromptSessionTeacherDashboard } from "@/lib/server/prompt-sessions";
 import MainClientWrapper from "./main-client-wrapper";
 
 export default async function SinglePromptSession({
@@ -17,13 +17,14 @@ export default async function SinglePromptSession({
         return <div>No session ID provided</div>;
     }
 
-    const promptSession = await getSinglePromptSessionTeacherDashboard(sessionId, teacherId) as unknown as PromptSession
+    const [promptSession, classRoster] = await Promise.all([
+        getSinglePromptSessionTeacherDashboard(sessionId, teacherId) as unknown as PromptSession,
+        getAllStudents(classId, teacherId) as unknown as User[]
+    ]);
 
     if (!promptSession) {
         return <div>Prompt session not found</div>;
     }
-
-    const classRoster = await getAllStudents(classId, teacherId) as User[]
 
     return (
         <div>

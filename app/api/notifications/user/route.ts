@@ -1,0 +1,35 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getUserNotifications } from "@/lib/server/notifications";
+
+export async function GET(req: NextRequest) {
+    try {
+        const { searchParams } = new URL(req.url);
+        const userId = searchParams.get("userId");
+        const classId = searchParams.get("classId");
+
+        if (!userId) {
+            return NextResponse.json({ error: "Missing userId" }, { status: 400 });
+        }
+
+        if (!classId) {
+            return NextResponse.json({ error: "Missing classId" }, { status: 400 });
+        }
+
+        const notifications = await getUserNotifications(userId, classId);
+
+        return NextResponse.json({ notifications });
+    } catch (error) {
+        console.error("Error getting user notifications:", error);
+
+        if (error instanceof Error) {
+            if (error.message === "Forbidden") {
+                return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+            }
+            if (error.message === "Unauthorized") {
+                return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+            }
+        }
+
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
+}

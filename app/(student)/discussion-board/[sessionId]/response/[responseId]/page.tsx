@@ -2,7 +2,7 @@ import BlogMetaDetails from "@/components/blog-meta-details";
 import CommentSection from "@/components/shared/comment-section";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
-import { getSingleResponse } from "@/lib/actions/response.action"
+import { getSingleResponse } from "@/lib/server/responses";
 import { Response, ResponseComment, ResponseData, Session } from "@/types";
 import { auth } from "@/auth";
 import { notFound } from "next/navigation";
@@ -22,17 +22,18 @@ export default async function SingleResponse({
     if (!session || !studentId || !classroomId) return notFound()
 
     const { responseId, sessionId } = await params;
-    const response = await getSingleResponse(responseId, studentId) as unknown as Response
+
+    const [response, { commentCoolDown }] = await Promise.all([
+        getSingleResponse(responseId, studentId) as unknown as Response,
+        prisma.user.findUnique({
+            where: { id: studentId },
+            select: {
+                commentCoolDown: true,
+            }
+        }) as unknown as { commentCoolDown: number }
+    ])
 
     const promptStatus = response?.promptSession?.status
-
-    // Get Data to find out if cooldown time is in effect
-    const { commentCoolDown } = await prisma.user.findUnique({
-        where: { id: studentId },
-        select: {
-            commentCoolDown: true,
-        }
-    }) as { commentCoolDown: number };
 
     return (
         <div className="max-w-[700px] px-3 mx-auto">

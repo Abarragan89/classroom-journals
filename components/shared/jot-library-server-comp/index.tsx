@@ -1,10 +1,10 @@
-import { getAllTeacherPrompts } from "@/lib/actions/prompt.actions";
+import { getAllTeacherPrompts } from "@/lib/server/prompts";
 import { Prompt, PromptCategory } from "@/types";
 import JotSearchArea from "@/components/jot-search-area";
-import { getAllClassroomIds } from "@/lib/actions/classroom.actions";
+import { getAllClassroomIds } from "@/lib/server/classroom";
 import { Classroom } from "@/types";
 import CreateNewJot from "@/components/modalBtns/create-new-jot";
-import { getAllPromptCategories } from "@/lib/actions/prompt.categories";
+import { getAllPromptCategories } from "@/lib/server/student-dashboard";
 
 export default async function PromptLibrary({
     teacherId,
@@ -14,11 +14,13 @@ export default async function PromptLibrary({
     inClassroom?: boolean,
 }) {
 
-    const allPrompts = await getAllTeacherPrompts(teacherId) as unknown as { prompts: Prompt[], totalCount: number }
-    const allClassroomIds = await getAllClassroomIds(teacherId) as Classroom[]
-    let allPromptCategories = await getAllPromptCategories(teacherId) as PromptCategory[]
+    const [allPrompts, allClassroomIds, allPromptCategories] = await Promise.all([
+        getAllTeacherPrompts(teacherId) as unknown as { prompts: Prompt[], totalCount: number },
+        getAllClassroomIds(teacherId) as unknown as Classroom[],
+        getAllPromptCategories(teacherId) as unknown as PromptCategory[]
+    ]);
     // Add default value to beginning fo drop down for searchbar
-    allPromptCategories = [{ id: '', name: 'All Categories...' }, ...allPromptCategories]
+    const allPromptCategoriesWithSpacer = [{ id: '', name: 'All Categories...' }, ...allPromptCategories]
 
     return (
         <>
@@ -26,14 +28,14 @@ export default async function PromptLibrary({
                 <div className="flex-between relative">
                     <h1 className={`${inClassroom ? 'text-2xl lg:text-3xl mt-2' : 'h1-bold'}`}>Jot Library</h1>
                     <div className="absolute top-[40px] right-0">
-                        <CreateNewJot 
+                        <CreateNewJot
                         />
                     </div>
                 </div>
                 <JotSearchArea
                     initialPrompts={allPrompts.prompts}
                     classroomData={allClassroomIds}
-                    categories={allPromptCategories}
+                    categories={allPromptCategoriesWithSpacer}
                     totalPromptCount={allPrompts.totalCount}
                     teacherId={teacherId}
                 />

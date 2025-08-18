@@ -12,7 +12,6 @@ export default async function CreatePrompt({
     searchParams: Promise<{ type: string }>
 }) {
     const session = await auth() as Session
-
     if (!session) return notFound()
 
     const teacherId = session?.user?.id as string

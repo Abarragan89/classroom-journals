@@ -2,7 +2,6 @@
 import { PromptCategory, PromptSession, SearchOptions } from "@/types"
 import { useEffect, useRef, useState } from "react"
 import AssignmentListItem from "@/components/shared/AssignmentListSection/assignment-list-item"
-import { getAllSessionsInClass, getFilteredPromptSessions } from "@/lib/actions/prompt.session.actions"
 import PromptSearchBar from "../prompt-filter-options/prompt-search-bar"
 import TraitFilterCombobox from "../prompt-filter-options/trait-filter-combobox"
 import PaginationList from "../prompt-filter-options/pagination-list"
@@ -29,9 +28,13 @@ export default function AssignmentListSection({
     const { error } = useQuery({
         queryKey: ['assignmentListDash', classId],
         queryFn: async () => {
-            const classdata = await getAllSessionsInClass(classId, teacherId) as unknown as { prompts: PromptSession[], totalCount: number }
-            setFetchedPrompts(classdata?.prompts || [])
-            return classdata.prompts
+            const response = await fetch(`/api/prompt-sessions/class?classId=${classId}&teacherId=${teacherId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch class sessions');
+            }
+            const { sessionData } = await response.json();
+            setFetchedPrompts(sessionData?.prompts || []);
+            return sessionData.prompts;
         },
         initialData: initialPrompts,
         // refetchOnMount: false,
@@ -54,8 +57,26 @@ export default function AssignmentListSection({
     });
 
     async function getFilteredSearch(filterOptions: SearchOptions) {
-        const filterPrompts = await getFilteredPromptSessions(filterOptions, classId, teacherId) as unknown as PromptSession[]
-        setFetchedPrompts(filterPrompts)
+        try {
+            const queryParams = new URLSearchParams({
+                classId: classId,
+                teacherId: teacherId,
+                category: filterOptions.category || "",
+                searchWords: filterOptions.searchWords || "",
+                filter: filterOptions.filter || "",
+                paginationSkip: filterOptions.paginationSkip.toString()
+            });
+
+            const response = await fetch(`/api/prompt-sessions/filtered?${queryParams}`);
+            if (response.ok) {
+                const { promptSessions } = await response.json();
+                setFetchedPrompts(promptSessions as PromptSession[]);
+            } else {
+                console.error('Failed to fetch filtered prompt sessions:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching filtered prompt sessions:', error);
+        }
     }
 
     useEffect(() => {

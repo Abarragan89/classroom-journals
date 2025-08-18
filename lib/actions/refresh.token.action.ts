@@ -1,5 +1,3 @@
-"use server";
-
 import { auth } from "@/auth";
 import { Session } from "@/types";
 import { requireAuth } from "./authorization.action";

@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import Header from "@/components/shared/header";
-import { getUserNotifications, markAllNotificationsAsRead } from "@/lib/actions/notifications.action";
+import { markAllNotificationsAsRead } from "@/lib/actions/notifications.action";
+import { getUserNotifications } from "@/lib/server/notifications";
 import { Session, UserNotification } from "@/types";
 import { notFound } from "next/navigation";
 import NotificationSection from "./notification-section";
@@ -19,9 +20,10 @@ export default async function StudentNotifications() {
     const classId = session?.classroomId
     if (!classId) return notFound()
 
-    const userNotifications = await getUserNotifications(studentId, classId) as unknown as UserNotification[]
-
-    if (userNotifications.length > 0) await markAllNotificationsAsRead(studentId, classId)
+    const [userNotifications] = await Promise.all([
+        getUserNotifications(studentId, classId) as unknown as UserNotification[],
+        markAllNotificationsAsRead(studentId, classId)
+    ])
 
 
     return (

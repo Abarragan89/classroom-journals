@@ -2,7 +2,7 @@
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { getWPMClassHighScores, updateUserWpm } from '@/lib/actions/wpm.action';
+import { updateUserWpm } from '@/lib/actions/wpm.action';
 import { User } from '@/types';
 import Confetti from 'react-confetti';
 import useWindowSize from 'react-use/lib/useWindowSize';
@@ -41,7 +41,14 @@ export default function TypingTest({
 
     const { data: classScores, refetch } = useQuery({
         queryKey: ['getClassHighScores', classId],
-        queryFn: () => getWPMClassHighScores(classId, studentId) as unknown as User[],
+        queryFn: async () => {
+            const response = await fetch(`/api/typing-test/high-scores/${classId}/${studentId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch class high scores');
+            }
+            const data = await response.json();
+            return data.highScores as User[];
+        },
         initialData: classHighScores,
         // refetchOnMount: false,
         refetchOnReconnect: false,

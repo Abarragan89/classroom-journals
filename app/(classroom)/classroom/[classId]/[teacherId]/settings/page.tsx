@@ -1,4 +1,4 @@
-import { getTeacherSettingData } from "@/lib/actions/profile.action"
+import { getTeacherSettingData } from "@/lib/server/profile";
 import { Class } from "@/types";
 import ClassSettings from "./class-settings";
 

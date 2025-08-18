@@ -1,5 +1,5 @@
 import TypingTest from "@/components/shared/typing-test";
-import { getUserWPM, getWPMClassHighScores } from "@/lib/actions/wpm.action";
+import { getUserWPM, getWPMClassHighScores } from "@/lib/server/typing-test";
 import { User } from "@/types";
 import { notFound } from "next/navigation";
 
@@ -12,8 +12,10 @@ export default async function TypingTestPage({
     const { teacherId, classId } = await params;
     if (!teacherId || !classId) return notFound()
 
-    const studentHighScore = await getUserWPM(teacherId) as number
-    const classTopTypers = await getWPMClassHighScores(classId, teacherId) as User[]
+    const [studentHighScore, classTopTypers] = await Promise.all([
+        getUserWPM(teacherId) as unknown as number,
+        getWPMClassHighScores(classId, teacherId) as unknown as User[]
+    ])
 
     return (
         <>

@@ -2,12 +2,15 @@ import { auth } from "@/auth";
 import Header from "@/components/shared/header";
 import { PromptCategory, Response, Session, StudentRequest } from "@/types";
 import { notFound } from "next/navigation";
-import { getAllPromptCategories } from "@/lib/actions/prompt.categories";
-import { getDecyptedStudentUsername, getFeaturedBlogs, getTeacherId } from "@/lib/actions/student.dashboard.actions";
-import { getStudentRequests } from "@/lib/actions/student.dashboard.actions";
 import StudentDashClientWrapper from "./student-dash-client-wrapper";
-import { getStudentResponsesDashboard } from "@/lib/actions/response.action";
-import { getAllQuipAlerts } from "@/lib/actions/alert.action";
+import { getStudentResponsesDashboard } from "@/lib/server/responses";
+import { getAllQuipAlerts } from "@/lib/server/alerts";
+import {
+    getStudentName,
+    getAllPromptCategories,
+    getFeaturedBlogs,
+    getStudentRequests
+} from "@/lib/server/student-dashboard";
 
 
 export default async function StudentDashboard() {
@@ -22,22 +25,28 @@ export default async function StudentDashboard() {
     }
 
     const classroomId = session?.classroomId
-
     if (!classroomId) return notFound()
 
-    const studentName = await getDecyptedStudentUsername(studentId)
-    const teacherId = await getTeacherId(classroomId) as string
+    const teacherId = session?.teacherId
+    if (!teacherId) return notFound()
 
-    if (!studentName || !teacherId) {
-        return notFound()
-    }
-    const allPromptCategories = await getAllPromptCategories(teacherId) as unknown as PromptCategory[]
-    const allResponses = await getStudentResponsesDashboard(studentId) as unknown as { responses: Response[], totalCount: number }
 
-    const featuredBlogs = await getFeaturedBlogs(classroomId) as unknown as Response[]
-    const studentRequests = await getStudentRequests(studentId) as unknown as StudentRequest[]
-
-    const quipAlerts = await getAllQuipAlerts(studentId) as number
+    // Get all remaining data in parallel
+    const [
+        allPromptCategories,
+        allResponses,
+        featuredBlogs,
+        studentRequests,
+        quipAlerts,
+        studentName
+    ] = await Promise.all([
+        getAllPromptCategories(teacherId as string),
+        getStudentResponsesDashboard(studentId),
+        getFeaturedBlogs(classroomId),
+        getStudentRequests(studentId),
+        getAllQuipAlerts(studentId),
+        getStudentName(studentId)
+    ]);
 
     return (
         <>
@@ -45,14 +54,14 @@ export default async function StudentDashboard() {
             <main className="wrapper relative">
                 <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {studentName as string}</h1>
                 <StudentDashClientWrapper
-                    allCategories={allPromptCategories}
-                    allResponses={allResponses}
-                    featuredBlogs={featuredBlogs}
-                    studentRequests={studentRequests}
+                    allCategories={allPromptCategories as PromptCategory[]}
+                    allResponses={allResponses as { responses: Response[], totalCount: number }}
+                    featuredBlogs={featuredBlogs as unknown as Response[]}
+                    studentRequests={studentRequests as unknown as StudentRequest[]}
                     studentId={studentId}
-                    teacherId={teacherId}
+                    teacherId={teacherId as string}
                     classroomId={classroomId}
-                    quipAlerts={quipAlerts}
+                    quipAlerts={quipAlerts as number}
                 />
             </main>
         </>

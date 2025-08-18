@@ -1,4 +1,4 @@
-"use server";
+// "use server";
 
 import { auth } from "@/auth"; // adjust if your auth import is different
 import { Session } from "@/types";

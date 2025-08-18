@@ -1,5 +1,6 @@
 import NotificationSection from "@/app/(student)/student-notifications/notification-section";
-import { getUserNotifications, markAllNotificationsAsRead } from "@/lib/actions/notifications.action"
+import { markAllNotificationsAsRead } from "@/lib/actions/notifications.action"
+import { getUserNotifications } from "@/lib/server/notifications";
 import { UserNotification } from "@/types";
 
 export default async function Notifications({
@@ -10,9 +11,10 @@ export default async function Notifications({
 
     const { teacherId, classId } = await params;
 
-    const teacherNotifications = await getUserNotifications(teacherId, classId) as unknown as UserNotification[];
-
-    if (teacherNotifications.length > 0) await markAllNotificationsAsRead(teacherId, classId)
+    const [teacherNotifications] = await Promise.all([
+        getUserNotifications(teacherId, classId) as unknown as UserNotification[],
+        markAllNotificationsAsRead(teacherId, classId)
+    ])
 
     return (
         <div>

@@ -12,7 +12,6 @@ import Image from 'next/image'
 import LoadingAnimation from '@/components/loading-animation'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { getAllPhotos } from '@/lib/actions/s3-upload'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
 import RubricDisplay from '@/components/rubric-display'
 
@@ -72,9 +71,13 @@ export default function SingleQuestionReview({
         if (allBlogPhotos !== null) return
         try {
             setIsLoadingPhotos(true)
-            const photos = await getAllPhotos() as BlogImage[]
-            setAllBlogPhotos(photos)
-            setFilteredBlogPhotos(photos)
+            const response = await fetch('/api/images/photos');
+            if (!response.ok) {
+                throw new Error('Failed to fetch photos');
+            }
+            const data = await response.json();
+            setAllBlogPhotos(data.photos);
+            setFilteredBlogPhotos(data.photos);
         } catch (error) {
             console.log('error getting blog photos ', error)
         } finally {

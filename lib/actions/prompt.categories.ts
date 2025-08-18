@@ -26,34 +26,6 @@ export async function addPromptCategory(categoryName: string, userId: string) {
     }
 }
 
-// Get All Prompt Categories
-export async function getAllPromptCategories(userId: string) {
-    try {
-        const session = await requireAuth();
-        if (!session?.user?.id) {
-            throw new Error("Forbidden");
-        }
-
-        const allCategories = await prisma.promptCategory.findMany({
-            where: { userId },
-            select: { id: true, name: true }
-        })
-
-        return allCategories;
-    } catch (error) {
-        if (error instanceof Error) {
-            console.log('Error getting categories:', error.message);
-            console.error(error.stack);
-        } else {
-            console.error('Unexpected error:', error);
-        }
-        return { success: false, message: 'Error getting categories. Try again.' };
-    }
-}
-
-
-//
-
 
 // Delete Prompt Category
 export async function deletePromptCategory(id: string, teacherId: string) {

@@ -2,7 +2,6 @@
 import StudentTodoTable from "@/components/shared/student-task-table";
 import { gradedTasksColumns } from "@/components/shared/student-task-table/graded-tasks-columns";
 import { tasksTodoColumns } from "@/components/shared/student-task-table/tasks-todo-columns";
-import { getSingleStudentResponses } from "@/lib/actions/response.action";
 import { formatDateMonthDayYear, responsePercentage } from "@/lib/utils";
 import { PromptSession, Response, ResponseData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
@@ -18,7 +17,14 @@ export default function MyWorkClientWrapper({
 
     const { data: studentResponsesData } = useQuery({
         queryKey: ['getStudentResponseData', studentId],
-        queryFn: () => getSingleStudentResponses(studentId) as unknown as Response[],
+        queryFn: async () => {
+            const response = await fetch(`/api/responses/student/${studentId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch student responses');
+            }
+            const data = await response.json();
+            return data.responses as Response[];
+        },
         initialData: studentResponses,
         // refetchOnMount: false,
         refetchOnReconnect: false,

@@ -8,12 +8,10 @@ import { PromptCategory, StudentRequest, Response, ResponseData } from '@/types'
 import Link from 'next/link';
 import AssignmentSectionClient from './assignement-section.client';
 import { useQuery } from '@tanstack/react-query';
-import { getFeaturedBlogs, getStudentRequests } from '@/lib/actions/student.dashboard.actions';
+import { getStudentRequests } from '@/lib/server/student-dashboard';
 import { useState } from 'react';
-import { getStudentResponsesDashboard } from '@/lib/actions/response.action';
 import { formatDateLong } from '@/lib/utils';
 import QuipLink from './quip-link';
-import { getAllQuipAlerts } from '@/lib/actions/alert.action';
 
 export default function StudentDashClientWrapper({
   allCategories,
@@ -40,7 +38,14 @@ export default function StudentDashClientWrapper({
   // Get the prompt sessions
   const { data: allResponseData } = useQuery({
     queryKey: ['getAllStudentResponses', classroomId],
-    queryFn: () => getStudentResponsesDashboard(studentId) as unknown as { responses: Response[], totalCount: number },
+    queryFn: async () => {
+      const response = await fetch(`/api/responses/student/${studentId}/dashboard`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch student responses dashboard');
+      }
+      const data = await response.json();
+      return data as { responses: Response[], totalCount: number };
+    },
     initialData: allResponses,
     // refetchOnMount: false,
     refetchOnReconnect: false,
@@ -66,7 +71,14 @@ export default function StudentDashClientWrapper({
   // Get the Featured Blogs
   const { data: featuredBlogsData } = useQuery({
     queryKey: ['getFeaturedBlogs', classroomId],
-    queryFn: () => getFeaturedBlogs(classroomId) as unknown as Response[],
+    queryFn: async () => {
+      const response = await fetch(`/api/student-dashboard/featured-blogs?classroomId=${classroomId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch featured blogs');
+      }
+      const { featuredBlogs } = await response.json();
+      return featuredBlogs as Response[];
+    },
     initialData: featuredBlogs,
     // refetchOnMount: false,
     refetchOnReconnect: false,
@@ -77,7 +89,14 @@ export default function StudentDashClientWrapper({
   // Get the StudentAlert Queries 
   const { data: quipAlertCount } = useQuery({
     queryKey: ['getQueryAlerts', studentId],
-    queryFn: () => getAllQuipAlerts(studentId) as unknown as number,
+    queryFn: async () => {
+      const response = await fetch(`/api/alerts/quips?userId=${studentId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch quip alerts');
+      }
+      const { quipAlerts } = await response.json();
+      return quipAlerts as number;
+    },
     initialData: quipAlerts,
     // refetchOnMount: false,
     refetchOnReconnect: false,
@@ -86,12 +105,11 @@ export default function StudentDashClientWrapper({
   })
 
   const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(studentRequestData?.some(req => req.type === 'username'))
+  const lastestTaskToDo = allResponseData?.responses.find(res => res.completionStatus === 'INCOMPLETE' || res.completionStatus === 'RETURNED')
 
   function handleRequestUIHandler() {
     setHasSentPromptRequest(true)
   }
-
-  const lastestTaskToDo = allResponseData?.responses.find(res => res.completionStatus === 'INCOMPLETE' || res.completionStatus === 'RETURNED')
 
   return (
     <>
