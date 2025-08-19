@@ -79,7 +79,7 @@ export default function SubscriptionSection({
                                 Let AI grade essays with your custom rubrics with <span className="underline">no subscription?</span>
                             </p>
                             <Button
-                                className="bg-success"
+                                className="bg-success !text-success-foreground"
                                 onClick={() => {
                                     checkout({
                                         priceId: process.env.NEXT_PUBLIC_AI_CREDITS_LINK as string,
