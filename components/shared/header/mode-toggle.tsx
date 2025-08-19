@@ -43,6 +43,8 @@ export default function ModeToggle() {
                 return <FaUserTie />
             case 'avocado':
                 return <Sprout />
+            case 'sky':
+                return <Sprout />
 
         }
     }
@@ -59,22 +61,25 @@ export default function ModeToggle() {
                     <DropdownMenuLabel>Themes</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuCheckboxItem checked={theme === 'tech'} onClick={() => setTheme('tech')}>
-                        <ComputerIcon size={12} className="mr-2"/> Tech
+                        <ComputerIcon size={12} className="mr-2" /> Tech
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'dark'} onClick={() => setTheme('dark')}>
-                        <MoonIcon size={12} className="mr-2"/> Dark
+                        <MoonIcon size={12} className="mr-2" /> Dark
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'light'} onClick={() => setTheme('light')}>
-                        <PiNewspaperClipping size={12} className="mr-2"/> Paper
+                        <PiNewspaperClipping size={12} className="mr-2" /> Paper
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'cupid'} onClick={() => setTheme('cupid')}>
-                        <Heart size={12} className="mr-2"/> Cupid
+                        <Heart size={12} className="mr-2" /> Cupid
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'tuxedo'} onClick={() => setTheme('tuxedo')}>
-                        <FaUserTie size={12} className="mr-2"/> Tuxedo
+                        <FaUserTie size={12} className="mr-2" /> Tuxedo
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'avocado'} onClick={() => setTheme('avocado')}>
-                        <Sprout size={12} className="mr-2"/> Avocado
+                        <Sprout size={12} className="mr-2" /> Avocado
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem checked={theme === 'sky'} onClick={() => setTheme('sky')}>
+                        <Sprout size={12} className="mr-2" /> Sky
                     </DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
             </DropdownMenu>
