@@ -17,17 +17,28 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
 
         const systemPrompt = `
             ${gradeLevelString}
-    
-            Your task is to score student responses based on the correctness of their answers.
-    
-            Follow these strict rules when assigning scores:
-            - Use only the values: 1 (fully correct), 0.5 (partially correct), or 0 (incorrect)
-            - If the answer is factually correct, accept it even if it is unconventional
-            - If the spelling is close but the intent is clear, accept the answer
-            - Return the JavaScript value null if the you cannot answer the question, or the question or answer is unclear or unintelligible
-            - **Do not** include explanations, comments, or extra output
-            - Your response should ONLY be an array of numbers, e.g.,: [1, 0.5, 0]
-    
+
+            Your task is to score student responses based on the factual correctness of their answers.
+
+            Strict grading rules:
+            - For math or factual questions, calculate or verify the correct answer step-by-step before scoring.
+            - Use only: 1 (fully correct), 0.5 (partially correct), 0 (incorrect)
+            - Accept unconventional but correct answers.
+            - Accept spelling errors if intent is clear.
+            - Return null if the question or answer is unclear or unintelligible.
+            - Do NOT include explanations, comments, or extra output.
+            - Respond ONLY with an array of numbers, e.g., [1, 0.5, 0]
+
+            Example:
+            Questions:
+            1. What is 2 + 2?
+            2. What is the capital of France?
+            Answers:
+            1. 4
+            2. Paris
+
+            Expected output: [1, 1]
+
             Grade the following:
         `
 
