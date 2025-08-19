@@ -59,22 +59,22 @@ export default function ModeToggle() {
                     <DropdownMenuLabel>Themes</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuCheckboxItem checked={theme === 'tech'} onClick={() => setTheme('tech')}>
-                        Tech
+                        <ComputerIcon size={12} className="mr-2"/> Tech
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'dark'} onClick={() => setTheme('dark')}>
-                        Dark
+                        <MoonIcon size={12} className="mr-2"/> Dark
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'light'} onClick={() => setTheme('light')}>
-                        Paper
+                        <PiNewspaperClipping size={12} className="mr-2"/> Paper
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'cupid'} onClick={() => setTheme('cupid')}>
-                        Cupid
+                        <Heart size={12} className="mr-2"/> Cupid
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'tuxedo'} onClick={() => setTheme('tuxedo')}>
-                        Tuxedo
+                        <FaUserTie size={12} className="mr-2"/> Tuxedo
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'avocado'} onClick={() => setTheme('avocado')}>
-                        Avocado
+                        <Sprout size={12} className="mr-2"/> Avocado
                     </DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
             </DropdownMenu>
