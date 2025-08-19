@@ -58,7 +58,7 @@ export default function UserButton({
                 <DropdownMenuContent className="w-fit max-w-[300px] px-5" align="end" forceMount>
                     <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
-                            <div className="text-sm text-center text-ring font-medium leading-none line-clamp-1">
+                            <div className="text-xs text-center font-medium leading-none line-clamp-1">
                                 {session?.user?.email ?? session?.user?.username}
                             </div>
                         </div>

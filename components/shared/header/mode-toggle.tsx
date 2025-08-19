@@ -13,6 +13,8 @@ import { useTheme } from "next-themes"
 import { SunIcon, MoonIcon, ComputerIcon, Heart, Sprout } from 'lucide-react'
 import { FaUserTie } from "react-icons/fa";
 import { PiNewspaperClipping } from "react-icons/pi";
+import { IoMdCloudOutline } from "react-icons/io";
+
 
 
 export default function ModeToggle() {
@@ -44,7 +46,7 @@ export default function ModeToggle() {
             case 'avocado':
                 return <Sprout />
             case 'sky':
-                return <Sprout />
+                return <IoMdCloudOutline />
 
         }
     }
@@ -61,25 +63,25 @@ export default function ModeToggle() {
                     <DropdownMenuLabel>Themes</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuCheckboxItem checked={theme === 'tech'} onClick={() => setTheme('tech')}>
-                        <ComputerIcon size={12} className="mr-2" /> Tech
+                        <ComputerIcon size={15} className="mr-2" /> Tech
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'dark'} onClick={() => setTheme('dark')}>
-                        <MoonIcon size={12} className="mr-2" /> Dark
+                        <MoonIcon size={15} className="mr-2" /> Dark
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'light'} onClick={() => setTheme('light')}>
-                        <PiNewspaperClipping size={12} className="mr-2" /> Paper
+                        <PiNewspaperClipping size={15} className="mr-2" /> Paper
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'cupid'} onClick={() => setTheme('cupid')}>
-                        <Heart size={12} className="mr-2" /> Cupid
+                        <Heart size={15} className="mr-2" /> Cupid
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'tuxedo'} onClick={() => setTheme('tuxedo')}>
-                        <FaUserTie size={12} className="mr-2" /> Tuxedo
+                        <FaUserTie size={15} className="mr-2" /> Tuxedo
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'avocado'} onClick={() => setTheme('avocado')}>
-                        <Sprout size={12} className="mr-2" /> Avocado
+                        <Sprout size={15} className="mr-2" /> Avocado
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem checked={theme === 'sky'} onClick={() => setTheme('sky')}>
-                        <Sprout size={12} className="mr-2" /> Sky
+                        <IoMdCloudOutline size={15} className="mr-2" /> Sky
                     </DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
             </DropdownMenu>
