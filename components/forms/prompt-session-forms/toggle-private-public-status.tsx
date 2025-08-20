@@ -35,7 +35,7 @@ export default function TogglePrivatePublicStatus({
 
     //redirect if the state is success
     useEffect(() => {
-        if (state.success) {
+        if (state?.success) {
             toast(`Discussion ${newStatusString}`);
             setPromptSessionStatus(newStatusBoolean)
             closeModal();

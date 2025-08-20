@@ -1,5 +1,5 @@
 'use client'
-import { RubricGradeDisplay, ResponseData, BlogImage } from '@/types'
+import { RubricGradeDisplay, ResponseData, BlogImage, Response } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import Editor from '@/components/shared/prompt-response-editor/editor'
@@ -14,35 +14,72 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
 import RubricDisplay from '@/components/rubric-display'
+import { useQuery } from '@tanstack/react-query'
 
 interface SingleQuestionReviewProps {
+    singleResponse: Response,
     questions: ResponseData[],
-    isSubmittable: boolean,
+    isSubmittableInitial: boolean,
     responseId: string,
-    showGrades: boolean,
-    isPublic: boolean,
+    showGradesInitial: boolean,
+    isPublicInitial: boolean,
     promptSessionId: string,
-    spellCheckEnabled: boolean,
+    spellCheckEnabledInitial: boolean,
     studentId: string,
-    rubricGrades?: RubricGradeDisplay[],
+    rubricGradesInitial?: RubricGradeDisplay[],
     studentName?: string
 }
 
 export default function SingleQuestionReview({
+    singleResponse,
     questions,
-    isSubmittable,
+    isSubmittableInitial,
     responseId,
-    showGrades,
-    isPublic,
+    showGradesInitial,
+    isPublicInitial,
     promptSessionId,
-    spellCheckEnabled,
+    spellCheckEnabledInitial,
     studentId,
-    rubricGrades,
+    rubricGradesInitial,
     studentName
 }: SingleQuestionReviewProps) {
 
+
     const router = useRouter();
-    const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions);
+
+
+    // ignore unsued variables in typesript since i'm not using data
+    // @typescript-eslint/no-unused-vars
+    const { data } = useQuery({
+        queryKey: ['response-review', responseId],
+        queryFn: async () => {
+            const response = await fetch(`/api/responses/review/${responseId}?userId=${studentId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch student responses');
+            }
+            const data = await response.json();
+            console.log('data from response review', data)
+
+            // Set the state variables with fresh data
+            setAllQuestions(data.response.response as unknown as ResponseData[]);
+            setIsPublic(data.response.promptSession.isPublic);
+            setRubricGrades(data.response?.rubricGrades || []);
+            setSpellCheckEnabled(data.response?.spellCheckEnabled || false);
+            setIsSubmittable(data.response?.completionStatus === 'INCOMPLETE' || data.response?.completionStatus === 'RETURNED');
+            setShowGrades(data.response?.showGrades || false);
+
+            return data.response as Response;
+        },
+        initialData: singleResponse
+    })
+
+    const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions || []);
+    const [isPublic, setIsPublic] = useState<boolean>(isPublicInitial);
+    const [spellCheckEnabled, setSpellCheckEnabled] = useState<boolean>(spellCheckEnabledInitial);
+    const [rubricGrades, setRubricGrades] = useState<RubricGradeDisplay[]>(rubricGradesInitial ?? []);
+    const [isSubmittable, setIsSubmittable] = useState<boolean>(isSubmittableInitial);
+    const [showGrades, setShowGrades] = useState<boolean>(showGradesInitial);
+
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isLoadingPhotos, setIsLoadingPhotos] = useState<boolean>(false)
     const [allBlogPhotos, setAllBlogPhotos] = useState<BlogImage[] | null>(null)
@@ -56,8 +93,8 @@ export default function SingleQuestionReview({
             setIsLoading(true)
             const submittedAt = new Date()
             const updatedResponse = await updateASingleResponse(studentId, responseId, responseData, submittedAt)
-            if (updatedResponse.success) {
-                router.push('/my-work')
+            if (updatedResponse?.success) {
+                router.push('/student-dashboard')
                 toast('Assignment Submitted!')
             }
         } catch (error) {
@@ -155,7 +192,7 @@ export default function SingleQuestionReview({
                     </Button>
                 </div>
             )}
-            {allQuestions.slice(0, 2).map((responseData, index) => (
+            {allQuestions?.slice(0, 2)?.map((responseData, index) => (
                 <Card className="w-full p-4 space-y-2 max-w-[700px] mx-auto mb-10 border border-border" key={index}>
                     <CardTitle className="p-2 leading-snug font-bold whitespace-pre-line">
                         {responseData.question}

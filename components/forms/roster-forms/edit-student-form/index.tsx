@@ -39,12 +39,12 @@ export default function EditStudentForm({
 
     //redirect if the state is success
     useEffect(() => {
-        if (state.success) {
+        if (state?.success) {
             toast.success('Student Updated!');
             closeModal()
             const teacherId = session.user.id
             router.push(`/classroom/${classId}/${teacherId}/roster`); // Navigates without losing state instantly
-        } else if (state.success === false && state.message !== '') {
+        } else if (state?.success === false && state.message !== '') {
             toast.error(state.message, {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });

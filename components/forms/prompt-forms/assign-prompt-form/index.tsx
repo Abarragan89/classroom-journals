@@ -40,12 +40,12 @@ export default function AssignPromptForm({
 
     //redirect if the state is success
     useEffect(() => {
-        if (state.success && state.data) {
+        if (state?.success && state.data) {
             toast('Jot Assigned!');
             updatePromptData(prev => prev.map(prompt => prompt.id === state.data.id ? state.data : prompt))
             closeModal();
         }
-    }, [state.success]);
+    }, [state?.success]);
 
 
     function AssignButton() {

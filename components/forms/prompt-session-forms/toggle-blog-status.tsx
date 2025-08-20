@@ -36,7 +36,7 @@ export default function ToggleBlogStatus({
 
     //redirect if the state is success
     useEffect(() => {
-        if (state.success) {
+        if (state?.success) {
             toast(`Discussion ${newStatus}`);
             setPromptSessionStatus(newStatus)
             closeModal();

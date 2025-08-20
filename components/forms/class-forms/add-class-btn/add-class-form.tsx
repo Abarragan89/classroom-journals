@@ -45,7 +45,7 @@ export default function AddClassForm({
 
     //redirect if the state is success
     useEffect(() => {
-        if (state.success) {
+        if (state?.success) {
             toast.success('Class Added!');
             closeModal()
             router.push(`/classroom/${state.data}/${teacherId}`); // Navigates without losing state instantly

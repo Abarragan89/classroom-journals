@@ -23,7 +23,7 @@ export default function PhotoHubClient() {
     });
 
     useEffect(() => {
-        if (state.success) {
+        if (state?.success) {
             setFile(null);
             setImagePreview(null);
             setMessage('');
@@ -142,8 +142,8 @@ export default function PhotoHubClient() {
 
                 </div>
                 {message && <p className="text-destructive text-sm mt-2">{message}</p>}
-                {state.success && <p className="text-success text-sm mt-2">Upload successful!</p>}
-                {state.message && !state.success && (
+                {state?.success && <p className="text-success text-sm mt-2">Upload successful!</p>}
+                {state?.message && !state?.success && (
                     <p className="text-destructive text-sm mt-2">{state.message}</p>
                 )}
             </>
