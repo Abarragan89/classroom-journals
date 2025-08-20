@@ -223,11 +223,12 @@
   --card-foreground: hsl(209, 75%, 14%); /* White text */
 
   --accent: hsl(207, 77%, 25%); /* Golden sunlight */
-  --accent-foreground: hsl(62, 85%, 47%); /* Deep navy for contrast */
+  /* --accent-foreground: hsl(62, 85%, 47%); Deep navy for contrast */
+  --accent-foreground: hsl(192, 100%, 65%); /* Deep navy for contrast */
 
   --border: hsl(212, 51%, 86%); /* Darker sky border */
   --input: hsl(233, 87%, 18%); /* Darker sky field */
-  --ring: hsl(191, 67%, 86%); /* Bright blue focus ring */
+  --ring: hsl(190, 82%, 87%); /* Bright blue focus ring */
 
   --destructive: hsl(5, 89%, 41%); /* Sunset red */
   --destructive-foreground: hsl(0, 0%, 100%);
@@ -240,13 +241,13 @@
   --sidebar-foreground: hsl(210, 40%, 96%);
   --sidebar-primary: hsl(210, 80%, 50%);
   --sidebar-primary-foreground: hsl(0, 0%, 100%);
-  --sidebar-accent: hsl(45, 95%, 55%); /* Sunlight accent */
+  --sidebar-accent: hsl(189, 11%, 88%); /* Sunlight accent */
   --sidebar-accent-foreground: hsl(210, 40%, 20%);
   --sidebar-border: hsl(210, 45%, 30%);
   --sidebar-ring: hsl(210, 80%, 50%);
 
-  --success: hsl(145, 100%, 50%); /* Fresh green, still visible on dark */
-  --success-foreground: hsl(211, 70%, 10%);
+  --success: hsl(145, 67%, 60%); /* Fresh green, still visible on dark */
+  --success-foreground: hsl(211, 80%, 16%);
 }
 
 @layer utilities {
