@@ -20,7 +20,7 @@ export default function UserButton({
     session: Session
 }) {
 
-    // Get the Featured Blogs
+    // Get the User Avatar
     const { data: avatarURL } = useQuery({
         queryKey: ['getUserAvatar', session?.user?.id],
         queryFn: async () => {

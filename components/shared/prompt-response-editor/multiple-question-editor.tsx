@@ -56,7 +56,7 @@ export default function MultipleQuestionEditor({
         if (state?.success) {
             setShowConfetti(true)
         }
-    }, [state.success])
+    }, [state?.success])
 
     // This runs on every new page
     useEffect(() => {

@@ -35,7 +35,7 @@ export default function AddStudentForm({
 
     //redirect if the state is success
     useEffect(() => {
-        if (state.success) {
+        if (state?.success) {
             toast.success('Student Added!');
             closeModal()
             router.push(`/classroom/${state.data}/${session.user.id}/roster`); // Navigates without losing state instantly

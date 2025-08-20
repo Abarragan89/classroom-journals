@@ -28,7 +28,7 @@ export default function DeletePromptForm({
 
     //redirect if the state is success
     useEffect(() => {
-        if (state.success) {
+        if (state?.success) {
             toast('Jot Deleted!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });

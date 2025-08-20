@@ -60,7 +60,7 @@ export default function SinglePromptEditor({
         if (state?.success) {
             setShowConfetti(true)
         }
-    }, [state.success])
+    }, [state?.success])
 
     async function fetchPhotos() {
         if (allBlogPhotos !== null) return

@@ -52,7 +52,6 @@ export const config = {
         '/classroom/:path*',
         '/discussion-board/:path*',
         '/jot-response/:path*',
-        '/my-work/:path*',
         '/response-review/:path*',
         '/student-grades/:path*',
         '/student-notifications/:path*',

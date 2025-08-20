@@ -26,7 +26,7 @@ export default function DeleteResponseForm({
 
     //redirect if the state is success
     useEffect(() => {
-        if (state.success) {
+        if (state?.success) {
             toast('Assignment removed!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });

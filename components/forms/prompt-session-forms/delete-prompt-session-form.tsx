@@ -24,7 +24,7 @@ export default function DeletePromptSessionForm({
 
     //redirect if the state is success
     useEffect(() => {
-        if (state.success) {
+        if (state?.success) {
             toast('Assignment Deleted!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });

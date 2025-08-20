@@ -21,7 +21,7 @@ export default function DeleteClassForm({ classroomId, closeModal, teacherId }: 
 
     //redirect if the state is success
     useEffect(() => {
-        if (state.success) {
+        if (state?.success) {
             closeModal()
             router.push(pathname); // Navigates without losing state instantly
             toast.error('Class Deleted!', {

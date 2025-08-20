@@ -52,8 +52,8 @@ export default function MultiQuestionReview({
                 isTeacherPremium,
                 gradeLevel,
             )
-            if (updatedResponse.success) {
-                router.push('/my-work')
+            if (updatedResponse?.success) {
+                router.push('/student-dashboard')
                 toast('Assignment Submitted!')
             }
         } catch (error) {

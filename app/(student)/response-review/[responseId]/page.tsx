@@ -53,27 +53,25 @@ export default async function ResponseReview({
                 </h1>
                 {singleResponse?.promptSession?.promptType === 'ASSESSMENT' ?
                     <ReviewWrapper
-                        allQuestions={singleResponse?.response as unknown as ResponseData[]}
-                        isSubmittable={singleResponse?.completionStatus === 'INCOMPLETE' || singleResponse?.completionStatus === 'RETURNED'}
-                        responseId={singleResponse?.id}
-                        showGrades={singleResponse?.promptSession?.areGradesVisible}
+                        singleResponse={singleResponse}
                         isTeacherPremium={isPremiumTeacher as boolean}
                         gradeLevel={grade as string}
+                        responseId={responseId}
                         studentId={studentId}
-                        spellCheckEnabled={singleResponse?.spellCheckEnabled}
                     />
                     :
                     <SingleQuestionReview
                         questions={singleResponse?.response as unknown as ResponseData[]}
-                        isSubmittable={singleResponse?.completionStatus === 'INCOMPLETE' || singleResponse?.completionStatus === 'RETURNED'}
-                        responseId={singleResponse?.id}
-                        showGrades={singleResponse?.promptSession?.areGradesVisible as boolean}
-                        isPublic={singleResponse?.promptSession?.isPublic as boolean}
+                        isSubmittableInitial={singleResponse?.completionStatus === 'INCOMPLETE' || singleResponse?.completionStatus === 'RETURNED'}
+                        showGradesInitial={singleResponse?.promptSession?.areGradesVisible as boolean}
+                        isPublicInitial={singleResponse?.promptSession?.isPublic as boolean}
+                        spellCheckEnabledInitial={singleResponse?.spellCheckEnabled}
+                        rubricGradesInitial={singleResponse?.rubricGrades}
                         promptSessionId={singleResponse?.promptSession?.id as string}
-                        spellCheckEnabled={singleResponse?.spellCheckEnabled}
-                        studentId={studentId}
-                        rubricGrades={singleResponse?.rubricGrades}
                         studentName={singleResponse?.student?.name}
+                        responseId={singleResponse?.id}
+                        singleResponse={singleResponse}
+                        studentId={studentId}
                     />
                 }
             </main>

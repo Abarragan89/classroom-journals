@@ -110,7 +110,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
 
     // redirect if the state is success
     useEffect(() => {
-        if (state.success) {
+        if (state?.success) {
             toast('Jot Added!');
             router.push(callBackUrl as string); // Navigates without losing state instantly
         }
