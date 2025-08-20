@@ -73,6 +73,10 @@ export default function SingleQuestionReview({
         initialData: singleResponse
     })
 
+    if (process.env.NODE_ENV === 'development') {
+        console.log(data);
+    }
+
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions || []);
     const [isPublic, setIsPublic] = useState<boolean>(isPublicInitial);
     const [spellCheckEnabled, setSpellCheckEnabled] = useState<boolean>(spellCheckEnabledInitial);
