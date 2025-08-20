@@ -85,7 +85,7 @@ export default function SubscriptionSection({
                                         priceId: process.env.NEXT_PUBLIC_AI_CREDITS_LINK as string,
                                         mode: 'payment',
                                     });
-                                }}                        
+                                }}
                             >
                                 One-time Purchase to Buy AI Credits
                             </Button>
