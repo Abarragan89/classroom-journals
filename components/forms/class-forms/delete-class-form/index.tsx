@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { deleteClassroom } from "@/lib/actions/classroom.actions"
 import { usePathname, useRouter } from "next/navigation"
 import { toast } from "sonner"
-
+import { useQueryClient } from "@tanstack/react-query"
 
 export default function DeleteClassForm({ classroomId, closeModal, teacherId }: { classroomId: string, closeModal: () => void, teacherId: string }) {
 
@@ -18,12 +18,13 @@ export default function DeleteClassForm({ classroomId, closeModal, teacherId }: 
     })
     const pathname = usePathname();
     const router = useRouter();
+    const queryClient = useQueryClient();
 
     //redirect if the state is success
     useEffect(() => {
         if (state?.success) {
             closeModal()
-            router.push(pathname); // Navigates without losing state instantly
+            queryClient.invalidateQueries({ queryKey: ['teacherClassrooms', teacherId] });
             toast.error('Class Deleted!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });

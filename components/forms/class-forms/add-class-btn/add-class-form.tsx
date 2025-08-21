@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner"
 import { GoogleClassroom, Session } from "@/types";
+import { useQueryClient } from "@tanstack/react-query";
 import { getTeacherGoogleClassrooms } from "@/lib/actions/google.classroom.actions";
 import {
     Select,
@@ -39,16 +40,19 @@ export default function AddClassForm({
         success: false,
         message: ''
     })
+
     const pathname = usePathname()
     const router = useRouter();
-
+    const queryClient = useQueryClient();
 
     //redirect if the state is success
     useEffect(() => {
         if (state?.success) {
             toast.success('Class Added!');
+            // invalidate the teacherClassrooms useQuery
+            queryClient.invalidateQueries({ queryKey: ['teacherClassrooms', teacherId] });
             closeModal()
-            router.push(`/classroom/${state.data}/${teacherId}`); // Navigates without losing state instantly
+            router.push(`/classroom/${state.data}/${teacherId}/roster`); // Navigates without losing state instantly
         }
     }, [state, pathname, router])
 

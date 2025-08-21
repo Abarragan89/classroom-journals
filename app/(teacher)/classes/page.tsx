@@ -5,6 +5,7 @@ import ClassCard from "@/components/shared/class-card";
 import { Class, Session } from "@/types";
 import AddClassBtn from "@/components/forms/class-forms/add-class-btn";
 import UpgradeAccountBtn from "@/components/buttons/upgrade-account-btn";
+import ClassCardClientWrapper from "./class-card-client-wrapper";
 
 export default async function Classes() {
 
@@ -28,16 +29,10 @@ export default async function Classes() {
                             />
                         </div>
 
-                        <div className="mt-10 flex flex-wrap items-start gap-14 mx-auto">
-                            {allClassrooms.map((classroom: Class) => (
-                                <ClassCard
-                                    key={classroom.id}
-                                    teacherId={teacherId}
-                                    classData={classroom}
-                                />
-                            ))
-                            }
-                        </div>
+                        <ClassCardClientWrapper
+                            allClassrooms={allClassrooms}
+                            teacherId={teacherId}
+                        />
                     </>
                 ) :
                     (
