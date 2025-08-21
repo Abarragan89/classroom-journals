@@ -32,34 +32,50 @@ export default async function Roster({
       where: { id: classId },
       select: { classCode: true }
     })
-  ]);   
+  ]);
 
 
   return (
     <>
       <div className="relative print:hidden">
         <div className="flex-between w-full absolute top-[40px] right-0">
-          <PringLoginBtn />
-          <AddStudentBtn classId={classId} session={session} />
+          {studentRoster.length > 0 && (
+            <>
+              <PringLoginBtn />
+              <AddStudentBtn classId={classId} session={session} />
+            </>
+          )}
+
         </div>
         <h2 className="text-2xl lg:text-3xl mt-2">Class Roster</h2>
-        <Table className="mt-14">
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Username</TableHead>
-              <TableHead>Password</TableHead>
-              <TableHead className="text-right">&nbsp;</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <StudentRosterRow
-              studentRoster={studentRoster}
-              session={session}
-              classId={classId}
-            />
-          </TableBody>
-        </Table>
+        {studentRoster.length === 0 ? (
+          <>
+            <p className="mt-10 text-2xl text-center">
+              Add students to the roster!
+            </p>
+            <div className="flex-center mt-5 scale-125">
+              <AddStudentBtn classId={classId} session={session} />
+            </div>
+          </>
+        ) : (
+          <Table className="mt-14">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Username</TableHead>
+                <TableHead>Password</TableHead>
+                <TableHead className="text-right">&nbsp;</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <StudentRosterRow
+                studentRoster={studentRoster}
+                session={session}
+                classId={classId}
+              />
+            </TableBody>
+          </Table>
+        )}
       </div>
 
       {/* Only visible in print view */}
