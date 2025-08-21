@@ -50,7 +50,7 @@ export default async function SingleResponse({
                     {response?.completionStatus !== 'COMPLETE' && (
                         <p className='mt-2 text-destructive font-bold'>Not Submitted</p>
                     )}
-                    <div className="flex-between items-end mt-7">
+                    <div className="flex-between items-end mt-5">
                         <ToggleSpellCheck
                             responseId={responseId}
                             spellCheckEnabled={response?.spellCheckEnabled}
