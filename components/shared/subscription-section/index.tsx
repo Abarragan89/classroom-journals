@@ -49,7 +49,7 @@ export default function SubscriptionSection({
 
     const premiumPlanData: SubscriptionData = {
         name: 'Premium - AI Enhanced!',
-        price: 99,
+        price: 49,
         frequency: 'yr',
         description: 'Automatically grades with AI! - Your New Best Friend',
         listItems: [
