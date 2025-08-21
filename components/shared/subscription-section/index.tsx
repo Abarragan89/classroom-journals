@@ -33,7 +33,7 @@ export default function SubscriptionSection({
 
     const standardPlanData: SubscriptionData = {
         name: 'Standard - Unlimited Data',
-        price: 49,
+        price: 19,
         frequency: 'yr',
         description: 'Level up with more classrooms and unlimited assignments.',
         listItems: [
@@ -41,7 +41,7 @@ export default function SubscriptionSection({
             'Create up to 6 Classrooms',
             'Unlimited Assignments',
             'Unlimited student data saved',
-            'Instant Data Visualizations',
+            'Long-term data analysis'
         ],
         payoutLink: process.env.NEXT_PUBLIC_STANDARD_SUBSCRIPTION_LINK as string,
         teacherEmail: teacherData?.email as string
