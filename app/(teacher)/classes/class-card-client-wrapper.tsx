@@ -11,7 +11,7 @@ export default function ClassCardClientWrapper({
     teacherId: string
 }) {
 
-    const { data: teacherClassrooms} = useQuery({
+    const { data: teacherClassrooms } = useQuery({
         queryKey: ['teacherClassrooms', teacherId],
         queryFn: async () => {
             const response = await fetch(`/api/classrooms/teacher-classrooms?teacherId=${teacherId}`);

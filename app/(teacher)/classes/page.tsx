@@ -1,7 +1,6 @@
 import { auth } from "@/auth";
 import { notFound } from "next/navigation";
 import { getAllClassrooms } from "@/lib/server/classroom";
-import ClassCard from "@/components/shared/class-card";
 import { Class, Session } from "@/types";
 import AddClassBtn from "@/components/forms/class-forms/add-class-btn";
 import UpgradeAccountBtn from "@/components/buttons/upgrade-account-btn";
