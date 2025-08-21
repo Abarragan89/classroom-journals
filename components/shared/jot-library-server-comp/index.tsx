@@ -19,6 +19,7 @@ export default async function PromptLibrary({
         getAllClassroomIds(teacherId) as unknown as Classroom[],
         getAllPromptCategories(teacherId) as unknown as PromptCategory[]
     ]);
+
     // Add default value to beginning fo drop down for searchbar
     const allPromptCategoriesWithSpacer = [{ id: '', name: 'All Categories...' }, ...allPromptCategories]
 

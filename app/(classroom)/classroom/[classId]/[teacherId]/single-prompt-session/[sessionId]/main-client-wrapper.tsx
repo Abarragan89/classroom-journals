@@ -33,10 +33,6 @@ export default function MainClientWrapper({
             return promptSession as PromptSession;
         },
         initialData: promptSession,
-        // refetchOnMount: false,
-        refetchOnReconnect: false,
-        // refetchOnWindowFocus: false,
-        // staleTime: Infinity,
     })
 
 
