@@ -37,7 +37,8 @@ export default function JotSearchArea({
             setFetchedPrompts(data.prompts.prompts);
             return data.prompts;
         },
-        initialData: initialPrompts
+        initialData: initialPrompts,
+        refetchOnWindowFocus: false
     })
     if (process.env.NODE_ENV === 'development') console.log('allPrompts', allPrompts)
 
@@ -52,7 +53,8 @@ export default function JotSearchArea({
             const { classrooms } = await response.json();
             return classrooms;
         },
-        initialData: classroomData
+        initialData: classroomData,
+        refetchOnWindowFocus: false
     })
 
     const { data: promptCategories } = useQuery({
@@ -66,7 +68,8 @@ export default function JotSearchArea({
             const allPromptCategoriesWithSpacer = [{ id: '', name: 'All Categories...' }, ...categories]
             return allPromptCategoriesWithSpacer;
         },
-        initialData: categories
+        initialData: categories,
+        refetchOnWindowFocus: false
     })
 
 
