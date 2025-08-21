@@ -41,7 +41,7 @@ export default function SubscriptionSection({
             'Create up to 6 Classrooms',
             'Unlimited Assignments',
             'Unlimited student data saved',
-            'Graphical Student Data Visualizations',
+            'Instant Data Visualizations',
         ],
         payoutLink: process.env.NEXT_PUBLIC_STANDARD_SUBSCRIPTION_LINK as string,
         teacherEmail: teacherData?.email as string
@@ -76,7 +76,7 @@ export default function SubscriptionSection({
                     <article className="w-full">
                         <div className="my-5">
                             <p className="mb-1 text-sm">
-                                Let AI grade essays with your custom rubrics with <span className="underline">no subscription?</span>
+                                Let AI grade essays with your custom rubrics with <span className="underline">no subscription!</span>
                             </p>
                             <Button
                                 className="bg-success !text-success-foreground"
