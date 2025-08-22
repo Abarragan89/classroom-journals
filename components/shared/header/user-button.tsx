@@ -89,9 +89,11 @@ export default function UserButton({
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            <p className="text-sm font-bold text-accent absolute top-20 right-5">
-                Hi, {data?.username}
-            </p>
+            {data?.username && (
+                <p className="text-sm font-bold text-accent absolute top-20 right-5">
+                    Hi, {data?.username}
+                </p>
+            )}
         </>
     )
 }

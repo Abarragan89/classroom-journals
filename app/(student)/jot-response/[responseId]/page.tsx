@@ -35,7 +35,7 @@ export default async function StudentDashboard({
 
     return (
         <div>
-            <Header session={session} />
+            <Header session={session} studentId={studentId} />
             <main className="wrapper">
                 {studentResponse?.promptSession?.promptType === 'ASSESSMENT' ?
                     <MultipleQuestionEditor
