@@ -61,7 +61,7 @@ export default async function StudentDashboard() {
                     teacherId={teacherId as string}
                     classroomId={classroomId}
                     quipAlerts={quipAlerts as number}
-                    studentName={studentName as string}
+                    // studentName={studentName as string}
                 />
             </main>
         </>

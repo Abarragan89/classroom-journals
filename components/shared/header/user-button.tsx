@@ -13,7 +13,6 @@ import { LogOut, User } from "lucide-react";
 import Image from "next/image";
 import { Session } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 
 export default function UserButton({
     session,
