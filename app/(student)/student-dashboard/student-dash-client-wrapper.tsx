@@ -20,7 +20,8 @@ export default function StudentDashClientWrapper({
   studentId,
   teacherId,
   classroomId,
-  quipAlerts
+  quipAlerts,
+  studentName
 
 }: {
   allCategories: PromptCategory[];
@@ -31,6 +32,7 @@ export default function StudentDashClientWrapper({
   teacherId: string;
   classroomId: string;
   quipAlerts: number;
+  studentName: string;
 }) {
 
 
@@ -46,10 +48,8 @@ export default function StudentDashClientWrapper({
       return data as { responses: Response[], totalCount: number };
     },
     initialData: allResponses,
-    // refetchOnMount: false,
     refetchOnReconnect: false,
-    // refetchOnWindowFocus: false,
-    // staleTime: Infinity,
+    refetchOnWindowFocus: false,
   })
 
   // Get the student requests
@@ -61,15 +61,10 @@ export default function StudentDashClientWrapper({
         throw new Error('Failed to fetch student requests');
       }
       const { studentRequests } = await response.json();
-      console.log('Student Requests:', studentRequests);
       setHasSentPromptRequest(studentRequests?.some((req: StudentRequest) => req.type === 'prompt'))
       return studentRequests
     },
     initialData: studentRequests,
-    // refetchOnMount: false,
-    refetchOnReconnect: false,
-    // refetchOnWindowFocus: false,
-    // staleTime: Infinity,
   })
 
   // Get the Featured Blogs
@@ -84,10 +79,6 @@ export default function StudentDashClientWrapper({
       return featuredBlogs as Response[];
     },
     initialData: featuredBlogs,
-    // refetchOnMount: false,
-    refetchOnReconnect: false,
-    // refetchOnWindowFocus: false,
-    // staleTime: Infinity,
   })
 
   // Get the StudentAlert Queries 
@@ -102,10 +93,6 @@ export default function StudentDashClientWrapper({
       return quipAlerts as number;
     },
     initialData: quipAlerts,
-    // refetchOnMount: false,
-    refetchOnReconnect: false,
-    // refetchOnWindowFocus: false,
-    // staleTime: Infinity,
   })
 
   const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(studentRequestData?.some((req: StudentRequest) => req.type === 'username'))
@@ -117,9 +104,11 @@ export default function StudentDashClientWrapper({
 
   return (
     <>
+      {/* <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {studentName as string}</h1> */}
+
       {lastestTaskToDo && (
         <div
-          className="border border-primary w-full px-5 py-2 rounded-lg relative mb-10"
+          className="border border-primary w-full px-5 py-2 rounded-lg relative mb-10 mt-6"
         >
           <div className="flex-between">
             <div>
