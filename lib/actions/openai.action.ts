@@ -33,11 +33,15 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
             Questions:
             1. What is 2 + 2?
             2. What is the capital of France?
+            3. What is the boiling point of water?
+            4. What is photosynthesis?
             Answers:
             1. 4
             2. Paris
+            3. 10 degrees Celsius
+            4. How plants eat
 
-            Expected output: [1, 1]
+            Expected output: [1, 1, 0, 0.5]
 
             Grade the following:
         `
@@ -46,7 +50,8 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
         const answers = responseData.map((r, i) => `${i + 1}. ${r.answer}`).join('\n');
 
         const response = await openai.responses.create({
-            model: "gpt-4o-mini",
+            model: "gpt-5-nano",
+            reasoning: { effort: 'medium' },
             instructions: systemPrompt.trim(),
             input: [
                 {
@@ -57,13 +62,11 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
             text: {
                 format: { type: "text" }
             },
-            temperature: 0.0,
-            max_output_tokens: 300,
+            max_output_tokens: 4500,
         });
         return response;
-
     } catch (error) {
-        console.log('error wiht open ai autograde ', error)
+        console.log('error with open ai autograde ', error)
         return { output_text: 'error' }
     }
 }
@@ -109,7 +112,7 @@ export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, 
         }).join('\n\n');
 
         const systemPrompt = `
-            You are an expert teacher using a rubric to grade student writing. ${gradeLevelString}
+            You are an expert teacher using a rubric to grade student writing. You are a stern grader looking for clarity, complete paragraphs, and relevant details ${gradeLevelString}
             
             Your task is to:
             1. Score each category based on the rubric criteria
@@ -133,9 +136,10 @@ export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, 
             The scores array should contain one score for each category in the order they appear in the rubric.
         `;
 
-        const response = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [
+        const response = await openai.responses.create({
+            model: "gpt-5-nano",
+            reasoning: { effort: 'medium' },
+            input: [
                 {
                     role: "system",
                     content: systemPrompt.trim()
@@ -145,12 +149,14 @@ export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, 
                     content: `Please grade this student writing:\n\n${studentWriting}`
                 }
             ],
-            temperature: 0.3,
-            max_tokens: 800,
-            response_format: { type: "json_object" }
+            max_output_tokens: 4500,
+            text: {
+                format: { type: "json_object" }
+            }
         });
 
-        const result = response.choices[0]?.message?.content;
+        console.log('response ', response)
+        const result = response.output_text
         if (!result) {
             throw new Error('No response from OpenAI');
         }

@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
                     case 4999:
                         futureDate.setDate(futureDate.getDate() + 368);
                         accountType = TeacherAccountType.PREMIUM
-                        newAIAllowance = 150;
+                        newAIAllowance = 100;
                         break;
                 }
 

@@ -125,7 +125,7 @@ export default function StudentDashClientWrapper({
         </div>
       )}
       <section>
-        <div className="flex-end space-x-5 relative -top-5 pb-5">
+        <div className="flex-end space-x-5 relative -top-5 pb-5 mt-12">
           <QuipLink
             quipAlerts={quipAlertCount}
           />

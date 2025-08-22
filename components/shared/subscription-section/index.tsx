@@ -55,7 +55,7 @@ export default function SubscriptionSection({
         listItems: [
             'All features in Standard Plus:',
             'AI-Graded Exit Tickets / Assessments (unlimited)',
-            'AI-Graded Essays / Blogs with custom rubrics (150 credits/month)',
+            'AI-Graded Essays / Blogs with custom rubrics (100 credits/month)',
             'Instant student feedback',
             'Save hours on grading!',
         ],
