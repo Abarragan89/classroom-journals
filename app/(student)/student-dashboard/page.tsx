@@ -6,7 +6,7 @@ import StudentDashClientWrapper from "./student-dash-client-wrapper";
 import { getStudentResponsesDashboard } from "@/lib/server/responses";
 import { getAllQuipAlerts } from "@/lib/server/alerts";
 import {
-    getStudentName,
+    // getStudentName,
     getAllPromptCategories,
     getFeaturedBlogs,
     getStudentRequests
@@ -38,14 +38,14 @@ export default async function StudentDashboard() {
         featuredBlogs,
         studentRequests,
         quipAlerts,
-        studentName
+        // studentName
     ] = await Promise.all([
         getAllPromptCategories(teacherId as string),
         getStudentResponsesDashboard(studentId),
         getFeaturedBlogs(classroomId),
         getStudentRequests(studentId),
         getAllQuipAlerts(studentId),
-        getStudentName(studentId)
+        // getStudentName(studentId)
     ]);
 
     return (
