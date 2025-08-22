@@ -21,7 +21,7 @@ export default function StudentDashClientWrapper({
   teacherId,
   classroomId,
   quipAlerts,
-  studentName
+  // studentName
 
 }: {
   allCategories: PromptCategory[];
@@ -32,7 +32,7 @@ export default function StudentDashClientWrapper({
   teacherId: string;
   classroomId: string;
   quipAlerts: number;
-  studentName: string;
+  // studentName: string;
 }) {
 
 
