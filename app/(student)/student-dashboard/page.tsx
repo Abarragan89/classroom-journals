@@ -52,7 +52,6 @@ export default async function StudentDashboard() {
         <>
             <Header session={session} studentId={studentId} />
             <main className="wrapper relative">
-                <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {studentName as string}</h1>
                 <StudentDashClientWrapper
                     allCategories={allPromptCategories as PromptCategory[]}
                     allResponses={allResponses as { responses: Response[], totalCount: number }}
@@ -62,6 +61,7 @@ export default async function StudentDashboard() {
                     teacherId={teacherId as string}
                     classroomId={classroomId}
                     quipAlerts={quipAlerts as number}
+                    studentName={studentName as string}
                 />
             </main>
         </>

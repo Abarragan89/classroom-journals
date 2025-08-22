@@ -13,10 +13,17 @@ export async function getUserAvatarURL(userId: string) {
         where: { id: userId },
         select: {
             avatarURL: true,
+            iv: true,
+            username: true,
         }
     });
 
-    return userInfo?.avatarURL;
+    const decryptedUserInfo = {
+        avatarURL: userInfo?.avatarURL,
+        username: decryptText(userInfo?.username as string, userInfo?.iv as string)
+    };
+    console.log('decrypted user ', decryptedUserInfo)
+    return decryptedUserInfo;
 }
 
 export async function getTeacherAccountData(teacherId: string) {
