@@ -109,7 +109,7 @@ export default function SinglePromptEditor({
             typingTimeoutRef.current = setTimeout(() => {
                 handleSaveResponses();
                 setIsTyping(false);
-            }, 5000); // Save after 5 seconds of inactivity
+            }, 15000); // Save after 15 seconds of inactivity
         }
         return () => clearTimeout(typingTimeoutRef.current);
     }, [journalText, isTyping]);
