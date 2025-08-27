@@ -76,7 +76,7 @@ export default function MultipleQuestionEditor({
             typingTimeoutRef.current = setTimeout(async () => {
                 setIsTyping(false);
                 await handleSaveResponses();
-            }, 5000); // Save after 5 seconds of inactivity
+            }, 15000); // Save after 15 seconds of inactivity
         }
         return () => clearTimeout(typingTimeoutRef.current);
     }, [journalText, isTyping]);
