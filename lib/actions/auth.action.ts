@@ -38,7 +38,7 @@ export async function signInWithGoogle() {
 
 // Sign user out
 export async function signOutUser() {
-    await signOut({ redirect: false });  // prevent auto redirect
+    await signOut({ redirect: false });  // prevent auto redirect˚†
     revalidatePath('/');
     redirect('/');
 
