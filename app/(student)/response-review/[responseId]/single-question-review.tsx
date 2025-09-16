@@ -44,6 +44,8 @@ export default function SingleQuestionReview({
     studentName
 }: SingleQuestionReviewProps) {
 
+    console.log('initial grade visibilty ', showGradesInitial)
+
 
     const router = useRouter();
 
@@ -53,12 +55,12 @@ export default function SingleQuestionReview({
     const { data } = useQuery({
         queryKey: ['response-review', responseId],
         queryFn: async () => {
+
             const response = await fetch(`/api/responses/review/${responseId}?userId=${studentId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch student responses');
             }
             const data = await response.json();
-            console.log('data from response review', data)
 
             // Set the state variables with fresh data
             setAllQuestions(data.response.response as unknown as ResponseData[]);
@@ -66,11 +68,11 @@ export default function SingleQuestionReview({
             setRubricGrades(data.response?.rubricGrades || []);
             setSpellCheckEnabled(data.response?.spellCheckEnabled || false);
             setIsSubmittable(data.response?.completionStatus === 'INCOMPLETE' || data.response?.completionStatus === 'RETURNED');
-            setShowGrades(data.response?.showGrades || false);
+            setShowGrades(data.response?.promptSession?.areGradesVisible || false);
 
             return data.response as Response;
         },
-        initialData: singleResponse
+        initialData: singleResponse,
     })
 
     if (process.env.NODE_ENV === 'development') {
@@ -162,6 +164,9 @@ export default function SingleQuestionReview({
         { label: "Designs", value: "designs" },
     ]
     const gradePercentage = questions?.[0].score !== undefined ? `${questions?.[0]?.score}%` : 'N/A';
+
+    console.log("show grades ", showGrades)
+
 
     return (
         <div className=" max-w-[700px] mx-auto w-full relative">
