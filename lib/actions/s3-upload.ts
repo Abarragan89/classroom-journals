@@ -111,8 +111,6 @@ export async function addPhotoToLibrary(prevData: unknown, formData: FormData) {
         }
 
         return { success: false, message: 'Invalid file upload' }
-
-
     } catch (error) {
         console.error('Error uploading photo 123 ', error);
         return { success: false, message: 'Error uploading photo', error }
