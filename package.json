@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "build:analyze": "ANALYZE=true next build",
-   
-    "start": "node .next/standalone/server.js",
+    "start": "next start",
     "lint": "next lint",
     "postinstall": "npx prisma generate && npx prisma migrate deploy && next build"
   },
