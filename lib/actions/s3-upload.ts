@@ -87,30 +87,33 @@ export async function addPhotoToLibrary(prevData: unknown, formData: FormData) {
             return { success: false, message: 'Not a photo file' }
         }
 
-        if (imageFile instanceof File) {
-            const buffer = Buffer.from(await imageFile.arrayBuffer());
-            // upload it to S3
-            const pictureURL = await uploadFileToS3(buffer, imageFile.name.replace(/\s+/g, ''))
+        if (
+            imageFile &&
+            typeof imageFile === 'object' &&
+            typeof imageFile.arrayBuffer === 'function'
+        ) {
+            const buffer = Buffer.from(await imageFile.arrayBuffer())
 
-            // Save image to database and attach to User
+            const pictureURL = await uploadFileToS3(
+                buffer,
+                imageFile.name.replace(/\s+/g, '')
+            )
+
             await prisma.image.create({
                 data: {
                     url: pictureURL as string,
                     tags: tagArr,
                     category,
-                }
+                },
             })
 
-            // return the HTML string returned from s3 Bucket to assign
             return { success: true, message: 'Photo Uploaded Successfully!' }
-            // Proceed with buffer processing
-        } else {
-            return { success: false, message: 'Error uploading photo' }
         }
 
+        return { success: false, message: 'Invalid file upload' }
     } catch (error) {
         console.error('Error uploading photo 123 ', error);
-        return { success: false, message: 'Error uploading photo' }
+        return { success: false, message: 'Error uploading photo', error }
     }
 }
 
