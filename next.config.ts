@@ -6,7 +6,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  // output: 'standalone',
 
   // Image optimization for self-hosted environments
   images: {
