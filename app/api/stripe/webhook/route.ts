@@ -32,7 +32,6 @@ export async function POST(req: NextRequest) {
     try {
         // Handle the event
         switch (event.type) {
-
             // This is for one-time payments, not subscriptions
             case 'checkout.session.completed':
                 const purchaseHasBeenMade = event.data.object;
