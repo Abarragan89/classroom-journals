@@ -1,6 +1,6 @@
 import ModeToggle from "./mode-toggle"
 import UserButton from "./user-button"
-import { EllipsisVertical, UserIcon } from "lucide-react";
+import { MenuIcon, UserIcon } from "lucide-react";
 import {
     SheetContent,
     SheetDescription,
@@ -81,11 +81,11 @@ export default function Menu({
                 {renderMenuOptions()}
             </nav>
 
-            {/* Sheet menu */}
+            {/* Sheet Menu for Mobile View */}
             <nav className="sm:hidden">
                 <Sheet>
                     <SheetTrigger className="align-middle">
-                        <EllipsisVertical />
+                        <MenuIcon />
                     </SheetTrigger>
                     <SheetContent className="flex flex-col items-start">
                         <SheetTitle>Menu</SheetTitle>

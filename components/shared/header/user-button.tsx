@@ -39,8 +39,6 @@ export default function UserButton({
         staleTime: Infinity
     })
 
-
-
     return (
         <>
             <div className="flex gap-2 items-center relative">
@@ -89,6 +87,7 @@ export default function UserButton({
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
+            
             {data?.username && (
                 <p className="text-sm font-bold text-accent absolute top-[84px] right-5">
                     Hi, {data?.username}

@@ -17,6 +17,8 @@ export default async function StudentDashboard() {
 
     const session = await auth() as Session
 
+    console.log('student dashboard session', session)
+
     if (!session) return notFound()
 
     const studentId = session?.user?.id as string

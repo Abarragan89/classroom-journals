@@ -46,6 +46,7 @@ export default function AssessmentTableData({
             setIsLoading(true)
             if (!studentId) return
             const newResponse = await createStudentResponse(promptSessionId, studentId, teacherId, promptSessionQuestions)
+           console.log('newResponse', newResponse)
             if (!newResponse) throw new Error('Error creating student response', newResponse)
             queryClient.invalidateQueries({ queryKey: ['getSingleSessionData', promptSessionId] })
         } catch (error) {

@@ -104,8 +104,6 @@ export default function StudentDashClientWrapper({
 
   return (
     <>
-      {/* <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {studentName as string}</h1> */}
-
       {lastestTaskToDo && (
         <div
           className="border border-primary w-full px-5 py-2 rounded-lg relative mb-10 mt-6"
