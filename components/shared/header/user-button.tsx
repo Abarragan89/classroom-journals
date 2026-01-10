@@ -40,7 +40,7 @@ export default function UserButton({
     })
 
     return (
-        <>
+        <div className="relative">
             <div className="flex gap-2 items-center relative">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -89,10 +89,10 @@ export default function UserButton({
             </div>
             
             {data?.username && (
-                <p className="text-sm font-bold text-accent absolute top-[84px] right-5">
+                <p className="text-xs text-accent absolute top-11 right-0 whitespace-nowrap">
                     Hi, {data?.username}
                 </p>
             )}
-        </>
+        </div>
     )
 }

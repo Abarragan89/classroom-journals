@@ -29,7 +29,7 @@ export default function ClassCardClientWrapper({
     })
 
     return (
-        <div className="mt-10 flex flex-wrap items-start gap-14 mx-auto">
+        <div className="mt-8 flex flex-wrap items-start gap-14 mx-auto">
             {teacherClassrooms.map((classroom: Class) => (
                 <ClassCard
                     key={classroom.id}
