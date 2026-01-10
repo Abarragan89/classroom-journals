@@ -5,8 +5,8 @@ import { prisma } from "@/db/prisma";
 import { PromptType } from "@prisma/client";
 
 // Get a single response with comments for blog Display
-export async function getSingleResponse(responseId: string, userId: string) {
-    const session = await requireAuth();
+export async function getSingleResponse(responseId: string, userId: string, sessionParam?: any) {
+    const session = sessionParam || await requireAuth();
     if (session?.user?.id !== userId) {
         throw new Error("Forbidden");
     }
@@ -249,8 +249,8 @@ export async function getSingleStudentResponses(studentId: string) {
 
 
 // Get student responses for student Dashboard. Pagination count and only first 30
-export async function getStudentResponsesDashboard(studentId: string) {
-    const session = await requireAuth();
+export async function getStudentResponsesDashboard(studentId: string, sessionParam?: any) {
+    const session = sessionParam || await requireAuth();
     if (session?.user?.id !== studentId) {
         throw new Error("Forbidden");
     }

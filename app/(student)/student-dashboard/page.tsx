@@ -40,7 +40,7 @@ export default async function StudentDashboard() {
         quipAlerts
     ] = await Promise.all([
         getAllPromptCategories(teacherId as string),
-        getStudentResponsesDashboard(studentId),
+        getStudentResponsesDashboard(studentId, session),
         getFeaturedBlogs(classroomId),
         getStudentRequests(studentId),
         getAllQuipAlerts(studentId),
