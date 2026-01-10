@@ -4,6 +4,8 @@ import { gradeStudentResponse } from "@/lib/actions/response.action";
 import { useState } from "react";
 import { BarLoader } from "react-spinners"
 import { useQueryClient } from "@tanstack/react-query";
+import { PromptSession, Response, ResponseData } from "@/types";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 export default function GradingPanel({
     responseId,
@@ -36,16 +38,17 @@ export default function GradingPanel({
             
             // Always update the cache if sessionId is provided
             if (sessionId) {
-                queryClient.setQueryData<any>(['getSingleSessionData', sessionId], (old) => {
+                queryClient.setQueryData<PromptSession>(['getSingleSessionData', sessionId], (old) => {
                     if (!old) return old;
                     return {
                         ...old,
-                        responses: old.responses?.map((r: any) =>
+                        responses: old.responses?.map((r: Response) =>
                             r.id === responseId
                                 ? {
-                                    ...r, response: r.response.map((q: any, idx: number) =>
+                                    ...r, 
+                                    response: (r.response as unknown as ResponseData[]).map((q: ResponseData, idx: number) =>
                                         idx === questionNumber ? { ...q, score } : q
-                                    )
+                                    ) as unknown as JsonValue
                                 }
                                 : r
                         )

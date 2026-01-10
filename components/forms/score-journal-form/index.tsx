@@ -6,11 +6,12 @@ import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { saveRubricGrade, deleteRubricGrade } from "@/lib/actions/rubric.actions";
-import { Rubric, RubricGrade, RubricListItem } from "@/types";
+import { Rubric, RubricGrade, RubricListItem, Response, ResponseData, PromptSession } from "@/types";
 import { FadeLoader } from 'react-spinners';
 import { useTheme } from "next-themes";
 import RubricInstance from "@/app/(classroom)/classroom/[classId]/[teacherId]/single-prompt-session/[sessionId]/single-response/[responseId]/rubric-instance";
 import { useQueryClient } from '@tanstack/react-query'
+import { JsonValue } from '@prisma/client/runtime/library';
 
 export default function ScoreJournalForm({
     currentScore,
@@ -63,7 +64,7 @@ export default function ScoreJournalForm({
                 const savedGrade: RubricGrade = {
                     rubricId: mostRecentGrade.rubricId,
                     responseId: mostRecentGrade.responseId,
-                    categories: mostRecentGrade.categories as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+                    categories: mostRecentGrade.categories as RubricGrade['categories'],
                     totalScore: mostRecentGrade.totalScore,
                     maxTotalScore: mostRecentGrade.maxTotalScore,
                     comment: mostRecentGrade.comment || undefined
@@ -74,7 +75,7 @@ export default function ScoreJournalForm({
                 const rubricForDisplay: Rubric = {
                     id: mostRecentGrade.rubric.id,
                     title: mostRecentGrade.rubric.title,
-                    categories: mostRecentGrade.rubric.categories as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+                    categories: mostRecentGrade.rubric.categories as Rubric['categories'],
                     teacherId: mostRecentGrade.teacherId,
                     createdAt: new Date(),
                     updatedAt: new Date()
@@ -101,26 +102,26 @@ export default function ScoreJournalForm({
                 return {
                     ...old,
                     rubricGrades: [], // Clear rubric grades when using 100-point scoring
-                    response: (old.response as any[]).map((item, index) => 
+                    response: (old.response as unknown as ResponseData[]).map((item, index) => 
                         index === 0 ? { ...item, score } : item
-                    )
-                } as Response;
+                    ) as unknown as JsonValue
+                } as unknown as Response;
             });
 
             // Update session data cache if sessionId is provided
             if (sessionId) {
-                queryClient.setQueryData<any>(['getSingleSessionData', sessionId], (old) => {
+                queryClient.setQueryData<PromptSession>(['getSingleSessionData', sessionId], (old) => {
                     if (!old) return old;
                     return {
                         ...old,
-                        responses: old.responses?.map((r: any) =>
+                        responses: old.responses?.map((r: Response) =>
                             r.id === responseId
                                 ? {
                                     ...r,
                                     rubricGrades: [],
-                                    response: r.response.map((item: any, index: number) =>
+                                    response: (r.response as unknown as ResponseData[]).map((item: ResponseData, index: number) =>
                                         index === 0 ? { ...item, score } : item
-                                    )
+                                    ) as unknown as JsonValue
                                 }
                                 : r
                         )
@@ -246,33 +247,49 @@ export default function ScoreJournalForm({
                 // Refresh existing grade to show the new grade
                 await loadExistingGrade();
 
+                // Construct the rubric grade object that matches the Response type
+                const rubricGradeForCache = rubricResult.grade && currentRubric ? {
+                    id: rubricResult.grade.id,
+                    categories: rubricResult.grade.categories,
+                    totalScore: rubricResult.grade.totalScore,
+                    maxTotalScore: rubricResult.grade.maxTotalScore,
+                    percentageScore: rubricResult.grade.percentageScore,
+                    comment: rubricResult.grade.comment || undefined,
+                    gradedAt: rubricResult.grade.updatedAt || new Date(),
+                    rubric: {
+                        id: currentRubric.id,
+                        title: currentRubric.title,
+                        categories: currentRubric.categories
+                    }
+                } : null;
+
                 // Update the response query cache with new rubric grade
                 queryClient.setQueryData<Response>(['response', responseId], (old) => {
-                    if (!old || !rubricResult.grade) return old;
+                    if (!old || !rubricGradeForCache) return old;
                     return {
                         ...old,
-                        rubricGrades: [rubricResult.grade],
-                        response: (old.response as any[]).map((item, index) => 
+                        rubricGrades: [rubricGradeForCache],
+                        response: (old.response as unknown as ResponseData[]).map((item, index) => 
                             index === 0 ? { ...item, score: rubricResult.grade?.percentageScore || 0 } : item
-                        )
-                    } as Response;
+                        ) as unknown as JsonValue
+                    } as unknown as Response;
                 });
 
                 // Update session data cache if sessionId is provided
                 if (sessionId) {
-                    queryClient.setQueryData<any>(['getSingleSessionData', sessionId], (old) => {
-                        if (!old || !rubricResult.grade) return old;
+                    queryClient.setQueryData<PromptSession>(['getSingleSessionData', sessionId], (old) => {
+                        if (!old || !rubricGradeForCache) return old;
                         return {
                             ...old,
-                            responses: old.responses?.map((r: any) =>
+                            responses: old.responses?.map((r: Response) =>
                                 r.id === responseId
                                     ? {
                                         ...r,
-                                        rubricGrades: [rubricResult.grade],
-                                        response: r.response.map((item: any, index: number) =>
+                                        rubricGrades: [rubricGradeForCache],
+                                        response: (r.response as unknown as ResponseData[]).map((item: ResponseData, index: number) =>
                                             index === 0 ? { ...item, score: rubricResult.grade?.percentageScore || 0 } : item
-                                        )
-                                    }
+                                        ) as unknown as JsonValue
+                                    } as unknown as Response
                                     : r
                             )
                         };

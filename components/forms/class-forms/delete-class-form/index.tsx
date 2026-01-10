@@ -9,6 +9,7 @@ import { deleteClassroom } from "@/lib/actions/classroom.actions"
 import { usePathname, useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useQueryClient } from "@tanstack/react-query"
+import { Class } from "@/types"
 
 export default function DeleteClassForm({ classroomId, closeModal, teacherId }: { classroomId: string, closeModal: () => void, teacherId: string }) {
 
@@ -25,9 +26,9 @@ export default function DeleteClassForm({ classroomId, closeModal, teacherId }: 
         if (state?.success) {
             closeModal()
             // Remove deleted class from cache
-            queryClient.setQueryData(['teacherClassrooms', teacherId], (old: any) => {
+            queryClient.setQueryData<Class[]>(['teacherClassrooms', teacherId], (old) => {
                 if (!old) return old;
-                return old.filter((classroom: any) => classroom.id !== classroomId);
+                return old.filter((classroom: Class) => classroom.id !== classroomId);
             });
             toast.error('Class Deleted!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }

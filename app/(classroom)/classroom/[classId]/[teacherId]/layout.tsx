@@ -4,12 +4,10 @@ import Header from "@/components/shared/header";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { notFound } from "next/navigation";
-import { Class, Classroom, Session } from "@/types";
+import { Classroom, Session } from "@/types";
 import { getAllClassrooms, getSingleClassroom } from "@/lib/server/classroom";
-import { prisma } from "@/db/prisma";
 import DynamicHeader from "@/components/dynamic-header";
 import { determineSubscriptionAllowance } from "@/lib/server/profile";
-import { ClassUserRole } from "@prisma/client";
 
 export default async function DashboardLayout({
     children,
