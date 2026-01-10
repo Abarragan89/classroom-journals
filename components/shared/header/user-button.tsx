@@ -11,35 +11,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { LogOut, User } from "lucide-react";
 import Image from "next/image";
-import { Session } from "@/types";
-// import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
-export default function UserButton({
-    session,
-    // userId
-}: {
-    session: Session
-    // userId: string | undefined
-}) {
+export default function UserButton() {
+    const { data: session } = useSession();
 
-    // Get the User Avatar
-    // const { data, isLoading } = useQuery({
-    //     queryKey: ['getUserAvatar'],
-    //     queryFn: async () => {
-    //         const response = await fetch(`/api/profile/avatar?userId=${userId}`);
-    //         if (!response.ok) {
-    //             throw new Error('Failed to fetch avatar URL');
-    //         }
-    //         const { avatarURL } = await response.json();
-    //         return avatarURL
-    //     },
-    //     refetchOnWindowFocus: false,
-    //     refetchOnMount: false,
-    //     refetchOnReconnect: false,
-    //     staleTime: Infinity
-    // })
-
-    // if (isLoading)  return;
+    if (!session?.user) return null;
 
     return (
         <div className="relative">
