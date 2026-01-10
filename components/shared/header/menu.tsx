@@ -37,18 +37,14 @@ export default function Menu({
                 isAllowedToMakeNewClass={isAllowedToMakeNewClass as boolean}
             />
             <ModeToggle />
-            <UserButton
-                session={session as Session}
-            />
+            <UserButton />
         </>
     );
     const renderStudentHeader = () => (
         <>
             <StudentNavLinks studentId={studentId as string} classId={session?.classroomId as string} />
             <ModeToggle />
-            <UserButton
-                session={session as Session}
-            />
+            <UserButton />
         </>
     );
 
