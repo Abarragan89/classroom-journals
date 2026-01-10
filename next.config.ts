@@ -100,6 +100,16 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '4mb'
     },
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+    ...(process.env.NODE_ENV === 'development' && {
+      turbo: {
+        rules: {
+          '*.svg': {
+            loaders: ['@svgr/webpack'],
+            as: '*.js',
+          },
+        },
+      },
+    }),
   },
 
   // Server external packages
@@ -131,7 +141,9 @@ const nextConfig: NextConfig = {
       headers: [
         {
           key: 'Cache-Control',
-          value: 'no-store, must-revalidate',
+          value: process.env.NODE_ENV === 'production'
+            ? 'no-store, must-revalidate'
+            : 'no-cache',
         },
       ],
     },
@@ -141,7 +153,9 @@ const nextConfig: NextConfig = {
       headers: [
         {
           key: 'Cache-Control',
-          value: 'no-store, max-age=0',
+          value: process.env.NODE_ENV === 'production'
+            ? 'no-store, max-age=0'
+            : 'no-cache',
         },
       ],
     },

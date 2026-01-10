@@ -37,11 +37,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "JotterBlog",
     description: "Manage student writing and assessments. Share work as blog posts, auto-grade with AI, and write in a distraction-free, feedback-friendly classroom space.",
-    url: "https://www.jotterblog.com", // <-- update this to your domain
+    url: "https://www.jotterblog.com",
     siteName: "JotterBlog",
     images: [
       {
-        url: "/images/open-graph-logo.png", // <-- Add your image here
+        url: "/images/open-graph-logo.png",
         width: 1200,
         height: 630,
         alt: "JotterBlog social preview",

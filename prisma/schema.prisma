@@ -122,6 +122,7 @@ model ClassUser {
 
   @@id([userId, classId]) // Composite primary key
   @@index([userId, role]) // For faster search ups
+  @@index([classId, role])
 }
 
 model Notification {
@@ -136,6 +137,8 @@ model Notification {
   response    Response @relation(fields: [responseId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
   isRead      Boolean  @default(false)
+
+  @@index([userId, isRead, classId])
 }
 
 // This is used for teachers when payment fails
@@ -153,6 +156,8 @@ model Alert {
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime  @default(now())
   isRead    Boolean   @default(false)
+
+  @@index([userId, type])
 }
 
 model Comment {
@@ -170,6 +175,7 @@ model Comment {
   replies    Comment[]     @relation("CommentReplies")
 
   @@index([parentId]) // Optional: Improves performance when querying replies
+  @@index([responseId])
 }
 
 model ResponseLike {
@@ -247,6 +253,8 @@ model PromptSession {
   class            Classroom           @relation(fields: [classId], references: [id], onDelete: Cascade)
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
+
+  @@index([classId, promptType])
 }
 
 enum ResponseStatus {
@@ -272,6 +280,9 @@ model Response {
   // Relationship
   promptSession     PromptSession  @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
   student           User           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, completionStatus])
+  @@index([promptSessionId])
 }
 
 enum StudentRequestStatus {
@@ -297,6 +308,9 @@ model StudentRequest {
   // Relations
   student User @relation("RequestsByStudent", fields: [studentId], references: [id], onDelete: Cascade)
   teacher User @relation("RequestsToTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@index([teacherId, classId, status])
+  @@index([studentId])
 }
 
 model Image {

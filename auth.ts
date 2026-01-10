@@ -27,6 +27,7 @@ declare module "next-auth" {
         role?: string,
         classroomId?: string // Add classroomId to user
         teacherId?: string // Add teacherId to user
+        avatarURL?: string // Add avatarURL to user
     }
 }
 
@@ -96,6 +97,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         name: true,
                         id: true,
                         iv: true,
+                        avatarURL: true,
                     }
                 })
 
@@ -126,6 +128,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     id: loggedInStudent.id,
                     name: loggedInStudent.name,
                     username: loggedInStudent.username,
+                    avatarURL: loggedInStudent.avatarURL,
                     role: 'STUDENT',
                     classroomId: classroom.id,
                     iv: loggedInStudent.iv,
@@ -145,6 +148,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     callbacks: {
         // user only comes back when loggin in with  GOogle
         async session({ session, user, trigger, token }) {
+            console.log('session callback user, token, trigger', user, token, trigger, token)
             if (session.user) {
                 // getRefresh
                 session.refreshToken = token.refreshToken
@@ -158,6 +162,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 session.user.role = token?.email ? 'TEACHER' : 'STUDENT';
                 session.user.name = token.name;
                 session.user.username = token.username as string;
+                session.user.avatarURL = token.avatarURL as string;
 
                 // Setting the classroomId and teacherId for student sessions
                 if (token?.classroomId) {
@@ -212,6 +217,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         // If signing back in, just set the token to the user name that is already encyrpted
                         token.name = decryptText(user.name as string, user.iv as string)
                         token.username = decryptText(user.username as string, user.iv as string)
+                        token.avatarURL = user.avatarURL
                     }
                 }
             } catch (error) {

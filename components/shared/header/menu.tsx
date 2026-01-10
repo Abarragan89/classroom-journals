@@ -39,7 +39,6 @@ export default function Menu({
             <ModeToggle />
             <UserButton
                 session={session as Session}
-                userId={teacherId}
             />
         </>
     );
@@ -49,7 +48,6 @@ export default function Menu({
             <ModeToggle />
             <UserButton
                 session={session as Session}
-                userId={studentId}
             />
         </>
     );

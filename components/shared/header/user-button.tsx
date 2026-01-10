@@ -12,32 +12,34 @@ import { Button } from "@/components/ui/button";
 import { LogOut, User } from "lucide-react";
 import Image from "next/image";
 import { Session } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 
 export default function UserButton({
     session,
-    userId
+    // userId
 }: {
     session: Session
-    userId: string | undefined
+    // userId: string | undefined
 }) {
 
     // Get the User Avatar
-    const { data } = useQuery({
-        queryKey: ['getUserAvatar'],
-        queryFn: async () => {
-            const response = await fetch(`/api/profile/avatar?userId=${userId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch avatar URL');
-            }
-            const { avatarURL } = await response.json();
-            return avatarURL
-        },
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        staleTime: Infinity
-    })
+    // const { data, isLoading } = useQuery({
+    //     queryKey: ['getUserAvatar'],
+    //     queryFn: async () => {
+    //         const response = await fetch(`/api/profile/avatar?userId=${userId}`);
+    //         if (!response.ok) {
+    //             throw new Error('Failed to fetch avatar URL');
+    //         }
+    //         const { avatarURL } = await response.json();
+    //         return avatarURL
+    //     },
+    //     refetchOnWindowFocus: false,
+    //     refetchOnMount: false,
+    //     refetchOnReconnect: false,
+    //     staleTime: Infinity
+    // })
+
+    // if (isLoading)  return;
 
     return (
         <div className="relative">
@@ -47,7 +49,7 @@ export default function UserButton({
                         <div className="flex items-center">
                             <Button className="flex items-center justify-center ml-2 bg-transparent px-0 shadow-none">
                                 <Image
-                                    src={data?.avatarURL || '/images/demo-avatars/1.png'}
+                                    src={session?.user?.avatarURL || '/images/demo-avatars/1.png'}
                                     alt="blog cover photo"
                                     width={36}
                                     height={36}
@@ -61,7 +63,7 @@ export default function UserButton({
                         <DropdownMenuLabel className="font-normal">
                             <div className="flex flex-col space-y-1">
                                 <div className="text-xs text-center font-medium leading-none line-clamp-1">
-                                    {session?.user?.email ?? data?.username}
+                                    {session?.user?.email ?? session?.user?.username}
                                 </div>
                             </div>
                         </DropdownMenuLabel>
@@ -88,9 +90,11 @@ export default function UserButton({
                 </DropdownMenu>
             </div>
             
-            {data?.username && (
-                <p className="text-xs text-accent absolute top-11 right-0 whitespace-nowrap">
-                    Hi, {data?.username}
+            {session?.user?.username && (
+                <p className="text-xs text-accent absolute top-11 right-0 whitespace-nowrap"
+                
+                >
+                    Hi, {session?.user?.username}
                 </p>
             )}
         </div>

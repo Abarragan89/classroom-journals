@@ -17,8 +17,6 @@ export default async function StudentDashboard() {
 
     const session = await auth() as Session
 
-    console.log('student dashboard session', session)
-
     if (!session) return notFound()
 
     const studentId = session?.user?.id as string
@@ -39,15 +37,13 @@ export default async function StudentDashboard() {
         allResponses,
         featuredBlogs,
         studentRequests,
-        quipAlerts,
-        // studentName
+        quipAlerts
     ] = await Promise.all([
         getAllPromptCategories(teacherId as string),
         getStudentResponsesDashboard(studentId),
         getFeaturedBlogs(classroomId),
         getStudentRequests(studentId),
         getAllQuipAlerts(studentId),
-        // getStudentName(studentId)
     ]);
 
     return (
@@ -63,7 +59,6 @@ export default async function StudentDashboard() {
                     teacherId={teacherId as string}
                     classroomId={classroomId}
                     quipAlerts={quipAlerts as number}
-                    // studentName={studentName as string}
                 />
             </main>
         </>
