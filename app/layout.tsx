@@ -6,6 +6,7 @@ import "./globals.css";
 import Footer from "@/components/footer";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import TanstackQueryProvider from "@/components/providers/tanstack-query-provider";
+import SessionProvider from "@/components/providers/session-provider";
 import AbsentUserChecker from "@/components/absent-user-checker";
 
 const geistSans = Geist({
@@ -67,27 +68,29 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <TanstackQueryProvider>
-          {process.env.NODE_ENV === 'development' && (
-            <ReactQueryDevtools initialIsOpen={false} />
-          )}
-          <ThemeProvider
-            attribute='class'
-            themes={["light", "dark", "tech", "cupid", "tuxedo", "avocado", "sky"]}
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <AbsentUserChecker />
-            <Toaster />
-            <div className="flex min-h-screen flex-col">
-              <div className="flex-1">
-                {children}
+        <SessionProvider>
+          <TanstackQueryProvider>
+            {process.env.NODE_ENV === 'development' && (
+              <ReactQueryDevtools initialIsOpen={false} />
+            )}
+            <ThemeProvider
+              attribute='class'
+              themes={["light", "dark", "tech", "cupid", "tuxedo", "avocado", "sky"]}
+              defaultTheme="light"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <AbsentUserChecker />
+              <Toaster />
+              <div className="flex min-h-screen flex-col">
+                <div className="flex-1">
+                  {children}
+                </div>
               </div>
-            </div>
-            <Footer />
-          </ThemeProvider>
-        </TanstackQueryProvider>
+              <Footer />
+            </ThemeProvider>
+          </TanstackQueryProvider>
+        </SessionProvider>
       </body>
     </html>
   );
