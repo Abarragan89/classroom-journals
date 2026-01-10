@@ -171,18 +171,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     session.teacherId = token.teacherId as string
                 }
             }
-            // It there is an update, set the user name
-            if (trigger === 'update') {
-                session.user.name = user.name
-                if (user.avatarURL) {
-                    session.user.avatarURL = user.avatarURL
-                }
-            }
 
             return session
         },
-        async jwt({ token, user, trigger, account }) {
+        async jwt({ token, user, trigger, account, session }) {
             try {
+                // Handle session updates from update() calls
+                if (trigger === 'update' && session?.user) {
+                    if (session.user.avatarURL) {
+                        token.avatarURL = session.user.avatarURL
+                    }
+                    if (session.user.name) {
+                        token.name = session.user.name
+                    }
+                }
+
                 if (user) {
                     if (account) {
                         // pass the accessToken and provierAccount ID to the token to pass to the session
