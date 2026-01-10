@@ -32,7 +32,11 @@ export default function ReviewWrapper({
             const data = await response.json();
             return data.response as Response;
         },
-        initialData: singleResponse
+        initialData: singleResponse,
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
     })
     const [questions, setQuestions] = useState<ResponseData[]>(responseData?.response as unknown as ResponseData[])
 

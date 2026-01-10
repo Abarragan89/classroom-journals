@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table"
 import { createStudentResponse } from "@/lib/actions/response.action";
 import { formatDateShort } from "@/lib/utils";
-import { Response, ResponseData, User } from "@/types";
+import { Response, ResponseData, User, PromptSession } from "@/types";
 import { ClipboardCheckIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
@@ -46,14 +46,23 @@ export default function BlogTableData({
             setIsLoading(true)
             if (!studentId) return
             const newResponse = await createStudentResponse(promptSessionId, studentId, teacherId, promptSessionQuestions)
-            if (!newResponse) throw new Error('Error creating student response', newResponse)
-            queryClient.invalidateQueries({ queryKey: ['getSingleSessionData', promptSessionId] })
+            if (!newResponse.success) throw new Error('Error creating student response')
+
+            // Update cache with new response instead of invalidating
+            queryClient.setQueryData<PromptSession>(['getSingleSessionData', promptSessionId], (old) => {
+                if (!old || !newResponse.data) return old;
+                return {
+                    ...old,
+                    responses: [...(old.responses || []), newResponse.data]
+                } as PromptSession;
+            });
         } catch (error) {
             console.log('error creating student response', error)
         } finally {
             setIsLoading(false)
         }
     }
+
 
     return (
         <Table className="mt-3">

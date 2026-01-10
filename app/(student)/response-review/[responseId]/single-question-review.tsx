@@ -73,6 +73,10 @@ export default function SingleQuestionReview({
             return data.response as Response;
         },
         initialData: singleResponse,
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
     })
 
     if (process.env.NODE_ENV === 'development') {

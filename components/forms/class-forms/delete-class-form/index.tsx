@@ -24,7 +24,11 @@ export default function DeleteClassForm({ classroomId, closeModal, teacherId }: 
     useEffect(() => {
         if (state?.success) {
             closeModal()
-            queryClient.invalidateQueries({ queryKey: ['teacherClassrooms', teacherId] });
+            // Remove deleted class from cache
+            queryClient.setQueryData(['teacherClassrooms', teacherId], (old: any) => {
+                if (!old) return old;
+                return old.filter((classroom: any) => classroom.id !== classroomId);
+            });
             toast.error('Class Deleted!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });

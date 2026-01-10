@@ -47,9 +47,10 @@ export default function AddClassForm({
 
     //redirect if the state is success
     useEffect(() => {
-        if (state?.success) {
+        if (state?.success && state.data) {
             toast.success('Class Added!');
-            // invalidate the teacherClassrooms useQuery
+            // Note: Can't add to cache here because we don't have the full class object
+            // The action only returns classId. Keep invalidation for now.
             queryClient.invalidateQueries({ queryKey: ['teacherClassrooms', teacherId] });
             closeModal()
             router.push(`/classroom/${state.data}/${teacherId}/roster`); // Navigates without losing state instantly

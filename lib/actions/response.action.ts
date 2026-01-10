@@ -40,20 +40,87 @@ export async function createStudentResponse(
 
         if (hasSubmitted) {
             return {
-                success: true,
+                success: false,
                 message: "You have already submitted your responses."
             };
         }
 
-        await prisma.response.create({
+        const newResponse = await prisma.response.create({
             data: {
                 promptSessionId,
                 studentId,
                 response: questions as unknown as InputJsonArray,
+            },
+            select: {
+                id: true,
+                promptSessionId: true,
+                studentId: true,
+                response: true,
+                submittedAt: true,
+                completionStatus: true,
+                likeCount: true,
+                spellCheckEnabled: true,
+                createdAt: true,
+                likes: {
+                    select: {
+                        userId: true,
+                        id: true,
+                    }
+                },
+                _count: {
+                    select: {
+                        comments: true
+                    }
+                },
+                comments: {
+                    select: {
+                        id: true,
+                        createdAt: true,
+                        userId: true,
+                        responseId: true,
+                    }
+                },
+                rubricGrades: {
+                    select: {
+                        id: true,
+                        categories: true,
+                        totalScore: true,
+                        maxTotalScore: true,
+                        percentageScore: true,
+                        comment: true,
+                        rubricId: true,
+                    }
+                },
+                student: {
+                    select: {
+                        id: true,
+                        name: true,
+                        username: true,
+                        iv: true,
+                        avatarURL: true,
+                    }
+                },
+                promptSession: {
+                    select: {
+                        id: true,
+                        title: true,
+                        promptType: true,
+                        status: true,
+                        classId: true,
+                        createdAt: true,
+                        updatedAt: true,
+                        assignedAt: true,
+                        areGradesVisible: true,
+                        isPublic: true,
+                        questions: true,
+                        authorId: true,
+                        promptId: true,
+                    }
+                }
             }
         })
 
-        return { success: true, message: "responses submitted" };
+        return { success: true, message: "responses submitted", data: newResponse };
 
     } catch (error) {
         if (error instanceof Error) {

@@ -8,7 +8,8 @@ import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 export default function DataClientWrapper({
     questions,
     responses,
-    teacherId
+    teacherId,
+    sessionId,
 }: {
     questions: Question[];
     responses: Response[];
@@ -62,6 +63,7 @@ export default function DataClientWrapper({
                         startRange={currentQuestions.start}
                         endRange={currentQuestions.end}
                         teacherId={teacherId}
+                        sessionId={sessionId}
                     />
                 </div>
             </div>

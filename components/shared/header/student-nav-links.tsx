@@ -25,10 +25,10 @@ export default function StudentNavLinks({
             return unreadCount as number;
         },
         placeholderData: 0,
-        // refetchOnMount: false,
+        staleTime: 1000 * 60 * 2, // 2 minutes
+        refetchOnMount: false,
         refetchOnReconnect: false,
-        // refetchOnWindowFocus: false,
-        // staleTime: Infinity,
+        refetchOnWindowFocus: false,
     })
 
     return (

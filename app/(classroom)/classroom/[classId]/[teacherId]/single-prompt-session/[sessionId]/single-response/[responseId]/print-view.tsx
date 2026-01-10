@@ -27,10 +27,10 @@ export default function PrintViewBlog({
             return data.response as Response;
         },
         initialData: response,
-        // refetchOnMount: false,
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        refetchOnMount: false,
         refetchOnReconnect: false,
-        // refetchOnWindowFocus: false,
-        // staleTime: Infinity,
+        refetchOnWindowFocus: false,
     })
 
     return (
@@ -104,11 +104,13 @@ export default function PrintViewBlog({
                         }}
                     >
                         <div style={{ marginTop: 0, paddingTop: 0 }}>
-                            <RubricDisplay
-                                rubricGrade={currentResponse?.rubricGrades[0]}
-                                studentName={currentResponse?.student?.name || currentResponse?.student?.username}
-                                isPrintView={true}
-                            />
+                            {currentResponse?.rubricGrades?.[0]?.rubric && (
+                                <RubricDisplay
+                                    rubricGrade={currentResponse.rubricGrades[0]}
+                                    studentName={currentResponse?.student?.name || currentResponse?.student?.username}
+                                    isPrintView={true}
+                                />
+                            )}
                         </div>
                     </div>
                 )}

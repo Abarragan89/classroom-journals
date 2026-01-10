@@ -36,10 +36,10 @@ export default function QuipListSection({
             return data.quips as PromptSession[];
         },
         initialData: allQuips,
+        staleTime: 1000 * 60 * 3, // 3 minutes
+        refetchOnMount: false,
         refetchOnReconnect: false,
-        // refetchOnWindowFocus: false,
-        // refetchOnMount: false,
-        // staleTime: Infinity,
+        refetchOnWindowFocus: false,
     });
 
     function closeModal() {

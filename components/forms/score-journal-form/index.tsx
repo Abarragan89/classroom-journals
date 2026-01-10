@@ -17,11 +17,13 @@ export default function ScoreJournalForm({
     responseId,
     teacherId,
     studentWriting = '',
+    sessionId,
 }: {
     currentScore: number | string,
     responseId: string,
     teacherId: string,
     studentWriting?: string,
+    sessionId?: string,
 }) {
 
     const queryClient = useQueryClient()
@@ -92,6 +94,39 @@ export default function ScoreJournalForm({
         try {
             // First, save the new 100-point score
             await gradeStudentResponse(responseId, 0, score, teacherId);
+
+            // Update the response query cache with new score
+            queryClient.setQueryData<Response>(['response', responseId], (old) => {
+                if (!old) return old;
+                return {
+                    ...old,
+                    rubricGrades: [], // Clear rubric grades when using 100-point scoring
+                    response: (old.response as any[]).map((item, index) => 
+                        index === 0 ? { ...item, score } : item
+                    )
+                } as Response;
+            });
+
+            // Update session data cache if sessionId is provided
+            if (sessionId) {
+                queryClient.setQueryData<any>(['getSingleSessionData', sessionId], (old) => {
+                    if (!old) return old;
+                    return {
+                        ...old,
+                        responses: old.responses?.map((r: any) =>
+                            r.id === responseId
+                                ? {
+                                    ...r,
+                                    rubricGrades: [],
+                                    response: r.response.map((item: any, index: number) =>
+                                        index === 0 ? { ...item, score } : item
+                                    )
+                                }
+                                : r
+                        )
+                    };
+                });
+            }
 
             // If there is an existing rubric grade, delete it since we're now using 100-point grading
             if (existingGrade) {
@@ -211,10 +246,38 @@ export default function ScoreJournalForm({
                 // Refresh existing grade to show the new grade
                 await loadExistingGrade();
 
-                // Invalidate the response query to refresh the data for print view
-                await queryClient.invalidateQueries({
-                    queryKey: ['response', responseId]
-                })
+                // Update the response query cache with new rubric grade
+                queryClient.setQueryData<Response>(['response', responseId], (old) => {
+                    if (!old || !rubricResult.grade) return old;
+                    return {
+                        ...old,
+                        rubricGrades: [rubricResult.grade],
+                        response: (old.response as any[]).map((item, index) => 
+                            index === 0 ? { ...item, score: rubricResult.grade?.percentageScore || 0 } : item
+                        )
+                    } as Response;
+                });
+
+                // Update session data cache if sessionId is provided
+                if (sessionId) {
+                    queryClient.setQueryData<any>(['getSingleSessionData', sessionId], (old) => {
+                        if (!old || !rubricResult.grade) return old;
+                        return {
+                            ...old,
+                            responses: old.responses?.map((r: any) =>
+                                r.id === responseId
+                                    ? {
+                                        ...r,
+                                        rubricGrades: [rubricResult.grade],
+                                        response: r.response.map((item: any, index: number) =>
+                                            index === 0 ? { ...item, score: rubricResult.grade?.percentageScore || 0 } : item
+                                        )
+                                    }
+                                    : r
+                            )
+                        };
+                    });
+                }
 
                 toast('Rubric grade saved successfully!');
             } else {

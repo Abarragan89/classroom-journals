@@ -26,10 +26,10 @@ export default function MyWorkClientWrapper({
             return data.responses as Response[];
         },
         initialData: studentResponses,
-        // refetchOnMount: false,
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        refetchOnMount: false,
         refetchOnReconnect: false,
-        // refetchOnWindowFocus: false,
-        // staleTime: Infinity,
+        refetchOnWindowFocus: false,
     })
 
     // Determine Returned Work 
