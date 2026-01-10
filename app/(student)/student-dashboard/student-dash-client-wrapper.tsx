@@ -7,8 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { PromptCategory, StudentRequest, Response, ResponseData } from '@/types'
 import Link from 'next/link';
 import AssignmentSectionClient from './assignement-section.client';
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { formatDateLong } from '@/lib/utils';
 import QuipLink from './quip-link';
 
@@ -35,68 +34,18 @@ export default function StudentDashClientWrapper({
   // studentName: string;
 }) {
 
+  // Initialize state from server-fetched data
+  const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(
+    studentRequests?.some((req: StudentRequest) => req.type === 'prompt') ?? false
+  );
 
-  // Get the prompt sessions
-  const { data: allResponseData } = useQuery({
-    queryKey: ['getAllStudentResponses', classroomId],
-    queryFn: async () => {
-      const response = await fetch(`/api/responses/student/${studentId}/dashboard`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch student responses dashboard');
-      }
-      const data = await response.json();
-      return data as { responses: Response[], totalCount: number };
-    },
-    initialData: allResponses,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-  })
-
-  // Get the student requests
-  const { data: studentRequestData } = useQuery({
-    queryKey: ['getStudentRequests', classroomId],
-    queryFn: async () => {
-      const response = await fetch(`/api/student-requests/student/${studentId}?classroomId=${classroomId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch student requests');
-      }
-      const { studentRequests } = await response.json();
-      setHasSentPromptRequest(studentRequests?.some((req: StudentRequest) => req.type === 'prompt'))
-      return studentRequests
-    },
-    initialData: studentRequests,
-  })
-
-  // Get the Featured Blogs
-  const { data: featuredBlogsData } = useQuery({
-    queryKey: ['getFeaturedBlogs', classroomId],
-    queryFn: async () => {
-      const response = await fetch(`/api/student-dashboard/featured-blogs?classroomId=${classroomId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch featured blogs');
-      }
-      const { featuredBlogs } = await response.json();
-      return featuredBlogs as Response[];
-    },
-    initialData: featuredBlogs,
-  })
-
-  // Get the StudentAlert Queries 
-  const { data: quipAlertCount } = useQuery({
-    queryKey: ['getQueryAlerts', studentId],
-    queryFn: async () => {
-      const response = await fetch(`/api/alerts/quips?userId=${studentId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch quip alerts');
-      }
-      const { quipAlerts } = await response.json();
-      return quipAlerts as number;
-    },
-    initialData: quipAlerts,
-  })
-
-  const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(studentRequestData?.some((req: StudentRequest) => req.type === 'username'))
-  const lastestTaskToDo = allResponseData?.responses.find(res => res.completionStatus === 'INCOMPLETE' || res.completionStatus === 'RETURNED')
+  // Memoize computed values for performance
+  const lastestTaskToDo = useMemo(
+    () => allResponses?.responses.find(
+      res => res.completionStatus === 'INCOMPLETE' || res.completionStatus === 'RETURNED'
+    ),
+    [allResponses?.responses]
+  );
 
   function handleRequestUIHandler() {
     setHasSentPromptRequest(true)
@@ -104,8 +53,6 @@ export default function StudentDashClientWrapper({
 
   return (
     <>
-      {/* <h1 className="h2-bold mt-2 line-clamp-1 mb-10">Hi, {studentName as string}</h1> */}
-
       {lastestTaskToDo && (
         <div
           className="border border-primary w-full px-5 py-2 rounded-lg relative mb-10 mt-6"
@@ -127,7 +74,7 @@ export default function StudentDashClientWrapper({
       <section>
         <div className="flex-end space-x-5 relative -top-5 pb-5 mt-12">
           <QuipLink
-            quipAlerts={quipAlertCount}
+            quipAlerts={quipAlerts}
           />
           <Button asChild>
             <Link href={'/typing-test'}>
@@ -143,11 +90,11 @@ export default function StudentDashClientWrapper({
             classId={classroomId}
           />
         </div>
-        {featuredBlogsData?.length > 0 && (
+        {featuredBlogs?.length > 0 && (
           <>
             <h3 className="h3-bold ml-1">Featured Blogs</h3>
             <Carousel>
-              {featuredBlogsData.map((response) => (
+              {featuredBlogs.map((response) => (
                 <Link
                   key={response?.id}
                   href={`/discussion-board/${response?.promptSession?.id}/response/${response?.id}`}
@@ -171,8 +118,8 @@ export default function StudentDashClientWrapper({
       <section>
         <h3 className="h3-bold mb-2 ml-1">Assignments</h3>
         <AssignmentSectionClient
-          initialPrompts={allResponseData?.responses}
-          promptCountTotal={allResponseData?.totalCount}
+          initialPrompts={allResponses?.responses}
+          promptCountTotal={allResponses?.totalCount}
           categories={allCategories}
           studentId={studentId}
         />

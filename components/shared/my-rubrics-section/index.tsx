@@ -35,7 +35,11 @@ export default function MyRubricSection({
             const data = await response.json();
             return data.rubrics as Rubric[];
         },
-        initialData: teacherRubrics || []
+        initialData: teacherRubrics || [],
+        staleTime: 1000 * 60 * 10, // 10 minutes
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
     })
 
     // Function to handle rubric updates to send user back to list with updated rubric

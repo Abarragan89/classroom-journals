@@ -37,10 +37,10 @@ export default function AssignmentListSection({
             return sessionData.prompts;
         },
         initialData: initialPrompts,
-        // refetchOnMount: false,
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        refetchOnMount: false,
         refetchOnReconnect: false,
-        // refetchOnWindowFocus: false,
-        // staleTime: Infinity,
+        refetchOnWindowFocus: false,
     })
 
     if (error) {

@@ -50,10 +50,10 @@ export default function TypingTest({
             return data.highScores as User[];
         },
         initialData: classHighScores,
-        // refetchOnMount: false,
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        refetchOnMount: false,
         refetchOnReconnect: false,
-        // refetchOnWindowFocus: false,
-        // staleTime: Infinity,
+        refetchOnWindowFocus: false,
     })
 
     useEffect(() => {

@@ -5,8 +5,8 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { approveUsernameChange, declineStudentRequest, approveNewPrompt, markAllRequestsAsViewed } from '@/lib/actions/student-request';
 import { StudentRequest } from '@/types';
 import { toast } from 'sonner';
-import { useQuery } from '@tanstack/react-query';
 import { useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 export default function StudentRequestSection({
     teacherId,
@@ -20,32 +20,14 @@ export default function StudentRequestSection({
 
 
     const queryClient = useQueryClient();
+    const [allRequests, setAllRequests] = useState<StudentRequest[]>(studentRequests);
 
-    const { error } = useQuery({
-        queryKey: ['getStudentRequests', teacherId],
-        queryFn: async () => {
-            const response = await fetch(`/api/student-requests/teacher/${teacherId}/${classId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch teacher requests');
-            }
-            const data = await response.json();
-            const studentRequestData = data.teacherRequests as StudentRequest[];
-            await markAllRequestsAsViewed(teacherId, classId)
-            setAllRequests(studentRequestData)
-            return studentRequestData
-        },
-        initialData: studentRequests,
-        // refetchOnMount: false,
-        refetchOnReconnect: false,
-        // refetchOnWindowFocus: false,
-        // staleTime: Infinity,
-    })
-
-    if (error) {
-        throw new Error('Error getting student requests')
-    }
-
-    const [allRequests, setAllRequests] = useState<StudentRequest[]>(studentRequests)
+    // Mark all requests as viewed on component mount
+    useEffect(() => {
+        if (studentRequests.length > 0) {
+            markAllRequestsAsViewed(teacherId, classId);
+        }
+    }, []); // Empty dependency array - only run once on mount
 
     async function approveRequest(studentId: string, requestText: string, responseId: string, requestType: string) {
         try {
@@ -64,9 +46,10 @@ export default function StudentRequestSection({
                 setAllRequests(prev => prev.filter(request => request.id !== responseId))
                 toast('Prompt added to Library');
             }
-            queryClient.invalidateQueries({
-                queryKey: ['getStudentRequestCount', teacherId],
-            })
+            // Decrement request count in cache
+            queryClient.setQueryData(['getStudentRequestCount', teacherId], (old: number | undefined) => {
+                return old ? Math.max(0, old - 1) : 0;
+            });
         } catch (error) {
             console.log('error approving student request', error)
         }
@@ -82,9 +65,10 @@ export default function StudentRequestSection({
             toast.error('Request Denied!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
-            queryClient.invalidateQueries({
-                queryKey: ['getStudentRequestCount', teacherId],
-            })
+            // Decrement request count in cache
+            queryClient.setQueryData(['getStudentRequestCount', teacherId], (old: number | undefined) => {
+                return old ? Math.max(0, old - 1) : 0;
+            });
         } catch (error) {
             console.log('error denying username change ', error)
         }

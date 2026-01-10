@@ -6,7 +6,6 @@ import PromptCard from "./shared/prompt-card"
 import { SearchOptions } from "@/types"
 import { Classroom } from "@/types"
 import PaginationList from "./shared/prompt-filter-options/pagination-list"
-import { useQuery } from "@tanstack/react-query"
 
 export default function JotSearchArea({
     initialPrompts,
@@ -24,55 +23,6 @@ export default function JotSearchArea({
 
 
     const [fetchedPrompts, setFetchedPrompts] = useState<Prompt[]>(initialPrompts);
-
-    // refetch all the data and update data
-    const { data: allPrompts } = useQuery({
-        queryKey: ['allPrompts', teacherId],
-        queryFn: async () => {
-            const response = await fetch(`/api/prompts/teacher-prompts/${teacherId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch prompts');
-            }
-            const data = await response.json();
-            setFetchedPrompts(data.prompts.prompts);
-            return data.prompts;
-        },
-        initialData: initialPrompts,
-        refetchOnWindowFocus: false
-    })
-    if (process.env.NODE_ENV === 'development') console.log('allPrompts', allPrompts)
-
-
-    const { data: classroomIds } = useQuery({
-        queryKey: ['classroomIds', teacherId],
-        queryFn: async () => {
-            const response = await fetch(`/api/classrooms/ids?teacherId=${teacherId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch classrooms');
-            }
-            const { classrooms } = await response.json();
-            return classrooms;
-        },
-        initialData: classroomData,
-        refetchOnWindowFocus: false
-    })
-
-    const { data: promptCategories } = useQuery({
-        queryKey: ['promptCategories', teacherId],
-        queryFn: async () => {
-            const response = await fetch(`/api/prompt-categories?userId=${teacherId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch prompt categories');
-            }
-            const { categories } = await response.json();
-            const allPromptCategoriesWithSpacer = [{ id: '', name: 'All Categories...' }, ...categories]
-            return allPromptCategoriesWithSpacer;
-        },
-        initialData: categories,
-        refetchOnWindowFocus: false
-    })
-
-
 
     // Make the following into one state object
     const promptSearchOptions = useRef<SearchOptions>({
@@ -109,7 +59,7 @@ export default function JotSearchArea({
             <PromptFilterOptions
                 searchOptionsRef={promptSearchOptions}
                 getFilteredSearch={getFilteredSearch}
-                categories={promptCategories}
+                categories={categories}
             />
             {/* Insert all the prompt jot cards here */}
             {fetchedPrompts?.length > 0 ? (
@@ -119,7 +69,7 @@ export default function JotSearchArea({
                             key={prompt.id}
                             promptData={prompt}
                             updatePromptData={setFetchedPrompts}
-                            classroomData={classroomIds}
+                            classroomData={classroomData}
                             teacherId={teacherId}
                         />
                     ))}

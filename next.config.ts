@@ -6,7 +6,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const nextConfig: NextConfig = {
-  // output: 'standalone',
+  output: 'standalone',
 
   // Image optimization for self-hosted environments
   images: {
@@ -102,8 +102,28 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
   },
 
+  // Turbopack configuration (moved from experimental.turbo)
+  ...(process.env.NODE_ENV === 'development' && {
+    turbopack: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
+  }),
+
   // Server external packages
   serverExternalPackages: ['@prisma/client'],
+
+  // Performance optimizations
+  compress: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
 
   // Caching and performance optimizations
   headers: async () => [
@@ -131,7 +151,9 @@ const nextConfig: NextConfig = {
       headers: [
         {
           key: 'Cache-Control',
-          value: 'no-store, must-revalidate',
+          value: process.env.NODE_ENV === 'production'
+            ? 'no-store, must-revalidate'
+            : 'no-cache',
         },
       ],
     },
@@ -141,7 +163,9 @@ const nextConfig: NextConfig = {
       headers: [
         {
           key: 'Cache-Control',
-          value: 'no-store, max-age=0',
+          value: process.env.NODE_ENV === 'production'
+            ? 'no-store, max-age=0'
+            : 'no-cache',
         },
       ],
     },

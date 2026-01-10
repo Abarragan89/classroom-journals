@@ -11,7 +11,8 @@ export default function GradingPanel({
     updateScoreUIHandler,
     currentScore,
     updateUIQuestionAccordion,
-    teacherId
+    teacherId,
+    sessionId
 }: {
     responseId: string;
     questionNumber: number;
@@ -19,7 +20,10 @@ export default function GradingPanel({
     updateUIQuestionAccordion?: (newScore: number) => void;
     currentScore: number;
     teacherId: string;
+    sessionId: string;
 }) {
+
+    console.log('session id ', sessionId)
 
     const [isGrading, setIsGrading] = useState<boolean>(false)
     const [currentScoreState, setCurrentScoreState] = useState<number>(currentScore)
@@ -29,13 +33,33 @@ export default function GradingPanel({
         try {
             setIsGrading(true)
             await gradeStudentResponse(responseId, questionNumber, score, teacherId)
+            
+            // Always update the cache if sessionId is provided
+            if (sessionId) {
+                queryClient.setQueryData<any>(['getSingleSessionData', sessionId], (old) => {
+                    if (!old) return old;
+                    return {
+                        ...old,
+                        responses: old.responses?.map((r: any) =>
+                            r.id === responseId
+                                ? {
+                                    ...r, response: r.response.map((q: any, idx: number) =>
+                                        idx === questionNumber ? { ...q, score } : q
+                                    )
+                                }
+                                : r
+                        )
+                    };
+                });
+            }
+
+            // Update local UI state
             if (updateScoreUIHandler) {
                 updateScoreUIHandler(questionNumber, score)
             } else if (updateUIQuestionAccordion) {
                 updateUIQuestionAccordion(score)
-                queryClient.invalidateQueries({ queryKey: ['getSingleSessionData'] });
-                return
             }
+            
             setCurrentScoreState(score)
         } catch (error) {
             console.log('error updating score ', error)

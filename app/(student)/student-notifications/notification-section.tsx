@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     clearAllNotifications,
     markAllNotificationsAsRead
@@ -9,7 +9,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { formatDateLong } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function NotificationSection({
@@ -22,37 +21,15 @@ export default function NotificationSection({
     classId: string,
 }) {
 
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
+    const [notificationsState, setNotificaitonsState] = useState<UserNotification[]>(notifications);
 
-
-    const { error } = useQuery({
-        queryKey: ['getUserNotifications', userId],
-        queryFn: async () => {
-            // ✅ Use API route instead of server action
-            const response = await fetch(`/api/notifications/user?userId=${userId}&classId=${classId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch notifications');
-            }
-            const { notifications: userNotifications } = await response.json();
-
-            setNotificaitonsState(userNotifications);
-            if (userNotifications.length > 0) {
-                await markAllNotificationsAsRead(userId, classId);
-            }
-            return userNotifications as UserNotification[];
-        },
-        initialData: notifications,
-        // refetchOnMount: false,
-        refetchOnReconnect: false,
-        // refetchOnWindowFocus: false,
-        // staleTime: Infinity,
-    })
-    if (error) {
-        throw new Error('Error getting user notifications')
-    }
-
-
-    const [notificationsState, setNotificaitonsState] = useState<UserNotification[]>(notifications)
+    // Mark all notifications as read on component mount
+    useEffect(() => {
+        if (notifications.length > 0) {
+            markAllNotificationsAsRead(userId, classId);
+        }
+    }, []); // Empty dependency array - only run once on mount
 
     async function clearNotifications() {
         try {

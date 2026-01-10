@@ -33,7 +33,10 @@ export default function StudentProfileClientWrapper({
             return requests
         },
         initialData: studentRequests,
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        refetchOnMount: false,
         refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
     })
 
     // 🔥 FIX: Initialize state properly

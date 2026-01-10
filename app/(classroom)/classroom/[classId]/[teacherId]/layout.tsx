@@ -26,28 +26,22 @@ export default async function DashboardLayout({
     const teacherId = session?.user?.id as string
     if (!teacherId) return notFound()
 
-    // Get all classrooms to render 
-    const teacherClasses = await getAllClassrooms(teacherId)
-
     const { classId } = await params
     if (!classId) return notFound()
 
-    // Check if the authenticated teacher is part of the classroom and has the role of 'teacher'
-    const isTeacherAuthorized = await prisma.classUser.findFirst({
-        where: {
-            classId: classId,
-            userId: teacherId,
-            role: ClassUserRole.TEACHER
-        },
-        select: { userId: true }
-    });
+    // Parallel queries - only fetch what's needed
+    const [teacherClasses, classroomData, subscriptionData] = await Promise.all([
+        getAllClassrooms(teacherId),
+        getSingleClassroom(classId, teacherId), // Already includes auth check
+        determineSubscriptionAllowance(teacherId)
+    ]);
 
-    if (!isTeacherAuthorized) return notFound()
+    // getSingleClassroom returns null if not authorized
+    if (!classroomData) {
+        return notFound()
+    }
 
-
-    const { isAllowedToMakeNewClass } = await determineSubscriptionAllowance(teacherId)
-    // Get Class Data
-    const classroomData = await getSingleClassroom(classId, teacherId) as Class;
+    const { isAllowedToMakeNewClass } = subscriptionData
 
     return (
         <SidebarProvider>

@@ -29,7 +29,6 @@ export default async function SinglePromptSession({
     return (
         <div>
             <h2 className="text-xl lg:text-2xl line-clamp-3 mt-5">{promptSession?.prompt?.title}</h2>
-
             <div className="flex-between items-center mt-3">
                 <EditPromptSessionPopUp
                     promptSessionType={promptSession?.promptType}

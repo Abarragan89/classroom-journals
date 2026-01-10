@@ -8,11 +8,13 @@ import { useState } from "react"
 export default function GradeResponseCard({
     questionsAndAnswers,
     responseId,
-    teacherId
+    teacherId,
+    sessionId
 }: {
     questionsAndAnswers: ResponseData[],
     responseId: string,
-    teacherId: string
+    teacherId: string,
+    sessionId?: string
 }) {
 
     const [responseArr, setResponseArr] = useState<ResponseData[]>(questionsAndAnswers)
@@ -64,6 +66,7 @@ export default function GradeResponseCard({
                                 questionNumber={index}
                                 updateScoreUIHandler={updateScoreUIHandler}
                                 teacherId={teacherId}
+                                sessionId={sessionId}
                             />
                         </div>
                         <Separator />

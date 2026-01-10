@@ -45,10 +45,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
       const { unreadCount } = await response.json();
       return unreadCount as number;
     },
-    // refetchOnMount: false,
+    staleTime: 1000 * 60 * 2, // 2 minutes
+    refetchOnMount: false,
     refetchOnReconnect: false,
-    // refetchOnWindowFocus: false,
-    // staleTime: Infinity,
+    refetchOnWindowFocus: false,
   })
 
   const { data: studentRequestCount } = useQuery({
@@ -61,10 +61,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
       const data = await response.json();
       return data.count as number;
     },
-    // refetchOnMount: false,
+    staleTime: 1000 * 60 * 2, // 2 minutes
+    refetchOnMount: false,
     refetchOnReconnect: false,
-    // refetchOnWindowFocus: false,
-    // staleTime: Infinity,
+    refetchOnWindowFocus: false,
   })
 
 

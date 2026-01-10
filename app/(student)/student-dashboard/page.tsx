@@ -37,15 +37,13 @@ export default async function StudentDashboard() {
         allResponses,
         featuredBlogs,
         studentRequests,
-        quipAlerts,
-        // studentName
+        quipAlerts
     ] = await Promise.all([
         getAllPromptCategories(teacherId as string),
-        getStudentResponsesDashboard(studentId),
+        getStudentResponsesDashboard(studentId, session),
         getFeaturedBlogs(classroomId),
         getStudentRequests(studentId),
         getAllQuipAlerts(studentId),
-        // getStudentName(studentId)
     ]);
 
     return (
@@ -61,7 +59,6 @@ export default async function StudentDashboard() {
                     teacherId={teacherId as string}
                     classroomId={classroomId}
                     quipAlerts={quipAlerts as number}
-                    // studentName={studentName as string}
                 />
             </main>
         </>

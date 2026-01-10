@@ -17,10 +17,10 @@ export default function UpgradeAccountBtn({
             const { subscriptionData } = await response.json();
             return subscriptionData;
         },
-        // refetchOnMount: false,
+        staleTime: 1000 * 60 * 10, // 10 minutes - subscription status rarely changes
+        refetchOnMount: false,
         refetchOnReconnect: false,
-        // refetchOnWindowFocus: false,
-        // staleTime: Infinity,
+        refetchOnWindowFocus: false,
     })
 
     if (isPending) return

@@ -8,7 +8,7 @@ import {
     TableCell
 } from "@/components/ui/table"
 import { formatDateShort } from "@/lib/utils";
-import { Response, ResponseData, User } from "@/types";
+import { Response, ResponseData, User, PromptSession } from "@/types";
 import { ClipboardCheckIcon } from "lucide-react";
 import { responsePercentage, responseScore } from "@/lib/utils";
 import { createStudentResponse } from "@/lib/actions/response.action";
@@ -46,8 +46,17 @@ export default function AssessmentTableData({
             setIsLoading(true)
             if (!studentId) return
             const newResponse = await createStudentResponse(promptSessionId, studentId, teacherId, promptSessionQuestions)
-            if (!newResponse) throw new Error('Error creating student response', newResponse)
-            queryClient.invalidateQueries({ queryKey: ['getSingleSessionData', promptSessionId] })
+            console.log('newResponse', newResponse)
+            if (!newResponse.success) throw new Error('Error creating student response')
+
+            // Update cache with new response instead of invalidating
+            queryClient.setQueryData<PromptSession>(['getSingleSessionData', promptSessionId], (old) => {
+                if (!old || !newResponse.data) return old;
+                return {
+                    ...old,
+                    responses: [...(old.responses || []), newResponse.data]
+                } as PromptSession;
+            });
         } catch (error) {
             console.log('error creating student response', error)
         } finally {
