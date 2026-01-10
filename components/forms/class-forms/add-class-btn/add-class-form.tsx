@@ -9,7 +9,7 @@ import ColorSelect from "../class-color-select";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner"
-import { GoogleClassroom, Session } from "@/types";
+import { GoogleClassroom, Session, Class } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { getTeacherGoogleClassrooms } from "@/lib/actions/google.classroom.actions";
 import {
@@ -49,13 +49,16 @@ export default function AddClassForm({
     useEffect(() => {
         if (state?.success && state.data) {
             toast.success('Class Added!');
-            // Note: Can't add to cache here because we don't have the full class object
-            // The action only returns classId. Keep invalidation for now.
-            queryClient.invalidateQueries({ queryKey: ['teacherClassrooms', teacherId] });
+            // Optimistically update cache with the new class returned from the server
+            queryClient.setQueryData<Class[]>(['teacherClassrooms', teacherId], (old) => {
+                if (!old) return [state.data as Class];
+                // Add new class to the beginning of the list (most recent first)
+                return [state.data as Class, ...old];
+            });
             closeModal()
-            router.push(`/classroom/${state.data}/${teacherId}/roster`); // Navigates without losing state instantly
+            router.push(`/classroom/${state.data.id}/${teacherId}/roster`);
         }
-    }, [state, pathname, router])
+    }, [state, pathname, router, queryClient, teacherId, closeModal])
 
     const [selectedColor, setSelectedColor] = useState<string>('rgba(220, 38, 38, 0.90)');
 

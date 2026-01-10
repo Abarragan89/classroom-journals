@@ -4,7 +4,7 @@ import { updateUserAvatar } from "@/lib/actions/profile.action";
 import { BlogImage } from "@/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 export default function UpdateAvatar({
     setOpenPhotoModal,
@@ -18,7 +18,7 @@ export default function UpdateAvatar({
 
     const [isLoadingPhotos, setIsLoadingPhotos] = useState<boolean>(false);
     const [allAvatarPhotos, setAllAvatarPhotos] = useState<BlogImage[] | null>(null);
-    const queryClient = useQueryClient();
+    const { update } = useSession();
 
 
     useEffect(() => {
@@ -45,11 +45,16 @@ export default function UpdateAvatar({
 
     async function updateUserAvatarHandler(imageUrl: string) {
         try {
-            await updateUserAvatar(imageUrl, userId)
-            setCurrentAvatar(imageUrl)
-            queryClient.invalidateQueries({
-                queryKey: ['getUserAvatar', userId],
-            });
+            const result = await updateUserAvatar(imageUrl, userId)
+            if (result?.success) {
+                setCurrentAvatar(imageUrl)
+                // Update NextAuth session with new avatar - this triggers session callback to refresh
+                await update({
+                    user: {
+                        avatarURL: imageUrl
+                    }
+                });
+            }
         } catch (error) {
             console.log('error updating url', error)
         }

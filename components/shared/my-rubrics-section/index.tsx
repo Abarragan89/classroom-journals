@@ -44,7 +44,10 @@ export default function MyRubricSection({
 
     // Function to handle rubric updates to send user back to list with updated rubric
     function handleRubricUpdate(updateType: string) {
-        // Refetch the rubric list after an update
+        // Keep invalidateQueries here because:
+        // 1. Rubric has complex nested structure (categories array with variable items)
+        // 2. Update could be create/edit/delete - hard to predict final state
+        // 3. Server returns the full updated rubric list, so refetch is efficient
         queryClient.invalidateQueries({ queryKey: ['rubrics', teacherId] })
         setShowMyRubrics(true)
         // show toast to notificy user of success
