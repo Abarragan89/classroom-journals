@@ -174,6 +174,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             // It there is an update, set the user name
             if (trigger === 'update') {
                 session.user.name = user.name
+                if (user.avatarURL) {
+                    session.user.avatarURL = user.avatarURL
+                }
             }
 
             return session
