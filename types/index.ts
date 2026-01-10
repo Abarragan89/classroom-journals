@@ -119,6 +119,7 @@ export interface Response {
     }>;
 }
 
+
 export interface ResponseData {
     answer: string;
     question: string;

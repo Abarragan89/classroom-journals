@@ -24,8 +24,8 @@ export default async function SingleResponse({
         return <div>No response ID provided</div>;
     }
 
-    const response = await getSingleResponse(responseId, teacherId) as Response;
-    const classRosterAndScores = await getAllResponsesFromPrompt(sessionId, teacherId) as Response[]
+    const response = await getSingleResponse(responseId, teacherId) as unknown as Response;
+    const classRosterAndScores = await getAllResponsesFromPrompt(sessionId, teacherId) as unknown as Response[]
 
     const rosterAlphabetized = classRosterAndScores.sort((a, b) => {
         const lastNameA = a?.student?.name?.split(" ")[1] as string; // Get second word (last name)
@@ -37,7 +37,7 @@ export default async function SingleResponse({
         return <div>Response not found</div>;
     }
 
-    const questionsAndAnswers = response?.response as ResponseData[]
+    const questionsAndAnswers = response?.response as unknown as ResponseData[]
     const isMultiQuestion = response?.promptSession?.promptType === 'ASSESSMENT';
 
     return (
@@ -78,7 +78,7 @@ export default async function SingleResponse({
                             teacherId={teacherId}
                             responseId={response?.id}
                             currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
-                            studentWriting={(response.response as ResponseData[])?.[0]?.answer || ''}
+                            studentWriting={(response.response as unknown as ResponseData[])?.[0]?.answer || ''}
                             sessionId={sessionId}
                         />
                     )}

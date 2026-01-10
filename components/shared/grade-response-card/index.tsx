@@ -14,7 +14,7 @@ export default function GradeResponseCard({
     questionsAndAnswers: ResponseData[],
     responseId: string,
     teacherId: string,
-    sessionId?: string
+    sessionId: string
 }) {
 
     const [responseArr, setResponseArr] = useState<ResponseData[]>(questionsAndAnswers)
