@@ -66,10 +66,8 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
         const classCodes = allClassCodes.map(classroom => classroom.classCode)
         const classCode = generateClassCode(classCodes);
 
-        // This gets passed as the return to redirect to classroom page
-        let classUrl: string = '';
-
-        await prisma.$transaction(async (tx) => {
+        // Execute transaction and return the new class
+        const newClassData = await prisma.$transaction(async (tx) => {
             const newClass = await tx.classroom.create({
                 data: {
                     name: name.trim(),
@@ -88,11 +86,27 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
                     role: ClassUserRole.TEACHER
                 }
             })
-            classUrl = newClass.id
-            return newClass
+            return newClass;
         })
 
-        return { success: true, message: 'Class Created!', data: classUrl }
+        // Return full class object with _count for cache update
+        return { 
+            success: true, 
+            message: 'Class Created!', 
+            data: {
+                id: newClassData.id,
+                name: newClassData.name,
+                subject: newClassData.subject,
+                year: newClassData.year,
+                period: newClassData.period,
+                color: newClassData.color,
+                grade: newClassData.grade,
+                classCode: newClassData.classCode,
+                createdAt: newClassData.createdAt,
+                updatedAt: newClassData.updatedAt,
+                _count: { users: 1 } // Teacher is the first user
+            }
+        }
     } catch (error) {
         console.log('error creating classroom', error)
         return { success: false, message: 'Error creating class. Try again.' }

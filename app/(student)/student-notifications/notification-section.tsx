@@ -34,9 +34,8 @@ export default function NotificationSection({
     async function clearNotifications() {
         try {
             clearAllNotifications(userId, classId)
-            queryClient.invalidateQueries({
-                queryKey: ['getUserNotifications', userId],
-            })
+            // Optimistically update cache to empty array
+            queryClient.setQueryData<UserNotification[]>(['getUserNotifications', userId], [])
             setNotificaitonsState([])
         } catch (error) {
             console.log('error clearing all notifications', error)

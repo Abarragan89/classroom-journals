@@ -131,6 +131,8 @@ export async function updateUserAvatar(avatarURL: string, userId: string) {
             }
         })
 
+        return { success: true, message: 'Avatar updated successfully', avatarURL };
+
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {

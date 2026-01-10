@@ -8,12 +8,10 @@ import { Input } from '@/components/ui/input';
 import { signIn } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
-import { useQueryClient } from '@tanstack/react-query'
 
 export default function StudentSignInCard({ changeTab }: { changeTab: () => void }) {
 
     const router = useRouter();
-    const queryClient = useQueryClient();
 
     const [classCode, setClassCode] = useState<string>('')
     const [password, setPassword] = useState<string>('')
@@ -35,8 +33,7 @@ export default function StudentSignInCard({ changeTab }: { changeTab: () => void
             if (result?.error) {
                 setError('Invalid class code or password')
             } else {
-                // Invalidate the query to update avatar and username
-                queryClient.invalidateQueries({ queryKey: ['getUserAvatar'] })
+                // Session is automatically updated by NextAuth after login
                 // Redirect the student to the dashboard after successful login
                 router.push(`/student-dashboard/`)
             }
