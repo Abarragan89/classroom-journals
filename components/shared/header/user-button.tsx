@@ -68,7 +68,7 @@ export default function UserButton() {
             </div>
 
             {session?.user?.username && (
-                <p className="hidden md:block text-xs text-accent absolute top-11 right-0 whitespace-nowrap"
+                <p className="hidden md:block text-xs absolute top-11 right-0 whitespace-nowrap"
                 >
                     Hi, {session?.user?.username}
                 </p>

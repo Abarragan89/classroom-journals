@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: hsl(48, 24%, 88%);
+    /* --background: hsl(48, 24%, 88%);
     --foreground: hsl(233, 91%, 17%);
     --primary: hsl(217, 58%, 21%);
     --primary-foreground: hsl(0, 3%, 94%);
@@ -34,7 +34,74 @@
     --sidebar-border: hsl(240 3.7% 15.9%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 72%, 31%);
-    --success-foreground: hsl(0, 3%, 94%);
+    --success-foreground: hsl(0, 3%, 94%); */
+
+    --background: #f5f1e6;
+    --foreground: #4a3f35;
+    --card: #fffcf5;
+    --card-foreground: #4a3f35;
+    --popover: #fffcf5;
+    --popover-foreground: #4a3f35;
+    --primary: #a67c52;
+    --primary-foreground: #ffffff;
+    --secondary: #e2d8c3;
+    --secondary-foreground: #5c4d3f;
+    --muted: #ece5d8;
+    --muted-foreground: #7d6b56;
+    --accent: #d4c8aa;
+    --accent-foreground: #4a3f35;
+    --destructive: #b54a35;
+    --destructive-foreground: #ffffff;
+    --border: #dbd0ba;
+    --input: #dbd0ba;
+    --ring: #a67c52;
+    --chart-1: #a67c52;
+    --chart-2: #8d6e4c;
+    --chart-3: #735a3a;
+    --chart-4: #b3906f;
+    --chart-5: #c0a080;
+    --sidebar: #ece5d8;
+    --sidebar-foreground: #4a3f35;
+    --sidebar-primary: #a67c52;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #d4c8aa;
+    --sidebar-accent-foreground: #4a3f35;
+    --sidebar-border: #dbd0ba;
+    --sidebar-ring: #a67c52;
+    --success: #6b8e4e;
+    --success-foreground: #ffffff;
+    --warning: #d4941a;
+    --warning-foreground: #1f1508;
+    --font-sans: Libre Baskerville, serif;
+    --font-serif: Lora, serif;
+    --font-mono: IBM Plex Mono, monospace;
+    --radius: 0.25rem;
+    --shadow-x: 2px;
+    --shadow-y: 3px;
+    --shadow-blur: 5px;
+    --shadow-spread: 0px;
+    --shadow-opacity: 0.12;
+    --shadow-color: hsl(28 13% 20%);
+    --shadow-2xs: 2px 3px 5px 0px hsl(28 13% 20% / 0.06);
+    --shadow-xs: 2px 3px 5px 0px hsl(28 13% 20% / 0.06);
+    --shadow-sm:
+      2px 3px 5px 0px hsl(28 13% 20% / 0.12),
+      2px 1px 2px -1px hsl(28 13% 20% / 0.12);
+    --shadow:
+      2px 3px 5px 0px hsl(28 13% 20% / 0.12),
+      2px 1px 2px -1px hsl(28 13% 20% / 0.12);
+    --shadow-md:
+      2px 3px 5px 0px hsl(28 13% 20% / 0.12),
+      2px 2px 4px -1px hsl(28 13% 20% / 0.12);
+    --shadow-lg:
+      2px 3px 5px 0px hsl(28 13% 20% / 0.12),
+      2px 4px 6px -1px hsl(28 13% 20% / 0.12);
+    --shadow-xl:
+      2px 3px 5px 0px hsl(28 13% 20% / 0.12),
+      2px 8px 10px -1px hsl(28 13% 20% / 0.12);
+    --shadow-2xl: 2px 3px 5px 0px hsl(28 13% 20% / 0.3);
+    --tracking-normal: 0em;
+    --spacing: 0.25rem;
   }
   .dark {
     --background: hsl(222.2 84% 4.9%);
@@ -68,6 +135,11 @@
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 73%, 39%);
     --success-foreground: hsl(222.2 84% 4.9%);
+    --chart-1: hsl(213, 45%, 80%);
+    --chart-2: hsl(221, 61%, 64%);
+    --chart-3: hsl(206, 68%, 50%);
+    --chart-4: hsl(212, 50%, 40%);
+    --chart-5: hsl(224, 44%, 60%);
   }
 
   .tech {
@@ -103,6 +175,11 @@
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 80%, 43%);
     --success-foreground: hsl(0, 0%, 0%);
+    --chart-1: hsl(107, 89%, 48%);
+    --chart-2: hsl(75, 49%, 54%);
+    --chart-3: hsl(123, 64%, 33%);
+    --chart-4: hsl(128, 70%, 40%);
+    --chart-5: hsl(135, 37%, 45%);
   }
   .cupid {
     --background: hsl(330, 60%, 94%);
@@ -136,6 +213,11 @@
     --sidebar-ring: hsl(340, 80%, 50%);
     --success: hsl(129, 72%, 31%);
     --success-foreground: hsl(0, 0%, 100%);
+    --chart-1: hsl(340, 72%, 48%);
+    --chart-2: hsl(320, 92%, 35%);
+    --chart-3: hsl(330, 90%, 70%);
+    --chart-4: hsl(340, 80%, 60%);
+    --chart-5: hsl(331, 61%, 52%);
   }
 
   .tuxedo {
@@ -170,6 +252,11 @@
     --sidebar-accent-foreground: hsl(0, 0%, 95%);
     --sidebar-border: hsl(0, 0%, 20%);
     --sidebar-ring: hsl(0, 0%, 80%);
+    --chart-1: hsl(0, 0%, 100%);
+    --chart-2: hsl(0, 0%, 80%);
+    --chart-3: hsl(0, 0%, 60%);
+    --chart-4: hsl(0, 0%, 40%);
+    --chart-5: hsl(0, 0%, 50%);
   }
 
   .avocado {
@@ -204,6 +291,11 @@
     --sidebar-ring: hsl(100, 70%, 50%);
     --success: hsl(140, 70%, 40%);
     --success-foreground: hsl(0, 0%, 100%);
+    --chart-1: hsl(100, 59%, 34%);
+    --chart-2: hsl(55, 28%, 36%);
+    --chart-3: hsl(72, 68%, 60%);
+    --chart-4: hsl(99, 26%, 49%);
+    --chart-5: hsl(100, 60%, 45%);
   }
 }
 
@@ -249,6 +341,11 @@
 
   --success: hsl(145, 67%, 60%); /* Fresh green, still visible on dark */
   --success-foreground: hsl(211, 80%, 16%);
+  --chart-1: hsl(210, 79%, 23%);
+  --chart-2: hsl(207, 77%, 25%);
+  --chart-3: hsl(210, 80%, 50%);
+  --chart-4: hsl(210, 55%, 35%);
+  --chart-5: hsl(190, 82%, 60%);
 }
 
 @layer utilities {

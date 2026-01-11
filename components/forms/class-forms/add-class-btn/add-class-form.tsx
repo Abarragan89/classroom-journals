@@ -60,7 +60,7 @@ export default function AddClassForm({
         }
     }, [state, pathname, router, queryClient, teacherId, closeModal])
 
-    const [selectedColor, setSelectedColor] = useState<string>('rgba(220, 38, 38, 0.90)');
+    const [selectedColor, setSelectedColor] = useState<string>('1'); // Default to chart-1
 
     // Handler for setting the color value when a color is selected
     const handleColorSelect = (color: string) => {

@@ -45,7 +45,16 @@ export default function EditClassForm({
         }
     }, [state])
 
-    const [selectedColor, setSelectedColor] = useState<string>(classData?.color || '#f87171');
+    // Convert old color format to chart number, default to '1' if invalid
+    const getInitialColor = (color: string | undefined): string => {
+        if (!color) return '1';
+        // If it's already a chart number (1-5), use it
+        if (['1', '2', '3', '4', '5'].includes(color)) return color;
+        // Otherwise default to '1'
+        return '1';
+    };
+
+    const [selectedColor, setSelectedColor] = useState<string>(getInitialColor(classData?.color));
 
     // Handler for setting the color value when a color is selected
     const handleColorSelect = (color: string) => {

@@ -23,7 +23,7 @@ export default function TeacherSignInCard({ changeTab }: { changeTab: () => void
                 {/* Magic Link Form */}
                 <MagicLink />
                                 
-                <p className="text-sm text-center text-accent mt-4 px-4">
+                <p className="text-sm text-center mt-4 px-4">
                     By using JotterBlog, you agree to our{" "}
                     <a href="/terms-of-service" className="underline hover:text-primary">
                         Terms of Service

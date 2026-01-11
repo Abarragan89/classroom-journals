@@ -76,7 +76,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                         <div className="w-6 h-6 rounded-full bg-accent border-2 border-background" />
                                         <div className="w-6 h-6 rounded-full bg-secondary border-2 border-background" />
                                     </div>
-                                    <span className="text-sm font-medium text-accent">Trusted by educators nationwide</span>
+                                    <span className="text-sm font-medium text-muted-foreground">Trusted by educators nationwide</span>
                                 </div>
 
                                 {/* Main Headline */}
@@ -84,7 +84,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
                                         Stop Grading.
                                         <br />
-                                        <span className="text-accent">Start Teaching.</span>
+                                        <span className="text-muted-foreground">Start Teaching.</span>
                                     </h1>
                                     <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
                                         Reclaim 10+ hours per week with AI-powered grading that uses <span className="font-semibold text-foreground">your custom rubrics</span>. Your students write, AI grades, you focus on what matters.
@@ -123,7 +123,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
 
                                 {/* Trust Indicators */}
                                 <p className="text-sm text-muted-foreground">
-                                    ✓ No credit card required  •  ✓ Free for basic plan  •  ✓ Cancel anytime
+                                    ✓ No credit card required  •  ✓ AI graded Essays and Assessments
                                 </p>
                             </div>
 
@@ -154,7 +154,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                         </div>
                     </div>
                     {/* Theme switcher hint - repositioned */}
-                    <div className='hidden sm:flex items-baseline text-sm absolute -top-7 right-36 text-accent italic font-medium opacity-0 animate-bounce-down gap-2'>
+                    <div className='hidden sm:flex items-baseline text-sm absolute -top-7 right-36 text-muted-foreground italic font-medium opacity-0 animate-bounce-down gap-2'>
                         Try our themes!
                         <CornerRightUp className="w-4 h-4" />
                     </div>
@@ -176,7 +176,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                         <div className="grid lg:grid-cols-2 gap-8 items-center">
                             <div className="space-y-4">
                                 <div className="inline-block px-4 py-1 bg-accent/10 rounded-full border border-accent/20">
-                                    <span className="text-sm font-semibold text-accent">⭐ Most Popular</span>
+                                    <span className="text-sm font-semibold">⭐ Most Popular</span>
                                 </div>
                                 <h3 className="text-3xl font-bold">AI Grading with Your Rubrics</h3>
                                 <p className="text-lg text-muted-foreground">
@@ -184,15 +184,15 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 </p>
                                 <ul className="space-y-3 text-foreground">
                                     <li className="flex items-start gap-3">
-                                        <span className="text-accent mt-1">✓</span>
+                                        <span className="mt-1">✓</span>
                                         <span>Grade 120 essays in under 5 minutes</span>
                                     </li>
                                     <li className="flex items-start gap-3">
-                                        <span className="text-accent mt-1">✓</span>
+                                        <span className="mt-1">✓</span>
                                         <span>Maintain your teaching standards and rubric criteria</span>
                                     </li>
                                     <li className="flex items-start gap-3">
-                                        <span className="text-accent mt-1">✓</span>
+                                        <span className="mt-1">✓</span>
                                         <span>Review and adjust AI scores before finalizing</span>
                                     </li>
                                 </ul>

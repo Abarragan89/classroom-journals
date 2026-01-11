@@ -7,6 +7,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+// Get chart color CSS variable by number (1-5)
+export function getChartColor(chartNumber: string | number): string {
+  return `hsl(var(--chart-${chartNumber}))`;
+}
+
 // Generate class code
 const characters = [..."abcdefghikmnpqrstuvwxyz"]; // Lowercase (without o, l)
 

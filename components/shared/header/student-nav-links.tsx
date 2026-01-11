@@ -36,13 +36,13 @@ export default function StudentNavLinks({
 
             <Link href={`/student-dashboard`} className={`
             flex-start hover:cursor-pointer hover:text-foreground text-sm
-            ${pathname === 'student-dashboard' ? 'text-foreground underline' : 'text-accent'}  
+            ${pathname === 'student-dashboard' ? 'text-foreground' : 'text-muted-foreground'}  
             `}>
                 <LayoutDashboard size={16} className='mr-1' />Dashboard
             </Link>
             <Link href={`/student-profile`} className={`
                 flex-center hover:cursor-pointer hover:text-foreground text-sm
-                ${pathname === 'student-profile' ? 'text-foreground underline' : 'text-accent'}    
+                ${pathname === 'student-profile' ? 'text-foreground' : 'text-muted-foreground'}    
                 `}>
                 <User size={17} className='mr-1' />Profile
             </Link>
@@ -55,7 +55,7 @@ export default function StudentNavLinks({
                 )}
                 <Link href={`/student-notifications`} className={`
                 flex-center hover:cursor-pointer hover:text-foreground text-sm
-                ${pathname === 'student-notifications' ? 'text-foreground underline' : 'text-accent'}    
+                ${pathname === 'student-notifications' ? 'text-foreground' : 'text-muted-foreground'}    
                 `}>
                     <Bell size={16} className='mr-1' />Notifications
                 </Link>
