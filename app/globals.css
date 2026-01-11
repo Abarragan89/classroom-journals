@@ -85,7 +85,8 @@
     --accent-foreground: hsl(0, 0%, 2%);
     --border: hsla(109, 66%, 17%, 0.761);
     --input: hsl(210, 15%, 28%);
-    --ring: hsl(128, 70%, 25%);
+    /* --ring: hsl(128, 70%, 25%); */
+    --ring: hsl(128, 57%, 21%);
     --destructive: hsl(0, 100%, 50%);
     --warning: hsl(49, 84%, 48%);
     --warning-foreground: hsl(0, 0%, 7%);

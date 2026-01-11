@@ -66,10 +66,9 @@ export default function UserButton() {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            
+
             {session?.user?.username && (
-                <p className="text-xs text-accent absolute top-11 right-0 whitespace-nowrap"
-                
+                <p className="hidden md:block text-xs text-accent absolute top-11 right-0 whitespace-nowrap"
                 >
                     Hi, {session?.user?.username}
                 </p>
