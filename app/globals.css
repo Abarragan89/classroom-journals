@@ -11,7 +11,7 @@
     --secondary: hsl(223, 82%, 30%);
     --secondary-foreground: hsl(15, 40%, 98%);
     --muted: hsl(228, 19%, 35%);
-    --muted-foreground: hsla(0, 1%, 60%, 0.91);
+    --muted-foreground: hsla(0, 1%, 44%, 0.91);
     --card: hsla(60, 4%, 77%, 0.925);
     --card-foreground: hsl(24, 85%, 11%);
     --accent: hsl(203, 38%, 36%);
@@ -216,7 +216,7 @@
   --secondary-foreground: hsl(210, 40%, 96%); /* White text */
 
   --muted: hsl(210, 45%, 25%); /* Dark muted blue */
-  --muted-foreground: hsl(215, 62%, 47%); /* Softer light text */
+  --muted-foreground: hsl(215, 63%, 38%); /* Softer light text */
 
   /* --card: hsla(204, 54%, 44%, 0.608); Darker blue card, feels like layers of sky */
   --card: hsl(206, 81%, 69%); /* Darker blue card, feels like layers of sky */

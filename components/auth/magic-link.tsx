@@ -4,7 +4,7 @@ import { Button } from "../ui/button"
 import { signInWithMagicLink } from "@/lib/actions/auth.action"
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
-
+import { Mail } from 'lucide-react'
 export default function MagicLink() {
     const [data, action] = useActionState(signInWithMagicLink, {
         success: false,
@@ -16,7 +16,11 @@ export default function MagicLink() {
         const { pending } = useFormStatus()
         return (
             <Button disabled={pending} className="w-full" variant='default'>
-                {pending ? 'Signing In...' : 'Send Magic Link Email'}
+                {pending ? 'Sending Email' : 
+                <>
+                    <Mail /> via Email
+                </>
+                }
             </Button>
         )
     }

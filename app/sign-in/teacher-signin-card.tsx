@@ -2,7 +2,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import GoogleButton from '@/components/auth/google-button'
 import MagicLink from '@/components/auth/magic-link'
 import { TabsList, TabsTrigger } from '@/components/ui/tabs'
-
+import { Mail} from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export default function TeacherSignInCard({ changeTab }: { changeTab: () => void }) {
 
@@ -20,7 +21,10 @@ export default function TeacherSignInCard({ changeTab }: { changeTab: () => void
                     <span className="relative z-10 bg-card px-3">or</span>
                     <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
                 </p>
+
+                {/* Magic Link Form */}
                 <MagicLink />
+                                
                 <p className="text-sm text-center text-accent mt-4 px-4">
                     By using JotterBlog, you agree to our{" "}
                     <a href="/terms-of-service" className="underline hover:text-primary">
@@ -29,7 +33,7 @@ export default function TeacherSignInCard({ changeTab }: { changeTab: () => void
                     and{" "}
                     <a href="/privacy-policy" className="underline hover:text-primary">
                         Privacy Policy
-                    </a>.
+                    </a>
                 </p>
             </CardContent>
         </Card>
