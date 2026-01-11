@@ -9,7 +9,6 @@ import TextEditorDemo from "@/components/text-editor-demo";
 import BlogMetaDetails from "@/components/blog-meta-details";
 import { Separator } from "@/components/ui/separator";
 import CommentSection from "@/components/shared/comment-section";
-import WelcomeToJotterBlog from "@/components/welcome-to-jotterblog";
 import { CornerRightUp } from "lucide-react";
 
 export default async function page() {

@@ -2,8 +2,6 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import GoogleButton from '@/components/auth/google-button'
 import MagicLink from '@/components/auth/magic-link'
 import { TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Mail} from 'lucide-react'
-import { Button } from '@/components/ui/button'
 
 export default function TeacherSignInCard({ changeTab }: { changeTab: () => void }) {
 
