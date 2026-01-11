@@ -19,7 +19,7 @@ export default async function SignIn() {
     return (
         <main>
             <Header />
-            <h1 className="text-center h1-bold mt-[110px] mb-2">Welcome</h1>
+            <h1 className="text-center h1-bold mt-[110px] mb-2">Sign In</h1>
             <div className="flex-center w-full">
                 <div className="w-full px-5 max-w-md mx-auto">
                     <SignInMainForm />
