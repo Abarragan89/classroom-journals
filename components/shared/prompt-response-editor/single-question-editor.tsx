@@ -2,6 +2,7 @@
 import { ResponseData } from "@/types";
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 import SaveAndContinueBtns from "@/components/buttons/save-and-continue";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -190,19 +191,21 @@ export default function SinglePromptEditor({
 
     if (showConfetti && width && height) {
         return (
-            <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center">
-                <Confetti
-                    width={width}
-                    height={height}
-                    numberOfPieces={2000}
-                    recycle={false}
-                    gravity={0.3}
-                    tweenDuration={2000}
-                    initialVelocityY={20}
-                    initialVelocityX={5}
-                    wind={0.01}
-                    friction={0.99}
-                />
+            <>
+                <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center">
+                    <Confetti
+                        width={width}
+                        height={height}
+                        numberOfPieces={2000}
+                        recycle={false}
+                        gravity={0.3}
+                        tweenDuration={2000}
+                        initialVelocityY={20}
+                        initialVelocityX={5}
+                        wind={0.01}
+                        friction={0.99}
+                    />
+                </div>
                 <div className="animate-fall w-[370px] mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40">
                     <p className="text-primary font-bold text-xl text-center">Blog Posted!</p>
                     <Button asChild className="mt-4">
@@ -211,7 +214,7 @@ export default function SinglePromptEditor({
                         </Link>
                     </Button>
                 </div>
-            </div>
+            </>
 
         )
     }
@@ -283,14 +286,14 @@ export default function SinglePromptEditor({
                 </>
             </ResponsiveDialog>
             <div className="w-full max-w-[900px] mx-auto relative px-5">
-                <p className="absolute -top-10 right-0 text-sm">Blog Post</p>
-                <ArrowBigLeft className="absolute -top-10 left-0 text-sm hover:cursor-pointer hover:text-accent" onClick={() => {
+                <Badge className="absolute -top-10 right-0 text-sm">Blog Post</Badge>
+                <ArrowBigLeft size={30} className="absolute -top-12 left-3 hover:cursor-pointer hover:text-primary" onClick={() => {
                     router.back();
                     if (typingTimeoutRef.current) {
                         clearTimeout(typingTimeoutRef.current);
                     }
                 }} />
-                <p className="mt-16 mb-5 w-full mx-auto whitespace-pre-line text-left text-primary lg:text-lg font-bold">{currentQuestion}</p>
+                <p className="mt-16 pt-6 pb-4 rounded-lg mb-5 w-full mx-auto whitespace-pre-line lg:text-lg font-medium leading-relaxed tracking-wider">{currentQuestion}</p>
                 {/*  Show question if answer question */}
                 {questionNumber === '0' && (
                     <>
