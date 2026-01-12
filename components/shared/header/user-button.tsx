@@ -67,7 +67,7 @@ export default function UserButton() {
                 </DropdownMenu>
             </div>
 
-            {session?.user?.username && (
+            {session?.user?.username && !session?.user?.email && (
                 <p className="hidden md:block text-xs absolute top-11 right-0 whitespace-nowrap"
                 >
                     Hi, {session?.user?.username}

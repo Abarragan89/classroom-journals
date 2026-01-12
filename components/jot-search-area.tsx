@@ -63,16 +63,18 @@ export default function JotSearchArea({
             />
             {/* Insert all the prompt jot cards here */}
             {fetchedPrompts?.length > 0 ? (
-                <div className="mt-10 flex flex-wrap items-start gap-10 mb-10">
-                    {fetchedPrompts.map((prompt: Prompt) => (
-                        <PromptCard
-                            key={prompt.id}
-                            promptData={prompt}
-                            updatePromptData={setFetchedPrompts}
-                            classroomData={classroomData}
-                            teacherId={teacherId}
-                        />
-                    ))}
+                <div className="mt-10 mb-10">
+                    <div className="space-y-3 mb-8">
+                        {fetchedPrompts.map((prompt: Prompt) => (
+                            <PromptCard
+                                key={prompt.id}
+                                promptData={prompt}
+                                updatePromptData={setFetchedPrompts}
+                                classroomData={classroomData}
+                                teacherId={teacherId}
+                            />
+                        ))}
+                    </div>
                     <PaginationList
                         searchOptionsRef={promptSearchOptions}
                         getFilteredSearch={getFilteredSearch}

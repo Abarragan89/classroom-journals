@@ -52,7 +52,7 @@ export default function AssignmentListItem({
                 </Tooltip>
             </TooltipProvider>
             {/* This needs to outside the Link so user can click on questionPopup without linking  */}
-            <div className="text-xs absolute right-3 bottom-[6px]">
+            <div className="text-xs text-muted-foreground absolute right-3 bottom-[6px]">
                 {jotData.promptType === 'ASSESSMENT' ? (
                     <QuestionPopup promptQuestions={jotData as unknown as Prompt} />
                 ) : (

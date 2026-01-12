@@ -226,7 +226,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     }
                 }
             } catch (error) {
-                console.log('erroring signing in ', error)
+                console.error('erroring signing in ', error)
             }
             return token
             //assign user fields to the token

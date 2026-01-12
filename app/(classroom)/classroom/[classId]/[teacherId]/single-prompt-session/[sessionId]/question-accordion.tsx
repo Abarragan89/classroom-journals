@@ -89,7 +89,7 @@ export default function QuestionAccordion({
         1: { text: 'Correct Responses', color: 'text-success' },
         0.5: { text: 'Half Credit Responses', color: 'text-warning' },
         0: { text: 'Wrong Responses', color: 'text-destructive' },
-        default: { text: 'Not Graded', color: 'text-input' }
+        default: { text: 'Not Graded', color: 'text-muted-foreground' }
     };
 
     const score = currentSubQuery.current.score;
@@ -159,7 +159,7 @@ export default function QuestionAccordion({
                             >
                                 {data.answer}
                             </p>
-                            <span className="absolute bottom-1 right-5 text-input text-xs">-{data.studName}</span>
+                            <span className="absolute bottom-1 right-5 text-xs">-{data.studName}</span>
                             <div className="absolute bottom-1 left-5">
                                 <GradingPanel
                                     responseId={data.responseId}
@@ -194,7 +194,7 @@ export default function QuestionAccordion({
                                 <div className="flex justify-around text-xl mt-3">
                                     <div
                                         onClick={() => handleShowModal(question.question, 2, startRange + index)}
-                                        className={`bg-input ${circleBtnStyles}`}
+                                        className={`bg-primary ${circleBtnStyles}`}
                                     >
                                         <p>{currentResponseData[question.question]?.[2]?.length}</p>
                                     </div>

@@ -4,38 +4,6 @@
 
 @layer base {
   :root {
-    /* --background: hsl(48, 24%, 88%);
-    --foreground: hsl(233, 91%, 17%);
-    --primary: hsl(217, 58%, 21%);
-    --primary-foreground: hsl(0, 3%, 94%);
-    --secondary: hsl(223, 82%, 30%);
-    --secondary-foreground: hsl(15, 40%, 98%);
-    --muted: hsl(228, 19%, 35%);
-    --muted-foreground: hsla(0, 1%, 44%, 0.91);
-    --card: hsla(60, 4%, 77%, 0.925);
-    --card-foreground: hsl(24, 85%, 11%);
-    --accent: hsl(203, 38%, 36%);
-    --accent-foreground: hsl(0, 0%, 100%);
-    --border: hsla(192, 31%, 25%, 0.281);
-    --input: hsl(60, 1%, 35%);
-    --ring: hsl(208, 16%, 55%);
-    --destructive: hsl(0, 79%, 41%);
-    --warning: hsl(37, 95%, 45%);
-    --warning-foreground: hsl(0, 0%, 7%);
-    --destructive-foreground: hsl(0, 0%, 100%);
-    --popover: hsl(0, 0%, 100%);
-    --popover-foreground: hsl(0, 0%, 20%);
-    --sidebar-background: hsl(0, 0%, 20%);
-    --sidebar-foreground: hsl(240 4.8% 95.9%);
-    --sidebar-primary: hsl(224, 44%, 46%);
-    --sidebar-primary-foreground: hsl(0 0% 100%);
-    --sidebar-accent: hsl(60, 5%, 55%);
-    --sidebar-accent-foreground: hsl(67, 54%, 91%);
-    --sidebar-border: hsl(240 3.7% 15.9%);
-    --sidebar-ring: hsl(217.2 91.2% 59.8%);
-    --success: hsl(129, 72%, 31%);
-    --success-foreground: hsl(0, 3%, 94%); */
-
     --background: #f5f1e6;
     --foreground: #4a3f35;
     --card: #fffcf5;
@@ -68,10 +36,6 @@
     --sidebar-accent-foreground: #4a3f35;
     --sidebar-border: #dbd0ba;
     --sidebar-ring: #a67c52;
-    --success: #6b8e4e;
-    --success-foreground: #ffffff;
-    --warning: #d4941a;
-    --warning-foreground: #1f1508;
     --font-sans: Libre Baskerville, serif;
     --font-serif: Lora, serif;
     --font-mono: IBM Plex Mono, monospace;
@@ -108,10 +72,10 @@
     --foreground: hsl(210 40% 98%);
     --primary: hsl(213, 45%, 80%);
     --primary-foreground: hsl(222.2 84% 4.9%);
-    --secondary: hsl(206, 68%, 20%);
+    --secondary: hsl(206, 64%, 27%);
     --secondary-foreground: hsl(210 40% 98%);
     --muted: hsl(231, 42%, 9%);
-    --muted-foreground: hsl(240, 3%, 31%);
+    --muted-foreground: hsl(215, 15%, 55%);
     --card: hsl(220.9 39.3% 11%);
     --card-foreground: hsl(212.7 26.8% 83.9%);
     --accent: hsl(221, 61%, 64%);
@@ -125,6 +89,11 @@
     --destructive-foreground: hsl(210 40% 98%);
     --popover: hsl(215.3 25% 26.7%);
     --popover-foreground: hsl(220 13% 91%);
+    --chart-1: hsl(213, 45%, 80%);
+    --chart-2: hsl(221, 61%, 64%);
+    --chart-3: hsl(206, 68%, 50%);
+    --chart-4: hsl(213, 50%, 40%);
+    --chart-5: hsl(220, 55%, 30%);
     --sidebar-background: hsl(240, 20%, 10%);
     --sidebar-foreground: hsl(240 4.8% 95.9%);
     --sidebar-primary: hsl(224.3 76.3% 48%);
@@ -135,29 +104,23 @@
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 73%, 39%);
     --success-foreground: hsl(222.2 84% 4.9%);
-    --chart-1: hsl(213, 45%, 80%);
-    --chart-2: hsl(221, 61%, 64%);
-    --chart-3: hsl(206, 68%, 50%);
-    --chart-4: hsl(212, 50%, 40%);
-    --chart-5: hsl(224, 44%, 60%);
   }
 
   .tech {
     --background: hsl(120, 20%, 6%);
-    --foreground: hsl(210, 20%, 85%);
+    --foreground: hsl(120, 35%, 85%);
     --primary: hsl(107, 89%, 48%);
     --primary-foreground: hsl(0, 0%, 0%);
-    --secondary: hsla(73, 77%, 61%, 0.727);
-    --secondary-foreground: hsl(180, 3%, 6%);
-    --muted: hsla(135, 37%, 27%, 0.833);
-    --muted-foreground: hsl(0, 0%, 59%);
+    --secondary: hsl(73, 77%, 45%);
+    --secondary-foreground: hsl(0, 0%, 5%);
+    --muted: hsl(135, 30%, 18%);
+    --muted-foreground: hsl(120, 15%, 65%);
     --card: hsl(0, 0%, 0%);
-    --card-foreground: hsl(210, 20%, 85%);
+    --card-foreground: hsl(120, 35%, 85%);
     --accent: hsl(75, 49%, 54%);
     --accent-foreground: hsl(0, 0%, 2%);
-    --border: hsla(109, 66%, 17%, 0.761);
+    --border: hsl(109, 66%, 22%);
     --input: hsl(210, 15%, 28%);
-    /* --ring: hsl(128, 70%, 25%); */
     --ring: hsl(128, 57%, 21%);
     --destructive: hsl(0, 100%, 50%);
     --warning: hsl(49, 84%, 48%);
@@ -165,6 +128,11 @@
     --destructive-foreground: hsl(0, 0%, 100%);
     --popover: hsl(220, 15%, 15%);
     --popover-foreground: hsl(210, 20%, 85%);
+    --chart-1: hsl(107, 89%, 48%);
+    --chart-2: hsl(75, 49%, 54%);
+    --chart-3: hsl(129, 80%, 43%);
+    --chart-4: hsl(128, 57%, 35%);
+    --chart-5: hsl(123, 64%, 25%);
     --sidebar-background: hsl(0, 0%, 0%);
     --sidebar-foreground: hsl(240 4.8% 95.9%);
     --sidebar-primary: hsl(123, 64%, 33%);
@@ -175,11 +143,6 @@
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 80%, 43%);
     --success-foreground: hsl(0, 0%, 0%);
-    --chart-1: hsl(107, 89%, 48%);
-    --chart-2: hsl(75, 49%, 54%);
-    --chart-3: hsl(123, 64%, 33%);
-    --chart-4: hsl(128, 70%, 40%);
-    --chart-5: hsl(135, 37%, 45%);
   }
   .cupid {
     --background: hsl(330, 60%, 94%);
@@ -188,8 +151,8 @@
     --primary-foreground: hsl(0, 0%, 100%);
     --secondary: hsl(330, 90%, 84%);
     --secondary-foreground: hsl(302, 90%, 34%);
-    --muted: hsl(331, 61%, 52%);
-    --muted-foreground: hsl(316, 70%, 26%);
+    --muted: hsl(331, 35%, 75%);
+    --muted-foreground: hsl(316, 40%, 35%);
     --card: hsl(340, 80%, 90%);
     --card-foreground: hsl(0, 0%, 15%);
     --accent: hsl(320, 92%, 35%); /* Vibrant Pink */
@@ -203,6 +166,11 @@
     --destructive-foreground: hsl(0, 0%, 100%);
     --popover: hsl(330, 50%, 90%);
     --popover-foreground: hsl(0, 0%, 20%);
+    --chart-1: hsl(340, 72%, 48%);
+    --chart-2: hsl(320, 92%, 35%);
+    --chart-3: hsl(331, 61%, 52%);
+    --chart-4: hsl(322, 94%, 27%);
+    --chart-5: hsl(330, 90%, 60%);
     --sidebar-background: hsl(330, 50%, 20%);
     --sidebar-foreground: hsl(330, 80%, 95%);
     --sidebar-primary: hsl(340, 80%, 60%);
@@ -213,11 +181,6 @@
     --sidebar-ring: hsl(340, 80%, 50%);
     --success: hsl(129, 72%, 31%);
     --success-foreground: hsl(0, 0%, 100%);
-    --chart-1: hsl(340, 72%, 48%);
-    --chart-2: hsl(320, 92%, 35%);
-    --chart-3: hsl(330, 90%, 70%);
-    --chart-4: hsl(340, 80%, 60%);
-    --chart-5: hsl(331, 61%, 52%);
   }
 
   .tuxedo {
@@ -244,6 +207,11 @@
     --success-foreground: hsl(0, 0%, 8%);
     --popover: hsl(0, 0%, 12%);
     --popover-foreground: hsl(0, 0%, 90%);
+    --chart-1: hsl(0, 0%, 100%);
+    --chart-2: hsl(0, 0%, 60%);
+    --chart-3: hsl(0, 0%, 40%);
+    --chart-4: hsl(0, 0%, 25%);
+    --chart-5: hsl(0, 0%, 15%);
     --sidebar-background: hsl(0, 0%, 3%);
     --sidebar-foreground: hsl(0, 0%, 90%);
     --sidebar-primary: hsl(0, 0%, 100%);
@@ -252,11 +220,6 @@
     --sidebar-accent-foreground: hsl(0, 0%, 95%);
     --sidebar-border: hsl(0, 0%, 20%);
     --sidebar-ring: hsl(0, 0%, 80%);
-    --chart-1: hsl(0, 0%, 100%);
-    --chart-2: hsl(0, 0%, 80%);
-    --chart-3: hsl(0, 0%, 60%);
-    --chart-4: hsl(0, 0%, 40%);
-    --chart-5: hsl(0, 0%, 50%);
   }
 
   .avocado {
@@ -266,14 +229,14 @@
     --primary-foreground: hsl(0, 0%, 100%); /* White text */
     --secondary: hsl(30, 61%, 37%); /* Avocado pit brown */
     --secondary-foreground: hsl(46, 55%, 83%); /* Creamy highlight */
-    --muted: hsl(99, 26%, 49%);
-    --muted-foreground: hsl(100, 40%, 21%);
+    --muted: hsl(99, 20%, 70%);
+    --muted-foreground: hsl(100, 40%, 30%);
     --card: hsl(60, 54%, 84%);
     --card-foreground: hsl(100, 40%, 25%);
     --accent: hsl(55, 28%, 36%); /* Avocado yellow */
     --accent-foreground: hsl(105, 41%, 85%);
-    --border: hsl(52, 29%, 67%);
-    --input: hsl(101, 54%, 24%);
+    --border: hsl(100, 25%, 65%);
+    --input: hsl(100, 30%, 80%);
     --ring: hsl(33, 23%, 50%);
     --destructive: hsl(0, 70%, 50%);
     --destructive-foreground: hsl(0, 0%, 100%);
@@ -281,6 +244,11 @@
     --warning-foreground: hsl(0, 0%, 10%);
     --popover: hsl(100, 30%, 95%);
     --popover-foreground: hsl(100, 40%, 25%);
+    --chart-1: hsl(100, 59%, 34%);
+    --chart-2: hsl(99, 26%, 49%);
+    --chart-3: hsl(72, 68%, 78%);
+    --chart-4: hsl(55, 28%, 36%);
+    --chart-5: hsl(30, 61%, 37%);
     --sidebar-background: hsl(69, 88%, 94%); /* WHITE sidebar now */
     --sidebar-foreground: hsl(100, 40%, 25%);
     --sidebar-primary: hsl(100, 60%, 35%);
@@ -291,37 +259,30 @@
     --sidebar-ring: hsl(100, 70%, 50%);
     --success: hsl(140, 70%, 40%);
     --success-foreground: hsl(0, 0%, 100%);
-    --chart-1: hsl(100, 59%, 34%);
-    --chart-2: hsl(55, 28%, 36%);
-    --chart-3: hsl(72, 68%, 60%);
-    --chart-4: hsl(99, 26%, 49%);
-    --chart-5: hsl(100, 60%, 45%);
   }
 }
 
 .sky {
-  --background: hsl(210, 56%, 63%); /* Deep sky / twilight blue */
-  --foreground: hsl(237, 77%, 14%); /* Almost white text for contrast */
-  --primary: hsl(210, 79%, 23%); /* Bold vivid sky blue */
+  --background: hsl(210, 60%, 90%); /* Light airy sky background */
+  --foreground: hsl(210, 40%, 15%); /* Deep blue text for contrast */
+  --primary: hsl(210, 79%, 45%); /* Bold vivid sky blue */
   --primary-foreground: hsl(0, 0%, 100%); /* White text on blue */
 
-  --secondary: hsl(210, 55%, 35%); /* Muted navy/sky shadow */
-  --secondary-foreground: hsl(210, 40%, 96%); /* White text */
+  --secondary: hsl(210, 55%, 75%); /* Soft sky blue */
+  --secondary-foreground: hsl(210, 60%, 20%); /* Dark text */
 
-  --muted: hsl(210, 45%, 25%); /* Dark muted blue */
-  --muted-foreground: hsl(215, 63%, 38%); /* Softer light text */
+  --muted: hsl(210, 35%, 80%); /* Light muted blue */
+  --muted-foreground: hsl(210, 30%, 35%); /* Medium dark text */
 
-  /* --card: hsla(204, 54%, 44%, 0.608); Darker blue card, feels like layers of sky */
-  --card: hsl(206, 81%, 69%); /* Darker blue card, feels like layers of sky */
-  --card-foreground: hsl(209, 75%, 14%); /* White text */
+  --card: hsl(206, 50%, 97%); /* Very light card, like clouds */
+  --card-foreground: hsl(209, 40%, 15%); /* Dark text */
 
-  --accent: hsl(207, 77%, 25%); /* Golden sunlight */
-  /* --accent-foreground: hsl(62, 85%, 47%); Deep navy for contrast */
-  --accent-foreground: hsl(192, 100%, 65%); /* Deep navy for contrast */
+  --accent: hsl(45, 95%, 55%); /* Bright sunlight yellow */
+  --accent-foreground: hsl(210, 50%, 15%); /* Deep blue for contrast */
 
-  --border: hsl(212, 51%, 86%); /* Darker sky border */
-  --input: hsl(233, 87%, 18%); /* Darker sky field */
-  --ring: hsl(190, 82%, 87%); /* Bright blue focus ring */
+  --border: hsl(210, 30%, 75%); /* Soft sky border */
+  --input: hsl(210, 40%, 95%); /* Very light input field */
+  --ring: hsl(210, 80%, 55%); /* Bright blue focus ring */
 
   --destructive: hsl(5, 89%, 41%); /* Sunset red */
   --destructive-foreground: hsl(0, 0%, 100%);
@@ -329,7 +290,11 @@
   --warning-foreground: hsl(210, 40%, 20%);
   --popover: hsl(209, 54%, 89%); /* Dark blue popover */
   --popover-foreground: hsl(210, 78%, 20%);
-
+  --chart-1: hsl(210, 79%, 23%);
+  --chart-2: hsl(207, 77%, 25%);
+  --chart-3: hsl(210, 55%, 35%);
+  --chart-4: hsl(192, 100%, 65%);
+  --chart-5: hsl(189, 11%, 88%);
   --sidebar-background: hsl(210, 62%, 42%); /* Deep sky sidebar */
   --sidebar-foreground: hsl(210, 40%, 96%);
   --sidebar-primary: hsl(210, 80%, 50%);
@@ -341,11 +306,6 @@
 
   --success: hsl(145, 67%, 60%); /* Fresh green, still visible on dark */
   --success-foreground: hsl(211, 80%, 16%);
-  --chart-1: hsl(210, 79%, 23%);
-  --chart-2: hsl(207, 77%, 25%);
-  --chart-3: hsl(210, 80%, 50%);
-  --chart-4: hsl(210, 55%, 35%);
-  --chart-5: hsl(190, 82%, 60%);
 }
 
 @layer utilities {

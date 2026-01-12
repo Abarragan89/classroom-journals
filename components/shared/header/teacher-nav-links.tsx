@@ -9,17 +9,17 @@ export default function TeacherNavLinks() {
     return (
         <>
             <Link href={`/classes`} className={`
-                    flex-center hover:cursor-pointer leading-loose hover:text-accent mb-1
-                    ${pathname === 'classes' || pathname === 'classroom' ? 'border-b' : ''}    
+                      flex-start hover:cursor-pointer hover:text-foreground text-sm
+            ${pathname === 'classes' || pathname === 'classroom' ? 'text-foreground' : 'text-muted-foreground'} 
                     `}>
                 <GraduationCap size={23} className='mr-2' />Classes
             </Link>
 
             <Link href={`/prompt-library`} className={`
-                    flex-center hover:cursor-pointer leading-loose hover:text-accent
-                    ${pathname.includes('prompt') ? 'border-b' : ''}  
+                       ml-3 flex-start hover:cursor-pointer hover:text-foreground text-sm
+            ${pathname.includes("prompt") ? 'text-foreground' : 'text-muted-foreground'}  
                     `}>
-                <PenTool size={23} className='mr-2' />My Jots
+                <PenTool size={20} className='mr-2' />My Jots
             </Link>
         </>
     )
