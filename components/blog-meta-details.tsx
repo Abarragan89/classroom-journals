@@ -73,7 +73,7 @@ export default function BlogMetaDetails({
                     height={40}
                     className="rounded-full w-[40px] h-[40px]"
                 />
-                <div className="ml-2 w-full text-sm text-input flex-between">
+                <div className="ml-2 w-full text-sm text-muted-foreground flex-between">
                     <div>
                         <p className="leading-5">{responseData.student.username}</p>
                         <div className="flex justify-between w-full">
@@ -89,8 +89,8 @@ export default function BlogMetaDetails({
                 </div>
             </section>
             {/* Comment LIke Bar */}
-            <section className="flex items-center mx-auto mb-5 justify-between py-[5px] max-w-[700px] my-3 px-4 text-input border-t border-b border-input">
-                <div className="flex items-center text-input">
+            <section className="flex items-center mx-auto mb-5 justify-between py-[5px] max-w-[700px] my-3 px-4 text-muted-foreground border-t border-b border-input">
+                <div className="flex items-center text-muted-foreground">
                     {isBlogLikedByUser ?
                         <FaHeart
                             onClick={() => toggleResponseLikeHandler('remove')}

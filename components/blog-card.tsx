@@ -38,7 +38,7 @@ export default function BlogCard({
                 quality={75}
             />
             <div className="min-h-[200px] px-2 ">
-                <div className="flex justify-between pt-1 text-input text-[0.875rem]">
+                <div className="flex justify-between pt-1 text-muted-foreground text-[0.875rem]">
                     <p>{author}</p>
                     <div className="flex">
                         <div className="flex items-center pr-3">
@@ -57,8 +57,8 @@ export default function BlogCard({
                         <p className="mt-1 text-[.95rem] text-ring line-clamp-3">{description}</p>
                     </div>
                     <div className="flex justify-between">
-                        <div className="flex justify-end text-input text-[0.875rem]">
-                            <p className="text-[.85rem] text-input">{date}</p>
+                        <div className="flex justify-end text-muted-foreground text-[0.875rem]">
+                            <p className="text-[.85rem] text-muted-foreground">{date}</p>
                         </div>
                     </div>
                 </div>
