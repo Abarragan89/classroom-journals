@@ -142,13 +142,13 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 </div>
 
                                 {/* Floating stats cards */}
-                                <div className="hidden lg:block absolute -left-4 top-1/4 bg-card border border-border rounded-lg p-4 shadow-lg">
-                                    <p className="text-2xl font-bold text-accent">10+</p>
-                                    <p className="text-xs text-muted-foreground">Hours saved weekly</p>
+                                <div className="hidden lg:block absolute -left-4 top-1/4 bg-card border border-border rounded-lg p-4 shadow-lg max-w-[180px]">
+                                    <p className="text-xl font-bold text-primary">Essays</p>
+                                    <p className="text-xs text-muted-foreground">Graded with your custom rubrics</p>
                                 </div>
-                                <div className="hidden lg:block absolute -right-4 bottom-1/4 bg-card border border-border rounded-lg p-4 shadow-lg">
-                                    <p className="text-2xl font-bold text-accent">95%</p>
-                                    <p className="text-xs text-muted-foreground">Accuracy rate</p>
+                                <div className="hidden lg:block absolute -right-4 top-1/2 bg-card border border-border rounded-lg p-4 shadow-lg max-w-[180px]">
+                                    <p className="text-xl font-bold text-primary">Exit Tickets</p>
+                                    <p className="text-xs text-muted-foreground">Just post your questions. AI grades them instantly</p>
                                 </div>
                             </div>
                         </div>
@@ -315,7 +315,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
 
                 {/* Demo Blog */}
                 <section className="max-w-[700px] py-12 px-10 mx-auto">
-                    <h2 className='h1-bold text-center mb-10 text-input'>Example Blog</h2>
+                    <h2 className='h1-bold text-center mb-10 text-muted-foreground'>Example Blog</h2>
                     <BlogMetaDetails
                         responseData={response}
                         studentId="1"
