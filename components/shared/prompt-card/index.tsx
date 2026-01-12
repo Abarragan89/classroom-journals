@@ -22,7 +22,7 @@ export default function PromptCard({
     teacherId: string
 }) {
     const isAssessment = promptData.promptType === 'ASSESSMENT';
-    const assignedCount = promptData.promptSession?.length || 0;
+    // const assignedCount = promptData.promptSession?.length || 0;
 
     return (
         <Card className="w-full relative shadow-sm hover:shadow-md transition-shadow group">
