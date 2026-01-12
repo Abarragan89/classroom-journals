@@ -25,7 +25,7 @@ export default function Header({
                         href='/'
                         className='flex-start'>
                         <Image
-                            src='/images/logo.png'
+                            src='/images/logo-v2.png'
                             alt={`${APP_NAME} logo`}
                             height={60}
                             width={60}
