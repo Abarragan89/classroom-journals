@@ -20,6 +20,10 @@
     --accent-foreground: hsl(28, 13%, 26%);
     --destructive: hsl(10, 59%, 48%);
     --destructive-foreground: hsl(0, 0%, 100%);
+    --warning: hsl(37, 95%, 45%);
+    --warning-foreground: hsl(0, 0%, 10%);
+    --success: hsl(129, 72%, 31%);
+    --success-foreground: hsl(0, 0%, 100%);
     --border: hsl(36, 24%, 79%);
     --input: hsl(36, 24%, 79%);
     --ring: hsl(28, 39%, 49%);
@@ -306,7 +310,7 @@
   --sidebar-border: hsl(210, 45%, 30%);
   --sidebar-ring: hsl(210, 80%, 50%);
 
-  --success: hsl(145, 67%, 60%); /* Fresh green, still visible on dark */
+  --success: hsl(145, 55%, 47%); /* Fresh green, still visible on dark */
   --success-foreground: hsl(211, 80%, 16%);
 }
 

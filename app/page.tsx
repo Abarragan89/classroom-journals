@@ -110,7 +110,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                                     <Link href="/sign-in">
                                         <Button size="lg" className="text-base px-8 py-6 w-full sm:w-auto">
-                                            Start Free Trial
+                                            Get Started
                                             <span className="ml-2">→</span>
                                         </Button>
                                     </Link>
@@ -199,7 +199,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                             </div>
                             <div className="order-first lg:order-last">
                                 <Image
-                                    src='/images/custom-rubric.png'
+                                    src='/images/custom-rubric-builder.png'
                                     width={600}
                                     height={400}
                                     alt="AI rubric grading screenshot"
@@ -300,7 +300,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                     <TextEditorDemo />
                     <div className="flex flex-col items-center">
                         <h5 className="font-bold text-lg mb-1">Benefits</h5>
-                        <div className="text-primary space-y-2">
+                        <div className=" space-y-2">
                             <p>✅ CANNOT copy and paste text into the editor (TRY IT!)</p>
                             <p>✅ Option to enable spell-check</p>
                             <p>✅ No distractions with font, font-sizes, formatting, images, etc.</p>
