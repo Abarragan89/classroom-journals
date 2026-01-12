@@ -64,8 +64,8 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
             <Header />
             <main className="min-h-screen bg-background relative">
                 {/* Hero Section - Above the Fold */}
-                <section className="relative">
-                    <div className="max-w-7xl mx-auto p-10 lg:py-14 relative">
+                <section className="relative max-w-7xl mx-auto">
+                    <div className="p-10 lg:py-14">
                         <div className="grid lg:grid-cols-2 gap-12 items-center">
                             {/* Left Column - Value Proposition */}
                             <div className="text-center lg:text-left space-y-6">
@@ -153,11 +153,11 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                             </div>
                         </div>
                     </div>
-                    {/* Theme switcher hint - repositioned */}
                     <div className='hidden sm:flex items-baseline text-sm absolute -top-7 right-36 text-muted-foreground italic font-medium opacity-0 animate-bounce-down gap-2'>
                         Try our themes!
                         <CornerRightUp className="w-4 h-4" />
                     </div>
+                    {/* Theme switcher hint - repositioned */}
 
                 </section>
 

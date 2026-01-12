@@ -14,10 +14,9 @@ export default function NoSignInHeader() {
                         <Image
                             src='/images/logo-v2.png'
                             alt={`${APP_NAME} logo`}
-                            height={50}
-                            width={50}
+                            height={60}
+                            width={60}
                             priority={true}
-                            className="rounded-2xl"
                         />
                     </Link>
                 </div>
