@@ -38,7 +38,7 @@ export default async function Roster({
   return (
     <>
       <div className="relative print:hidden">
-        <div className="flex-between w-full absolute top-[50px] right-0">
+        <div className="flex-between w-full absolute top-[50px] right-0 z-50">
           {studentRoster.length > 0 && (
             <>
               <PringLoginBtn />
