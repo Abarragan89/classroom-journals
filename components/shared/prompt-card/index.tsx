@@ -8,7 +8,6 @@ import AssignedToPopUp from "./assigned-to-popup";
 import QuestionPopup from "./question-popup";
 import { PromptSession } from "@/types";
 import { Badge } from "@/components/ui/badge";
-import { FileText, ClipboardList } from "lucide-react";
 
 export default function PromptCard({
     promptData,
@@ -39,29 +38,28 @@ export default function PromptCard({
                 <div className="flex items-center gap-3">
                     <div className={`w-7 h-7 flex-shrink-0 flex items-center justify-center ${isAssessment ? 'text-primary' : 'text-secondary'
                         }`}>
-                        {isAssessment ? (
-                            <ClipboardList className="w-7 h-7" />
-                        ) : (
-                            <FileText className="w-7 h-7" />
-                        )}
+
+                        <div className="flex items-center gap-2">
+                            <Badge variant={isAssessment ? "default" : "secondary"} className="text-xl">
+                                {isAssessment ? 'A' : 'B'}
+                            </Badge>
+                        </div>
+
+
                     </div>
-                    <h3 className="font-semibold text-base leading-tight line-clamp-2 group-hover:text-primary transition-colors">
+                    <h3 className="font-semibold text-base leading-tight line-clamp-2 group-hover:text-primary transition-colors mr-5">
                         {promptData.title}
                     </h3>
                 </div>
 
                 {/* Metadata Footer */}
                 <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap pt-3 border-t">
-                    <div className="flex items-center gap-2">
-                        <Badge variant={isAssessment ? "default" : "secondary"} className="text-xs">
-                            {isAssessment ? 'Assessment' : 'Blog'}
-                        </Badge>
-                        {promptData?.category?.name && (
-                            <span className="text-xs text-muted-foreground">
-                                {promptData.category.name}
-                            </span>
-                        )}
-                    </div>
+
+                    {promptData?.category?.name && (
+                        <span className="text-xs text-muted-foreground">
+                            {promptData.category.name}
+                        </span>
+                    )}
 
                     <Separator orientation="vertical" className="h-4" />
 
@@ -71,15 +69,6 @@ export default function PromptCard({
 
                     <AssignedToPopUp classesData={promptData.promptSession as unknown as PromptSession[]} />
 
-                    {/* {assignedCount > 0 && (
-                        <>
-                            <Separator orientation="vertical" className="h-4" />
-                            <span className="flex items-center gap-1">
-                                <span className="font-medium text-foreground">{assignedCount}</span>
-                                {assignedCount === 1 ? 'class' : 'classes'}
-                            </span>
-                        </>
-                    )} */}
                 </div>
             </div>
         </Card>

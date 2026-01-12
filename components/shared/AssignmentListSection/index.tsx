@@ -112,7 +112,7 @@ export default function AssignmentListSection({
         <>
             < div className="flex flex-col-reverse items-end lg:flex-row lg:items-start justify-between">
                 {fetchedPrompts && fetchedPrompts?.length > 0 ? (
-                    <div className="flex-2 w-full lg:mr-10">
+                    <div className="flex-2 w-full lg:mr-10 space-y-5">
                         {fetchedPrompts?.map((prompt: PromptSession) => (
                             <AssignmentListItem
                                 key={prompt.id}
