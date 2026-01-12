@@ -8,7 +8,6 @@ import AssignedToPopUp from "./assigned-to-popup";
 import QuestionPopup from "./question-popup";
 import { PromptSession } from "@/types";
 import { Badge } from "@/components/ui/badge";
-import { FileText, ClipboardList } from "lucide-react";
 
 export default function PromptCard({
     promptData,
@@ -39,16 +38,6 @@ export default function PromptCard({
                 <div className="flex items-center gap-3">
                     <div className={`w-7 h-7 flex-shrink-0 flex items-center justify-center ${isAssessment ? 'text-primary' : 'text-secondary'
                         }`}>
-                        {/* {isAssessment ? (
-                            <ClipboardList className="w-7 h-7" />
-                        ) : (
-                            <FileText className="w-7 h-7" />
-                        )} */}
-                        {/* <p
-                            className='text-2xl font-bold bg-muted text-muted-foreground p-1 px-3 rounded-full mx-3'
-                        >
-                            {promptData?.promptType?.charAt(0)}
-                        </p> */}
 
                         <div className="flex items-center gap-2">
                             <Badge variant={isAssessment ? "default" : "secondary"} className="text-xl">
@@ -80,15 +69,6 @@ export default function PromptCard({
 
                     <AssignedToPopUp classesData={promptData.promptSession as unknown as PromptSession[]} />
 
-                    {/* {assignedCount > 0 && (
-                        <>
-                            <Separator orientation="vertical" className="h-4" />
-                            <span className="flex items-center gap-1">
-                                <span className="font-medium text-foreground">{assignedCount}</span>
-                                {assignedCount === 1 ? 'class' : 'classes'}
-                            </span>
-                        </>
-                    )} */}
                 </div>
             </div>
         </Card>
