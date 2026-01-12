@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator";
 export default function ClassCard({ classData, teacherId }: { classData: Class, teacherId: string }) {
 
     return (
-        <Card className="w-[350px] relative shadow-sm shadow-accent active:shadow-none">
+        <Card className="w-[350px] relative shadow-sm">
             {/* Absolutely positions options menu with responsive dialogs */}
             <OptionsMenu
                 teacherId={teacherId}

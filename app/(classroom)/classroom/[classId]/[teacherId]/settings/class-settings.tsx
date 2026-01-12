@@ -15,8 +15,8 @@ export default function ClassSettings({
         <section className='mb-20'>
             <h2 className="text-2xl lg:text-3xl mt-2 mb-5">Class Settings</h2>
             <div className="flex-between mb-10 mr-5">
-                <p className='text-accent'>Class Code: <span className='text-foreground py-1 px-3 bg-border rounded-full'>{classInfo?.classCode}</span></p>
-                <p className='text-accent'>Class Size: <span className='text-foreground py-1 px-3 bg-border rounded-full'>{classSize}</span></p>
+                <p>Class Code: <span className='text-sm text-muted-foreground py-1 px-3 bg-muted rounded-full'>{classInfo?.classCode}</span></p>
+                <p>Class Size: <span className='text-sm text-muted-foreground py-1 px-3 bg-muted rounded-full'>{classSize}</span></p>
             </div>
 
             {/* Edit Class Form */}

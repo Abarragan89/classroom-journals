@@ -65,7 +65,10 @@ export default function OptionsMenu({ classData, teacherId }: { classData: Class
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         {/* Ellipse */}
-                        <div style={{ backgroundColor: classData.color }} className={`w-7 h-7 rounded-full flex-center`}>
+                        <div
+                            style={{ backgroundColor: `var(--chart-${classData.color || '1'})` }}
+                            className="w-7 h-7 rounded-full flex-center"
+                        >
                             <EllipsisVertical size={20} className="hover:cursor-pointer text-white" />
                         </div>
 

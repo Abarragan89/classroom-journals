@@ -89,7 +89,7 @@ export default function MainClientWrapper({
         <div>
             <div className="flex">
                 <div className='space-y-4'>
-                    <p className="text-input">Class Average: {classAverage}</p>
+                    <p className="text-muted-foreground">Class Average: {classAverage}</p>
                     <ToggleGradesVisible
                         promptSessionId={promptSessionData?.id}
                         gradesVisibility={promptSessionData?.areGradesVisible}

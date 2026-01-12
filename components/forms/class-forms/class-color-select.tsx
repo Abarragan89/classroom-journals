@@ -5,33 +5,29 @@ interface ColorSelectProps {
 
 export default function ColorSelect({ setColor, selectedColor }: ColorSelectProps) {
 
-    // const colors = ["#dc2626", "#d97706", "#65a30d", "#0d9488", "#2563eb", "#9333ea"];
-    // muted
-    const colors = [
-        "rgba(220, 38, 38, 0.90)",  // Muted Red  
-        "rgba(217, 119, 6, 0.90)",  // Muted Orange  
-        "rgba(101, 163, 13, 0.90)", // Muted Green  
-        "rgba(13, 148, 136, 0.90)", // Muted Teal  
-        "rgba(37, 99, 235, 0.90)",  // Muted Blue  
-        "rgba(147, 51, 234, 0.90)"  // Muted Purple  
+    // Chart color options (1-5)
+    const colorOptions = [
+        { value: '1', label: 'Color 1' },
+        { value: '2', label: 'Color 2' },
+        { value: '3', label: 'Color 3' },
+        { value: '4', label: 'Color 4' },
+        { value: '5', label: 'Color 5' },
     ];
 
-
     return (
-        <div className="flex flex-wrap">
-            {colors.map(color => (
-                <p
-                    key={color}
-                    style={{ backgroundColor: color }}
-                    onClick={() => setColor(color)} // Set color when clicked
-                    className={
-                        `w-[25px] h-[25px] rounded-[50%] mr-[15px] hover:cursor-pointer
-                        ${selectedColor === color ? 'border-4 border-foreground' : ''}
-                        `
-                    }
+        <div className="flex flex-wrap gap-3">
+            {colorOptions.map(({ value, label }) => (
+                <div
+                    key={value}
+                    onClick={() => setColor(value)}
+                    className={`
+                        w-[30px] h-[30px] rounded-full hover:cursor-pointer transition-all
+                        ${selectedColor === value ? 'ring-4 ring-ring ring-offset-2 ring-offset-background scale-110' : 'hover:scale-105'}
+                    `}
+                    style={{ backgroundColor: `var(--chart-${value})` }}
+                    title={label}
                 />
             ))}
         </div>
     )
 }
-

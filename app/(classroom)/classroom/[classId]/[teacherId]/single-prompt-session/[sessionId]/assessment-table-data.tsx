@@ -46,7 +46,6 @@ export default function AssessmentTableData({
             setIsLoading(true)
             if (!studentId) return
             const newResponse = await createStudentResponse(promptSessionId, studentId, teacherId, promptSessionQuestions)
-            console.log('newResponse', newResponse)
             if (!newResponse.success) throw new Error('Error creating student response')
 
             // Update cache with new response instead of invalidating

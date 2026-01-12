@@ -164,7 +164,7 @@ export default function Editor({
     return (
         <div className={`w-full mx-auto flex flex-col items-center relative mb-5`}>
             {characterLimit && <p className="text-sm absolute right-2 bottom-4">{journalText.length} / {characterLimit}</p>}
-            <div className="text-xs text-accent text-center mb-1">
+            <div className="text-xs text-center mb-1">
                 Press TAB or click the Textbox to start typing
             </div>
             <Textarea

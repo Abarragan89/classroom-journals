@@ -44,11 +44,7 @@ export default function SingleQuestionReview({
     studentName
 }: SingleQuestionReviewProps) {
 
-    console.log('initial grade visibilty ', showGradesInitial)
-
-
     const router = useRouter();
-
 
     // ignore unsued variables in typesript since i'm not using data
     // @typescript-eslint/no-unused-vars
@@ -168,8 +164,6 @@ export default function SingleQuestionReview({
         { label: "Designs", value: "designs" },
     ]
     const gradePercentage = questions?.[0].score !== undefined ? `${questions?.[0]?.score}%` : 'N/A';
-
-    console.log("show grades ", showGrades)
 
 
     return (

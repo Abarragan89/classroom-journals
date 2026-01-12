@@ -32,13 +32,13 @@ export default function AssignmentListItem({
                             {/* only show public or private if it is a blog, otherwise don't render */}
                             <article className='bg-card flex-start opacity-80 px-5 py-4 rounded-lg mb-4 border border-border hover:cursor-pointer hover:opacity-100'>
                                 <p
-                                    className='text-2xl font-bold bg-input text-background p-1 px-3 rounded-full mr-3'
+                                    className='text-2xl font-bold bg-muted text-muted-foreground p-1 px-3 rounded-full mr-3'
                                 >
                                     {jotData.promptType.charAt(0)}
                                 </p>
                                 <div className="flex flex-col relative">
                                     <p className='text-md font-bold line-clamp-1 text-foreground'>{jotData.title}</p>
-                                    <div className="relative top-[11px] flex-between text-xs text-input">
+                                    <div className="relative top-[11px] flex-between text-xs">
                                         <p>{formatDateLong(jotData.createdAt, 'short')}</p>
                                     </div>
                                 </div>
@@ -52,7 +52,7 @@ export default function AssignmentListItem({
                 </Tooltip>
             </TooltipProvider>
             {/* This needs to outside the Link so user can click on questionPopup without linking  */}
-            <div className="text-xs absolute text-input right-3 bottom-[6px]">
+            <div className="text-xs text-muted-foreground absolute right-3 bottom-[6px]">
                 {jotData.promptType === 'ASSESSMENT' ? (
                     <QuestionPopup promptQuestions={jotData as unknown as Prompt} />
                 ) : (

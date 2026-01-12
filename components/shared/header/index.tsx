@@ -19,7 +19,7 @@ export default function Header({
 
     return (
         <header className='w-full border-b print:hidden'>
-            <div className="py-5 px-5  flex-between  max-w-7xl lg:mx-auto ">
+            <div className="py-3 px-5  flex-between  max-w-7xl lg:mx-auto ">
                 <div className="flex-start">
                     <Link
                         href='/'
@@ -27,10 +27,9 @@ export default function Header({
                         <Image
                             src='/images/logo.png'
                             alt={`${APP_NAME} logo`}
-                            height={50}
-                            width={50}
+                            height={60}
+                            width={60}
                             priority
-                            className="rounded-2xl"
                         />
                     </Link>
                 </div>

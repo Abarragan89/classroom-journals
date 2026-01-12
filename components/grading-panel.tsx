@@ -1,11 +1,12 @@
 "use client"
 import { Check, X } from "lucide-react"
 import { gradeStudentResponse } from "@/lib/actions/response.action";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BarLoader } from "react-spinners"
 import { useQueryClient } from "@tanstack/react-query";
 import { PromptSession, Response, ResponseData } from "@/types";
 import { JsonValue } from "@prisma/client/runtime/library";
+import { useTheme } from "next-themes";
 
 export default function GradingPanel({
     responseId,
@@ -25,17 +26,31 @@ export default function GradingPanel({
     sessionId: string;
 }) {
 
-    console.log('session id ', sessionId)
-
     const [isGrading, setIsGrading] = useState<boolean>(false)
     const [currentScoreState, setCurrentScoreState] = useState<number>(currentScore)
     const queryClient = useQueryClient();
+    const { theme } = useTheme();
+
+    // Get theme color dynamically for BarLoader (only accepts hex)
+    const [loaderColor, setLoaderColor] = useState('#a67c52');
+
+    useEffect(() => {
+        // Wait for next frame to ensure CSS has been applied
+        requestAnimationFrame(() => {
+            const primaryColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--primary')
+                .trim();
+            if (primaryColor) {
+                setLoaderColor(primaryColor);
+            }
+        });
+    }, [theme]); // Re-run when theme changes
 
     async function updateResponseScore(score: number) {
         try {
             setIsGrading(true)
             await gradeStudentResponse(responseId, questionNumber, score, teacherId)
-            
+
             // Always update the cache if sessionId is provided
             if (sessionId) {
                 queryClient.setQueryData<PromptSession>(['getSingleSessionData', sessionId], (old) => {
@@ -45,7 +60,7 @@ export default function GradingPanel({
                         responses: old.responses?.map((r: Response) =>
                             r.id === responseId
                                 ? {
-                                    ...r, 
+                                    ...r,
                                     response: (r.response as unknown as ResponseData[]).map((q: ResponseData, idx: number) =>
                                         idx === questionNumber ? { ...q, score } : q
                                     ) as unknown as JsonValue
@@ -62,7 +77,7 @@ export default function GradingPanel({
             } else if (updateUIQuestionAccordion) {
                 updateUIQuestionAccordion(score)
             }
-            
+
             setCurrentScoreState(score)
         } catch (error) {
             console.log('error updating score ', error)
@@ -75,14 +90,13 @@ export default function GradingPanel({
 
     return (
         <div className="flex gap-x-8">
-            {isGrading ? (
+            {isGrading && loaderColor ? (
                 <BarLoader
-                    color={'white'}
+                    color={loaderColor}
                     width={70}
                     height={5}
                     aria-label="Loading Spinner"
                     data-testid="loader"
-                    className="my-3 mx-auto"
                 />
             ) : (
                 <>

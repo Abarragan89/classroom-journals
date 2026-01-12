@@ -76,7 +76,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                         <div className="w-6 h-6 rounded-full bg-accent border-2 border-background" />
                                         <div className="w-6 h-6 rounded-full bg-secondary border-2 border-background" />
                                     </div>
-                                    <span className="text-sm font-medium text-accent">Trusted by educators nationwide</span>
+                                    <span className="text-sm font-medium text-muted-foreground">Trusted by educators nationwide</span>
                                 </div>
 
                                 {/* Main Headline */}
@@ -84,7 +84,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
                                         Stop Grading.
                                         <br />
-                                        <span className="text-accent">Start Teaching.</span>
+                                        <span className="text-muted-foreground">Start Teaching.</span>
                                     </h1>
                                     <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
                                         Reclaim 10+ hours per week with AI-powered grading that uses <span className="font-semibold text-foreground">your custom rubrics</span>. Your students write, AI grades, you focus on what matters.
@@ -123,7 +123,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
 
                                 {/* Trust Indicators */}
                                 <p className="text-sm text-muted-foreground">
-                                    ✓ No credit card required  •  ✓ Free for basic plan  •  ✓ Cancel anytime
+                                    ✓ No credit card required  •  ✓ AI graded Essays and Assessments
                                 </p>
                             </div>
 
@@ -154,64 +154,16 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                         </div>
                     </div>
                     {/* Theme switcher hint - repositioned */}
-                    <div className='hidden sm:flex items-baseline text-sm absolute -top-7 right-36 text-accent italic font-medium opacity-0 animate-bounce-down gap-2'>
+                    <div className='hidden sm:flex items-baseline text-sm absolute -top-7 right-36 text-muted-foreground italic font-medium opacity-0 animate-bounce-down gap-2'>
                         Try our themes!
                         <CornerRightUp className="w-4 h-4" />
                     </div>
 
                 </section>
 
-                {/* Problem/Solution Section */}
-                <section className="py-16 bg-muted/30">
-                    <div className="max-w-7xl mx-auto px-6">
-                        <div className="text-center mb-12">
-                            <h2 className="text-3xl sm:text-4xl font-bold mb-4">The Teacher&apos;s Dilemma</h2>
-                            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                                You want students to write more, but grading takes forever. AI detectors flag everything. Sound familiar?
-                            </p>
-                        </div>
-
-                        <div className="grid md:grid-cols-3 gap-8 mb-12">
-                            {/* Problem 1 */}
-                            <div className="text-center space-y-3">
-                                <div className="w-12 h-12 mx-auto rounded-full bg-destructive/10 flex items-center justify-center">
-                                    <span className="text-2xl">⏰</span>
-                                </div>
-                                <h3 className="font-semibold">Grading Takes Hours</h3>
-                                <p className="text-sm text-muted-foreground">120 essays × 5 minutes each = 10 hours gone</p>
-                            </div>
-
-                            {/* Problem 2 */}
-                            <div className="text-center space-y-3">
-                                <div className="w-12 h-12 mx-auto rounded-full bg-destructive/10 flex items-center justify-center">
-                                    <span className="text-2xl">🤖</span>
-                                </div>
-                                <h3 className="font-semibold">Students Use ChatGPT</h3>
-                                <p className="text-sm text-muted-foreground">Copy-paste essays make grading meaningless</p>
-                            </div>
-
-                            {/* Problem 3 */}
-                            <div className="text-center space-y-3">
-                                <div className="w-12 h-12 mx-auto rounded-full bg-destructive/10 flex items-center justify-center">
-                                    <span className="text-2xl">📊</span>
-                                </div>
-                                <h3 className="font-semibold">No Time for Data</h3>
-                                <p className="text-sm text-muted-foreground">Exit tickets pile up, insights get lost</p>
-                            </div>
-                        </div>
-
-                        {/* Solution */}
-                        <div className="text-center">
-                            <div className="inline-block px-6 py-3 bg-accent/10 rounded-full border border-accent/20 mb-6">
-                                <span className="font-semibold text-accent">✓ JotterBlog solves all three</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
                 <Separator />
                 {/* Features - Redesigned with better hierarchy */}
-                <section className="py-20 px-6 max-w-7xl mx-auto">
+                <section className="py-12 px-6 max-w-7xl mx-auto">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl sm:text-4xl font-bold mb-4">Everything You Need in One Platform</h2>
                         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -224,7 +176,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                         <div className="grid lg:grid-cols-2 gap-8 items-center">
                             <div className="space-y-4">
                                 <div className="inline-block px-4 py-1 bg-accent/10 rounded-full border border-accent/20">
-                                    <span className="text-sm font-semibold text-accent">⭐ Most Popular</span>
+                                    <span className="text-sm font-semibold">⭐ Most Popular</span>
                                 </div>
                                 <h3 className="text-3xl font-bold">AI Grading with Your Rubrics</h3>
                                 <p className="text-lg text-muted-foreground">
@@ -232,15 +184,15 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 </p>
                                 <ul className="space-y-3 text-foreground">
                                     <li className="flex items-start gap-3">
-                                        <span className="text-accent mt-1">✓</span>
+                                        <span className="mt-1">✓</span>
                                         <span>Grade 120 essays in under 5 minutes</span>
                                     </li>
                                     <li className="flex items-start gap-3">
-                                        <span className="text-accent mt-1">✓</span>
+                                        <span className="mt-1">✓</span>
                                         <span>Maintain your teaching standards and rubric criteria</span>
                                     </li>
                                     <li className="flex items-start gap-3">
-                                        <span className="text-accent mt-1">✓</span>
+                                        <span className="mt-1">✓</span>
                                         <span>Review and adjust AI scores before finalizing</span>
                                     </li>
                                 </ul>
@@ -262,14 +214,13 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                     <div className="grid md:grid-cols-2 gap-8">
                         {/* Feature 2 - Auto-Graded Assessments */}
                         <div className="bg-card rounded-xl p-8 border border-border shadow-sm hover:shadow-md transition-shadow">
-                            <div className="mb-6">
-                                <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
-                                    <span className="text-2xl">📊</span>
+                            <div className="mb-5 flex gap-4">
+                                <div>
+                                    <h3 className="text-2xl font-bold mb-3"><span className="text-2xl">📊</span> Self-Grading Exit Tickets</h3>
+                                    <p className="text-muted-foreground mb-4">
+                                        Create short answer exit tickets that AI grades instantly. No more stacks to review—get beautiful visual graphs showing class understanding in real-time.
+                                    </p>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-3">Auto-Graded Assessments</h3>
-                                <p className="text-muted-foreground mb-4">
-                                    No more multiple choice! Ask real questions, get instant data. Perfect for exit tickets and comprehension checks.
-                                </p>
                             </div>
                             <Image
                                 src='/images/assessment-data.png'
@@ -283,14 +234,13 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
 
                         {/* Feature 3 - AI Anti-Cheat */}
                         <div className="bg-card rounded-xl p-8 border border-border shadow-sm hover:shadow-md transition-shadow">
-                            <div className="mb-6">
-                                <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
-                                    <span className="text-2xl">🛡️</span>
+                            <div className="mb-6 flex gap-4">
+                                <div>
+                                    <h3 className="text-2xl font-bold mb-3"><span className="text-2xl">🛡️</span> AI Anti-Cheat Editor</h3>
+                                    <p className="text-muted-foreground mb-4">
+                                        Custom editor blocks copy-paste, word prediction, and spell check. See their true writing ability.
+                                    </p>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-3">AI Anti-Cheat Editor</h3>
-                                <p className="text-muted-foreground mb-4">
-                                    Custom editor blocks copy-paste, word prediction, and spell check. See their true writing ability.
-                                </p>
                             </div>
                             <Image
                                 src='/images/text-editor.png'
@@ -304,14 +254,13 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
 
                         {/* Feature 4 - Sharable Blogs */}
                         <div className="bg-card rounded-xl p-8 border border-border shadow-sm hover:shadow-md transition-shadow">
-                            <div className="mb-6">
-                                <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
-                                    <span className="text-2xl">✍️</span>
+                            <div className="mb-6 flex gap-4">
+                                <div>
+                                    <h3 className="text-2xl font-bold mb-3"> <span className="text-2xl">✍️</span> Beautiful Student Blogs</h3>
+                                    <p className="text-muted-foreground mb-4">
+                                        Turn essays into shareable blogs. Students comment, like, and engage with each other&apos;s work.
+                                    </p>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-3">Beautiful Student Blogs</h3>
-                                <p className="text-muted-foreground mb-4">
-                                    Turn essays into shareable blogs. Students comment, like, and engage with each other&apos;s work.
-                                </p>
                             </div>
                             <Image
                                 src='/images/featured-blogs.png'
@@ -325,14 +274,13 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
 
                         {/* Feature 5 - Quick Quips */}
                         <div className="bg-card rounded-xl p-8 border border-border shadow-sm hover:shadow-md transition-shadow">
-                            <div className="mb-6">
-                                <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
-                                    <span className="text-2xl">💬</span>
+                            <div className="mb-6 flex gap-4">
+                                <div>
+                                    <h3 className="text-2xl font-bold mb-3"><span className="text-2xl">💬</span> Quick Quips</h3>
+                                    <p className="text-muted-foreground mb-4">
+                                        Twitter-style prompts for instant engagement. Students respond without seeing others&apos; answers first.
+                                    </p>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-3">Quick Quips</h3>
-                                <p className="text-muted-foreground mb-4">
-                                    Twitter-style prompts for instant engagement. Students respond without seeing others&apos; answers first.
-                                </p>
                             </div>
                             <Image
                                 src='/images/quip-demo.png'
@@ -416,12 +364,12 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 <p className="text-sm text-muted-foreground mt-1">Hours saved weekly</p>
                             </div>
                             <div>
-                                <p className="text-4xl font-bold text-accent">95%</p>
+                                <p className="text-4xl font-bold text-accent">100%</p>
                                 <p className="text-sm text-muted-foreground mt-1">Teacher satisfaction</p>
                             </div>
                             <div>
                                 <p className="text-4xl font-bold text-accent">Free</p>
-                                <p className="text-sm text-muted-foreground mt-1">Basic plan forever</p>
+                                <p className="text-sm text-muted-foreground mt-1">Sign up and start using</p>
                             </div>
                         </div>
 
@@ -432,13 +380,13 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                     <span className="ml-2">→</span>
                                 </Button>
                             </Link>
-                            <p className="text-sm text-muted-foreground">
+                            {/* <p className="text-sm text-muted-foreground">
                                 No credit card • Setup in 5 minutes
-                            </p>
+                            </p> */}
                         </div>
 
                         {/* Trust badges */}
-                        <div className="pt-8 border-t border-border">
+                        {/* <div className="pt-8 border-t border-border">
                             <p className="text-sm text-muted-foreground mb-4">Secure & Privacy-Focused</p>
                             <div className="flex flex-wrap justify-center gap-6 text-xs text-muted-foreground">
                                 <span>🔒 SOC 2 Compliant</span>
@@ -446,7 +394,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 <span>✓ Student Data Encrypted</span>
                                 <span>✓ Google Workspace Integration</span>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </section>
             </main>

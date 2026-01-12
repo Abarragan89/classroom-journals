@@ -36,17 +36,17 @@ export default function StudentNavLinks({
 
             <Link href={`/student-dashboard`} className={`
             flex-start hover:cursor-pointer hover:text-foreground text-sm
-            ${pathname === 'student-dashboard' ? 'text-foreground underline' : 'text-accent'}  
+            ${pathname === 'student-dashboard' ? 'text-foreground' : 'text-muted-foreground'}  
             `}>
                 <LayoutDashboard size={16} className='mr-1' />Dashboard
             </Link>
             <Link href={`/student-profile`} className={`
-                flex-center hover:cursor-pointer hover:text-foreground text-sm
-                ${pathname === 'student-profile' ? 'text-foreground underline' : 'text-accent'}    
+                ml-3 flex-center hover:cursor-pointer hover:text-foreground text-sm
+                ${pathname === 'student-profile' ? 'text-foreground' : 'text-muted-foreground'}    
                 `}>
                 <User size={17} className='mr-1' />Profile
             </Link>
-            <div className='relative'>
+            <div className='relative ml-3'>
                 {notificationCount !== undefined && notificationCount > 0 && (
                     <p className='opacity-80 text-center min-w-5 absolute top-[-10px] right-[-16px] py-[2px] rounded-full bg-destructive text-destructive-foreground text-xs'
                     >
@@ -55,7 +55,7 @@ export default function StudentNavLinks({
                 )}
                 <Link href={`/student-notifications`} className={`
                 flex-center hover:cursor-pointer hover:text-foreground text-sm
-                ${pathname === 'student-notifications' ? 'text-foreground underline' : 'text-accent'}    
+                ${pathname === 'student-notifications' ? 'text-foreground' : 'text-muted-foreground'}    
                 `}>
                     <Bell size={16} className='mr-1' />Notifications
                 </Link>
