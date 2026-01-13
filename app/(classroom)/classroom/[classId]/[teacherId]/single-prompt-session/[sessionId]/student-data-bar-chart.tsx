@@ -62,22 +62,12 @@ export function StudentDataBarChart({
         }
     }))
 
-    // Calculate totals for summary
-    const totals = chartData.reduce(
-        (acc, item) => ({
-            correct: acc.correct + item.correct,
-            half: acc.half + item.half,
-            wrong: acc.wrong + item.wrong,
-        }),
-        { correct: 0, half: 0, wrong: 0 }
-    );
-
     const chevronStyles = 'hover:cursor-pointer hover:text-input border border-border rounded-sm hover:bg-primary hover:text-foreground p-1 transition-colors';
     const canGoBack = startRange > 0;
     const canGoNext = endRange < totalQuestions;
 
     return (
-        <div className="border border-border rounded-lg p-4 bg-card">
+        <div className="border border-border rounded-md p-4 bg-card">
             {/* Header Section */}
             <div className="mb-8">
                 <div className="flex items-center justify-between mb-1">
@@ -100,6 +90,8 @@ export function StudentDataBarChart({
                         </button>
                     </div>
                 </div>
+                {/* Text explaining the graph */}
+                <p className="text-sm text-muted-foreground">Score breakdown by question</p>
             </div>
 
             {/* Chart */}

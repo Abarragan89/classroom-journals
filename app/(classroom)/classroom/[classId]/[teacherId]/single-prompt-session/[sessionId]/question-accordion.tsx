@@ -180,28 +180,28 @@ export default function QuestionAccordion({
                 </div>
             </ResponsiveDialog>
 
-            <div className="border border-border rounded-lg p-4 bg-card">
+            <div className="border border-border rounded-md p-4 bg-card">
                 {/* Header Section */}
                 <div className="mb-4">
                     <h3 className="font-bold text-lg mb-1">Student Responses by Question</h3>
-                    <p className="text-sm text-muted-foreground">Click a question to view student responses grouped by score</p>
+                    {/* <p className="text-sm text-muted-foreground">Click a question to view student responses grouped by score</p> */}
                 </div>
 
                 {/* Legend */}
                 <div className="flex flex-wrap gap-3 mb-4 pb-4 border-b border-border text-xs">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
                         <div className="w-4 h-4 rounded bg-muted"></div>
                         <span className="text-muted-foreground">Not Graded</span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
                         <div className="w-4 h-4 rounded bg-destructive"></div>
                         <span className="text-muted-foreground">Incorrect</span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
                         <div className="w-4 h-4 rounded bg-warning"></div>
                         <span className="text-muted-foreground">Half Credit</span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
                         <div className="w-4 h-4 rounded bg-success"></div>
                         <span className="text-muted-foreground">Correct</span>
                     </div>
@@ -219,7 +219,7 @@ export default function QuestionAccordion({
                                     </div>
                                 </AccordionTrigger>
                                 <AccordionContent>
-                                    <div className="pt-2">
+                                    <div>
                                         <p className="text-xs text-muted-foreground mb-3 italic">Click a badge to view student responses</p>
                                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                             <button
