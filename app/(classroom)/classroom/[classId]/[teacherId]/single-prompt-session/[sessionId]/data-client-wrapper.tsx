@@ -36,8 +36,8 @@ export default function DataClientWrapper({
 
     return (
         <div className="mb-10">
-            <div className="flex flex-col lg:flex-row lg:items-start mt-5 gap-5">
-                <div className="flex-1 w-full">
+            <div className="flex flex-col lg:flex-row lg:items-start mt-5 gap-8">
+                <div className="w-full max-w-[100%] sm:max-w-[80%] mx-auto">
                     <StudentDataBarChart
                         responses={responses as Response[]}
                         startRange={currentQuestions.start}
@@ -47,7 +47,7 @@ export default function DataClientWrapper({
                         totalQuestions={questions.length}
                     />
                 </div>
-                <div className="flex-1 w-full">
+                <div className="w-full max-w-[100%] sm:max-w-[80%] mx-auto">
                     <QuestionAccordion
                         questions={(questions as unknown as Question[]) as unknown as Question[]}
                         responses={responses as unknown as Response[]}

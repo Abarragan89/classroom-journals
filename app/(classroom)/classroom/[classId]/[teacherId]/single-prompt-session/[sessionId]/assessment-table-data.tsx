@@ -64,7 +64,7 @@ export default function AssessmentTableData({
     }
 
     return (
-        <Table className="mt-3">
+        <Table className="mt-3 rounded-lg">
             <TableHeader>
                 <TableRow>
                     <TableHead className="text-right">&nbsp;</TableHead>

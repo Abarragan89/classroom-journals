@@ -152,12 +152,12 @@ export default function QuestionAccordion({
                 </p>
                 <div className="max-h-[500px] overflow-y-auto custom-scrollbar">
                     {currentResponseData?.[currentSubQuery.current.question]?.[currentSubQuery.current.score]?.map((data, index) => (
-                        <div key={index} className="bg-card px-5 mx-3 pt-3 pb-14 my-4 rounded-md text-sm relative">
+                        <div key={index} className="bg-card border border-border px-8 mx-3 pt-8 pb-14 my-4 rounded-md text-sm relative">
                             <p
                             >
                                 {data.answer}
                             </p>
-                            <span className="absolute bottom-1 right-5 text-xs">-{data.studName}</span>
+                            <span className="absolute bottom-1 right-5">-{data.studName}</span>
                             <div className="absolute bottom-1 left-5">
                                 <GradingPanel
                                     responseId={data.responseId}
@@ -190,7 +190,7 @@ export default function QuestionAccordion({
                 {/* Legend */}
                 <div className="flex flex-wrap gap-3 mb-4 pb-4 border-b border-border text-xs">
                     <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded bg-primary"></div>
+                        <div className="w-4 h-4 rounded bg-muted"></div>
                         <span className="text-muted-foreground">Not Graded</span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -224,9 +224,9 @@ export default function QuestionAccordion({
                                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                             <button
                                                 onClick={() => handleShowModal(question.question, 2, startRange + index)}
-                                                className="flex flex-col items-center justify-center p-3 rounded-lg border-2 border-primary bg-primary/10 hover:bg-primary/20 transition-colors group"
+                                                className="flex flex-col items-center justify-center p-3 rounded-lg border-2 border-muted bg-muted/10 hover:bg-muted/20 transition-colors group"
                                             >
-                                                <span className="text-2xl font-bold text-primary group-hover:scale-110 transition-transform">
+                                                <span className="text-2xl font-bold text-muted-foreground group-hover:scale-110 transition-transform">
                                                     {currentResponseData[question.question]?.[2]?.length || 0}
                                                 </span>
                                                 <span className="text-xs text-muted-foreground mt-1">Not Graded</span>
