@@ -79,7 +79,6 @@ export default function QuipListSection({
                         classId={classId}
                         indexNumber={(index + 1).toString()}
                     />
-
                 ))}
             </Accordion>
         </section>

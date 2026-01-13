@@ -79,6 +79,8 @@ export default function QuipListItem({
 
     const quipQuestion = (singleQuip?.questions as Question[])[0]?.question
 
+    console.log('studentResponses', studentResponses);
+
     return (
         <>
             <ResponsiveDialog
@@ -91,36 +93,49 @@ export default function QuipListItem({
                     Delete Quip
                 </Button>
             </ResponsiveDialog>
-            <AccordionItem value={`item-${indexNumber}`} className='relative'>
-                <div className="flex flex-col mt-1">
-                    <div className='flex'>
-                        <Image
-                            src={singleQuip?.author?.avatarURL || '/images/demo-avatars/1.png'}
-                            alt="blog cover photo"
-                            width={40}
-                            height={40}
-                            className="rounded-full w-[40px] h-[40px]"
-                        />
-                        <div className="flex-between">
-                            <div className='ml-2 text-muted-foreground'>
-                                <p className="leading-5 text-sm">{singleQuip?.author?.username}</p>
-                                <p className="leading-5 text-sm">{formatDateMonthDayYear(singleQuip?.assignedAt)}</p>
-                            </div>
-                            {role === ClassUserRole.TEACHER && (
-                                <p onClick={(e) => { setOpenDeleteModal(true); e.stopPropagation(); }} className='text-destructive absolute top-1 -right-[2px]'>
-                                    <Trash2
-                                        className='hover:cursor-pointer opacity-80 hover:opacity-100'
-                                        size={18}
-                                    />
-                                </p>
-                            )}
-                        </div>
+
+
+            <AccordionItem value={`item-${indexNumber}`} className='relative rounded-lg bg-card mb-4 overflow-hidden'>
+                {/* Post Header */}
+                <div className="flex items-center gap-3 p-4 pb-2">
+                    <Image
+                        src={singleQuip?.author?.avatarURL || '/images/demo-avatars/1.png'}
+                        alt="author avatar"
+                        width={44}
+                        height={44}
+                        className="rounded-full w-[44px] h-[44px]"
+                    />
+                    <div className="flex-1">
+                        <p className="font-semibold text-foreground text-sm">{singleQuip?.author?.username}</p>
+                        <p className="text-xs text-muted-foreground">{formatDateMonthDayYear(singleQuip?.assignedAt)}</p>
                     </div>
+                    {role === ClassUserRole.TEACHER && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setOpenDeleteModal(true);
+                            }}
+                        >
+                            <Trash2 size={18} />
+                        </Button>
+                    )}
                 </div>
-                <AccordionTrigger onClick={() => setShowResponses(true)} className='py-2 items-start'>
-                    <p className='text-md font-bold text-foreground mx-12 tracking-wide'>{quipQuestion}</p>
+
+                {/* Post Content - The Question */}
+                <AccordionTrigger
+                    onClick={() => setShowResponses(true)}
+                    className='px-5 pt-2 pb-4 hover:no-underline items-center hover:text-primary transition-colors'
+                >
+                    <p className=' ml-14 h2-bold '>
+                        {quipQuestion}
+                    </p>
                 </AccordionTrigger>
-                <AccordionContent>
+
+                {/* Responses Section */}
+                <AccordionContent className='bg-muted/30 px-4 py-4 space-y-3'>
                     {isComplete || role !== ClassUserRole.STUDENT ? (
                         studentResponses ? studentResponses.map((response) => (
                             <QuipSingleResponse
@@ -138,17 +153,15 @@ export default function QuipListItem({
                             <LoadingAnimation />
                         )
                     ) : (
-                        <div className='sm:mx-14'>
-                            <AnswerQuip
-                                studentId={userId}
-                                promptSessionId={singleQuip.id}
-                                quipQuestion={quipQuestion}
-                                completeStatusTrue={completeStatusTrue}
-                            />
-                        </div>
+                        <AnswerQuip
+                            studentId={userId}
+                            promptSessionId={singleQuip.id}
+                            quipQuestion={quipQuestion}
+                            completeStatusTrue={completeStatusTrue}
+                        />
                     )}
                 </AccordionContent>
-            </AccordionItem >
+            </AccordionItem>
         </>
     )
 }
