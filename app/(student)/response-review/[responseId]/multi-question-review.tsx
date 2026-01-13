@@ -87,10 +87,10 @@ export default function MultiQuestionReview({
 
     return (
         <div className="max-w-[650px] mx-auto w-full relative">
-            {isSubmittable && <p className="h2-bold text-input text-center">Question Review</p>}
+            {isSubmittable && <p className="h2-bold text-muted-foreground text-center">Question Review</p>}
             <div className="flex-between mt-7">
                 {showGrades && (
-                    <p className='font-bold text-lg text-input ml-0 text-right mb-10'>Grade: <span
+                    <p className='font-bold text-lg text-muted-foreground ml-0 text-right mb-10'>Grade: <span
                         className={`
                         ${parseInt(gradePercentage) >= 90 ? 'text-success' : parseInt(gradePercentage) >= 70 ? 'text-warning' : 'text-destructive'}
                         `}

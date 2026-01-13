@@ -88,7 +88,7 @@ export default function EditPromptSessionPopUp({
 
             {/* Options Menu */}
             {promptSessionType === 'BLOG' && isSessionPublic ? (
-                <p className='text-input text-left'>Discussion:
+                <p className='text-muted-foreground text-left'>Discussion:
                     {
                         promptSessionStatus === 'OPEN' ? (
                             <span className="text-success font-bold text-sm"> Open</span>

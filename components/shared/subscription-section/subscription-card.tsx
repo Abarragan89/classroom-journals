@@ -109,7 +109,7 @@ export default function SubscriptionCard({
                     ) : (
                         <p className="text-[2.5rem] mt-5">${subscriptionData.price}<span className="text-[1.5rem]">.99</span><span className="text-[1rem]">/{subscriptionData.frequency}</span></p>
                     )}
-                    <p className="text-sm text-input">{subscriptionData.description}</p>
+                    <p className="text-sm text-muted-foreground">{subscriptionData.description}</p>
                 </div>
                 <Separator className="my-5" />
                 <ul>

@@ -102,7 +102,7 @@ export default function QuipListItem({
                             className="rounded-full w-[40px] h-[40px]"
                         />
                         <div className="flex-between">
-                            <div className='ml-2 text-input'>
+                            <div className='ml-2 text-muted-foreground'>
                                 <p className="leading-5 text-sm">{singleQuip?.author?.username}</p>
                                 <p className="leading-5 text-sm">{formatDateMonthDayYear(singleQuip?.assignedAt)}</p>
                             </div>

@@ -70,7 +70,7 @@ export default function SubscriptionSection({
             {/* <div className="flex justify-between mb-5"> */}
             <div>
                 <h3 className="text-lg">Subscription Plans</h3>
-                <p className="text-input">cancel anytime</p>
+                <p className="text-muted-foreground">cancel anytime</p>
                 {/* AI Credits Banner */}
                 <div>
                     <article className="w-full">

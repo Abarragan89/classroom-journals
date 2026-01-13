@@ -61,11 +61,11 @@ export default function ClientQuestionControls({
             >{questions[currentQuestion].question}</p>
             <Separator className='mt-5 mb-2' />
             <div className='flex-between mb-9 mx-auto max-w-[500px]'>
-                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'blank' ? 'text-input' : ''}`} onClick={() => setSelectedPaper('blank')}>Blank</p>
-                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'line1' ? 'text-input' : ''}`} onClick={() => setSelectedPaper('line1')}>Line 1</p>
-                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'line2' ? 'text-input' : ''}`} onClick={() => setSelectedPaper('line2')}>Line 2</p>
-                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'graph1' ? 'text-input' : ''}`} onClick={() => setSelectedPaper('graph1')}>Graph 1</p>
-                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'graph2' ? 'text-input' : ''}`} onClick={() => setSelectedPaper('graph2')}>Graph 2</p>
+                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'blank' ? 'text-muted-foreground' : ''}`} onClick={() => setSelectedPaper('blank')}>Blank</p>
+                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'line1' ? 'text-muted-foreground' : ''}`} onClick={() => setSelectedPaper('line1')}>Line 1</p>
+                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'line2' ? 'text-muted-foreground' : ''}`} onClick={() => setSelectedPaper('line2')}>Line 2</p>
+                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'graph1' ? 'text-muted-foreground' : ''}`} onClick={() => setSelectedPaper('graph1')}>Graph 1</p>
+                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'graph2' ? 'text-muted-foreground' : ''}`} onClick={() => setSelectedPaper('graph2')}>Graph 2</p>
             </div>
             <div className={`
                 ${selectedPaper === 'blank' ? blankPaper : ''}
