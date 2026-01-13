@@ -223,7 +223,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 </div>
                             </div>
                             <Image
-                                src='/images/assessment-data.png'
+                                src='/images/assessment-data-v2.png'
                                 width={500}
                                 height={300}
                                 alt="assessment data screenshot"
@@ -243,7 +243,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 </div>
                             </div>
                             <Image
-                                src='/images/text-editor.png'
+                                src='/images/text-editor-v2.png'
                                 width={500}
                                 height={300}
                                 alt="student text-editor screenshot"
@@ -263,7 +263,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 </div>
                             </div>
                             <Image
-                                src='/images/featured-blogs.png'
+                                src='/images/featured-blogs-v2.png'
                                 width={500}
                                 height={300}
                                 alt="featured blogs screenshot"
@@ -283,7 +283,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 </div>
                             </div>
                             <Image
-                                src='/images/quip-demo.png'
+                                src='/images/quip-demo-v2.png'
                                 width={500}
                                 height={300}
                                 alt="quip demo screenshot"
