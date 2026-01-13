@@ -28,6 +28,9 @@ export default function QuipSingleResponse({
     authorAvatarUrl: string
 }) {
 
+    console.log('userId', userId);
+    
+
     const [isBlogLikedByUser, setIsBlogLikeByUser] = useState<boolean>(responseLikes?.some((like) => like.userId === userId));
     const [totalCommentLikes, setTotalCommentLikes] = useState<number>(likeCount);
 
@@ -63,8 +66,8 @@ export default function QuipSingleResponse({
     }
 
     return (
-        <div className="mt-2">
-            <div className='ml-12 flex'>
+        <div className="mt-2 ml-12 border-b border-input last:border-b-0">
+            <div className='mb-1 flex'>
                 <Image
                     src={authorAvatarUrl || '/images/demo-avatars/1.png'}
                     alt="blog cover photo"
@@ -74,8 +77,8 @@ export default function QuipSingleResponse({
                 />
                 <div className="flex justify-between w-full items-start">
                     <div className='ml-2 text-muted-foreground'>
-                        <p className="leading-5 text-xs">{responseAuthor}</p>
-                        <p className="leading-5 text-xs">{formatDateMonthDayYear(responseDate)}</p>
+                        <p className="leading-4 text-xs">{responseAuthor}</p>
+                        <p className="leading-4 text-xs">{formatDateMonthDayYear(responseDate)}</p>
                     </div>
                     <div className="flex mt-[2px] text-muted-foreground">
                         {isBlogLikedByUser ?
@@ -93,7 +96,7 @@ export default function QuipSingleResponse({
                     </div>
                 </div>
             </div>
-            <p className='ml-[5.55rem] text-foreground'>
+            <p className='ml-[2.8rem] pb-2 mb-2 text-foreground'>
                 {responseText}
             </p>
         </div>
