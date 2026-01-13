@@ -143,7 +143,7 @@ export default function SingleComment({
                 <div className="flex justify-between items-center w-full">
                     <div>
                         <p className="leading-0 text-[.95rem] text-primary">{commentData?.user?.username}</p>
-                        <p className="leading-none text-[.95rem] text-input">{formatDateMonthDayYear(commentData?.createdAt)}</p>
+                        <p className="leading-none text-[.95rem] text-muted-foreground">{formatDateMonthDayYear(commentData?.createdAt)}</p>
                     </div>
                     <div className="flex items-center text-primary">
                         {isTeacherView &&
@@ -218,7 +218,7 @@ export default function SingleComment({
                 </section>
             }
 
-            <div className="flex justify-between text-input items-center text-[.975rem] mx-[50px] mt-2">
+            <div className="flex justify-between text-muted-foreground items-center text-[.975rem] mx-[50px] mt-2">
                 <div
                     onClick={() => setShowReplies(prev => !prev)}
                     className="w-fit mr-0 flex justify-end items-center hover:cursor-pointer"

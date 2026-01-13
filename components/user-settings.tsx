@@ -135,7 +135,7 @@ export default function UserSettings({
                             Delete Account
                         </Button>
                         {!isCancelling && isSubscriptionValid && (
-                            <p className="text-xs text-input">You must first unsubscribe to delete account</p>
+                            <p className="text-xs text-muted-foreground">You must first unsubscribe to delete account</p>
                         )}
                     </div>
                 </div>

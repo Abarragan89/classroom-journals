@@ -171,7 +171,7 @@ export default function SingleQuestionReview({
             <div className="flex-between mt-10">
                 {showGrades && (
                     <div className="flex items-start">
-                        <p className='font-bold text-lg text-input ml-0 text-right'>Grade: <span
+                        <p className='font-bold text-lg text-muted-foreground ml-0 text-right'>Grade: <span
                             className={`
                             ${parseInt(gradePercentage) >= 90 ? 'text-success' : parseInt(gradePercentage) >= 70 ? 'text-warning' : 'text-destructive'}
                             `}

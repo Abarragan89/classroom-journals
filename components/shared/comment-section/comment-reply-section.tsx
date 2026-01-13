@@ -65,7 +65,7 @@ export default function CommentReplySection({
                 <div className="flex justify-between items-center w-full ml-3">
                     <div>
                         <p className="leading-none text-[.95rem] mb-1 text-primary">{replyCommentData?.user?.username}</p>
-                        <p className="leading-none text-[.95rem] text-input">{formatDateMonthDayYear(replyCommentData?.createdAt)}</p>
+                        <p className="leading-none text-[.95rem] text-muted-foreground">{formatDateMonthDayYear(replyCommentData?.createdAt)}</p>
                     </div>
                     <div className="flex items-center text-primary">
                         {isTeacherView &&

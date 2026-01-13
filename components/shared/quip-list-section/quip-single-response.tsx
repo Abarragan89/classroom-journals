@@ -73,11 +73,11 @@ export default function QuipSingleResponse({
                     className="rounded-full w-[35px] h-[35px]"
                 />
                 <div className="flex justify-between w-full items-start">
-                    <div className='ml-2 text-input'>
+                    <div className='ml-2 text-muted-foreground'>
                         <p className="leading-5 text-xs">{responseAuthor}</p>
                         <p className="leading-5 text-xs">{formatDateMonthDayYear(responseDate)}</p>
                     </div>
-                    <div className="flex mt-[2px] text-input">
+                    <div className="flex mt-[2px] text-muted-foreground">
                         {isBlogLikedByUser ?
                             <FaHeart
                                 onClick={() => toggleResponseLikeHandler('remove')}
@@ -89,7 +89,7 @@ export default function QuipSingleResponse({
                                 className="text-[1.1rem] mr-[4px] hover:cursor-pointer"
                             />
                         }
-                        <p className="text-[.95rem] text-input">{totalCommentLikes}</p>
+                        <p className="text-[.95rem] text-muted-foreground">{totalCommentLikes}</p>
                     </div>
                 </div>
             </div>
