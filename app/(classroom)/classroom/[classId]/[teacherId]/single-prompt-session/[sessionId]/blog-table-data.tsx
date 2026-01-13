@@ -80,7 +80,7 @@ export default function BlogTableData({
                 {/* Completed Assignments */}
                 {completedResponses.length > 0 && (
                     <TableRow>
-                        <TableCell colSpan={6} className="text-center font-bold bg-background text-success">Submitted</TableCell>
+                        <TableCell colSpan={6} className="text-center font-bold text-success">Submitted</TableCell>
                     </TableRow>
                 )}
                 {(completedResponses ?? []).sort((a, b) => {
@@ -107,7 +107,7 @@ export default function BlogTableData({
                 {/* INCOMPLETE ASSIGNMENTS */}
                 {incompleteResponses.length > 0 && (
                     <TableRow>
-                        <TableCell colSpan={6} className="text-center font-bold bg-background text-destructive">Not Submitted</TableCell>
+                        <TableCell colSpan={6} className="text-center font-bold text-destructive">Not Submitted</TableCell>
                     </TableRow>
                 )}
                 {(incompleteResponses ?? []).sort((a, b) => {
@@ -134,7 +134,7 @@ export default function BlogTableData({
                 {/* RETURNED ASSIGNMENTS */}
                 {returnedResponses.length > 0 && (
                     <TableRow>
-                        <TableCell colSpan={6} className="text-center font-bold bg-background text-warning">Returned</TableCell>
+                        <TableCell colSpan={6} className="text-center font-bold text-warning">Returned</TableCell>
                     </TableRow>
                 )}
                 {(returnedResponses ?? []).sort((a, b) => {
@@ -161,7 +161,7 @@ export default function BlogTableData({
                 {/* NOT ASSIGNED */}
                 {notAssigned.length > 0 && (
                     <TableRow>
-                        <TableCell colSpan={6} className="text-center font-bold bg-background text-border">Not Assigned</TableCell>
+                        <TableCell colSpan={6} className="text-center font-bold text-border">Not Assigned</TableCell>
                     </TableRow>
                 )}
                 {notAssigned?.length > 0 && notAssigned.map((user) => (
