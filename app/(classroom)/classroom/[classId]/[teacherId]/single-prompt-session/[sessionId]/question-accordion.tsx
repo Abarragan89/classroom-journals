@@ -83,8 +83,6 @@ export default function QuestionAccordion({
         setIsResponseViewModalOpen(true);
     }
 
-    const circleBtnStyles = "text-background rounded-lg w-full mx-1 h-8 flex-center opacity-70 hover:cursor-pointer hover:opacity-100";
-
     const scoreLabelMap: Record<number | string, { text: string; color: string }> = {
         1: { text: 'Correct Responses', color: 'text-success' },
         0.5: { text: 'Half Credit Responses', color: 'text-warning' },
@@ -182,45 +180,94 @@ export default function QuestionAccordion({
                 </div>
             </ResponsiveDialog>
 
-            <Accordion type="single" collapsible>
-                {/* <h3 className="text-sm font-bold text-center">View responses by question</h3> */}
-                {questions?.length > 0 &&
-                    questions?.slice(startRange, endRange)?.map((question: Question, index: number) => (
-                        <AccordionItem key={index} value={question.question}>
-                            <AccordionTrigger>
-                                <p className="line-clamp-1 pr-10">{`Q: ${startRange + index + 1}`} <span className="ml-2 block-inline">{question.question}</span></p>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <div className="flex justify-around text-xl mt-3">
-                                    <div
-                                        onClick={() => handleShowModal(question.question, 2, startRange + index)}
-                                        className={`bg-primary ${circleBtnStyles}`}
-                                    >
-                                        <p>{currentResponseData[question.question]?.[2]?.length}</p>
+            <div className="border border-border rounded-lg p-4 bg-card">
+                {/* Header Section */}
+                <div className="mb-4">
+                    <h3 className="font-bold text-lg mb-1">Student Responses by Question</h3>
+                    <p className="text-sm text-muted-foreground">Click a question to view student responses grouped by score</p>
+                </div>
+
+                {/* Legend */}
+                <div className="flex flex-wrap gap-3 mb-4 pb-4 border-b border-border text-xs">
+                    <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded bg-primary"></div>
+                        <span className="text-muted-foreground">Not Graded</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded bg-destructive"></div>
+                        <span className="text-muted-foreground">Incorrect</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded bg-warning"></div>
+                        <span className="text-muted-foreground">Half Credit</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded bg-success"></div>
+                        <span className="text-muted-foreground">Correct</span>
+                    </div>
+                </div>
+
+                {/* Accordion */}
+                <Accordion type="single" collapsible defaultValue={questions?.[0]?.question}>
+                    {questions?.length > 0 &&
+                        questions?.slice(startRange, endRange)?.map((question: Question, index: number) => (
+                            <AccordionItem key={index} value={question.question}>
+                                <AccordionTrigger className="hover:no-underline">
+                                    <div className="flex items-start gap-2 text-left">
+                                        <span className="font-semibold text-primary shrink-0">Q{startRange + index + 1}.</span>
+                                        <span className="line-clamp-2">{question.question}</span>
                                     </div>
-                                    <div
-                                        onClick={() => handleShowModal(question.question, 0, startRange + index)}
-                                        className={`bg-destructive ${circleBtnStyles}`}
-                                    >
-                                        <p>{currentResponseData[question.question]?.[0]?.length}</p>
+                                </AccordionTrigger>
+                                <AccordionContent>
+                                    <div className="pt-2">
+                                        <p className="text-xs text-muted-foreground mb-3 italic">Click a badge to view student responses</p>
+                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                            <button
+                                                onClick={() => handleShowModal(question.question, 2, startRange + index)}
+                                                className="flex flex-col items-center justify-center p-3 rounded-lg border-2 border-primary bg-primary/10 hover:bg-primary/20 transition-colors group"
+                                            >
+                                                <span className="text-2xl font-bold text-primary group-hover:scale-110 transition-transform">
+                                                    {currentResponseData[question.question]?.[2]?.length || 0}
+                                                </span>
+                                                <span className="text-xs text-muted-foreground mt-1">Not Graded</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => handleShowModal(question.question, 0, startRange + index)}
+                                                className="flex flex-col items-center justify-center p-3 rounded-lg border-2 border-destructive bg-destructive/10 hover:bg-destructive/20 transition-colors group"
+                                            >
+                                                <span className="text-2xl font-bold text-destructive group-hover:scale-110 transition-transform">
+                                                    {currentResponseData[question.question]?.[0]?.length || 0}
+                                                </span>
+                                                <span className="text-xs text-muted-foreground mt-1">Incorrect</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => handleShowModal(question.question, 0.5, startRange + index)}
+                                                className="flex flex-col items-center justify-center p-3 rounded-lg border-2 border-warning bg-warning/10 hover:bg-warning/20 transition-colors group"
+                                            >
+                                                <span className="text-2xl font-bold text-warning group-hover:scale-110 transition-transform">
+                                                    {currentResponseData[question.question]?.[0.5]?.length || 0}
+                                                </span>
+                                                <span className="text-xs text-muted-foreground mt-1">Half Credit</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => handleShowModal(question.question, 1, startRange + index)}
+                                                className="flex flex-col items-center justify-center p-3 rounded-lg border-2 border-success bg-success/10 hover:bg-success/20 transition-colors group"
+                                            >
+                                                <span className="text-2xl font-bold text-success group-hover:scale-110 transition-transform">
+                                                    {currentResponseData[question.question]?.[1]?.length || 0}
+                                                </span>
+                                                <span className="text-xs text-muted-foreground mt-1">Correct</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div
-                                        onClick={() => handleShowModal(question.question, 0.5, startRange + index)}
-                                        className={`bg-warning ${circleBtnStyles}`}
-                                    >
-                                        <p>{currentResponseData[question.question]?.[0.5]?.length}</p>
-                                    </div>
-                                    <div
-                                        onClick={() => handleShowModal(question.question, 1, startRange + index)}
-                                        className={`bg-success ${circleBtnStyles}`}
-                                    >
-                                        <p>{currentResponseData[question.question]?.[1]?.length}</p>
-                                    </div>
-                                </div>
-                            </AccordionContent>
-                        </AccordionItem>
-                    ))}
-            </Accordion>
+                                </AccordionContent>
+                            </AccordionItem>
+                        ))}
+                </Accordion>
+            </div>
         </>
     );
 }

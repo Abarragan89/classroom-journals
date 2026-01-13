@@ -3,7 +3,6 @@ import { Response, Question } from "@/types";
 import { useState } from "react";
 import { StudentDataBarChart } from "./student-data-bar-chart";
 import QuestionAccordion from "./question-accordion";
-import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 export default function DataClientWrapper({
     questions,
@@ -35,28 +34,20 @@ export default function DataClientWrapper({
         }))
     }
 
-    const chevronStyles = 'hover:cursor-pointer hover:text-input border border-border rounded-sm hover:bg-primary hover:text-foreground';
-
     return (
         <div className="mb-10">
-            <div className="flex-start mt-5 gap-x-5 mb-3">
-                <p className="font-bold">Questions: {currentQuestions.start + 1} - {currentQuestions.end}</p>
-                <p className={chevronStyles} onClick={backQuestionSet}>
-                    <BiChevronLeft size={25} />
-                </p>
-                <p className={chevronStyles} onClick={nextQuestionSet}>
-                    < BiChevronRight size={25} />
-                </p>
-            </div>
-            <div className="flex flex-col lg:flex-row lg:items-start ">
-                <div className="flex-1 w-[95%] mx-auto">
+            <div className="flex flex-col lg:flex-row lg:items-start mt-5 gap-5">
+                <div className="flex-1 w-full">
                     <StudentDataBarChart
                         responses={responses as Response[]}
                         startRange={currentQuestions.start}
                         endRange={currentQuestions.end}
+                        onNext={nextQuestionSet}
+                        onPrevious={backQuestionSet}
+                        totalQuestions={questions.length}
                     />
                 </div>
-                <div className="flex-1 p-0 w-[95%] mt-10 sm:px-5 mx-auto lg:mt-0">
+                <div className="flex-1 w-full">
                     <QuestionAccordion
                         questions={(questions as unknown as Question[]) as unknown as Question[]}
                         responses={responses as unknown as Response[]}
