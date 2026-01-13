@@ -79,8 +79,6 @@ export default function QuipListItem({
 
     const quipQuestion = (singleQuip?.questions as Question[])[0]?.question
 
-    console.log('studentResponses', studentResponses);
-
     return (
         <>
             <ResponsiveDialog

@@ -27,8 +27,6 @@ export default function QuipSingleResponse({
     responseAuthor: string;
     authorAvatarUrl: string
 }) {
-
-    console.log('userId', userId);
     
 
     const [isBlogLikedByUser, setIsBlogLikeByUser] = useState<boolean>(responseLikes?.some((like) => like.userId === userId));
