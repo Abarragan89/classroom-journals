@@ -101,7 +101,7 @@ export default function QuipListItem({
                         alt="author avatar"
                         width={44}
                         height={44}
-                        className="rounded-full w-[44px] h-[44px]"
+                        className="rounded-full w-[44px] h-[44px] border"
                     />
                     <div className="flex-1">
                         <p className="font-semibold text-foreground text-sm">{singleQuip?.author?.username}</p>
@@ -125,9 +125,9 @@ export default function QuipListItem({
                 {/* Post Content - The Question */}
                 <AccordionTrigger
                     onClick={() => setShowResponses(true)}
-                    className='px-5 pt-2 pb-4 hover:no-underline items-center hover:text-primary transition-colors'
+                    className='px-5 pt-2 pb-4 hover:no-underline items-center hover:text-primary transition-colors data-[state=open]:border-b'
                 >
-                    <p className=' ml-14 h2-bold '>
+                    <p className='ml-1 font-bold text-xl sm:text-2xl lg:text-3xl '>
                         {quipQuestion}
                     </p>
                 </AccordionTrigger>
@@ -142,6 +142,7 @@ export default function QuipListItem({
                                 responseText={(response?.response as unknown as ResponseData[])[0]?.answer}
                                 userId={userId}
                                 responseDate={response?.createdAt}
+                                isTeacherView={role === ClassUserRole.TEACHER}
                                 responseLikes={response?.likes}
                                 likeCount={response?.likeCount}
                                 authorAvatarUrl={response?.student?.avatarURL as string}

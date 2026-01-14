@@ -30,7 +30,7 @@ export default function UserButton() {
                                     alt="blog cover photo"
                                     width={36}
                                     height={36}
-                                    className="rounded-full w-[36px] h-[36px]"
+                                    className="rounded-full w-[36px] h-[36px] border"
                                 />
                             </Button>
                         </div>

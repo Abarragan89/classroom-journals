@@ -69,7 +69,7 @@ export default function QuipListSection({
                 </>
 
             )}
-            <Accordion className='mx-5 mt-10' type="single" collapsible>
+            <Accordion className='mt-10' type="single" collapsible>
                 {currentQuips && currentQuips?.length > 0 && currentQuips.map((singleQuip, index) => (
                     <QuipListItem
                         singleQuip={singleQuip}
