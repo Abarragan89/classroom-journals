@@ -24,7 +24,7 @@ export default function PromptCard({
     // const assignedCount = promptData.promptSession?.length || 0;
 
     return (
-        <Card className="w-full relative shadow-sm hover:shadow-md transition-shadow group">
+        <Card className="w-full relative">
             {/* Options Menu - positioned absolutely */}
             <OptionsMenu
                 promptData={promptData}

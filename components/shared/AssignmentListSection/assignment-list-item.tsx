@@ -23,7 +23,9 @@ export default function AssignmentListItem({
 
     return (
         <Link href={`/classroom/${classId}/${teacherId}/single-prompt-session/${jotData.id}`}>
-            <Card className="w-full relative shadow-sm hover:shadow-md transition-shadow group mb-4">
+            <Card className="w-full relative shadow-sm hover:shadow-md transition-shadow group mb-4 pt-3">
+                <span className='absolute top-1.5 right-4 text-[.68rem] text-muted-foreground italic'>{formatDateLong(jotData.createdAt, 'short')}</span>
+
                 <div className="p-4 pb-3 flex flex-col gap-4">
                     {/* Badge & Title Row */}
                     <div className="flex items-center gap-3">
@@ -38,7 +40,7 @@ export default function AssignmentListItem({
                     </div>
 
                     {/* Metadata Footer */}
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap pt-3 border-t">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground flex-wrap pt-3 border-t">
                         {jotData?.prompt?.category?.name && (
                             <>
                                 <span className="text-xs text-muted-foreground">
@@ -48,18 +50,14 @@ export default function AssignmentListItem({
                             </>
                         )}
 
-                        <span>{formatDateLong(jotData.createdAt, 'short')}</span>
-
                         {isAssessment && (
                             <>
-                                <Separator orientation="vertical" className="h-4" />
                                 <QuestionPopup promptQuestions={jotData as unknown as Prompt} />
                             </>
                         )}
 
                         {!isAssessment && (
                             <>
-                                <Separator orientation="vertical" className="h-4" />
                                 {jotData.isPublic ? (
                                     <span>
                                         Discussion: <span className={`font-medium ${jotData.status === 'OPEN' ? 'text-success' : 'text-destructive'}`}>
