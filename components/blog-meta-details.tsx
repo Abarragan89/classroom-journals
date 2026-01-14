@@ -71,7 +71,7 @@ export default function BlogMetaDetails({
                     alt="blog cover photo"
                     width={40}
                     height={40}
-                    className="rounded-full w-[40px] h-[40px]"
+                    className="rounded-full w-[40px] h-[40px] border"
                 />
                 <div className="ml-2 w-full text-sm text-muted-foreground flex-between">
                     <div>

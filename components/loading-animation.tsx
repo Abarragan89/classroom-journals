@@ -20,7 +20,7 @@ export default function LoadingAnimation() {
         if (!theme) return '';
         switch (theme) {
             case 'light':
-                return '#0e318b'
+                return '#ae7a4c'
             case 'tech':
                 return '#3de70d'
             case 'dark':

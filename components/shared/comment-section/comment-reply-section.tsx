@@ -60,7 +60,7 @@ export default function CommentReplySection({
                     alt="blog cover photo"
                     width={80}
                     height={80}
-                    className="rounded-full w-[40px] h-[40px]"
+                    className="rounded-full w-[40px] h-[40px] border"
                 />
                 <div className="flex justify-between items-center w-full ml-3">
                     <div>

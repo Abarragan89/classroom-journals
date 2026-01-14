@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import Image from "next/image";
+import { Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useMutation } from "@tanstack/react-query";
 
 export default function QuipSingleResponse({
     responseId,
@@ -16,7 +19,8 @@ export default function QuipSingleResponse({
     responseLikes,
     likeCount,
     responseAuthor,
-    authorAvatarUrl
+    authorAvatarUrl,
+    isTeacherView
 }: {
     responseId: string;
     userId: string;
@@ -25,12 +29,14 @@ export default function QuipSingleResponse({
     responseLikes: ResponseLike[];
     likeCount: number;
     responseAuthor: string;
-    authorAvatarUrl: string
+    authorAvatarUrl: string;
+    isTeacherView: boolean
 }) {
-    
+
 
     const [isBlogLikedByUser, setIsBlogLikeByUser] = useState<boolean>(responseLikes?.some((like) => like.userId === userId));
     const [totalCommentLikes, setTotalCommentLikes] = useState<number>(likeCount);
+    const [showConfirmDelete, setShowConfirmDelete] = useState<boolean>(false)
 
     useEffect(() => {
         if (userId && responseLikes && likeCount) {
@@ -40,38 +46,47 @@ export default function QuipSingleResponse({
         }
     }, [userId, responseLikes, likeCount]);
 
-    async function toggleResponseLikeHandler(toggleOption: string) {
-        // there will not be a response id if it is in preview mode
-        try {
-            if (toggleOption === 'add') {
-                setIsBlogLikeByUser(true)
-                setTotalCommentLikes(prev => prev + 1)
-            } else if (toggleOption === 'remove') {
-                setIsBlogLikeByUser(false)
-                setTotalCommentLikes(prev => prev - 1)
-            }
-            await toggleResponseLike(responseId, userId)
-        } catch (error) {
-            console.log('error adding comment ', error)
-            if (toggleOption === 'add') {
-                setIsBlogLikeByUser(true)
-                setTotalCommentLikes(prev => prev - 1)
-            } else if (toggleOption === 'remove') {
-                setIsBlogLikeByUser(false)
-                setTotalCommentLikes(prev => prev + 1)
+    const likeMutation = useMutation({
+        mutationFn: () => toggleResponseLike(responseId, userId),
+        onMutate: async () => {
+            // Save current state for rollback
+            const previousLiked = isBlogLikedByUser;
+            const previousCount = totalCommentLikes;
+
+            // Optimistic update
+            const newLiked = !isBlogLikedByUser;
+            setIsBlogLikeByUser(newLiked);
+            setTotalCommentLikes(prev => newLiked ? prev + 1 : prev - 1);
+
+            return { previousLiked, previousCount };
+        },
+        onError: (err, variables, context) => {
+            // Automatic rollback with saved state
+            console.error('Error toggling like:', err);
+            if (context) {
+                setIsBlogLikeByUser(context.previousLiked);
+                setTotalCommentLikes(context.previousCount);
             }
         }
+    });
+
+    function toggleResponseLikeHandler() {
+        likeMutation.mutate();
+    }
+
+    async function deleteResponse(responseId: string) {
+        console.log('delete response called for id: ', responseId)
     }
 
     return (
-        <div className="mt-2 ml-12 border-b border-input last:border-b-0">
+        <div className="mt-2 ml-2 border-b border-input last:border-b-0">
             <div className='mb-1 flex'>
                 <Image
                     src={authorAvatarUrl || '/images/demo-avatars/1.png'}
                     alt="blog cover photo"
                     width={35}
                     height={35}
-                    className="rounded-full w-[35px] h-[35px]"
+                    className="rounded-full w-[35px] h-[35px] border"
                 />
                 <div className="flex justify-between w-full items-start">
                     <div className='ml-2 text-muted-foreground'>
@@ -79,14 +94,38 @@ export default function QuipSingleResponse({
                         <p className="leading-4 text-xs">{formatDateMonthDayYear(responseDate)}</p>
                     </div>
                     <div className="flex mt-[2px] text-muted-foreground">
+                        {isTeacherView && (
+                            showConfirmDelete ? (
+                                <div className="flex gap-1 items-center">
+                                    <Button
+                                        onClick={async () => {
+                                            // Call your delete function here
+                                            await deleteResponse(responseId)
+                                            setShowConfirmDelete(false)
+                                        }}                                    >
+                                        Confirm Delete
+                                    </Button>
+                                    <Button
+                                        onClick={() => setShowConfirmDelete(false)}                                    >
+                                        Cancel
+                                    </Button>
+                                </div>
+                            ) : (
+                                <Trash2
+                                    onClick={() => setShowConfirmDelete(true)}
+                                    size={16}
+                                    className="text-destructive hover:text-destructive/80 hover:cursor-pointer transition-colors"
+                                />
+                            )
+                        )}
                         {isBlogLikedByUser ?
                             <FaHeart
-                                onClick={() => toggleResponseLikeHandler('remove')}
+                                onClick={toggleResponseLikeHandler}
                                 className="text-[1.1rem] mr-[4px] hover:cursor-pointer text-sidebar-primary"
                             />
                             :
                             <FaRegHeart
-                                onClick={() => toggleResponseLikeHandler('add')}
+                                onClick={toggleResponseLikeHandler}
                                 className="text-[1.1rem] mr-[4px] hover:cursor-pointer"
                             />
                         }

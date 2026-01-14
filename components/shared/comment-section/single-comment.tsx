@@ -138,7 +138,7 @@ export default function SingleComment({
                     alt="blog cover photo"
                     width={40}
                     height={40}
-                    className="rounded-full w-[40px] h-[40px] mr-2"
+                    className="rounded-full w-[40px] h-[40px] mr-2 border"
                 />
                 <div className="flex justify-between items-center w-full">
                     <div>

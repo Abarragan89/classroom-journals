@@ -38,7 +38,7 @@ export default function ChangeAvatar({
                     alt="blog cover photo"
                     width={80}
                     height={80}
-                    className="hover:cursor-pointer hover:scale-105 rounded-full w-[80px] h-[80px]"
+                    className="hover:cursor-pointer hover:scale-105 rounded-full w-[80px] h-[80px] border"
                 />
                 <Button onClick={() => setIsModalOpen(true)} variant={'link'} className="p-0 text-xs absolute -bottom-3 -right-10">
                     Change
