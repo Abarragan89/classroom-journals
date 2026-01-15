@@ -11,7 +11,7 @@ import { ResponsiveDialog } from '@/components/responsive-dialog'
 import AnswerQuip from '@/components/forms/quip-forms/answer-quip'
 import { deleteQuip, getReponsesForQuip } from '@/lib/actions/quips.action'
 import { ClassUserRole } from '@prisma/client'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient, useQuery } from '@tanstack/react-query'
 import LoadingAnimation from '@/components/loading-animation'
 import { formatDateMonthDayYear } from '@/lib/utils'
 import { Trash2, } from 'lucide-react'
@@ -34,9 +34,19 @@ export default function QuipListItem({
 
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
     const [isComplete, setIsComplete] = useState<boolean>(singleQuip?.responses?.some(res => res.studentId === userId) || false)
-    const [studentResponses, setStudentResponses] = useState<Response[] | null>(null)
     const [showResponses, setShowResponses] = useState<boolean>(false)
     const queryClient = useQueryClient();
+
+    // Fetch responses only when accordion is opened
+    const { data: studentResponses = null } = useQuery({
+        queryKey: ['quipResponses', singleQuip.id],
+        queryFn: async () => {
+            const responses = await getReponsesForQuip(userId, singleQuip.id);
+            return responses as Response[];
+        },
+        enabled: showResponses && (isComplete || role === ClassUserRole.TEACHER),
+        staleTime: 1000 * 60 * 5,
+    });
 
 
 
@@ -44,12 +54,6 @@ export default function QuipListItem({
     useEffect(() => {
         setIsComplete(singleQuip?.responses?.some(res => res.studentId === userId) || false)
     }, [singleQuip])
-
-    useEffect(() => {
-        if ((isComplete || role === "TEACHER") && showResponses) {
-            getStudentResponses()
-        }
-    }, [isComplete, role, showResponses])
 
     function completeStatusTrue() {
         setIsComplete(true)
@@ -65,15 +69,6 @@ export default function QuipListItem({
             setOpenDeleteModal(false)
         } catch (error) {
             console.log('error deleting quip ', error)
-        }
-    }
-
-    async function getStudentResponses() {
-        try {
-            const responses = await getReponsesForQuip(userId, singleQuip.id) as Response[];
-            setStudentResponses(responses)
-        } catch (error) {
-            console.log('error getting student reponses to quips', error)
         }
     }
 
@@ -147,6 +142,9 @@ export default function QuipListItem({
                                 likeCount={response?.likeCount}
                                 authorAvatarUrl={response?.student?.avatarURL as string}
                                 responseAuthor={response?.student?.username as string}
+                                teacherId={singleQuip.authorId || userId}
+                                classId={classId}
+                                quipId={singleQuip.id}
                             />
                         )) : (
                             <LoadingAnimation />

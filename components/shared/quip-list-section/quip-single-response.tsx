@@ -1,14 +1,15 @@
 "use client"
 
-import { toggleResponseLike } from "@/lib/actions/response.action";
+import { toggleResponseLike, deleteResponse as deleteResponseAction } from "@/lib/actions/response.action";
 import { formatDateMonthDayYear } from "@/lib/utils";
-import { ResponseLike } from "@/types";
+import { ResponseLike, PromptSession, Response as QuipResponse } from "@/types";
 import { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export default function QuipSingleResponse({
     responseId,
@@ -19,7 +20,10 @@ export default function QuipSingleResponse({
     likeCount,
     responseAuthor,
     authorAvatarUrl,
-    isTeacherView
+    isTeacherView,
+    teacherId,
+    classId,
+    quipId
 }: {
     responseId: string;
     userId: string;
@@ -29,10 +33,13 @@ export default function QuipSingleResponse({
     likeCount: number;
     responseAuthor: string;
     authorAvatarUrl: string;
-    isTeacherView: boolean
+    isTeacherView: boolean;
+    teacherId: string;
+    classId: string;
+    quipId: string;
 }) {
 
-
+    const queryClient = useQueryClient();
     const [isBlogLikedByUser, setIsBlogLikeByUser] = useState<boolean>(responseLikes?.some((like) => like.userId === userId));
     const [totalCommentLikes, setTotalCommentLikes] = useState<number>(likeCount);
     const [showConfirmDelete, setShowConfirmDelete] = useState<boolean>(false)
@@ -73,8 +80,61 @@ export default function QuipSingleResponse({
         likeMutation.mutate();
     }
 
-    async function deleteResponse(responseId: string) {
-        console.log('delete response called for id: ', responseId)
+    const deleteMutation = useMutation({
+        mutationFn: async () => {
+            const formData = new FormData();
+            formData.append('teacherId', teacherId);
+            formData.append('response-id', responseId);
+            return await deleteResponseAction(null, formData);
+        },
+        onMutate: async () => {
+            // Cancel outgoing refetches to prevent race conditions
+            await queryClient.cancelQueries({ queryKey: ['quipResponses', quipId] });
+            await queryClient.cancelQueries({ queryKey: ['getAllQuips', classId] });
+
+            // Snapshot the previous values for rollback
+            const previousResponses = queryClient.getQueryData<QuipResponse[]>(['quipResponses', quipId]);
+            const previousQuips = queryClient.getQueryData<PromptSession[]>(['getAllQuips', classId]);
+
+            // Optimistically update quipResponses cache
+            queryClient.setQueryData<QuipResponse[]>(['quipResponses', quipId], (old) => 
+                old?.filter(response => response.id !== responseId) || []
+            );
+
+            // Optimistically update getAllQuips cache
+            queryClient.setQueryData<PromptSession[]>(['getAllQuips', classId], (old) => {
+                if (!old) return old;
+                return old.map(quip => ({
+                    ...quip,
+                    responses: quip.responses?.filter(response => response.id !== responseId) || []
+                }));
+            });
+
+            return { previousResponses, previousQuips };
+        },
+        onError: (err, variables, context) => {
+            // Rollback on error
+            console.error('Error deleting response:', err);
+            if (context?.previousResponses) {
+                queryClient.setQueryData(['quipResponses', quipId], context.previousResponses);
+            }
+            if (context?.previousQuips) {
+                queryClient.setQueryData(['getAllQuips', classId], context.previousQuips);
+            }
+            toast.error('Failed to delete response');
+        },
+        onSuccess: (data) => {
+            if (data?.success) {
+                toast.success('Response deleted successfully');
+                setShowConfirmDelete(false);
+            } else {
+                toast.error(data?.message || 'Failed to delete response');
+            }
+        }
+    });
+
+    async function handleDeleteResponse() {
+        deleteMutation.mutate();
     }
 
     return (
@@ -101,20 +161,17 @@ export default function QuipSingleResponse({
                                 <div className="flex gap-x-3 items-center">
                                     <Button
                                         variant={"link"}
-                                        onClick={async () => {
-                                            // Call your delete function here
-                                            await deleteResponse(responseId)
-                                            setShowConfirmDelete(false)
-
-                                        }}
-                                        className="p-0 text-destructive text-xs"
+                                        onClick={handleDeleteResponse}
+                                        disabled={deleteMutation.isPending}
+                                        className="p-0 text-destructive text-xs disabled:opacity-50"
                                     >
-                                        Delete
+                                        {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
                                     </Button>
                                     <Button
                                         variant={"link"}
                                         className="p-0 text-xs"
                                         onClick={() => setShowConfirmDelete(false)}
+                                        disabled={deleteMutation.isPending}
                                     >
                                         Cancel
                                     </Button>
