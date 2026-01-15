@@ -70,7 +70,6 @@ export default async function ResponseReview({
                         promptSessionId={singleResponse?.promptSession?.id as string}
                         studentName={singleResponse?.student?.name}
                         responseId={singleResponse?.id}
-                        singleResponse={singleResponse}
                         studentId={studentId}
                     />
                 }

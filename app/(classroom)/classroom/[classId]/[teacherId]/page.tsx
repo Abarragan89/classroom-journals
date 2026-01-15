@@ -24,7 +24,7 @@ export default async function Classroom({
         <div className="relative">
             <Button asChild className="absolute top-[40px] right-0">
                 <Link href={`/classroom/${classId}/${teacherId}/jots`}>
-                    <Plus />Assign
+                    <Plus />Assignment 
                 </Link>
             </Button>
             <h2 className="text-2xl lg:text-3xl mt-2">Posted Assignments</h2>

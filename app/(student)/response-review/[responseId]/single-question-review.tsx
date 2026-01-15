@@ -1,5 +1,5 @@
 'use client'
-import { RubricGradeDisplay, ResponseData, BlogImage, Response } from '@/types'
+import { RubricGradeDisplay, ResponseData, BlogImage } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import Editor from '@/components/shared/prompt-response-editor/editor'
@@ -14,10 +14,8 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
 import RubricDisplay from '@/components/rubric-display'
-import { useQuery } from '@tanstack/react-query'
 
 interface SingleQuestionReviewProps {
-    singleResponse: Response,
     questions: ResponseData[],
     isSubmittableInitial: boolean,
     responseId: string,
@@ -31,7 +29,6 @@ interface SingleQuestionReviewProps {
 }
 
 export default function SingleQuestionReview({
-    singleResponse,
     questions,
     isSubmittableInitial,
     responseId,
@@ -46,46 +43,10 @@ export default function SingleQuestionReview({
 
     const router = useRouter();
 
-    // ignore unsued variables in typesript since i'm not using data
-    // @typescript-eslint/no-unused-vars
-    const { data } = useQuery({
-        queryKey: ['response-review', responseId],
-        queryFn: async () => {
-
-            const response = await fetch(`/api/responses/review/${responseId}?userId=${studentId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch student responses');
-            }
-            const data = await response.json();
-
-            // Set the state variables with fresh data
-            setAllQuestions(data.response.response as unknown as ResponseData[]);
-            setIsPublic(data.response.promptSession.isPublic);
-            setRubricGrades(data.response?.rubricGrades || []);
-            setSpellCheckEnabled(data.response?.spellCheckEnabled || false);
-            setIsSubmittable(data.response?.completionStatus === 'INCOMPLETE' || data.response?.completionStatus === 'RETURNED');
-            setShowGrades(data.response?.promptSession?.areGradesVisible || false);
-
-            return data.response as Response;
-        },
-        initialData: singleResponse,
-        staleTime: 1000 * 60 * 5, // 5 minutes
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-    })
-
-    if (process.env.NODE_ENV === 'development') {
-        console.log(data);
-    }
-
+    // State for user-editable form fields
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions || []);
-    const [isPublic, setIsPublic] = useState<boolean>(isPublicInitial);
-    const [spellCheckEnabled, setSpellCheckEnabled] = useState<boolean>(spellCheckEnabledInitial);
-    const [rubricGrades, setRubricGrades] = useState<RubricGradeDisplay[]>(rubricGradesInitial ?? []);
-    const [isSubmittable, setIsSubmittable] = useState<boolean>(isSubmittableInitial);
-    const [showGrades, setShowGrades] = useState<boolean>(showGradesInitial);
 
+    // State for loading and photos
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isLoadingPhotos, setIsLoadingPhotos] = useState<boolean>(false)
     const [allBlogPhotos, setAllBlogPhotos] = useState<BlogImage[] | null>(null)
@@ -169,16 +130,16 @@ export default function SingleQuestionReview({
     return (
         <div className=" max-w-[700px] mx-auto w-full relative">
             <div className="flex-between mt-10">
-                {showGrades && (
+                {showGradesInitial && (
                     <div className="flex items-start">
                         <p className='font-bold text-lg text-muted-foreground ml-0 text-right'>Grade: <span
                             className={`
                             ${parseInt(gradePercentage) >= 90 ? 'text-success' : parseInt(gradePercentage) >= 70 ? 'text-warning' : 'text-destructive'}
                             `}
                         >{gradePercentage}</span></p>
-                        {rubricGrades && rubricGrades.length > 0 && (
+                        {rubricGradesInitial && rubricGradesInitial.length > 0 && (
                             <RubricDisplay
-                                rubricGrade={rubricGrades[0]}
+                                rubricGrade={rubricGradesInitial[0]}
                                 studentName={studentName}
                                 isPrintView={false}
                             />
@@ -186,7 +147,7 @@ export default function SingleQuestionReview({
                     </div>
                 )}
             </div>
-            {isPublic && (
+            {isPublicInitial && (
                 <div className=" w-full block">
                     <Button asChild
                         className='my-5 w-full'
@@ -206,13 +167,13 @@ export default function SingleQuestionReview({
                     </CardTitle>
                     <CardContent className="p-3 pt-0">
                         {/* <p className="ml-1 mb-1 text-sm font-bold">Response:</p> */}
-                        {isSubmittable ? (
+                        {isSubmittableInitial ? (
                             <>
                                 <Editor
                                     setJournalText={(newText) => handleTextChange(index, newText as string)}
                                     journalText={responseData.answer}
                                     characterLimit={index === 1 ? 70 : undefined}
-                                    spellCheckEnabled={spellCheckEnabled}
+                                    spellCheckEnabled={spellCheckEnabledInitial}
                                 />
                             </>
                         ) : (
@@ -223,7 +184,7 @@ export default function SingleQuestionReview({
                     </CardContent>
                 </Card>
             ))}
-            {isSubmittable &&
+            {isSubmittableInitial &&
                 <div className="flex-center">
                     <ResponsiveDialog
                         isOpen={openPhotoModal}

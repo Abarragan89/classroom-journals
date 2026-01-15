@@ -23,22 +23,21 @@ export default function AssignmentListItem({
 
     return (
         <Link href={`/classroom/${classId}/${teacherId}/single-prompt-session/${jotData.id}`}>
-            <Card className="w-full relative shadow-sm hover:shadow-md transition-shadow group mb-4">
-                <div className="p-4 pb-3 flex flex-col gap-4">
-                    {/* Badge & Title Row */}
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-2">
-                            <Badge variant={isAssessment ? "default" : "secondary"} className="text-xl">
-                                {isAssessment ? 'A' : 'B'}
-                            </Badge>
-                        </div>
-                        <h3 className="font-semibold text-base leading-tight line-clamp-1 group-hover:text-primary transition-colors">
-                            {jotData.title}
-                        </h3>
-                    </div>
+            <Card className="w-full relative shadow-sm hover:shadow-md transition-shadow group mb-4 pt-3">
+                <div className="flex-between text-[.68rem] px-4">
+                    <Badge variant={isAssessment ? "default" : "secondary"} className="text-xs w-fit">
+                        {isAssessment ? 'Assessment' : 'Blog'}
+                    </Badge>
+                    <span className='text-muted-foreground italic'>{formatDateLong(jotData.createdAt, 'short')}</span>
+                </div>
+
+                <div className="px-4 py-3 flex flex-col gap-4">
+                    <h3 className="font-semibold text-base leading-tight line-clamp-1 group-hover:text-primary transition-colors">
+                        {jotData.title}
+                    </h3>
 
                     {/* Metadata Footer */}
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap pt-3 border-t">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground flex-wrap pt-3 border-t">
                         {jotData?.prompt?.category?.name && (
                             <>
                                 <span className="text-xs text-muted-foreground">
@@ -48,18 +47,14 @@ export default function AssignmentListItem({
                             </>
                         )}
 
-                        <span>{formatDateLong(jotData.createdAt, 'short')}</span>
-
                         {isAssessment && (
                             <>
-                                <Separator orientation="vertical" className="h-4" />
                                 <QuestionPopup promptQuestions={jotData as unknown as Prompt} />
                             </>
                         )}
 
                         {!isAssessment && (
                             <>
-                                <Separator orientation="vertical" className="h-4" />
                                 {jotData.isPublic ? (
                                     <span>
                                         Discussion: <span className={`font-medium ${jotData.status === 'OPEN' ? 'text-success' : 'text-destructive'}`}>
@@ -71,7 +66,6 @@ export default function AssignmentListItem({
                                 )}
                             </>
                         )}
-
                         <Separator orientation="vertical" className="h-4" />
 
                         <span>

@@ -9,6 +9,7 @@ import { Edit, Trash2Icon } from "lucide-react"
 import { useState } from "react"
 import { deletePromptCategory, editPromptCategory } from "@/lib/actions/prompt.categories"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Card, CardContent } from "@/components/ui/card"
 
 
 export default function CategorySection({
@@ -130,57 +131,59 @@ export default function CategorySection({
             </ResponsiveDialog>
 
 
+            <Card className="shadow-md hover:shadow-lg hover:scale-[1.01] transition-transform duration-300">
+                <CardContent className="space-y-4">
+                    <p className="text-md font-bold">Category <span className="text-sm font-normal">(optional)</span></p>
+                    <div className="flex-start">
+                        <Input
+                            type="text"
+                            placeholder="add new category"
+                            value={newCategoryName}
+                            onChange={(e) => setNewCategoryName(e.target.value)}
+                            className="mr-5 bg-background"
+                        />
+                        <Button
+                            type="button"
+                            disabled={isAddingCategory}
+                            onClick={() => handleAddCategory(newCategoryName)}
+                        >Add Category</Button>
+                    </div>
+                    <div className="space-y-5 mt-5">
+                        {categories?.length > 0 ? (
+                            <RadioGroup defaultValue={editingPrompt?.category?.id || 'no-category'} name="prompt-category" id="prompt-category">
+                                <div className="flex items-center space-x-3 italic">
+                                    <RadioGroupItem value='no-category' id='no-category' />
+                                    <Label htmlFor='no-category'>(none)</Label>
+                                </div>
+                                {categories.map((category: PromptCategory) => (
+                                    <div key={category.id} className="flex items-center space-x-3 space-y-1">
+                                        <RadioGroupItem value={category.id} id={category.name} />
+                                        <Label htmlFor={category.name}>{category.name}</Label>
 
-            <p className="text-md font-bold">Category <span className="text-sm font-normal">(optional)</span></p>
-            {/* Add category form */}
-            <div className="flex-start">
-                <Input
-                    type="text"
-                    placeholder="add new category"
-                    value={newCategoryName}
-                    onChange={(e) => setNewCategoryName(e.target.value)}
-                    className="mr-3 mt-3"
-                />
-                <Button
-                    type="button"
-                    disabled={isAddingCategory}
-                    onClick={() => handleAddCategory(newCategoryName)}
-                    className="mt-3"
-                >Add Category</Button>
-            </div>
-            <div className="space-y-3 mt-3">
-                {categories?.length > 0 ? (
-                    <RadioGroup defaultValue={editingPrompt?.category?.id || 'no-category'} name="prompt-category" id="prompt-category">
-                        <div className="flex items-center space-x-2 italic">
-                            <RadioGroupItem value='no-category' id='no-category' />
-                            <Label htmlFor='no-category'>(none)</Label>
-                        </div>
-                        {categories.map((category: PromptCategory) => (
-                            <div key={category.id} className="flex items-center space-x-2">
-                                <RadioGroupItem value={category.id} id={category.name} />
-                                <Label htmlFor={category.name}>{category.name}</Label>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                {/* Ellipse */}
+                                                <Edit className="hover:text-input hover:cursor-pointer" size={15} />
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <DropdownMenuItem onClick={() => showEditModalHandler(category.id, category.name)} className="hover:cursor-pointer rounded-md">
+                                                    <Edit />Edit
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => showDeleteModalHandler(category.id, category.name)} className="hover:cursor-pointer text-destructive rounded-md">
+                                                    <Trash2Icon />Delete
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                ))}
+                            </RadioGroup>
+                        ) : (
+                            <p className="text-sm text-center">No Categories Made</p>
+                        )}
+                    </div>
+                </CardContent>
 
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        {/* Ellipse */}
-                                        <Edit className="hover:text-input hover:cursor-pointer" size={15} />
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
-                                        <DropdownMenuItem onClick={() => showEditModalHandler(category.id, category.name)} className="hover:cursor-pointer rounded-md">
-                                            <Edit />Edit
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => showDeleteModalHandler(category.id, category.name)} className="hover:cursor-pointer text-destructive rounded-md">
-                                            <Trash2Icon />Delete
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                        ))}
-                    </RadioGroup>
-                ) : (
-                    <p className="text-sm text-center">No Categories Made</p>
-                )}
-            </div>
+            </Card>
         </>
     )
 }
