@@ -7,7 +7,6 @@ import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner"
 import { createNewPrompt, updateAPrompt } from "@/lib/actions/prompt.actions";
-import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox"
 import { Classroom, Prompt, PromptCategory } from "@/types";
 import { addPromptCategory } from "@/lib/actions/prompt.categories";
@@ -17,6 +16,7 @@ import { Switch } from "@/components/ui/switch"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { CiCircleQuestion } from "react-icons/ci";
 import LoadingAnimation from "@/components/loading-animation";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface Question {
     name: string;
@@ -154,28 +154,25 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     }
 
     return (
-        <form action={action} className="grid relative">
+        <form action={action} className="grid relative space-y-8">
             {questions.map((question, index) => (
-                <div key={question.name}>
-                    <div className="mt-4">
-                        <Label htmlFor={question.name} className="text-md font-bold">
+                <Card key={question.name} className="shadow-md hover:scale-[1.01] transition-transform duration-100">
+                    <CardContent>
+                        <Label htmlFor={question.name} className="text-md font-bold ml-1">
                             {question.label}
                         </Label>
                         <Textarea
                             id={question.name}
-                            className="col-span-3"
+                            className="col-span-3 bg-background"
                             name={question.name}
                             value={question.value} // Keep text state for deletion
                             onChange={(e) => handleChange(index, e.target.value)}
                             required
                             rows={5}
                         />
-                    </div>
-                </div>
+                    </CardContent>
+                </Card>
             ))}
-
-
-            <Separator className="mt-10 mb-5" />
 
             {/* Associate with a category*/}
             <CategorySection
@@ -190,33 +187,69 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
             />
 
             {/* Assign to a classroom */}
-            <div className="space-y-3 mt-5">
-                <Separator />
-                <p className="text-md font-bold">Assign <span className="text-sm font-normal">(optional)</span></p>
-                {classrooms?.length > 0 && (
-                    <>
-                        {classrooms.map((classroom: Classroom) => (
-                            <div key={`classroom-assign-${classroom.id}`} className="flex items-center space-x-2">
-                                <Checkbox id={`classroom-assign-${classroom.id}`} value={classroom.id} name={`classroom-assign-${classroom.id}`} />
-                                <label
-                                    htmlFor={`classroom-assign-${classroom.id}`}
-                                    className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                >
-                                    {classroom.name}
-                                </label>
-                            </div>
-                        ))}
-                    </>
-                )}
-                <div className="flex items-center space-x-2">
+            <Card className="shadow-md hover:scale-[1.01] transition-transform duration-100">
+                <CardContent>
+                    <p className="text-md font-bold">Assign <span className="text-sm font-normal">(optional)</span></p>
+                    <div className="space-y-3 mt-5">
+                        {/* <Separator /> */}
+                        {classrooms?.length > 0 && (
+                            <>
+                                {classrooms.map((classroom: Classroom) => (
+                                    <div key={`classroom-assign-${classroom.id}`} className="flex items-center space-x-2">
+                                        <Checkbox id={`classroom-assign-${classroom.id}`} value={classroom.id} name={`classroom-assign-${classroom.id}`} />
+                                        <label
+                                            htmlFor={`classroom-assign-${classroom.id}`}
+                                            className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                        >
+                                            {classroom.name}
+                                        </label>
+                                    </div>
+                                ))}
+                            </>
+                        )}
+                        <div className="flex items-center space-x-2">
+                            <Switch
+                                onCheckedChange={(e) => setIsPublic(e)}
+                                checked={isPublic}
+                            />
+                            <Label
+                                className="text-md ml-2"
+                            >
+                                Public
+                            </Label>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <CiCircleQuestion size={20} />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Responses are visible to everyone</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                            <input
+                                type='hidden'
+                                readOnly
+                                name='is-public'
+                                id='is-public'
+                                value={isPublic.toString()}
+                            />
+                        </div>
+                    </div>
+
+                </CardContent>
+            </Card>
+            {/* this is making spell check enabled */}
+            <div>
+                <div className="flex items-center justify-center space-x-2 my-2">
                     <Switch
-                        onCheckedChange={(e) => setIsPublic(e)}
-                        checked={isPublic}
+                        onCheckedChange={(e) => setEnableSpellCheck(e)}
+                        checked={enableSpellCheck}
                     />
                     <Label
                         className="text-md ml-2"
                     >
-                        Public
+                        Enable Spell Check
                     </Label>
                     <TooltipProvider>
                         <Tooltip>
@@ -224,47 +257,24 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                                 <CiCircleQuestion size={20} />
                             </TooltipTrigger>
                             <TooltipContent>
-                                <p>Responses are visible to everyone</p>
+                                <p>Student text editor will spell check</p>
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
                     <input
                         type='hidden'
                         readOnly
-                        name='is-public'
-                        id='is-public'
-                        value={isPublic.toString()}
+                        name='enable-spellcheck'
+                        id='enable-spellcheck'
+                        value={enableSpellCheck.toString()}
                     />
                 </div>
-            </div>
-            {/* this is making spell check enabled */}
-            <div className="flex items-center space-x-2 mt-3">
-                <Switch
-                    onCheckedChange={(e) => setEnableSpellCheck(e)}
-                    checked={enableSpellCheck}
-                />
-                <Label
-                    className="text-md ml-2"
-                >
-                    Enable Spell Check
-                </Label>
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <CiCircleQuestion size={20} />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>Text editor will spell check</p>
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-                <input
-                    type='hidden'
-                    readOnly
-                    name='enable-spellcheck'
-                    id='enable-spellcheck'
-                    value={enableSpellCheck.toString()}
-                />
+                {state && !state.success && (
+                    <p className="text-center text-destructive">{state.message}</p>
+                )}
+                <div className="flex-center">
+                    <CreateButton />
+                </div>
             </div>
             <input
                 type="hidden"
@@ -295,13 +305,6 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                     hidden
                 />
             }
-
-            {state && !state.success && (
-                <p className="text-center text-destructive mt-3">{state.message}</p>
-            )}
-            <div className="flex-center">
-                <CreateButton />
-            </div>
         </form>
     )
 }
