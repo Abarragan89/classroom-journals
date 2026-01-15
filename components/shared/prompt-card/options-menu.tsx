@@ -7,7 +7,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem
 } from "@/components/ui/dropdown-menu"
-import { EllipsisVertical, Edit, Trash2Icon, Pin } from "lucide-react";
+import { EllipsisVertical, Edit, Trash2Icon } from "lucide-react";
 import { Prompt } from '@/types';
 import DeletePromptForm from '@/components/forms/prompt-forms/delete-prompt-form';
 import { usePathname } from 'next/navigation';
@@ -69,9 +69,6 @@ export default function OptionsMenu({
                         <EllipsisVertical size={20} className="hover:cursor-pointer text-primary" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        {/* <DropdownMenuItem onClick={() => setIsAssignModalOpen(true)} className="hover:cursor-pointer rounded-md">
-                            <Pin />Assign
-                        </DropdownMenuItem> */}
                         <Link href={`/prompt-form/?type=${promptData.promptType}&edit=${promptData.id}&callbackUrl=${pathname}`}>
                             <DropdownMenuItem className="hover:cursor-pointer rounded-md">
                                 <Edit />Edit

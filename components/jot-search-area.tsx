@@ -63,8 +63,8 @@ export default function JotSearchArea({
             />
             {/* Insert all the prompt jot cards here */}
             {fetchedPrompts?.length > 0 ? (
-                <div className="mt-10 mb-10">
-                    <div className="space-y-5 mb-8">
+                <div className="mt-10 mb-10 ">
+                    <div className="mb-8 grid-cols-1 xl:grid-cols-2 grid gap-6 items-start">
                         {fetchedPrompts.map((prompt: Prompt) => (
                             <PromptCard
                                 key={prompt.id}

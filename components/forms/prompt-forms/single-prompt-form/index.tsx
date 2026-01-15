@@ -168,6 +168,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                             value={question.value} // Keep text state for deletion
                             onChange={(e) => handleChange(index, e.target.value)}
                             required
+                            autoFocus
                             rows={5}
                         />
                     </CardContent>

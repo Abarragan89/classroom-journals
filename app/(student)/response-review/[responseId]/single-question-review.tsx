@@ -1,5 +1,5 @@
 'use client'
-import { RubricGradeDisplay, ResponseData, BlogImage, Response } from '@/types'
+import { RubricGradeDisplay, ResponseData, BlogImage } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import Editor from '@/components/shared/prompt-response-editor/editor'
@@ -45,7 +45,6 @@ export default function SingleQuestionReview({
 
     // State for user-editable form fields
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions || []);
-    const [spellCheckEnabled, setSpellCheckEnabled] = useState<boolean>(spellCheckEnabledInitial);
 
     // State for loading and photos
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -174,7 +173,7 @@ export default function SingleQuestionReview({
                                     setJournalText={(newText) => handleTextChange(index, newText as string)}
                                     journalText={responseData.answer}
                                     characterLimit={index === 1 ? 70 : undefined}
-                                    spellCheckEnabled={spellCheckEnabled}
+                                    spellCheckEnabled={spellCheckEnabledInitial}
                                 />
                             </>
                         ) : (

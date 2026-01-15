@@ -49,7 +49,8 @@ export default function PromptCard({
                 />
 
             </ResponsiveDialog>
-            <Card className="max-w-[660px] mx-auto relative">
+
+            <Card className="mx-auto max-w-[650px] relative w-full">
                 {/* Options Menu - positioned absolutely */}
                 <OptionsMenu
                     promptData={promptData}
@@ -78,7 +79,7 @@ export default function PromptCard({
                         {isAssessment ? 'Assessment' : 'Blog'}
                     </Badge>
                     <div className="flex items-center gap-3">
-                        <h3 className="font-semibold text-base leading-tight line-clamp-2 group-hover:text-primary transition-colors mr-5">
+                        <h3 className="font-semibold text-base m-1 mb-3 leading-tight line-clamp-1 group-hover:text-primary transition-colors mr-5">
                             {promptData.title}
                         </h3>
                     </div>
