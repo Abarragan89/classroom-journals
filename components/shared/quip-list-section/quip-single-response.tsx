@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import Image from "next/image";
-import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 
@@ -88,48 +87,62 @@ export default function QuipSingleResponse({
                     height={35}
                     className="rounded-full w-[35px] h-[35px] border"
                 />
-                <div className="flex justify-between w-full items-start">
+                <div className="flex-between w-full items-start">
                     <div className='ml-2 text-muted-foreground'>
                         <p className="leading-4 text-xs">{responseAuthor}</p>
                         <p className="leading-4 text-xs">{formatDateMonthDayYear(responseDate)}</p>
                     </div>
-                    <div className="flex mt-[2px] text-muted-foreground">
+
+
+                    {/* Like and Delete BTN if you are a teacher */}
+                    <div className="flex-center gap-x-3 text-muted-foreground">
                         {isTeacherView && (
                             showConfirmDelete ? (
-                                <div className="flex gap-1 items-center">
+                                <div className="flex gap-x-3 items-center">
                                     <Button
+                                        variant={"link"}
                                         onClick={async () => {
                                             // Call your delete function here
                                             await deleteResponse(responseId)
                                             setShowConfirmDelete(false)
-                                        }}                                    >
-                                        Confirm Delete
+
+                                        }}
+                                        className="p-0 text-destructive text-xs"
+                                    >
+                                        Delete
                                     </Button>
                                     <Button
-                                        onClick={() => setShowConfirmDelete(false)}                                    >
+                                        variant={"link"}
+                                        className="p-0 text-xs"
+                                        onClick={() => setShowConfirmDelete(false)}
+                                    >
                                         Cancel
                                     </Button>
                                 </div>
                             ) : (
-                                <Trash2
+                                <Button
+                                    variant={"link"}
                                     onClick={() => setShowConfirmDelete(true)}
-                                    size={16}
-                                    className="text-destructive hover:text-destructive/80 hover:cursor-pointer transition-colors"
-                                />
+                                    className="p-0 m-0 text-xs text-destructive hover:text-destructive/80 hover:cursor-pointer transition-colors"
+                                >
+                                    Remove
+                                </Button>
                             )
                         )}
-                        {isBlogLikedByUser ?
-                            <FaHeart
-                                onClick={toggleResponseLikeHandler}
-                                className="text-[1.1rem] mr-[4px] hover:cursor-pointer text-sidebar-primary"
-                            />
-                            :
-                            <FaRegHeart
-                                onClick={toggleResponseLikeHandler}
-                                className="text-[1.1rem] mr-[4px] hover:cursor-pointer"
-                            />
-                        }
-                        <p className="text-[.95rem] text-muted-foreground">{totalCommentLikes}</p>
+                        <div className="flex-center">
+                            {isBlogLikedByUser ?
+                                <FaHeart
+                                    onClick={toggleResponseLikeHandler}
+                                    className="text-[1.1rem] mr-[4px] hover:cursor-pointer text-sidebar-primary"
+                                />
+                                :
+                                <FaRegHeart
+                                    onClick={toggleResponseLikeHandler}
+                                    className="text-[1.1rem] mr-[4px] hover:cursor-pointer"
+                                />
+                            }
+                            <p className="text-[.95rem] text-muted-foreground">{totalCommentLikes}</p>
+                        </div>
                     </div>
                 </div>
             </div>
