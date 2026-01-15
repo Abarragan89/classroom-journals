@@ -62,6 +62,7 @@ export default async function SingleResponse({
                                 responseId={responseId}
                                 teacherId={teacherId}
                                 isCompleted={response?.completionStatus === 'COMPLETE' ? true : false}
+                                sessionId={sessionId}
                             />
 
                             <DeleteResponseBtn
