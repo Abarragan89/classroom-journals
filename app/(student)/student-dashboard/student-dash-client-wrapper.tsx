@@ -20,8 +20,6 @@ export default function StudentDashClientWrapper({
   teacherId,
   classroomId,
   quipAlerts,
-  // studentName
-
 }: {
   allCategories: PromptCategory[];
   allResponses: { responses: Response[], totalCount: number },
@@ -31,7 +29,6 @@ export default function StudentDashClientWrapper({
   teacherId: string;
   classroomId: string;
   quipAlerts: number;
-  // studentName: string;
 }) {
 
   // Initialize state from server-fetched data
