@@ -60,7 +60,7 @@ export default async function SingleStudentView({
                             className='max-w-[600px] mx-auto relative' href={`/classroom/${classId}/${teacherId}/single-prompt-session/${response?.promptSession?.id}/single-response/${response.id}`}>
                             {/* only show public or private if it is a blog, otherwise don't render */}
                             <article className='bg-card flex-start opacity-80 px-5 py-4 rounded-lg mb-4 border border-border hover:cursor-pointer hover:opacity-100'>
-                               {/* Status */}
+                                {/* Status */}
                                 <p className="absolute text-xs top-1 right-2">
                                     {response?.completionStatus === 'COMPLETE' ? (
                                         <span className="text-success">Complete</span>
@@ -80,7 +80,9 @@ export default async function SingleStudentView({
                                     <p className='text-md font-bold line-clamp-1 pt-1 text-foreground'>{response?.promptSession?.title}</p>
                                     <div className="flex relative top-[5px] justify-between text-xs">
                                         {response?.completionStatus === 'INCOMPLETE' ? (
-                                            <p>Not Submitted</p>
+                                            <>
+                                                <p>Not Submitted</p>
+                                            </>
                                         ) : (
                                             <p>Submitted: {formatDateLong(response?.submittedAt, 'short')}</p>
                                         )}

@@ -11,6 +11,7 @@ import HandleToggleReturnStateBtn from '@/components/buttons/handle-toggle-retur
 import DeleteResponseBtn from './delete-response-btn';
 import PrintViewBlog from './print-view';
 import ToggleSpellCheck from './toggle-spell-check';
+import { Button } from '@/components/ui/button';
 
 
 export default async function SingleResponse({
@@ -48,7 +49,7 @@ export default async function SingleResponse({
                         responses={rosterAlphabetized}
                     />
                     {response?.completionStatus !== 'COMPLETE' && (
-                        <p className='mt-2 text-destructive font-bold'>Not Submitted</p>
+                        <p className='my-2 text-destructive font-bold'>Not Submitted</p>
                     )}
                     <div className="flex-between items-end mt-5">
                         <ToggleSpellCheck
@@ -56,22 +57,20 @@ export default async function SingleResponse({
                             spellCheckEnabled={response?.spellCheckEnabled}
                             teacherId={teacherId}
                         />
-                        {response?.submittedAt && (
-                            <div className='flex-end gap-x-5'>
-                                <HandleToggleReturnStateBtn
-                                    responseId={responseId}
-                                    teacherId={teacherId}
-                                    isCompleted={response?.completionStatus === 'COMPLETE'}
-                                />
+                        <div className='flex-end gap-x-5'>
+                            <HandleToggleReturnStateBtn
+                                responseId={responseId}
+                                teacherId={teacherId}
+                                isCompleted={response?.completionStatus === 'COMPLETE' ? true : false}
+                            />
 
-                                <DeleteResponseBtn
-                                    responseId={responseId}
-                                    sessionId={sessionId}
-                                    teacherId={teacherId}
-                                    classId={classId}
-                                />
-                            </div>
-                        )}
+                            <DeleteResponseBtn
+                                responseId={responseId}
+                                sessionId={sessionId}
+                                teacherId={teacherId}
+                                classId={classId}
+                            />
+                        </div>
                     </div>
                     {!isMultiQuestion && (
                         <ScoreJournalForm
