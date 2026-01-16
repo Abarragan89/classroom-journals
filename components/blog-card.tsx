@@ -23,21 +23,21 @@ export default function BlogCard({
 }: Props) {
 
     return (
-        <div className="embla__slide-inner flex-col h-full w-[300px] border pb-2 rounded-sm hover:cursor-pointer relative">
+        <div className="embla__slide-inner flex-col h-full w-[300px] border rounded-md shadow-md hover:shadow-lg hover:scale-[1.008] transition-transform duration-200 hover:cursor-pointer relative">
             {/* Your slide content here */}
             <Image
                 src={coverPhotoUrl ? coverPhotoUrl : "https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png"}
                 width={298}
                 height={167}
                 alt={title ? `Cover image for ${title}` : "Blog post cover image"}
-                className="rounded-t-sm"
+                className="rounded-t-sm w-full"
                 priority={true}
                 loading="eager"
                 fetchPriority="high"
                 sizes="298px"
                 quality={75}
             />
-            <div className="min-h-[200px] px-2 ">
+            <div className="min-h-[200px] px-2 bg-card rounded-b-md">
                 <div className="flex justify-between pt-1 text-muted-foreground text-[0.875rem]">
                     <p>{author}</p>
                     <div className="flex">
@@ -51,13 +51,13 @@ export default function BlogCard({
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col justify-between h-[180px]">
-                    <div className="flex-column justify-between rounded-b-sm pt-2">
-                        <h3 className="text-primary text-[1.1rem] leading-tight font-bold">{title}</h3>
-                        <p className="mt-1 text-[.95rem] text-ring line-clamp-3">{description}</p>
+                <div className="flex flex-col justify-between h-[180px] ">
+                    <div className="flex-column justify-between  pt-2">
+                        <h3 className="text-primary text-[1.15rem] leading-tight font-bold">{title}</h3>
+                        <p className="mt-1 text-[.925rem] font-medium line-clamp-3">{description}</p>
                     </div>
                     <div className="flex justify-between">
-                        <div className="flex justify-end text-muted-foreground text-[0.875rem]">
+                        <div className="flex justify-end text-[0.8rem] pb-1">
                             <p className="text-[.85rem] text-muted-foreground">{date}</p>
                         </div>
                     </div>
