@@ -7,10 +7,9 @@ import Image from 'next/image';
 import { Response, ResponseComment, ResponseData } from '@/types';
 import { getSingleResponse, getAllResponsesFromPrompt } from '@/lib/server/responses';
 import { StudentComboBox } from './student-combobox';
-import HandleToggleReturnStateBtn from '@/components/buttons/handle-toggle-return-state-btn';
-import DeleteResponseBtn from './delete-response-btn';
 import PrintViewBlog from './print-view';
 import ToggleSpellCheck from './toggle-spell-check';
+import ResponseActions from './response-actions';
 
 
 export default async function SingleResponse({
@@ -47,31 +46,19 @@ export default async function SingleResponse({
                     <StudentComboBox
                         responses={rosterAlphabetized}
                     />
-                    {response?.completionStatus !== 'COMPLETE' && (
-                        <p className='mt-2 text-destructive font-bold'>Not Submitted</p>
-                    )}
                     <div className="flex-between items-end mt-5">
                         <ToggleSpellCheck
                             responseId={responseId}
                             spellCheckEnabled={response?.spellCheckEnabled}
                             teacherId={teacherId}
                         />
-                        {response?.submittedAt && (
-                            <div className='flex-end gap-x-5'>
-                                <HandleToggleReturnStateBtn
-                                    responseId={responseId}
-                                    teacherId={teacherId}
-                                    isCompleted={response?.completionStatus === 'COMPLETE'}
-                                />
-
-                                <DeleteResponseBtn
-                                    responseId={responseId}
-                                    sessionId={sessionId}
-                                    teacherId={teacherId}
-                                    classId={classId}
-                                />
-                            </div>
-                        )}
+                        <ResponseActions
+                            initialResponse={response}
+                            responseId={responseId}
+                            sessionId={sessionId}
+                            teacherId={teacherId}
+                            classId={classId}
+                        />
                     </div>
                     {!isMultiQuestion && (
                         <ScoreJournalForm
