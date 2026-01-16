@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { ResponseStatus } from '@prisma/client'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Response as QuipResponse, PromptSession } from '@/types'
+import { Badge } from '../ui/badge'
 
 export default function HandleToggleReturnStateBtn({
   isCompleted,
@@ -97,21 +98,20 @@ export default function HandleToggleReturnStateBtn({
   }
 
   return (
-    <div>
+    <div className='relative'>
       {isSubmittable ? (
         <Button
           onClick={() => handleToggleReturnState('COMPLETE')}
           disabled={toggleMutation.isPending}
         >
-          {toggleMutation.isPending ? 'Collecting...' : 'Collect'}
+          {toggleMutation.isPending ? 'Returning...' : 'Collect'}
         </Button>
       ) : (
-
         <Button
           onClick={() => handleToggleReturnState('RETURNED')}
           disabled={toggleMutation.isPending}
         >
-          {toggleMutation.isPending ? 'Returning...' : 'Return'}
+          {toggleMutation.isPending ? 'Collecting...' : 'Return'}
         </Button>
       )}
     </div>

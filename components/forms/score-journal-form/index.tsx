@@ -12,6 +12,7 @@ import { useTheme } from "next-themes";
 import RubricInstance from "@/app/(classroom)/classroom/[classId]/[teacherId]/single-prompt-session/[sessionId]/single-response/[responseId]/rubric-instance";
 import { useQueryClient } from '@tanstack/react-query'
 import { JsonValue } from '@prisma/client/runtime/library';
+import { Button } from "@/components/ui/button";
 
 export default function ScoreJournalForm({
     currentScore,
@@ -102,7 +103,7 @@ export default function ScoreJournalForm({
                 return {
                     ...old,
                     rubricGrades: [], // Clear rubric grades when using 100-point scoring
-                    response: (old.response as unknown as ResponseData[]).map((item, index) => 
+                    response: (old.response as unknown as ResponseData[]).map((item, index) =>
                         index === 0 ? { ...item, score } : item
                     ) as unknown as JsonValue
                 } as unknown as Response;
@@ -269,7 +270,7 @@ export default function ScoreJournalForm({
                     return {
                         ...old,
                         rubricGrades: [rubricGradeForCache],
-                        response: (old.response as unknown as ResponseData[]).map((item, index) => 
+                        response: (old.response as unknown as ResponseData[]).map((item, index) =>
                             index === 0 ? { ...item, score: rubricResult.grade?.percentageScore || 0 } : item
                         ) as unknown as JsonValue
                     } as unknown as Response;
@@ -410,23 +411,23 @@ export default function ScoreJournalForm({
 
 
                     <div className="flex justify-end mt-4">
-                        <p
+                        <Button
+                            variant={"outline"}
                             onClick={() => setShowRubricDialog(true)}
-                            className="underline ml-5 hover:cursor-pointer hover:text-accent"
                         >
                             Grade with Rubric
-                        </p>
+                        </Button>
                     </div>
                 </>
             ) : (
                 <div className="flex flex-col items-center justify-center">
-                    <div className="w-full flex justify-end my-5">
-                        <p
+                    <div className="w-full flex justify-end mt-10">
+                        <Button
                             onClick={() => setCurrentRubric(null)}
-                            className="underline hover:cursor-pointer hover:text-accent text-right"
+                            variant={"outline"}
                         >
                             Grade out of 100
-                        </p>
+                        </Button>
                     </div>
                     <RubricInstance
                         rubric={currentRubric}
