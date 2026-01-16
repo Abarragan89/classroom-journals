@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { responsePercentage } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 export default function MultiQuestionReview({
     allQuestions,
@@ -36,7 +37,7 @@ export default function MultiQuestionReview({
 
     const router = useRouter();
     const [isLoading, setIsLoading] = useState<boolean>(false)
-
+    const [isAssignmentCollected, setIsAssignmentCollected] = useState<boolean>(false);
 
     async function updateResponsesHandler(responseData: ResponseData[]) {
         if (isLoading || !responseId) return
@@ -52,6 +53,14 @@ export default function MultiQuestionReview({
                 isTeacherPremium,
                 gradeLevel,
             )
+
+            // Handle collected assignment
+            if (updatedResponse?.isCollected) {
+                // Show modal and redirect
+                setIsAssignmentCollected(true);
+                return;
+            }
+
             if (updatedResponse?.success) {
                 router.push('/student-dashboard')
                 toast('Assignment Submitted!')
@@ -86,57 +95,70 @@ export default function MultiQuestionReview({
     const gradePercentage = responsePercentage(allQuestions)
 
     return (
-        <div className="max-w-[650px] mx-auto w-full relative">
-            {isSubmittable && <p className="h2-bold text-muted-foreground text-center">Question Review</p>}
-            <div className="flex-between mt-7">
-                {showGrades && (
-                    <p className='font-bold text-lg text-muted-foreground ml-0 text-right mb-10'>Grade: <span
-                        className={`
+        <>
+            <Dialog open={isAssignmentCollected}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Assignment Collected</DialogTitle>
+                    </DialogHeader>
+                    <p className="my-3">Your teacher has collected this assignment. You can no longer edit your answers.</p>
+                    <Button onClick={() => router.push("/student-dashboard")}>
+                        Go to Dashboard
+                    </Button>
+                </DialogContent>
+            </Dialog>
+            <div className="max-w-[650px] mx-auto w-full relative">
+                {isSubmittable && <p className="h2-bold text-muted-foreground text-center">Question Review</p>}
+                <div className="flex-between mt-7">
+                    {showGrades && (
+                        <p className='font-bold text-lg text-muted-foreground ml-0 text-right mb-10'>Grade: <span
+                            className={`
                         ${parseInt(gradePercentage) >= 90 ? 'text-success' : parseInt(gradePercentage) >= 70 ? 'text-warning' : 'text-destructive'}
                         `}
-                    >{gradePercentage}</span></p>
-                )}
-            </div>
-            {allQuestions?.map((responseData, index) => (
-                <Card className="p-4 space-y-2 border border-border  mx-auto mb-10 relative" key={index}>
-                    <div className="flex-between left-5 right-5 absolute top-2 text-sm">
-                        <p className='text-accent font-bold'>Question {index + 1}</p>
-                        {showGrades && (
-                            displayGradeUI(responseData?.score)
-                        )}
-                    </div>
-                    <CardTitle className="p-4 leading-snug text-center font-bold whitespace-pre-line">
-                        <Separator className='mb-5' />
-                        {responseData.question}
-                    </CardTitle>
-                    <CardContent className="p-3 pt-0 mt-0">
-                        {/* <p className="ml-1 mb-1 text-sm font-bold">Answer:</p> */}
-                        {isSubmittable ? (
-                            <>
-                                <Editor
-                                    setJournalText={(newText) => handleTextChange(index, newText as string)}
-                                    journalText={responseData.answer}
-                                    spellCheckEnabled={spellCheckEnabled}
-                                />
-                            </>
-                        ) : (
-                            <div className='bg-background px-4  py-3 m-0 rounded-md whitespace-pre-line'>
-                                <p>{responseData.answer}</p>
-                            </div>
-                        )}
-                    </CardContent>
-                </Card>
-            ))}
-            {isSubmittable && responseId &&
-                <div className="flex-center">
-                    <Button
-                        disabled={isLoading}
-                        onClick={() => updateResponsesHandler(allQuestions)}
-                        className="mr-0 block"
-                    >Submit</Button>
+                        >{gradePercentage}</span></p>
+                    )}
                 </div>
-            }
-        </div>
+                {allQuestions?.map((responseData, index) => (
+                    <Card className="p-4 space-y-2 border border-border  mx-auto mb-10 relative" key={index}>
+                        <div className="flex-between left-5 right-5 absolute top-2 text-sm">
+                            <p className='text-accent font-bold'>Question {index + 1}</p>
+                            {showGrades && (
+                                displayGradeUI(responseData?.score)
+                            )}
+                        </div>
+                        <CardTitle className="p-4 leading-snug text-center font-bold whitespace-pre-line">
+                            <Separator className='mb-5' />
+                            {responseData.question}
+                        </CardTitle>
+                        <CardContent className="p-3 pt-0 mt-0">
+                            {/* <p className="ml-1 mb-1 text-sm font-bold">Answer:</p> */}
+                            {isSubmittable ? (
+                                <>
+                                    <Editor
+                                        setJournalText={(newText) => handleTextChange(index, newText as string)}
+                                        journalText={responseData.answer}
+                                        spellCheckEnabled={spellCheckEnabled}
+                                    />
+                                </>
+                            ) : (
+                                <div className='bg-background px-4  py-3 m-0 rounded-md whitespace-pre-line'>
+                                    <p>{responseData.answer}</p>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                ))}
+                {isSubmittable && responseId &&
+                    <div className="flex-center">
+                        <Button
+                            disabled={isLoading}
+                            onClick={() => updateResponsesHandler(allQuestions)}
+                            className="mr-0 block"
+                        >Submit</Button>
+                    </div>
+                }
+            </div>
+        </>
     );
 }
 

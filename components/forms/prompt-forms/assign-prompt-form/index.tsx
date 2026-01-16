@@ -54,7 +54,7 @@ export default function AssignPromptForm({
             <Button
                 type="submit"
                 disabled={pending}
-                className={`mx-auto block mt-3`}
+                className={`mx-auto block`}
             >
                 {pending ? 'Assigning...' : 'Assign'}
             </Button>
@@ -77,7 +77,7 @@ export default function AssignPromptForm({
                                     <Checkbox id={classroom.id} value={classroom.id} name={`classroom-organize-${classroom.id}`} />
                                     <label
                                         htmlFor={classroom.id}
-                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                        className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                     >
                                         {classroom.name}
                                     </label>
@@ -134,13 +134,13 @@ export default function AssignPromptForm({
                     </div>
                 }
                 {/* this is making spell check enabled */}
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center justify-center space-x-2 mt-5">
                     <Switch
                         onCheckedChange={(e) => setEnableSpellCheck(e)}
                         checked={enableSpellCheck}
                     />
                     <Label
-                        className="text-md ml-2"
+                        className="text-sm ml-2"
                     >
                         Enable Spell Check
                     </Label>

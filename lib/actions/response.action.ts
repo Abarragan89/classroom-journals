@@ -149,6 +149,26 @@ export async function updateASingleResponse(
         if (session?.user?.id !== studentId) {
             throw new Error("Forbidden");
         }
+
+        // Check current status first
+        const response = await prisma.response.findUnique({
+            where: { id: responseId },
+            select: { completionStatus: true }
+        });
+
+        if (!response) {
+            return { success: false, message: "Response not found" };
+        }
+
+        // Block if teacher has collected it
+        if (response.completionStatus === 'COMPLETE') {
+            return {
+                success: false,
+                isCollected: true,
+                message: "This assignment has been collected by your teacher"
+            };
+        }
+
         // Grade it with AI Only if premium member
         if (promptType === 'ASSESSMENT' && isTeacherPremium && gradeLevel) {
             let { output_text: scores } = await gradeResponseWithAI(gradeLevel, responseData)
@@ -190,21 +210,43 @@ export async function updateStudentResponse(responseData: ResponseData[], respon
         if (session?.user?.id !== studentId) {
             throw new Error("Forbidden");
         }
+
+        // Check current status first
+        const response = await prisma.response.findUnique({
+            where: { id: responseId },
+            select: { completionStatus: true }
+        });
+
+        if (!response) {
+            return { success: false, message: "Response not found" };
+        }
+
+        // Block if teacher has collected it
+        if (response.completionStatus === 'COMPLETE') {
+            return {
+                success: false,
+                isCollected: true,
+                message: "This assignment has been collected by your teacher"
+            };
+        }
+
+        // Proceed with update
         await prisma.response.update({
             where: { id: responseId },
             data: {
                 response: responseData as unknown as InputJsonArray
             }
-        })
-        return { success: true, message: "Updated student Response data" };
+        });
+
+        return { success: true, isCollected: false, message: "Updated student Response data" };
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.log("Error updating response:", error.message);
             console.error(error.stack);
         } else {
             console.log("Unexpected error:", error);
         }
-        return { success: false, message: "Error fetching prompts. Try again." };
+        return { success: false, isCollected: false, message: "Error updating response. Try again." };
     }
 }
 
