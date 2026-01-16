@@ -21,6 +21,7 @@ import Confetti from 'react-confetti'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Link from "next/link";
 import LoadingAnimation from "@/components/loading-animation";
+import { Dialog, DialogHeader, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 export default function SinglePromptEditor({
     studentResponse,
@@ -50,12 +51,14 @@ export default function SinglePromptEditor({
     const [isTyping, setIsTyping] = useState(false);
     const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
     const [showConfetti, setShowConfetti] = useState<boolean>(false)
+    const [isAssignmentCollected, setIsAssignmentCollected] = useState<boolean>(false)
     const { width, height } = useWindowSize()
 
     const [state, action] = useActionState(submitStudentResponse, {
         success: false,
         message: ''
     })
+
 
     useEffect(() => {
         if (state?.success) {
@@ -137,9 +140,30 @@ export default function SinglePromptEditor({
                     : q
             );
             setStudentResponseData(updatedData)
-            await updateStudentResponse(updatedData, responseId, studentId);
+
+            const result = await updateStudentResponse(updatedData, responseId, studentId);
+
+            console.log('save result', result);
+
+            // Handle collected assignment
+            if (result?.isCollected) {
+                // Show modal and redirect
+                // router.push('/student-dashboard');
+                // toast.error('This assignment has been collected');
+                setIsAssignmentCollected(true);
+                return;
+            }
+
+            // Handle other errors
+            if (!result?.success) {
+                toast.error(result?.message || 'Failed to save');
+                return;
+            }
+
+            toast('Answers Saved!')
         } catch (error) {
-            console.log('error saving to indexed db', error);
+            console.log('error saving response', error);
+            toast.error('Failed to save');
         } finally {
             setIsSaving(false);
         }
@@ -234,6 +258,18 @@ export default function SinglePromptEditor({
 
     return (
         <>
+            <Dialog open={isAssignmentCollected}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Assignment Collected</DialogTitle>
+                    </DialogHeader>
+                    <p className="my-3">Your teacher has collected this assignment. You can no longer edit your answers.</p>
+                    <Button>
+                        <Link href='/student-dashboard'>Go to Dashboard</Link>
+                    </Button>
+                </DialogContent>
+            </Dialog>
+
             <ResponsiveDialog
                 isOpen={openPhotoModal}
                 setIsOpen={setOpenPhotoModal}
@@ -306,7 +342,7 @@ export default function SinglePromptEditor({
                             <form onSubmit={(e) => saveAndContinue(e)}>
                                 <SaveAndContinueBtns
                                     isSaving={isSaving}
-                                    submitHandler={() => { handleSaveResponses(); toast('Answers Saved!') }}
+                                    submitHandler={() => { handleSaveResponses() }}
                                 />
                             </form>
                         </div>

@@ -26,11 +26,11 @@ export default function Editor({
 
     // Undo function
     const handleUndo = () => {
-        if (historyRef.current.length > 1) {
+        if (historyRef?.current?.length > 1) {
             // Pop last state from history and save it to redo stack
             const lastState = historyRef.current.pop() as string;
             redoRef.current.push(lastState); // Push the last state to redo stack
-            const prevState = historyRef.current[historyRef.current.length - 1];
+            const prevState = historyRef.current[historyRef?.current?.length - 1];
             setJournalText(prevState); // Update textarea content to the previous state
 
             if (textareaRef.current) {
@@ -41,7 +41,7 @@ export default function Editor({
 
     // Redo function
     const handleRedo = () => {
-        if (redoRef.current.length > 0) {
+        if (redoRef?.current?.length > 0) {
             const redoState = redoRef.current.pop() as string;
             historyRef.current.push(redoState); // Push redo state back to history
             setJournalText(redoState); // Update textarea content
@@ -144,7 +144,7 @@ export default function Editor({
 
         // Replace a single ending newline with double newline (for mobile keyboards)
         if (
-            newContent.length > lastContent.length &&
+            newContent?.length > lastContent?.length &&
             newContent.endsWith('\n') &&
             !lastContent.endsWith('\n')
         ) {
@@ -163,7 +163,7 @@ export default function Editor({
 
     return (
         <div className={`w-full mx-auto flex flex-col items-center relative mb-5`}>
-            {characterLimit && <p className="text-sm absolute right-2 bottom-4">{journalText.length} / {characterLimit}</p>}
+            {characterLimit && <p className="text-sm absolute right-2 bottom-4">{journalText?.length} / {characterLimit}</p>}
             <div className="text-xs opacity-70 text-center mb-1">
                 Press TAB or click the Textbox to start typing
             </div>
