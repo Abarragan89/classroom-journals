@@ -283,7 +283,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 </div>
                             </div>
                             <Image
-                                src='/images/quip-demo-v2.png'
+                                src='/images/quip-demo-v3.png'
                                 width={500}
                                 height={300}
                                 alt="quip demo screenshot"
