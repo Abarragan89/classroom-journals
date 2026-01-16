@@ -203,7 +203,7 @@ export default function QuipSingleResponse({
                     </div>
                 </div>
             </div>
-            <p className='ml-[2.8rem] pb-2 mb-2 text-foreground'>
+            <p className='ml-[2.8rem] pb-2 mb-2 text-foreground break-words'>
                 {responseText}
             </p>
         </div>
