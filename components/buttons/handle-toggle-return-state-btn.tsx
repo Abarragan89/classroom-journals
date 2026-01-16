@@ -6,7 +6,6 @@ import { useState } from 'react'
 import { ResponseStatus } from '@prisma/client'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Response as QuipResponse, PromptSession } from '@/types'
-import { Badge } from '../ui/badge'
 
 export default function HandleToggleReturnStateBtn({
   isCompleted,
