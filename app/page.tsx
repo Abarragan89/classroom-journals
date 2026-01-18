@@ -9,7 +9,7 @@ import TextEditorDemo from "@/components/text-editor-demo";
 import BlogMetaDetails from "@/components/blog-meta-details";
 import { Separator } from "@/components/ui/separator";
 import CommentSection from "@/components/shared/comment-section";
-import { CornerRightUp } from "lucide-react";
+import { CornerRightUp, SquareCheckBig } from "lucide-react";
 
 export default async function page() {
 
@@ -243,7 +243,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 </div>
                             </div>
                             <Image
-                                src='/images/text-editor-v2.png'
+                                src='/images/text-editor-v3.png'
                                 width={500}
                                 height={300}
                                 alt="student text-editor screenshot"
@@ -263,7 +263,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                 </div>
                             </div>
                             <Image
-                                src='/images/featured-blogs-v2.png'
+                                src='/images/featured-blogs-v3.png'
                                 width={500}
                                 height={300}
                                 alt="featured blogs screenshot"
@@ -298,17 +298,25 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                 {/* Demo */}
                 <section className="py-16 px-6" id="app-demo-section">
                     <TextEditorDemo />
-                    <div className="flex flex-col items-center">
-                        <h5 className="font-bold text-lg mb-1">Benefits</h5>
-                        <div className=" space-y-2">
-                            <p>✅ CANNOT copy and paste text into the editor (TRY IT!)</p>
-                            <p>✅ Option to enable spell-check</p>
+                    <div className="flex flex-col items-center mt-8">
+                        <h5 className="font-bold text-2xl tracking-wider mb-3">Benefits</h5>
+                        {/* <div className=" space-y-3 font-medium text-md">
+                            <p>✅ <span className="underline">CANNOT</span> copy and paste text into the editor (TRY IT!)</p>
+                            <p>✅ Teacher option to enable spell-check</p>
                             <p>✅ No distractions with font, font-sizes, formatting, images, etc.</p>
                             <p>✅ Word predication will not complete sentences</p>
                             <p>✅ Know exactly how well your students write</p>
+                        </div> */}
+
+                        <div className="space-y-3 font-medium text-md">
+                            <p><SquareCheckBig className="inline-block mr-2" /><span className="font-semibold underline">Stop AI cheating</span> - Copy/paste completely disabled</p>
+                            <p><SquareCheckBig className="inline-block mr-2" /><span className="font-semibold underline">Assess real skills</span> - No autocorrect or word prediction</p>
+                            <p><SquareCheckBig className="inline-block mr-2" /><span className="font-semibold underline">Keep students focused</span> - Zero formatting distractions</p>
+                            <p><SquareCheckBig className="inline-block mr-2" /><span className="font-semibold underline">Teacher-controlled spell-check</span> - Your choice, per assignment</p>
+                            <p><SquareCheckBig className="inline-block mr-2" /><span className="font-semibold underline">Authentic writing</span> - See what they truly know</p>
                         </div>
                     </div>
-                    <h3 className='mt-10 max-w-[850px] font-bold text-lg text-center w-full mx-auto px-5 md:px-20'>Student writing will be transformed into beautiful blogs as shown below:</h3>
+                    <h3 className='mt-16 max-w-[850px] tracking-wide text-xl text-center w-full mx-auto px-5 md:px-20'>Student writing will be transformed into <span className="font-bold">interactive blogs</span> as shown below:</h3>
                 </section>
 
                 <Separator />
