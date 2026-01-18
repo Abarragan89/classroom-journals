@@ -52,7 +52,7 @@ export default function StudentDashClientWrapper({
     <>
       {lastestTaskToDo && (
         <div
-          className="border border-primary w-full px-5 py-2 rounded-lg relative mb-10 mt-6"
+          className="border border-primary w-full px-5 py-2 rounded-lg relative mb-16 mt-2"
         >
           <div className="flex-between">
             <div>

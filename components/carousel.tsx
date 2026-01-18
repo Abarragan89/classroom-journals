@@ -17,24 +17,21 @@ export default function Carousel({ children }: { children: React.ReactNode }) {
     }, [emblaApi])
 
     return (
-        <>
-            {/* <div className="embla border rounded-md bg-muted/50 shadow-border shadow-[inset_0px_0px_10px_0px_rgba(0,_0,_0,_0.1)]"> */}
-            <div className="embla rounded-md bg-card border shadow-lg">
-                <div className="embla__viewport p-10 pb-5" ref={emblaRef}>
-                    <div className="embla__container">
-                        {/* EACH CHILD MUST HAVE embla__slide CLASSNAME */}
-                        {children}
-                    </div>
+        <div className="embla rounded-md shadow-muted relative shadow-[inset_0_0_40px_rgba(0,0,0,0.08),inset_0_4px_20px_rgba(0,0,0,0.1),inset_0_-2px_10px_rgba(255,255,255,0.05)]">
+            <div className="embla__viewport p-10 pb-2" ref={emblaRef}>
+                <div className="embla__container">
+                    {/* EACH CHILD MUST HAVE embla__slide CLASSNAME */}
+                    {children}
                 </div>
-                <div className='flex justify-between w-[180px] mx-auto mb-5'>
-                    <button className="embla__prev mt-4 text-[2.2rem] text-primary" onClick={scrollPrev}>
-                        <IoIosArrowBack />
-                    </button>
-                    <button className="embla__next mt-4 text-[2.2rem] text-primary" onClick={scrollNext}>
-                        <IoIosArrowForward />
-                    </button>
-                </div>
-            </div >
-        </>
+            </div>
+            <div className='flex justify-between w-[180px] mx-auto mb-5 relative z-20'>
+                <button className="embla__prev mt-4 text-[2.2rem] text-primary" onClick={scrollPrev}>
+                    <IoIosArrowBack />
+                </button>
+                <button className="embla__next mt-4 text-[2.2rem] text-primary" onClick={scrollNext}>
+                    <IoIosArrowForward />
+                </button>
+            </div>
+        </div>
     )
 }

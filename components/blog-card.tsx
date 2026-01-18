@@ -30,14 +30,14 @@ export default function BlogCard({
                 width={298}
                 height={167}
                 alt={title ? `Cover image for ${title}` : "Blog post cover image"}
-                className="rounded-t-[4px] w-full"
+                className="rounded-t-[5px] w-full"
                 priority={true}
                 loading="eager"
                 fetchPriority="high"
                 sizes="298px"
                 quality={75}
             />
-            <div className="min-h-[200px] px-2 bg-muted rounded-b-md">
+            <div className="min-h-[200px] px-2 bg-card rounded-b-md">
                 <div className="flex justify-between pt-1 text-muted-foreground text-[0.875rem]">
                     <p>{author}</p>
                     <div className="flex">
