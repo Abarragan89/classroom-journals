@@ -68,7 +68,7 @@ export default function QuipListItem({
             );
             setOpenDeleteModal(false)
         } catch (error) {
-            console.log('error deleting quip ', error)
+            console.error('error deleting quip ', error)
         }
     }
 

@@ -37,7 +37,7 @@ export default function UpdateAvatar({
             const data = await response.json();
             setAllAvatarPhotos(data.avatars);
         } catch (error) {
-            console.log('error getting avatar photos ', error)
+            console.error('error getting avatar photos ', error)
         } finally {
             setIsLoadingPhotos(false)
         }
@@ -56,7 +56,7 @@ export default function UpdateAvatar({
                 });
             }
         } catch (error) {
-            console.log('error updating url', error)
+            console.error('error updating url', error)
         }
     }
 

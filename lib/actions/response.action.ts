@@ -124,10 +124,10 @@ export async function createStudentResponse(
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error creating student response:", error.message);
+            console.error("Error creating student response:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
         return { success: false, message: "Error fetching prompts. Try again." };
     }
@@ -193,10 +193,10 @@ export async function updateASingleResponse(
         return { success: true, message: "Error fetching prompts. Try again." };
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.error("Error fetching prompts:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
 
         return { success: false, message: "Error fetching prompts. Try again." };
@@ -241,10 +241,10 @@ export async function updateStudentResponse(responseData: ResponseData[], respon
         return { success: true, isCollected: false, message: "Updated student Response data" };
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error updating response:", error.message);
+            console.error("Error updating response:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
         return { success: false, isCollected: false, message: "Error updating response. Try again." };
     }
@@ -292,10 +292,10 @@ export async function submitStudentResponse(prevState: unknown, formData: FormDa
         return { success: true, message: "responses submitted" };
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.error("Error fetching prompts:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
         return { success: false, message: "Error fetching prompts. Try again." };
     }
@@ -336,10 +336,10 @@ export async function gradeStudentResponse(responseId: string, question: number,
         });
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.error("Error fetching prompts:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
 
         return { success: false, message: "Error fetching prompts. Try again." };
@@ -389,10 +389,10 @@ export async function toggleResponseLike(responseId: string, userId: string) {
         });
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.error("Error fetching prompts:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
 
         return { success: false, message: "Error fetching prompts. Try again." };
@@ -415,10 +415,10 @@ export async function toggleReturnStateStatus(responseId: string, responseStatus
         return { success: true, message: "Error fetching prompts. Try again." };
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.error("Error fetching prompts:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
 
         return { success: false, message: "Error fetching prompts. Try again." };
@@ -441,10 +441,10 @@ export async function toggleHideShowGrades(promptSessionId: string, areGradesVis
         return { success: true, message: "Error toggling show/hide grades update. Try again." };
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.error("Error fetching prompts:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
 
         return { success: false, message: "Error fetching prompts. Try again." };
@@ -467,10 +467,10 @@ export async function toggleSpellCheck(responseId: string, spellCheckEnabled: bo
         return { success: true, message: "Error toggling spell check." };
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.error("Error fetching prompts:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
 
         return { success: false, message: "Error toggling Spell Check" };
@@ -498,7 +498,7 @@ export async function deleteResponse(prevState: unknown, formData: FormData) {
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error deleting prompt:', error.message);
+            console.error('Error deleting prompt:', error.message);
             console.error(error.stack);
         } else {
             console.error('Unexpected error:', error);

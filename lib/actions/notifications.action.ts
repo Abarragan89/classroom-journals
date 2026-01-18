@@ -18,10 +18,10 @@ export async function markAllNotificationsAsRead(userId: string, classId: string
         return notificationCount;
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
+            console.error('Error creating new prompt:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error updating student. Try again.' }
     }
@@ -35,7 +35,7 @@ export async function clearAllNotifications(userId: string, classId: string) {
         if (session?.user?.id !== userId) {
             throw new Error('Forbidden');
         }
-        
+
         if (!userId) {
             return { success: false, message: 'Missing user Id' }
         }
@@ -45,10 +45,10 @@ export async function clearAllNotifications(userId: string, classId: string) {
         return { success: false, message: 'All notifications deleted' }
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
+            console.error('Error creating new prompt:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error updating student. Try again.' }
     }

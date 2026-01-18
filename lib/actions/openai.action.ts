@@ -66,7 +66,7 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
         });
         return response;
     } catch (error) {
-        console.log('error with open ai autograde ', error)
+        console.error('error with open ai autograde ', error)
         return { output_text: 'error' }
     }
 }
@@ -155,7 +155,6 @@ export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, 
             }
         });
 
-        console.log('response ', response)
         const result = response.output_text
         if (!result) {
             throw new Error('No response from OpenAI');

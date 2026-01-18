@@ -43,13 +43,13 @@ export async function createStudentRequest(studentId: string, teacherId: string,
 
         return { success: true, message: 'Request has been made' }
     } catch (error) {
-        console.log('error ', error)
+        console.error('error ', error)
         // Improved error logging
         if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
+            console.error('Error creating new prompt:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error adding student. Try again.' }
     }
@@ -72,10 +72,10 @@ export async function markAllRequestsAsViewed(teacherId: string, classId: string
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
+            console.error('Error creating new prompt:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error adding student. Try again.' }
     }
@@ -113,10 +113,10 @@ export async function approveUsernameChange(studentId: string, username: string,
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
+            console.error('Error creating new prompt:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error adding student. Try again.' }
     }
@@ -165,10 +165,10 @@ export async function approveNewPrompt(teacherId: string, requestText: string, r
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
+            console.error('Error creating new prompt:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error adding student. Try again.' }
     }
@@ -197,10 +197,10 @@ export async function declineStudentRequest(responseId: string, teacherId: strin
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
+            console.error('Error creating new prompt:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error adding student. Try again.' }
     }

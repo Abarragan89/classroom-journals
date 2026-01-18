@@ -22,6 +22,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import Link from "next/link";
 import LoadingAnimation from "@/components/loading-animation";
 import { Dialog, DialogHeader, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export default function SinglePromptEditor({
     studentResponse,
@@ -78,7 +79,7 @@ export default function SinglePromptEditor({
             setAllBlogPhotos(data.photos);
             setFilteredBlogPhotos(data.photos);
         } catch (error) {
-            console.log('error getting blog photos ', error)
+            console.error('error getting blog photos ', error)
         } finally {
             setIsLoadingPhotos(false)
         }
@@ -143,8 +144,6 @@ export default function SinglePromptEditor({
 
             const result = await updateStudentResponse(updatedData, responseId, studentId);
 
-            console.log('save result', result);
-
             // Handle collected assignment
             if (result?.isCollected) {
                 // Show modal and redirect
@@ -162,7 +161,7 @@ export default function SinglePromptEditor({
 
             toast('Answers Saved!')
         } catch (error) {
-            console.log('error saving response', error);
+            console.error('error saving response', error);
             toast.error('Failed to save');
         } finally {
             setIsSaving(false);
@@ -188,7 +187,7 @@ export default function SinglePromptEditor({
             router.push(`/jot-response/${responseId}?q=${nextQuestion}`)
             setJournalText('')
         } catch (error) {
-            console.log('error saving and continuing ', error)
+            console.error('error saving and continuing ', error)
         }
     }
 
@@ -219,7 +218,7 @@ export default function SinglePromptEditor({
                 <Confetti
                     width={width}
                     height={height}
-                    numberOfPieces={2000}
+                    numberOfPieces={1000}
                     recycle={false}
                     gravity={0.3}
                     tweenDuration={2000}
@@ -228,7 +227,7 @@ export default function SinglePromptEditor({
                     wind={0.01}
                     friction={0.99}
                 />
-                <div className="animate-fall w-[370px] mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40">
+                <div className="animate-fall w-[370px] mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40 border">
                     <p className="text-primary font-bold text-xl text-center">Blog Posted!</p>
                     <Button asChild className="mt-4">
                         <Link href={'/'}>
@@ -258,14 +257,15 @@ export default function SinglePromptEditor({
 
     return (
         <>
+            {/* Modal to kick user out if the assignment has been collected */}
             <Dialog open={isAssignmentCollected}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Assignment Collected</DialogTitle>
                     </DialogHeader>
                     <p className="my-3">Your teacher has collected this assignment. You can no longer edit your answers.</p>
-                    <Button>
-                        <Link href='/student-dashboard'>Go to Dashboard</Link>
+                    <Button onClick={() => router.push("/student-dashboard")}>
+                        Go to Dashboard
                     </Button>
                 </DialogContent>
             </Dialog>
@@ -319,26 +319,38 @@ export default function SinglePromptEditor({
                     )}
                 </>
             </ResponsiveDialog>
-            <div className="w-full max-w-[900px] mx-auto relative px-5">
-                <Badge className="absolute -top-16 right-0 text-sm">Blog Post</Badge>
-                <ArrowBigLeft size={30} className="absolute -top-12 left-3 hover:cursor-pointer hover:text-primary" onClick={() => {
-                    router.back();
-                    if (typingTimeoutRef.current) {
-                        clearTimeout(typingTimeoutRef.current);
-                    }
-                }} />
-                <p className="mt-16 pt-6 pb-4 rounded-lg mb-5 w-full mx-auto whitespace-pre-line lg:text-lg font-medium leading-relaxed tracking-wider">{currentQuestion}</p>
-                {/*  Show question if answer question */}
+
+            <div className="w-full max-w-[1000px] mx-auto relative px-5">
+                <div className="flex-between">
+                    <div
+                        className="flex-center hover:cursor-pointer hover:text-primary"
+                        onClick={() => {
+                            router.back();
+                            if (typingTimeoutRef.current) {
+                                clearTimeout(typingTimeoutRef.current);
+                            }
+                        }}
+                    >
+                        <ArrowBigLeft size={30} />
+                        <p className="ml-2 font-medium">Back</p>
+                    </div>
+                    <Badge className="text-sm">Blog Post</Badge>
+                </div>
+
+                {/* Editor for Question Number 1 */}
                 {questionNumber === '0' && (
-                    <>
+                    <div className="mt-14">
                         <Editor
+                            questionText={currentQuestion}
                             setJournalText={setJournalText}
                             journalText={journalText}
+                            questionNumber={1}
+                            totalQuestions={3}
                             spellCheckEnabled={spellCheckEnabled}
                             setIsTyping={setIsTyping}
                             jotType='BLOG'
                         />
-                        <div className="flex flex-col justify-center items-center mb-20">
+                        <div className="flex flex-col justify-center items-center mt-10">
                             <form onSubmit={(e) => saveAndContinue(e)}>
                                 <SaveAndContinueBtns
                                     isSaving={isSaving}
@@ -346,20 +358,23 @@ export default function SinglePromptEditor({
                                 />
                             </form>
                         </div>
-                    </>
+                    </div>
                 )}
 
-                {/* show Blog title input */}
+                {/* Editor for Question #2 */}
                 {questionNumber === '1' && (
-                    <>
+                    <div className="mt-14">
                         <Editor
+                            questionText={"Add a title for your blog post"}
                             setJournalText={setJournalText}
                             journalText={journalText}
                             spellCheckEnabled={spellCheckEnabled}
                             setIsTyping={setIsTyping}
                             characterLimit={70}
+                            questionNumber={2}
+                            totalQuestions={3}
                         />
-                        <div className="flex flex-col justify-center items-center mb-20">
+                        <div className="flex flex-col justify-center items-center mt-10">
                             <form onSubmit={(e) => saveAndContinue(e)}>
                                 <SaveAndContinueBtns
                                     isSaving={isSaving}
@@ -367,26 +382,36 @@ export default function SinglePromptEditor({
                                 />
                             </form>
                         </div>
-                    </>
+                    </div>
                 )}
+
                 {/* Show final image and submission */}
                 {questionNumber === '2' && (
                     <>
                         {/* Save and Submit Buttons */}
-                        <div className="flex flex-col justify-center items-center">
-                            <Image
-                                src={journalText || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
-                                alt="blog cover photo"
-                                width={448}
-                                height={252}
-                                priority
-                                className="rounded-md max-w-md"
-                            />
-
-                            <Button className=" mt-4 mb-8" onClick={() => { setOpenPhotoModal(true); fetchPhotos() }}>Change Photo</Button>
+                        <div className="flex flex-col justify-center items-center mt-12 shadow-lg">
+                            <Card className='relative px-8'>
+                                <CardHeader>
+                                    <p className='lg:text-lg font-medium leading-relaxed tracking-wider mt-7'>Add a Cover Photo</p>
+                                    <p className='absolute top-3 right-9 text-sm text-muted-foreground'>Question 3 of 3</p>
+                                </CardHeader>
+                                <CardContent>
+                                    <Image
+                                        src={journalText || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
+                                        alt="blog cover photo"
+                                        width={448}
+                                        height={252}
+                                        priority
+                                        className="rounded-md max-w-md"
+                                    />
+                                    <div className="flex-center">
+                                        <Button className=" mt-8 mb-5" onClick={() => { setOpenPhotoModal(true); fetchPhotos() }}>Change Photo</Button>
+                                    </div>
+                                </CardContent>
+                            </Card>
 
                             {confirmSubmission ? (
-                                <div className="flex flex-col justify-center items-center">
+                                <div className="flex flex-col justify-center items-center mt-8">
                                     <p className="text-center text-success mb-3 font-bold">Are you sure you want to submit all your answers?</p>
                                     <form action={action} className="mt-5">
                                         <input
@@ -432,10 +457,10 @@ export default function SinglePromptEditor({
                                 </div>
                             ) : (
                                 <>
-                                    <p className="text-center mb-3 font-bold">Ready to submit?</p>
+                                    <p className="text-center mt-10 tracking-wider mb-5 text-xl font-bold">Ready to submit?</p>
                                     <div className="flex-center gap-5 mb-20">
                                         {/* <Button variant='secondary' onClick={() => { handleSaveResponses(); toast('Answers Saved!') }} className="flex justify-center mx-auto">Save</Button> */}
-                                        <Button className="bg-success" onClick={async () => { await handleSaveResponses(); setConfirmSubmission(true) }}>Submit Responses</Button>
+                                        <Button size={"lg"} className="text-md bg-success" onClick={async () => { await handleSaveResponses(); setConfirmSubmission(true) }}>Submit Responses</Button>
                                     </div>
                                 </>
                             )}

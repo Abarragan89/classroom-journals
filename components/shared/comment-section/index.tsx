@@ -68,7 +68,7 @@ export default function CommentSection({
             const lastCommentStamp = new Date();
             localStorage.setItem('lastCommentDate', lastCommentStamp.toString())
         } catch (error) {
-            console.log('error adding comment ', error)
+            console.error('error adding comment ', error)
         } finally {
             setIsLoading(false)
         }
@@ -85,7 +85,7 @@ export default function CommentSection({
                 })
             }
         } catch (error) {
-            console.log('error deleting comment', error)
+            console.error('error deleting comment', error)
         }
     }
 

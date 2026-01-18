@@ -47,7 +47,7 @@ export default function CategorySection({
             setShowDeleteCategoryModal(false)
             setUserText('')
         } catch (error) {
-            console.log('error deleting category ', error)
+            console.error('error deleting category ', error)
         }
     }
 
@@ -58,7 +58,7 @@ export default function CategorySection({
             setPromptId('')
             setShowEditCategoryModal(false)
         } catch (error) {
-            console.log('error deleting category ', error)
+            console.error('error deleting category ', error)
         }
     }
 

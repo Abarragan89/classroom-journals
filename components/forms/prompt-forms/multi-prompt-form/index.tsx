@@ -141,7 +141,7 @@ export default function MultiPromptForm({
             setCategories(prev => [newCategory, ...prev])
             setNewCategoryName('')
         } catch (error) {
-            console.log('error adding category ', error)
+            console.error('error adding category ', error)
         } finally {
             setIsAddingCategory(false)
         }

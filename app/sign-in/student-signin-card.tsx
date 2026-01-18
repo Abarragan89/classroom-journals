@@ -38,7 +38,7 @@ export default function StudentSignInCard({ changeTab }: { changeTab: () => void
                 router.push(`/student-dashboard/`)
             }
         } catch (error) {
-            console.log('error with student sign in ', error)
+            console.error('error with student sign in ', error)
         } finally {
             setIsLoading(false)
         }

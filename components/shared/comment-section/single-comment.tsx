@@ -85,7 +85,7 @@ export default function SingleComment({
             const lastCommentStamp = new Date();
             localStorage.setItem('lastCommentDate', lastCommentStamp.toString())
         } catch (error) {
-            console.log('error adding comment ', error)
+            console.error('error adding comment ', error)
         } finally {
             setIsLoading(false)
         }
@@ -103,7 +103,7 @@ export default function SingleComment({
             }
             await toggleCommentLike(commentId, studentId)
         } catch (error) {
-            console.log('error liking comments ', error)
+            console.error('error liking comments ', error)
             if (toggleOption === 'add') {
                 setIsLikeByUser(true)
                 setTotalCommentLikes(prev => prev - 1)
@@ -125,7 +125,7 @@ export default function SingleComment({
                 })
             }
         } catch (error) {
-            console.log('error deleting comment', error)
+            console.error('error deleting comment', error)
         }
     }
 

@@ -14,7 +14,7 @@ export async function requireAuth() {
         throw new Error("Unauthorized");
     }
 
-    // console.log('session ', session)
+    // console.error('session ', session)
     // if (session?.user?.id === 'c30effb8-1c4a-4778-97f7-c0110722ce65') {
     //     redirect('https://abarragan89.github.io/jotter-blog-still-there/')
     // };

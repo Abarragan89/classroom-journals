@@ -18,7 +18,7 @@ export async function addPromptCategory(categoryName: string, userId: string) {
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error adding category:', error.message);
+            console.error('Error adding category:', error.message);
             console.error(error.stack);
         } else {
             console.error('Unexpected error:', error);
@@ -43,7 +43,7 @@ export async function deletePromptCategory(id: string, teacherId: string) {
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error adding category:', error.message);
+            console.error('Error adding category:', error.message);
             console.error(error.stack);
         } else {
             console.error('Unexpected error:', error);
@@ -69,7 +69,7 @@ export async function editPromptCategory(id: string, newCategoryName: string, te
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error adding category:', error.message);
+            console.error('Error adding category:', error.message);
             console.error(error.stack);
         } else {
             console.error('Unexpected error:', error);

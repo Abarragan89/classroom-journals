@@ -40,7 +40,7 @@ export default function SubscriptionCard({
                 throw new Error('error deleting sub')
             }
         } catch (error) {
-            console.log('error cancelling subscription ', error)
+            console.error('error cancelling subscription ', error)
         } finally {
             setIsLoading(false)
         }
@@ -74,7 +74,7 @@ export default function SubscriptionCard({
                     });
                 }}
             >
-                Subscribe 
+                Subscribe
             </Button>
         )
     }

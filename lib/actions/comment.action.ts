@@ -131,11 +131,11 @@ export async function addComment(
         return result;
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error adding comments:", error.message);
+            console.error("Error adding comments:", error.message);
             console.error(error.stack);
             return { success: false, message: "Error fetching prompts. Try again.", error: error.message };
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
             return { success: false, message: "Error fetching prompts. Try again." };
         }
 
@@ -283,11 +283,11 @@ export async function replyComment(
         return result;
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error replying to comment:", error.message);
+            console.error("Error replying to comment:", error.message);
             console.error(error.stack);
             return { success: false, message: "Error fetching prompts. Try again.", error: error.message };
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
         return { success: false, message: "Error replying to comment. Try again." };
     }
@@ -335,10 +335,10 @@ export async function toggleCommentLike(commentId: string, userId: string) {
         });
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.error("Error fetching prompts:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
 
         return { success: false, message: "Error fetching prompts. Try again." };
@@ -364,10 +364,10 @@ export async function deleteComment(commentId: string, teacherId: string) {
         return { success: true, message: "comment deleted" };
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.error("Error fetching prompts:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
         return { success: false, message: "Error fetching prompts. Try again." };
     }

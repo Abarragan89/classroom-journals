@@ -21,7 +21,7 @@ export async function deletePromptSession(prevState: unknown, formData: FormData
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error deleting prompt:', error.message);
+            console.error('Error deleting prompt:', error.message);
             console.error(error.stack);
         } else {
             console.error('Unexpected error:', error);
@@ -52,7 +52,7 @@ export async function toggleBlogStatus(prevState: unknown, formData: FormData) {
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error updating prompt:', error.message);
+            console.error('Error updating prompt:', error.message);
             console.error(error.stack);
         } else {
             console.error('Unexpected error:', error);
@@ -82,7 +82,7 @@ export async function togglePublicPrivateStatus(prevState: unknown, formData: Fo
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error updating prompt:', error.message);
+            console.error('Error updating prompt:', error.message);
             console.error(error.stack);
         } else {
             console.error('Unexpected error:', error);

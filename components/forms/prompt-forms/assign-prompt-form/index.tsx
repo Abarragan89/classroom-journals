@@ -54,7 +54,7 @@ export default function AssignPromptForm({
             <Button
                 type="submit"
                 disabled={pending}
-                className={`mx-auto block`}
+                className={`mx-auto block mt-5`}
             >
                 {pending ? 'Assigning...' : 'Assign'}
             </Button>
@@ -71,7 +71,7 @@ export default function AssignPromptForm({
                 <div className="space-y-3">
                     {classroomData?.length > 0 && (
                         <>
-                            <p className="text-md font-bold">Select Classes</p>
+                            <p className="text-md mt-2 font-bold">Select Classes</p>
                             {classroomData.map((classroom: Classroom) => (
                                 <div key={classroom.id} className="flex items-center space-x-2">
                                     <Checkbox id={classroom.id} value={classroom.id} name={`classroom-organize-${classroom.id}`} />
@@ -102,7 +102,11 @@ export default function AssignPromptForm({
                     readOnly
                     hidden
                 />
+
+                {/* Other Options */}
+                <p className="text-md font-bold mt-3">Other Options</p>
                 {/* Make it public switch */}
+
                 {promptType === 'BLOG' &&
                     <div className="flex items-center space-x-2">
                         <Switch
@@ -110,7 +114,7 @@ export default function AssignPromptForm({
                             checked={isPublic}
                         />
                         <Label
-                            className="text-md ml-2"
+                            className="text-md text-sm ml-2"
                         >
                             Make Public
                         </Label>
@@ -133,8 +137,9 @@ export default function AssignPromptForm({
                         />
                     </div>
                 }
+
                 {/* this is making spell check enabled */}
-                <div className="flex items-center justify-center space-x-2 mt-5">
+                <div className="flex items-center space-x-2">
                     <Switch
                         onCheckedChange={(e) => setEnableSpellCheck(e)}
                         checked={enableSpellCheck}
@@ -162,6 +167,9 @@ export default function AssignPromptForm({
                         value={enableSpellCheck.toString()}
                     />
                 </div>
+
+
+
                 <AssignButton />
                 {state && !state.success && (
                     <p className="text-center text-destructive">{state.message}</p>

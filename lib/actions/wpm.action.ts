@@ -18,10 +18,10 @@ export async function updateUserWpm(userId: string, wpm: number) {
         return { success: true, message: "Updating user score successful" };
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error updating word per minute:", error.message);
+            console.error("Error updating word per minute:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
 
         return { success: false, message: "Error updating word per minute. Try again." };

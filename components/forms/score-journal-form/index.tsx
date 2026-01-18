@@ -151,7 +151,7 @@ export default function ScoreJournalForm({
             }
             toast('Grade Updated!');
         } catch (error) {
-            console.log('error updating score ', error);
+            console.error('error updating score ', error);
             toast('Grade failed to update');
         }
     }
@@ -386,7 +386,7 @@ export default function ScoreJournalForm({
                                             // Load the most recent rubric grade and show it
                                             await loadExistingGrade();
                                         }}
-                                        className="text-accent underline hover:text-accent/80 cursor-pointer"
+                                        className="text-muted-foreground underline hover:text-primary cursor-pointer"
                                     >
                                         current rubric grade
                                     </span>

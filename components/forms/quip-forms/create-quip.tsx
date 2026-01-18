@@ -60,7 +60,7 @@ export default function CreateQuipForm({
             closeModal();
             toast('Quip Posted!')
         } catch (error) {
-            console.log('Error creating new quip:', error);
+            console.error('Error creating new quip:', error);
             // Handle either a standard Error or the custom return format
             const errMessage =
                 error instanceof Error

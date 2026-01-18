@@ -16,6 +16,7 @@ import useWindowSize from 'react-use/lib/useWindowSize'
 import Confetti from 'react-confetti'
 import Link from "next/link";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 
 export default function MultipleQuestionEditor({
     studentResponse,
@@ -121,7 +122,7 @@ export default function MultipleQuestionEditor({
                 toast.error(result?.message || 'Failed to save');
             }
         } catch (error) {
-            console.log('error saving response', error);
+            console.error('error saving response', error);
             toast.error('Failed to save');
         } finally {
             setIsSaving(false);
@@ -145,14 +146,14 @@ export default function MultipleQuestionEditor({
             const nextQuestion = (Number(questionNumber) + 1).toString()
             router.push(`/jot-response/${responseId}?q=${nextQuestion}`)
         } catch (error) {
-            console.log('error saving and continuing ', error)
+            console.error('error saving and continuing ', error)
         }
     }
 
     const SubmitFormBtn = () => {
         const { pending } = useFormStatus()
         return (
-            <Button disabled={pending} className="w-full" variant='default' type="submit">
+            <Button disabled={pending} variant='default' type="submit">
                 {pending ? 'Submitting...' : 'Submit'}
             </Button>
         )
@@ -164,7 +165,7 @@ export default function MultipleQuestionEditor({
                 <Confetti
                     width={width}
                     height={height}
-                    numberOfPieces={2000}
+                    numberOfPieces={1000}
                     recycle={false}
                     gravity={0.3}
                     tweenDuration={2000}
@@ -173,7 +174,7 @@ export default function MultipleQuestionEditor({
                     wind={0.01}
                     friction={0.99}
                 />
-                <div className="w-[370px] mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40 animate-fall">
+                <div className="w-[370px] mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40 animate-fall border">
                     <p className="text-primary font-bold text-xl text-center">Answers Submitted!</p>
                     <Button asChild className="mt-4">
                         <Link href={'/'}>
@@ -193,27 +194,35 @@ export default function MultipleQuestionEditor({
                         <DialogTitle>Assignment Collected</DialogTitle>
                     </DialogHeader>
                     <p className="my-3">Your teacher has collected this assignment. You can no longer edit your answers.</p>
-                    <Button>
-                        <Link href='/student-dashboard'>Go to Dashboard</Link>
+                    <Button onClick={() => router.push("/student-dashboard")}>
+                        Go to Dashboard
                     </Button>
                 </DialogContent>
             </Dialog>
-            <div className="w-full max-w-[900px] mx-auto relative px-5 mb-32">
-                {/* If finished the last question, show answer review */}
-                <div className="flex-start absolute -top-16 left-0 hover:cursor-pointer hover:text-accent" onClick={() => {
-                    router.back();
-                    if (typingTimeoutRef.current) {
-                        clearTimeout(typingTimeoutRef.current);
-                    }
-                }}>
-                    <ArrowBigLeft />
-                    <p className="ml-1 text-md">Back</p>
+
+
+            {/* If finished the last question, show answer review */}
+            <div className="w-full max-w-[1000px] mx-auto relative px-5">
+                <div className="flex-between">
+                    <div className="flex-center hover:cursor-pointer hover:text-primary"
+                        onClick={() => {
+                            router.back();
+                            if (typingTimeoutRef.current) {
+                                clearTimeout(typingTimeoutRef.current);
+                            }
+                        }}>
+                        <ArrowBigLeft size={30} />
+                        <p className="ml-2 text-md">Back</p>
+                    </div>
+                    <Badge className="text-sm">Assessment</Badge>
                 </div>
                 {Number(questionNumber) === studentResponse.length ? (
-                    <div className="mt-16">
+                    <div className="mt-10">
                         <MultiQuestionReview
                             allQuestions={studentResponseData as ResponseData[]}
                             setAllQuestions={setStudentResponseData}
+                            // to show Question Review title instead of Assessment title
+                            isQuestionReview={true}
                             isSubmittable={true}
                             showGrades={false}
                             isTeacherPremium={isTeacherPremium}
@@ -222,7 +231,7 @@ export default function MultipleQuestionEditor({
                             studentId={studentId}
                         />
                         <div className="flex flex-col justify-center items-center">
-                            <p className="text-center font-bold">Ready to Submit?</p>
+                            <p className="text-center mt-10 tracking-wider mb-5 text-xl font-bold">Ready to Submit?</p>
                             {/* Final form to submit responses to database */}
                             <form action={action} className="mt-5">
                                 <input
@@ -277,22 +286,25 @@ export default function MultipleQuestionEditor({
                     </div>
                 ) : (
                     // IF not final question, just show the editor and question with continue buttons
-                    <>
-                        <p className="absolute -top-16 right-0 text-sm">Question: {Number(questionNumber) + 1} / {studentResponse.length}</p>
-                        <p className="mt-16 mb-5 w-full mx-auto whitespace-pre-line text-left lg:text-lg font-bold">{currentQuestion}</p>
+                    <div className="mt-20">
                         <Editor
+                            questionText={currentQuestion}
                             setJournalText={setJournalText}
                             journalText={journalText}
                             spellCheckEnabled={spellCheckEnabled}
                             setIsTyping={setIsTyping}
+                            questionNumber={Number(questionNumber) + 1}
+                            totalQuestions={studentResponse.length}
                         />
-                        <form onSubmit={(e) => saveAndContinue(e)}>
-                            <SaveAndContinueBtns
-                                isSaving={isSaving}
-                                submitHandler={() => { handleSaveResponses(); toast('Answers Saved!') }}
-                            />
-                        </form>
-                    </>
+                        <div className="flex flex-col justify-center items-center mt-10">
+                            <form onSubmit={(e) => saveAndContinue(e)}>
+                                <SaveAndContinueBtns
+                                    isSaving={isSaving}
+                                    submitHandler={() => { handleSaveResponses(); toast('Answers Saved!') }}
+                                />
+                            </form>
+                        </div>
+                    </div>
                 )}
             </div>
         </>

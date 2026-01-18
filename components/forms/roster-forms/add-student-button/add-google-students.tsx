@@ -31,7 +31,7 @@ export default function AddGoogleStudents({
             closeModal();
             router.push(`/classroom/${classId}/${session?.user?.id}/roster`)
         } catch (error) {
-            console.log('error creating classroom', error)
+            console.error('error creating classroom', error)
         } finally {
             setIsLoading(false)
         }

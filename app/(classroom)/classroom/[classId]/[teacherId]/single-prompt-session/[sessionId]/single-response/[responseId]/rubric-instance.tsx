@@ -10,6 +10,7 @@ import { gradeRubricWithAI, getTeacherAIAllowance } from '@/lib/actions/openai.a
 import { toast } from "sonner"
 import { PrinterIcon } from 'lucide-react'
 import { checkout } from '@/lib/stripe/checkout'
+import { Badge } from '@/components/ui/badge'
 
 interface RubricInstanceProps {
     rubric: Rubric;
@@ -247,7 +248,7 @@ export default function RubricInstance({
                     <h3 className="text-lg font-bold">{gradingInstance.title}</h3>
                     {isComplete && (
                         <div className='flex items-start justify-start'>
-                            <p className="text-accent font-semibold">
+                            <p className="text-muted-foreground font-semibold">
                                 Total Score: {currentGrade.totalScore}/{currentGrade.maxTotalScore}
                                 ({Math.round((currentGrade.totalScore / currentGrade.maxTotalScore) * 100)}%)
                             </p>
@@ -332,9 +333,9 @@ export default function RubricInstance({
                                         <div>
                                             <div className="font-semibold text-lg">{category.name}</div>
                                             {category.selectedScore !== undefined && (
-                                                <div className="absolute top-0 left-2 text-accent text-lg mt-2 font-bold">
-                                                    {category.criteria[category.selectedScore].score}
-                                                </div>
+                                                <Badge variant={"secondary"} className="absolute top-0 left-2 text-xs mt-2">
+                                                    Credit: {category.criteria[category.selectedScore].score}
+                                                </Badge>
                                             )}
                                         </div>
                                     </div>
@@ -353,7 +354,7 @@ export default function RubricInstance({
                                                     'text-left border-4 shadow-sm min-h-[100px]',
                                                     'focus:outline-none',
                                                     isSelected
-                                                        ? 'border-accent bg-accent/10 scale-[0.98]'
+                                                        ? 'border-primary bg-primary/10 scale-[0.98]'
                                                         : 'border-border hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] active:translate-y-0'
                                                 )}
                                             >
