@@ -1,6 +1,5 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { ResponseData } from '@/types'
 import Editor from '@/components/shared/prompt-response-editor/editor'
 import { useState } from 'react'
@@ -8,8 +7,8 @@ import { updateASingleResponse } from '@/lib/actions/response.action';
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { responsePercentage } from '@/lib/utils'
-import { Separator } from '@/components/ui/separator'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Badge } from '@/components/ui/badge'
 
 export default function MultiQuestionReview({
     allQuestions,
@@ -81,17 +80,6 @@ export default function MultiQuestionReview({
         );
     };
 
-    function displayGradeUI(score: number) {
-        switch (score) {
-            case 0:
-                return <p className='text-destructive font-bold'>Wrong</p>;
-            case 0.5:
-                return <p className='text-warning font-bold'>Half Credit</p>;
-            case 1:
-                return <p className='text-success font-bold'>Correct</p>;
-        }
-    }
-
     const gradePercentage = responsePercentage(allQuestions)
 
     return (
@@ -107,47 +95,36 @@ export default function MultiQuestionReview({
                     </Button>
                 </DialogContent>
             </Dialog>
-            <div className="max-w-[650px] mx-auto w-full relative">
-                {isSubmittable && <p className="h2-bold text-muted-foreground text-center">Question Review</p>}
-                <div className="flex-between mt-7">
+
+
+            <div className="mx-auto w-full relative max-w-[1000px] mt-5">
+
+                <h2>Question Review</h2>
+                <div className="flex-between mb-5">
                     {showGrades && (
-                        <p className='font-bold text-lg text-muted-foreground ml-0 text-right mb-10'>Grade: <span
-                            className={`
-                        ${parseInt(gradePercentage) >= 90 ? 'text-success' : parseInt(gradePercentage) >= 70 ? 'text-warning' : 'text-destructive'}
-                        `}
-                        >{gradePercentage}</span></p>
+                        <Badge className='text-md'>Grade: {gradePercentage}</Badge>
                     )}
                 </div>
-                {allQuestions?.map((responseData, index) => (
-                    <Card className="p-4 space-y-2 border border-border  mx-auto mb-10 relative" key={index}>
-                        <div className="flex-between left-5 right-5 absolute top-2 text-sm">
-                            <p className='text-accent font-bold'>Question {index + 1}</p>
-                            {showGrades && (
-                                displayGradeUI(responseData?.score)
-                            )}
-                        </div>
-                        <CardTitle className="p-4 leading-snug text-center font-bold whitespace-pre-line">
-                            <Separator className='mb-5' />
-                            {responseData.question}
-                        </CardTitle>
-                        <CardContent className="p-3 pt-0 mt-0">
-                            {/* <p className="ml-1 mb-1 text-sm font-bold">Answer:</p> */}
-                            {isSubmittable ? (
-                                <>
-                                    <Editor
-                                        setJournalText={(newText) => handleTextChange(index, newText as string)}
-                                        journalText={responseData.answer}
-                                        spellCheckEnabled={spellCheckEnabled}
-                                    />
-                                </>
-                            ) : (
-                                <div className='bg-background px-4  py-3 m-0 rounded-md whitespace-pre-line'>
-                                    <p>{responseData.answer}</p>
-                                </div>
-                            )}
-                        </CardContent>
-                    </Card>
-                ))}
+
+                <div className="space-y-10">
+                    {allQuestions?.map((responseData, index) => (
+                        <Editor
+                            key={index}
+                            jotType='ASSESSMENT'
+                            // Only show score when they are open
+                            score={showGrades ? responseData?.score : undefined}
+                            questionText={responseData.question}
+                            questionNumber={index + 1}
+                            totalQuestions={allQuestions.length}
+                            setJournalText={(newText) => handleTextChange(index, newText as string)}
+                            journalText={responseData.answer}
+                            spellCheckEnabled={spellCheckEnabled}
+                            isDisabled={!isSubmittable}
+                        />
+                    ))}
+                </div>
+
+
                 {isSubmittable && responseId &&
                     <div className="flex-center">
                         <Button

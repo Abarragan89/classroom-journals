@@ -164,7 +164,7 @@ export default function TypingTest({
                         <Confetti
                             width={width}
                             height={height}
-                            numberOfPieces={2000}
+                            numberOfPieces={1000}
                             recycle={false}
                             gravity={0.3}
                             tweenDuration={2000}

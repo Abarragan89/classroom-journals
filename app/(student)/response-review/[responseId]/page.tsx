@@ -5,11 +5,12 @@ import { notFound } from 'next/navigation'
 import React from 'react'
 import SingleQuestionReview from './single-question-review'
 import Link from 'next/link'
-import { ArrowLeftIcon } from 'lucide-react'
+import { ArrowBigLeft } from 'lucide-react'
 import ReviewWrapper from './review-wrapper'
 import { determineSubscriptionAllowance } from '@/lib/server/profile'
 import { getSingleResponseForReview } from '@/lib/server/responses'
 import { getClassroomGrade } from '@/lib/server/student-dashboard'
+import { Button } from '@/components/ui/button'
 
 export default async function ResponseReview({
     params
@@ -38,19 +39,49 @@ export default async function ResponseReview({
         getClassroomGrade(classroomId as string)
     ])
 
+    console.log('singleResponse', singleResponse)
+
     return (
         <div>
             <Header session={session} studentId={studentId} />
             <main className="wrapper">
-                <Link href='/' className="flex items-center hover:underline w-fit print:hidden">
-                    <ArrowLeftIcon className="mr-1" size={20} />
-                    Back To Dashboard
-                </Link>
-                <h1 className="font-bold text-xl max-w-[650px] text-center mt-7 mx-auto whitespace-pre-line">
-                    {singleResponse?.promptSession?.promptType === 'ASSESSMENT' && (
-                        singleResponse?.promptSession?.title
+                <div className="flex-between max-w-[800px] mx-auto">
+
+                    {/* Header with back button and link to class discussion */}
+                    <Link href='/' className="flex items-center hover:text-primary w-fit print:hidden">
+                        <ArrowBigLeft className="mr-1" size={23} />
+                        Back To Dashboard
+                    </Link>
+
+                    {singleResponse?.promptSession?.isPublic && singleResponse?.promptSession?.promptType === "BLOG" && (
+                        <Button asChild>
+                            <Link
+                                href={`/discussion-board/${singleResponse?.promptSession?.id}/response/${responseId}`}
+                            >
+                                View Published Blogs
+                            </Link>
+                        </Button>
                     )}
-                </h1>
+
+                    {!singleResponse?.promptSession?.isPublic && singleResponse?.promptSession?.promptType === "BLOG" && (
+                        <Button asChild>
+                            <Link
+                                href={`/discussion-board/${singleResponse?.promptSession?.id}/response/${responseId}`}
+                            >
+                                Blogs are Private
+                            </Link>
+                        </Button>
+                    )}
+
+                </div>
+
+                {/* Assessment Title ONly because blog title may be too long */}
+                {singleResponse?.promptSession?.promptType === 'ASSESSMENT' && (
+                    <h1 className="h2-bold mt-5 text-center">
+                        {singleResponse?.promptSession?.title}
+                    </h1>
+                )}
+
                 {singleResponse?.promptSession?.promptType === 'ASSESSMENT' ?
                     <ReviewWrapper
                         singleResponse={singleResponse}
@@ -64,10 +95,8 @@ export default async function ResponseReview({
                         questions={singleResponse?.response as unknown as ResponseData[]}
                         isSubmittableInitial={singleResponse?.completionStatus === 'INCOMPLETE' || singleResponse?.completionStatus === 'RETURNED'}
                         showGradesInitial={singleResponse?.promptSession?.areGradesVisible as boolean}
-                        isPublicInitial={singleResponse?.promptSession?.isPublic as boolean}
                         spellCheckEnabledInitial={singleResponse?.spellCheckEnabled}
                         rubricGradesInitial={singleResponse?.rubricGrades}
-                        promptSessionId={singleResponse?.promptSession?.id as string}
                         studentName={singleResponse?.student?.name}
                         responseId={singleResponse?.id}
                         studentId={studentId}

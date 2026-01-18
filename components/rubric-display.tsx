@@ -33,12 +33,12 @@ export default function RubricDisplay({ rubricGrade, studentName, isPrintView = 
     return (
         <>
             {!isPrintView && (
-                <p
+                <Button
+                    variant={"link"}
                     onClick={() => setIsOpen(true)}
-                    className='ml-2 underline  text-primary cursor-pointer hover:text-primary/80'
                 >
                     See Rubric
-                </p>
+                </Button>
             )}
 
             {/* Print View - Direct Content */}
@@ -61,7 +61,7 @@ export default function RubricDisplay({ rubricGrade, studentName, isPrintView = 
                         </div>
 
                         {/* Rubric Table */}
-                        <div className="w-full" style={{ margin: 0, padding: 0}}>
+                        <div className="w-full" style={{ margin: 0, padding: 0 }}>
                             <Table
                                 className='w-full border-collapse'
                             >

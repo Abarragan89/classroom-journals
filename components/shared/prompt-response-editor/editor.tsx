@@ -1,6 +1,6 @@
 import { Textarea } from "@/components/ui/textarea";
 import { Redo, Undo } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
 
 export default function Editor({
@@ -9,32 +9,50 @@ export default function Editor({
     jotType,
     characterLimit,
     setIsTyping,
-    spellCheckEnabled
+    spellCheckEnabled,
+    questionText,
+    questionNumber,
+    totalQuestions,
+    isDisabled = false,
+    score
 }: {
     journalText: string;
     setJournalText: React.Dispatch<React.SetStateAction<string>>;
-    jotType?: string;
+    jotType?: 'BLOG' | 'ASSESSMENT';
     characterLimit?: number,
     setIsTyping?: React.Dispatch<React.SetStateAction<boolean>>;
     spellCheckEnabled: boolean,
+    questionText?: string;
+    questionNumber?: number;
+    totalQuestions?: number;
+    isDisabled?: boolean;
+    score?: number;
 }) {
 
     // History for undo and redo
-    const historyRef = useRef<string[]>([]); // For storing past states (undo)
-    const redoRef = useRef<string[]>([]); // For storing future states (redo)
+    const historyRef = useRef<string[]>([]);
+    const redoRef = useRef<string[]>([]);
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+    const editorRef = useRef<HTMLTextAreaElement | null>(null)
+
+    // Auto-resize textarea based on content
+    useEffect(() => {
+        if (editorRef.current) {
+            editorRef.current.style.height = 'auto'; // Reset height
+            editorRef.current.style.height = `${editorRef.current.scrollHeight}px`; // Set to scrollHeight
+        }
+    }, [journalText]);
 
     // Undo function
     const handleUndo = () => {
         if (historyRef?.current?.length > 1) {
-            // Pop last state from history and save it to redo stack
             const lastState = historyRef.current.pop() as string;
-            redoRef.current.push(lastState); // Push the last state to redo stack
+            redoRef.current.push(lastState);
             const prevState = historyRef.current[historyRef?.current?.length - 1];
-            setJournalText(prevState); // Update textarea content to the previous state
+            setJournalText(prevState);
 
             if (textareaRef.current) {
-                textareaRef.current.value = prevState; // Update the textarea value
+                textareaRef.current.value = prevState;
             }
         }
     };
@@ -43,43 +61,29 @@ export default function Editor({
     const handleRedo = () => {
         if (redoRef?.current?.length > 0) {
             const redoState = redoRef.current.pop() as string;
-            historyRef.current.push(redoState); // Push redo state back to history
-            setJournalText(redoState); // Update textarea content
+            historyRef.current.push(redoState);
+            setJournalText(redoState);
 
             if (textareaRef.current) {
-                textareaRef.current.value = redoState; // Update the textarea value
+                textareaRef.current.value = redoState;
             }
         }
     };
 
-    const editorRef = useRef<HTMLTextAreaElement | null>(null)
-    // Handle text input changes
-    // const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    //     if (setIsTyping) setIsTyping(true)
-    //     const newContent = e.target.value;
-    //     setJournalText(newContent);
-    //     // Add current content to history stack for undo
-    //     historyRef.current.push(newContent);
-    //     redoRef.current = [];
-    // };
-
-    // This just overrides default behaviors for some keypresses (Tab Backspace and Enter)
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         const textarea = e.currentTarget;
         if (e.key === 'Tab') {
-            // Prevent the default behavior (tab moves focus, we want to insert spaces instead)
             e.preventDefault();
 
             const start = textarea.selectionStart;
             const end = textarea.selectionEnd;
             const value = textarea.value;
 
-            const spaces = '     '; // 5 spaces
+            const spaces = '     ';
             const newValue = value.substring(0, start) + spaces + value.substring(end);
 
             setJournalText(newValue);
 
-            // Set cursor position after the inserted spaces
             requestAnimationFrame(() => {
                 textarea.selectionStart = textarea.selectionEnd = start + spaces.length;
             });
@@ -90,7 +94,6 @@ export default function Editor({
             const end = textarea.selectionEnd;
             const value = textarea.value;
 
-            // Only do something special if there's no selection and the user is deleting one character
             if (start === end && start >= 2) {
                 const charsBefore = value.substring(start - 2, start);
                 if (charsBefore === '\n\n') {
@@ -115,19 +118,16 @@ export default function Editor({
                 return;
             }
 
-            // Check if the character before the cursor is a newline
             const charBeforeCursor = value[start - 1];
 
             if (charBeforeCursor === '\n') {
-                e.preventDefault(); // Block if already a newline before the cursor
+                e.preventDefault();
             } else {
-                e.preventDefault(); // Prevent default Enter behavior
+                e.preventDefault();
 
-                // Insert two newlines at the cursor
                 const newValue = value.substring(0, start) + '\n\n' + value.substring(end);
                 setJournalText(newValue);
 
-                // Move cursor after the two newlines
                 requestAnimationFrame(() => {
                     textarea.selectionStart = textarea.selectionEnd = start + 2;
                 });
@@ -135,14 +135,12 @@ export default function Editor({
         }
     };
 
-    // Handle text input changes (works on mobile keyboards)
     const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (setIsTyping) setIsTyping(true);
 
         let newContent = e.target.value;
         const lastContent = journalText;
 
-        // Replace a single ending newline with double newline (for mobile keyboards)
         if (
             newContent?.length > lastContent?.length &&
             newContent.endsWith('\n') &&
@@ -151,7 +149,6 @@ export default function Editor({
             newContent = newContent.slice(0, -1) + '\n\n';
         }
 
-        // Collapse any sequence of 3+ newlines into exactly 2
         const sanitizedContent = newContent.replace(/\n{3,}/g, '\n\n');
 
         setJournalText(sanitizedContent);
@@ -159,14 +156,46 @@ export default function Editor({
         redoRef.current = [];
     };
 
+    function displayGradeUI(score: number) {
+        switch (score) {
+            case 0:
+                return <p className='text-destructive text-sm font-bold'>Wrong</p>;
+            case 0.5:
+                return <p className='text-warning text-sm font-bold'>Half Credit</p>;
+            case 1:
+                return <p className='text-success text-sm font-bold'>Correct</p>;
+        }
+    }
 
 
     return (
-        <div className={`w-full mx-auto flex flex-col items-center relative mb-5`}>
-            {characterLimit && <p className="text-sm absolute right-2 bottom-4">{journalText?.length} / {characterLimit}</p>}
-            <div className="text-xs opacity-70 text-center mb-1">
-                Press TAB or click the Textbox to start typing
-            </div>
+        <div className={`w-full mx-auto relative bg-card rounded-md p-8 shadow-lg border`}>
+
+            {jotType === 'ASSESSMENT' && (
+                <div className="absolute top-3 left-9">
+                    {score !== undefined ? displayGradeUI(score) : <p className="text-sm italic text-muted-foreground ">Not Graded</p>}
+                </div>
+            )}
+
+            {questionNumber && totalQuestions && (
+                <p className="absolute top-3 right-9 text-sm text-muted-foreground">
+                    Question {questionNumber} of {totalQuestions}
+                </p>
+            )}
+            {questionText && (
+                <p className="pb-7 pt-4 whitespace-pre-line lg:text-lg font-medium leading-relaxed tracking-wider">{questionText}</p>
+            )}
+
+            {!isDisabled && characterLimit && (
+                <p className="text-sm w-fit text-right text-muted-foreground absolute right-9 bottom-10">{journalText?.length} / {characterLimit}</p>
+            )}
+
+            {!isDisabled && (
+                <div className="text-xs opacity-70 text-center mb-1">
+                    Press TAB or click the Textbox to start typing
+                </div>
+            )}
+
             <Textarea
                 onPaste={(e) => e.preventDefault()}
                 maxLength={characterLimit ?? undefined}
@@ -175,31 +204,31 @@ export default function Editor({
                 onDrop={(e) => e.preventDefault()}
                 onDragOver={(e) => e.preventDefault()}
                 className={`
-                    md:text-lg bg-transparent outline-border border border-border shadow-border shadow-[inset_0px_0px_10px_0px_rgba(0,_0,_0,_0.1)] p-4 md:p-7 textarea-field-size-content
-                    ${jotType === 'BLOG' ? 'min-h-48' : ''}
-                `}
+                w-full md:text-lg bg-transparent outline-border border border-border shadow-border shadow-[inset_0px_0px_10px_0px_rgba(0,_0,_0,_0.1)] p-5 resize-none overflow-hidden disabled:opacity-80 disabled:text-foreground disabled:cursor-not-allowed
+                ${jotType === 'BLOG' ? 'min-h-48' : ''}
+            `}
                 value={journalText}
                 onChange={handleOnChange}
-                onKeyDown={handleKeyDown}  // Handle key down events
+                onKeyDown={handleKeyDown}
                 autoComplete="off"
                 autoCorrect="off"
                 autoCapitalize="off"
                 spellCheck={spellCheckEnabled}
                 ref={editorRef}
+                disabled={isDisabled}
             />
 
-            <div className="flex space-x-14">
-                {/* Undo Button */}
-                <button onTouchStart={handleUndo} onMouseDown={handleUndo} className="p-2 hover:text-primary rounded">
-                    <Undo />
-                </button>
+            {!isDisabled && (
+                <div className="flex-center space-x-14 mt-2">
+                    <button onTouchStart={handleUndo} onMouseDown={handleUndo} className="p-2 hover:text-primary rounded">
+                        <Undo />
+                    </button>
 
-                {/* Redo Button */}
-                <button onTouchStart={handleRedo} onMouseDown={handleRedo} className="p-2 hover:text-primary rounded">
-                    <Redo />
-                </button>
-            </div>
+                    <button onTouchStart={handleRedo} onMouseDown={handleRedo} className="p-2 hover:text-primary rounded">
+                        <Redo />
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
-
