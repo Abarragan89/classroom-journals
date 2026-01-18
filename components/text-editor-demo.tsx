@@ -15,6 +15,9 @@ export default function TextEditorDemo() {
                     <div className='mt-10 w-full max-w-[750px] relative'>
                         <div className='z-10'>
                             <Editor
+                                // questionText='Try it out!'
+                                // questionNumber={1}
+                                // totalQuestions={1}
                                 setJournalText={setJournalText}
                                 journalText={journalText}
                                 spellCheckEnabled={false}
