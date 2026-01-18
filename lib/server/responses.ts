@@ -273,6 +273,7 @@ export async function getStudentResponsesDashboard(studentId: string, sessionPar
                 studentId: true,
                 completionStatus: true,
                 createdAt: true,
+                response: true,
                 promptSession: {
                     select: {
                         id: true,

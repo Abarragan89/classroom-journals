@@ -73,7 +73,6 @@ export default function AssignmentSectionClient({
 
     categoryFilterOptions.unshift({ value: " ", label: "All Categories" })
 
-
     return (
         <>
             < div className="flex flex-col-reverse items-end md:flex-row md:items-start justify-between">
