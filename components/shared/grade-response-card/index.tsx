@@ -53,11 +53,11 @@ export default function GradeResponseCard({
 
     return (
         <>
-            <div className="mt-8 flex flex-col justify-start gap-10">
+            <div className="mb-8 grid-cols-1 xl:grid-cols-2 grid gap-6 items-start">
                 {responseArr?.length > 0 && responseArr.map((responseData: ResponseData, index: number) => (
-                    <Card className='w-full p-4 space-y-2 max-w-[500px] mx-auto' key={index}>
+                    <Card className='w-full p-4 space-y-2 max-w-[650px] mx-auto' key={index}>
                         <div className="flex-between text-sm">
-                            <p className='ml-2'> Marked As:
+                            <p className='ml-2'> Marked as:
                                 {renderScoreUIText(responseData.score)}
                             </p>
                             <GradingPanel
@@ -73,7 +73,7 @@ export default function GradeResponseCard({
                         <CardTitle className='p-2 py-3 leading-snug text-center font-normal italic'>{responseData.question}</CardTitle>
                         <CardContent className='p-3 pt-0'>
                             <p className='ml-1 mb-1 text-sm font-bold'>Answer:</p>
-                            <div className='bg-background px-2 py-4 m-0 rounded-md'>
+                            <div className='bg-background p-3 m-0 rounded-md'>
                                 {responseData.answer}
                             </div>
                         </CardContent>
