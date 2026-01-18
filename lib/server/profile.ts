@@ -22,7 +22,6 @@ export async function getUserAvatarURL(userId: string) {
         avatarURL: userInfo?.avatarURL,
         username: decryptText(userInfo?.username as string, userInfo?.iv as string)
     };
-    console.log('decrypted user ', decryptedUserInfo)
     return decryptedUserInfo;
 }
 

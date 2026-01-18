@@ -39,13 +39,11 @@ export default async function ResponseReview({
         getClassroomGrade(classroomId as string)
     ])
 
-    console.log('singleResponse', singleResponse)
-
     return (
         <div>
             <Header session={session} studentId={studentId} />
             <main className="wrapper">
-                <div className="flex-between max-w-[800px] mx-auto">
+                <div className="flex-between max-w-[1000px] mx-auto">
 
                     {/* Header with back button and link to class discussion */}
                     <Link href='/' className="flex items-center hover:text-primary w-fit print:hidden">
@@ -77,9 +75,9 @@ export default async function ResponseReview({
 
                 {/* Assessment Title ONly because blog title may be too long */}
                 {singleResponse?.promptSession?.promptType === 'ASSESSMENT' && (
-                    <h1 className="h2-bold mt-5 text-center">
+                    <h2 className="h2-bold my-10 text-center">
                         {singleResponse?.promptSession?.title}
-                    </h1>
+                    </h2>
                 )}
 
                 {singleResponse?.promptSession?.promptType === 'ASSESSMENT' ?

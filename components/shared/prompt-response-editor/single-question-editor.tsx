@@ -144,8 +144,6 @@ export default function SinglePromptEditor({
 
             const result = await updateStudentResponse(updatedData, responseId, studentId);
 
-            console.log('save result', result);
-
             // Handle collected assignment
             if (result?.isCollected) {
                 // Show modal and redirect
@@ -229,7 +227,7 @@ export default function SinglePromptEditor({
                     wind={0.01}
                     friction={0.99}
                 />
-                <div className="animate-fall w-[370px] mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40">
+                <div className="animate-fall w-[370px] mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40 border">
                     <p className="text-primary font-bold text-xl text-center">Blog Posted!</p>
                     <Button asChild className="mt-4">
                         <Link href={'/'}>
@@ -321,7 +319,7 @@ export default function SinglePromptEditor({
                     )}
                 </>
             </ResponsiveDialog>
-            
+
             <div className="w-full max-w-[1000px] mx-auto relative px-5">
                 <div className="flex-between">
                     <div

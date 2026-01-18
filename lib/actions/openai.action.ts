@@ -155,7 +155,6 @@ export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, 
             }
         });
 
-        console.log('response ', response)
         const result = response.output_text
         if (!result) {
             throw new Error('No response from OpenAI');

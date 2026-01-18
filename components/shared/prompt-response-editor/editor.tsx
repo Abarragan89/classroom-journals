@@ -14,7 +14,8 @@ export default function Editor({
     questionNumber,
     totalQuestions,
     isDisabled = false,
-    score
+    score,
+    isPreGraded = false
 }: {
     journalText: string;
     setJournalText: React.Dispatch<React.SetStateAction<string>>;
@@ -27,6 +28,7 @@ export default function Editor({
     totalQuestions?: number;
     isDisabled?: boolean;
     score?: number;
+    isPreGraded?: boolean;
 }) {
 
     // History for undo and redo
@@ -171,7 +173,7 @@ export default function Editor({
     return (
         <div className={`w-full mx-auto relative bg-card rounded-md p-8 shadow-lg border`}>
 
-            {jotType === 'ASSESSMENT' && (
+            {jotType === 'ASSESSMENT' && !isPreGraded && (
                 <div className="absolute top-3 left-9">
                     {score !== undefined ? displayGradeUI(score) : <p className="text-sm italic text-muted-foreground ">Not Graded</p>}
                 </div>
@@ -183,7 +185,7 @@ export default function Editor({
                 </p>
             )}
             {questionText && (
-                <p className="pb-7 pt-4 whitespace-pre-line lg:text-lg font-medium leading-relaxed tracking-wider">{questionText}</p>
+                <p className="py-7 whitespace-pre-line lg:text-lg font-medium leading-relaxed tracking-wider">{questionText}</p>
             )}
 
             {!isDisabled && characterLimit && (

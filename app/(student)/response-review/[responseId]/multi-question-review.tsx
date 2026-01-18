@@ -19,7 +19,8 @@ export default function MultiQuestionReview({
     isTeacherPremium,
     gradeLevel,
     spellCheckEnabled,
-    studentId
+    studentId,
+    isQuestionReview = false
 }: {
     allQuestions: ResponseData[],
     setAllQuestions: React.Dispatch<React.SetStateAction<ResponseData[]>>
@@ -31,7 +32,9 @@ export default function MultiQuestionReview({
     isTeacherPremium: boolean,
     gradeLevel: string,
     spellCheckEnabled: boolean,
-    studentId: string
+    studentId: string,
+    // If this is viewed as a question review (before submission)
+    isQuestionReview?: boolean
 }) {
 
     const router = useRouter();
@@ -98,13 +101,14 @@ export default function MultiQuestionReview({
 
 
             <div className="mx-auto w-full relative max-w-[1000px] mt-5">
-
-                <h2>Question Review</h2>
-                <div className="flex-between mb-5">
-                    {showGrades && (
+                {isQuestionReview && (
+                    <h2 className="h2-bold mb-10 text-center">Question Review</h2>
+                )}
+                {showGrades && (
+                    <div className="flex-between mb-5">
                         <Badge className='text-md'>Grade: {gradePercentage}</Badge>
-                    )}
-                </div>
+                    </div>
+                )}
 
                 <div className="space-y-10">
                     {allQuestions?.map((responseData, index) => (
@@ -115,6 +119,7 @@ export default function MultiQuestionReview({
                             score={showGrades ? responseData?.score : undefined}
                             questionText={responseData.question}
                             questionNumber={index + 1}
+                            isPreGraded={isQuestionReview}
                             totalQuestions={allQuestions.length}
                             setJournalText={(newText) => handleTextChange(index, newText as string)}
                             journalText={responseData.answer}

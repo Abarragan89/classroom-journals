@@ -153,7 +153,7 @@ export default function MultipleQuestionEditor({
     const SubmitFormBtn = () => {
         const { pending } = useFormStatus()
         return (
-            <Button size={"lg"} disabled={pending} className="w-full text-md" variant='default' type="submit">
+            <Button disabled={pending} variant='default' type="submit">
                 {pending ? 'Submitting...' : 'Submit'}
             </Button>
         )
@@ -174,7 +174,7 @@ export default function MultipleQuestionEditor({
                     wind={0.01}
                     friction={0.99}
                 />
-                <div className="w-[370px] mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40 animate-fall">
+                <div className="w-[370px] mt-4 bg-card text-card-foreground rounded-xl p-6 shadow-lg text-center z-40 animate-fall border">
                     <p className="text-primary font-bold text-xl text-center">Answers Submitted!</p>
                     <Button asChild className="mt-4">
                         <Link href={'/'}>
@@ -217,10 +217,12 @@ export default function MultipleQuestionEditor({
                     <Badge className="text-sm">Assessment</Badge>
                 </div>
                 {Number(questionNumber) === studentResponse.length ? (
-                    <div className="mt-14">
+                    <div className="mt-10">
                         <MultiQuestionReview
                             allQuestions={studentResponseData as ResponseData[]}
                             setAllQuestions={setStudentResponseData}
+                            // to show Question Review title instead of Assessment title
+                            isQuestionReview={true}
                             isSubmittable={true}
                             showGrades={false}
                             isTeacherPremium={isTeacherPremium}

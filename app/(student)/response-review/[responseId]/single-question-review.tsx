@@ -146,7 +146,7 @@ export default function SingleQuestionReview({
                     </Button>
                 </DialogContent>
             </Dialog>
-            <div className="mx-auto w-full relative max-w-[800px] mt-14">
+            <div className="mx-auto w-full relative max-w-[1000px] mt-14">
 
                 {showGradesInitial && (
                     <div className='mb-5'>
