@@ -6,7 +6,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 
 export default function Carousel({ children }: { children: React.ReactNode }) {
-    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, }, [AutoScroll({ playOnInit: true , speed: 0.4})])
+    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, }, [AutoScroll({ playOnInit: true, speed: 0.4 })])
 
     const scrollPrev = useCallback(() => {
         if (emblaApi) emblaApi.scrollPrev()
@@ -18,18 +18,19 @@ export default function Carousel({ children }: { children: React.ReactNode }) {
 
     return (
         <>
-            <div className="embla">
-                <div className="embla__viewport mt-[20px]" ref={emblaRef}>
+            {/* <div className="embla border rounded-md bg-muted/50 shadow-border shadow-[inset_0px_0px_10px_0px_rgba(0,_0,_0,_0.1)]"> */}
+            <div className="embla rounded-md bg-card border shadow-lg">
+                <div className="embla__viewport p-10 pb-5" ref={emblaRef}>
                     <div className="embla__container">
                         {/* EACH CHILD MUST HAVE embla__slide CLASSNAME */}
                         {children}
                     </div>
                 </div>
-                <div className='flex justify-between w-[180px] mx-auto mt-3'>
-                    <button className="embla__prev mt-4 text-[2.2rem] text-[var(--brown-500)]" onClick={scrollPrev}>
+                <div className='flex justify-between w-[180px] mx-auto mb-5'>
+                    <button className="embla__prev mt-4 text-[2.2rem] text-primary" onClick={scrollPrev}>
                         <IoIosArrowBack />
                     </button>
-                    <button className="embla__next mt-4 text-[2.2rem] text-[var(--brown-500)]" onClick={scrollNext}>
+                    <button className="embla__next mt-4 text-[2.2rem] text-primary" onClick={scrollNext}>
                         <IoIosArrowForward />
                     </button>
                 </div>

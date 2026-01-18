@@ -69,7 +69,7 @@ export default function StudentDashClientWrapper({
         </div>
       )}
       <section>
-        <div className="flex-end space-x-5 relative -top-5 pb-5 mt-12">
+        <div className="flex-end space-x-5 relative -top-5 mt-5">
           <QuipLink
             quipAlerts={quipAlerts}
           />
@@ -89,13 +89,13 @@ export default function StudentDashClientWrapper({
         </div>
         {featuredBlogs?.length > 0 && (
           <>
-            <h3 className="h3-bold ml-1">Featured Blogs</h3>
+            <h3 className="h2-bold ml-1 mb-2">Most Popular</h3>
             <Carousel>
               {featuredBlogs.map((response) => (
                 <Link
                   key={response?.id}
                   href={`/discussion-board/${response?.promptSession?.id}/response/${response?.id}`}
-                  className="embla__slide hover:shadow-[0_4px_10px_-3px_var(--secondary)] mx-5">
+                  className="embla__slide mx-5 rounded-md shadow-lg border hover:border-primary transition-all">
                   <BlogCard
                     likeCount={response?.likeCount as number}
                     author={response?.student?.username as string}
@@ -108,12 +108,12 @@ export default function StudentDashClientWrapper({
                 </Link>
               ))}
             </Carousel>
-            <Separator className="mt-20 mb-10" />
+            <Separator className="my-14" />
           </>
         )}
       </section>
       <section>
-        <h3 className="h3-bold mb-2 ml-1">Assignments</h3>
+        <h3 className="h2-bold mb-2 ml-1">Assignments</h3>
         <AssignmentSectionClient
           initialPrompts={allResponses?.responses}
           promptCountTotal={allResponses?.totalCount}
