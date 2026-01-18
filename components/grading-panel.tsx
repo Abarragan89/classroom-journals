@@ -80,7 +80,7 @@ export default function GradingPanel({
 
             setCurrentScoreState(score)
         } catch (error) {
-            console.log('error updating score ', error)
+            console.error('error updating score ', error)
         } finally {
             setIsGrading(false)
         }

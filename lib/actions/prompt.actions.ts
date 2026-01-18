@@ -64,7 +64,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         });
         // Check for validation error
         if (!validationResult.success) {
-            console.log("Validation failed:", validationResult.error.format());
+            console.error("Validation failed:", validationResult.error.format());
             return { success: false, message: "Missing a required field" };
         }
 
@@ -191,11 +191,11 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
+            console.error('Error creating new prompt:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
             return { success: false, message: error.message as unknown as string }
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
             return { success: false, message: 'Error adding prompt' }
         }
     }
@@ -258,7 +258,7 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
         // Validate using Zod
         const validationResult = promptSchema.safeParse({ title, questions });
         if (!validationResult.success) {
-            console.log("Validation failed:", validationResult.error.format());
+            console.error("Validation failed:", validationResult.error.format());
             return { success: false, message: "Complete question required" };
         }
 
@@ -509,10 +509,10 @@ export async function assignPrompt(prevState: unknown, formData: FormData) {
         return { success: true, message: 'Prompt Assigned and Responses Created!', data: result as unknown as Prompt };
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error assigning prompt:", error.message);
+            console.error("Error assigning prompt:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
         return { success: false, message: "Error assigning prompt. Try again." };
     }
@@ -537,7 +537,7 @@ export async function deletePrompt(prevState: unknown, formData: FormData) {
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error updating prompt:', error.message);
+            console.error('Error updating prompt:', error.message);
             console.error(error.stack);
         } else {
             console.error('Unexpected error:', error);

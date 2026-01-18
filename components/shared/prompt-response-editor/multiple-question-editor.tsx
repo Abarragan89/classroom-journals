@@ -122,7 +122,7 @@ export default function MultipleQuestionEditor({
                 toast.error(result?.message || 'Failed to save');
             }
         } catch (error) {
-            console.log('error saving response', error);
+            console.error('error saving response', error);
             toast.error('Failed to save');
         } finally {
             setIsSaving(false);
@@ -146,7 +146,7 @@ export default function MultipleQuestionEditor({
             const nextQuestion = (Number(questionNumber) + 1).toString()
             router.push(`/jot-response/${responseId}?q=${nextQuestion}`)
         } catch (error) {
-            console.log('error saving and continuing ', error)
+            console.error('error saving and continuing ', error)
         }
     }
 

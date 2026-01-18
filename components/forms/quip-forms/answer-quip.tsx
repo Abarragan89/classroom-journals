@@ -45,7 +45,7 @@ export default function AnswerQuip({
             completeStatusTrue();
             toast('Response Posted')
         } catch (error) {
-            console.log('erroring making new quip', error)
+            console.error('erroring making new quip', error)
         }
     }
     return (

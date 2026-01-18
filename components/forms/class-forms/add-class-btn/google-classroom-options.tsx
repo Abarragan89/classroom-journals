@@ -30,7 +30,7 @@ export default function GoogleClassroomOptions({
             const classroomUrl = await createClassroomWithGoogle(classInfo, session?.user?.id)
             router.push(`/classroom/${classroomUrl}/${teacherId}`)
         } catch (error) {
-            console.log('error creating classroom', error)
+            console.error('error creating classroom', error)
             setIsLoading(false)
         } finally {
         }

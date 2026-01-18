@@ -79,7 +79,7 @@ export default function SinglePromptEditor({
             setAllBlogPhotos(data.photos);
             setFilteredBlogPhotos(data.photos);
         } catch (error) {
-            console.log('error getting blog photos ', error)
+            console.error('error getting blog photos ', error)
         } finally {
             setIsLoadingPhotos(false)
         }
@@ -161,7 +161,7 @@ export default function SinglePromptEditor({
 
             toast('Answers Saved!')
         } catch (error) {
-            console.log('error saving response', error);
+            console.error('error saving response', error);
             toast.error('Failed to save');
         } finally {
             setIsSaving(false);
@@ -187,7 +187,7 @@ export default function SinglePromptEditor({
             router.push(`/jot-response/${responseId}?q=${nextQuestion}`)
             setJournalText('')
         } catch (error) {
-            console.log('error saving and continuing ', error)
+            console.error('error saving and continuing ', error)
         }
     }
 

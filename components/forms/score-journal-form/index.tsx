@@ -151,7 +151,7 @@ export default function ScoreJournalForm({
             }
             toast('Grade Updated!');
         } catch (error) {
-            console.log('error updating score ', error);
+            console.error('error updating score ', error);
             toast('Grade failed to update');
         }
     }

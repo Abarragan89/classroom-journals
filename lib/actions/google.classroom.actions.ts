@@ -32,10 +32,10 @@ export async function getTeacherGoogleClassrooms(googleProviderId: string) {
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.error("Error fetching prompts:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
 
         return { success: false, message: "Error fetching prompts. Try again." };
@@ -152,10 +152,10 @@ export async function createClassroomWithGoogle(classroom: GoogleClassroom, teac
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.error("Error fetching prompts:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
 
         return { success: false, message: "Error fetching prompts. Try again." };
@@ -268,10 +268,10 @@ export async function populateStudentRosterFromGoogle(classroom: GoogleClassroom
         return { success: true, message: "Successfully added students." }
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error fetching prompts:", error.message);
+            console.error("Error fetching prompts:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
         return { success: false, message: "Error fetching prompts. Try again." };
     }

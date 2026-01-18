@@ -59,7 +59,7 @@ export async function uploadFileToS3(file: Buffer, filename: string) {
         const url = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${timestampedKey}`;
         return url;
     } catch (error) {
-        console.log('error uploading photo', error)
+        console.error('error uploading photo', error)
     }
 }
 

@@ -35,10 +35,10 @@ export async function updateUsername(username: string, teacherId: string) {
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
+            console.error('Error creating new prompt:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error adding student. Try again.' }
     }
@@ -107,10 +107,10 @@ export async function deleteTeacherAccount(teacherId: string) {
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
+            console.error('Error creating new prompt:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error adding student. Try again.' }
     }
@@ -136,10 +136,10 @@ export async function updateUserAvatar(avatarURL: string, userId: string) {
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
-            console.log('error updating avatar:', error.message);
+            console.error('error updating avatar:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error updating avatar. Try again.' }
     }

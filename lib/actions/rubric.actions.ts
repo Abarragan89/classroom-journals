@@ -23,10 +23,10 @@ export async function createRubric(teacherId: string, rubricData: InputJsonValue
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
+            console.error('Error creating new prompt:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error adding student. Try again.' }
     }

@@ -1,7 +1,7 @@
 'use client'
 import { RubricGradeDisplay, ResponseData, BlogImage } from '@/types'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import Editor from '@/components/shared/prompt-response-editor/editor'
 import { useState } from 'react'
 import { updateASingleResponse } from '@/lib/actions/response.action';
@@ -71,7 +71,7 @@ export default function SingleQuestionReview({
                 toast('Assignment Submitted!')
             }
         } catch (error) {
-            console.log('error updating responses', error)
+            console.error('error updating responses', error)
         } finally {
             setIsLoading(false)
         }
@@ -89,7 +89,7 @@ export default function SingleQuestionReview({
             setAllBlogPhotos(data.photos);
             setFilteredBlogPhotos(data.photos);
         } catch (error) {
-            console.log('error getting blog photos ', error)
+            console.error('error getting blog photos ', error)
         } finally {
             setIsLoadingPhotos(false)
         }

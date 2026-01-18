@@ -90,9 +90,9 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
         })
 
         // Return full class object with _count for cache update
-        return { 
-            success: true, 
-            message: 'Class Created!', 
+        return {
+            success: true,
+            message: 'Class Created!',
             data: {
                 id: newClassData.id,
                 name: newClassData.name,
@@ -108,7 +108,7 @@ export async function createNewClass(prevState: unknown, formData: FormData) {
             }
         }
     } catch (error) {
-        console.log('error creating classroom', error)
+        console.error('error creating classroom', error)
         return { success: false, message: 'Error creating class. Try again.' }
     }
 }
@@ -146,7 +146,7 @@ export async function updateClassInfo(prevState: unknown, formData: FormData) {
 
         return { success: true, message: 'Class Created!' }
     } catch (error) {
-        console.log('error creating classroom', error)
+        console.error('error creating classroom', error)
         return { success: false, message: 'Error creating class. Try again.' }
     }
 }
@@ -191,7 +191,7 @@ export async function deleteClassroom(prevState: unknown, formData: FormData) {
         return { success: true, message: 'Class Delete' }
 
     } catch (error) {
-        console.log('error deleting class', error)
+        console.error('error deleting class', error)
         return { success: true, message: 'Error deleting class' }
 
     }

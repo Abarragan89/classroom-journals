@@ -81,7 +81,7 @@ export default function AddClassForm({
             const response = await getTeacherGoogleClassrooms(session.googleProviderId)
             updateGoogleClassrooms(response, true)
         } catch (error) {
-            console.log('error fetching google classrooms', error)
+            console.error('error fetching google classrooms', error)
         }
     }
 

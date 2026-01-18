@@ -41,7 +41,7 @@ export default function CommentReplySection({
             }
             await toggleCommentLike(commentId, studentId)
         } catch (error) {
-            console.log('error adding comment ', error)
+            console.error('error adding comment ', error)
             if (toggleOption === 'add') {
                 setIsLikeByUser(true)
                 setTotalCommentLikes(prev => prev - 1)

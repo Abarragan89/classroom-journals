@@ -32,7 +32,7 @@ export default function UserSettings({
             await updateUsername(updatedUsername, teacherData?.id);
             toast('Username updated!')
         } catch (error) {
-            console.log('error updating username ', error)
+            console.error('error updating username ', error)
         }
     }
 
@@ -46,7 +46,7 @@ export default function UserSettings({
                 signOutUser()
             }
         } catch (error) {
-            console.log('error deleting account', error)
+            console.error('error deleting account', error)
         } finally {
             setIsLoading(false)
         }

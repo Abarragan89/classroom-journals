@@ -149,7 +149,7 @@ export default function TypingTest({
                 if (!response.success) throw new Error('Error updating wpm highscore')
                 setCurrentHighScore(currentScore)
             } catch (error) {
-                console.log('error updating user highscore', error)
+                console.error('error updating user highscore', error)
             } finally {
                 refetch();
             }

@@ -38,7 +38,7 @@ export default function NotificationSection({
             queryClient.setQueryData<UserNotification[]>(['getUserNotifications', userId], [])
             setNotificaitonsState([])
         } catch (error) {
-            console.log('error clearing all notifications', error)
+            console.error('error clearing all notifications', error)
         }
     }
 

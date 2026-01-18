@@ -25,7 +25,7 @@ export default function ToggleSpellCheck({
                 toast(toastString)
             }
         } catch (error) {
-            console.log('error toggling grade visibility', error)
+            console.error('error toggling grade visibility', error)
         }
     }
 

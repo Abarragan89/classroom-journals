@@ -68,7 +68,7 @@ export default function MultiQuestionReview({
                 toast('Assignment Submitted!')
             }
         } catch (error) {
-            console.log('error updating responses', error)
+            console.error('error updating responses', error)
         } finally {
             setIsLoading(false)
         }

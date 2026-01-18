@@ -51,7 +51,7 @@ export default function StudentRequestSection({
                 return old ? Math.max(0, old - 1) : 0;
             });
         } catch (error) {
-            console.log('error approving student request', error)
+            console.error('error approving student request', error)
         }
     }
 
@@ -70,7 +70,7 @@ export default function StudentRequestSection({
                 return old ? Math.max(0, old - 1) : 0;
             });
         } catch (error) {
-            console.log('error denying username change ', error)
+            console.error('error denying username change ', error)
         }
     }
 

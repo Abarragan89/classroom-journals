@@ -57,7 +57,7 @@ export default function BlogTableData({
                 } as PromptSession;
             });
         } catch (error) {
-            console.log('error creating student response', error)
+            console.error('error creating student response', error)
         } finally {
             setIsLoading(false)
         }

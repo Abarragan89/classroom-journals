@@ -43,7 +43,7 @@ export default function SuggestPromptForm({
             // sets the request pending to true to block user from sending multiple requests
             handleUIChange('prompt')
         } catch (error) {
-            console.log('error sending request for new user name ', error)
+            console.error('error sending request for new user name ', error)
         } finally {
             setIsSendingRequest(false)
         }

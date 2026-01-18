@@ -27,10 +27,10 @@ export async function getUserNotifications(userId: string, classId: string) {
         return userNotifications;
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
+            console.error('Error creating new prompt:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error updating student. Try again.' }
     }
@@ -48,10 +48,10 @@ export async function getUnreadUserNotifications(userId: string, classId: string
         return notificationCount;
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error creating new prompt:', error.message);
+            console.error('Error creating new prompt:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
-            console.log('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
         return { success: false, message: 'Error updating student. Try again.' }
     }

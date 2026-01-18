@@ -115,10 +115,10 @@ export async function createNewQuip(
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error assigning prompt:", error.message);
+            console.error("Error assigning prompt:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
         return { success: false, message: error, data: null }
     }
@@ -163,10 +163,10 @@ export async function respondToQuip(
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error assigning prompt:", error.message);
+            console.error("Error assigning prompt:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
         return { success: false, message: "Error assigning prompt. Try again." };
     }
@@ -196,10 +196,10 @@ export async function deleteQuip(
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error deleting quip:", error.message);
+            console.error("Error deleting quip:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
         return { success: false, message: "Error assigning prompt. Try again." };
     }
@@ -256,10 +256,10 @@ export async function getReponsesForQuip(
 
     } catch (error) {
         if (error instanceof Error) {
-            console.log("Error deleting quip:", error.message);
+            console.error("Error deleting quip:", error.message);
             console.error(error.stack);
         } else {
-            console.log("Unexpected error:", error);
+            console.error("Unexpected error:", error);
         }
         return { success: false, message: "Error assigning prompt. Try again." };
     }

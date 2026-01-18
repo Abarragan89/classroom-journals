@@ -19,7 +19,7 @@ export async function clearAllQuipAlerts(userId: string) {
         })
         return { success: true, message: 'deleted all quip alerts' }
     } catch (error) {
-        console.log('error creating classroom', error)
+        console.error('error creating classroom', error)
         return { success: false, message: 'Error creating class. Try again.' }
     }
 }

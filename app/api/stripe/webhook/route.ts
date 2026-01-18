@@ -206,6 +206,6 @@ export async function POST(req: NextRequest) {
 
         return new Response("Webhook received", { status: 200 });
     } catch (error) {
-        console.log('error in web hook user update information', error)
+        console.error('error in web hook user update information', error)
     }
 }

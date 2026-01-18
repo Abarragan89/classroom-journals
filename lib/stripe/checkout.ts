@@ -18,7 +18,7 @@ export async function checkout({
             window.location.href = data.url;
         }
     } catch (error) {
-        console.log('error fetching checkout session', error)
+        console.error('error fetching checkout session', error)
     }
 }
 
@@ -30,7 +30,7 @@ export async function cancelSubscription(subscriptionId: string) {
         const { success } = await res.json();
         if (success) return true
     } catch (error) {
-        console.log('error cancelling subscription ', error)
+        console.error('error cancelling subscription ', error)
         return false
     }
 }
