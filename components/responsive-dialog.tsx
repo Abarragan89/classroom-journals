@@ -14,12 +14,14 @@ export function ResponsiveDialog({
     setIsOpen,
     title,
     description,
+    showDescription = false,
 }: {
     children: React.ReactNode;
     isOpen: boolean;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
     title: string;
     description?: string;
+    showDescription?: boolean;
 }) {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -28,7 +30,7 @@ export function ResponsiveDialog({
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                     {description && (
-                        <DialogDescription className="sr-only">{description}</DialogDescription>
+                        <DialogDescription className={`${showDescription ? '' : 'sr-only'}`} >{description}</DialogDescription>
                     )}
                 </DialogHeader>
                 {children}
