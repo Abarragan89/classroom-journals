@@ -34,7 +34,7 @@ export default function DynamicHeader({ classId, teacherId }: { classId: string;
     }
 
     return (
-        <Link href={breadCrumbRoute} className="flex items-center hover:underline w-fit print:hidden">
+        <Link href={breadCrumbRoute} className="flex items-center -mt-4 hover:underline w-fit print:hidden">
             <ArrowLeftIcon className="mr-1" size={20} />
             {breadCrumbText}
         </Link>

@@ -50,31 +50,33 @@ export default async function Roster({
         <h2 className="text-2xl lg:text-3xl mt-2">Class Roster</h2>
         {studentRoster.length === 0 ? (
           <>
-            <p className="mt-10 text-2xl text-center">
+            <p className="mt-10 text-xl font-medium text-center">
               Add students to the roster!
             </p>
-            <div className="flex-center mt-5 scale-125">
+            <div className="flex-center mt-8 scale-125">
               <AddStudentBtn classId={classId} session={session} />
             </div>
           </>
         ) : (
-          <Table className="mt-24">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Username</TableHead>
-                <TableHead>Password</TableHead>
-                <TableHead className="text-right">&nbsp;</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <StudentRosterRow
-                studentRoster={studentRoster}
-                session={session}
-                classId={classId}
-              />
-            </TableBody>
-          </Table>
+          <div className="border rounded-md mt-20">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Username</TableHead>
+                  <TableHead>Password</TableHead>
+                  <TableHead className="text-right">&nbsp;</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <StudentRosterRow
+                  studentRoster={studentRoster}
+                  session={session}
+                  classId={classId}
+                />
+              </TableBody>
+            </Table>
+          </div>
         )}
       </div>
 

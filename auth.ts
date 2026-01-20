@@ -210,12 +210,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         token.name = user.name;
                         token.iv = iv.toString('hex');
 
+                        // Set premium subscription expiration to 14 days from now
+                        const premiumExpiresAt = new Date();
+                        premiumExpiresAt.setDate(premiumExpiresAt.getDate() + 14);
+
                         await prisma.user.update({
                             where: { id: user.id },
                             data: {
                                 name: encryptedData,
                                 username: encryptedData,
-                                iv: token.iv as string
+                                iv: token.iv as string,
+                                accountType: 'PREMIUM',
+                                subscriptionExpires: premiumExpiresAt
                             }
                         })
                     } else if (trigger === 'signIn') {

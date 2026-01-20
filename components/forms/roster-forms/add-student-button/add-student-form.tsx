@@ -10,6 +10,7 @@ import { addStudentToRoster } from "@/lib/actions/roster.action";
 import { toast } from "sonner"
 import { GoogleClassroom, Session } from "@/types";
 import { getTeacherGoogleClassrooms } from "@/lib/actions/google.classroom.actions";
+import { FaGoogle } from "react-icons/fa";
 
 
 export default function AddStudentForm({
@@ -47,7 +48,7 @@ export default function AddStudentForm({
         const { pending } = useFormStatus()
         return (
             <Button disabled={pending} type="submit" className="mx-auto opacity-90">
-                {pending ? 'Add...' : 'Add Student'}
+                {pending ? 'Adding...' : 'Add'}
             </Button>
         )
     }
@@ -64,10 +65,10 @@ export default function AddStudentForm({
 
     return (
         <form action={action} className="pb-4 pt-2 px-4">
-            <div className="flex-between">
+            <div className="flex-between gap-x-5">
                 <div>
-                    <Label htmlFor="name" className="text-right">
-                        Name
+                    <Label htmlFor="name" className="text-right relative">
+                        Name <span className="absolute -bottom-1.5 -right-2.5 text-lg text-destructive">*</span>
                     </Label>
                     <Input
                         id="name"
@@ -86,9 +87,9 @@ export default function AddStudentForm({
                         placeholder="optional"
                     />
                 </div>
-            </div>
             <div className="flex-center mt-5">
                 <CreateButton />
+            </div>
             </div>
 
             <input
@@ -111,13 +112,13 @@ export default function AddStudentForm({
 
             {session?.googleProviderId && (
                 <div className="flex flex-col mx-auto w-2/3">
-                    <p className="my-3 text-center relative">
-                        <span className="relative z-10 bg-background px-3">or</span>
+                    <p className="my-5 text-center relative">
+                        <span className="relative z-10 bg-background px-5">or</span>
                         <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
                     </p>
 
-                    <Button type="button" onClick={fetchGoogleClassrooms} className="mx-auto">
-                        Import From Google Classroom
+                    <Button size="lg" type="button" onClick={fetchGoogleClassrooms} className="mx-auto">
+                     <FaGoogle />   Import From Google Classroom
                     </Button>
                 </div>
             )}

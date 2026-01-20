@@ -389,8 +389,8 @@ export default function SinglePromptEditor({
                 {questionNumber === '2' && (
                     <>
                         {/* Save and Submit Buttons */}
-                        <div className="flex flex-col justify-center items-center mt-12 shadow-lg">
-                            <Card className='relative px-8'>
+                        <div className="flex flex-col justify-center items-center mt-12">
+                            <Card className='relative px-8 shadow-lg'>
                                 <CardHeader>
                                     <p className='lg:text-lg font-medium leading-relaxed tracking-wider mt-7'>Add a Cover Photo</p>
                                     <p className='absolute top-3 right-9 text-sm text-muted-foreground'>Question 3 of 3</p>

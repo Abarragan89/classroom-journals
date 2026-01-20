@@ -154,7 +154,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     }
 
     return (
-        <form action={action} className="grid relative space-y-8">
+        <form action={action} className="grid relative space-y-5">
             {questions.map((question, index) => (
                 <Card key={question.name} className="shadow-md hover:scale-[1.01] transition-transform duration-100">
                     <CardContent>

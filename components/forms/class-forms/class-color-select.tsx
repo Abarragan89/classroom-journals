@@ -21,7 +21,7 @@ export default function ColorSelect({ setColor, selectedColor }: ColorSelectProp
                     key={value}
                     onClick={() => setColor(value)}
                     className={`
-                        w-[30px] h-[30px] rounded-full hover:cursor-pointer transition-all
+                        w-[25px] h-[25px] rounded-full hover:cursor-pointer transition-all
                         ${selectedColor === value ? 'ring-4 ring-ring ring-offset-2 ring-offset-background scale-110' : 'hover:scale-105'}
                     `}
                     style={{ backgroundColor: `var(--chart-${value})` }}

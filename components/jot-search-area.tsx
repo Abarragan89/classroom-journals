@@ -6,6 +6,8 @@ import PromptCard from "./shared/prompt-card"
 import { SearchOptions } from "@/types"
 import { Classroom } from "@/types"
 import PaginationList from "./shared/prompt-filter-options/pagination-list"
+import CreateNewJot from "./modalBtns/create-new-jot"
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 
 export default function JotSearchArea({
     initialPrompts,
@@ -83,7 +85,21 @@ export default function JotSearchArea({
                     />
                 </div>
             ) : (
-                <p className="text-center italic text-2xl mt-10">No Jots in your Library</p>
+                <>
+                    <p className="text-center font-bold text-muted-foreground text-2xl mt-10">No Jots in your Library</p>
+                    {/* <p className="text-center">Create Your first Jot</p> */}
+                    <Card className="mt-5 w-fit mx-auto ">
+                        <CardHeader className="pb-0">
+                            <CardTitle className="text-center text-2xl text-primary">What's a Jot?</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-center text-muted-foreground max-w-sm">Jots are writing prompts (i.e. blogs) or assessments that you can assign to your classes.</p>
+                            <div className="flex-center mt-5">
+                                <CreateNewJot />
+                            </div>
+                        </CardContent>
+                    </Card>
+                </>
             )}
         </div>
     )
