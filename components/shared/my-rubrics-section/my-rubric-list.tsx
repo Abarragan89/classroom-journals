@@ -29,30 +29,32 @@ export default function MyRubricList({
     return (
         <>
             <p className="text-center text-success my-3">Upgrade to Premium to have AI automatically grade blogs using these rubrics</p>
-            <Table className="rounded-lg">
-                <TableCaption>Use these rubrics when grading student journals/essays.</TableCaption>
-                <TableHeader className="rounded-t-lg">
-                    <TableRow>
-                        <TableHead className="w-[100px]">My Rubrics</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {teacherRubrics.map((rubric: Rubric) => (
-                        <TableRow key={rubric.id}>
-                            <TableCell
-                                onClick={() => toggleShowMyRubrics(rubric)}
-                                className="font-medium line-clamp-1 cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                            >
-                                {rubric.title}
-                            </TableCell>
+            <div className="border rounded-md">
+                <Table>
+                    {/* <TableCaption>Use these rubrics when grading student journals/essays.</TableCaption> */}
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[100px]">My Rubrics</TableHead>
                         </TableRow>
-                    ))}
-                </TableBody>
-                <TableFooter>
-                    <TableRow>
-                    </TableRow>
-                </TableFooter>
-            </Table>
+                    </TableHeader>
+                    <TableBody>
+                        {teacherRubrics.map((rubric: Rubric) => (
+                            <TableRow key={rubric.id}>
+                                <TableCell
+                                    onClick={() => toggleShowMyRubrics(rubric)}
+                                    className="font-medium line-clamp-1 cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                                >
+                                    {rubric.title}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
         </>
     )
 }

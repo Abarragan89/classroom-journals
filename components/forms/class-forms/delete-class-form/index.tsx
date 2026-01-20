@@ -30,11 +30,12 @@ export default function DeleteClassForm({ classroomId, closeModal, teacherId }: 
                 if (!old) return old;
                 return old.filter((classroom: Class) => classroom.id !== classroomId);
             });
+
             toast.error('Class Deleted!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
         }
-    }, [state, router, pathname])
+    }, [state, router, pathname, queryClient, teacherId, classroomId])
 
     const [userText, setUserText] = useState<string>('')
 

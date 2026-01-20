@@ -61,7 +61,7 @@ export default function AddStudentBtn({
 
             </ResponsiveDialog>
             <Button className="rounded-full z-20" onClick={() => setIsOpenModal(true)}>
-                <UserRoundPlus /> Add Student
+                <UserRoundPlus /> Add Students
             </Button>
         </>
     )

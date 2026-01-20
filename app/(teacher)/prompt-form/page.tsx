@@ -28,7 +28,7 @@ export default async function CreatePrompt({
                 {type.toUpperCase() === 'BLOG' ? (
                     <>
                         <h1 className="h1-bold mt-5">New Blog Prompt</h1>
-                        <div className="max-w-[600px] mx-auto mt-5">
+                        <div className="max-w-[600px] mx-auto mt-8">
                             <SinglePromptForm teacherId={teacherId} />
                         </div>
                     </>

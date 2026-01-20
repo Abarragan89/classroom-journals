@@ -59,7 +59,7 @@ export default async function DashboardLayout({
                         classId={classId}
                         teacherId={teacherId}
                     />
-                    <h1 className="h1-bold mt-2 line-clamp-1 print:hidden">{classroomData.name}</h1>
+                    <h1 className="h1-bold mt-4 line-clamp-1 print:hidden">{classroomData.name}</h1>
                     {children}
                 </main>
             </SidebarInset>

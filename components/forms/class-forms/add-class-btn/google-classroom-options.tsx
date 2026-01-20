@@ -28,7 +28,7 @@ export default function GoogleClassroomOptions({
         try {
             setIsLoading(true)
             const classroomUrl = await createClassroomWithGoogle(classInfo, session?.user?.id)
-            router.push(`/classroom/${classroomUrl}/${teacherId}`)
+            router.push(`classroom/${classroomUrl}/${teacherId}/roster`)
         } catch (error) {
             console.error('error creating classroom', error)
             setIsLoading(false)
@@ -50,7 +50,7 @@ export default function GoogleClassroomOptions({
             {googleClassrooms?.length > 0 ? (
                 <p className='font-bold text-md text-center mb-3'>Choose a class to import</p>
             ) : (
-                <div className='space-y-2 mb-7'>
+                <div className='space-y-2'>
                     <p className='text-center text-destructive font-bold mb-5'>No Google Classes Found</p>
                     <ul className='text-center
                     space-y-1 text-sm'>
@@ -67,13 +67,13 @@ export default function GoogleClassroomOptions({
             {googleClassrooms?.length > 0 && googleClassrooms.map((classroom) => (
                 <div
                     onClick={() => createClassroom(classroom)}
-                    className='grid grid-cols-4 p-1 bg-gray-300  rounded-xl mx-4 mb-6 border-[1px] border-gray-300 hover:cursor-pointer hover:bg-white'
+                    className='grid grid-cols-4 p-3 items-center rounded-xl mx-4 mb-6 bg-card border hover:cursor-pointer hover:border-primary hover:shadow-md'
                     key={classroom.id}>
                     <Image
                         src='/images/google-classroom-logo.png'
                         alt='Google classroom logo'
-                        height={75}
-                        width={75}
+                        height={65}
+                        width={65}
                         className="border-[2px] border-l-[4px] border-r-[4px] rounded-xl"
                         style={{ borderColor: "rgb(255, 194, 38)" }}
                     />

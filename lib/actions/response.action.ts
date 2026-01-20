@@ -5,6 +5,7 @@ import { InputJsonArray, JsonValue } from "@prisma/client/runtime/library";
 import { gradeResponseWithAI } from "./openai.action";
 import { ResponseStatus } from "@prisma/client";
 import { requireAuth } from "./authorization.action";
+import { decryptText } from "../utils";
 
 // Create  a single response to a student
 export async function createStudentResponse(
@@ -120,7 +121,17 @@ export async function createStudentResponse(
             }
         })
 
-        return { success: true, message: "responses submitted", data: newResponse };
+        const decryptedResponse = {
+            ...newResponse,
+            student: {
+                ...newResponse.student,
+                iv: undefined,
+                name: newResponse.student.name ? decryptText(newResponse.student.name, newResponse.student.iv as string) : null,
+                username: newResponse.student.username ? decryptText(newResponse.student.username, newResponse.student.iv as string) : null,
+            }
+        };
+
+        return { success: true, message: "responses submitted", data: decryptedResponse };
 
     } catch (error) {
         if (error instanceof Error) {

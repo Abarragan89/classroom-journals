@@ -178,10 +178,10 @@ export default function RubricDisplay({ rubricGrade, studentName, isPrintView = 
                                     </p>
                                 </div>
                                 {/* Rubric Table */}
-                                <div className="overflow-auto">
+                                <div className="overflow-auto broder rounded-md">
                                     <Table>
                                         <TableHeader>
-                                            <TableRow className="border-b">
+                                            <TableRow className="">
                                                 <TableHead className="w-48 min-w-48 border-r">Category</TableHead>
                                                 {scoreLevels.map(level => (
                                                     <TableHead key={level} className="text-center min-w-32 border-r last:border-r-0">

@@ -21,6 +21,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { FaGoogle } from "react-icons/fa";
 
 export default function AddClassForm({
     teacherId,
@@ -58,7 +59,7 @@ export default function AddClassForm({
             closeModal()
             router.push(`/classroom/${state.data.id}/${teacherId}/roster`);
         }
-    }, [state, pathname, router, queryClient, teacherId, closeModal])
+    }, [state, pathname, router, queryClient, teacherId])
 
     const [selectedColor, setSelectedColor] = useState<string>('1'); // Default to chart-1
 
@@ -107,8 +108,8 @@ export default function AddClassForm({
         <form action={action} className="py-4 px-2">
             <div className="grid grid-cols-2 gap-x-5 mb-5">
                 <div className="flex flex-col col-span-1 items-start space-y-1">
-                    <Label htmlFor="name" className="text-right">
-                        Name
+                    <Label htmlFor="name" className="text-right relative">
+                        Name <span className="absolute -bottom-1.5 -right-2.5 text-lg text-destructive">*</span>
                     </Label>
                     <Input
                         id="name"
@@ -130,8 +131,8 @@ export default function AddClassForm({
             </div>
             <div className="grid grid-cols-3 gap-x-5 mb-4">
                 <div className="flex flex-col col-span-1 items-start space-y-1">
-                    <Label htmlFor="year" className="text-right">
-                        Year
+                    <Label htmlFor="year" className="text-right relative">
+                        Year <span className="absolute -bottom-1.5 -right-2.5 text-lg text-destructive">*</span>
                     </Label>
                     <Input
                         id="year"
@@ -177,7 +178,7 @@ export default function AddClassForm({
                     <Label htmlFor="color" className="text-right">
                         Color
                     </Label>
-                    <div>
+                    <div className="mt-2">
                         <ColorSelect setColor={handleColorSelect} selectedColor={selectedColor} />
                         {/* Hidden input to store selected color */}
                         <input
@@ -204,18 +205,18 @@ export default function AddClassForm({
                 hidden
             />
             {state && !state.success === false && (
-                <p className="text-center text-destructive mt-3">{state.message}</p>
+                <p className="text-center text-destructive">{state.message}</p>
             )}
 
             {session?.googleProviderId && (
                 <div className="flex flex-col mx-auto w-2/3">
-                    <p className="my-3 text-center relative">
+                    <p className="my-5 text-center relative">
                         <span className="relative z-10 bg-background px-3">or</span>
-                        <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
+                        <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t"></span>
                     </p>
 
-                    <Button type="button" onClick={fetchGoogleClassrooms} className="mx-auto">
-                        Import From Google Classroom
+                    <Button size={"lg"} type="button" onClick={fetchGoogleClassrooms} className="mx-auto">
+                        <FaGoogle />  Import From Google Classroom
                     </Button>
                 </div>
             )}

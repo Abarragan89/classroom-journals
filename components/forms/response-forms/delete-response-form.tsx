@@ -4,6 +4,7 @@ import { useFormStatus } from "react-dom"
 import { deleteResponse } from "@/lib/actions/response.action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function DeleteResponseForm({
     responseId,
@@ -18,7 +19,9 @@ export default function DeleteResponseForm({
 
 }) {
     
+    
     const router = useRouter();
+    const queryClient = useQueryClient();
     const [state, action] = useActionState(deleteResponse, {
         success: false,
         message: ''
@@ -30,6 +33,16 @@ export default function DeleteResponseForm({
             toast('Assignment removed!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
+
+            // update the useQueryClient cache 
+            queryClient.setQueryData(['getSingleSessionData', sessionId], (oldData: any) => {
+                if (!oldData) return oldData;
+                return {
+                    ...oldData,
+                    responses: oldData.responses.filter((response: any) => response.id !== responseId)
+                }
+            });
+            
             router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${sessionId}`);
         }
     }, [state])
