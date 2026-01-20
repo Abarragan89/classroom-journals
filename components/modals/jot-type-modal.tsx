@@ -1,5 +1,4 @@
 'use client'
-import { ClipboardListIcon, NotebookPen } from "lucide-react"
 import { ResponsiveDialog } from "../responsive-dialog"
 import { Button } from "../ui/button"
 import Link from "next/link"
@@ -35,7 +34,6 @@ export default function JotTypeModal({
                         <div className="flex flex-col items-center gap-1">
                             <div className="flex flex-col items-center">
                                 <div className="flex-center">
-                                    {/* <NotebookPen size={35} /> */}
                                     <span className="text-2xl font-semibold ml-1 tracking-wider">Blog</span>
                                 </div>
                                 <span className="text-sm text-muted-foreground">(Writing Prompt)</span>
@@ -49,7 +47,6 @@ export default function JotTypeModal({
                         <div className="flex flex-col items-center gap-1">
                             <div className="flex flex-col items-center">
                                 <div className="flex-center">
-                                    {/* <NotebookPen size={35} /> */}
                                     <span className="text-2xl font-semibold ml-1 tracking-wider">Assessment</span>
                                 </div>
                                 <span className="text-sm text-muted-foreground">(Exit Ticket / Quiz)</span>
