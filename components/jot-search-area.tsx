@@ -90,7 +90,7 @@ export default function JotSearchArea({
                     {/* <p className="text-center">Create Your first Jot</p> */}
                     <Card className="mt-5 w-fit mx-auto ">
                         <CardHeader className="pb-0">
-                            <CardTitle className="text-center text-2xl text-primary">What's a Jot?</CardTitle>
+                            <CardTitle className="text-center text-2xl text-primary">What&apos;s a Jot?</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <p className="text-center text-muted-foreground max-w-sm">Jots are writing prompts (i.e. blogs) or assessments that you can assign to your classes.</p>

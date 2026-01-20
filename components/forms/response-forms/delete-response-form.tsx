@@ -5,6 +5,7 @@ import { deleteResponse } from "@/lib/actions/response.action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { PromptSession, Response } from "@/types";
 
 export default function DeleteResponseForm({
     responseId,
@@ -35,17 +36,17 @@ export default function DeleteResponseForm({
             });
 
             // update the useQueryClient cache 
-            queryClient.setQueryData(['getSingleSessionData', sessionId], (oldData: any) => {
+            queryClient.setQueryData<PromptSession>(['getSingleSessionData', sessionId], (oldData) => {
                 if (!oldData) return oldData;
                 return {
                     ...oldData,
-                    responses: oldData.responses.filter((response: any) => response.id !== responseId)
+                    responses: oldData?.responses?.filter((response: Response) => response.id !== responseId)
                 }
             });
-            
+
             router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${sessionId}`);
         }
-    }, [state])
+    }, [state, router, queryClient, sessionId, responseId, classId, teacherId])
 
     function DeleteButton() {
         const { pending } = useFormStatus();

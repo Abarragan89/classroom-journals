@@ -22,7 +22,7 @@ export default function DeleteClassForm({ classroomId, closeModal, teacherId }: 
     const queryClient = useQueryClient();
 
     //redirect if the state is success
-    useEffect(() => {
+    useEffect(() => { 
         if (state?.success) {
             closeModal()
             // Remove deleted class from cache
