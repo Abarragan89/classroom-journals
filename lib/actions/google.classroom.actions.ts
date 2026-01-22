@@ -183,7 +183,8 @@ export async function populateStudentRosterFromGoogle(classroom: GoogleClassroom
         }
         const studentdata = await res.json(); // this is coming from google classroom
 
-        await prisma.$transaction(async (prisma) => {
+        // let result: User[] | null = null;
+        const result = await prisma.$transaction(async (prisma) => {
 
             // Get existing students by googleId in one query
             const existingStudents = await prisma.user.findMany({
@@ -230,6 +231,7 @@ export async function populateStudentRosterFromGoogle(classroom: GoogleClassroom
                 };
             });
 
+
             // Create only new students, skipping duplicates
             if (studentsToAdd?.length > 0) {
                 await prisma.user.createMany({
@@ -262,10 +264,39 @@ export async function populateStudentRosterFromGoogle(classroom: GoogleClassroom
                     skipDuplicates: true,
                 });
             }
-            return { success: true, message: "Successfully added students." }
-        },
-            { timeout: 20000 })
-        return { success: true, message: "Successfully added students." }
+
+
+            // Return all the students in classroom to send back and update the client
+            const finalStudentsInClass = await prisma.classUser.findMany({
+                where: {
+                    classId: classId,
+                    role: ClassUserRole.STUDENT
+                },
+                select: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            iv: true,
+                            username: true,
+                            password: true,
+                        }
+                    }
+                }
+            });
+
+            const decryptedStudents = finalStudentsInClass
+                .filter(studentObj => studentObj.user) // Ensure user exists
+                .map(({ user }) => ({ // Destructure `user` from `studentObj`
+                    id: user.id,
+                    username: decryptText(user.username as string, user.iv as string),
+                    password: decryptText(user.password as string, user.iv as string),
+                    name: decryptText(user.name as string, user.iv as string) // Decrypt name
+                }));
+
+            return { success: true, message: "Successfully added students.", data: decryptedStudents };
+        }, { timeout: 20000 })
+        return { success: true, message: "Successfully added students.", data: result };
     } catch (error) {
         if (error instanceof Error) {
             console.error("Error fetching prompts:", error.message);
@@ -273,6 +304,6 @@ export async function populateStudentRosterFromGoogle(classroom: GoogleClassroom
         } else {
             console.error("Unexpected error:", error);
         }
-        return { success: false, message: "Error fetching prompts. Try again." };
+        return { success: false, message: "Error fetching prompts. Try again.", data: null };
     }
 }

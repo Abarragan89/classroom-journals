@@ -38,9 +38,6 @@ export default function AssignmentListSection({
         },
         initialData: initialPrompts,
         staleTime: 1000 * 60 * 5, // 5 minutes
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
     })
 
     if (error) {
@@ -110,7 +107,7 @@ export default function AssignmentListSection({
 
     return (
         <>
-            < div className="flex flex-col-reverse items-end lg:flex-row lg:items-start justify-between">
+            < div className="flex flex-col-reverse items-center lg:flex-row lg:items-start justify-between">
                 {fetchedPrompts && fetchedPrompts?.length > 0 ? (
                     <div className="flex-2 w-full lg:mr-10 space-y-5">
                         {fetchedPrompts?.map((prompt: PromptSession) => (
@@ -130,7 +127,7 @@ export default function AssignmentListSection({
                         />
                     </div>
                 ) : (
-                    <p className="flex-1 text-center">No Assignments</p>
+                    <p className="flex-1 text-center font-medium text-xl">No Assignment Posted</p>
                 )}
                 <div className="flex-1 sticky top-5 mb-5 w-full flex flex-wrap md:flex-col lg:flex-col items-stretch lg:min-w-[280px] gap-3">
                     {/* Search Bar (always full width) */}

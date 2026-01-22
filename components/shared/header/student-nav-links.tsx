@@ -26,9 +26,6 @@ export default function StudentNavLinks({
         },
         placeholderData: 0,
         staleTime: 1000 * 60 * 2, // 2 minutes
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
     })
 
     return (

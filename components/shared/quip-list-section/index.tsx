@@ -37,9 +37,6 @@ export default function QuipListSection({
         },
         initialData: allQuips,
         staleTime: 1000 * 60 * 5, // 3 minutes
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
     });
 
     function closeModal() {

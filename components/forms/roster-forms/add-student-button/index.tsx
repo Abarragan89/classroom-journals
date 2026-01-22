@@ -53,7 +53,6 @@ export default function AddStudentBtn({
                     :
                     <AddStudentForm
                         classId={classId}
-                        closeModal={closeModal}
                         session={session as Session}
                         updateGoogleClassrooms={updateGoogleClassrooms}
                     />

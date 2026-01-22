@@ -60,6 +60,14 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
                 commentCoolDown: 20,
                 iv: iv.toString('hex'),
                 password: encryptedPassword,
+            },
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                commentCoolDown: true,
+                iv: true,
+                password: true,
             }
         })
 
@@ -70,7 +78,16 @@ export async function addStudentToRoster(prevState: unknown, formData: FormData)
                 role: ClassUserRole.STUDENT
             }
         })
-        return { success: true, message: 'Student Successfully Added!', data: classId }
+
+        const descryptedStudent = {
+            id: newStudent.id,
+            name: decryptText(newStudent.name as string, newStudent.iv as string),
+            username: decryptText(newStudent.username as string, newStudent.iv as string),
+            commentCoolDown: newStudent.commentCoolDown,
+            password: password
+        }
+
+        return { success: true, message: 'Student Successfully Added!', data: descryptedStudent }
 
     } catch (error) {
         // Improved error logging
@@ -131,7 +148,7 @@ export async function editStudent(prevState: unknown, formData: FormData) {
             })
             // Password is already in use
             if (studentPasswords.includes(password as string)) {
-                return { success: false, message: 'Password already in use' }
+                return { success: false, message: 'Password already in use', data: null }
             }
         }
 
@@ -141,25 +158,40 @@ export async function editStudent(prevState: unknown, formData: FormData) {
         const { encryptedData: encryptedPassword } = encryptText(password?.trim() as string, iv);
         const coolDownNumber = commentCoolDown === 'disabled' ? null : Number(commentCoolDown)
 
-        await prisma.$transaction(async (prisma) => {
-            // Update the student
-            await prisma.user.update({
-                where: { id: studentId },
-                data: {
-                    name: encryptedName,
-                    username: encryptedNickName,
-                    commentCoolDown: coolDownNumber,
-                    password: encryptedPassword,
-                    iv: iv.toString('hex')
-                }
-            })
+        // Update the student
+        const updatedUser = await prisma.user.update({
+            where: { id: studentId },
+            data: {
+                name: encryptedName,
+                username: encryptedNickName,
+                commentCoolDown: coolDownNumber,
+                password: encryptedPassword,
+                iv: iv.toString('hex')
+            },
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                commentCoolDown: true,
+                password: true,
+                iv: true,
+            }
         })
 
-        return { success: true, message: 'Student Successfully Updated!' }
+        // Decrypt updated user data before returning
+        const decryptedUpdatedUser = {
+            id: updatedUser.id,
+            name: decryptText(updatedUser.name as string, updatedUser.iv as string),
+            username: decryptText(updatedUser.username as string, updatedUser.iv as string),
+            commentCoolDown: updatedUser.commentCoolDown,
+            password: decryptText(updatedUser.password as string, updatedUser.iv as string),
+        }
+
+        return { success: true, message: 'Student Successfully Updated!', data: decryptedUpdatedUser }
 
     } catch (error) {
         if (error instanceof Error) {
-            console.error('Error creating new prompt:', error.message);
+            console.error('Error updating student:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
             console.error('Unexpected error:', error);
@@ -189,10 +221,10 @@ export async function deleteStudent(prevState: unknown, formData: FormData) {
                 where: { id: studentId }
             })
         })
-        return { success: true, message: 'Student Successfully Deleted!' }
+        return { success: true, message: 'Student Successfully Deleted!', data: studentId }
     } catch (error) {
         if (error instanceof Error) {
-            console.error('Error creating new prompt:', error.message);
+            console.error('Error deleting student:', error.message);
             console.error(error.stack); // Log stack trace for better debugging
         } else {
             console.error('Unexpected error:', error);
