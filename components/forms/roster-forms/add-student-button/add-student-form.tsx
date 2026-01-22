@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { addStudentToRoster } from "@/lib/actions/roster.action";
 import { toast } from "sonner"
-import { GoogleClassroom, Session } from "@/types";
+import { GoogleClassroom, Session, User } from "@/types";
 import { getTeacherGoogleClassrooms } from "@/lib/actions/google.classroom.actions";
 import { FaGoogle } from "react-icons/fa";
 import { useQueryClient } from "@tanstack/react-query";
@@ -40,9 +40,8 @@ export default function AddStudentForm({
         if (state?.success) {
             toast.success(`${state?.data?.name || 'Student'} Added!`);
             // update quietClient cache 
-            queryClient.setQueryData(['getStudentRoster', classId], (old: any) => {
-                if (!old || !state.data) return old;
-                return [...old, state.data];
+            queryClient.setQueryData<User[]>(['getStudentRoster', classId], (old) => {
+                return [...(old ?? []), state.data as User];
             });
         }
         inputEl.current?.focus();

@@ -37,9 +37,6 @@ export default function MyRubricSection({
         },
         initialData: teacherRubrics || [],
         staleTime: 1000 * 60 * 10, // 10 minutes
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
     })
 
     // Function to handle rubric updates to send user back to list with updated rubric

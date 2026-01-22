@@ -18,9 +18,6 @@ export default function UpgradeAccountBtn({
             return subscriptionData;
         },
         staleTime: 1000 * 60 * 10, // 10 minutes - subscription status rarely changes
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
     })
 
     if (isPending) return

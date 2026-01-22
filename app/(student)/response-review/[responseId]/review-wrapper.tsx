@@ -34,9 +34,6 @@ export default function ReviewWrapper({
         },
         initialData: singleResponse,
         staleTime: 1000 * 60 * 5, // 5 minutes
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
     })
     const [questions, setQuestions] = useState<ResponseData[]>(responseData?.response as unknown as ResponseData[])
 

@@ -50,7 +50,7 @@ export default function OptionsMenu({ classData, teacherId }: { classData: Class
                 <EditClassForm
                     classData={classData}
                     closeModal={closeEditModal}
-                    onSuccess={(updatedClass) => queryClient.setQueryData(['teacherClassrooms', teacherId], (oldData: any) => {
+                    onSuccess={(updatedClass: Class) => queryClient.setQueryData<Class[]>(['teacherClassrooms', teacherId], (oldData) => {
                         if (!oldData) return oldData;
                         return oldData.map((cls: Class) => cls.id === classData.id ? { ...cls, ...updatedClass } : cls);
                     })}

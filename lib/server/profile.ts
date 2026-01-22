@@ -1,7 +1,7 @@
 import { requireAuth } from "../actions/authorization.action";
 import { prisma } from "@/db/prisma";
 import { decryptText } from "../utils";
-import { ClassUserRole, TeacherAccountType } from "@prisma/client";
+import { TeacherAccountType } from "@prisma/client";
 
 export async function getUserAvatarURL(userId: string) {
     const session = await requireAuth();

@@ -37,7 +37,7 @@ export default function DeleteStudentForm({
         if (state?.success) {
             closeModal()
             // update cache
-            queryClient.setQueryData(['getStudentRoster', classId], (old: any) => {
+            queryClient.setQueryData<User[]>(['getStudentRoster', classId], (old) => {
                 if (!old) return old;
                 return old.filter((student: User) => student.id !== studentInfo.id);
             });

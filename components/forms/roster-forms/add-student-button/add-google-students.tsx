@@ -1,10 +1,9 @@
 import { Button } from '@/components/ui/button'
-import { GoogleClassroom, Session } from '@/types'
+import { GoogleClassroom, Session, User } from '@/types'
 import Image from 'next/image'
 import React from 'react'
 import { useState } from 'react'
 import { populateStudentRosterFromGoogle } from '@/lib/actions/google.classroom.actions'
-import { useRouter } from 'next/navigation'
 import LoadingAnimation from '@/components/loading-animation'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -32,9 +31,9 @@ export default function AddGoogleStudents({
             const { data: updatedRoster } = await populateStudentRosterFromGoogle(classInfo, session?.user?.id, classId)
             closeModal();
             // update client cache 
-            queryClient.setQueryData(['getStudentRoster', classId], (old: any) => {
+            queryClient.setQueryData<User[]>(['getStudentRoster', classId], (old) => {
                 if (!old || !updatedRoster) return old;
-                return [...updatedRoster?.data];
+                return [...updatedRoster?.data as User[]];
             });
         } catch (error) {
             console.error('error creating classroom', error)

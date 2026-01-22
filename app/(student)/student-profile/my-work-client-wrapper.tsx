@@ -27,9 +27,6 @@ export default function MyWorkClientWrapper({
         },
         initialData: studentResponses,
         staleTime: 1000 * 60 * 5, // 5 minutes
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
     })
 
     // Determine Returned Work 

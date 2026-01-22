@@ -47,9 +47,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
       return unreadCount as number;
     },
     staleTime: 1000 * 60 * 2, // 2 minutes
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
   })
 
   const { data: studentRequestCount } = useQuery({
@@ -63,9 +60,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
       return data.count as number;
     },
     staleTime: 1000 * 60 * 2, // 2 minutes
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
   })
 
 

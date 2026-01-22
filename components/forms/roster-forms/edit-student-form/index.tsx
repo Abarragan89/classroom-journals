@@ -44,9 +44,9 @@ export default function EditStudentForm({
             toast.success('Student Updated!');
             closeModal()
             // update cache
-            queryClient.setQueryData(['getStudentRoster', classId], (old: any) => {
+            queryClient.setQueryData<User[]>(['getStudentRoster', classId], (old) => {
                 if (!old) return old;
-                return old.map((student: User) => student.id === studentInfo.id ? { ...student, ...state.data } : student);
+                return old.map((student: User) => student.id === studentInfo.id ? { ...student, ...state.data } as User : student);
             });
         } else if (state?.success === false && state.message !== '') {
             toast.error(state.message, {

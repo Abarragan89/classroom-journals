@@ -22,7 +22,8 @@ export default function RosterTable({ studentRoster, session, classId }: {
             const { students } = await response.json();
             return students as User[];
         },
-        initialData: studentRoster
+        initialData: studentRoster,
+        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 
 

@@ -75,9 +75,9 @@ export default function AssignmentSectionClient({
 
     return (
         <>
-            < div className="flex flex-col-reverse items-end md:flex-row md:items-start justify-between">
+            < div className="flex flex-col-reverse items-center md:flex-row md:items-start justify-between">
                 {fetchedPrompts?.length <= 0 ? (
-                    <p className="flex-1 text-center">No Assignments</p>
+                    <p className="flex-1 text-center font-medium text-xl mt-3">No Assignments Posted</p>
                 ) : (
                     <div className="flex-2 w-full md:mr-10">
                         {fetchedPrompts.map((response: Response) => (

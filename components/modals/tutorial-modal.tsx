@@ -70,7 +70,7 @@ export default function TutorialModal({ isModalOpen }: { isModalOpen: boolean })
                 <div className="flex items-start gap-3">
                     <TrendingUp className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                     <div>
-                        <p className="font-semibold text-sm mb-1">You're all set!</p>
+                        <p className="font-semibold text-sm mb-1">You&apos;re all set!</p>
                         <p className="text-sm text-muted-foreground">
                             Track student progress, view responses, and provide feedback in the <span className="font-semibold text-foreground">Assignments</span> tab.
                         </p>

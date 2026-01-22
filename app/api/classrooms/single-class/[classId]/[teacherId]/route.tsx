@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSingleClassroom } from "@/lib/server/classroom";
 
-export async function GET(req: NextRequest, { params }: { params: { teacherId: string, classId: string } }) {
+export async function GET(
+    req: NextRequest,
+    { params }: { params: Promise<{ teacherId: string, classId: string }> }) {
     try {
 
-        const { teacherId, classId } = params;
+        const { teacherId, classId } = await params;
 
         if (!teacherId || !classId) {
             return NextResponse.json({ error: "Missing teacherId or classId" }, { status: 400 });

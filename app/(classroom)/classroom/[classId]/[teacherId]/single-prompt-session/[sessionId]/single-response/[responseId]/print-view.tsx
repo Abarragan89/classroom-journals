@@ -28,9 +28,6 @@ export default function PrintViewBlog({
         },
         initialData: response,
         staleTime: 1000 * 60 * 5, // 5 minutes
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
     })
 
     return (

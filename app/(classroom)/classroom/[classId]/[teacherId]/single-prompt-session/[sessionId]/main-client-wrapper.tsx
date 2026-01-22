@@ -22,7 +22,7 @@ export default function MainClientWrapper({
     sessionId: string
 }) {
 
-    const { data: promptSessionData } = useQuery({
+    const { data: promptSessionData, refetch } = useQuery({
         queryKey: ['getSingleSessionData', sessionId],
         queryFn: async () => {
             const response = await fetch(`/api/prompt-sessions/${sessionId}?teacherId=${teacherId}`);
@@ -33,10 +33,7 @@ export default function MainClientWrapper({
             return promptSession as PromptSession;
         },
         initialData: promptSession,
-        staleTime: 1000 * 60 * 5, // 5 minutes
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
+        staleTime: 1000,
     })
 
 
@@ -88,12 +85,13 @@ export default function MainClientWrapper({
     return (
         <div>
             <div className="flex">
-                <div className='space-y-4'>
+                <div className='space-y-4 w-full'>
                     <p className="text-muted-foreground">Class Average: {classAverage}</p>
                     <ToggleGradesVisible
                         promptSessionId={promptSessionData?.id}
                         gradesVisibility={promptSessionData?.areGradesVisible}
                         teacherId={teacherId}
+                        refetch={refetch}
                     />
                 </div>
             </div>
