@@ -2,7 +2,7 @@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
@@ -11,16 +11,15 @@ import { toast } from "sonner"
 import { GoogleClassroom, Session } from "@/types";
 import { getTeacherGoogleClassrooms } from "@/lib/actions/google.classroom.actions";
 import { FaGoogle } from "react-icons/fa";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 export default function AddStudentForm({
-    closeModal,
     session,
     updateGoogleClassrooms,
     classId
 
 }: {
-    closeModal: () => void,
     session: Session,
     classId: string,
     updateGoogleClassrooms: (classes: GoogleClassroom[], isOpen: boolean) => void
@@ -32,22 +31,28 @@ export default function AddStudentForm({
     })
     const pathname = usePathname()
     const router = useRouter();
+    const queryClient = useQueryClient();
+    const inputEl = useRef<HTMLInputElement>(null);
 
 
     //redirect if the state is success
     useEffect(() => {
         if (state?.success) {
-            toast.success('Student Added!');
-            closeModal()
-            router.push(`/classroom/${state.data}/${session.user.id}/roster`); // Navigates without losing state instantly
+            toast.success(`${state?.data?.name || 'Student'} Added!`);
+            // update quietClient cache 
+            queryClient.setQueryData(['getStudentRoster', classId], (old: any) => {
+                if (!old || !state.data) return old;
+                return [...old, state.data];
+            });
         }
+        inputEl.current?.focus();
     }, [state, pathname, router])
 
 
     const CreateButton = () => {
         const { pending } = useFormStatus()
         return (
-            <Button disabled={pending} type="submit" className="mx-auto opacity-90">
+            <Button disabled={pending} type="submit" className="mx-auto w-[80px]">
                 {pending ? 'Adding...' : 'Add'}
             </Button>
         )
@@ -72,6 +77,7 @@ export default function AddStudentForm({
                     </Label>
                     <Input
                         id="name"
+                        ref={inputEl}
                         required
                         placeholder="required"
                         name="name"
@@ -87,9 +93,9 @@ export default function AddStudentForm({
                         placeholder="optional"
                     />
                 </div>
-            <div className="flex-center mt-5">
-                <CreateButton />
-            </div>
+                <div className="flex-center mt-5">
+                    <CreateButton />
+                </div>
             </div>
 
             <input
@@ -106,7 +112,7 @@ export default function AddStudentForm({
                 value={session.user.id}
                 hidden
             />
-            {state && !state.success === false && (
+            {state && !state.success && (
                 <p className="text-center text-destructive mt-3">{state.message}</p>
             )}
 
@@ -118,7 +124,7 @@ export default function AddStudentForm({
                     </p>
 
                     <Button size="lg" type="button" onClick={fetchGoogleClassrooms} className="mx-auto">
-                     <FaGoogle />   Import From Google Classroom
+                        <FaGoogle />   Import From Google Classroom
                     </Button>
                 </div>
             )}

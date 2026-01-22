@@ -57,7 +57,7 @@ export default function AddClassForm({
                 return [state.data as Class, ...old];
             });
             closeModal()
-            router.push(`/classroom/${state.data.id}/${teacherId}/roster`);
+            router.push(`/classroom/${state.data.id}/${teacherId}/roster?tutorialModal=true`);
         }
     }, [state, pathname, router, queryClient, teacherId])
 

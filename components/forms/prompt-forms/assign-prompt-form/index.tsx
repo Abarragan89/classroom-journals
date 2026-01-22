@@ -45,7 +45,7 @@ export default function AssignPromptForm({
             updatePromptData(prev => prev.map(prompt => prompt.id === state.data.id ? state.data : prompt))
             closeModal();
         }
-    }, [state?.success]);
+    }, [state]);
 
 
     function AssignButton() {

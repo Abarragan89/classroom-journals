@@ -1,6 +1,6 @@
-import { getTeacherSettingData } from "@/lib/server/profile";
 import { Class } from "@/types";
 import ClassSettings from "./class-settings";
+import { getSingleClassroom } from "@/lib/server/classroom";
 
 export default async function Settings({
     params
@@ -10,11 +10,13 @@ export default async function Settings({
 
     const { teacherId, classId } = await params;
 
-    const teacherInfo = await getTeacherSettingData(teacherId, classId);
+    const teacherInfo = await getSingleClassroom(classId, teacherId) as Class;
 
     return (
         <ClassSettings
-            classInfo={teacherInfo.classInfo as unknown as Class}
+            classInfo={teacherInfo}
+            teacherId={teacherId}
+            classId={classId}
         />
     )
 }

@@ -25,7 +25,8 @@ export default function ClassCardClientWrapper({
             const { classrooms } = await response.json();
             return classrooms as Class[];
         },
-        initialData: allClassrooms
+        initialData: allClassrooms,
+        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 
     return (

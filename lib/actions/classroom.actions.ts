@@ -130,7 +130,8 @@ export async function updateClassInfo(prevState: unknown, formData: FormData) {
         if (typeof classroomId !== 'string') {
             throw new Error('Missing classroom ID');
         }
-        await prisma.classroom.update({
+
+        const updatedClass = await prisma.classroom.update({
             where: {
                 id: classroomId
             },
@@ -141,13 +142,25 @@ export async function updateClassInfo(prevState: unknown, formData: FormData) {
                 period: period?.trim(),
                 color,
                 grade
+            },
+            select: {
+                id: true,
+                name: true,
+                subject: true,
+                year: true,
+                period: true,
+                color: true,
+                grade: true,
+                classCode: true,
+                createdAt: true,
+                updatedAt: true,
             }
         })
 
-        return { success: true, message: 'Class Created!' }
+        return { success: true, message: 'Class Updated!', data: updatedClass }
     } catch (error) {
-        console.error('error creating classroom', error)
-        return { success: false, message: 'Error creating class. Try again.' }
+        console.error('error updating classroom', error)
+        return { success: false, message: 'Error updating class. Try again.' }
     }
 }
 

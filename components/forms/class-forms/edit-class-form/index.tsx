@@ -7,7 +7,6 @@ import { useFormStatus } from "react-dom";
 import { updateClassInfo } from "@/lib/actions/classroom.actions";
 import ColorSelect from "../class-color-select";
 import { Class } from "@/types";
-import { usePathname, useRouter } from "next/navigation";
 import { toast } from 'sonner';
 import {
     Select,
@@ -23,25 +22,27 @@ export default function EditClassForm({
     classData,
     closeModal,
     isInSettingsPage = false,
+    onSuccess
 }: {
     classData: Class,
-    closeModal: () => void,
-    isInSettingsPage?: boolean
+    closeModal?: () => void,
+    isInSettingsPage?: boolean,
+    onSuccess?: (updatedData: Class) => void
 }) {
 
     const [state, action] = useActionState(updateClassInfo, {
         success: false,
         message: ''
     })
-    const pathname = usePathname()
-    const router = useRouter();
 
     // redirect if the state is success
     useEffect(() => {
         if (state?.success) {
-            closeModal()
+            // close modal if closeModal function is provided
+            if (closeModal) closeModal();
+            // update cache
+            if (onSuccess) onSuccess(state.data as Class);
             toast('Class Updated!');
-            router.push(pathname); // Navigates without losing state instantly
         }
     }, [state])
 
@@ -181,7 +182,7 @@ export default function EditClassForm({
                 <Label htmlFor="color" className={`${isInSettingsPage ? '' : 'text-right'}`}>
                     Color
                 </Label>
-                <div className="col-span-3">
+                <div className="col-span-3 mt-2">
                     <ColorSelect setColor={handleColorSelect} selectedColor={selectedColor} />
                     {/* Hidden input to store selected color */}
                     <input

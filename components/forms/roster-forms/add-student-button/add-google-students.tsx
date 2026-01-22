@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { populateStudentRosterFromGoogle } from '@/lib/actions/google.classroom.actions'
 import { useRouter } from 'next/navigation'
 import LoadingAnimation from '@/components/loading-animation'
+import { useQueryClient } from '@tanstack/react-query'
 
 export default function AddGoogleStudents({
     googleClassrooms,
@@ -22,14 +23,19 @@ export default function AddGoogleStudents({
 }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const router = useRouter();
+    // const router = useRouter();
+    const queryClient = useQueryClient();
 
     async function addRosterFromGoogle(classInfo: GoogleClassroom) {
         try {
             setIsLoading(true)
-            await populateStudentRosterFromGoogle(classInfo, session?.user?.id, classId)
+            const { data: updatedRoster } = await populateStudentRosterFromGoogle(classInfo, session?.user?.id, classId)
             closeModal();
-            router.push(`/classroom/${classId}/${session?.user?.id}/roster`)
+            // update client cache 
+            queryClient.setQueryData(['getStudentRoster', classId], (old: any) => {
+                if (!old || !updatedRoster) return old;
+                return [...updatedRoster?.data];
+            });
         } catch (error) {
             console.error('error creating classroom', error)
         } finally {
@@ -40,7 +46,7 @@ export default function AddGoogleStudents({
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[240px]">
-                <p className='font-bold mt-[-60px]'>Creating Class...</p>
+                <p className='font-bold mt-[-60px]'>Adding Students...</p>
                 <LoadingAnimation />
             </div>
         )
@@ -59,13 +65,13 @@ export default function AddGoogleStudents({
             {googleClassrooms?.length > 0 && googleClassrooms.map((classroom) => (
                 <div
                     onClick={() => addRosterFromGoogle(classroom)}
-                    className='grid grid-cols-4 p-1 bg-gray-300  rounded-xl mx-4 mb-6 border-[1px] border-gray-300 hover:cursor-pointer hover:bg-white'
+                    className='grid grid-cols-4 items-center  p-3 bg-card rounded-xl mx-4 mb-6 border hover:cursor-pointer hover:shadow-md hover:border-primary'
                     key={classroom.id}>
                     <Image
                         src='/images/google-classroom-logo.png'
                         alt='Google classroom logo'
-                        height={75}
-                        width={75}
+                        height={65}
+                        width={65}
                         className="border-[2px] border-l-[4px] border-r-[4px] rounded-xl"
                         style={{ borderColor: "rgb(255, 194, 38)" }}
                     />

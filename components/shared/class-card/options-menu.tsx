@@ -11,9 +11,12 @@ import { EllipsisVertical, Edit, Trash2Icon } from "lucide-react";
 import DeleteClassForm from '@/components/forms/class-forms/delete-class-form';
 import EditClassForm from '@/components/forms/class-forms/edit-class-form';
 import { Class } from '@/types';
-
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function OptionsMenu({ classData, teacherId }: { classData: Class, teacherId: string }) {
+
+    const queryClient = useQueryClient();
+
     const [mounted, setMounted] = useState<boolean>(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
@@ -29,6 +32,7 @@ export default function OptionsMenu({ classData, teacherId }: { classData: Class
         setIsEditModalOpen(false)
     }
 
+
     // Prevents Hydration Warnings/Errors
     if (!mounted) {
         return null
@@ -43,7 +47,14 @@ export default function OptionsMenu({ classData, teacherId }: { classData: Class
                 title='Edit Class'
                 description='Fill out the form below to create a new class.'
             >
-                <EditClassForm classData={classData} closeModal={closeEditModal} />
+                <EditClassForm
+                    classData={classData}
+                    closeModal={closeEditModal}
+                    onSuccess={(updatedClass) => queryClient.setQueryData(['teacherClassrooms', teacherId], (oldData: any) => {
+                        if (!oldData) return oldData;
+                        return oldData.map((cls: Class) => cls.id === classData.id ? { ...cls, ...updatedClass } : cls);
+                    })}
+                />
             </ResponsiveDialog>
 
             {/* Delete Modal */}

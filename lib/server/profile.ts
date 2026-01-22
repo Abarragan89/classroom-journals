@@ -102,83 +102,85 @@ export async function determineSubscriptionAllowance(teacherId: string) {
     return { isSubscriptionActive, isAllowedToMakeNewClass, isPremiumTeacher };
 }
 
-export async function getTeacherSettingData(teacherId: string, classId: string) {
-    const session = await requireAuth();
-    if (session?.user?.id !== teacherId) {
-        throw new Error('Forbidden');
-    }
+// export async function getTeacherSettingData(teacherId: string, classId: string) {
+//     const session = await requireAuth();
+//     if (session?.user?.id !== teacherId) {
+//         throw new Error('Forbidden');
+//     }
 
-    const [teacherData, studentIdsArr, classInfo] = await Promise.all([
-        prisma.user.findUnique({
-            where: { id: teacherId },
-            select: {
-                username: true,
-                name: true,
-                iv: true,
-                email: true,
-                accountType: true,
-                id: true,
-                image: true,
-                subscriptionExpires: true,
-                subscriptionId: true,
-                isCancelling: true,
-                customerId: true,
-            }
-        }),
+    // const [teacherData, studentIdsArr, classInfo] = await Promise.all([
+    //     prisma.user.findUnique({
+    //         where: { id: teacherId },
+    //         select: {
+    //             username: true,
+    //             name: true,
+    //             iv: true,
+    //             email: true,
+    //             accountType: true,
+    //             id: true,
+    //             image: true,
+    //             subscriptionExpires: true,
+    //             subscriptionId: true,
+    //             isCancelling: true,
+    //             customerId: true,
+    //         }
+    //     }),
 
-        prisma.classUser.findMany({
-            where: {
-                classId: classId,
-                role: ClassUserRole.STUDENT
-            },
-            select: {
-                userId: true,
-            },
-        }),
+    //     prisma.classUser.findMany({
+    //         where: {
+    //             classId: classId,
+    //             role: ClassUserRole.STUDENT
+    //         },
+    //         select: {
+    //             userId: true,
+    //         },
+    //     }),
 
-        prisma.classroom.findUnique({
-            where: { id: classId },
-            select: {
-                _count: {
-                    select: {
-                        users: true,
-                    }
-                },
-                id: true,
-                classCode: true,
-                subject: true,
-                year: true,
-                period: true,
-                name: true,
-                color: true,
-                grade: true
-            }
-        })
-    ]);
+    // const classInfo = await prisma.classroom.findUnique({
+    //     where: { id: classId },
+    //     select: {
+    //         _count: {
+    //             select: {
+    //                 users: true,
+    //             }
+    //         },
+    //         id: true,
+    //         classCode: true,
+    //         subject: true,
+    //         year: true,
+    //         period: true,
+    //         name: true,
+    //         color: true,
+    //         grade: true
+    //     }
+    // })
+    // ]);
 
-    if (!teacherData) {
-        throw new Error('Teacher not found');
-    }
+    // if (!teacherData) {
+    //     throw new Error('Teacher not found');
+    // }
 
-    if (!classInfo) {
-        throw new Error('Class not found');
-    }
+    // if (!classInfo) {
+    //     throw new Error('Class not found');
+    // }
 
     // Return the teacher data with names decrypted and without iv string
-    const teacher = {
-        image: teacherData.image,
-        id: teacherData.id,
-        isCancelling: teacherData.isCancelling,
-        accountType: teacherData.accountType,
-        subscriptionExpires: teacherData.subscriptionExpires,
-        customerId: teacherData.customerId,
-        subscriptionId: teacherData.subscriptionId,
-        email: teacherData.email,
-        username: decryptText(teacherData.username as string, teacherData.iv as string),
-        name: decryptText(teacherData.name as string, teacherData.iv as string),
-    };
+    // const teacher = {
+    //     image: teacherData.image,
+    //     id: teacherData.id,
+    //     isCancelling: teacherData.isCancelling,
+    //     accountType: teacherData.accountType,
+    //     subscriptionExpires: teacherData.subscriptionExpires,
+    //     customerId: teacherData.customerId,
+    //     subscriptionId: teacherData.subscriptionId,
+    //     email: teacherData.email,
+    //     username: decryptText(teacherData.username as string, teacherData.iv as string),
+    //     name: decryptText(teacherData.name as string, teacherData.iv as string),
+    // };
 
-    const studentIds = studentIdsArr.map(student => student.userId);
+    // const studentIds = studentIdsArr.map(student => student.userId);
 
-    return { teacher, studentIds, classInfo };
-}
+    // return { teacher, studentIds, classInfo };
+
+//     return { classInfo };
+// }

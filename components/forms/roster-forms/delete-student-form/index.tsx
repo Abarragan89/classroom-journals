@@ -9,6 +9,7 @@ import { deleteStudent } from "@/lib/actions/roster.action"
 import { usePathname, useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Session, User } from "@/types"
+import { useQueryClient } from "@tanstack/react-query"
 
 
 export default function DeleteStudentForm({
@@ -29,13 +30,17 @@ export default function DeleteStudentForm({
     })
     const pathname = usePathname();
     const router = useRouter();
+    const queryClient = useQueryClient();
 
     //redirect if the state is success
     useEffect(() => {
         if (state?.success) {
             closeModal()
-            const teacherId = session.user.id
-            router.push(`/classroom/${classId}/${teacherId}/roster`); // Navigates without losing state instantly
+            // update cache
+            queryClient.setQueryData(['getStudentRoster', classId], (old: any) => {
+                if (!old) return old;
+                return old.filter((student: User) => student.id !== studentInfo.id);
+            });
             toast.error('Student Deleted!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
