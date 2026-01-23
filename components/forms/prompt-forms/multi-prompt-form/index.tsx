@@ -19,6 +19,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { CiCircleQuestion } from "react-icons/ci";
 import LoadingAnimation from "@/components/loading-animation";
 import { Card, CardContent } from "@/components/ui/card";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Question {
     name: string;
@@ -50,7 +51,7 @@ export default function MultiPromptForm({
     const [newCategoryName, setNewCategoryName] = useState<string>('');
     const [isTeacherPremium, setIsTeacherPremium] = useState<boolean>(false);
     const [enableSpellCheck, setEnableSpellCheck] = useState<boolean>(false);
-
+    const queryClient = useQueryClient();
 
     const [questions, setQuestions] = useState<Question[]>([
         { name: "question1", label: "Question 1", value: "" }
@@ -129,7 +130,12 @@ export default function MultiPromptForm({
     useEffect(() => {
         if (state?.success) {
             toast('Jot Added!');
-            router.push('/prompt-library'); // Navigates without losing state instantly
+            queryClient.invalidateQueries({
+                predicate: (query) =>
+                    query.queryKey[0] === 'prompts' &&
+                    query.queryKey[1] === teacherId,
+            });
+            router.push('/prompt-library');
         }
     }, [state, router])
 

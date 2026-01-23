@@ -1,11 +1,12 @@
 'use client'
 import { SearchOptions } from "@/types"
-import { useEffect, useRef, useState } from "react"
+import {  useState } from "react"
 import PromptSearchBar from "@/components/shared/prompt-filter-options/prompt-search-bar"
 import TraitFilterCombobox from "@/components/shared/prompt-filter-options/trait-filter-combobox"
 import PaginationList from "@/components/shared/prompt-filter-options/pagination-list"
 import StudentAssignmentListItem from "./student-assignment-list-item"
 import { PromptCategory, Response } from "@/types"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 
 interface Props {
     initialPrompts: Response[];
@@ -21,35 +22,37 @@ export default function AssignmentSectionClient({
     studentId
 }: Props) {
 
-    const [fetchedPrompts, setFetchedPrompts] = useState<Response[]>(initialPrompts)
+    // const [fetchedPrompts, setFetchedPrompts] = useState<Response[]>(initialPrompts)
 
 
-    const promptSearchOptions = useRef<SearchOptions>({
+    const [searchOptions, setSearchOptions] = useState<SearchOptions>({
         category: '',
-        status: '',
         filter: '',
         paginationSkip: 0,
         searchWords: ''
     });
 
-    async function getFilteredSearch(filterOptions: SearchOptions) {
-        const response = await fetch(`/api/responses/student/${studentId}/filtered`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(filterOptions)
-        });
+    const { data: fetchedPrompts } = useQuery({
+        queryKey: ['prompts', studentId, searchOptions],
+        queryFn: async () => {
+            const res = await fetch(`/api/responses/student/${studentId}/filtered`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(searchOptions)
+            });
+            if (!res.ok) throw new Error("Failed to fetch");
+            const data = await res.json();
+            return data.responses as Response[];
+        },
+        placeholderData: keepPreviousData,
+        initialData: initialPrompts,
+        staleTime: 0,
+        refetchOnMount: 'always'
+    });
 
-        if (!response.ok) {
-            throw new Error('Failed to fetch filtered student responses');
-        }
-
-        const data = await response.json();
-        setFetchedPrompts(data.responses as Response[]);
+    function handleFilterChange(newOptions: Partial<SearchOptions>) {
+        setSearchOptions(prev => ({ ...prev, ...newOptions }));
     }
-
-    useEffect(() => {
-        setFetchedPrompts(initialPrompts)
-    }, [initialPrompts])
 
     const traitFilterOptions = [
         {
@@ -76,19 +79,19 @@ export default function AssignmentSectionClient({
     return (
         <>
             < div className="flex flex-col-reverse items-center md:flex-row md:items-start justify-between">
-                {fetchedPrompts?.length <= 0 ? (
+                {fetchedPrompts && fetchedPrompts?.length <= 0 ? (
                     <p className="flex-1 text-center font-medium text-xl mt-3">No Assignments Posted</p>
                 ) : (
                     <div className="flex-2 w-full md:mr-10">
-                        {fetchedPrompts.map((response: Response) => (
+                        {fetchedPrompts?.map((response: Response) => (
                             <StudentAssignmentListItem
                                 key={response.id}
                                 studentResponse={response}
                             />
                         ))}
                         <PaginationList
-                            searchOptionsRef={promptSearchOptions}
-                            getFilteredSearch={getFilteredSearch}
+                            searchOptionState={searchOptions}
+                            getFilteredSearch={handleFilterChange}
                             totalItems={promptCountTotal}
                             itemsPerPage={30}
                         />
@@ -98,26 +101,26 @@ export default function AssignmentSectionClient({
                     {/* Search Bar (always full width) */}
                     <div className="w-full">
                         <PromptSearchBar
-                            searchOptionsRef={promptSearchOptions}
-                            getFilteredSearch={getFilteredSearch}
+                            searchOptionState={searchOptions}
+                            getFilteredSearch={handleFilterChange}
                         />
                     </div>
                     {/* Wrapper for combo boxes */}
                     <div className="flex w-full gap-4 md:flex-col">
                         <div className="flex-1 w-full">
                             <TraitFilterCombobox
-                                searchOptionsRef={promptSearchOptions}
+                                searchOptionState={searchOptions}
                                 options={traitFilterOptions}
                                 field='filter'
-                                getFilteredSearch={getFilteredSearch}
+                                getFilteredSearch={handleFilterChange}
                             />
                         </div>
                         <div className="flex-1 w-full">
                             <TraitFilterCombobox
-                                searchOptionsRef={promptSearchOptions}
+                                searchOptionState={searchOptions}
                                 options={categoryFilterOptions}
                                 field='category'
-                                getFilteredSearch={getFilteredSearch}
+                                getFilteredSearch={handleFilterChange}
                             />
                         </div>
                     </div>

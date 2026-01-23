@@ -5,19 +5,17 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { deletePrompt } from "@/lib/actions/prompt.actions"
 import { toast } from 'sonner'
-import { Prompt } from "@/types"
+import { useQueryClient } from "@tanstack/react-query"
 
 export default function DeletePromptForm({
     promptId,
     promptTitle,
     closeModal,
-    updatePromptData,
     teacherId
 }: {
     promptId: string,
     promptTitle: string,
     closeModal: () => void,
-    updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>,
     teacherId: string
 }) {
 
@@ -25,15 +23,18 @@ export default function DeletePromptForm({
         success: false,
         message: ''
     })
+    const queryClient = useQueryClient();
 
-    //redirect if the state is success
+    // update the cache if successful
     useEffect(() => {
         if (state?.success) {
             toast('Jot Deleted!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
             closeModal()
-            updatePromptData(prev => [...prev.filter((prompt: Prompt) => prompt.id !== state.promptId)])
+
+            //  queryClient.invalidateQueries(['prompts', teacherId]);
+            queryClient.invalidateQueries({ queryKey: ['prompts', teacherId] });
         }
     }, [state])
 

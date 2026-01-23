@@ -3,18 +3,26 @@ import PromptSearchBar from "./prompt-search-bar"
 import TraitFilterCombobox from "./trait-filter-combobox"
 
 interface Props {
-    searchOptionsRef: React.RefObject<SearchOptions>;
+    searchOptionState: SearchOptions;
     getFilteredSearch: (filterOptions: SearchOptions) => void;
     categories: PromptCategory[]
 }
 export default function PromptFilterOptions({
-    searchOptionsRef,
+    searchOptionState,
     getFilteredSearch,
     categories
 
 }: Props) {
 
     const traitFilterOptions = [
+        {
+            value: "desc",
+            label: "Newest",
+        },
+        {
+            value: "asc",
+            label: "Oldest",
+        },
         {
             value: "ASSESSMENT",
             label: "Assessments",
@@ -27,14 +35,6 @@ export default function PromptFilterOptions({
             value: "never-assigned",
             label: "Never Assigned",
         },
-        {
-            value: "asc",
-            label: "Oldest",
-        },
-        {
-            value: "desc",
-            label: "Newest",
-        },
     ]
 
     // convert categories data into consumable combobox data
@@ -46,17 +46,17 @@ export default function PromptFilterOptions({
     return (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-5 mt-10">
             <PromptSearchBar
-                searchOptionsRef={searchOptionsRef}
+                searchOptionState={searchOptionState}
                 getFilteredSearch={getFilteredSearch}
             />
             <TraitFilterCombobox
-                searchOptionsRef={searchOptionsRef}
+                searchOptionState={searchOptionState}
                 options={traitFilterOptions}
                 field='filter'
                 getFilteredSearch={getFilteredSearch}
             />
             <TraitFilterCombobox
-                searchOptionsRef={searchOptionsRef}
+                searchOptionState={searchOptionState}
                 options={categoryFilterOptions}
                 field='category'
                 getFilteredSearch={getFilteredSearch}

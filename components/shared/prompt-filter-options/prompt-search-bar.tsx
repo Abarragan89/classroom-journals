@@ -3,20 +3,19 @@ import { Search } from "lucide-react"
 import { SearchOptions } from "@/types"
 
 interface Props {
-    searchOptionsRef: React.RefObject<SearchOptions>;
+    searchOptionState: SearchOptions;
     getFilteredSearch: (filterOptions: SearchOptions) => void;
 }
 
-export default function PromptSearchBar({ searchOptionsRef, getFilteredSearch }: Props) {
-
+export default function PromptSearchBar({ searchOptionState, getFilteredSearch }: Props) {
     const handlePromptTraitChange = (value: string) => {
         // Update the ref object directly
-        searchOptionsRef.current = {
-            ...searchOptionsRef.current,
+        searchOptionState = {
+            ...searchOptionState,
             searchWords: value
         };
         // Call getFilteredSearch with the updated options
-        getFilteredSearch(searchOptionsRef.current);
+        getFilteredSearch(searchOptionState);
     };
     return (
         <div className="relative col-span-2 sm:col-span-1">

@@ -15,12 +15,12 @@ import { useState } from "react";
 
 export default function PromptCard({
     promptData,
-    updatePromptData,
+    // updatePromptData,
     classroomData,
     teacherId
 }: {
     promptData: Prompt
-    updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
+    // updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
     classroomData: Classroom[],
     teacherId: string
 }) {
@@ -43,18 +43,16 @@ export default function PromptCard({
                     promptTitle={promptData?.title}
                     promptType={promptData?.promptType as string}
                     closeModal={() => setIsAssignModalOpen(false)}
-                    updatePromptData={updatePromptData}
                     classroomData={classroomData}
                     teacherId={teacherId}
                 />
 
             </ResponsiveDialog>
 
-            <Card className="mx-auto max-w-[650px] relative w-full">
+            <Card className="mx-auto relative w-full">
                 {/* Options Menu - positioned absolutely */}
                 <OptionsMenu
                     promptData={promptData}
-                    updatePromptData={updatePromptData}
                     teacherId={teacherId}
                 />
 
@@ -75,7 +73,7 @@ export default function PromptCard({
                         <AssignedToPopUp classesData={promptData.promptSession as unknown as PromptSession[]} />
                     </div>
                     {/* Icon & Title Row - Centered */}
-                    <Badge variant={isAssessment ? "default" : "secondary"} className="text-xs w-fit">
+                    <Badge variant={isAssessment ? "default" : "secondary"} className="text-xs w-fit my-1">
                         {isAssessment ? 'Assessment' : 'Blog'}
                     </Badge>
                     <div className="flex items-center gap-3">
