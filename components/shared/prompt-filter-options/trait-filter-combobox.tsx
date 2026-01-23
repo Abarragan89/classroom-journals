@@ -17,14 +17,14 @@ import {
 import { SearchOptions } from "@/types"
 
 interface Props {
-    searchOptionsRef: React.RefObject<SearchOptions>;
+    searchOptionState: SearchOptions;
     field: string,
     options: { value: string; label: string }[]
     getFilteredSearch: (filterOptions: SearchOptions) => void;
 }
 
 export default function TraitFilterCombobox({
-    searchOptionsRef,
+    searchOptionState,
     field,
     getFilteredSearch,
     options
@@ -36,12 +36,12 @@ export default function TraitFilterCombobox({
 
     const handlePromptTraitChange = (value: string) => {
         // Update the ref object directly
-        searchOptionsRef.current = {
-            ...searchOptionsRef.current,
+        searchOptionState = {
+            ...searchOptionState,
             [field]: value
         };
         // Call getFilteredSearch with the updated options
-        getFilteredSearch(searchOptionsRef.current);
+        getFilteredSearch(searchOptionState);
     };
 
     return (

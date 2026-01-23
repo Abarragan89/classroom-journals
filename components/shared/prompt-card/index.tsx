@@ -15,12 +15,12 @@ import { useState } from "react";
 
 export default function PromptCard({
     promptData,
-    updatePromptData,
+    // updatePromptData,
     classroomData,
     teacherId
 }: {
     promptData: Prompt
-    updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
+    // updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
     classroomData: Classroom[],
     teacherId: string
 }) {
@@ -43,7 +43,6 @@ export default function PromptCard({
                     promptTitle={promptData?.title}
                     promptType={promptData?.promptType as string}
                     closeModal={() => setIsAssignModalOpen(false)}
-                    updatePromptData={updatePromptData}
                     classroomData={classroomData}
                     teacherId={teacherId}
                 />
@@ -54,7 +53,6 @@ export default function PromptCard({
                 {/* Options Menu - positioned absolutely */}
                 <OptionsMenu
                     promptData={promptData}
-                    updatePromptData={updatePromptData}
                     teacherId={teacherId}
                 />
 

@@ -11,12 +11,12 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { CiCircleQuestion } from "react-icons/ci";
+import { useQueryClient } from "@tanstack/react-query"
 
 export default function AssignPromptForm({
     promptId,
     promptTitle,
     closeModal,
-    updatePromptData,
     classroomData,
     promptType,
     teacherId
@@ -24,13 +24,13 @@ export default function AssignPromptForm({
     promptId: string,
     promptTitle: string,
     closeModal: () => void,
-    updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>,
     classroomData: Classroom[],
     promptType: string,
     teacherId: string
 }) {
     const [isPublic, setIsPublic] = useState<boolean>(false);
     const [enableSpellCheck, setEnableSpellCheck] = useState<boolean>(false);
+    const queryClient = useQueryClient();
 
     const [state, action] = useActionState(assignPrompt, {
         success: false,
@@ -38,11 +38,11 @@ export default function AssignPromptForm({
     })
 
 
-    //redirect if the state is success
+    // update the cache if successful
     useEffect(() => {
         if (state?.success && state.data) {
             toast('Jot Assigned!');
-            updatePromptData(prev => prev.map(prompt => prompt.id === state.data.id ? state.data : prompt))
+            queryClient.invalidateQueries({ queryKey: ['prompts', teacherId] });
             closeModal();
         }
     }, [state]);

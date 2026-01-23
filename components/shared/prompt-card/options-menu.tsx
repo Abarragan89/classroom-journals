@@ -16,11 +16,9 @@ import Link from 'next/link';
 
 export default function OptionsMenu({
     promptData,
-    updatePromptData,
     teacherId
 }: {
     promptData: Prompt,
-    updatePromptData: React.Dispatch<React.SetStateAction<Prompt[]>>
     teacherId: string
 }) {
 
@@ -55,7 +53,6 @@ export default function OptionsMenu({
                     promptId={promptData.id}
                     promptTitle={promptData.title}
                     closeModal={closeModal}
-                    updatePromptData={updatePromptData}
                     teacherId={teacherId}
                 />
             </ResponsiveDialog>

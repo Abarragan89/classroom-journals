@@ -12,14 +12,14 @@ import {
 import { SearchOptions } from "@/types";
 
 interface Props {
-    searchOptionsRef: React.RefObject<SearchOptions>;
+    searchOptionState: SearchOptions;
     getFilteredSearch: (filterOptions: SearchOptions) => void;
     totalItems: number;  // Total number of items available
     itemsPerPage: number; // Number of items per page
 }
 
 export default function PaginationList({
-    searchOptionsRef,
+    searchOptionState,
     getFilteredSearch,
     totalItems,
     itemsPerPage,
@@ -30,10 +30,8 @@ export default function PaginationList({
     const goToPage = (page: number) => {
         if (page < 1 || page > totalPages) return;
         setCurrentPage(page);
-        if (searchOptionsRef.current) {
-            searchOptionsRef.current.paginationSkip = (page - 1) * itemsPerPage;
-        }
-        getFilteredSearch(searchOptionsRef.current);
+        searchOptionState.paginationSkip = (page - 1) * itemsPerPage;
+        getFilteredSearch(searchOptionState);
     };
 
     const generatePaginationItems = () => {

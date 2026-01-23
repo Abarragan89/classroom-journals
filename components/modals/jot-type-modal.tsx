@@ -22,7 +22,7 @@ export default function JotTypeModal({
             setIsOpen={setIsModalOpen}
             title={`Choose Jot Type`}
             showDescription={true}
-            description='Assessments are automatically graded. Blogs require a rubric for autograding.'
+            description='Select the type of jot you would like to create.'
         >
             {/* <p className="text-muted-foreground"></p> */}
             <div className="flex-center gap-x-6 mx-auto my-3">
@@ -36,7 +36,7 @@ export default function JotTypeModal({
                                 <div className="flex-center">
                                     <span className="text-2xl font-semibold ml-1 tracking-wider">Blog</span>
                                 </div>
-                                <span className="text-sm text-muted-foreground">(Writing Prompt)</span>
+                                <span className="text-[.78rem] text-muted-foreground">(Writing Prompt)</span>
                             </div>
                         </div>
                     </Link>
@@ -49,7 +49,7 @@ export default function JotTypeModal({
                                 <div className="flex-center">
                                     <span className="text-2xl font-semibold ml-1 tracking-wider">Assessment</span>
                                 </div>
-                                <span className="text-sm text-muted-foreground">(Exit Ticket / Quiz)</span>
+                                <span className="text-[.78rem] text-muted-foreground">(Exit Ticket / Quiz)</span>
                             </div>
                         </div>
                     </Link>
