@@ -4,7 +4,7 @@ import { useFormStatus } from "react-dom"
 import { Button } from "@/components/ui/button"
 import { assignPrompt } from "@/lib/actions/prompt.actions"
 import { toast } from 'sonner'
-import { Classroom, Prompt } from "@/types"
+import { Classroom } from "@/types"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"

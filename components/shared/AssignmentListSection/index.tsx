@@ -1,6 +1,6 @@
 'use client'
 import { PromptCategory, PromptSession, SearchOptions } from "@/types"
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import AssignmentListItem from "@/components/shared/AssignmentListSection/assignment-list-item"
 import PromptSearchBar from "../prompt-filter-options/prompt-search-bar"
 import TraitFilterCombobox from "../prompt-filter-options/trait-filter-combobox"
@@ -24,61 +24,46 @@ export default function AssignmentListSection({
     promptCountTotal
 }: Props) {
 
-
-    const { error } = useQuery({
-        queryKey: ['assignmentListDash', classId],
-        queryFn: async () => {
-            const response = await fetch(`/api/prompt-sessions/class?classId=${classId}&teacherId=${teacherId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch class sessions');
-            }
-            const { sessionData } = await response.json();
-            setFetchedPrompts(sessionData?.prompts || []);
-            return sessionData.prompts;
-        },
-        initialData: initialPrompts,
-        staleTime: 1000 * 60 * 5, // 5 minutes
-    })
-
-    if (error) {
-        throw new Error('Error finding assignment list')
-    }
-
-    const [fetchedPrompts, setFetchedPrompts] = useState<PromptSession[]>(initialPrompts)
-
-    const promptSearchOptions = useRef<SearchOptions>({
+    const [searchOptions, setSearchOptions] = useState<SearchOptions>({
         category: '',
         filter: '',
         paginationSkip: 0,
         searchWords: ''
     });
 
-    async function getFilteredSearch(filterOptions: SearchOptions) {
-        try {
+    const { data: fetchedPrompts, error } = useQuery({
+        queryKey: ['assignmentListDash', classId, searchOptions],
+        queryFn: async () => {
             const queryParams = new URLSearchParams({
                 classId: classId,
                 teacherId: teacherId,
-                category: filterOptions.category || "",
-                searchWords: filterOptions.searchWords || "",
-                filter: filterOptions.filter || "",
-                paginationSkip: filterOptions.paginationSkip.toString()
+                category: searchOptions.category || "",
+                searchWords: searchOptions.searchWords || "",
+                filter: searchOptions.filter || "",
+                paginationSkip: searchOptions.paginationSkip.toString()
             });
-
             const response = await fetch(`/api/prompt-sessions/filtered?${queryParams}`);
             if (response.ok) {
                 const { promptSessions } = await response.json();
-                setFetchedPrompts(promptSessions as PromptSession[]);
+                return promptSessions;
             } else {
-                console.error('Failed to fetch filtered prompt sessions:', response.statusText);
+                throw new Error('Failed to fetch filtered prompt sessions');
             }
-        } catch (error) {
-            console.error('Error fetching filtered prompt sessions:', error);
-        }
+        },
+        initialData: initialPrompts,
+        staleTime: 0,
+        refetchOnMount: 'always'
+    })
+
+    if (error) {
+        throw new Error('Error finding assignment list')
+
+
     }
 
-    useEffect(() => {
-        setFetchedPrompts(initialPrompts)
-    }, [initialPrompts])
+    function handleFilterChange(newOptions: Partial<SearchOptions>) {
+        setSearchOptions(prev => ({ ...prev, ...newOptions }));
+    }
 
     const traitFilterOptions = [
         {
@@ -120,8 +105,8 @@ export default function AssignmentListSection({
                             />
                         ))}
                         <PaginationList
-                            searchOptionsRef={promptSearchOptions}
-                            getFilteredSearch={getFilteredSearch}
+                            searchOptionState={searchOptions}
+                            getFilteredSearch={handleFilterChange}
                             totalItems={promptCountTotal}
                             itemsPerPage={30}
                         />
@@ -133,8 +118,8 @@ export default function AssignmentListSection({
                     {/* Search Bar (always full width) */}
                     <div className="w-full">
                         <PromptSearchBar
-                            searchOptionsRef={promptSearchOptions}
-                            getFilteredSearch={getFilteredSearch}
+                            searchOptionState={searchOptions}
+                            getFilteredSearch={handleFilterChange}
                         />
                     </div>
                     {/* Wrapper for combo boxes */}
@@ -142,8 +127,8 @@ export default function AssignmentListSection({
                         <div className="flex-1 w-full">
                             {/* Trait Combo */}
                             <TraitFilterCombobox
-                                searchOptionsRef={promptSearchOptions}
-                                getFilteredSearch={getFilteredSearch}
+                                searchOptionState={searchOptions}
+                                getFilteredSearch={handleFilterChange}
                                 options={traitFilterOptions}
                                 field={'filter'}
                             />
@@ -151,8 +136,8 @@ export default function AssignmentListSection({
                         <div className="flex-1 w-full">
                             {/* Category Combo */}
                             <TraitFilterCombobox
-                                searchOptionsRef={promptSearchOptions}
-                                getFilteredSearch={getFilteredSearch}
+                                searchOptionState={searchOptions}
+                                getFilteredSearch={handleFilterChange}
                                 options={categoryFilterOptions}
                                 field={'category'}
                             />

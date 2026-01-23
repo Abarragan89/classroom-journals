@@ -16,6 +16,14 @@ export default function PromptFilterOptions({
 
     const traitFilterOptions = [
         {
+            value: "desc",
+            label: "Newest",
+        },
+        {
+            value: "asc",
+            label: "Oldest",
+        },
+        {
             value: "ASSESSMENT",
             label: "Assessments",
         },
@@ -26,14 +34,6 @@ export default function PromptFilterOptions({
         {
             value: "never-assigned",
             label: "Never Assigned",
-        },
-        {
-            value: "asc",
-            label: "Oldest",
-        },
-        {
-            value: "desc",
-            label: "Newest",
         },
     ]
 

@@ -49,7 +49,7 @@ export default function PromptCard({
 
             </ResponsiveDialog>
 
-            <Card className="mx-auto max-w-[650px] relative w-full">
+            <Card className="mx-auto relative w-full">
                 {/* Options Menu - positioned absolutely */}
                 <OptionsMenu
                     promptData={promptData}
@@ -73,7 +73,7 @@ export default function PromptCard({
                         <AssignedToPopUp classesData={promptData.promptSession as unknown as PromptSession[]} />
                     </div>
                     {/* Icon & Title Row - Centered */}
-                    <Badge variant={isAssessment ? "default" : "secondary"} className="text-xs w-fit">
+                    <Badge variant={isAssessment ? "default" : "secondary"} className="text-xs w-fit my-1">
                         {isAssessment ? 'Assessment' : 'Blog'}
                     </Badge>
                     <div className="flex items-center gap-3">

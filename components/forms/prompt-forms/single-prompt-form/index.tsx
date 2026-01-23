@@ -17,6 +17,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { CiCircleQuestion } from "react-icons/ci";
 import LoadingAnimation from "@/components/loading-animation";
 import { Card, CardContent } from "@/components/ui/card";
+import { useQueryClient } from "@tanstack/react-query";
+
 
 interface Question {
     name: string;
@@ -36,6 +38,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
         success: false,
         message: ''
     })
+    const queryClient = useQueryClient();
 
     const [classrooms, setClassrooms] = useState<Classroom[]>([]);
     const [categories, setCategories] = useState<PromptCategory[]>([]);
@@ -111,10 +114,15 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     // redirect if the state is success
     useEffect(() => {
         if (state?.success) {
-            toast('Jot Added!');
-            router.push(callBackUrl as string); // Navigates without losing state instantly
+            toast('Jot Saved!');
+            queryClient.invalidateQueries({
+                predicate: (query) =>
+                    query.queryKey[0] === 'prompts' &&
+                    query.queryKey[1] === teacherId,
+            });
+            router.push(callBackUrl as string);
         }
-    }, [state, router])
+    }, [state, router, teacherId])
 
     const handleChange = (index: number, newValue: string) => {
         setQuestions(prevQuestions =>

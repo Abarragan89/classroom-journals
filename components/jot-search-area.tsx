@@ -32,7 +32,7 @@ export default function JotSearchArea({
         searchWords: ''
     });
 
-    const [isThereAtLeastOneJot, setIsThereAtLeastOneJot] = useState<boolean>(initialPrompts.length > 0);
+    const isThereAtLeastOneJot = initialPrompts.length > 0;
 
     const { data: fetchedPrompts, isFetching } = useQuery({
         queryKey: ['prompts', teacherId, searchOptions],
@@ -51,6 +51,7 @@ export default function JotSearchArea({
         },
         placeholderData: keepPreviousData,
         staleTime: 0,
+        refetchOnMount: 'always'
     });
 
     function handleFilterChange(newOptions: Partial<SearchOptions>) {
@@ -68,7 +69,7 @@ export default function JotSearchArea({
             {/* Insert all the prompt jot cards here */}
             {fetchedPrompts && fetchedPrompts.length > 0 ? (
                 <div className="mt-10 mb-10 ">
-                    <div className="mb-8 grid-cols-1 xl:grid-cols-2 grid gap-6 items-start">
+                    <div className="mb-8 grid-cols-1 lg:grid-cols-2 grid gap-7">
                         {fetchedPrompts.map((prompt: Prompt) => (
                             <PromptCard
                                 key={prompt.id}
@@ -88,7 +89,7 @@ export default function JotSearchArea({
             ) : (
                 isFetching ? (
                     <div className="flex flex-col justify-center items-center mt-16">
-                        <h3 className="h3-bold mt-10">Loading Jots...</h3>
+                        <h3 className="h3-bold">Loading Jots...</h3>
                         <LoadingAnimation />
                     </div>
                 ) : (
