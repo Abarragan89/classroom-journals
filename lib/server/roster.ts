@@ -1,27 +1,6 @@
-import { ClassUserRole } from "@prisma/client";
 import { requireAuth } from "../actions/authorization.action";
 import { decryptText } from "../utils";
 import { prisma } from "@/db/prisma";
-
-export async function getStudentCountByClassId(classId: string, teacherId: string) {
-    const session = await requireAuth();
-    if (session?.user?.id !== teacherId) {
-        throw new Error('Forbidden')
-    }
-
-    if (typeof classId !== 'string') {
-        throw new Error('Missing or invalid classId');
-    }
-
-    const studentCount = await prisma.classUser.count({
-        where: {
-            classId,
-            role: ClassUserRole.STUDENT
-        }
-    });
-
-    return studentCount;
-}
 
 // Get single student information for Student Profile
 export async function getSingleStudentInformation(studentId: string, classId: string) {

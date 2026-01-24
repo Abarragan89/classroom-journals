@@ -10,19 +10,14 @@ export default function AssignmentListItem({
     jotData,
     classId,
     teacherId,
-    classSize,
 }: {
     jotData: PromptSession,
     classId: string,
     teacherId?: string,
-    classSize?: number,
 }) {
 
-    console.log('jotData in AssignmentListItem:', jotData);
-    const totalSubmissions = jotData?.responses?.filter(response => response.completionStatus === 'COMPLETE' || response.completionStatus === 'RETURNED').length
+    const totalSubmissions = jotData?.responses?.filter(response => response.completionStatus === 'COMPLETE').length
     const isAssessment = jotData.promptType === 'ASSESSMENT';
-
-    console.log('totalSubmissions in AssignmentListItem:', totalSubmissions);
 
     return (
         <Link href={`/classroom/${classId}/${teacherId}/single-prompt-session/${jotData.id}`}>
@@ -51,9 +46,15 @@ export default function AssignmentListItem({
                         )}
 
                         {isAssessment && (
-                            <>
+                            <div
+                                className="z-10"
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                }}
+                            >
                                 <QuestionPopup promptQuestions={jotData as unknown as Prompt} />
-                            </>
+                            </div>
                         )}
 
                         {!isAssessment && (
@@ -72,11 +73,11 @@ export default function AssignmentListItem({
                         <Separator orientation="vertical" className="h-4" />
 
                         <span>
-                            <span className="font-medium text-foreground">{totalSubmissions}</span> / {classSize} submitted
+                            <span className="font-medium text-foreground">{totalSubmissions}</span> / {jotData?.responses?.length} submitted
                         </span>
                     </div>
                 </div>
             </Card>
-        </Link>
+        </Link >
     )
 }

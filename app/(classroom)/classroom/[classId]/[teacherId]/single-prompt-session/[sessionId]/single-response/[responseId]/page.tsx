@@ -46,7 +46,7 @@ export default async function SingleResponse({
                     <StudentComboBox
                         responses={rosterAlphabetized}
                     />
-                    <div className="flex-between items-end mt-5">
+                    <div className="flex justify-between items-baseline mt-5">
                         <ToggleSpellCheck
                             responseId={responseId}
                             spellCheckEnabled={response?.spellCheckEnabled}

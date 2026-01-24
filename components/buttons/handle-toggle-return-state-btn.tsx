@@ -100,6 +100,8 @@ export default function HandleToggleReturnStateBtn({
     <div className='relative'>
       {isSubmittable ? (
         <Button
+          variant={"secondary"}
+          size={"sm"}
           onClick={() => handleToggleReturnState('COMPLETE')}
           disabled={toggleMutation.isPending}
         >
@@ -107,6 +109,8 @@ export default function HandleToggleReturnStateBtn({
         </Button>
       ) : (
         <Button
+          variant={"secondary"}
+          size={"sm"}
           onClick={() => handleToggleReturnState('RETURNED')}
           disabled={toggleMutation.isPending}
         >
