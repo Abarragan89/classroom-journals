@@ -18,8 +18,11 @@ export default function AssignmentListItem({
     classSize?: number,
 }) {
 
+    console.log('jotData in AssignmentListItem:', jotData);
     const totalSubmissions = jotData?.responses?.filter(response => response.completionStatus === 'COMPLETE' || response.completionStatus === 'RETURNED').length
     const isAssessment = jotData.promptType === 'ASSESSMENT';
+
+    console.log('totalSubmissions in AssignmentListItem:', totalSubmissions);
 
     return (
         <Link href={`/classroom/${classId}/${teacherId}/single-prompt-session/${jotData.id}`}>

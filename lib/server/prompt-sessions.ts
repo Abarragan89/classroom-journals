@@ -229,7 +229,8 @@ export async function getFilteredPromptSessions(filterOptions: SearchOptions, cl
                 select: {
                     id: true,
                     studentId: true,
-                    submittedAt: true
+                    submittedAt: true,
+                    completionStatus: true,
                 }
             }
         },
