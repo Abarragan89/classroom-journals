@@ -31,6 +31,8 @@ export default function AssignmentListSection({
         searchWords: ''
     });
 
+    console.log('initialPrompts in AssignmentListSection:', initialPrompts);
+
     const { data: fetchedPrompts, error } = useQuery({
         queryKey: ['assignmentListDash', classId, searchOptions],
         queryFn: async () => {

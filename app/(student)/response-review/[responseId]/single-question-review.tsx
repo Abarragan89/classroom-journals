@@ -235,7 +235,7 @@ export default function SingleQuestionReview({
                         </>
                     </ResponsiveDialog>
 
-                    <Card className='relative border shadow-lg mt-10'>
+                    <Card className='relative border-primary shadow-lg mt-10'>
                         <CardHeader>
                             <p className='lg:text-lg font-medium leading-relaxed tracking-wider pt-7 pl-6'>Add a Cover Photo</p>
                             <p className='absolute top-3 right-9 text-sm text-muted-foreground'>Question 3 of 3</p>

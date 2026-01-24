@@ -41,7 +41,7 @@ export default function DeletePromptSessionForm({
                 type="submit"
                 className={`mx-auto block bg-destructive border-none`}
             >
-                {pending ? 'Deleting...' : 'Delete Jot'}
+                {pending ? 'Deleting...' : 'Delete Assignment'}
             </Button>
         );
     }
