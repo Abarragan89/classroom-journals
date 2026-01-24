@@ -24,7 +24,7 @@ export default async function ReviewAssessmentQuestions({
     return (
         <>
             {promptSession?.promptType === 'ASSESSMENT' &&
-                <h2 className="text-xl lg:text-2xl line-clamp-3 mt-5">{promptSession?.prompt?.title}</h2>
+                <h2 className="text-xl lg:text-2xl line-clamp-3 mt-5">{promptSession?.title}</h2>
             }
             <ClientQuestionControls
                 questions={promptSession?.questions as unknown as Question[]}

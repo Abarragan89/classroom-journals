@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { getAllSessionsInClass } from "@/lib/server/prompt-sessions";
 import { PromptCategory, PromptSession } from "@/types";
 import { Plus } from "lucide-react";
-import { getStudentCountByClassId } from "@/lib/server/roster";
 import Link from "next/link";
 import { getAllPromptCategories } from "@/lib/server/student-dashboard";
 import AssignmentListSection from "@/components/shared/AssignmentListSection";
@@ -16,7 +15,6 @@ export default async function Classroom({
 
     const allPromptSessions = await getAllSessionsInClass(classId, teacherId) as unknown as { prompts: PromptSession[], totalCount: number }
     let allPromptCategories = await getAllPromptCategories(teacherId) as unknown as PromptCategory[]
-    const studentCount = await getStudentCountByClassId(classId, teacherId)
     allPromptCategories = [{ id: '', name: 'All Categories...' }, ...allPromptCategories]
 
 
@@ -24,7 +22,7 @@ export default async function Classroom({
         <div className="relative">
             <Button asChild className="absolute top-[40px] right-0">
                 <Link href={`/classroom/${classId}/${teacherId}/jots`}>
-                    <Plus />Assignment 
+                    <Plus />Assignment
                 </Link>
             </Button>
             <h2 className="text-2xl lg:text-3xl mt-2">Posted Assignments</h2>
@@ -32,7 +30,6 @@ export default async function Classroom({
                 <AssignmentListSection
                     initialPrompts={allPromptSessions.prompts}
                     categories={allPromptCategories}
-                    studentCount={studentCount}
                     classId={classId}
                     teacherId={teacherId}
                     promptCountTotal={allPromptSessions.totalCount}

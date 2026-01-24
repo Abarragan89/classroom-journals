@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowBigLeft } from "lucide-react";
 
 export default function DynamicHeader({ classId, teacherId }: { classId: string; teacherId: string }) {
     const pathname = usePathname();
@@ -35,7 +35,7 @@ export default function DynamicHeader({ classId, teacherId }: { classId: string;
 
     return (
         <Link href={breadCrumbRoute} className="flex items-center -mt-4 hover:underline w-fit print:hidden">
-            <ArrowLeftIcon className="mr-1" size={20} />
+            <ArrowBigLeft className="mr-1" size={20} />
             {breadCrumbText}
         </Link>
     );

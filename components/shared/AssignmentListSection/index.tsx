@@ -10,7 +10,6 @@ import { useQuery } from "@tanstack/react-query"
 interface Props {
     categories: PromptCategory[];
     initialPrompts: PromptSession[];
-    studentCount: number;
     classId: string;
     teacherId: string;
     promptCountTotal: number
@@ -18,7 +17,6 @@ interface Props {
 export default function AssignmentListSection({
     categories,
     initialPrompts,
-    studentCount,
     classId,
     teacherId,
     promptCountTotal
@@ -30,8 +28,6 @@ export default function AssignmentListSection({
         paginationSkip: 0,
         searchWords: ''
     });
-
-    console.log('initialPrompts in AssignmentListSection:', initialPrompts);
 
     const { data: fetchedPrompts, error } = useQuery({
         queryKey: ['assignmentListDash', classId, searchOptions],
@@ -103,7 +99,6 @@ export default function AssignmentListSection({
                                 jotData={prompt}
                                 classId={classId}
                                 teacherId={teacherId}
-                                classSize={studentCount}
                             />
                         ))}
                         <PaginationList

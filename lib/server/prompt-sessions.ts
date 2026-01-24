@@ -129,6 +129,7 @@ export async function getSinglePromptSessionTeacherDashboard(sessionId: string, 
             questions: true,
             isPublic: true,
             areGradesVisible: true,
+            title: true,
             responses: {
                 select: {
                     id: true,
@@ -147,16 +148,6 @@ export async function getSinglePromptSessionTeacherDashboard(sessionId: string, 
                     _count: {
                         select: {
                             comments: true
-                        }
-                    }
-                },
-            },
-            prompt: {
-                select: {
-                    title: true,
-                    category: {
-                        select: {
-                            name: true
                         }
                     }
                 },
