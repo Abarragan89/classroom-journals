@@ -86,10 +86,10 @@ export default function GradingPanel({
         }
     }
 
-    const iconStyles = 'text-slate-950 p-1 rounded-full'
+    const iconStyles = 'text-slate-950 w-10 h-10'
 
     return (
-        <div className="flex gap-x-8">
+        <div className="flex">
             {isGrading && loaderColor ? (
                 <BarLoader
                     color={loaderColor}
@@ -103,10 +103,11 @@ export default function GradingPanel({
                     <X
                         onClick={() => { if (currentScore !== 0) updateResponseScore(0) }}
                         size={25}
-                        className={`bg-destructive ${iconStyles} ${currentScoreState === 0 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`} />
+                        className={`bg-destructive ${iconStyles} ${currentScoreState === 0 ? 'opacity-100' : 'opacity-50 hover:cursor-pointer hover:opacity-100'}`} />
+                    
                     <p
                         onClick={() => { if (currentScore !== 0.5) updateResponseScore(0.5) }}
-                        className={`bg-warning text-[.93rem] ${iconStyles} ${currentScoreState === 0.5 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`}
+                        className={`bg-warning text-[.93rem] ${iconStyles} ${currentScoreState === 0.5 ? 'opacity-100' : 'opacity-50 hover:cursor-pointer hover:opacity-100'}`}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 50 50">
                             <text x="37%" y="30%" dominantBaseline="middle" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="26" fontWeight={600} fill="black">1</text>
@@ -114,10 +115,11 @@ export default function GradingPanel({
                             <text x="66%" y="80%" dominantBaseline="middle" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="26" fontWeight={600} fill="black">2</text>
                         </svg>
                     </p>
+
                     <Check
                         onClick={() => { if (currentScoreState !== 1) updateResponseScore(1) }}
                         size={25}
-                        className={`bg-success ${iconStyles} ${currentScoreState === 1 ? 'opacity-100' : 'opacity-40 hover:cursor-pointer hover:opacity-100'}`}
+                        className={`bg-success ${iconStyles} ${currentScoreState === 1 ? 'opacity-100' : 'opacity-50 hover:cursor-pointer hover:opacity-100'}`}
                     />
                 </>
             )}
