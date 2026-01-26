@@ -32,6 +32,7 @@ export default function ClassSettings({
         staleTime: 1000 * 60 * 5,
     });
 
+    console.log('class settings data', data);
     const classSize = data?._count?.users ? data?._count?.users - 1 : 0
 
     return (

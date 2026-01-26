@@ -101,7 +101,22 @@ export async function getSingleClassroom(classroomId: string, teacherId: string)
         throw new Error('Forbidden')
     }
     const classroom = await prisma.classroom.findUnique({
-        where: { id: classroomId }
+        where: { id: classroomId },
+        select: {
+            id: true,
+            name: true,
+            classCode: true,
+            year: true,
+            period: true,
+            subject: true,
+            grade: true,
+            color: true,
+            _count: {
+                select: {
+                    users: true,
+                }
+            }
+        }
     })
     return classroom
 }
