@@ -79,7 +79,7 @@ export default function TutorialModal({ isModalOpen }: { isModalOpen: boolean })
             </div>
             <Separator className="" />
             <p className="text-sm text-muted-foreground text-center">
-                Learn everything JotterBlog can do in your classroom in our <a href="https://docs.jotterblog.com/for-teachers/getting-started-with-jotterblog" target="_blank" rel="noreferrer" className="underline hover:text-primary font-bold">Teacher Guide</a>.
+                Learn everything JotterBlog can do in 1 minute <a href="https://docs.jotterblog.com/for-teachers/getting-started-with-jotterblog" target="_blank" rel="noreferrer" className="underline hover:text-primary font-bold block">Teacher Guide Videos.</a>
             </p>
         </ResponsiveDialog>
     )
