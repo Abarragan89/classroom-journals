@@ -29,7 +29,7 @@ export default async function Roster({
     })
   ]);
 
-  const showTutorialModal = resolvedSearchParams?.tutorialMode === 'true';
+  const showTutorialModal = resolvedSearchParams?.tutorialModal === 'true';
 
   return (
     <>

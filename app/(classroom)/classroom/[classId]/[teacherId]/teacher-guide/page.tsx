@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default function TeacherGuid() {
+export default function TeacherGuide() {
   return (
-    <div>TeacherGuid</div>
+    <div>Coming Soon...</div>
   )
 }
