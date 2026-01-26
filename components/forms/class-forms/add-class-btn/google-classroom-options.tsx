@@ -50,19 +50,18 @@ export default function GoogleClassroomOptions({
             {googleClassrooms?.length > 0 ? (
                 <p className='font-bold text-md text-center mb-3'>Choose a class to import</p>
             ) : (
-                <div className='space-y-2'>
-                    <p className='text-center text-destructive font-bold mb-5'>No Google Classes Found</p>
+                <div className='space-y-2 mb-5'>
+                    <p className='text-center text-destructive font-bold mb-2'>No Google Classes Found</p>
                     <ul className='text-center
                     space-y-1 text-sm'>
-                        <li className='text-accent max-w-[260px] mx-auto mb-3'>Give JotterBlog access to your Google Classrooms when logging in</li>
-                        <li className="text-center relative text-accent max-w-[150px] mx-auto">
+                        <li className='text-muted-foreground max-w-[320px] mx-auto mb-3'>Give JotterBlog access to your Google Classrooms when logging in</li>
+                        <li className="text-center relative text-muted-foreground max-w-[150px] mx-auto">
                             <span className="relative z-10 bg-background px-3">or</span>
                             <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
                         </li>
-                        <li className='text-accent max-w-[260px] mx-auto'>Create a Google Classroom using {session?.user?.email}</li>
+                        <li className='text-muted-foreground max-w-[260px] mx-auto'>Create a Google Classroom using <span>{session?.user?.email}</span></li>
                     </ul>
                 </div>
-
             )}
             {googleClassrooms?.length > 0 && googleClassrooms.map((classroom) => (
                 <div
