@@ -30,7 +30,6 @@ export default async function Roster({
   ]);
 
   const showTutorialModal = resolvedSearchParams?.tutorialModal === 'true';
-  console.log('studentRoster', showTutorialModal);
 
   return (
     <>
