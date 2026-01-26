@@ -1,7 +1,6 @@
 'use client'
 import GradingPanel from "@/components/grading-panel"
-import { Card, CardContent, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ResponseData } from "@/types"
 import { useState } from "react"
 
@@ -55,11 +54,34 @@ export default function GradeResponseCard({
         <>
             <div className="mb-8 grid-cols-1 xl:grid-cols-2 grid gap-5 items-start">
                 {responseArr?.length > 0 && responseArr.map((responseData: ResponseData, index: number) => (
-                    <Card className='w-full space-y-2 mx-auto' key={index}>
-                        <div className="flex-between text-sm">
-                            <p className='ml-2'> Marked as:
-                                {renderScoreUIText(responseData.score)}
-                            </p>
+                    <Card className='w-full mx-auto' key={index}>
+                        <CardHeader>
+                            <CardTitle className='text-sm font-bold flex-between border-b'>
+                                <p>Question {index + 1}</p>
+                                <p className='font-bold'> Marked as:
+                                    {renderScoreUIText(responseData.score)}
+                                </p>
+                            </CardTitle>
+                        </CardHeader>
+                        <div className="flex-between text-sm relative">
+                        </div>
+                        <CardContent className='px-5 pb-0  pt-0'>
+                            <p className='mb-6 mt-3 leading-snug text-center font-medium italic'>{responseData.question}</p>
+                            <div className={`
+                            p-3 m-0 rounded-md bg-background border-4      
+                             ${responseData.score === 1
+                                    ? 'border-success'
+                                    : responseData.score === 0.5
+                                        ? 'border-warning'
+                                        : responseData.score === 0
+                                            ? 'border-destructive'
+                                            : 'border-muted'
+                                }
+                            `}>
+                                {responseData?.answer || <span className="italic">No answer provided.</span>}
+                            </div>
+                        </CardContent>
+                        <CardFooter className="block p-5">
                             <GradingPanel
                                 currentScore={responseData.score}
                                 responseId={responseId}
@@ -68,15 +90,7 @@ export default function GradeResponseCard({
                                 teacherId={teacherId}
                                 sessionId={sessionId}
                             />
-                        </div> 
-                        <Separator />
-                        <CardTitle className='p-2 py-3 leading-snug text-center font-normal italic'>{responseData.question}</CardTitle>
-                        <CardContent className='p-5 pt-0'>
-                            <p className='ml-1 mb-1 text-sm font-bold'>Answer:</p>
-                            <div className='bg-background p-3 m-0 rounded-md'>
-                                {responseData.answer}
-                            </div>
-                        </CardContent>
+                        </CardFooter>
                     </Card>
                 ))}
             </div>
