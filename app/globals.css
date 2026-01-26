@@ -21,7 +21,7 @@
     --destructive: hsl(10, 59%, 48%);
     --destructive-foreground: hsl(0, 0%, 100%);
     --warning: hsl(37, 95%, 45%);
-    --warning-foreground: hsl(0, 0%, 10%);
+    --warning-foreground: hsl(0, 0%, 100%);
     --success: hsl(129, 72%, 31%);
     --success-foreground: hsl(0, 0%, 100%);
     --border: hsl(36, 24%, 79%);
@@ -50,8 +50,9 @@
     --shadow-y: 3px;
     --shadow-blur: 5px;
     --shadow-spread: 0px;
-    --shadow-opacity: 0.12;
+    --shadow-opacity: 0.72;
     --shadow-color: hsl(28 13% 20%);
+    --shadow-color: hsl(20, 69%, 3%);
     --shadow-2xs: 2px 3px 5px 0px hsl(28 13% 20% / 0.06);
     --shadow-xs: 2px 3px 5px 0px hsl(28 13% 20% / 0.06);
     --shadow-sm:
@@ -92,7 +93,7 @@
     --destructive: hsl(0, 100%, 50%);
     --warning: hsl(50, 98%, 43%);
     --warning-foreground: hsl(0, 0%, 7%);
-    --destructive-foreground: hsl(210 40% 98%);
+    --destructive-foreground: hsl(0, 0%, 8%);
     --popover: hsl(215.3 25% 26.7%);
     --popover-foreground: hsl(220 13% 91%);
     --chart-1: hsl(213, 45%, 80%);
@@ -131,7 +132,7 @@
     --destructive: hsl(0, 100%, 50%);
     --warning: hsl(49, 84%, 48%);
     --warning-foreground: hsl(0, 0%, 7%);
-    --destructive-foreground: hsl(0, 0%, 100%);
+    --destructive-foreground: hsl(0, 0%, 8%);
     --popover: hsl(220, 15%, 15%);
     --popover-foreground: hsl(210, 20%, 85%);
     --chart-1: hsl(107, 89%, 48%);
@@ -168,7 +169,7 @@
     --ring: hsla(340, 76%, 70%, 0.816);
     --destructive: hsl(0, 79%, 50%);
     --warning: hsl(37, 95%, 45%);
-    --warning-foreground: hsl(0, 0%, 10%);
+    --warning-foreground: hsl(0, 0%, 100%);
     --destructive-foreground: hsl(0, 0%, 100%);
     --popover: hsl(330, 50%, 90%);
     --popover-foreground: hsl(0, 0%, 20%);
@@ -206,7 +207,7 @@
     --input: hsl(0, 2%, 33%); /* input field background */
     --ring: hsl(0, 0%, 29%); /* mid-gray ring */
     --destructive: hsl(0, 80%, 50%); /* red for delete/warning */
-    --destructive-foreground: hsl(0, 0%, 100%);
+    --destructive-foreground: hsl(0, 0%, 8%);
     --warning: hsl(45, 90%, 55%); /* light goldenrod */
     --warning-foreground: hsl(0, 0%, 10%);
     --success: hsl(129, 75%, 35%); /* classy green */
@@ -247,7 +248,7 @@
     --destructive: hsl(0, 70%, 50%);
     --destructive-foreground: hsl(0, 0%, 100%);
     --warning: hsl(45, 87%, 52%);
-    --warning-foreground: hsl(0, 0%, 10%);
+    --warning-foreground: hsl(0, 0%, 100%);
     --popover: hsl(100, 30%, 95%);
     --popover-foreground: hsl(100, 40%, 25%);
     --chart-1: hsl(100, 59%, 34%);
@@ -293,7 +294,7 @@
   --destructive: hsl(5, 89%, 41%); /* Sunset red */
   --destructive-foreground: hsl(0, 0%, 100%);
   --warning: hsl(36, 87%, 37%); /* Golden-orange warning */
-  --warning-foreground: hsl(210, 40%, 20%);
+  --warning-foreground: hsl(0, 0%, 100%);
   --popover: hsl(209, 54%, 89%); /* Dark blue popover */
   --popover-foreground: hsl(210, 78%, 20%);
   --chart-1: hsl(210, 79%, 23%);
@@ -311,7 +312,7 @@
   --sidebar-ring: hsl(210, 80%, 50%);
 
   --success: hsl(145, 55%, 47%); /* Fresh green, still visible on dark */
-  --success-foreground: hsl(211, 80%, 16%);
+  --success-foreground: hsl(0, 0%, 100%);
 }
 
 @layer utilities {

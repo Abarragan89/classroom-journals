@@ -89,7 +89,7 @@ export default function AssessmentTableData({
                     }).map((response) => (
                         <TableRow key={response.id}>
                             <TableCell
-                                className="hover:cursor-pointer hover:text-accent"
+                                className="text-primary hover:cursor-pointer hover:text-accent"
                                 onClick={() => router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`)}
                             >
                                 <ClipboardCheckIcon />
@@ -116,7 +116,7 @@ export default function AssessmentTableData({
                     }).map((response) => (
                         <TableRow key={response.id}>
                             <TableCell
-                                className="hover:cursor-pointer hover:text-accent"
+                                className="text-primary hover:cursor-pointer hover:text-accent"
                                 onClick={() => router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`)}
                             >
                                 <ClipboardCheckIcon />
@@ -143,7 +143,7 @@ export default function AssessmentTableData({
                     }).map((response) => (
                         <TableRow key={response.id}>
                             <TableCell
-                                className="hover:cursor-pointer hover:text-accent"
+                                className="text-primary hover:cursor-pointer hover:text-accent"
                                 onClick={() => router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`)}
                             >
                                 <ClipboardCheckIcon />
