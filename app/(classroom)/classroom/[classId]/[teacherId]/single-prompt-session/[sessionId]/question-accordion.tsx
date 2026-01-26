@@ -106,7 +106,7 @@ export default function QuestionAccordion({
                         {label.text}
                     </p>
                     <p className="text-center my-5 font-medium italic w-[97%] mx-auto">{currentSubQuery.current.question}</p>
-                    <div className="max-h-[500px] overflow-y-auto custom-scrollbar space-y-6 rounded-md shadow-md">
+                    <div className="max-h-[500px] overflow-y-auto custom-scrollbar space-y-6 rounded-md">
                         {currentResponseData?.[currentSubQuery.current.question]?.[currentSubQuery.current.score]?.map((data) => (
                             <div key={data.responseId} className="bg-card border rounded-md text-sm relative shadow-md">
                                 <p className="bg-muted text-muted-foreground py-1 text-center font-bold">{data?.studName}</p>
