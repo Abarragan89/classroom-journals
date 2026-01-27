@@ -5,11 +5,13 @@ import StudentRosterRow from "@/components/shared/student-roster-row";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Session, User } from "@/types";
 import { useQuery } from "@tanstack/react-query";
+import PrintViewLogins from "./print-view-logins";
 
-export default function RosterTable({ studentRoster, session, classId }: {
+export default function RosterTable({ studentRoster, session, classId, classCode }: {
     studentRoster: User[],
     session: Session,
-    classId: string
+    classId: string,
+    classCode: string
 }) {
 
     const { data: allStudents } = useQuery({
@@ -29,7 +31,12 @@ export default function RosterTable({ studentRoster, session, classId }: {
 
     return (
         <>
-            <div className="flex-between w-full absolute top-[50px] right-0 z-50">
+            {/* Only visible in print view */}
+            <PrintViewLogins
+                classCode={classCode}
+                studentRoster={allStudents}
+            />
+            <div className="flex-between w-full absolute top-[50px] right-0 z-50 print:hidden">
                 {allStudents && allStudents?.length > 0 && <PringLoginBtn />}
 
                 {/* Show add student button in different position if there are students */}
@@ -38,12 +45,12 @@ export default function RosterTable({ studentRoster, session, classId }: {
                 </div>
             </div>
             {allStudents && allStudents.length === 0 ? (
-                <p className="mt-12 text-xl font-medium text-center">
+                <p className="mt-12 text-xl font-medium text-center print:hidden">
                     Add students to the roster!
                 </p>
             ) : (
 
-                <div className="border rounded-md mt-20">
+                <div className="border rounded-md mt-20 print:hidden">
                     <Table>
                         <TableHeader>
                             <TableRow>
