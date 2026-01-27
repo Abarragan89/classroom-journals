@@ -62,12 +62,8 @@ export default async function ResponseReview({
                     )}
 
                     {!singleResponse?.promptSession?.isPublic && singleResponse?.promptSession?.promptType === "BLOG" && (
-                        <Button asChild>
-                            <Link
-                                href={`/discussion-board/${singleResponse?.promptSession?.id}/response/${responseId}`}
-                            >
-                                Blogs are Private
-                            </Link>
+                        <Button disabled>
+                            Blogs are Private
                         </Button>
                     )}
 
