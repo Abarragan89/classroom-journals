@@ -99,7 +99,7 @@ export default function EditPromptSessionPopUp({
                 </p>
             ) : (
                 !isSessionPublic && promptSessionType !== 'ASSESSMENT' &&
-                <p>Private</p>
+                <p>Private Blog</p>
             )}
             <div className={`flex-end ${promptSessionType === 'ASSESSMENT' ? 'w-full' : ''} relative z-10`}>
                 <DropdownMenu>

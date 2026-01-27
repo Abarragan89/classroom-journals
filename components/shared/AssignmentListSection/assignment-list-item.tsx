@@ -66,7 +66,7 @@ export default function AssignmentListItem({
                                         </span>
                                     </span>
                                 ) : (
-                                    <span>Private</span>
+                                    <span>Private Blog</span>
                                 )}
                             </>
                         )}
