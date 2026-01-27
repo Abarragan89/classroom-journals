@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { approveUsernameChange, declineStudentRequest, approveNewPrompt, markAllRequestsAsViewed } from '@/lib/actions/student-request';
 import { StudentRequest } from '@/types';
 import { toast } from 'sonner';
@@ -76,38 +76,53 @@ export default function StudentRequestSection({
     }
 
     return (
-        <section className='space-y-10 mt-10'>
+        <section className='mt-10 grid grid-cols-1 xl:grid-cols-2 gap-6'>
             {allRequests.length > 0 ? (
                 allRequests.map((studentRequest: StudentRequest) => (
-                    <Card
-                        key={studentRequest.id}
-                        className='bg-card'
-                    >
-                        <CardHeader>
-                            <CardTitle>
-                                <Badge variant={`${studentRequest.type === "PROMPT" ? 'default' : 'secondary'}`}>
-                                    {studentRequest.type} 
+                    <Card key={studentRequest.id} className="bg-card shadow-lg rounded-xl border border-border mx-auto my-6 w-full">
+                        <CardHeader className="">
+                            <div className="flex-between">
+                                <Badge
+                                    variant={studentRequest.type === "PROMPT" ? "default" : "secondary"}
+                                    className="font-bold text-xs"
+                                >
+                                    {studentRequest.type === "USERNAME" ? "Name Change" : "Prompt Idea"}
                                 </Badge>
-                            </CardTitle>
+                                <p className='text-card-foreground text-sm font-bold'>{studentRequest.student.username}</p>
+                            </div>
                         </CardHeader>
-                        <CardContent>
-                            <p className='text-md tracking-wider text-center mb-5'><span className="font-bold">{studentRequest.student.username}</span> is requesting a <span className="underline">{studentRequest.type}</span> :</p>
-                            {studentRequest.type === 'USERNAME' ? (
-                                <p className='text-center bg-background border border-border p-4 rounded-md mx-5 sm:mx-20'>{studentRequest.displayText}</p>
-                            ) : (
-                                <p className='text-center bg-background border border-border p-4 rounded-md mx-5 sm:mx-20'>{studentRequest.text}</p>
-                            )}
+                        <CardContent className="pt-3">
+                            <div className="bg-background border border-border rounded-md p-3 text-center text-md font-medium">
+                                {studentRequest.type === "USERNAME"
+                                    ? studentRequest.displayText
+                                    : studentRequest.text}
+                            </div>
                         </CardContent>
-                        <CardFooter className='flex-center gap-x-10'>
-                            <Button onClick={() => approveRequest(studentRequest.studentId, studentRequest.text, studentRequest.id, studentRequest.type)} className='bg-success'>Accept</Button>
-                            <Button onClick={() => declineRequest(studentRequest.id)} className='bg-destructive'>Decline</Button>
-                            {/* <p>{formatDateMonthDayYear(studentRequest.createdAt)}</p> */}
+                        <CardFooter className="flex justify-center gap-6 px-6 pb-6">
+                            <Button
+                                size={"sm"}
+                                className='bg-success text-success-foreground'
+                                onClick={() => approveRequest(studentRequest.studentId, studentRequest.text, studentRequest.id, studentRequest.type)}
+                                aria-label="Accept Request"
+                            >
+                                Accept
+                            </Button>
+                            <Button
+                                size={"sm"}
+                                variant="destructive"
+                                onClick={() => declineRequest(studentRequest.id)}
+                                aria-label="Decline Request"
+                            >
+                                Decline
+                            </Button>
                         </CardFooter>
-                    </Card>
+                    </Card >
+
                 ))
             ) : (
                 <p className="text-2xl italic text-center">No Requests</p>
-            )}
-        </section>
+            )
+            }
+        </section >
     )
 }
