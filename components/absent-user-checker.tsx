@@ -53,7 +53,6 @@ export default function AbsentUserChecker() {
     const REDIRECT_URL = "https://abarragan89.github.io/jotter-blog-still-there/"
     const [state, setState] = useState<string>("Active")
     const [count, setCount] = useState<number>(0)
-    const [remaining, setRemaining] = useState<number>(120000)
 
     const onIdle = () => {
         setState("Idle")
@@ -72,17 +71,13 @@ export default function AbsentUserChecker() {
         onIdle,
         onActive,
         onAction,
-        // timeout: 600_000, // 10 min
-        timeout: 600_000, // 10 min
+        timeout: 3_600_000, // 60 min
         throttle: 1000,
     })
 
     useEffect(() => {
         const interval = setInterval(() => {
             const secs = Math.ceil(getRemainingTime() / 1000)
-            if (secs !== remaining) {
-                setRemaining(secs)
-            }
             if (secs <= 0) {
                 const currentUrl = window.location.href
                 const redirectUrl = `${REDIRECT_URL}?returnUrl=${encodeURIComponent(
@@ -93,7 +88,7 @@ export default function AbsentUserChecker() {
         }, 1000)
 
         return () => clearInterval(interval)
-    }, [remaining, getRemainingTime])
+    }, [getRemainingTime])
 
     return null
 }
