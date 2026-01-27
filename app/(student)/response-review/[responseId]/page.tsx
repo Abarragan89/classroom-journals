@@ -62,7 +62,7 @@ export default async function ResponseReview({
                     )}
 
                     {!singleResponse?.promptSession?.isPublic && singleResponse?.promptSession?.promptType === "BLOG" && (
-                        <Button disabled>
+                        <Button disabled variant="destructive">
                             Blogs are Private
                         </Button>
                     )}
