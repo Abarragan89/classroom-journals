@@ -1,5 +1,4 @@
 "use client";
-import RequestNewUsername from '@/components/modalBtns/request-new-username';
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { StudentRequest, User } from '@/types';
@@ -69,13 +68,6 @@ export default function StudentProfileClientWrapper({
                         defaultValue={studentInfo?.username}
                         readOnly
                         disabled
-                    />
-                    <RequestNewUsername
-                        studentId={studentInfo?.id}
-                        teacherId={teacherId}
-                        handleUIChange={handleRequestUIHandler}
-                        hasSentUsernameRequest={hasSentUsernameRequest}
-                        classId={classId}
                     />
                 </div>
             </div>

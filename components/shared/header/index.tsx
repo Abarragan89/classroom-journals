@@ -18,8 +18,8 @@ export default function Header({
 }) {
 
     return (
-        <header className='w-full border-b print:hidden'>
-            <div className="py-3 px-5  flex-between  max-w-7xl lg:mx-auto ">
+        <header className='w-full border-b print:hidden '>
+            <div className="py-3 px-5  flex-between relative  max-w-7xl lg:mx-auto ">
                 <div className="flex-start">
                     <Link
                         href='/'
@@ -39,6 +39,12 @@ export default function Header({
                     session={session as Session}
                     isAllowedToMakeNewClass={isAllowedToMakeNewClass as boolean}
                 />
+                {session?.user?.username && !session?.user?.email && (
+                    <p className="block text-xs absolute bottom-0 right-5 whitespace-nowrap"
+                    >
+                        Hi, {session?.user?.username}
+                    </p>
+                )}
             </div>
         </header>
     )

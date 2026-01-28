@@ -56,14 +56,10 @@ export default function RequestNewUsernameForm({
                     name="notificationText"
                     render={({ field }) => (
                         <FormItem>
-                            {/* <FormDescription className=''>
-                                Request you name be changed
-                            </FormDescription> */}
-                            {/* <FormLabel>Username</FormLabel> */}
                             <FormControl>
                                 <Input
                                     {...field}
-                                    placeholder='new username'
+                                    placeholder='Request new username'
                                     maxLength={20}
                                     onChange={(e) => field.onChange(e.target.value.replace(/\s/g, ''))}
                                 />
@@ -72,12 +68,12 @@ export default function RequestNewUsernameForm({
                     )}
                 >
                 </FormField>
-                <div className="flex-center">
+                <div className="flex-center mt-5">
                     <Button
                         disabled={isSendingRequest}
                         className='mt-4'
                         type="submit">
-                        Send
+                        Send Request
                     </Button>
                 </div>
             </form>
