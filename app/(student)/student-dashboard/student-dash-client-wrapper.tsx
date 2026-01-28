@@ -33,7 +33,10 @@ export default function StudentDashClientWrapper({
 
   // Initialize state from server-fetched data
   const [hasSentPromptRequest, setHasSentPromptRequest] = useState<boolean>(
-    studentRequests?.some((req: StudentRequest) => req.type === 'prompt') ?? false
+    studentRequests?.some((req: StudentRequest) => req.type === 'PROMPT') ?? false
+  );
+  const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(
+    studentRequests?.some((req: StudentRequest) => req.type === 'USERNAME') ?? false
   );
 
   // Memoize computed values for performance
@@ -44,8 +47,12 @@ export default function StudentDashClientWrapper({
     [allResponses?.responses]
   );
 
-  function handleRequestUIHandler() {
-    setHasSentPromptRequest(true)
+  function handleRequestUIHandler(type: "username" | "prompt") {
+    if (type === "prompt") {
+      setHasSentPromptRequest(true);
+    } else if (type === "username") {
+      setHasSentUsernameRequest(true);
+    }
   }
 
   return (
@@ -75,7 +82,7 @@ export default function StudentDashClientWrapper({
           />
           <Button asChild>
             <Link href={'/typing-test'}>
-              Speed Test
+              Typing Test
             </Link>
           </Button>
 
@@ -83,6 +90,7 @@ export default function StudentDashClientWrapper({
             studentId={studentId}
             teacherId={teacherId}
             handleUIChange={handleRequestUIHandler}
+            hasSentUsernameRequest={hasSentUsernameRequest}
             hasSentPromptRequest={hasSentPromptRequest}
             classId={classroomId}
           />

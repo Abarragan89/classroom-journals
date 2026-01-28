@@ -6,7 +6,6 @@ import StudentDashClientWrapper from "./student-dash-client-wrapper";
 import { getStudentResponsesDashboard } from "@/lib/server/responses";
 import { getAllQuipAlerts } from "@/lib/server/alerts";
 import {
-    // getStudentName,
     getAllPromptCategories,
     getFeaturedBlogs,
     getStudentRequests

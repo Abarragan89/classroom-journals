@@ -34,20 +34,15 @@ export default async function Roster({
   return (
     <>
       <TutorialModal isModalOpen={showTutorialModal} />
-      <div className="relative print:hidden">
-        <h2 className="text-2xl lg:text-3xl mt-2">Class Roster</h2>
+      <div className="relative">
+        <h2 className="text-2xl lg:text-3xl mt-2 print:hidden">Class Roster</h2>
         <RosterTable
           studentRoster={studentRoster}
           session={session}
           classId={classId}
+          classCode={classCode?.classCode as string}
         />
       </div>
-
-      {/* Only visible in print view */}
-      <PrintViewLogins
-        classCode={classCode?.classCode as string}
-        studentRoster={studentRoster}
-      />
     </>
   )
 }

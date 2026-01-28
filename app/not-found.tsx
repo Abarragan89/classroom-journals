@@ -13,7 +13,6 @@ export default function NotFoundPage() {
                 width={100}
                 alt={`${APP_NAME} logo`}
                 priority={true}
-                className="rounded-3xl"
             />
             <div className="p-6 w-[80%] max-w-lg border border-border bg-card rounded-lg shadow-md text-center mt-10">
                 <h1 className="text-3xl font-bold mb-4">Not Found</h1>

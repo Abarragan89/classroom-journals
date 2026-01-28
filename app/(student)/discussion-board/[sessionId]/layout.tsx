@@ -27,6 +27,10 @@ export default async function StudentDashboardLayout({
 
     const promptSession = await getSinglePromptSessionStudentDiscussion(sessionId, classId) as unknown as PromptSession
 
+    if (promptSession.isPublic === false) {
+        return notFound()
+    }
+
     return (
         <SidebarProvider>
             <DiscussionSidebar prompt_data={promptSession as unknown as PromptSession} />
