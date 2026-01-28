@@ -71,7 +71,7 @@ export default function SuggestPromptForm({
                         disabled={isSendingRequest}
                         className='mt-4'
                         type="submit">
-                        Send</Button>
+                        Send Request</Button>
                 </div>
             </form>
         </Form>
