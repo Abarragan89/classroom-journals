@@ -1,7 +1,7 @@
 import { auth } from '@/auth'
 import Header from '@/components/shared/header'
 import { getSingleStudentInformation } from '@/lib/server/roster'
-import { Session, StudentRequest, User, Response } from '@/types'
+import { Session, User, Response } from '@/types'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import StudentProfileClientWrapper from './student-profile-client-wrapper'
@@ -23,7 +23,6 @@ export default async function StudentProfile() {
     }
 
     const classId = session?.classroomId as string
-    const teacherId = session?.teacherId as string
 
     if (!classId) return notFound()
 
@@ -52,9 +51,6 @@ export default async function StudentProfile() {
                 <div suppressHydrationWarning>
                     <StudentProfileClientWrapper
                         studentInfo={studentInfo}
-                        studentRequests={studentRequests as unknown as StudentRequest[]}
-                        classId={classId}
-                        teacherId={teacherId}
                     />
                 </div>
                 <Separator className='mt-10 mb-9' />

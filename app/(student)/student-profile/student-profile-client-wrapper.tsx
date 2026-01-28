@@ -1,48 +1,14 @@
 "use client";
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { StudentRequest, User } from '@/types';
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { User } from '@/types';
 import ChangeAvatar from '@/components/shared/change-avatar';
 
 export default function StudentProfileClientWrapper({
     studentInfo,
-    studentRequests,
-    classId,
-    teacherId,
 }: {
     studentInfo: User;
-    studentRequests: StudentRequest[];
-    classId: string;
-    teacherId: string;
 }) {
-
-    // Get the student requests
-    const { data: studentRequestData } = useQuery({
-        queryKey: ['getStudentUsernameRequests', classId],
-        queryFn: async () => {
-            const response = await fetch(`/api/student-requests/student/${studentInfo?.id}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch student requests');
-            }
-            const data = await response.json();
-            const requests = data.studentRequests as StudentRequest[];
-            setHasSentUsernameRequest(requests?.some(req => req.type === 'USERNAME') || false);
-            return requests
-        },
-        initialData: studentRequests,
-        staleTime: 1000 * 60 * 5, // 5 minutes
-    })
-
-    // 🔥 FIX: Initialize state properly
-    const [hasSentUsernameRequest, setHasSentUsernameRequest] = useState<boolean>(
-        Array.isArray(studentRequests) ? studentRequestData.some(req => req.type === 'USERNAME') : false
-    )
-
-    function handleRequestUIHandler() {
-        setHasSentUsernameRequest(true)
-    }
 
     return (
         <section className="mt-8">

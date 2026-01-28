@@ -1,7 +1,6 @@
 import { getAllStudents } from "@/lib/server/classroom";
 import { Session, User } from "@/types";
 import { auth } from "@/auth";
-import PrintViewLogins from "./print-view-logins";
 import { prisma } from "@/db/prisma";
 import { notFound } from "next/navigation";
 import TutorialModal from "@/components/modals/tutorial-modal";
