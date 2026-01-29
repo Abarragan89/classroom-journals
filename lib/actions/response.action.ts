@@ -201,7 +201,7 @@ export async function updateASingleResponse(
                 submittedAt
             }
         })
-        return { success: true, message: "Error fetching prompts. Try again." };
+        return { success: true, message: "Response updated successfully" };
     } catch (error) {
         if (error instanceof Error) {
             console.error("Error fetching prompts:", error.message);

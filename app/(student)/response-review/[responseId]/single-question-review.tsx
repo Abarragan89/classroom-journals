@@ -15,6 +15,7 @@ import { ResponsiveDialog } from '@/components/responsive-dialog'
 import RubricDisplay from '@/components/rubric-display'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface SingleQuestionReviewProps {
     questions: ResponseData[],
@@ -39,7 +40,7 @@ export default function SingleQuestionReview({
 }: SingleQuestionReviewProps) {
 
     const router = useRouter();
-
+    const queryClient = useQueryClient();
     // State for user-editable form fields
     const [allQuestions, setAllQuestions] = useState<ResponseData[]>(questions || []);
 
@@ -67,6 +68,7 @@ export default function SingleQuestionReview({
 
 
             if (updatedResponse?.success) {
+                await queryClient.invalidateQueries({ queryKey: ['response-review', responseId] });
                 router.push('/student-dashboard')
                 toast('Assignment Submitted!')
             }

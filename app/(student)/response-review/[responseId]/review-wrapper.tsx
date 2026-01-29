@@ -5,13 +5,15 @@ import React from 'react'
 import MultiQuestionReview from './multi-question-review'
 import { Response } from '@/types';
 import { useQuery } from '@tanstack/react-query';
+import SingleQuestionReview from './single-question-review';
 
 export default function ReviewWrapper({
     singleResponse,
     responseId,
     isTeacherPremium,
     gradeLevel,
-    studentId
+    studentId,
+    promptType
 }: {
     // if there is a responseId, then it's been given back to student
     // and needs the submit button here to update
@@ -19,7 +21,8 @@ export default function ReviewWrapper({
     responseId: string,
     isTeacherPremium: boolean,
     gradeLevel: string,
-    studentId: string
+    studentId: string,
+    promptType: 'ASSESSMENT' | 'BLOG'
 }) {
 
     const { data: responseData } = useQuery({
@@ -38,16 +41,31 @@ export default function ReviewWrapper({
     const [questions, setQuestions] = useState<ResponseData[]>(responseData?.response as unknown as ResponseData[])
 
     return (
-        <MultiQuestionReview
-            allQuestions={questions}
-            isSubmittable={responseData?.completionStatus === 'INCOMPLETE' || responseData?.completionStatus === 'RETURNED'}
-            showGrades={responseData?.promptSession?.areGradesVisible as boolean}
-            spellCheckEnabled={responseData?.spellCheckEnabled as boolean}
-            gradeLevel={gradeLevel}
-            isTeacherPremium={isTeacherPremium}
-            setAllQuestions={setQuestions}
-            responseId={responseId}
-            studentId={studentId}
-        />
+        <>
+            {promptType === 'ASSESSMENT' ? (
+                <MultiQuestionReview
+                    allQuestions={questions}
+                    isSubmittable={responseData?.completionStatus === 'INCOMPLETE' || responseData?.completionStatus === 'RETURNED'}
+                    showGrades={responseData?.promptSession?.areGradesVisible as boolean}
+                    spellCheckEnabled={responseData?.spellCheckEnabled as boolean}
+                    gradeLevel={gradeLevel}
+                    isTeacherPremium={isTeacherPremium}
+                    setAllQuestions={setQuestions}
+                    responseId={responseId}
+                    studentId={studentId}
+                />
+            ) : (
+                <SingleQuestionReview
+                    questions={responseData?.response as unknown as ResponseData[]}
+                    isSubmittableInitial={responseData?.completionStatus === 'INCOMPLETE' || responseData?.completionStatus === 'RETURNED'}
+                    showGradesInitial={responseData?.promptSession?.areGradesVisible as boolean}
+                    spellCheckEnabledInitial={responseData?.spellCheckEnabled}
+                    rubricGradesInitial={responseData?.rubricGrades}
+                    studentName={responseData?.student?.name}
+                    responseId={responseData?.id}
+                    studentId={studentId}
+                />
+            )}
+        </>
     )
 }

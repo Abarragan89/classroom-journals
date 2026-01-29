@@ -1,9 +1,8 @@
 import { auth } from '@/auth'
 import Header from '@/components/shared/header'
-import { Response, ResponseData, Session } from '@/types'
+import { Response,  Session } from '@/types'
 import { notFound } from 'next/navigation'
 import React from 'react'
-import SingleQuestionReview from './single-question-review'
 import Link from 'next/link'
 import { ArrowBigLeft } from 'lucide-react'
 import ReviewWrapper from './review-wrapper'
@@ -75,27 +74,14 @@ export default async function ResponseReview({
                         {singleResponse?.promptSession?.title}
                     </h2>
                 )}
-
-                {singleResponse?.promptSession?.promptType === 'ASSESSMENT' ?
-                    <ReviewWrapper
-                        singleResponse={singleResponse}
-                        isTeacherPremium={isPremiumTeacher as boolean}
-                        gradeLevel={grade as string}
-                        responseId={responseId}
-                        studentId={studentId}
-                    />
-                    :
-                    <SingleQuestionReview
-                        questions={singleResponse?.response as unknown as ResponseData[]}
-                        isSubmittableInitial={singleResponse?.completionStatus === 'INCOMPLETE' || singleResponse?.completionStatus === 'RETURNED'}
-                        showGradesInitial={singleResponse?.promptSession?.areGradesVisible as boolean}
-                        spellCheckEnabledInitial={singleResponse?.spellCheckEnabled}
-                        rubricGradesInitial={singleResponse?.rubricGrades}
-                        studentName={singleResponse?.student?.name}
-                        responseId={singleResponse?.id}
-                        studentId={studentId}
-                    />
-                }
+                <ReviewWrapper
+                    singleResponse={singleResponse}
+                    isTeacherPremium={isPremiumTeacher as boolean}
+                    gradeLevel={grade as string}
+                    responseId={responseId}
+                    studentId={studentId}
+                    promptType={singleResponse?.promptSession?.promptType as 'ASSESSMENT' | 'BLOG'}
+                />
             </main>
         </div>
     )
