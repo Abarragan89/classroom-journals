@@ -212,7 +212,7 @@ export default function Editor({
                 autoCorrect="off"
                 autoCapitalize="off"
                 spellCheck={spellCheckEnabled}
-                placeholder="Enter your response here..."
+                placeholder={isDisabled ? "" : "Enter your response here..."}
                 ref={editorRef}
                 disabled={isDisabled}
             />

@@ -61,15 +61,15 @@ export default function RubricDisplay({ rubricGrade, studentName, isPrintView = 
                         </div>
 
                         {/* Rubric Table */}
-                        <div className="w-full" style={{ margin: 0, padding: 0 }}>
+                        <div className="w-full border border-black" style={{ margin: 0, padding: 0 }}>
                             <Table
                                 className='w-full border-collapse'
                             >
                                 <TableHeader>
                                     <TableRow className="border-b border-black">
-                                        <TableHead className="w-32 border-r border-black text-black text-xs p-1">Category</TableHead>
+                                        <TableHead className="w-32 border-r border-b border-black text-black text-xs p-1">Category</TableHead>
                                         {scoreLevels.map(level => (
-                                            <TableHead key={level} className="text-center border-r border-black last:border-r-0 text-black text-xs p-1">
+                                            <TableHead key={level} className="text-center border-r border-b border-black last:border-r-0 text-black text-xs p-1">
                                                 {level} {level === 1 ? 'Point' : 'Points'}
                                             </TableHead>
                                         ))}
@@ -81,7 +81,7 @@ export default function RubricDisplay({ rubricGrade, studentName, isPrintView = 
 
                                         return (
                                             <TableRow key={catIdx} className="border-b border-black">
-                                                <TableCell className="font-medium align-top border-r border-black text-black text-xs p-1" style={{ pageBreakInside: 'avoid', wordWrap: 'break-word' }}>
+                                                <TableCell className="font-medium align-top border-r border-b border-black text-black text-xs p-1" style={{ pageBreakInside: 'avoid', wordWrap: 'break-word' }}>
                                                     {category.name}
                                                 </TableCell>
                                                 {scoreLevels.map(level => {
@@ -159,14 +159,14 @@ export default function RubricDisplay({ rubricGrade, studentName, isPrintView = 
                         <div className="flex-1 overflow-auto p-6">
                             <div>
                                 {/* Student Name and Date */}
-                                <div className='flex justify-between mx-1 mb-5'>
+                                <div className='flex justify-between mx-1 mb-5 text-sm'>
                                     <p className='m-0'>Name:<span className='underline mx-1'>{studentName}</span></p>
 
                                     <p>Date: <span className=' mx-1 underline'>{formatDateLong(rubricGrade.gradedAt, 'long')}</span></p>
                                 </div>
 
                                 {/* Grade Summary */}
-                                <div className='flex justify-between mx-1 mb-0'>
+                                <div className='flex justify-between mx-1 mb-0 text-sm'>
                                     <p className='text-center mt-0'>Assignment: <span>{rubricGrade.rubric.title}</span> </p>
                                     <p>Grade:
                                         <span className={`font-bold ml-1 ${rubricGrade.percentageScore >= 85 ? 'text-success' :
@@ -178,7 +178,7 @@ export default function RubricDisplay({ rubricGrade, studentName, isPrintView = 
                                     </p>
                                 </div>
                                 {/* Rubric Table */}
-                                <div className="overflow-auto broder rounded-md">
+                                <div className="overflow-auto border rounded-md">
                                     <Table>
                                         <TableHeader>
                                             <TableRow className="">

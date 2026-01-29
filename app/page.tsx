@@ -62,7 +62,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
     return (
         <>
             <Header />
-            <main className="min-h-screen bg-background relative">
+            <main className="min-h-screen relative">
                 {/* Hero Section - Above the Fold */}
                 <section className="relative max-w-7xl mx-auto">
                     <div className="p-10 lg:py-14">
