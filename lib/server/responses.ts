@@ -193,7 +193,7 @@ export async function getAllResponsesFromPrompt(promptSessionId: string, teacher
             } else if (numberScore === 0) {
                 score = '0%'
             } else {
-                score = ((parseFloat((numberScore / responsesArr.length).toFixed(2)) * 100).toString() + '%');
+                score = Math.round((numberScore / responsesArr.length) * 100) + '%';
             }
         } else {
             const isItScored = (responsesArr?.[0].score)?.toString()

@@ -38,7 +38,6 @@ export function StudentComboBox({
         setCurrentStudentIndex(responses.findIndex(response => response.id === responseId))
     }, [params])
 
-
     return (
         <>
             <div className="flex flex-col items-start sm:flex-row sm:items-center mt-4">
@@ -75,7 +74,7 @@ export function StudentComboBox({
                                         >
                                             <div className="flex-between w-full">
                                                 <p>{response?.student?.name?.split(" ")[0]}  {response?.student?.name?.split(" ")[1]}</p>
-                                                <span className="text-sm block">({response.score.toFixed(0)})</span>
+                                                <span className="text-sm block">({response.score})</span>
                                             </div>
                                             <Check
                                                 className={cn(
