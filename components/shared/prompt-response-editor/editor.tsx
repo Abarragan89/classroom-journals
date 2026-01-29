@@ -170,8 +170,8 @@ export default function Editor({
     }
 
 
-    return (
-        <div className={`w-full mx-auto relative bg-card rounded-md p-8 shadow-lg border`}>
+    return ( 
+        <div className={`w-full mx-auto relative bg-card rounded-md p-8 pb-3 shadow-lg border`}>
 
             {jotType === 'ASSESSMENT' && !isPreGraded && (
                 <div className="absolute top-3 left-9">
@@ -180,22 +180,16 @@ export default function Editor({
             )}
 
             {questionNumber && totalQuestions && (
-                <p className="absolute top-3 right-9 text-sm text-muted-foreground">
+                <p className="absolute top-3 right-5 text-xs text-muted-foreground">
                     Question {questionNumber} of {totalQuestions}
                 </p>
             )}
             {questionText && (
-                <p className="py-7 whitespace-pre-line lg:text-lg font-medium leading-relaxed tracking-wider">{questionText}</p>
+                <p className="pt-5 pb-7 ml-1 whitespace-pre-line lg:text-lg font-medium leading-relaxed tracking-wider">{questionText}</p>
             )}
 
             {!isDisabled && characterLimit && (
                 <p className="text-sm w-fit text-right text-muted-foreground absolute right-9 bottom-10">{journalText?.length} / {characterLimit}</p>
-            )}
-
-            {!isDisabled && (
-                <div className="text-xs opacity-70 text-center mb-1">
-                    Press TAB or click the Textbox to start typing
-                </div>
             )}
 
             <Textarea
@@ -206,7 +200,9 @@ export default function Editor({
                 onDrop={(e) => e.preventDefault()}
                 onDragOver={(e) => e.preventDefault()}
                 className={`
-                w-full md:text-lg bg-transparent outline-border border border-border shadow-border shadow-[inset_0px_0px_10px_0px_rgba(0,_0,_0,_0.1)] p-5 resize-none overflow-hidden disabled:opacity-80 disabled:text-foreground disabled:cursor-not-allowed
+                w-full md:text-lg bg-transparent rounded-lg outline-border border shadow-border custom-scrollbar max-h-[70vh] 
+                shadow-[inset_0_10px_30px_-5px_rgba(0,0,0,0.35),inset_0_-10px_30px_-5px_rgba(0,0,0,0.35)]
+                p-6 resize-none h-max-full disabled:opacity-80 disabled:text-foreground disabled:cursor-not-allowed leading-normal  tracking-widest font-extralight text-foreground
                 ${jotType === 'BLOG' ? 'min-h-48' : ''}
             `}
                 value={journalText}
@@ -216,12 +212,12 @@ export default function Editor({
                 autoCorrect="off"
                 autoCapitalize="off"
                 spellCheck={spellCheckEnabled}
+                placeholder="Enter your response here..."
                 ref={editorRef}
                 disabled={isDisabled}
             />
-
             {!isDisabled && (
-                <div className="flex-center space-x-14 mt-2">
+                <div className="flex-center space-x-14 mt-4">
                     <button onTouchStart={handleUndo} onMouseDown={handleUndo} className="p-2 hover:text-primary rounded">
                         <Undo />
                     </button>

@@ -202,7 +202,7 @@ export default function MultipleQuestionEditor({
 
 
             {/* If finished the last question, show answer review */}
-            <div className="w-full max-w-[1000px] mx-auto relative px-5">
+            <div className="w-full max-w-[1000px] mx-auto relative">
                 <div className="flex-between">
                     <div className="flex-center hover:cursor-pointer hover:text-primary"
                         onClick={() => {

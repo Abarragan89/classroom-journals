@@ -320,7 +320,7 @@ export default function SinglePromptEditor({
                 </>
             </ResponsiveDialog>
 
-            <div className="w-full max-w-[1000px] mx-auto relative px-5">
+            <div className="w-full max-w-[1000px] mx-auto relative">
                 <div className="flex-between">
                     <div
                         className="flex-center hover:cursor-pointer hover:text-primary"

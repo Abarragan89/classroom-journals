@@ -65,7 +65,7 @@ export default function MyRubricSection({
                 {showMyRubrics ? "My Rubrics" : "Create/Edit Rubric"}
             </h2>
 
-            <Button onClick={() => { setShowMyRubrics(!showMyRubrics); setCurrentRubric(null) }} className="my-3">
+            <Button variant={"outline"} onClick={() => { setShowMyRubrics(!showMyRubrics); setCurrentRubric(null) }} className="my-3">
                 {showMyRubrics ? "Create New Rubric" : "Back to My Rubrics"}
             </Button>
 
