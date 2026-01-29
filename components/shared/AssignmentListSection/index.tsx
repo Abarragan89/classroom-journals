@@ -111,7 +111,7 @@ export default function AssignmentListSection({
                 ) : (
                     <p className="flex-1 text-center font-medium text-xl">No Assignment Posted</p>
                 )}
-                <div className="flex-1 sticky top-5 mb-5 w-full flex flex-wrap md:flex-col lg:flex-col items-stretch lg:min-w-[280px] gap-3">
+                <div className="flex-1 top-5 mb-5 w-full flex flex-wrap md:flex-col lg:flex-col items-stretch lg:min-w-[280px] gap-3">
                     {/* Search Bar (always full width) */}
                     <div className="w-full">
                         <PromptSearchBar
