@@ -33,6 +33,7 @@ export default function StudentAssignmentListItem({
         } else {
             const blogResponse = studentResponse?.response as unknown as ResponseData[];
             const score = blogResponse?.[0]?.score;
+
             return score !== undefined ? `${score}%` : 'N/A';
         }
     }
@@ -43,7 +44,6 @@ export default function StudentAssignmentListItem({
         scoreValue >= 80 ? 'text-success' :
             scoreValue >= 70 ? 'text-warning' :
                 'text-destructive';
-
 
     return (
         // <div className='relative'>
@@ -65,28 +65,33 @@ export default function StudentAssignmentListItem({
 
                         {/* Submission Status */}
                         {studentResponse.completionStatus === 'COMPLETE' && (
-                            <span>Status: <span className={`font-bold pr-2 text-success`}>Completed</span></span>
+                            <span>Status: <span className={`font-bold text-success`}>Completed</span></span>
                         )}
                         {studentResponse.completionStatus === 'INCOMPLETE' && (
-                            <span>Status: <span className={`font-bold pr-2 text-destructive`}>Incomplete</span></span>
+                            <span>Status: <span className={`font-bold text-destructive`}>Incomplete</span></span>
                         )}
                         {studentResponse.completionStatus === 'RETURNED' && (
-                            <span>Status: <span className={`font-bold pr-2 text-warning`}>Returned</span></span>
+                            <span>Status: <span className={`font-bold text-warning`}>Returned</span></span>
                         )}
 
-                        <Separator orientation="vertical" className="h-4" />
 
-                        <span>
-                            <p>Score: <span className={`font-bold ${scoreColorClass}`}>
-                                {score}
-                            </span></p>
-                        </span>
+                        {studentResponse?.promptSession?.areGradesVisible && (
+                            <>
+                                <Separator orientation="vertical" className="h-4" />
+                                <p>Score:
+                                    <span className={`font-bold ${scoreColorClass}`}>
+                                        {score}
+                                    </span>
+                                </p>
+                            </>
+                        )}
 
-                        <Separator orientation="vertical" className="h-4" />
+
 
                         {/* Show category on Assessment */}
-                        {isAssessment && (
+                        {isAssessment && studentResponse?.promptSession?.prompt?.category?.name && (
                             <>
+                                <Separator orientation="vertical" className="h-4" />
                                 <span className="text-xs text-muted-foreground">
                                     {studentResponse?.promptSession?.prompt?.category?.name}
                                 </span>
@@ -96,18 +101,20 @@ export default function StudentAssignmentListItem({
 
                         {/* Show discussion status on Blog */}
                         {!isAssessment && (
-                            <span>
-                                Discussion: {studentResponse.promptSession?.status === 'OPEN' ? (
-                                    <span className={`font-medium text-success`}>Open</span>
-                                ) : (
-                                    <span className={`font-medium text-destructive`}>Closed</span>
-                                )}
-                            </span>
+                            <>
+                                <Separator orientation="vertical" className="h-4" />
+                                <span>
+                                    Discussion: {studentResponse.promptSession?.status === 'OPEN' ? (
+                                        <span className={`font-medium text-success`}>Open</span>
+                                    ) : (
+                                        <span className={`font-medium text-destructive`}>Closed</span>
+                                    )}
+                                </span>
+
+                            </>
                         )}
                     </div>
-
                 </div>
-
             </Card>
         </Link>
     )

@@ -45,6 +45,7 @@ export default function CreateEditRubric({
 
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
     const [scoreLevels, setScoreLevels] = useState(["1", "2", "3", "4"])
+
     const initialCategories = [
         {
             name: "Introduction",
@@ -140,7 +141,6 @@ export default function CreateEditRubric({
     }
 
     const onSubmit = async (data: RubricFormData) => {
-
         try {
             // If currentRubric is provided, update it; otherwise, create a new one
             if (currentRubric) {
@@ -149,7 +149,7 @@ export default function CreateEditRubric({
                 await createRubric(teacherId, data.categories, data.title)
             }
             // send user back to list with updated rubric data
-            onRubricUpdate(!!currentRubric ? 'updated' : 'created')
+            // onRubricUpdate(!!currentRubric ? 'updated' : 'created')
         } catch (error) {
             console.error('Error creating rubric:', error);
             return {
@@ -309,7 +309,7 @@ export default function CreateEditRubric({
                                                                         {...field}
                                                                         rows={4}
                                                                         className="resize-none"
-                                                                        required={true}
+                                                                        required={false}
                                                                         placeholder="Criteria"
                                                                     />
                                                                 )}

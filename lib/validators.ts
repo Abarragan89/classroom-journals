@@ -50,7 +50,7 @@ export const rubricSchema = z.object({
             name: z.string().min(1, "Required"),
             criteria: z.array(
                 z.object({
-                    description: z.string().min(1, "Required"),
+                    description: z.string(),
                     score: z.number().min(1, "Score must be at least 1")
                 })
             ).min(1, "At least one criterion is required")

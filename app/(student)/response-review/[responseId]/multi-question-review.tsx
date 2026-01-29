@@ -9,6 +9,7 @@ import { toast } from 'sonner'
 import { responsePercentage } from '@/lib/utils'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
+import { useQueryClient } from '@tanstack/react-query'
 
 export default function MultiQuestionReview({
     allQuestions,
@@ -40,6 +41,7 @@ export default function MultiQuestionReview({
     const router = useRouter();
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isAssignmentCollected, setIsAssignmentCollected] = useState<boolean>(false);
+    const queryClient = useQueryClient();
 
     async function updateResponsesHandler(responseData: ResponseData[]) {
         if (isLoading || !responseId) return
@@ -64,6 +66,8 @@ export default function MultiQuestionReview({
             }
 
             if (updatedResponse?.success) {
+                // update cache via react query in wrapper
+                await queryClient.invalidateQueries({ queryKey: ['response-review', responseId] });
                 router.push('/student-dashboard')
                 toast('Assignment Submitted!')
             }
@@ -131,7 +135,7 @@ export default function MultiQuestionReview({
 
 
                 {isSubmittable && responseId &&
-                    <div className="flex-center">
+                    <div className="flex-center mt-5">
                         <Button
                             disabled={isLoading}
                             onClick={() => updateResponsesHandler(allQuestions)}

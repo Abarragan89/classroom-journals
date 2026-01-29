@@ -200,7 +200,7 @@ export default function Editor({
                 onDrop={(e) => e.preventDefault()}
                 onDragOver={(e) => e.preventDefault()}
                 className={`
-                w-full md:text-lg bg-transparent rounded-lg outline-border border shadow-border custom-scrollbar max-h-[70vh] 
+                w-full md:text-lg bg-transparent rounded-lg outline-border border shadow-border custom-scrollbar max-h-[70vh] mb-5
                 shadow-[inset_0_10px_30px_-5px_rgba(0,0,0,0.35),inset_0_-10px_30px_-5px_rgba(0,0,0,0.35)]
                 p-6 resize-none h-max-full disabled:opacity-80 disabled:text-foreground disabled:cursor-not-allowed leading-normal  tracking-widest font-extralight text-foreground
                 ${jotType === 'BLOG' ? 'min-h-48' : ''}
@@ -217,7 +217,7 @@ export default function Editor({
                 disabled={isDisabled}
             />
             {!isDisabled && (
-                <div className="flex-center space-x-14 mt-4">
+                <div className="flex-center space-x-14">
                     <button onTouchStart={handleUndo} onMouseDown={handleUndo} className="p-2 hover:text-primary rounded">
                         <Undo />
                     </button>
