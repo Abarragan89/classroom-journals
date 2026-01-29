@@ -66,7 +66,10 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`
+          ${geistSans.variable} ${geistMono.variable} antialiased
+          min-h-screen bg-[linear-gradient(360deg,_var(--background)_0%,_var(--card)_100%)]
+          `}
       >
         <SessionProvider>
           <TanstackQueryProvider>
