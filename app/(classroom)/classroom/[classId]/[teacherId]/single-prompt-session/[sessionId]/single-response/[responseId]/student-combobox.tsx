@@ -75,7 +75,7 @@ export function StudentComboBox({
                                         >
                                             <div className="flex-between w-full">
                                                 <p>{response?.student?.name?.split(" ")[0]}  {response?.student?.name?.split(" ")[1]}</p>
-                                                <span className="text-sm block">({response.score})</span>
+                                                <span className="text-sm block">({response.score.toFixed(0)})</span>
                                             </div>
                                             <Check
                                                 className={cn(
