@@ -19,6 +19,7 @@ export default function GradeResponseCard({
     const [responseArr, setResponseArr] = useState<ResponseData[]>(questionsAndAnswers)
 
     function updateScoreUIHandler(questionNumber: number, score: number) {
+        
         setResponseArr(prev => {
             const updatedArr = [...prev]
             updatedArr[questionNumber] = {

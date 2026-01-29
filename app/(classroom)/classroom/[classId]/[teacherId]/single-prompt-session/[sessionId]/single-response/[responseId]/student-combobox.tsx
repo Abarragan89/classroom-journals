@@ -38,6 +38,7 @@ export function StudentComboBox({
         setCurrentStudentIndex(responses.findIndex(response => response.id === responseId))
     }, [params])
 
+
     return (
         <>
             <div className="flex flex-col items-start sm:flex-row sm:items-center mt-4">
