@@ -9,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 import {
     Table,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -25,14 +24,14 @@ import {
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { Trash2 } from "lucide-react"
+import { PlusCircle } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { createRubric, deleteRubric, updateRubric } from "@/lib/actions/rubric.actions"
 import { rubricSchema } from "@/lib/validators"
 import { Rubric, RubricFormData } from "@/types"
 import { ResponsiveDialog } from "@/components/responsive-dialog"
-
+import { OctagonX } from "lucide-react"
 
 export default function CreateEditRubric({
     teacherId,
@@ -201,22 +200,20 @@ export default function CreateEditRubric({
 
 
             <div className="mt-4">
-
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
-
-                        <div className="flex justify-between items-center">
+                        <div className="flex justify-start items-center gap-x-5">
                             <FormField
                                 control={form.control}
                                 name="title"
                                 render={({ field }) => (
-                                    <FormItem className="my-4 flex-1">
+                                    <FormItem>
                                         <FormControl>
                                             <Input
                                                 {...field}
-                                                placeholder="Rubric Name"
+                                                placeholder="Enter rubric name"
                                                 required={true}
-                                                className="w-1/2"
+                                                className="min-w-[275px]"
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -224,110 +221,107 @@ export default function CreateEditRubric({
                                 )}
                             />
 
-                            {/* Button to delete rubric */}
-                            {currentRubric && (
-                                <Button
-                                    type="button"
-                                    variant="link"
-                                    className="text-destructive flex-3"
-                                    onClick={() => setShowConfirmDelete(true)}
-                                >
-                                    Delete Rubric
-                                </Button>
-                            )}
                         </div>
                         <div className="overflow-x-auto">
-                            <Table className="min-w-[920px]">
-                                <TableCaption>Create and customize your grading rubric.</TableCaption>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Category</TableHead>
-                                        {[...scoreLevels].reverse().map((level, idx) => {
-                                            const realIdx = scoreLevels.length - 1 - idx
-                                            return (
-                                                <TableHead key={level} className="relative">
-                                                    <div className="flex items-center justify-center gap-2">
-                                                        <span className="text-xl">{level}</span>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => deleteScoreLevel(realIdx)}
-                                                            className="text-destructive"
-                                                            title="Delete column"
-                                                        >
-                                                            <Trash2 size={16} />
-                                                        </button>
-                                                    </div>
-                                                </TableHead>
-                                            )
-                                        })}
-                                    </TableRow>
-                                </TableHeader>
-
-                                <TableBody>
-                                    {categoryFields.map((category, catIdx) => (
-                                        <TableRow key={category.id}>
-                                            {/* Category Name */}
-                                            <TableCell className="w-60 flex justify-between">
-
-                                                <Controller
-                                                    control={form.control}
-                                                    name={`categories.${catIdx}.name`}
-                                                    render={({ field }) => (
-                                                        <Textarea
-                                                            {...field}
-                                                            rows={4}
-                                                            className="resize-none"
-                                                            placeholder="Criteria"
-                                                            required={true}
-                                                        />
-                                                    )}
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeCategory(catIdx)}
-                                                    className="text-destructive ml-3"
-                                                    title="Delete row"
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
-                                            </TableCell>
-
-                                            {/* Criteria By Score */}
-                                            {[...scoreLevels].reverse().map((_, revIdx) => {
-                                                const realIdx = scoreLevels.length - 1 - revIdx
+                            <div className="flex flex-wrap gap-4 my-5">
+                                <Button type="submit">Save Rubric</Button>
+                                {/* Button to delete rubric */}
+                                {currentRubric && (
+                                    <Button
+                                        type="button"
+                                        variant="destructive"
+                                        onClick={() => setShowConfirmDelete(true)}
+                                    >
+                                        Delete Rubric
+                                    </Button>
+                                )}
+                            </div>
+                            <div className="border rounded-md shadow-lg mt-3 relative">
+                                <div className="flex flex-wrap gap-x-8 my-5 text-sm text-primary absolute -top-1 left-3 z-50">
+                                    <Button type="button" variant="secondary" onClick={addCategory} className="gap-x-1"><PlusCircle size={17} /> Category</Button>
+                                    <Button type="button" variant="secondary" onClick={addScoreLevel} className="gap-x-1"><PlusCircle size={17} /> Score</Button>
+                                </div>
+                                <Table className="min-w-[920px]">
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>
+                                            </TableHead>
+                                            {[...scoreLevels].reverse().map((level, idx) => {
+                                                const realIdx = scoreLevels.length - 1 - idx
                                                 return (
-                                                    <TableCell key={realIdx}>
-                                                        <Controller
-                                                            control={form.control}
-                                                            name={`categories.${catIdx}.criteria.${realIdx}.description`}
-                                                            render={({ field }) => (
-                                                                <Textarea
-                                                                    {...field}
-                                                                    rows={4}
-                                                                    className="resize-none"
-                                                                    required={true}
-                                                                    placeholder="Criteria"
-                                                                />
-                                                            )}
-                                                        />
-                                                    </TableCell>
+                                                    <TableHead key={level} className="relative min-h-[48px]">
+                                                        <div className="flex items-center justify-center gap-1 py-4 ">
+                                                            <span className="text-2xl font-bold text-foreground">{level}</span>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => deleteScoreLevel(realIdx)}
+                                                                className="text-destructive"
+                                                                title="Delete column"
+                                                            >
+                                                                <OctagonX size={14} />
+                                                            </button>
+                                                        </div>
+                                                    </TableHead>
                                                 )
                                             })}
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                    </TableHeader>
 
-                        <div className="flex gap-4 mt-6">
-                            <Button type="button" onClick={addCategory} variant="secondary">Add Category</Button>
-                            <Button type="button" onClick={addScoreLevel} variant="secondary">Add Score Level</Button>
-                            {/* If currentRubric, then Update, else Submit */}
-                            {currentRubric ? (
-                                <Button type="submit">Update Rubric</Button>
-                            ) : (
-                                <Button type="submit">Create Rubric</Button>
-                            )}
+                                    <TableBody>
+                                        {categoryFields.map((category, catIdx) => (
+                                            <TableRow key={category.id}>
+                                                {/* Category Name */}
+                                                <TableCell className="w-60 flex justify-between">
+
+                                                    <Controller
+                                                        control={form.control}
+                                                        name={`categories.${catIdx}.name`}
+                                                        render={({ field }) => (
+                                                            <Textarea
+                                                                {...field}
+                                                                rows={3}
+                                                                className="resize-none font-bold md:text-lg"
+                                                                placeholder="Criteria"
+                                                                required={true}
+                                                            />
+                                                        )}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeCategory(catIdx)}
+                                                        className="text-destructive ml-3"
+                                                        title="Delete row"
+                                                    >
+                                                        <OctagonX size={16} />
+                                                    </button>
+                                                </TableCell>
+
+                                                {/* Criteria By Score */}
+                                                {[...scoreLevels].reverse().map((_, revIdx) => {
+                                                    const realIdx = scoreLevels.length - 1 - revIdx
+                                                    return (
+                                                        <TableCell key={realIdx}>
+                                                            <Controller
+                                                                control={form.control}
+                                                                name={`categories.${catIdx}.criteria.${realIdx}.description`}
+                                                                render={({ field }) => (
+                                                                    <Textarea
+                                                                        {...field}
+                                                                        rows={4}
+                                                                        className="resize-none"
+                                                                        required={true}
+                                                                        placeholder="Criteria"
+                                                                    />
+                                                                )}
+                                                            />
+                                                        </TableCell>
+                                                    )
+                                                })}
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
                         </div>
                     </form>
                 </Form>
