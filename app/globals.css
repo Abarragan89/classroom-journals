@@ -50,30 +50,28 @@
     --shadow-y: 3px;
     --shadow-blur: 5px;
     --shadow-spread: 0px;
-    --shadow-opacity: 0.72;
-    --shadow-color: hsl(28 13% 20%);
-    --shadow-color: hsl(20, 69%, 3%);
-    --shadow-2xs: 2px 3px 5px 0px hsl(28 13% 20% / 0.06);
-    --shadow-xs: 2px 3px 5px 0px hsl(28 13% 20% / 0.06);
-    --shadow-sm:
-      2px 3px 5px 0px hsl(28 13% 20% / 0.12),
-      2px 1px 2px -1px hsl(28 13% 20% / 0.12);
-    --shadow:
-      2px 3px 5px 0px hsl(28 13% 20% / 0.12),
-      2px 1px 2px -1px hsl(28 13% 20% / 0.12);
-    --shadow-md:
-      2px 3px 5px 0px hsl(28 13% 20% / 0.12),
-      2px 2px 4px -1px hsl(28 13% 20% / 0.12);
-    --shadow-lg:
-      2px 3px 5px 0px hsl(28 13% 20% / 0.12),
-      2px 4px 6px -1px hsl(28 13% 20% / 0.12);
-    --shadow-xl:
-      2px 3px 5px 0px hsl(28 13% 20% / 0.12),
-      2px 8px 10px -1px hsl(28 13% 20% / 0.12);
-    --shadow-2xl: 2px 3px 5px 0px hsl(28 13% 20% / 0.3);
+    --shadow-color: hsla(17, 8%, 18%, 0.25);
     --tracking-normal: 0em;
     --spacing: 0.25rem;
+
+    --shadow-2xs: var(--shadow-x) var(--shadow-y) var(--shadow-blur)
+      var(--shadow-spread) var(--shadow-color);
+    --shadow-xs: var(--shadow-x) var(--shadow-y) var(--shadow-blur)
+      var(--shadow-spread) var(--shadow-color);
+    --shadow-sm:
+      var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-spread)
+        var(--shadow-color),
+      2px 2px 2px 0px var(--shadow-color);
+    --shadow-md:
+      var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-spread)
+        var(--shadow-color),
+      4px 4px 4px 0px var(--shadow-color);
+    --shadow-lg:
+      var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-spread)
+        var(--shadow-color),
+      5px 8px 8px 0px var(--shadow-color);
   }
+
   .dark {
     --background: hsl(222.2 84% 4.9%);
     --foreground: hsl(210 40% 98%);
@@ -111,6 +109,12 @@
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 73%, 39%);
     --success-foreground: hsl(222.2 84% 4.9%);
+    --shadow-color: hsla(213, 45%, 80%, 0.1);
+    --radius: 0.12rem;
+    --shadow-x: 0px;
+    --shadow-y: 0px;
+    --shadow-blur: 4px;
+    --shadow-spread: 4px;
   }
 
   .tech {
@@ -120,8 +124,8 @@
     --primary-foreground: hsl(0, 0%, 0%);
     --secondary: hsl(73, 77%, 45%);
     --secondary-foreground: hsl(0, 0%, 5%);
-    --muted: hsl(135, 30%, 18%);
-    --muted-foreground: hsl(120, 15%, 65%);
+    --muted: hsl(135, 31%, 15%);
+    --muted-foreground: hsl(120, 11%, 43%);
     --card: hsl(0, 0%, 0%);
     --card-foreground: hsl(120, 35%, 85%);
     --accent: hsl(75, 49%, 54%);
@@ -150,6 +154,13 @@
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --success: hsl(129, 80%, 43%);
     --success-foreground: hsl(0, 0%, 0%);
+    --shadow-x: 0px;
+    --shadow-y: 0px;
+    --shadow-blur: 4px;
+    --shadow-spread: 4px;
+    --shadow-color: hsla(107, 64%, 33%, 0.15);
+    --tracking-normal: 0em;
+    --spacing: 0.25rem;
   }
   .cupid {
     --background: hsl(330, 60%, 94%);
@@ -205,7 +216,7 @@
     --accent-foreground: hsl(0, 0%, 10%); /* text on silver */
     --border: hsl(0, 4%, 26%); /* subtle borders */
     --input: hsl(0, 2%, 33%); /* input field background */
-    --ring: hsl(0, 0%, 29%); /* mid-gray ring */
+    --ring: hsl(0, 5%, 75%); /* mid-gray ring */
     --destructive: hsl(0, 80%, 50%); /* red for delete/warning */
     --destructive-foreground: hsl(0, 0%, 8%);
     --warning: hsl(45, 90%, 55%); /* light goldenrod */
@@ -227,6 +238,11 @@
     --sidebar-accent-foreground: hsl(0, 0%, 95%);
     --sidebar-border: hsl(0, 0%, 20%);
     --sidebar-ring: hsl(0, 0%, 80%);
+    --shadow-x: 0px;
+    --shadow-y: 0px;
+    --shadow-blur: 4px;
+    --shadow-spread: 4px;
+    --shadow-color: hsla(120, 1%, 31%, 0.35);
   }
 
   .avocado {
@@ -267,52 +283,51 @@
     --success: hsl(140, 70%, 40%);
     --success-foreground: hsl(0, 0%, 100%);
   }
-}
+  .sky {
+    --background: hsl(210, 60%, 90%); /* Light airy sky background */
+    --foreground: hsl(210, 40%, 15%); /* Deep blue text for contrast */
+    --primary: hsl(210, 79%, 45%); /* Bold vivid sky blue */
+    --primary-foreground: hsl(0, 0%, 100%); /* White text on blue */
 
-.sky {
-  --background: hsl(210, 60%, 90%); /* Light airy sky background */
-  --foreground: hsl(210, 40%, 15%); /* Deep blue text for contrast */
-  --primary: hsl(210, 79%, 45%); /* Bold vivid sky blue */
-  --primary-foreground: hsl(0, 0%, 100%); /* White text on blue */
+    --secondary: hsl(210, 55%, 75%); /* Soft sky blue */
+    --secondary-foreground: hsl(210, 60%, 20%); /* Dark text */
 
-  --secondary: hsl(210, 55%, 75%); /* Soft sky blue */
-  --secondary-foreground: hsl(210, 60%, 20%); /* Dark text */
+    --muted: hsl(210, 35%, 80%); /* Light muted blue */
+    --muted-foreground: hsl(210, 30%, 35%); /* Medium dark text */
 
-  --muted: hsl(210, 35%, 80%); /* Light muted blue */
-  --muted-foreground: hsl(210, 30%, 35%); /* Medium dark text */
+    --card: hsl(206, 50%, 97%); /* Very light card, like clouds */
+    --card-foreground: hsl(209, 40%, 15%); /* Dark text */
 
-  --card: hsl(206, 50%, 97%); /* Very light card, like clouds */
-  --card-foreground: hsl(209, 40%, 15%); /* Dark text */
+    --accent: hsl(45, 95%, 55%); /* Bright sunlight yellow */
+    --accent-foreground: hsl(210, 50%, 15%); /* Deep blue for contrast */
 
-  --accent: hsl(45, 95%, 55%); /* Bright sunlight yellow */
-  --accent-foreground: hsl(210, 50%, 15%); /* Deep blue for contrast */
+    --border: hsl(210, 30%, 75%); /* Soft sky border */
+    --input: hsl(210, 40%, 95%); /* Very light input field */
+    --ring: hsl(210, 80%, 55%); /* Bright blue focus ring */
 
-  --border: hsl(210, 30%, 75%); /* Soft sky border */
-  --input: hsl(210, 40%, 95%); /* Very light input field */
-  --ring: hsl(210, 80%, 55%); /* Bright blue focus ring */
+    --destructive: hsl(5, 89%, 41%); /* Sunset red */
+    --destructive-foreground: hsl(0, 0%, 100%);
+    --warning: hsl(36, 87%, 37%); /* Golden-orange warning */
+    --warning-foreground: hsl(0, 0%, 100%);
+    --popover: hsl(209, 54%, 89%); /* Dark blue popover */
+    --popover-foreground: hsl(210, 78%, 20%);
+    --chart-1: hsl(210, 79%, 23%);
+    --chart-2: hsl(207, 77%, 25%);
+    --chart-3: hsl(210, 55%, 35%);
+    --chart-4: hsl(192, 100%, 65%);
+    --chart-5: hsl(189, 11%, 88%);
+    --sidebar-background: hsl(210, 62%, 42%); /* Deep sky sidebar */
+    --sidebar-foreground: hsl(210, 40%, 96%);
+    --sidebar-primary: hsl(210, 80%, 50%);
+    --sidebar-primary-foreground: hsl(0, 0%, 100%);
+    --sidebar-accent: hsl(189, 11%, 88%); /* Sunlight accent */
+    --sidebar-accent-foreground: hsl(210, 40%, 20%);
+    --sidebar-border: hsl(210, 45%, 30%);
+    --sidebar-ring: hsl(210, 80%, 50%);
 
-  --destructive: hsl(5, 89%, 41%); /* Sunset red */
-  --destructive-foreground: hsl(0, 0%, 100%);
-  --warning: hsl(36, 87%, 37%); /* Golden-orange warning */
-  --warning-foreground: hsl(0, 0%, 100%);
-  --popover: hsl(209, 54%, 89%); /* Dark blue popover */
-  --popover-foreground: hsl(210, 78%, 20%);
-  --chart-1: hsl(210, 79%, 23%);
-  --chart-2: hsl(207, 77%, 25%);
-  --chart-3: hsl(210, 55%, 35%);
-  --chart-4: hsl(192, 100%, 65%);
-  --chart-5: hsl(189, 11%, 88%);
-  --sidebar-background: hsl(210, 62%, 42%); /* Deep sky sidebar */
-  --sidebar-foreground: hsl(210, 40%, 96%);
-  --sidebar-primary: hsl(210, 80%, 50%);
-  --sidebar-primary-foreground: hsl(0, 0%, 100%);
-  --sidebar-accent: hsl(189, 11%, 88%); /* Sunlight accent */
-  --sidebar-accent-foreground: hsl(210, 40%, 20%);
-  --sidebar-border: hsl(210, 45%, 30%);
-  --sidebar-ring: hsl(210, 80%, 50%);
-
-  --success: hsl(145, 55%, 47%); /* Fresh green, still visible on dark */
-  --success-foreground: hsl(0, 0%, 100%);
+    --success: hsl(145, 55%, 47%); /* Fresh green, still visible on dark */
+    --success-foreground: hsl(0, 0%, 100%);
+  }
 }
 
 @layer utilities {
@@ -348,6 +363,22 @@
     field-sizing: content;
   }
 
+  .shadow-2xs {
+    box-shadow: var(--shadow-2xs);
+  }
+  .shadow-xs {
+    box-shadow: var(--shadow-xs);
+  }
+  .shadow-sm {
+    box-shadow: var(--shadow-sm);
+  }
+  .shadow-md {
+    box-shadow: var(--shadow-md);
+  }
+  .shadow-lg {
+    box-shadow: var(--shadow-lg);
+  }
+
   .custom-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: var(--primary) var(--card);
@@ -375,15 +406,6 @@
 @layer base {
   * {
     @apply border-border outline-ring;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
   }
   body {
     @apply bg-background text-foreground;

@@ -21,7 +21,7 @@ export default function AssignmentListItem({
 
     return (
         <Link href={`/classroom/${classId}/${teacherId}/single-prompt-session/${jotData.id}`}>
-            <Card className="w-full relative border shadow-md hover:border-primary hover:shadow-lg transition-shadow group mb-6 pt-3">
+            <Card className="w-full relative border shadow-sm hover:border-primary hover:shadow-md transition-shadow group mb-6 pt-3">
                 <div className="flex-between text-[.68rem] px-4">
                     <Badge variant={isAssessment ? "default" : "secondary"} className="text-xs w-fit">
                         {isAssessment ? 'Assessment' : 'Blog'}

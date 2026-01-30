@@ -62,13 +62,13 @@ export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
+  // min-h-screen bg-[linear-gradient(360deg,_var(--background)_0%,_var(--card)_100%)]
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`
           ${geistSans.variable} ${geistMono.variable} antialiased
-          min-h-screen bg-[linear-gradient(360deg,_var(--background)_0%,_var(--card)_100%)]
           `}
       >
         <SessionProvider>

@@ -131,7 +131,7 @@ export default function CategorySection({
             </ResponsiveDialog>
 
 
-            <Card className="shadow-md hover:shadow-lg hover:scale-[1.01] transition-transform duration-300">
+            <Card className="shadow-sm hover:scale-[1.01] transition-transform duration-300">
                 <CardContent className="space-y-4">
                     <p className="text-md font-bold">Category <span className="text-sm font-normal">(optional)</span></p>
                     <div className="flex-start">
@@ -140,7 +140,7 @@ export default function CategorySection({
                             placeholder="add new category"
                             value={newCategoryName}
                             onChange={(e) => setNewCategoryName(e.target.value)}
-                            className="mr-5 bg-background"
+                            className="mr-5 bg-background shadow-none"
                         />
                         <Button
                             type="button"

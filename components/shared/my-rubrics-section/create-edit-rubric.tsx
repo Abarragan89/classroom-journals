@@ -209,12 +209,14 @@ export default function CreateEditRubric({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input
-                                                {...field}
-                                                placeholder="Enter rubric name"
-                                                required={true}
-                                                className="min-w-[275px]"
-                                            />
+                                            <div className="shadow-md rounded-md scale-[1.01] focus-within:scale-100 focus-within:shadow-none transition-transform">
+                                                <Input
+                                                    {...field}
+                                                    placeholder="Enter rubric name"
+                                                    required={true}
+                                                    className="min-w-[275px]"
+                                                />
+                                            </div>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
