@@ -164,14 +164,14 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     return (
         <form action={action} className="grid relative space-y-5">
             {questions.map((question, index) => (
-                <Card key={question.name} className="shadow-md hover:scale-[1.01] transition-transform duration-100">
+                <Card key={question.name} className="shadow-sm hover:scale-[1.01] transition-transform duration-100">
                     <CardContent>
                         <Label htmlFor={question.name} className="text-md font-bold ml-1">
                             {question.label}
                         </Label>
                         <Textarea
                             id={question.name}
-                            className="col-span-3 bg-background"
+                            className="col-span-3 bg-background mt-1 resize-none shadow-none"
                             name={question.name}
                             value={question.value} // Keep text state for deletion
                             onChange={(e) => handleChange(index, e.target.value)}
@@ -196,7 +196,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
             />
 
             {/* Assign to a classroom */}
-            <Card className="shadow-md hover:scale-[1.01] transition-transform duration-100">
+            <Card className="shadow-sm hover:scale-[1.01] transition-transform duration-100">
                 <CardContent>
                     <p className="text-md font-bold">Assign <span className="text-sm font-normal">(optional)</span></p>
                     <div className="space-y-3 mt-5">

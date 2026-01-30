@@ -170,8 +170,8 @@ export default function Editor({
     }
 
 
-    return ( 
-        <div className={`w-full mx-auto relative bg-card rounded-md p-8 pb-3 shadow-lg border`}>
+    return (
+        <div className={`w-full mx-auto relative bg-card rounded-md p-8 pb-3 border`}>
 
             {jotType === 'ASSESSMENT' && !isPreGraded && (
                 <div className="absolute top-3 left-9">
@@ -200,8 +200,8 @@ export default function Editor({
                 onDrop={(e) => e.preventDefault()}
                 onDragOver={(e) => e.preventDefault()}
                 className={`
-                w-full md:text-lg bg-transparent rounded-lg outline-border border shadow-border custom-scrollbar max-h-[70vh] mb-5
-                shadow-[inset_0_10px_30px_-5px_rgba(0,0,0,0.35),inset_0_-10px_30px_-5px_rgba(0,0,0,0.35)]
+                w-full md:text-lg bg-transparent outline-ring rounded-lg  shadow-border  custom-scrollbar max-h-[70vh] mb-5
+                shadow-[inset_0_5px_20px_-5px_rgba(0,0,0,0.35),inset_0_-5px_20px_-5px_rgba(0,0,0,0.35)]
                 p-6 resize-none h-max-full disabled:opacity-80 disabled:text-foreground disabled:cursor-not-allowed leading-normal  tracking-widest font-extralight text-foreground
                 ${jotType === 'BLOG' ? 'min-h-48' : ''}
             `}

@@ -53,9 +53,9 @@ export default function GradeResponseCard({
 
     return (
         <>
-            <div className="mb-8 grid-cols-1 xl:grid-cols-2 grid gap-5 items-start">
+            <div className="mb-8 grid-cols-1 xl:grid-cols-2 grid gap-7 items-start">
                 {responseArr?.length > 0 && responseArr.map((responseData: ResponseData, index: number) => (
-                    <Card className='w-full mx-auto' key={index}>
+                    <Card className='w-full mx-auto border' key={index}>
                         <CardHeader>
                             <CardTitle className='text-sm font-bold flex-between border-b'>
                                 <p>Question {index + 1}</p>

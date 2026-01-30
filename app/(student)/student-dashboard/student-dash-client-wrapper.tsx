@@ -59,7 +59,7 @@ export default function StudentDashClientWrapper({
     <>
       {lastestTaskToDo && (
         <div
-          className="border border-primary w-full px-5 py-2 rounded-lg relative mb-16 mt-2"
+          className="border border-primary bg-card shadow-lg w-full px-5 py-2 rounded-lg relative mb-16 mt-2"
         >
           <div className="flex-between">
             <div>
@@ -67,7 +67,7 @@ export default function StudentDashClientWrapper({
               <p className="text-md line-clamp-1">{lastestTaskToDo?.promptSession?.title}</p>
               <p className="text-sm text-ring">{lastestTaskToDo?.promptSession?.prompt?.category?.name}</p>
             </div>
-            <Button asChild variant='secondary' className="text-secondary-foreground">
+            <Button asChild className='bg-success text-success-foreground'>
               <Link href={`jot-response/${lastestTaskToDo?.id}?q=0`}>
                 Complete
               </Link>

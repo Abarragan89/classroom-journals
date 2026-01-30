@@ -8,7 +8,7 @@ import { useFormStatus } from "react-dom";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner"
 import { createNewPrompt, updateAPrompt } from "@/lib/actions/prompt.actions";
-import { Plus, X } from "lucide-react";
+import { Plus, X} from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox"
 import { Classroom, Prompt, PromptCategory } from "@/types";
 import { addPromptCategory } from "@/lib/actions/prompt.categories";
@@ -202,14 +202,14 @@ export default function MultiPromptForm({
             }
             <div className="space-y-7">
                 {/* Prompt Title */}
-                <Card className="mb-8 shadow-md hover:scale-[1.01] transition-transform duration-100">
+                <Card className="mb-8 mt-5 shadow-sm hover:scale-[1.01] transition-transform duration-100">
                     <CardContent>
                         <Label htmlFor="title" className="text-md font-bold ml-1">
                             Title
                         </Label>
                         <Input
                             id="title"
-                            className="mt-1 bg-background"
+                            className="mt-1 bg-background shadow-none"
                             name="title"
                             autoFocus
                             required
@@ -218,7 +218,7 @@ export default function MultiPromptForm({
                     </CardContent>
                 </Card>
                 {/* Questions Section */}
-                <Card className="shadow-md hover:scale-[1.01] transition-transform duration-100">
+                <Card className="shadow-sm hover:scale-[1.01] transition-transform duration-100">
                     <CardContent>
                         {questions.map((question, index) => (
                             <div key={question.name}>
@@ -239,7 +239,7 @@ export default function MultiPromptForm({
                                     </div>
                                     <Textarea
                                         id={question.name}
-                                        className="mt-1  bg-background"
+                                        className="mt-1  bg-background shadow-none"
                                         name={question.name}
                                         value={question.value} // Keep text state for deletion
                                         onChange={(e) => handleChange(index, e.target.value)}
@@ -274,7 +274,7 @@ export default function MultiPromptForm({
                 />
 
                 {/* Assign to a classroom */}
-                <Card className="shadow-md hover:scale-[1.01] transition-transform duration-100">
+                <Card className="shadow-sm hover:scale-[1.01] transition-transform duration-100">
                     <CardContent className="space-y-4">
                         <div className="space-y-3 mt-5">
                             {classrooms?.length > 0 && (

@@ -48,7 +48,7 @@ export default function StudentAssignmentListItem({
     return (
         // <div className='relative'>
         <Link className='block relative' href={hrefLink}>
-            <Card className="w-full relative border shadow-md hover:border-primary hover:shadow-lg transition-shadow group mb-6 pt-3">
+            <Card className="w-full relative border shadow-sm hover:border-primary hover:shadow-md transition-shadow group mb-6 pt-3">
                 <div className="flex-between text-[.68rem] px-4">
                     <Badge variant={studentResponse?.promptSession?.promptType === 'ASSESSMENT' ? "default" : "secondary"} className="text-xs w-fit">
                         {studentResponse?.promptSession?.promptType === 'ASSESSMENT' ? 'Assessment' : 'Blog'}
