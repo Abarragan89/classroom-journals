@@ -15,7 +15,7 @@ export default function DynamicHeader({ classId, teacherId }: { classId: string;
         const promptSessionId = params?.sessionId
         breadCrumbRoute = `/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}`;
         breadCrumbText = 'Back to Class Responses';
-        
+
     } else if (pathname.includes("single-response")) {
         const promptSessionId = params?.sessionId
         breadCrumbRoute = `/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}`;
@@ -31,6 +31,9 @@ export default function DynamicHeader({ classId, teacherId }: { classId: string;
             breadCrumbRoute = `/classroom/${classId}/${teacherId}/roster`;
             breadCrumbText = 'Back to Class Roster';
         }
+    } else if (pathname.includes(`${teacherId}/my-rubrics/`)) {
+        breadCrumbRoute = `/classroom/${classId}/${teacherId}/my-rubrics`;
+        breadCrumbText = 'Back to My Rubrics';
     }
 
     return (

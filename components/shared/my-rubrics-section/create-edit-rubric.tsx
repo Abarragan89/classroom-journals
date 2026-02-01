@@ -34,20 +34,22 @@ import { ResponsiveDialog } from "@/components/responsive-dialog"
 import { OctagonX } from "lucide-react"
 import { useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 export default function CreateEditRubric({
     teacherId,
     currentRubric,
-    onRubricUpdate
+    classId,
 }: {
     teacherId: string
     currentRubric: Rubric | null
-    onRubricUpdate: () => void
+    classId: string
 }) {
 
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
     const [scoreLevels, setScoreLevels] = useState(["1", "2", "3", "4"])
     const queryClient = useQueryClient();
+    const router = useRouter();
 
     const initialCategories = [
         {
@@ -165,8 +167,18 @@ export default function CreateEditRubric({
                     });
                 }
             }
-            // send user back to list with updated rubric data
-            toast.success('Rubric saved successfully');
+            // Navigate `/classroom/${classId}/${teacherId}/my-rubrics`
+            toast.success('Rubric saved successfully', {
+                action: {
+                    label: 'Back to Rubric List',
+                    onClick: () => router.back()
+                },
+                actionButtonStyle: {
+                    backgroundColor: 'var(--secondary)',
+                    color: 'var(--secondary-foreground)',
+                    border: "var(--border)"
+                }
+            });
         } catch (error) {
             console.error('Error creating rubric:', error);
             return {
@@ -185,7 +197,7 @@ export default function CreateEditRubric({
                 return old.filter(rubricItem => rubricItem.id !== currentRubric.id);
             });
             toast.success('Rubric deleted successfully');
-            onRubricUpdate();
+            router.push(`/classroom/${classId}/${teacherId}/my-rubrics`);
         } catch (error) {
             console.error('Error deleting rubric:', error);
             toast.error('Error deleting rubric. Please try again.');
@@ -258,7 +270,7 @@ export default function CreateEditRubric({
                                 )}
                             </div>
                             <div className="border rounded-md shadow-lg mt-3 relative">
-                                <div className="flex flex-wrap gap-x-8 my-5 text-sm text-primary absolute -top-1 left-3 z-50">
+                                <div className="flex flex-wrap gap-x-8 my-5 text-sm text-primary absolute -top-1 left-3 z-10">
                                     <Button type="button" variant="secondary" onClick={addCategory} className="gap-x-1"><PlusCircle size={17} /> Category</Button>
                                     <Button type="button" variant="secondary" onClick={addScoreLevel} className="gap-x-1"><PlusCircle size={17} /> Score</Button>
                                 </div>

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getRubricsByTeacherId } from '@/lib/server/rubrics';
+import { getRubricListByTeacherId } from '@/lib/server/rubrics';
 
 export async function GET(
     request: NextRequest,
@@ -8,7 +8,7 @@ export async function GET(
     try {
         const { teacherId } = await params;
 
-        const rubrics = await getRubricsByTeacherId(teacherId);
+        const rubrics = await getRubricListByTeacherId(teacherId);
 
         return NextResponse.json({ rubrics });
     } catch (error) {

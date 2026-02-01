@@ -87,6 +87,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
   return (
     <Sidebar
       collapsible='icon'
+      className="z-50"
       {...props}>
       <SidebarHeader>
         <ClassroomSwitcher

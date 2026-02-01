@@ -8,13 +8,16 @@ import {
 } from "@/components/ui/table"
 import { Rubric } from "@/types"
 import { ChevronRight, Table2Icon } from "lucide-react"
+import Link from "next/link"
 
 export default function MyRubricList({
     teacherRubrics,
-    toggleShowMyRubrics
+    classId,
+    teacherId,
 }: {
     teacherRubrics: Rubric[],
-    toggleShowMyRubrics: (rubricData: Rubric) => void
+    classId: string,
+    teacherId: string,
 }) {
 
     if (teacherRubrics.length === 0) {
@@ -43,21 +46,23 @@ export default function MyRubricList({
                                 key={rubric.id}
                                 className="group"
                             >
-                                <TableCell
-                                    onClick={() => toggleShowMyRubrics(rubric)}
-                                    className="flex items-center gap-3 font-semibold text-base cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all py-4 px-4"
-                                >
-                                    <span className="opacity-0 group-hover:opacity-100 transition-opacity text-primary">
-                                        <Table2Icon size={18} />
-                                    </span>
-                                    <span className="flex-1">{rubric.title}</span>
-                                    {/* Optional metadata */}
-                                    <span className="text-xs text-muted-foreground hidden group-hover:inline">
-                                        View
-                                    </span>
-                                    <span className="opacity-50 group-hover:opacity-100 transition-opacity">
-                                        <ChevronRight size={18} />
-                                    </span>
+                                <TableCell className="p-0">
+                                    <Link
+                                        href={`/classroom/${classId}/${teacherId}/my-rubrics/${rubric.id}`}
+                                        className="flex items-center gap-3 font-semibold text-base cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all py-4 px-4"
+                                    >
+                                        <span className="opacity-0 group-hover:opacity-100 transition-opacity text-primary">
+                                            <Table2Icon size={18} />
+                                        </span>
+                                        <span className="flex-1">{rubric.title}</span>
+                                        {/* Optional metadata */}
+                                        <span className="text-xs text-muted-foreground hidden group-hover:inline">
+                                            Edit
+                                        </span>
+                                        <span className="opacity-50 group-hover:opacity-100 transition-opacity">
+                                            <ChevronRight size={18} />
+                                        </span>
+                                    </Link>
                                 </TableCell>
                             </TableRow>
                         ))}
