@@ -32,19 +32,24 @@ import { rubricSchema } from "@/lib/validators"
 import { Rubric, RubricFormData } from "@/types"
 import { ResponsiveDialog } from "@/components/responsive-dialog"
 import { OctagonX } from "lucide-react"
+import { useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 export default function CreateEditRubric({
     teacherId,
     currentRubric,
-    onRubricUpdate
+    classId,
 }: {
     teacherId: string
     currentRubric: Rubric | null
-    onRubricUpdate: (updateType: string) => void
+    classId: string
 }) {
 
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
     const [scoreLevels, setScoreLevels] = useState(["1", "2", "3", "4"])
+    const queryClient = useQueryClient();
+    const router = useRouter();
 
     const initialCategories = [
         {
@@ -144,30 +149,58 @@ export default function CreateEditRubric({
         try {
             // If currentRubric is provided, update it; otherwise, create a new one
             if (currentRubric) {
-                await updateRubric(currentRubric.id, data.categories, data.title)
+                const result = await updateRubric(currentRubric.id, data.categories, data.title);
+                if (result?.rubric) {
+                    queryClient.setQueryData<Rubric[]>(['rubrics', teacherId], (old) => {
+                        if (!old) return old;
+                        return old.map(rubricItem =>
+                            rubricItem.id === result.rubric.id ? result.rubric as Rubric : rubricItem
+                        );
+                    });
+                }
             } else {
-                await createRubric(teacherId, data.categories, data.title)
+                const result = await createRubric(teacherId, data.categories, data.title);
+                if (result?.rubric) {
+                    queryClient.setQueryData<Rubric[]>(['rubrics', teacherId], (old) => {
+                        if (!old) return [result.rubric as Rubric];
+                        return [...old, result.rubric as Rubric];
+                    });
+                }
             }
-            // send user back to list with updated rubric data
-            // onRubricUpdate(!!currentRubric ? 'updated' : 'created')
+            // Navigate `/classroom/${classId}/${teacherId}/my-rubrics`
+            toast.success('Rubric saved successfully', {
+                action: {
+                    label: 'Back to Rubric List',
+                    onClick: () => router.back()
+                },
+                actionButtonStyle: {
+                    backgroundColor: 'var(--secondary)',
+                    color: 'var(--secondary-foreground)',
+                    border: "var(--border)"
+                }
+            });
         } catch (error) {
             console.error('Error creating rubric:', error);
             return {
                 success: false, message: 'Error creating rubric. Please try again.'
-
             }
         }
     }
-
     // handle delete rubric
     const handleDeleteRubric = async () => {
         if (!currentRubric) return;
 
         try {
             await deleteRubric(currentRubric.id)
-            onRubricUpdate('deleted')
+            queryClient.setQueryData<Rubric[]>(['rubrics', teacherId], (old) => {
+                if (!old) return old;
+                return old.filter(rubricItem => rubricItem.id !== currentRubric.id);
+            });
+            toast.success('Rubric deleted successfully');
+            router.push(`/classroom/${classId}/${teacherId}/my-rubrics`);
         } catch (error) {
             console.error('Error deleting rubric:', error);
+            toast.error('Error deleting rubric. Please try again.');
         }
     }
 
@@ -209,14 +242,12 @@ export default function CreateEditRubric({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
-                                            <div className="shadow-md rounded-md scale-[1.01] focus-within:scale-100 focus-within:shadow-none transition-transform">
-                                                <Input
-                                                    {...field}
-                                                    placeholder="Enter rubric name"
-                                                    required={true}
-                                                    className="min-w-[275px]"
-                                                />
-                                            </div>
+                                            <Input
+                                                {...field}
+                                                placeholder="Enter rubric name"
+                                                required={true}
+                                                className="min-w-[275px]"
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -239,7 +270,7 @@ export default function CreateEditRubric({
                                 )}
                             </div>
                             <div className="border rounded-md shadow-lg mt-3 relative">
-                                <div className="flex flex-wrap gap-x-8 my-5 text-sm text-primary absolute -top-1 left-3 z-50">
+                                <div className="flex flex-wrap gap-x-8 my-5 text-sm text-primary absolute -top-1 left-3 z-10">
                                     <Button type="button" variant="secondary" onClick={addCategory} className="gap-x-1"><PlusCircle size={17} /> Category</Button>
                                     <Button type="button" variant="secondary" onClick={addScoreLevel} className="gap-x-1"><PlusCircle size={17} /> Score</Button>
                                 </div>
@@ -282,7 +313,7 @@ export default function CreateEditRubric({
                                                             <Textarea
                                                                 {...field}
                                                                 rows={3}
-                                                                className="resize-none font-bold md:text-lg"
+                                                                className="resize-none font-bold md:text-lg shadow-none"
                                                                 placeholder="Criteria"
                                                                 required={true}
                                                             />
@@ -310,7 +341,7 @@ export default function CreateEditRubric({
                                                                     <Textarea
                                                                         {...field}
                                                                         rows={4}
-                                                                        className="resize-none"
+                                                                        className="resize-none shadow-none"
                                                                         required={false}
                                                                         placeholder="Criteria"
                                                                     />

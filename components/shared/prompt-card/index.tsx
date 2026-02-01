@@ -49,7 +49,7 @@ export default function PromptCard({
 
             </ResponsiveDialog>
 
-            <Card className="mx-auto relative w-full">
+            <Card className="mx-auto relative w-full border">
                 {/* Options Menu - positioned absolutely */}
                 <OptionsMenu
                     promptData={promptData}

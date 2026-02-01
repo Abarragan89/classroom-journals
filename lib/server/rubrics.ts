@@ -26,19 +26,19 @@ export async function getRubricGradesForResponse(responseId: string) {
 }
 
 // Grab all rubrics for a teacher (full data - keep for backward compatibility)
-export async function getRubricsByTeacherId(teacherId: string) {
-    const session = await requireAuth();
-    if (session?.user?.id !== teacherId) {
-        throw new Error("Forbidden");
-    }
+// export async function getRubricsByTeacherId(teacherId: string) {
+//     const session = await requireAuth();
+//     if (session?.user?.id !== teacherId) {
+//         throw new Error("Forbidden");
+//     }
 
-    const rubrics = await prisma.rubricTemplate.findMany({
-        where: { teacherId },
-        orderBy: { createdAt: 'desc' },
-    });
+//     const rubrics = await prisma.rubricTemplate.findMany({
+//         where: { teacherId },
+//         orderBy: { createdAt: 'desc' },
+//     });
 
-    return rubrics;
-}
+//     return rubrics;
+// }
 
 
 // Grab all rubrics for a teacher (lightweight - only id and title)
@@ -74,6 +74,10 @@ export async function getRubricById(rubricId: string) {
 
     if (!rubric) {
         throw new Error("Rubric not found");
+    }
+    
+    if (rubric.teacherId !== session.user.id) {
+        throw new Error("Forbidden");
     }
 
     return rubric;

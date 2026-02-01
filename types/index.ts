@@ -312,5 +312,16 @@ export interface RubricGradeDisplay {
     };
 }
 
+export type StarterRubric = {
+    title: string;
+    rubricData: {
+        name: string;
+        maxScore: number;
+        criteria: {
+            description: string;
+            score: number;
+        }[];
+    }[];
+};
 
 
