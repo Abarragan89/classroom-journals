@@ -32,6 +32,8 @@ import { rubricSchema } from "@/lib/validators"
 import { Rubric, RubricFormData } from "@/types"
 import { ResponsiveDialog } from "@/components/responsive-dialog"
 import { OctagonX } from "lucide-react"
+import { useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 export default function CreateEditRubric({
     teacherId,
@@ -40,11 +42,12 @@ export default function CreateEditRubric({
 }: {
     teacherId: string
     currentRubric: Rubric | null
-    onRubricUpdate: (updateType: string) => void
+    onRubricUpdate: () => void
 }) {
 
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
     const [scoreLevels, setScoreLevels] = useState(["1", "2", "3", "4"])
+    const queryClient = useQueryClient();
 
     const initialCategories = [
         {
@@ -144,30 +147,48 @@ export default function CreateEditRubric({
         try {
             // If currentRubric is provided, update it; otherwise, create a new one
             if (currentRubric) {
-                await updateRubric(currentRubric.id, data.categories, data.title)
+                const result = await updateRubric(currentRubric.id, data.categories, data.title);
+                if (result?.rubric) {
+                    queryClient.setQueryData<Rubric[]>(['rubrics', teacherId], (old) => {
+                        if (!old) return old;
+                        return old.map(rubricItem =>
+                            rubricItem.id === result.rubric.id ? result.rubric as Rubric : rubricItem
+                        );
+                    });
+                }
             } else {
-                await createRubric(teacherId, data.categories, data.title)
+                const result = await createRubric(teacherId, data.categories, data.title);
+                if (result?.rubric) {
+                    queryClient.setQueryData<Rubric[]>(['rubrics', teacherId], (old) => {
+                        if (!old) return [result.rubric as Rubric];
+                        return [...old, result.rubric as Rubric];
+                    });
+                }
             }
             // send user back to list with updated rubric data
-            // onRubricUpdate(!!currentRubric ? 'updated' : 'created')
+            toast.success('Rubric saved successfully');
         } catch (error) {
             console.error('Error creating rubric:', error);
             return {
                 success: false, message: 'Error creating rubric. Please try again.'
-
             }
         }
     }
-
     // handle delete rubric
     const handleDeleteRubric = async () => {
         if (!currentRubric) return;
 
         try {
             await deleteRubric(currentRubric.id)
-            onRubricUpdate('deleted')
+            queryClient.setQueryData<Rubric[]>(['rubrics', teacherId], (old) => {
+                if (!old) return old;
+                return old.filter(rubricItem => rubricItem.id !== currentRubric.id);
+            });
+            toast.success('Rubric deleted successfully');
+            onRubricUpdate();
         } catch (error) {
             console.error('Error deleting rubric:', error);
+            toast.error('Error deleting rubric. Please try again.');
         }
     }
 
@@ -209,14 +230,12 @@ export default function CreateEditRubric({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
-                                            <div className="shadow-md rounded-md scale-[1.01] focus-within:scale-100 focus-within:shadow-none transition-transform">
-                                                <Input
-                                                    {...field}
-                                                    placeholder="Enter rubric name"
-                                                    required={true}
-                                                    className="min-w-[275px]"
-                                                />
-                                            </div>
+                                            <Input
+                                                {...field}
+                                                placeholder="Enter rubric name"
+                                                required={true}
+                                                className="min-w-[275px]"
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -282,7 +301,7 @@ export default function CreateEditRubric({
                                                             <Textarea
                                                                 {...field}
                                                                 rows={3}
-                                                                className="resize-none font-bold md:text-lg"
+                                                                className="resize-none font-bold md:text-lg shadow-none"
                                                                 placeholder="Criteria"
                                                                 required={true}
                                                             />
@@ -310,7 +329,7 @@ export default function CreateEditRubric({
                                                                     <Textarea
                                                                         {...field}
                                                                         rows={4}
-                                                                        className="resize-none"
+                                                                        className="resize-none shadow-none"
                                                                         required={false}
                                                                         placeholder="Criteria"
                                                                     />

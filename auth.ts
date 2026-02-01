@@ -1,5 +1,4 @@
 import NextAuth, { DefaultSession } from "next-auth";
-// import Sendgrid from "next-auth/providers/sendgrid";
 import Resend from "next-auth/providers/resend";
 import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
@@ -9,6 +8,7 @@ import { User } from "./types";
 import { decryptText, encryptText } from "./lib/utils";
 import crypto from 'crypto';
 import { ClassUserRole } from "@prisma/client";
+import { starterRubrics } from "./data/starterRubrics";
 
 declare module "next-auth" {
     interface Session extends DefaultSession {
@@ -32,6 +32,43 @@ declare module "next-auth" {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+    events: {
+        async createUser({ user }) {
+            try {
+                // Only seed teachers
+                if (!user.id || !user.email) return;
+
+
+                const iv = crypto.randomBytes(16);
+                const { encryptedData } = encryptText(user.name!, iv);
+
+                const premiumExpiresAt = new Date();
+                premiumExpiresAt.setDate(premiumExpiresAt.getDate() + 14);
+
+                await prisma.user.update({
+                    where: { id: user.id },
+                    data: {
+                        name: encryptedData,
+                        username: encryptedData,
+                        iv: iv.toString('hex'),
+                        accountType: 'PREMIUM',
+                        subscriptionExpires: premiumExpiresAt
+                    }
+                });
+
+                await prisma.rubricTemplate.createMany({
+                    data: starterRubrics.map(r => ({
+                        title: r.title,
+                        categories: r.rubricData,
+                        teacherId: user.id as string
+                    }))
+                });
+
+            } catch (error) {
+                console.error("createUser error:", error);
+            }
+        }
+    },
     adapter: PrismaAdapter(prisma),
     trustHost: true,
     secret: process.env.AUTH_SECRET,
@@ -202,29 +239,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         }
                     }
 
-                    if (trigger === 'signUp') {
-                        // if signing up, encrypt name and save name and iv(random string) 
-                        const iv = crypto.randomBytes(16);
-                        // Encrypt the user name
-                        const { encryptedData } = encryptText(user.name!, iv);
-                        token.name = user.name;
-                        token.iv = iv.toString('hex');
-
-                        // Set premium subscription expiration to 14 days from now
-                        const premiumExpiresAt = new Date();
-                        premiumExpiresAt.setDate(premiumExpiresAt.getDate() + 14);
-
-                        await prisma.user.update({
-                            where: { id: user.id },
-                            data: {
-                                name: encryptedData,
-                                username: encryptedData,
-                                iv: token.iv as string,
-                                accountType: 'PREMIUM',
-                                subscriptionExpires: premiumExpiresAt
-                            }
-                        })
-                    } else if (trigger === 'signIn') {
+                    if (trigger === 'signIn') {
                         // If signing back in, just set the token to the user name that is already encyrpted
                         token.name = decryptText(user.name as string, user.iv as string)
                         token.username = decryptText(user.username as string, user.iv as string)

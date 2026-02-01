@@ -8,7 +8,7 @@ import Confetti from 'react-confetti';
 import useWindowSize from 'react-use/lib/useWindowSize';
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { sampleTexts } from '@/data';
+import { sampleTexts } from '@/data/wpmText';
 
 // Sample 160-word prompt
 export default function TypingTest({

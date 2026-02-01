@@ -2,12 +2,12 @@ import {
     Table,
     TableBody,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
 import { Rubric } from "@/types"
+import { ChevronRight, Table2Icon } from "lucide-react"
 
 export default function MyRubricList({
     teacherRubrics,
@@ -27,31 +27,41 @@ export default function MyRubricList({
 
     return (
         <>
-            <p className="text-center text-success my-3">Upgrade to Premium to have AI automatically grade blogs using these rubrics</p>
-            <div className="border rounded-md">
+            <div className="border rounded-md shadow-md hover:shadow-lg transition-shadow mt-8">
                 <Table>
-                    {/* <TableCaption>Use these rubrics when grading student journals/essays.</TableCaption> */}
-                    <TableHeader>
+                    <TableHeader className="border-b-2 border-primary/20">
                         <TableRow>
-                            <TableHead className="w-[100px]">My Rubrics</TableHead>
+                            <TableHead className="h3-bold flex items-center gap-2 py-4">
+                                <Table2Icon size={20} className="text-primary" />
+                                Rubric List
+                            </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {teacherRubrics.map((rubric: Rubric) => (
-                            <TableRow key={rubric.id}>
+                            <TableRow
+                                key={rubric.id}
+                                className="group"
+                            >
                                 <TableCell
                                     onClick={() => toggleShowMyRubrics(rubric)}
-                                    className="font-medium line-clamp-1 cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                                    className="flex items-center gap-3 font-semibold text-base cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all py-4 px-4"
                                 >
-                                    {rubric.title}
+                                    <span className="opacity-0 group-hover:opacity-100 transition-opacity text-primary">
+                                        <Table2Icon size={18} />
+                                    </span>
+                                    <span className="flex-1">{rubric.title}</span>
+                                    {/* Optional metadata */}
+                                    <span className="text-xs text-muted-foreground hidden group-hover:inline">
+                                        View
+                                    </span>
+                                    <span className="opacity-50 group-hover:opacity-100 transition-opacity">
+                                        <ChevronRight size={18} />
+                                    </span>
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                        </TableRow>
-                    </TableFooter>
                 </Table>
             </div>
         </>

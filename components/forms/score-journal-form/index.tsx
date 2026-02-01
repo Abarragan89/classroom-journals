@@ -229,7 +229,6 @@ export default function ScoreJournalForm({
                     // Continue with saving the new grade even if deletion fails
                 }
             }
-
             // Save the detailed rubric grade data
             const rubricResult = await saveRubricGrade(
                 responseId,

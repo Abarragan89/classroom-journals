@@ -316,7 +316,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                             <p><SquareCheckBig className="inline-block mr-2" /><span className="font-semibold underline">Authentic writing</span> - See what they truly know</p>
                         </div>
                     </div>
-                    <h3 className='mt-16 max-w-[850px] tracking-wide text-xl text-center w-full mx-auto px-5 md:px-20'>Student writing will be transformed into <span className="font-bold">interactive blogs</span> as shown below:</h3>
+                    <h3 className='bg-card font-semibold text-primary border shadow-sm rounded-lg p-5 px-10 mt-16 max-w-[750px] tracking-wide text-xl text-center w-full mx-auto'>Student writing will be transformed into interactive blogs as shown below:</h3>
                 </section>
 
                 <Separator />

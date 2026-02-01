@@ -4,8 +4,7 @@ import { Button } from "@/components/ui/button"
 import CreateEditRubric from "./create-edit-rubric"
 import MyRubricList from "./my-rubric-list"
 import { Rubric } from "@/types"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { toast } from "sonner"
+import { useQuery } from "@tanstack/react-query"
 
 export default function MyRubricSection({
     teacherId,
@@ -17,7 +16,6 @@ export default function MyRubricSection({
 
     const [showMyRubrics, setShowMyRubrics] = useState(true)
     const [currentRubric, setCurrentRubric] = useState<Rubric | null>(null)
-    const queryClient = useQueryClient()
 
     const toggleShowMyRubrics = (rubricData: Rubric) => {
         setShowMyRubrics(!showMyRubrics)
@@ -40,23 +38,8 @@ export default function MyRubricSection({
     })
 
     // Function to handle rubric updates to send user back to list with updated rubric
-    function handleRubricUpdate(updateType: string) {
-        // Keep invalidateQueries here because:
-        // 1. Rubric has complex nested structure (categories array with variable items)
-        // 2. Update could be create/edit/delete - hard to predict final state
-        // 3. Server returns the full updated rubric list, so refetch is efficient
-        queryClient.invalidateQueries({ queryKey: ['rubrics', teacherId] })
-        setShowMyRubrics(true)
-        // show toast to notificy user of success
-        const message = `Rubric ${updateType}.`
-
-        if (updateType === 'deleted') {
-            toast.error(message, {
-                style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
-            })
-        } else {
-            toast(message)
-        }
+    function handleRubricUpdate() {
+        setShowMyRubrics(true);
     }
 
     return (
