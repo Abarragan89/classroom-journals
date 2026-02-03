@@ -122,7 +122,7 @@
     --foreground: hsl(120, 35%, 85%);
     --primary: hsl(107, 89%, 48%);
     --primary-foreground: hsl(0, 0%, 0%);
-    --secondary: hsl(73, 77%, 45%);
+    --secondary: hsl(73, 100%, 63%);
     --secondary-foreground: hsl(0, 0%, 5%);
     --muted: hsl(135, 31%, 15%);
     --muted-foreground: hsl(120, 11%, 43%);
@@ -288,23 +288,17 @@
     --foreground: hsl(210, 40%, 15%); /* Deep blue text for contrast */
     --primary: hsl(210, 79%, 45%); /* Bold vivid sky blue */
     --primary-foreground: hsl(0, 0%, 100%); /* White text on blue */
-
     --secondary: hsl(210, 55%, 75%); /* Soft sky blue */
     --secondary-foreground: hsl(210, 60%, 20%); /* Dark text */
-
     --muted: hsl(210, 35%, 80%); /* Light muted blue */
     --muted-foreground: hsl(210, 30%, 35%); /* Medium dark text */
-
     --card: hsl(206, 50%, 97%); /* Very light card, like clouds */
     --card-foreground: hsl(209, 40%, 15%); /* Dark text */
-
     --accent: hsl(45, 95%, 55%); /* Bright sunlight yellow */
     --accent-foreground: hsl(210, 50%, 15%); /* Deep blue for contrast */
-
     --border: hsl(210, 30%, 75%); /* Soft sky border */
-    --input: hsl(210, 40%, 95%); /* Very light input field */
+    --input: hsl(207, 41%, 73%); /* Very light input field */
     --ring: hsl(210, 80%, 55%); /* Bright blue focus ring */
-
     --destructive: hsl(5, 89%, 41%); /* Sunset red */
     --destructive-foreground: hsl(0, 0%, 100%);
     --warning: hsl(36, 87%, 37%); /* Golden-orange warning */

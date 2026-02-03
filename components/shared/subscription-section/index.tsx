@@ -13,6 +13,8 @@ export default function SubscriptionSection({
     updateTeacherData: (updatedData: Partial<User>) => void
 }) {
 
+    console.log("updated teacher data ", teacherData)
+
     const [isCancelling, setIsCancelling] = useState(teacherData?.isCancelling)
 
     const freePlanData: SubscriptionData = {
@@ -66,7 +68,6 @@ export default function SubscriptionSection({
 
     return (
         <section className='mb-10' id="subscription-section">
-
             {/* <div className="flex justify-between mb-5"> */}
             <div>
                 <h3 className="text-lg">Subscription Plans</h3>

@@ -12,6 +12,7 @@ enum TeacherAccountType {
   BASIC
   STANDARD
   PREMIUM
+  TRIAL
 }
 
 model User {

@@ -2,9 +2,16 @@
 import { useState } from 'react'
 import { ResponsiveDialog } from '../responsive-dialog'
 import { Users, FileText, Send, TrendingUp } from 'lucide-react'
-import { Separator } from '../ui/separator';
 
-export default function TutorialModal({ isModalOpen }: { isModalOpen: boolean }) {
+export default function TutorialModal({
+    isModalOpen,
+    classId,
+    teacherId
+}: {
+    isModalOpen: boolean,
+    classId: string,
+    teacherId: string
+}) {
 
     const [isOpen, setIsOpen] = useState<boolean>(isModalOpen);
 
@@ -70,16 +77,15 @@ export default function TutorialModal({ isModalOpen }: { isModalOpen: boolean })
                 <div className="flex items-start gap-3">
                     <TrendingUp className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                     <div>
-                        <p className="font-semibold text-sm mb-1">You&apos;re all set!</p>
+                        <p className="font-semibold text-lg mb-1">You&apos;re all set!</p>
                         <p className="text-sm text-muted-foreground">
                             Track student progress, view responses, and provide feedback in the <span className="font-semibold text-foreground">Assignments</span> tab.
                         </p>
                     </div>
                 </div>
             </div>
-            <Separator className="" />
             <p className="text-sm text-muted-foreground text-center">
-                Learn everything JotterBlog can do in 1 minute <a href="https://docs.jotterblog.com/for-teachers/getting-started-with-jotterblog" target="_blank" rel="noreferrer" className="underline hover:text-primary font-bold block">Teacher Guide Videos.</a>
+                Learn everything JotterBlog can do in 1 minute <a href={`${process.env.NEXT_PUBLIC_BASE_URL}/classroom/${classId}/${teacherId}/teacher-guide`} target="_blank" rel="noreferrer" className="hover:underline text-primary font-bold block">Teacher Guide Videos.</a>
             </p>
         </ResponsiveDialog>
     )

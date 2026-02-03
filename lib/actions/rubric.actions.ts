@@ -11,8 +11,6 @@ export async function createRubric(teacherId: string, rubricData: InputJsonValue
             throw new Error("Forbidden");
         }
 
-        console.dir({ teacherId, rubricData, title }, { depth: null });
-
         const newRubric = await prisma.rubricTemplate.create({
             data: {
                 teacherId: teacherId,

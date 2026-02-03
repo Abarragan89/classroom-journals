@@ -32,7 +32,11 @@ export default async function Roster({
 
   return (
     <>
-      <TutorialModal isModalOpen={showTutorialModal} />
+      <TutorialModal
+        isModalOpen={showTutorialModal}
+        classId={classId}
+        teacherId={teacherId}
+      />
       <div className="relative">
         <h2 className="text-2xl lg:text-3xl mt-2 print:hidden">Class Roster</h2>
         <RosterTable

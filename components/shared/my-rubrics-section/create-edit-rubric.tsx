@@ -90,6 +90,8 @@ export default function CreateEditRubric({
         }
     })
 
+    const { isDirty, isSubmitting } = form.formState;
+
     useEffect(() => {
         if (currentRubric) {
             form.reset({
@@ -246,7 +248,7 @@ export default function CreateEditRubric({
                                                 {...field}
                                                 placeholder="Enter rubric name"
                                                 required={true}
-                                                className="min-w-[275px]"
+                                                className="min-w-[275px] font-bold"
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -257,7 +259,13 @@ export default function CreateEditRubric({
                         </div>
                         <div className="overflow-x-auto">
                             <div className="flex flex-wrap gap-4 my-5">
-                                <Button type="submit">Save Rubric</Button>
+                                <Button
+                                    type="submit"
+                                    disabled={!isDirty || isSubmitting}
+                                >
+                                    {isDirty ? 'Save Changes' : 'All Changes Saved'}
+                                </Button>
+
                                 {/* Button to delete rubric */}
                                 {currentRubric && (
                                     <Button
@@ -341,7 +349,7 @@ export default function CreateEditRubric({
                                                                     <Textarea
                                                                         {...field}
                                                                         rows={4}
-                                                                        className="resize-none shadow-none"
+                                                                        className="resize-none shadow-none custom-scrollbar"
                                                                         required={false}
                                                                         placeholder="Criteria"
                                                                     />
