@@ -66,7 +66,6 @@ export default function SubscriptionSection({
 
     return (
         <section className='mb-10' id="subscription-section">
-
             {/* <div className="flex justify-between mb-5"> */}
             <div>
                 <h3 className="text-lg">Subscription Plans</h3>

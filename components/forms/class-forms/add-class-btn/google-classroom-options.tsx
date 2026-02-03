@@ -76,7 +76,7 @@ export default function GoogleClassroomOptions({
                         className="border-[2px] border-l-[4px] border-r-[4px] rounded-xl"
                         style={{ borderColor: "rgb(255, 194, 38)" }}
                     />
-                    <div className='text-black col-span-3 my-1'>
+                    <div className='col-span-3 my-1'>
                         <p className='text-md font-bold'>{classroom.name}</p>
                         <p className='text-sm'> <span className='font-bold mr-1 my-3'>Section: </span>{classroom?.section ? classroom.section : 'N/A'}</p>
                         <div className="flex-between w-full pr-5">

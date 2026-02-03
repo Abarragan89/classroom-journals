@@ -19,7 +19,7 @@ export default function AccountClientWrapper({ decryptedTeacher }: { decryptedTe
                 teacherData={teacherData as unknown as User}
             />
             <Separator className="my-7" />
-
+            
             <SubscriptionSection
                 teacherData={teacherData as unknown as User}
                 updateTeacherData={updateTeacherData}

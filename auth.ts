@@ -51,7 +51,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         name: encryptedData,
                         username: encryptedData,
                         iv: iv.toString('hex'),
-                        accountType: 'PREMIUM',
+                        accountType: 'TRIAL',
                         subscriptionExpires: premiumExpiresAt
                     }
                 });

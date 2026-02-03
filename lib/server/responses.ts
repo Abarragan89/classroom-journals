@@ -176,6 +176,11 @@ export async function getAllResponsesFromPrompt(promptSessionId: string, teacher
                 select: {
                     promptType: true,
                 }
+            },
+            rubricGrades: {
+                select: {
+                    percentageScore: true,
+                }
             }
         }
     })
@@ -196,8 +201,12 @@ export async function getAllResponsesFromPrompt(promptSessionId: string, teacher
                 score = Math.round((numberScore / responsesArr.length) * 100) + '%';
             }
         } else {
-            const isItScored = (responsesArr?.[0].score)?.toString()
-            score = isItScored ? isItScored + '%' : 'Not Graded'
+            if (response.rubricGrades && response.rubricGrades.length > 0) {
+                score = response.rubricGrades[0].percentageScore + '%'
+            } else {
+                const isItScored = (responsesArr?.[0].score)?.toString()
+                score = isItScored ? isItScored + '%' : 'Not Graded'
+            }
         }
         return (
             {

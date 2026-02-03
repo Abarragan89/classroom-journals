@@ -27,6 +27,7 @@ export default function UserSettings({
     const isCancelling = teacherData.isCancelling;
     const accountStatus = isSubscriptionValid ? teacherData?.accountType : 'Basic-Free'
 
+
     async function updateUsernameHandler() {
         try {
             await updateUsername(updatedUsername, teacherData?.id);
@@ -122,7 +123,7 @@ export default function UserSettings({
                     </div>
                 </div>
                 <div className="flex-between mt-8">
-                    {accountStatus !== 'Basic-Free' &&
+                    {accountStatus !== 'Basic-Free' && accountStatus !== 'TRIAL' &&
                         <Link
                             className="inline-block underline hover:italic w-fit"
                             href='https://billing.stripe.com/p/login/7sIdRq4Y21h7enSbII'
@@ -134,7 +135,7 @@ export default function UserSettings({
                         <Button disabled={isCancelling === false} variant='destructive' onClick={() => setIsModalOpen(true)} >
                             Delete Account
                         </Button>
-                        {!isCancelling && isSubscriptionValid && (
+                        {!isCancelling && isSubscriptionValid && teacherData?.subscriptionId && (
                             <p className="text-xs text-muted-foreground">You must first unsubscribe to delete account</p>
                         )}
                     </div>
