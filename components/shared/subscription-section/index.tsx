@@ -13,8 +13,6 @@ export default function SubscriptionSection({
     updateTeacherData: (updatedData: Partial<User>) => void
 }) {
 
-    console.log("updated teacher data ", teacherData)
-
     const [isCancelling, setIsCancelling] = useState(teacherData?.isCancelling)
 
     const freePlanData: SubscriptionData = {

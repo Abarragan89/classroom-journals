@@ -39,8 +39,6 @@ export default async function SingleResponse({
     const questionsAndAnswers = response?.response as unknown as ResponseData[]
     const isMultiQuestion = response?.promptSession?.promptType === 'ASSESSMENT';
 
-    console.log()
-
     return (
         <>
             <div className='mb-10 print:hidden'>
