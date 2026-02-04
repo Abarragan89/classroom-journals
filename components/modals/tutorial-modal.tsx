@@ -47,7 +47,7 @@ export default function TutorialModal({
                     <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                             <FileText className="w-5 h-5 text-primary" />
-                            <h3 className="font-semibold text-lg">Create Your First JOT</h3>
+                            <h3 className="font-semibold text-lg">Create Your First <span className='font-bold text-primary'>JOT</span></h3>
                         </div>
                         <p className="text-sm text-muted-foreground">
                             Choose between a blog prompt or an assessment
@@ -63,7 +63,7 @@ export default function TutorialModal({
                     <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                             <Send className="w-5 h-5 text-primary" />
-                            <h3 className="font-semibold text-lg">Assign to Your Class</h3>
+                            <h3 className="font-semibold text-lg">Assign <span className='font-bold text-primary'>JOT</span> to Your Class</h3>
                         </div>
                         <p className="text-sm text-muted-foreground">
                             Send the assignment and watch students start writing

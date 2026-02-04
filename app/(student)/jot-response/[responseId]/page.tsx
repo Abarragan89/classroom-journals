@@ -7,6 +7,8 @@ import SinglePromptEditor from "@/components/shared/prompt-response-editor/singl
 import { determineSubscriptionAllowance } from "@/lib/server/profile";
 import { getClassroomGrade } from "@/lib/server/student-dashboard";
 import { getSingleResponseForReview } from "@/lib/server/responses";
+import { Suspense } from "react";
+import Loading from "@/app/loading";
 
 export default async function StudentDashboard({
     params
@@ -37,23 +39,25 @@ export default async function StudentDashboard({
         <div>
             <Header session={session} studentId={studentId} />
             <main className="wrapper">
-                {studentResponse?.promptSession?.promptType === 'ASSESSMENT' ?
-                    <MultipleQuestionEditor
-                        responseId={studentResponse.id}
-                        studentResponse={studentResponse.response as unknown as ResponseData[]}
-                        isTeacherPremium={isPremiumTeacher as boolean}
-                        gradeLevel={grade as string}
-                        spellCheckEnabled={studentResponse?.spellCheckEnabled}
-                        studentId={studentId}
-                    />
-                    :
-                    <SinglePromptEditor
-                        studentResponse={studentResponse.response as unknown as ResponseData[]}
-                        responseId={responseId}
-                        spellCheckEnabled={studentResponse?.spellCheckEnabled}
-                        studentId={studentId}
-                    />
-                }
+                <Suspense fallback={<Loading />}>
+                    {studentResponse?.promptSession?.promptType === 'ASSESSMENT' ?
+                        <MultipleQuestionEditor
+                            responseId={studentResponse.id}
+                            studentResponse={studentResponse.response as unknown as ResponseData[]}
+                            isTeacherPremium={isPremiumTeacher as boolean}
+                            gradeLevel={grade as string}
+                            spellCheckEnabled={studentResponse?.spellCheckEnabled}
+                            studentId={studentId}
+                        />
+                        :
+                        <SinglePromptEditor
+                            studentResponse={studentResponse.response as unknown as ResponseData[]}
+                            responseId={responseId}
+                            spellCheckEnabled={studentResponse?.spellCheckEnabled}
+                            studentId={studentId}
+                        />
+                    }
+                </Suspense>
             </main>
         </div>
     )
