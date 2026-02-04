@@ -88,7 +88,7 @@ export default function QuipListItem({
             </ResponsiveDialog>
 
 
-            <AccordionItem value={`item-${indexNumber}`} className='relative rounded-lg bg-card mb-4 overflow-hidden'>
+            <AccordionItem value={`item-${indexNumber}`} className='rounded-lg mb-5 bg-card shadow-sm overflow-hidden border data-[state=open]:border-primary hover:border-primary transition-all'>
                 {/* Post Header */}
                 <div className="flex items-center gap-3 p-4 pb-2">
                     <Image
@@ -120,9 +120,9 @@ export default function QuipListItem({
                 {/* Post Content - The Question */}
                 <AccordionTrigger
                     onClick={() => setShowResponses(true)}
-                    className='px-5 pt-2 pb-4 hover:no-underline items-center hover:text-primary transition-colors data-[state=open]:border-b'
+                    className='px-6 pt-1 pb-5 rounded-md hover:bg-accent/50 data-[state=open]:rounded-b-none  cursor-pointer hover:no-underline items-center hover:text-primary transition-colors'
                 >
-                    <p className='ml-1 font-bold text-xl sm:text-2xl lg:text-3xl '>
+                    <p className='ml-1 mr-4 font-bold text-xl sm:text-2xl  '>
                         {quipQuestion}
                     </p>
                 </AccordionTrigger>
