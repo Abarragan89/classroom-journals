@@ -5,6 +5,8 @@ import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
 import MultiPromptForm from "@/components/forms/prompt-forms/multi-prompt-form";
 import { Session } from "@/types";
+import { Suspense } from "react";
+import Loading from "@/app/loading";
 
 export default async function CreatePrompt({
     searchParams
@@ -29,16 +31,22 @@ export default async function CreatePrompt({
                     <>
                         <h1 className="h1-bold mt-5">New Blog Prompt</h1>
                         <div className="max-w-[600px] mx-auto mt-8">
-                            <SinglePromptForm teacherId={teacherId} />
+                            <Suspense fallback={<Loading />}>
+                                <SinglePromptForm
+                                    teacherId={teacherId}
+                                />
+                            </Suspense>
                         </div>
                     </>
                 ) : type.toUpperCase() === 'ASSESSMENT' ? (
                     <>
                         <h1 className="h1-bold mt-5">New Assessment</h1>
                         <div className="max-w-[600px] mx-auto mt-5">
-                            <MultiPromptForm
-                                teacherId={teacherId}
-                            />
+                            <Suspense fallback={<Loading />}>
+                                <MultiPromptForm
+                                    teacherId={teacherId}
+                                />
+                            </Suspense>
                         </div>
                     </>
                 ) : (

@@ -8,6 +8,8 @@ import { Classroom, Session } from "@/types";
 import { getAllClassrooms, getSingleClassroom } from "@/lib/server/classroom";
 import DynamicHeader from "@/components/dynamic-header";
 import { determineSubscriptionAllowance } from "@/lib/server/profile";
+import { Suspense } from "react";
+import Loading from "@/app/loading";
 
 export default async function DashboardLayout({
     children,
@@ -55,12 +57,16 @@ export default async function DashboardLayout({
                     <Separator orientation="vertical" className="mr-2 h-4" />
                 </div>
                 <main className="wrapper">
-                    <DynamicHeader
-                        classId={classId}
-                        teacherId={teacherId}
-                    />
+                    <Suspense fallback={<div className="h-10" />}>
+                        <DynamicHeader
+                            classId={classId}
+                            teacherId={teacherId}
+                        />
+                    </Suspense>
                     <h1 className="h1-bold mt-2 text-muted-foreground line-clamp-1 print:hidden">{classroomData.name}</h1>
-                    {children}
+                    <Suspense fallback={<Loading />}>
+                        {children}
+                    </Suspense>
                 </main>
             </SidebarInset>
         </SidebarProvider>
