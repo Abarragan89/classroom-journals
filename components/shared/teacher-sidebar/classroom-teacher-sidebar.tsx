@@ -78,7 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
           { title: "Student Requests", icon: Inbox, slug: `/classroom/${currentClassroomId}/${teacherId}/student-requests`, isActive: currentRoute === 'student-requests', isLink: true },
           { title: "My Rubrics", icon: Grid3x3, slug: `/classroom/${currentClassroomId}/${teacherId}/my-rubrics`, isActive: currentRoute === 'my-rubrics', isLink: true },
           { title: "Class Settings", icon: Settings, slug: `/classroom/${currentClassroomId}/${teacherId}/settings`, isActive: currentRoute === 'settings', isLink: true },
-          { title: "Teacher Guide", icon: ShieldQuestion, slug: `/classroom/${currentClassroomId}/${teacherId}/teacher-guide`, isActive: currentRoute === 'teacher-guide', isLink: true },
+          { title: "Teacher Guide Videos", icon: ShieldQuestion, slug: `/classroom/${currentClassroomId}/${teacherId}/teacher-guide`, isActive: currentRoute === 'teacher-guide', isLink: true },
         ],
       },
     ]

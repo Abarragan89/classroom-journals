@@ -38,22 +38,28 @@ export default function ClassCardClientWrapper({
                     classData={classroom}
                 />
             )) : (
-                <>
-                    <div className="flex flex-col mx-auto items-center justify-center text-primary mt-5">
+                <div className="w-full max-w-xl mx-auto">
+                    <div className="bg-card border shadow-sm rounded-lg p-8 sm:p-10 text-center">
+                        <h2 className="text-2xl sm:text-3xl font-bold mb-3">Welcome to JotterBlog!</h2>
+                        <p className="text-muted-foreground mb-8 text-base sm:text-lg">
+                            Let&apos;s get started. Create your first class.
+                        </p>
+
                         {session.googleProviderId && (
-                            <p className="mb-3 font-medium text-lg">Create a Classroom to Get Started!</p>
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="w-full max-w-xs">
+                                    <AddClassBtn
+                                        variant='default'
+                                        teacherId={teacherId}
+                                        closeSubMenu={undefined}
+                                        session={session as Session}
+                                        isAllowedToMakeNewClass={true}
+                                    />
+                                </div>
+                            </div>
                         )}
-                        <div className="w-[90%] max-w-[150px]">
-                            <AddClassBtn
-                                variant='default'
-                                teacherId={teacherId}
-                                closeSubMenu={undefined}
-                                session={session as Session}
-                                isAllowedToMakeNewClass={true}
-                            />
-                        </div>
                     </div>
-                </>
+                </div>
             )}
         </div>
     )

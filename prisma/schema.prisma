@@ -50,7 +50,7 @@ model User {
   subscriptionId      String?
   isCancelling        Boolean?
   subscriptionExpires DateTime?
-  openAIAllowance     Int?               @default(3)
+  openAIAllowance     Int?               @default(50)
   purchasedCredits    Int                @default(0)
   Alert               Alert[]
   PromptSession       PromptSession[]
