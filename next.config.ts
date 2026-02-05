@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
     formats: ['image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
-    minimumCacheTTL: 31536000, // 1 year for images
+    minimumCacheTTL: process.env.NODE_ENV === 'production' ? 31536000 : 0, // 1 year in prod, no cache in dev
     dangerouslyAllowSVG: false,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -151,9 +151,7 @@ const nextConfig: NextConfig = {
       headers: [
         {
           key: 'Cache-Control',
-          value: process.env.NODE_ENV === 'production'
-            ? 'no-store, must-revalidate'
-            : 'no-cache',
+          value: 'no-store, must-revalidate', // No cache in both dev and prod for pages
         },
       ],
     },
@@ -163,9 +161,7 @@ const nextConfig: NextConfig = {
       headers: [
         {
           key: 'Cache-Control',
-          value: process.env.NODE_ENV === 'production'
-            ? 'no-store, max-age=0'
-            : 'no-cache',
+          value: 'no-store, max-age=0', // Never cache API routes
         },
       ],
     },
@@ -183,7 +179,9 @@ const nextConfig: NextConfig = {
       headers: [
         {
           key: 'Cache-Control',
-          value: 'public, max-age=31536000',
+          value: process.env.NODE_ENV === 'production'
+            ? 'public, max-age=31536000'
+            : 'public, max-age=0', // No cache in dev
         },
       ],
     },

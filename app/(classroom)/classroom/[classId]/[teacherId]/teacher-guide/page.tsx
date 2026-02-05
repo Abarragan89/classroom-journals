@@ -66,7 +66,7 @@ export default function TeacherGuide() {
   return (
     <div>
       <div className="mt-7 mb-5">
-        <h2 className="h2-bold">1-Minute Tutorial Videos</h2>
+        <h2 className="h2-bold">Teacher Guide Videos</h2>
       </div>
       <Accordion className="rounded-md" type="single" collapsible>
         {tutorialVideos.map((video) => (

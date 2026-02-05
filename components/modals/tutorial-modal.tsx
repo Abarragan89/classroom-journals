@@ -1,7 +1,9 @@
 'use client'
 import { useState } from 'react'
 import { ResponsiveDialog } from '../responsive-dialog'
-import { Users, FileText, Send, TrendingUp } from 'lucide-react'
+import { Users, FileText, Send } from 'lucide-react'
+import { Button } from '@/components/ui/button';
+import Link from 'next/link'
 
 export default function TutorialModal({
     isModalOpen,
@@ -20,11 +22,10 @@ export default function TutorialModal({
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             title="Welcome to your Classroom!"
-            description="Get started in 3 simple steps"
         >
-            <div className="space-y-4 mt-4">
+            <div className="space-y-4 mt-2">
                 {/* Step 1 */}
-                <div className="flex gap-4 items-start p-4 rounded-lg bg-accent/10 border border-accent/20">
+                <div className="flex flex-wrap gap-4 items-start p-4 rounded-lg border">
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">
                         1
                     </div>
@@ -40,7 +41,7 @@ export default function TutorialModal({
                 </div>
 
                 {/* Step 2 */}
-                <div className="flex gap-4 items-start p-4 rounded-lg bg-accent/10 border border-accent/20">
+                <div className="flex flex-wrap  gap-4 items-start p-4 rounded-lg border">
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">
                         2
                     </div>
@@ -56,7 +57,7 @@ export default function TutorialModal({
                 </div>
 
                 {/* Step 3 */}
-                <div className="flex gap-4 items-start p-4 rounded-lg bg-accent/10 border border-accent/20">
+                <div className="flex flex-wrap  gap-4 items-start p-4 rounded-lg border">
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">
                         3
                     </div>
@@ -72,21 +73,31 @@ export default function TutorialModal({
                 </div>
             </div>
 
-            {/* Footer */}
-            <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
-                <div className="flex items-start gap-3">
-                    <TrendingUp className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                        <p className="font-semibold text-lg mb-1">You&apos;re all set!</p>
-                        <p className="text-sm text-muted-foreground">
-                            Track student progress, view responses, and provide feedback in the <span className="font-semibold text-foreground">Assignments</span> tab.
-                        </p>
-                    </div>
-                </div>
+            {/* Video Link */}
+            <div className="p-4 rounded-lg border">
+                <p className="text-sm text-center">
+                    <span className="text-muted-foreground">Need help? Watch our </span>
+                    <Link 
+                        href={`${process.env.NEXT_PUBLIC_BASE_URL}/classroom/${classId}/${teacherId}/teacher-guide`} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="font-semibold text-primary hover:underline"
+                    >
+                        1-minute tutorial videos
+                    </Link>
+                </p>
             </div>
-            <p className="text-sm text-muted-foreground text-center">
-                Learn everything JotterBlog can do in 1 minute <a href={`${process.env.NEXT_PUBLIC_BASE_URL}/classroom/${classId}/${teacherId}/teacher-guide`} target="_blank" rel="noreferrer" className="hover:underline text-primary font-bold block">Teacher Guide Videos.</a>
-            </p>
+
+            {/* CTA Button */}
+            <Button 
+                onClick={() => {
+                    setIsOpen(false)
+                    window.history.replaceState({}, '', window.location.pathname)
+                }}
+                className="w-full mt-2 mb-4"
+            >
+                Got It, Let&apos;s Start!
+            </Button>
         </ResponsiveDialog>
     )
 }
