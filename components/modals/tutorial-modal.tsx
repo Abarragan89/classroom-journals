@@ -1,5 +1,4 @@
 'use client'
-import { useState } from 'react'
 import { ResponsiveDialog } from '../responsive-dialog'
 import { Users, FileText, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button';
@@ -7,20 +6,24 @@ import Link from 'next/link'
 
 export default function TutorialModal({
     isModalOpen,
+    onClose,
     classId,
     teacherId
 }: {
     isModalOpen: boolean,
+    onClose: () => void,
     classId: string,
     teacherId: string
 }) {
 
-    const [isOpen, setIsOpen] = useState<boolean>(isModalOpen);
+    const handleClose = () => {
+        onClose();
+    };
 
     return (
         <ResponsiveDialog
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
+            isOpen={isModalOpen}
+            setIsOpen={handleClose}
             title="Welcome to your Classroom!"
         >
             <div className="space-y-4 mt-2">
@@ -77,10 +80,10 @@ export default function TutorialModal({
             <div className="p-4 rounded-lg border">
                 <p className="text-sm text-center">
                     <span className="text-muted-foreground">Need help? Watch our </span>
-                    <Link 
-                        href={`${process.env.NEXT_PUBLIC_BASE_URL}/classroom/${classId}/${teacherId}/teacher-guide`} 
-                        target="_blank" 
-                        rel="noreferrer" 
+                    <Link
+                        href={`${process.env.NEXT_PUBLIC_BASE_URL}/classroom/${classId}/${teacherId}/teacher-guide`}
+                        target="_blank"
+                        rel="noreferrer"
                         className="font-semibold text-primary hover:underline"
                     >
                         1-minute tutorial videos
@@ -89,11 +92,8 @@ export default function TutorialModal({
             </div>
 
             {/* CTA Button */}
-            <Button 
-                onClick={() => {
-                    setIsOpen(false)
-                    window.history.replaceState({}, '', window.location.pathname)
-                }}
+            <Button
+                onClick={handleClose}
                 className="w-full mt-2 mb-4"
             >
                 Got It, Let&apos;s Start!

@@ -161,6 +161,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
         )
     }
 
+    console.log("classrooms", classrooms)
     return (
         <form action={action} className="grid relative space-y-5">
             {questions.map((question, index) => (

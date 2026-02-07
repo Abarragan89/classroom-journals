@@ -51,7 +51,7 @@ export default function TraitFilterCombobox({
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="justify-between truncate relative overflow-hidden"
+                    className="justify-between truncate relative overflow-hidden shadow-sm"
                 >
                     <span className="block truncate max-w-[140px]">{value
                         ? options.find((option) => option.value === value)?.label

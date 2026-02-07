@@ -6,10 +6,12 @@ import PromptCard from "./shared/prompt-card"
 import { SearchOptions } from "@/types"
 import { Classroom } from "@/types"
 import PaginationList from "./shared/prompt-filter-options/pagination-list"
-import CreateNewJot from "./modalBtns/create-new-jot"
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { useQuery, keepPreviousData } from "@tanstack/react-query"
 import LoadingAnimation from "./loading-animation"
+import { Separator } from "./ui/separator"
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
+import CreateNewJot from "./modalBtns/create-new-jot"
 
 export default function JotSearchArea({
     initialPrompts,
@@ -60,32 +62,33 @@ export default function JotSearchArea({
 
     return (
         <div className="mt-16">
-            <PromptFilterOptions
-                searchOptionState={searchOptions}
-                getFilteredSearch={handleFilterChange}
-                categories={categories}
-            />
-
             {/* Insert all the prompt jot cards here */}
             {fetchedPrompts && fetchedPrompts.length > 0 ? (
-                <div className="mt-10 mb-10 ">
-                    <div className="mb-8 grid-cols-1 lg:grid-cols-2 grid gap-7">
-                        {fetchedPrompts.map((prompt: Prompt) => (
-                            <PromptCard
-                                key={prompt.id}
-                                promptData={prompt}
-                                classroomData={classroomData}
-                                teacherId={teacherId}
-                            />
-                        ))}
-                    </div>
-                    <PaginationList
+                <>
+                    <PromptFilterOptions
                         searchOptionState={searchOptions}
                         getFilteredSearch={handleFilterChange}
-                        totalItems={totalPromptCount}
-                        itemsPerPage={20}
+                        categories={categories}
                     />
-                </div>
+                    <div className="mt-10 mb-10 ">
+                        <div className="mb-8 grid-cols-1 lg:grid-cols-2 grid gap-7">
+                            {fetchedPrompts.map((prompt: Prompt) => (
+                                <PromptCard
+                                    key={prompt.id}
+                                    promptData={prompt}
+                                    classroomData={classroomData}
+                                    teacherId={teacherId}
+                                />
+                            ))}
+                        </div>
+                        <PaginationList
+                            searchOptionState={searchOptions}
+                            getFilteredSearch={handleFilterChange}
+                            totalItems={totalPromptCount}
+                            itemsPerPage={20}
+                        />
+                    </div>
+                </>
             ) : (
                 isFetching ? (
                     <div className="flex flex-col justify-center items-center mt-16">
@@ -96,8 +99,8 @@ export default function JotSearchArea({
                     // Only show this when there are no jots at all
                     !isThereAtLeastOneJot && (
                         <>
-                            <p className="text-center font-bold text-muted-foreground text-2xl mt-10">No Jots in your Library</p>
-                            <Card className="mt-5 w-fit mx-auto ">
+                            {/* <p className="text-center font-bold text-muted-foreground text-2xl mt-10">No Jots in your Library</p> */}
+                            {/* <Card className="mt-5 w-fit mx-auto ">
                                 <CardHeader className="pb-0">
                                     <CardTitle className="text-center text-2xl text-primary">What&apos;s a Jot?</CardTitle>
                                 </CardHeader>
@@ -107,12 +110,31 @@ export default function JotSearchArea({
                                         <CreateNewJot />
                                     </div>
                                 </CardContent>
-                            </Card>
+                            </Card> */}
+
+
+                            <div className="max-w-xl mx-auto mt-10">
+                                <div className="bg-card border shadow-sm rounded-lg p-8 text-center">
+                                    <h2 className="text-2xl sm:text-3xl font-bold mb-3">Your Jot Library is Empty</h2>
+                                    <p className="text-muted-foreground mb-5 text-base sm:text-lg">
+                                        Create Your First Jot and Assign it to Your Class!
+                                    </p>
+                                    <CreateNewJot />
+                                </div>
+                                <Separator className="my-10" />
+                                <div>
+                                    <p className="text-center">Learn about Rosters in a <span className="font-bold">25 seconds</span> video!</p>
+                                    <LiteYouTubeEmbed
+                                        id="gCxIeBKOiZs"
+                                        title={`JotterBlog Tutorial - Rosters`}
+                                    />
+                                </div>
+                            </div>
                         </>
+
                     )
                 )
-            )
-            }
+            )}
         </div >
     )
 }

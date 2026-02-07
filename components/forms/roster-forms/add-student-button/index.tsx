@@ -10,11 +10,13 @@ import AddGoogleStudents from "./add-google-students";
 export default function AddStudentBtn({
     classId,
     closeSubMenu,
-    session
+    session,
+    showTutorialArrowOnClose = false
 }: {
     classId: string,
     closeSubMenu?: () => void,
-    session: Session
+    session: Session,
+    showTutorialArrowOnClose?: boolean
 }) {
 
     const [isModalOpen, setIsOpenModal] = useState<boolean>(false)
@@ -25,6 +27,9 @@ export default function AddStudentBtn({
     function closeModal() {
         setIsOpenModal(false)
         if (closeSubMenu) closeSubMenu()
+        if (showTutorialArrowOnClose) {
+            // Add any additional logic for tutorial arrow here if needed
+        }
     }
 
     function updateGoogleClassrooms(classes: GoogleClassroom[], isOpen: boolean) {
@@ -59,7 +64,7 @@ export default function AddStudentBtn({
                 }
 
             </ResponsiveDialog>
-            <Button className="rounded-full " onClick={() => setIsOpenModal(true)}>
+            <Button className="rounded-full shadow-md " onClick={() => setIsOpenModal(true)}>
                 <UserRoundPlus /> Add Students
             </Button>
         </>

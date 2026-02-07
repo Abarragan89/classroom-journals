@@ -2,7 +2,10 @@
 import AddClassBtn from "@/components/forms/class-forms/add-class-btn"
 import ClassCard from "@/components/shared/class-card"
 import { Class, Session } from "@/types"
+import { Separator } from "@/components/ui/separator"
 import { useQuery } from "@tanstack/react-query"
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 
 export default function ClassCardClientWrapper({
     allClassrooms,
@@ -41,23 +44,31 @@ export default function ClassCardClientWrapper({
                 <div className="w-full max-w-xl mx-auto">
                     <div className="bg-card border shadow-sm rounded-lg p-8 sm:p-10 text-center">
                         <h2 className="text-2xl sm:text-3xl font-bold mb-3">Welcome to JotterBlog!</h2>
-                        <p className="text-muted-foreground mb-8 text-base sm:text-lg">
+                        <p className="text-muted-foreground mb-5 text-base sm:text-lg">
                             Let&apos;s get started. Create your first class.
                         </p>
-
-                        {session.googleProviderId && (
-                            <div className="flex flex-col items-center gap-4">
-                                <div className="w-full max-w-xs">
-                                    <AddClassBtn
-                                        variant='default'
-                                        teacherId={teacherId}
-                                        closeSubMenu={undefined}
-                                        session={session as Session}
-                                        isAllowedToMakeNewClass={true}
-                                    />
-                                </div>
+                        <div className="flex flex-col items-center gap-4">
+                            <div className="w-full max-w-xs">
+                                <AddClassBtn
+                                    variant='default'
+                                    teacherId={teacherId}
+                                    closeSubMenu={undefined}
+                                    session={session as Session}
+                                    isAllowedToMakeNewClass={true}
+                                />
                             </div>
-                        )}
+                        </div>
+
+                    </div>
+
+                    <Separator className="mt-8 mb-3" />
+
+                    <p className="text-lg text-center">Learn about Classes in <span className="font-bold">33 seconds</span>!</p>
+                    <div className="scale-x-105 origin-center rounded-lg mx-3">
+                        <LiteYouTubeEmbed
+                            id="IZ9b6dTi56M"
+                            title={`JotterBlog Tutorial - Classes`}
+                        />
                     </div>
                 </div>
             )}

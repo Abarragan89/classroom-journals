@@ -9,7 +9,7 @@ import GoogleClassroomOptions from "./google-classroom-options";
 import Link from "next/link";
 
 
-export default function AddClassBtn({
+export default function  AddClassBtn({
     teacherId,
     closeSubMenu,
     variant = 'ghost',
@@ -83,7 +83,7 @@ export default function AddClassBtn({
                 }
 
             </ResponsiveDialog>
-            <Button size={"lg"} className="w-full" variant={variant} onClick={() => setIsOpenModal(true)}>
+            <Button size={"lg"} className="w-full shadow-md" variant={variant} onClick={() => setIsOpenModal(true)}>
                 <Plus />Add Class
             </Button>
         </>

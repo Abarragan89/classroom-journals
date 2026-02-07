@@ -87,6 +87,7 @@ export async function getAllClassroomIds(teacherId: string) {
             name: true,
             updatedAt: true,
         },
+        
         orderBy: {
             updatedAt: 'desc'
         }

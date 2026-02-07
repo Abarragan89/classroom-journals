@@ -28,7 +28,7 @@ export default function GoogleClassroomOptions({
         try {
             setIsLoading(true)
             const classroomUrl = await createClassroomWithGoogle(classInfo, session?.user?.id)
-            router.push(`classroom/${classroomUrl}/${teacherId}/roster?tutorialModal=true`);
+            router.push(`classroom/${classroomUrl}/${teacherId}/roster?tutorial=showArrow`);
         } catch (error) {
             console.error('error creating classroom', error)
             setIsLoading(false)

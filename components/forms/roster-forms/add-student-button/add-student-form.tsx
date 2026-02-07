@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
 import { useActionState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
-import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { addStudentToRoster } from "@/lib/actions/roster.action";
 import { toast } from "sonner"
@@ -30,7 +29,6 @@ export default function AddStudentForm({
         message: ''
     })
     const pathname = usePathname()
-    const router = useRouter();
     const queryClient = useQueryClient();
     const inputEl = useRef<HTMLInputElement>(null);
 
@@ -45,13 +43,13 @@ export default function AddStudentForm({
             });
         }
         inputEl.current?.focus();
-    }, [state, pathname, router])
+    }, [state, pathname])
 
 
     const CreateButton = () => {
         const { pending } = useFormStatus()
         return (
-            <Button disabled={pending} type="submit" className="mx-auto w-[80px]">
+            <Button disabled={pending} type="submit" className="mx-auto w-[80px] shadow-sm">
                 {pending ? 'Adding...' : 'Add'}
             </Button>
         )
