@@ -71,8 +71,7 @@ export async function createClassroomWithGoogle(classroom: GoogleClassroom, teac
         const classCodes = allClassCodes.map(classroom => classroom.classCode)
         const classCode = generateClassCode(classCodes);
 
-        let classroomId: string = '';
-        await prisma.$transaction(async (prisma) => {
+        return await prisma.$transaction(async (prisma) => {
             const newClassroom = await prisma.classroom.create({
                 data: {
                     name: classroom.name,
@@ -145,10 +144,8 @@ export async function createClassroomWithGoogle(classroom: GoogleClassroom, teac
                     skipDuplicates: true
                 })
             }
-            classroomId = newClassroom.id
-            return newClassroom.id
+            return newClassroom
         }, { timeout: 20000 })
-        return classroomId
 
     } catch (error) {
         if (error instanceof Error) {

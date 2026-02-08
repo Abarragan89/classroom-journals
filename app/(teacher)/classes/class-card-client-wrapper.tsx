@@ -45,7 +45,7 @@ export default function ClassCardClientWrapper({
                     <div className="bg-card border shadow-sm rounded-lg p-8 sm:p-10 text-center">
                         <h2 className="text-2xl sm:text-3xl font-bold mb-3">Welcome to JotterBlog!</h2>
                         <p className="text-muted-foreground mb-5 text-base sm:text-lg">
-                            Step 1: Create your first class.
+                            Step 1: Create your first Class.
                         </p>
                         <div className="flex flex-col items-center gap-4">
                             <div className="scale-110 w-1/2 mx-auto text-lg">

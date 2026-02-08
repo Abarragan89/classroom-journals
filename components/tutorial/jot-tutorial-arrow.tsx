@@ -1,6 +1,6 @@
 'use client'
 import { useRef } from 'react';
-import { ArrowRight, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import Link from 'next/link';
@@ -72,11 +72,11 @@ export default function JotTutorialArrow({
 
     // Desktop: Show arrow pointing to sidebar
     return (
-        <div className="fixed top-[160px] left-[110px] z-50 pointer-events-none">
+        <div className="fixed top-[162px] left-[120px] z-50 pointer-events-none">
             <div className="relative  pointer-events-auto">
                 <div className="bg-primary text-primary-foreground px-4 py-3 rounded-lg shadow-lg flex items-center gap-3">
                     <div className="flex flex-col">
-                        <p className="font-semibold text-sm">Roster Ready? Now Create a Jot!</p>
+                        <p className="font-semibold text-sm">Roster Ready? Step 3: Create a Jot!</p>
                         <p className="text-xs opacity-90">Click &quot;Jots&quot; in the sidebar to make your first assignment</p>
                     </div>
                     <Button
@@ -89,7 +89,22 @@ export default function JotTutorialArrow({
                     </Button>
                 </div>
                 <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full">
-                    <ArrowRight className="h-6 w-6 text-primary rotate-180 mr-2" />
+                    <ArrowLeft
+                        className="h-6 w-6 text-primary mr-2 animate-[pulse-x_1.5s_ease-in-out_infinite]"
+                        // style={{
+                        //     animation: 'pulse-x 1.5s ease-in-out infinite'
+                        // }}
+                    />
+                    <style jsx>{`
+                        @keyframes pulse-x {
+                            0%, 100% {
+                                transform: translateX(0px);
+                            }
+                            50% {
+                                transform: translateX(-8px);
+                            }
+                        }
+                    `}</style>
                 </div>
             </div>
         </div>

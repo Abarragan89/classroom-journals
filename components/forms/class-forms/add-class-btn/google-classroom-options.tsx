@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
-import { GoogleClassroom, Session } from '@/types'
+import { Class, GoogleClassroom, Session } from '@/types'
 import Image from 'next/image'
-import React from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { createClassroomWithGoogle } from '@/lib/actions/google.classroom.actions'
 import { useRouter } from 'next/navigation'
@@ -21,14 +21,19 @@ export default function GoogleClassroomOptions({
 }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
+    const queryClient = useQueryClient();
     const router = useRouter();
 
     async function createClassroom(classInfo: GoogleClassroom) {
         try {
             setIsLoading(true)
-            const classroomUrl = await createClassroomWithGoogle(classInfo, session?.user?.id)
-            router.push(`classroom/${classroomUrl}/${teacherId}/roster?tutorial=showArrow`);
+            const newClassroom = await createClassroomWithGoogle(classInfo, session?.user?.id) as Class
+            queryClient.setQueryData<Class[]>(['teacherClassrooms', teacherId], (old) => {
+                if (!old) return [newClassroom as Class];
+                // Add new class to the beginning of the list (most recent first)
+                return [newClassroom as Class, ...old];
+            });
+            router.push(`classroom/${newClassroom.id}/${teacherId}/roster?tutorial=showArrow`);
         } catch (error) {
             console.error('error creating classroom', error)
             setIsLoading(false)

@@ -189,15 +189,10 @@ export default function AddClassForm({
                         />
                     </div>
                 </div>
-
                 <div className="flex-center mt-5">
                     <CreateButton />
                 </div>
-
             </div>
-
-
-
             <input
                 type="hidden"
                 name="teacherId"

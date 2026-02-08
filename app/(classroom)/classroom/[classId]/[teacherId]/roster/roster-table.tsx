@@ -89,7 +89,7 @@ export default function RosterTable({ studentRoster, session, classId, classCode
                         <UserIcon className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
                         <h2 className="text-2xl sm:text-3xl font-bold mb-3">Your roster is empty!</h2>
                         <p className="text-muted-foreground mb-5 text-base sm:text-lg">
-                            Step 2: Add students to your roster.
+                            Step 2: Add students to your Roster.
                         </p>
 
                         {/* This is the Add Student Button and the Print Login Button, they need to change positions */}
