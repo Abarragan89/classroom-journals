@@ -6,7 +6,6 @@ import { assignPrompt } from "@/lib/actions/prompt.actions"
 import { toast } from 'sonner'
 import { Classroom } from "@/types"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
@@ -54,7 +53,7 @@ export default function AssignPromptForm({
             <Button
                 type="submit"
                 disabled={pending}
-                className={`mx-auto block mt-5`}
+                className={`mx-auto block mt-5 shadow-sm ${pending ? 'cursor-not-allowed' : ''}`}
             >
                 {pending ? 'Assigning...' : 'Assign'}
             </Button>
@@ -63,29 +62,29 @@ export default function AssignPromptForm({
 
     return (
         <form action={action} className="space-y-2">
-            <div className="grid items-center gap-3">
-                <p className="text-center italic line-clamp-4 text-primary">
-                    &ldquo;{promptTitle}&rdquo;
+            <div className="grid items-center gap-2">
+                <p className="text-center italic line-clamp-4 text-primary bg-card p-4 border rounded-md">
+                    {promptTitle}
                 </p>
-                <Separator />
-                <div className="space-y-3">
-                    {classroomData?.length > 0 && (
-                        <>
-                            <p className="text-md mt-2 font-bold">Select Classes</p>
-                            {classroomData.map((classroom: Classroom) => (
-                                <div key={classroom.id} className="flex items-center space-x-2">
-                                    <Checkbox id={classroom.id} value={classroom.id} name={`classroom-organize-${classroom.id}`} />
-                                    <label
-                                        htmlFor={classroom.id}
-                                        className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                    >
-                                        {classroom.name}
-                                    </label>
-                                </div>
-                            ))}
-                        </>
-                    )}
-                </div>
+                {classroomData?.length > 0 && (
+                    <>
+                        <p className="text-md mt-5 font-bold">Select Classes</p>
+                        {classroomData.map((classroom: Classroom) => (
+                            <div key={classroom.id} className="flex items-center space-x-2 bg-card border p-4 rounded-md">
+                                <Checkbox id={classroom.id} value={classroom.id} name={`classroom-organize-${classroom.id}`} />
+                                <label
+                                    htmlFor={classroom.id}
+                                    className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                    {classroom.name}
+                                </label>
+                                <span className={`text-xs font-normal ${classroom._count?.users === 0 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                                    ({classroom._count?.users || 0} {classroom._count?.users === 1 ? 'student' : 'students'})
+                                </span>
+                            </div>
+                        ))}
+                    </>
+                )}
                 <input
                     id="promptId"
                     name="promptId"
@@ -107,16 +106,47 @@ export default function AssignPromptForm({
                 <p className="text-md font-bold mt-3">Other Options</p>
                 {/* Make it public switch */}
 
-                {promptType === 'BLOG' &&
+                <div className="bg-card border p-4 space-y-4 rounded-md">
+                    {promptType === 'BLOG' &&
+                        <div className="flex items-center space-x-2">
+                            <Switch
+                                onCheckedChange={(e) => setIsPublic(e)}
+                                checked={isPublic}
+                            />
+                            <Label
+                                className="text-md text-sm ml-2"
+                            >
+                                Make Public
+                            </Label>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <CiCircleQuestion size={20} />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Responses are visible to everyone</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                            <input
+                                type='hidden'
+                                readOnly
+                                name='is-public'
+                                id='is-public'
+                                value={isPublic.toString()}
+                            />
+                        </div>
+                    }
+                    {/* this is making spell check enabled */}
                     <div className="flex items-center space-x-2">
                         <Switch
-                            onCheckedChange={(e) => setIsPublic(e)}
-                            checked={isPublic}
+                            onCheckedChange={(e) => setEnableSpellCheck(e)}
+                            checked={enableSpellCheck}
                         />
                         <Label
-                            className="text-md text-sm ml-2"
+                            className="text-sm ml-2"
                         >
-                            Make Public
+                            Enable Spell Check
                         </Label>
                         <TooltipProvider>
                             <Tooltip>
@@ -124,51 +154,19 @@ export default function AssignPromptForm({
                                     <CiCircleQuestion size={20} />
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p>Responses are visible to everyone</p>
+                                    <p>Text editor will spell check</p>
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
                         <input
                             type='hidden'
                             readOnly
-                            name='is-public'
-                            id='is-public'
-                            value={isPublic.toString()}
+                            name='enable-spellcheck'
+                            id='enable-spellcheck'
+                            value={enableSpellCheck.toString()}
                         />
                     </div>
-                }
-
-                {/* this is making spell check enabled */}
-                <div className="flex items-center space-x-2">
-                    <Switch
-                        onCheckedChange={(e) => setEnableSpellCheck(e)}
-                        checked={enableSpellCheck}
-                    />
-                    <Label
-                        className="text-sm ml-2"
-                    >
-                        Enable Spell Check
-                    </Label>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <CiCircleQuestion size={20} />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Text editor will spell check</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                    <input
-                        type='hidden'
-                        readOnly
-                        name='enable-spellcheck'
-                        id='enable-spellcheck'
-                        value={enableSpellCheck.toString()}
-                    />
                 </div>
-
-
 
                 <AssignButton />
                 {state && !state.success && (

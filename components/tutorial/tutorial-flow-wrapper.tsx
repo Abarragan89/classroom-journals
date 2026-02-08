@@ -55,8 +55,6 @@ export default function TutorialFlowWrapper({
                 <TutorialModal
                     isModalOpen={true}
                     onClose={handleModalClose}
-                    classId={classId}
-                    teacherId={teacherId}
                 />
             )}
             {currentStep === 'showArrow' && hasStudents && (

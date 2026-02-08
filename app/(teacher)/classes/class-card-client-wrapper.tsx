@@ -41,14 +41,14 @@ export default function ClassCardClientWrapper({
                     classData={classroom}
                 />
             )) : (
-                <div className="w-full max-w-xl mx-auto">
+                <div className="w-full sm:w-2/3 lg:w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
                     <div className="bg-card border shadow-sm rounded-lg p-8 sm:p-10 text-center">
                         <h2 className="text-2xl sm:text-3xl font-bold mb-3">Welcome to JotterBlog!</h2>
                         <p className="text-muted-foreground mb-5 text-base sm:text-lg">
-                            Let&apos;s get started. Create your first class.
+                            Step 1: Create your first class.
                         </p>
                         <div className="flex flex-col items-center gap-4">
-                            <div className="w-full max-w-xs">
+                            <div className="scale-110 w-1/2 mx-auto text-lg">
                                 <AddClassBtn
                                     variant='default'
                                     teacherId={teacherId}
@@ -60,10 +60,6 @@ export default function ClassCardClientWrapper({
                         </div>
 
                     </div>
-
-                    <Separator className="mt-8 mb-3" />
-
-                    <p className="text-lg text-center">Learn about Classes in <span className="font-bold">33 seconds</span>!</p>
                     <div className="scale-x-105 origin-center rounded-lg mx-3">
                         <LiteYouTubeEmbed
                             id="IZ9b6dTi56M"

@@ -384,12 +384,12 @@
 
   .custom-scrollbar::-webkit-scrollbar-track {
     background: "transparent";
-    border-radius: 10px;
+    border-radius: 5px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: var(--primary);
-    border-radius: 10px;
+    border-radius: 5px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {

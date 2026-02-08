@@ -86,6 +86,15 @@ export async function getAllClassroomIds(teacherId: string) {
             id: true,
             name: true,
             updatedAt: true,
+            _count: {
+                select: {
+                    users: {
+                        where: {
+                            role: ClassUserRole.STUDENT
+                        }
+                    }
+                }
+            }
         },
         
         orderBy: {

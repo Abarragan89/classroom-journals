@@ -35,7 +35,7 @@ export default function PromptCard({
             <ResponsiveDialog
                 isOpen={isAssignModalOpen}
                 setIsOpen={setIsAssignModalOpen}
-                title={`Assign`}
+                title={`Assign Jot`}
                 description='Select which classes to assign to'
             >
                 <AssignPromptForm

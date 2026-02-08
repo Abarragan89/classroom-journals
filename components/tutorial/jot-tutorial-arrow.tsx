@@ -76,7 +76,7 @@ export default function JotTutorialArrow({
             <div className="relative  pointer-events-auto">
                 <div className="bg-primary text-primary-foreground px-4 py-3 rounded-lg shadow-lg flex items-center gap-3">
                     <div className="flex flex-col">
-                        <p className="font-semibold text-sm">Roster Ready! Now Create a Jot</p>
+                        <p className="font-semibold text-sm">Roster Ready? Now Create a Jot!</p>
                         <p className="text-xs opacity-90">Click &quot;Jots&quot; in the sidebar to make your first assignment</p>
                     </div>
                     <Button

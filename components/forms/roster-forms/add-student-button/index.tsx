@@ -1,72 +1,15 @@
 'use client';
 import { Button } from "@/components/ui/button"
-import { useState } from "react";
 import { UserRoundPlus } from "lucide-react"
-import AddStudentForm from "./add-student-form";
-import { ResponsiveDialog } from "@/components/responsive-dialog"
-import { GoogleClassroom, Session } from "@/types";
-import AddGoogleStudents from "./add-google-students";
 
 export default function AddStudentBtn({
-    classId,
-    closeSubMenu,
-    session,
-    showTutorialArrowOnClose = false
+    onClick
 }: {
-    classId: string,
-    closeSubMenu?: () => void,
-    session: Session,
-    showTutorialArrowOnClose?: boolean
+    onClick: () => void
 }) {
-
-    const [isModalOpen, setIsOpenModal] = useState<boolean>(false)
-    const [googleClassroomArr, setGoogleClassroomArr] = useState<GoogleClassroom[]>([])
-    const [showGoogleClassrooms, setShowGoogleClassrooms] = useState<boolean>(false)
-
-
-    function closeModal() {
-        setIsOpenModal(false)
-        if (closeSubMenu) closeSubMenu()
-        if (showTutorialArrowOnClose) {
-            // Add any additional logic for tutorial arrow here if needed
-        }
-    }
-
-    function updateGoogleClassrooms(classes: GoogleClassroom[], isOpen: boolean) {
-        setGoogleClassroomArr(classes)
-        setShowGoogleClassrooms(isOpen)
-    }
-
     return (
-        <>
-            <ResponsiveDialog
-                isOpen={isModalOpen}
-                setIsOpen={closeModal}
-                title="Add Student"
-                description="Fill out form to add student to your roster"
-            >
-                {showGoogleClassrooms ?
-                    <div className="mt-3">
-                        <AddGoogleStudents
-                            googleClassrooms={googleClassroomArr}
-                            updateGoogleClassrooms={updateGoogleClassrooms}
-                            session={session as Session}
-                            classId={classId}
-                            closeModal={closeModal}
-                        />
-                    </div>
-                    :
-                    <AddStudentForm
-                        classId={classId}
-                        session={session as Session}
-                        updateGoogleClassrooms={updateGoogleClassrooms}
-                    />
-                }
-
-            </ResponsiveDialog>
-            <Button className="rounded-full shadow-md " onClick={() => setIsOpenModal(true)}>
-                <UserRoundPlus /> Add Students
-            </Button>
-        </>
+        <Button className="rounded-full shadow-md" onClick={onClick}>
+            <UserRoundPlus /> Add Students
+        </Button>
     )
 }
