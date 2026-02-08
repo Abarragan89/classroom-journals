@@ -95,7 +95,15 @@ export default function AssignmentListSection({
 
     return (
         <>
-            < div className="flex flex-col-reverse items-center lg:flex-row lg:items-start justify-between">
+            {fetchedPrompts && fetchedPrompts.length > 0 && (
+                <Button asChild className="absolute top-[40px] right-0 shadow-sm">
+                    <Link href={`/classroom/${classId}/${teacherId}/jots`}>
+                        <Plus />Assignment
+                    </Link>
+                </Button>
+            )}
+
+            < div className="flex flex-col-reverse items-center lg:flex-row lg:items-start justify-between mt-16">
                 {fetchedPrompts && fetchedPrompts?.length > 0 ? (
                     <>
                         <div className="flex-2 w-full lg:mr-10 space-y-5">
@@ -152,7 +160,7 @@ export default function AssignmentListSection({
                             <p className="text-muted-foreground mb-5 text-base sm:text-lg">
                                 Step 4: Assign a Jot to the Class.
                             </p>
-                            <Button variant="default" className="scale-125" asChild>
+                            <Button variant="default" className="scale-105" asChild>
                                 <Link href={`/classroom/${classId}/${teacherId}/jots`}>
                                     <Plus />Assignment
                                 </Link>
@@ -162,7 +170,7 @@ export default function AssignmentListSection({
                             <div className="shadow-lg rounded-lg">
                                 <LiteYouTubeEmbed
                                     id="oQxuIbV1XkI"
-                                    title={`JotterBlog Tutorial - Rosters`}
+                                    title={`JotterBlog Tutorial - Assignements`}
                                 />
                             </div>
                         </div>

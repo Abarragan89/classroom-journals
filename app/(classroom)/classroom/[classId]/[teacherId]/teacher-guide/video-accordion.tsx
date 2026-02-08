@@ -98,7 +98,6 @@ export default function VideoAccordion() {
                             </div>
                         </AccordionTrigger>
                         <AccordionContent className="p-5 sm:p-10 pt-0 sm:pt-0">
-                            <h4 className="h3-bold text-center pt-3">Watch Video:</h4>
                             <div className="rounded-lg border overflow-hidden shadow-sm">
                                 <div className="scale-x-105 origin-center">
                                     <LiteYouTubeEmbed

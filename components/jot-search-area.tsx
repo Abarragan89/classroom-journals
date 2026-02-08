@@ -110,10 +110,10 @@ export default function JotSearchArea({
                                 </p>
                                 <CreateNewJot />
                             </div>
-                            <div>
+                            <div className="shadow-lg">
                                 <LiteYouTubeEmbed
                                     id="gCxIeBKOiZs"
-                                    title={`JotterBlog Tutorial - Rosters`}
+                                    title={`JotterBlog Tutorial - Jots`}
                                 />
                             </div>
                         </div>

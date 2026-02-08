@@ -60,7 +60,7 @@ export default function ClassCardClientWrapper({
                         </div>
 
                     </div>
-                    <div className="scale-x-105 origin-center rounded-lg mx-3">
+                    <div className="scale-x-105 origin-center rounded-lg mx-3 shadow-lg">
                         <LiteYouTubeEmbed
                             id="IZ9b6dTi56M"
                             title={`JotterBlog Tutorial - Classes`}

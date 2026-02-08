@@ -20,21 +20,15 @@ export default async function Classroom({
 
     return (
         <div className="relative">
-            <Button asChild className="absolute top-[40px] right-0 shadow-sm">
-                <Link href={`/classroom/${classId}/${teacherId}/jots`}>
-                    <Plus />Assignment
-                </Link>
-            </Button>
+
             <h2 className="text-2xl lg:text-3xl mt-2">Posted Assignments</h2>
-            <div className="gap-7 mt-16">
-                <AssignmentListSection
-                    initialPrompts={allPromptSessions.prompts}
-                    categories={allPromptCategories}
-                    classId={classId}
-                    teacherId={teacherId}
-                    promptCountTotal={allPromptSessions.totalCount}
-                />
-            </div>
+            <AssignmentListSection
+                initialPrompts={allPromptSessions.prompts}
+                categories={allPromptCategories}
+                classId={classId}
+                teacherId={teacherId}
+                promptCountTotal={allPromptSessions.totalCount}
+            /> 
         </div>
     )
 }
