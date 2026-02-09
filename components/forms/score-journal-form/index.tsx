@@ -3,7 +3,7 @@ import { gradeStudentResponse } from "@/lib/actions/response.action";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { saveRubricGrade, deleteRubricGrade } from "@/lib/actions/rubric.actions";
 import { Rubric, RubricGrade, RubricListItem } from "@/types";
@@ -73,18 +73,20 @@ export default function ScoreJournalForm({
         comment: mostRecentGrade.comment || undefined
     } : null;
 
-    // Auto-set currentRubric when existing grade loads
-    if (mostRecentGrade && !currentRubric) {
-        const rubricForDisplay: Rubric = {
-            id: mostRecentGrade.rubric.id,
-            title: mostRecentGrade.rubric.title,
-            categories: mostRecentGrade.rubric.categories as Rubric['categories'],
-            teacherId: mostRecentGrade.teacherId,
-            createdAt: new Date(),
-            updatedAt: new Date()
-        };
-        setCurrentRubric(rubricForDisplay);
-    }
+    // Auto-set currentRubric when existing grade loads (only once)
+    useEffect(() => {
+        if (mostRecentGrade && !currentRubric) {
+            const rubricForDisplay: Rubric = {
+                id: mostRecentGrade.rubric.id,
+                title: mostRecentGrade.rubric.title,
+                categories: mostRecentGrade.rubric.categories as Rubric['categories'],
+                teacherId: mostRecentGrade.teacherId,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            };
+            setCurrentRubric(rubricForDisplay);
+        }
+    }, [mostRecentGrade]); // Only run when mostRecentGrade changes
 
     // Mutation for updating 100-point score
     const updateScoreMutation = useMutation({
