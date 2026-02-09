@@ -15,10 +15,11 @@ import { Badge } from '@/components/ui/badge'
 interface RubricInstanceProps {
     rubric: Rubric;
     responseId?: string;
-    existingGrade?: RubricGrade; // Add this to accept saved grades
+    existingGrade?: RubricGrade;
     onGradeChange?: (grade: RubricGrade) => void;
     onSave?: (grade: RubricGrade) => void;
-    studentWriting?: string; // Student's writing to be graded by AI
+    studentWriting?: string;
+    isSaving?: boolean; // Add this prop
 }
 
 export default function RubricInstance({
@@ -28,12 +29,12 @@ export default function RubricInstance({
     onGradeChange,
     onSave,
     studentWriting = '',
+    isSaving = false,
 }: RubricInstanceProps) {
 
     const [hasChanges, setHasChanges] = useState(false);
     const [comment, setComment] = useState(existingGrade?.comment || '');
     const [isAIGrading, setIsAIGrading] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
     const [aiAllowance, setAiAllowance] = useState<number>(0);
 
     // Fetch AI allowance when component mounts
@@ -82,6 +83,36 @@ export default function RubricInstance({
             }))
         };
     });
+
+    // Update state when existingGrade prop changes
+    useEffect(() => {
+        if (existingGrade) {
+            // Update comment
+            setComment(existingGrade.comment || '');
+
+            // Update grading instance
+            setGradingInstance({
+                id: rubric.id,
+                title: rubric.title,
+                categories: rubric.categories.map((cat) => {
+                    const savedCategory = existingGrade.categories.find(saved => saved.name === cat.name);
+                    let selectedScore: number | undefined = undefined;
+
+                    if (savedCategory) {
+                        selectedScore = cat.criteria.findIndex(criterion =>
+                            criterion.score === savedCategory.selectedScore
+                        );
+                        if (selectedScore === -1) selectedScore = undefined;
+                    }
+
+                    return {
+                        ...cat,
+                        selectedScore
+                    };
+                })
+            });
+        }
+    }, [existingGrade, rubric.id, rubric.title, rubric.categories]);
 
 
     // Function to check if current state matches the existing grade
@@ -220,19 +251,12 @@ export default function RubricInstance({
         }
     };
 
-    const handleSave = async () => {
+    const handleSave = () => {
         if (onSave) {
-            setIsSaving(true);
-            try {
-                const grade = calculateGrade(gradingInstance)
-                await onSave(grade)
-                // Reset hasChanges after successful save
-                setHasChanges(false)
-            } catch (error) {
-                console.error('Error saving grade:', error);
-            } finally {
-                setIsSaving(false);
-            }
+            const grade = calculateGrade(gradingInstance)
+            onSave(grade)
+            // Reset hasChanges after triggering save
+            setHasChanges(false)
         }
     }
 
