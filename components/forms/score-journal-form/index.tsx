@@ -47,6 +47,7 @@ export default function ScoreJournalForm({
 
     // Load existing rubric grades when component mounts
     useEffect(() => {
+        console.log('showing here')
         loadExistingGrade();
     }, [responseId]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -58,6 +59,7 @@ export default function ScoreJournalForm({
             }
             const data = await response.json();
             const grades = data.rubricGrades;
+            console.log('Fetched existing grades for response:', grades);
             const mostRecentGrade = grades && grades.length > 0 ? grades[0] : null;
 
             if (mostRecentGrade) {
