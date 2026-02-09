@@ -102,7 +102,7 @@ export default function JotSearchArea({
                 ) : (
                     // Only show this when there are no jots at all
                     !isThereAtLeastOneJot && (
-                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 w-full sm:w-2/3 lg:w-full mx-auto mt-10">
+                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 w-full max-w-[450px] mx-auto mt-10">
                             <div className="bg-card border shadow-sm rounded-lg p-8 text-center">
                                 <h2 className="text-2xl sm:text-3xl font-bold mb-3">Your Jot Library is Empty</h2>
                                 <p className="text-muted-foreground mb-5 text-base sm:text-lg">
