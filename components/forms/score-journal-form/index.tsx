@@ -3,15 +3,14 @@ import { gradeStudentResponse } from "@/lib/actions/response.action";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { saveRubricGrade, deleteRubricGrade } from "@/lib/actions/rubric.actions";
-import { Rubric, RubricGrade, RubricListItem, Response, ResponseData, PromptSession } from "@/types";
+import { Rubric, RubricGrade, RubricListItem } from "@/types";
 import { FadeLoader } from 'react-spinners';
 import { useTheme } from "next-themes";
 import RubricInstance from "@/app/(classroom)/classroom/[classId]/[teacherId]/single-prompt-session/[sessionId]/single-response/[responseId]/rubric-instance";
-import { useQueryClient } from '@tanstack/react-query'
-import { JsonValue } from '@prisma/client/runtime/library';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button } from "@/components/ui/button";
 
 export default function ScoreJournalForm({
@@ -29,172 +28,114 @@ export default function ScoreJournalForm({
 }) {
 
     const queryClient = useQueryClient()
-
-    const [showRubicDialog, setShowRubricDialog] = useState(false);
-    const [currentRubric, setCurrentRubric] = useState<Rubric | null>(null);
-    const [rubricList, setRubricList] = useState<RubricListItem[]>([]);
-    const [currentGrade, setCurrentGrade] = useState<RubricGrade | null>(null);
-    const [existingGrade, setExistingGrade] = useState<RubricGrade | null>(null);
-    const [loadingRubric, setLoadingRubric] = useState(false);
-    const [loadingRubricList, setLoadingRubricList] = useState(false);
     const { theme } = useTheme();
 
-    useEffect(() => {
-        if (showRubicDialog && rubricList.length === 0) {
-            getRubricList()
-        }
-    }, [showRubicDialog, rubricList.length]) // eslint-disable-line react-hooks/exhaustive-deps
+    const [showRubricDialog, setShowRubricDialog] = useState(false);
+    const [currentRubric, setCurrentRubric] = useState<Rubric | null>(null);
 
-    // Load existing rubric grades when component mounts
-    useEffect(() => {
-        console.log('showing here')
-        loadExistingGrade();
-    }, [responseId]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    async function loadExistingGrade() {
-        try {
+    // Fetch existing rubric grades with React Query
+    const { data: rubricGradeData } = useQuery({
+        queryKey: ['rubricGrades', responseId],
+        queryFn: async () => {
             const response = await fetch(`/api/rubrics/response/${responseId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch rubric grades');
             }
             const data = await response.json();
-            const grades = data.rubricGrades;
-            console.log('Fetched existing grades for response:', grades);
-            const mostRecentGrade = grades && grades.length > 0 ? grades[0] : null;
+            return data.rubricGrades;
+        },
+        staleTime: 1000 * 60 * 5, // 5 minutes
+    });
 
-            if (mostRecentGrade) {
-                // Set the existing grade
-                const savedGrade: RubricGrade = {
-                    rubricId: mostRecentGrade.rubricId,
-                    responseId: mostRecentGrade.responseId,
-                    categories: mostRecentGrade.categories as RubricGrade['categories'],
-                    totalScore: mostRecentGrade.totalScore,
-                    maxTotalScore: mostRecentGrade.maxTotalScore,
-                    comment: mostRecentGrade.comment || undefined
-                };
-                setExistingGrade(savedGrade);
-
-                // Convert the saved grade back to a Rubric format for display
-                const rubricForDisplay: Rubric = {
-                    id: mostRecentGrade.rubric.id,
-                    title: mostRecentGrade.rubric.title,
-                    categories: mostRecentGrade.rubric.categories as Rubric['categories'],
-                    teacherId: mostRecentGrade.teacherId,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                };
-                setCurrentRubric(rubricForDisplay);
-                setCurrentGrade(savedGrade);
-            } else {
-                setExistingGrade(null);
-            }
-        } catch (error) {
-            console.error('Error loading existing grade:', error);
-            // Don't show error toast for this, as it's not critical
-        }
-    }
-
-    async function updateResponseScore(score: number) {
-        try {
-            // First, save the new 100-point score
-            await gradeStudentResponse(responseId, 0, score, teacherId);
-
-            // Update the response query cache with new score
-            queryClient.setQueryData<Response>(['response', responseId], (old) => {
-                if (!old) return old;
-                return {
-                    ...old,
-                    rubricGrades: [], // Clear rubric grades when using 100-point scoring
-                    response: (old.response as unknown as ResponseData[]).map((item, index) =>
-                        index === 0 ? { ...item, score } : item
-                    ) as unknown as JsonValue
-                } as unknown as Response;
-            });
-
-            // Update session data cache if sessionId is provided
-            if (sessionId) {
-                queryClient.setQueryData<PromptSession>(['getSingleSessionData', sessionId], (old) => {
-                    if (!old) return old;
-                    return {
-                        ...old,
-                        responses: old.responses?.map((r: Response) =>
-                            r.id === responseId
-                                ? {
-                                    ...r,
-                                    rubricGrades: [],
-                                    response: (r.response as unknown as ResponseData[]).map((item: ResponseData, index: number) =>
-                                        index === 0 ? { ...item, score } : item
-                                    ) as unknown as JsonValue
-                                }
-                                : r
-                        )
-                    };
-                });
-            }
-
-            // If there is an existing rubric grade, delete it since we're now using 100-point grading
-            if (existingGrade) {
-                try {
-                    await deleteRubricGrade(responseId, existingGrade.rubricId, teacherId);
-
-                    // Refresh the existing grade
-                    await loadExistingGrade();
-
-                    // Clear current rubric state since we're now using 100-point grading
-                    setCurrentRubric(null);
-                    setCurrentGrade(null);
-
-                } catch (rubricError) {
-                    console.error('Error deleting existing rubric grade:', rubricError);
-                    // Don't fail the main grade update if rubric deletion fails
-                    toast('Grade updated, but failed to clean up rubric grade');
-                    return;
-                }
-            }
-            toast('Grade Updated!');
-        } catch (error) {
-            console.error('error updating score ', error);
-            toast('Grade failed to update');
-        }
-    }
-
-    async function getRubricList() {
-        setLoadingRubricList(true);
-        try {
+    // Fetch rubric list with React Query
+    const { data: rubricList = [], isLoading: loadingRubricList } = useQuery({
+        queryKey: ['rubricList', teacherId],
+        queryFn: async () => {
             const response = await fetch(`/api/rubrics/teacher/${teacherId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch rubric list');
             }
             const data = await response.json();
-            setRubricList(data.rubrics || []);
-        } catch (error) {
-            console.error('Error fetching rubric list:', error);
-            toast('Failed to fetch rubrics');
-        } finally {
-            setLoadingRubricList(false);
-        }
+            return data.rubrics || [];
+        },
+        enabled: showRubricDialog, // Only fetch when dialog is open
+        staleTime: 1000 * 60 * 5, // 5 minutes
+    });
+
+    // Derive existing grade from query data
+    const mostRecentGrade = rubricGradeData && rubricGradeData.length > 0 ? rubricGradeData[0] : null;
+    const existingGrade: RubricGrade | null = mostRecentGrade ? {
+        rubricId: mostRecentGrade.rubricId,
+        responseId: mostRecentGrade.responseId,
+        categories: mostRecentGrade.categories as RubricGrade['categories'],
+        totalScore: mostRecentGrade.totalScore,
+        maxTotalScore: mostRecentGrade.maxTotalScore,
+        comment: mostRecentGrade.comment || undefined
+    } : null;
+
+    // Auto-set currentRubric when existing grade loads
+    if (mostRecentGrade && !currentRubric) {
+        const rubricForDisplay: Rubric = {
+            id: mostRecentGrade.rubric.id,
+            title: mostRecentGrade.rubric.title,
+            categories: mostRecentGrade.rubric.categories as Rubric['categories'],
+            teacherId: mostRecentGrade.teacherId,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        };
+        setCurrentRubric(rubricForDisplay);
     }
 
-    async function handleRubricSelect(rubricListItem: RubricListItem) {
-        setLoadingRubric(true);
-        try {
-            // Fetch the full rubric data when one is selected
+    // Mutation for updating 100-point score
+    const updateScoreMutation = useMutation({
+        mutationFn: async (score: number) => {
+            // Delete existing rubric grade if present
+            if (existingGrade) {
+                await deleteRubricGrade(responseId, existingGrade.rubricId, teacherId);
+            }
+            // Save the new 100-point score
+            await gradeStudentResponse(responseId, 0, score, teacherId);
+            return score;
+        },
+        onSuccess: () => {
+            // Invalidate all related queries to refetch fresh data
+            queryClient.invalidateQueries({ queryKey: ['rubricGrades', responseId] });
+            queryClient.invalidateQueries({ queryKey: ['response', responseId] });
+            if (sessionId) {
+                queryClient.invalidateQueries({ queryKey: ['getSingleSessionData', sessionId] });
+            }
+            setCurrentRubric(null);
+            toast('Grade Updated!');
+        },
+        onError: (error) => {
+            console.error('error updating score:', error);
+            toast('Grade failed to update');
+        }
+    });
+
+    // Mutation for selecting a rubric (fetch full details)
+    const selectRubricMutation = useMutation({
+        mutationFn: async (rubricListItem: RubricListItem) => {
             const response = await fetch(`/api/rubrics/${rubricListItem.id}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch rubric details');
             }
             const data = await response.json();
-            const fullRubric = data.rubric as Rubric;
+            return data.rubric as Rubric;
+        },
+        onSuccess: (fullRubric) => {
             setCurrentRubric(fullRubric);
-            setCurrentGrade(null); // Reset grade when selecting new rubric
             setShowRubricDialog(false);
-        } catch (error) {
+        },
+        onError: (error) => {
             console.error('Error fetching full rubric:', error);
             toast('Failed to load rubric details');
-        } finally {
-            setLoadingRubric(false);
         }
-    }
+    });
+
+    const handleRubricSelect = (rubricListItem: RubricListItem) => {
+        selectRubricMutation.mutate(rubricListItem);
+    };
 
     function determineLoadingColor() {
         if (!theme) return '#0e318b'; // default color
@@ -216,22 +157,10 @@ export default function ScoreJournalForm({
         }
     }
 
-    const handleGradeChange = (grade: RubricGrade) => {
-        setCurrentGrade(grade);
-    }
-
-    const handleSaveGrade = async (grade: RubricGrade) => {
-        try {
-            // If there's an existing rubric grade, delete it first (to replace it)
-            if (existingGrade) {
-                try {
-                    await deleteRubricGrade(responseId, existingGrade.rubricId, teacherId);
-                } catch (deleteError) {
-                    console.error('Error deleting previous rubric grade:', deleteError);
-                    // Continue with saving the new grade even if deletion fails
-                }
-            }
-            // Save the detailed rubric grade data
+    // Mutation for saving rubric grade with optimistic updates
+    const saveGradeMutation = useMutation({
+        mutationFn: async (grade: RubricGrade) => {
+            // Save the detailed rubric grade data (upsert handles update/create)
             const rubricResult = await saveRubricGrade(
                 responseId,
                 grade.rubricId,
@@ -242,78 +171,57 @@ export default function ScoreJournalForm({
                 grade.comment
             );
 
-            if (rubricResult.success) {
-                // Also update the response score with the percentage
-                await gradeStudentResponse(responseId, 0, rubricResult.grade?.percentageScore || 0, teacherId);
-
-                // Refresh existing grade to show the new grade
-                await loadExistingGrade();
-
-                // Construct the rubric grade object that matches the Response type
-                const rubricGradeForCache = rubricResult.grade && currentRubric ? {
-                    id: rubricResult.grade.id,
-                    categories: rubricResult.grade.categories,
-                    totalScore: rubricResult.grade.totalScore,
-                    maxTotalScore: rubricResult.grade.maxTotalScore,
-                    percentageScore: rubricResult.grade.percentageScore,
-                    comment: rubricResult.grade.comment || undefined,
-                    gradedAt: rubricResult.grade.updatedAt || new Date(),
-                    rubric: {
-                        id: currentRubric.id,
-                        title: currentRubric.title,
-                        categories: currentRubric.categories
-                    }
-                } : null;
-
-                // Update the response query cache with new rubric grade
-                queryClient.setQueryData<Response>(['response', responseId], (old) => {
-                    if (!old || !rubricGradeForCache) return old;
-                    return {
-                        ...old,
-                        rubricGrades: [rubricGradeForCache],
-                        response: (old.response as unknown as ResponseData[]).map((item, index) =>
-                            index === 0 ? { ...item, score: rubricResult.grade?.percentageScore || 0 } : item
-                        ) as unknown as JsonValue
-                    } as unknown as Response;
-                });
-
-                // Update session data cache if sessionId is provided
-                if (sessionId) {
-                    queryClient.setQueryData<PromptSession>(['getSingleSessionData', sessionId], (old) => {
-                        if (!old || !rubricGradeForCache) return old;
-                        return {
-                            ...old,
-                            responses: old.responses?.map((r: Response) =>
-                                r.id === responseId
-                                    ? {
-                                        ...r,
-                                        rubricGrades: [rubricGradeForCache],
-                                        response: (r.response as unknown as ResponseData[]).map((item: ResponseData, index: number) =>
-                                            index === 0 ? { ...item, score: rubricResult.grade?.percentageScore || 0 } : item
-                                        ) as unknown as JsonValue
-                                    } as unknown as Response
-                                    : r
-                            )
-                        };
-                    });
-                }
-
-                toast('Rubric grade saved successfully!');
-            } else {
-                toast(rubricResult.message || 'Failed to save rubric grade');
+            if (!rubricResult.success) {
+                throw new Error(rubricResult.message || 'Failed to save rubric grade');
             }
-        } catch (error) {
+
+            // Also update the response score with the percentage
+            await gradeStudentResponse(responseId, 0, rubricResult.grade?.percentageScore || 0, teacherId);
+
+            return rubricResult;
+        },
+        onMutate: async (grade: RubricGrade) => {
+            // Cancel any outgoing refetches to avoid overwriting our optimistic update
+            await queryClient.cancelQueries({ queryKey: ['rubricGrades', responseId] });
+
+            // Snapshot the previous value
+            const previousGrade = queryClient.getQueryData(['rubricGrades', responseId]);
+
+            // Optimistically update the cache with the new grade
+            queryClient.setQueryData(['rubricGrades', responseId], grade);
+
+            // Return context with the previous value for potential rollback
+            return { previousGrade };
+        },
+        onSuccess: () => {
+            // Invalidate all related queries to refetch fresh data from server
+            queryClient.invalidateQueries({ queryKey: ['rubricGrades', responseId] });
+            queryClient.invalidateQueries({ queryKey: ['response', responseId] });
+            if (sessionId) {
+                queryClient.invalidateQueries({ queryKey: ['getSingleSessionData', sessionId] });
+            }
+            toast('Rubric grade saved successfully!');
+        },
+        onError: (error: Error, _grade, context) => {
+            // Rollback to the previous value on error
+            if (context?.previousGrade) {
+                queryClient.setQueryData(['rubricGrades', responseId], context.previousGrade);
+            }
             console.error('Error saving rubric grade:', error);
-            toast('Failed to save rubric grade');
+            toast(error.message || 'Failed to save rubric grade');
         }
-    }
+    });
+
+    const handleSaveGrade = (grade: RubricGrade) => {
+        saveGradeMutation.mutate(grade);
+    };
 
     return (
         <>
             <ResponsiveDialog
                 title="My Rubrics"
                 description="Select a rubric to grade this response"
-                isOpen={showRubicDialog}
+                isOpen={showRubricDialog}
                 setIsOpen={setShowRubricDialog}
             >
                 <div className="flex flex-col items-center justify-center">
@@ -339,7 +247,7 @@ export default function ScoreJournalForm({
                             </p>
                         ) : (
                             rubricList.map((rubricItem: RubricListItem) => {
-                                const isCurrentlyLoading = loadingRubric;
+                                const isCurrentlyLoading = selectRubricMutation.isPending;
                                 return (
                                     <div
                                         key={rubricItem.id}
@@ -383,9 +291,19 @@ export default function ScoreJournalForm({
                                 <p className="text-sm text-muted-foreground">
                                     ⚠️ Entering a new score below will replace the{' '}
                                     <span
-                                        onClick={async () => {
-                                            // Load the most recent rubric grade and show it
-                                            await loadExistingGrade();
+                                        onClick={() => {
+                                            // Show the rubric grade view
+                                            if (mostRecentGrade) {
+                                                const rubricForDisplay: Rubric = {
+                                                    id: mostRecentGrade.rubric.id,
+                                                    title: mostRecentGrade.rubric.title,
+                                                    categories: mostRecentGrade.rubric.categories as Rubric['categories'],
+                                                    teacherId: mostRecentGrade.teacherId,
+                                                    createdAt: new Date(),
+                                                    updatedAt: new Date()
+                                                };
+                                                setCurrentRubric(rubricForDisplay);
+                                            }
                                         }}
                                         className="text-muted-foreground underline hover:text-primary cursor-pointer"
                                     >
@@ -404,7 +322,12 @@ export default function ScoreJournalForm({
                             className="h-7 w-[4.1rem] text-center text-sm"
                             placeholder="---"
                             maxLength={3}
-                            onBlur={(e) => updateResponseScore(parseInt(e.target.value))}
+                            onBlur={(e) => {
+                                const value = parseInt(e.target.value);
+                                if (!isNaN(value)) {
+                                    updateScoreMutation.mutate(value);
+                                }
+                            }}
                         />
                         <p className="mx-2 text-lg">/</p>
                         <p className="text-lg">100 </p>
@@ -433,10 +356,10 @@ export default function ScoreJournalForm({
                     <RubricInstance
                         rubric={currentRubric}
                         responseId={responseId}
-                        existingGrade={currentGrade || undefined}
-                        onGradeChange={handleGradeChange}
+                        existingGrade={existingGrade || undefined}
                         onSave={handleSaveGrade}
                         studentWriting={studentWriting}
+                        isSaving={saveGradeMutation.isPending}
                     />
                 </div>
             )}
