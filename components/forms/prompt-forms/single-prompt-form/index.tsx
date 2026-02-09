@@ -208,10 +208,14 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                                         <Checkbox id={`classroom-assign-${classroom.id}`} value={classroom.id} name={`classroom-assign-${classroom.id}`} />
                                         <label
                                             htmlFor={`classroom-assign-${classroom.id}`}
-                                            className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                            className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
                                         >
-                                            {classroom.name}
+                                            <span>{classroom.name}</span>
+                                            <span className={`text-xs font-normal ${classroom._count?.users === 0 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                                                ({classroom._count?.users || 0} {classroom._count?.users === 1 ? 'student' : 'students'})
+                                            </span>
                                         </label>
+
                                     </div>
                                 ))}
                             </>

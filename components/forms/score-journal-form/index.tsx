@@ -221,7 +221,7 @@ export default function ScoreJournalForm({
     const handleSaveGrade = async (grade: RubricGrade) => {
         try {
             // If there's an existing rubric grade, delete it first (to replace it)
-            if (existingGrade && existingGrade.rubricId !== grade.rubricId) {
+            if (existingGrade) {
                 try {
                     await deleteRubricGrade(responseId, existingGrade.rubricId, teacherId);
                 } catch (deleteError) {

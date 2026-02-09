@@ -3,7 +3,7 @@ import { Session, User } from "@/types";
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
 import { notFound } from "next/navigation";
-import TutorialModal from "@/components/modals/tutorial-modal";
+import TutorialFlowWrapper from "@/components/tutorial/tutorial-flow-wrapper";
 import RosterTable from "./roster-table";
 
 export default async function Roster({
@@ -28,14 +28,16 @@ export default async function Roster({
     })
   ]);
 
-  const showTutorialModal = resolvedSearchParams?.tutorialModal === 'true';
+  // Get tutorial step from URL params ('start' or 'showArrow')
+  const tutorialStep = resolvedSearchParams?.tutorial;
 
   return (
     <>
-      <TutorialModal
-        isModalOpen={showTutorialModal}
+      <TutorialFlowWrapper
+        tutorialStep={tutorialStep}
         classId={classId}
         teacherId={teacherId}
+        initialStudentCount={studentRoster.length}
       />
       <div className="relative">
         <h2 className="text-2xl lg:text-3xl mt-2 print:hidden">Class Roster</h2>

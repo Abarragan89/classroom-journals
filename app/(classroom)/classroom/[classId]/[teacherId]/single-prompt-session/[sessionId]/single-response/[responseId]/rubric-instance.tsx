@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableRow, TableHeader } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 import { Rubric, RubricGradingInstance, RubricGrade } from '@/types'

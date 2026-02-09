@@ -38,7 +38,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 // Only seed teachers
                 if (!user.id || !user.email) return;
 
-
+                if (user.name === "NO_NAME") {
+                    // If using magic link, set username to the part of their email before the @ and name to empty string, both encrypted
+                    user.name = user.email.split("@")[0];
+                    
+                }
                 const iv = crypto.randomBytes(16);
                 const { encryptedData } = encryptText(user.name!, iv);
 

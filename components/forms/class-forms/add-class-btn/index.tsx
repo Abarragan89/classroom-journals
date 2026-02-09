@@ -83,7 +83,12 @@ export default function AddClassBtn({
                 }
 
             </ResponsiveDialog>
-            <Button size={"lg"} className="w-full" variant={variant} onClick={() => setIsOpenModal(true)}>
+            <Button
+                size={"lg"}
+                className="w-full"
+                variant={variant}
+                onClick={() => setIsOpenModal(true)}
+            >
                 <Plus />Add Class
             </Button>
         </>

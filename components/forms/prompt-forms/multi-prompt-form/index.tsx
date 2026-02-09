@@ -8,7 +8,7 @@ import { useFormStatus } from "react-dom";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner"
 import { createNewPrompt, updateAPrompt } from "@/lib/actions/prompt.actions";
-import { Plus, X} from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox"
 import { Classroom, Prompt, PromptCategory } from "@/types";
 import { addPromptCategory } from "@/lib/actions/prompt.categories";
@@ -289,6 +289,9 @@ export default function MultiPromptForm({
                                             >
                                                 {classroom.name}
                                             </label>
+                                            <span className={`text-xs font-normal ${classroom._count?.users === 0 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                                                ({classroom._count?.users || 0} {classroom._count?.users === 1 ? 'student' : 'students'})
+                                            </span>
                                         </div>
                                     ))}
                                 </>

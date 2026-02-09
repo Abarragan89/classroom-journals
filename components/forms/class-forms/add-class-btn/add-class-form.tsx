@@ -57,7 +57,7 @@ export default function AddClassForm({
                 return [state.data as Class, ...old];
             });
             closeModal()
-            router.push(`/classroom/${state.data.id}/${teacherId}/roster?tutorialModal=true`);
+            router.push(`/classroom/${state.data.id}/${teacherId}/roster?tutorial=start`);
         }
     }, [state, pathname, router, queryClient, teacherId])
 
@@ -71,7 +71,7 @@ export default function AddClassForm({
     const CreateButton = () => {
         const { pending } = useFormStatus()
         return (
-            <Button disabled={pending} type="submit" className="mx-auto">
+            <Button disabled={pending} type="submit" className="mx-auto shadow-sm">
                 {pending ? 'Creating...' : 'Create Class'}
             </Button>
         )
@@ -189,15 +189,10 @@ export default function AddClassForm({
                         />
                     </div>
                 </div>
-
                 <div className="flex-center mt-5">
                     <CreateButton />
                 </div>
-
             </div>
-
-
-
             <input
                 type="hidden"
                 name="teacherId"

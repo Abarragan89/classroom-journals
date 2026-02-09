@@ -6,6 +6,11 @@ import PromptSearchBar from "../prompt-filter-options/prompt-search-bar"
 import TraitFilterCombobox from "../prompt-filter-options/trait-filter-combobox"
 import PaginationList from "../prompt-filter-options/pagination-list"
 import { useQuery } from "@tanstack/react-query"
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
+import { Plus } from "lucide-react"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 interface Props {
     categories: PromptCategory[];
@@ -90,57 +95,87 @@ export default function AssignmentListSection({
 
     return (
         <>
-            < div className="flex flex-col-reverse items-center lg:flex-row lg:items-start justify-between">
+            {fetchedPrompts && fetchedPrompts.length > 0 && (
+                <Button asChild className="absolute top-[40px] right-0 shadow-sm">
+                    <Link href={`/classroom/${classId}/${teacherId}/jots`}>
+                        <Plus />Assignment
+                    </Link>
+                </Button>
+            )}
+
+            < div className="flex flex-col-reverse items-center lg:flex-row lg:items-start justify-between mt-16">
                 {fetchedPrompts && fetchedPrompts?.length > 0 ? (
-                    <div className="flex-2 w-full lg:mr-10 space-y-5">
-                        {fetchedPrompts?.map((prompt: PromptSession) => (
-                            <AssignmentListItem
-                                key={prompt.id}
-                                jotData={prompt}
-                                classId={classId}
-                                teacherId={teacherId}
+                    <>
+                        <div className="flex-2 w-full lg:mr-10 space-y-5">
+                            {fetchedPrompts?.map((prompt: PromptSession) => (
+                                <AssignmentListItem
+                                    key={prompt.id}
+                                    jotData={prompt}
+                                    classId={classId}
+                                    teacherId={teacherId}
+                                />
+                            ))}
+                            <PaginationList
+                                searchOptionState={searchOptions}
+                                getFilteredSearch={handleFilterChange}
+                                totalItems={promptCountTotal}
+                                itemsPerPage={30}
                             />
-                        ))}
-                        <PaginationList
-                            searchOptionState={searchOptions}
-                            getFilteredSearch={handleFilterChange}
-                            totalItems={promptCountTotal}
-                            itemsPerPage={30}
-                        />
-                    </div>
+                        </div>
+                        <div className="flex-1 top-5 mb-5 w-full flex flex-wrap md:flex-col lg:flex-col items-stretch lg:min-w-[280px] gap-3">
+                            {/* Search Bar (always full width) */}
+                            <div className="w-full">
+                                <PromptSearchBar
+                                    searchOptionState={searchOptions}
+                                    getFilteredSearch={handleFilterChange}
+                                />
+                            </div>
+                            {/* Wrapper for combo boxes */}
+                            <div className="flex w-full gap-4 lg:flex-col">
+                                <div className="flex-1 w-full">
+                                    {/* Trait Combo */}
+                                    <TraitFilterCombobox
+                                        searchOptionState={searchOptions}
+                                        getFilteredSearch={handleFilterChange}
+                                        options={traitFilterOptions}
+                                        field={'filter'}
+                                    />
+                                </div>
+                                <div className="flex-1 w-full">
+                                    {/* Category Combo */}
+                                    <TraitFilterCombobox
+                                        searchOptionState={searchOptions}
+                                        getFilteredSearch={handleFilterChange}
+                                        options={categoryFilterOptions}
+                                        field={'category'}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </>
                 ) : (
-                    <p className="flex-1 text-center font-medium text-xl">No Assignment Posted</p>
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 w-full sm:w-2/3 lg:w-full mx-auto mt-10">
+                        <div className="bg-card border shadow-sm rounded-lg p-8 text-center">
+                            <h2 className="text-2xl sm:text-3xl font-bold mb-3">No Assignments Posted</h2>
+                            <p className="text-muted-foreground mb-5 text-base sm:text-lg">
+                                Step 4: Assign a Jot to the Class.
+                            </p>
+                            <Button variant="default" className="scale-105" asChild>
+                                <Link href={`/classroom/${classId}/${teacherId}/jots`}>
+                                    <Plus />Assignment
+                                </Link>
+                            </Button>
+                        </div>
+                        <div>
+                            <div className="shadow-lg rounded-lg">
+                                <LiteYouTubeEmbed
+                                    id="oQxuIbV1XkI"
+                                    title={`JotterBlog Tutorial - Assignements`}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 )}
-                <div className="flex-1 top-5 mb-5 w-full flex flex-wrap md:flex-col lg:flex-col items-stretch lg:min-w-[280px] gap-3">
-                    {/* Search Bar (always full width) */}
-                    <div className="w-full">
-                        <PromptSearchBar
-                            searchOptionState={searchOptions}
-                            getFilteredSearch={handleFilterChange}
-                        />
-                    </div>
-                    {/* Wrapper for combo boxes */}
-                    <div className="flex w-full gap-4 lg:flex-col">
-                        <div className="flex-1 w-full">
-                            {/* Trait Combo */}
-                            <TraitFilterCombobox
-                                searchOptionState={searchOptions}
-                                getFilteredSearch={handleFilterChange}
-                                options={traitFilterOptions}
-                                field={'filter'}
-                            />
-                        </div>
-                        <div className="flex-1 w-full">
-                            {/* Category Combo */}
-                            <TraitFilterCombobox
-                                searchOptionState={searchOptions}
-                                getFilteredSearch={handleFilterChange}
-                                options={categoryFilterOptions}
-                                field={'category'}
-                            />
-                        </div>
-                    </div>
-                </div>
             </div >
         </>
     )
