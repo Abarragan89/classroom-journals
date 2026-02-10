@@ -52,9 +52,9 @@ export default function RubricInstance({
             return {
                 id: rubric.id,
                 title: rubric.title,
-                categories: rubric.categories.map((cat) => {
-                    // Find the corresponding saved category score
-                    const savedCategory = existingGrade.categories.find(saved => saved.name === cat.name);
+                categories: rubric.categories.map((cat, idx) => {
+                    // Match by index instead of name to handle duplicate names
+                    const savedCategory = existingGrade.categories[idx];
                     let selectedScore: number | undefined = undefined;
 
                     if (savedCategory) {
@@ -94,8 +94,9 @@ export default function RubricInstance({
             setGradingInstance({
                 id: rubric.id,
                 title: rubric.title,
-                categories: rubric.categories.map((cat) => {
-                    const savedCategory = existingGrade.categories.find(saved => saved.name === cat.name);
+                categories: rubric.categories.map((cat, idx) => {
+                    // Match by index instead of name to handle duplicate names
+                    const savedCategory = existingGrade.categories[idx];
                     let selectedScore: number | undefined = undefined;
 
                     if (savedCategory) {
@@ -350,7 +351,7 @@ export default function RubricInstance({
 
                     <TableBody>
                         {gradingInstance.categories.map((category, catIdx) => (
-                            <TableRow key={catIdx}>
+                            <TableRow key={`${catIdx}-${category.name}`}>
                                 {/* Category Name with Selected Score */}
                                 <TableCell className="w-60 relative">
                                     <div className="p-4 rounded-md min-h-[100px] flex items-center">
