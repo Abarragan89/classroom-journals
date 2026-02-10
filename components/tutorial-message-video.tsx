@@ -14,15 +14,19 @@ export default function TutorialMessageVideo({
     youtubeId: string
 }) {
     return (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 w-full max-w-[450px] mx-auto mt-10">
-            <div className="bg-card border shadow-sm rounded-lg p-8 text-center">
-                <h2 className="text-2xl sm:text-3xl font-bold mb-3">{title}</h2>
-                <p className="text-muted-foreground mb-5 text-base sm:text-lg">
-                    {subtitle}
-                </p>
-                <CTAButton />
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 w-[450px] xl:w-full mx-auto">
+            <div className="flex flex-col justify-between bg-card border shadow-sm rounded-lg p-8 text-center max-w-[500px]">
+                <div className='xl:max-h-[100px]'>
+                    <h2 className="text-2xl sm:text-3xl font-bold mb-5">{title}</h2>
+                    <p className="text-muted-foreground mb-5 text-base sm:text-lg font-medium">
+                        {subtitle}
+                    </p>
+                    <div className='mt-8 xl:mt-16 w-fit mx-auto'>
+                        <CTAButton />
+                    </div>
+                </div>
             </div>
-            <div className="shadow-lg">
+            <div className="shadow-lg max-w-[500px]">
                 <LiteYouTubeEmbed
                     id={youtubeId}
                     title={`JotterBlog Tutorial - Jots`}

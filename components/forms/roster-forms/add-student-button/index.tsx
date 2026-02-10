@@ -8,7 +8,7 @@ export default function AddStudentBtn({
     onClick: () => void
 }) {
     return (
-        <Button className="rounded-full shadow-md" onClick={onClick}>
+        <Button className="shadow-md" onClick={onClick}>
             <UserRoundPlus /> Add Students
         </Button>
     )

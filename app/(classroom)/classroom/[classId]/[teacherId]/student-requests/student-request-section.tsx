@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
+import TutorialMessageVideo from '@/components/tutorial-message-video';
 
 export default function StudentRequestSection({
     teacherId,
@@ -120,7 +121,12 @@ export default function StudentRequestSection({
 
                 ))
             ) : (
-                <p className="text-2xl italic text-center">No Requests</p>
+                <TutorialMessageVideo
+                    title="No Student Requests"
+                    subtitle="Students can submit requests for name changes or new prompts. Approved requests will show up in your class roster or prompt library!"
+                    CTAButton={() => <div></div>}
+                    youtubeId="YPkOROXrt3Q"
+                />
             )
             }
         </section >
