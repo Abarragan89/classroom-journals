@@ -9,6 +9,7 @@ import CreateQuipForm from "@/components/forms/quip-forms/create-quip"
 import { ResponsiveDialog } from "@/components/responsive-dialog"
 import { useState } from "react";
 import { Accordion } from "@/components/ui/accordion";
+import TutorialMessageVideo from "@/components/tutorial-message-video";
 
 
 export default function QuipListSection({
@@ -67,7 +68,7 @@ export default function QuipListSection({
 
             )}
             <Accordion className='mt-10' type="single" collapsible>
-                {currentQuips && currentQuips?.length > 0 && currentQuips.map((singleQuip, index) => (
+                {currentQuips && currentQuips?.length > 0 ? currentQuips.map((singleQuip, index) => (
                     <QuipListItem
                         singleQuip={singleQuip}
                         key={singleQuip.id}
@@ -76,7 +77,18 @@ export default function QuipListSection({
                         classId={classId}
                         indexNumber={(index + 1).toString()}
                     />
-                ))}
+                )) : (
+                    <TutorialMessageVideo
+                        title="No Quips Posted"
+                        subtitle="Create your first Quip!"
+                        CTAButton={() => (
+                            <Button onClick={() => setIsModalOpen(true)} className="">
+                                <Plus /> New Quip
+                            </Button>
+                        )}
+                        youtubeId="xa4sxeBoQ24"
+                    />
+                )}
             </Accordion>
         </section>
     )

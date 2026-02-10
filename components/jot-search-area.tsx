@@ -8,9 +8,8 @@ import { Classroom } from "@/types"
 import PaginationList from "./shared/prompt-filter-options/pagination-list"
 import { useQuery, keepPreviousData } from "@tanstack/react-query"
 import LoadingAnimation from "./loading-animation"
-import LiteYouTubeEmbed from 'react-lite-youtube-embed';
-import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 import CreateNewJot from "./modalBtns/create-new-jot"
+import TutorialMessageVideo from "./tutorial-message-video"
 
 export default function JotSearchArea({
     initialPrompts,
@@ -102,21 +101,28 @@ export default function JotSearchArea({
                 ) : (
                     // Only show this when there are no jots at all
                     !isThereAtLeastOneJot && (
-                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 w-full max-w-[450px] mx-auto mt-10">
-                            <div className="bg-card border shadow-sm rounded-lg p-8 text-center">
-                                <h2 className="text-2xl sm:text-3xl font-bold mb-3">Your Jot Library is Empty</h2>
-                                <p className="text-muted-foreground mb-5 text-base sm:text-lg">
-                                    Create Your First Jot and Assign it to Your Class!
-                                </p>
-                                <CreateNewJot />
-                            </div>
-                            <div className="shadow-lg">
-                                <LiteYouTubeEmbed
-                                    id="gCxIeBKOiZs"
-                                    title={`JotterBlog Tutorial - Jots`}
-                                />
-                            </div>
-                        </div>
+                        <TutorialMessageVideo
+                            title="Your Jot Library is Empty"
+                            subtitle="Create Your First Assignment!"
+                            CTAButton={CreateNewJot}
+                            youtubeId="gCxIeBKOiZs"
+
+                        />
+                        // <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 w-full max-w-[450px] mx-auto mt-10">
+                        //     <div className="bg-card border shadow-sm rounded-lg p-8 text-center">
+                        //         <h2 className="text-2xl sm:text-3xl font-bold mb-3">Your Jot Library is Empty</h2>
+                        //         <p className="text-muted-foreground mb-5 text-base sm:text-lg">
+                        //             Create Your First Jot and Assign it to Your Class!
+                        //         </p>
+                        //         <CreateNewJot />
+                        //     </div>
+                        //     <div className="shadow-lg">
+                        //         <LiteYouTubeEmbed
+                        //             id="gCxIeBKOiZs"
+                        //             title={`JotterBlog Tutorial - Jots`}
+                        //         />
+                        //     </div>
+                        // </div>
                     )
                 )
             )}

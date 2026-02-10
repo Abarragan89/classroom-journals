@@ -9,6 +9,7 @@ import {
 import { Rubric } from "@/types"
 import { ChevronRight, Table2Icon } from "lucide-react"
 import Link from "next/link"
+import RubricModalTutorial from "./rubric-modal-tutorial"
 
 export default function MyRubricList({
     teacherRubrics,
@@ -29,8 +30,9 @@ export default function MyRubricList({
     }
 
     return (
-        <>
-            <div className="border rounded-md shadow-md hover:shadow-lg transition-shadow mt-8">
+        <div className="relative">
+            <RubricModalTutorial />
+            <div className="border rounded-md shadow-md hover:shadow-lg transition-shadow mt-14">
                 <Table>
                     <TableHeader className="border-b-2 border-primary/20">
                         <TableRow>
@@ -69,6 +71,6 @@ export default function MyRubricList({
                     </TableBody>
                 </Table>
             </div>
-        </>
+        </div>
     )
 }
