@@ -270,7 +270,7 @@ export default function RubricInstance({
         <div className="mt-4">
             <div className="flex justify-between items-center">
                 <div>
-                    <h3 className="text-lg font-bold">{gradingInstance.title}</h3>
+                    <h3 className="h3-bold mt-10">{gradingInstance.title}</h3>
                     {isComplete && (
                         <div className='flex items-start justify-start'>
                             <p className="text-muted-foreground font-semibold">
@@ -287,8 +287,7 @@ export default function RubricInstance({
                     )}
                 </div>
                 {onSave && (
-                    <div className="flex gap-3 items-center">
-
+                    <div className="flex gap-3 items-center mt-5">
                         {/* AI Grading Button */}
                         <div className="flex flex-col items-center space-y-2">
                             {aiAllowance > 0 ? (
@@ -336,7 +335,7 @@ export default function RubricInstance({
                 )}
             </div>
 
-            <div className="overflow-x-auto mt-3">
+            <div className="overflow-x-auto border shadow-md mt-3">
                 <Table className="min-w-[920px]">
                     <TableHeader>
                         <TableRow>

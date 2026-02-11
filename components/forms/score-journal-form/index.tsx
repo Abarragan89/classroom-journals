@@ -3,7 +3,7 @@ import { gradeStudentResponse } from "@/lib/actions/response.action";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { saveRubricGrade, deleteRubricGrade } from "@/lib/actions/rubric.actions";
 import { Rubric, RubricGrade, RubricListItem } from "@/types";
@@ -32,17 +32,6 @@ export default function ScoreJournalForm({
 
     const [showRubricDialog, setShowRubricDialog] = useState(false);
     const [currentRubric, setCurrentRubric] = useState<Rubric | null>(null);
-    const [loadingRubricId, setLoadingRubricId] = useState<string | null>(null);
-
-    // Helper function to transform rubric grade data to Rubric type
-    const transformToRubric = (grade: typeof rubricGradeData[0]): Rubric => ({
-        id: grade.rubric.id,
-        title: grade.rubric.title,
-        categories: grade.rubric.categories as Rubric['categories'],
-        teacherId: grade.teacherId,
-        createdAt: new Date(),
-        updatedAt: new Date()
-    });
 
     // Fetch existing rubric grades with React Query
     const { data: rubricGradeData } = useQuery({
@@ -53,8 +42,6 @@ export default function ScoreJournalForm({
                 throw new Error('Failed to fetch rubric grades');
             }
             const data = await response.json();
-            const mostRecentGrade = data.rubricGrades && data.rubricGrades.length > 0 ? data.rubricGrades[0] : null;
-            setCurrentRubric(transformToRubric(mostRecentGrade));
             return data.rubricGrades;
         },
         staleTime: 1000 * 60 * 5, // 5 minutes
@@ -87,23 +74,27 @@ export default function ScoreJournalForm({
     } : null;
 
     // Auto-set currentRubric when existing grade loads (only once)
-    // useEffect(() => {
-    //     if (mostRecentGrade && !currentRubric) {
-    //         setCurrentRubric(transformToRubric(mostRecentGrade));
-    //     }
-    // }, [mostRecentGrade, currentRubric]);
-
+    useEffect(() => {
+        if (mostRecentGrade && !currentRubric) {
+            const rubricForDisplay: Rubric = {
+                id: mostRecentGrade.rubric.id,
+                title: mostRecentGrade.rubric.title,
+                categories: mostRecentGrade.rubric.categories as Rubric['categories'],
+                teacherId: mostRecentGrade.teacherId,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            };
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setCurrentRubric(rubricForDisplay);
+        }
+    }, [mostRecentGrade]); // Only run when mostRecentGrade changes, not currentRubric
 
     // Mutation for updating 100-point score
     const updateScoreMutation = useMutation({
         mutationFn: async (score: number) => {
-            // Get fresh rubric grade data from cache to avoid race conditions
-            const currentGradeData = queryClient.getQueryData(['rubricGrades', responseId]) as typeof rubricGradeData;
-            const mostRecent = currentGradeData?.[0];
-
             // Delete existing rubric grade if present
-            if (mostRecent) {
-                await deleteRubricGrade(responseId, mostRecent.rubricId, teacherId);
+            if (existingGrade) {
+                await deleteRubricGrade(responseId, existingGrade.rubricId, teacherId);
             }
             // Save the new 100-point score
             await gradeStudentResponse(responseId, 0, score, teacherId);
@@ -128,7 +119,6 @@ export default function ScoreJournalForm({
     // Mutation for selecting a rubric (fetch full details)
     const selectRubricMutation = useMutation({
         mutationFn: async (rubricListItem: RubricListItem) => {
-            setLoadingRubricId(rubricListItem.id);
             const response = await fetch(`/api/rubrics/${rubricListItem.id}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch rubric details');
@@ -137,12 +127,10 @@ export default function ScoreJournalForm({
             return data.rubric as Rubric;
         },
         onSuccess: (fullRubric) => {
-            setLoadingRubricId(null);
             setCurrentRubric(fullRubric);
             setShowRubricDialog(false);
         },
         onError: (error) => {
-            setLoadingRubricId(null);
             console.error('Error fetching full rubric:', error);
             toast('Failed to load rubric details');
         }
@@ -152,18 +140,25 @@ export default function ScoreJournalForm({
         selectRubricMutation.mutate(rubricListItem);
     };
 
-    const loadingColor = useMemo(() => {
-        if (!theme) return '#0e318b';
+    function determineLoadingColor() {
+        if (!theme) return '#0e318b'; // default color
         switch (theme) {
-            case 'light': return '#0e318b';
-            case 'tech': return '#3de70d';
-            case 'dark': return '#b5cae3';
-            case 'cupid': return '#d3225d';
-            case 'tuxedo': return '#ffffff';
-            case 'avocado': return '#333d2f';
-            default: return '#0e318b';
+            case 'light':
+                return '#0e318b'
+            case 'tech':
+                return '#3de70d'
+            case 'dark':
+                return '#b5cae3'
+            case 'cupid':
+                return '#d3225d'
+            case 'tuxedo':
+                return '#ffffff'
+            case 'avocado':
+                return '#333d2f'
+            default:
+                return '#0e318b'
         }
-    }, [theme]);
+    }
 
     // Mutation for saving rubric grade with optimistic updates
     const saveGradeMutation = useMutation({
@@ -242,7 +237,7 @@ export default function ScoreJournalForm({
                         {loadingRubricList ? (
                             <div className="flex flex-col justify-center items-center h-full">
                                 <FadeLoader
-                                    color={loadingColor}
+                                    color={determineLoadingColor()}
                                     aria-label="Loading Rubrics"
                                     data-testid="rubric-loader"
                                     className="my-3 mx-auto"
@@ -255,7 +250,7 @@ export default function ScoreJournalForm({
                             </p>
                         ) : (
                             rubricList.map((rubricItem: RubricListItem) => {
-                                const isCurrentlyLoading = loadingRubricId === rubricItem.id;
+                                const isCurrentlyLoading = selectRubricMutation.isPending;
                                 return (
                                     <div
                                         key={rubricItem.id}
@@ -270,7 +265,7 @@ export default function ScoreJournalForm({
                                             {isCurrentlyLoading && (
                                                 <div className="flex items-center gap-1">
                                                     <FadeLoader
-                                                        color={loadingColor}
+                                                        color={determineLoadingColor()}
                                                         height={10}
                                                         width={2}
                                                         margin={1}
@@ -293,50 +288,56 @@ export default function ScoreJournalForm({
             {/* Show the Input to Grade */}
             {currentRubric === null ? (
                 <>
-                    {existingGrade && (
-                        <div className="flex justify-end mt-5">
-                            <div>
-                                <p className="text-sm text-muted-foreground">
-                                    ⚠️ Entering a new score below will replace the{' '}
-                                    <span
-                                        onClick={() => {
-                                            // Show the rubric grade view
-                                            if (mostRecentGrade) {
-                                                setCurrentRubric(transformToRubric(mostRecentGrade));
-                                            }
-                                        }}
-                                        className="text-muted-foreground underline hover:text-primary cursor-pointer"
-                                    >
-                                        current rubric grade
-                                    </span>
-                                    .
-                                </p>
+                    <div className="flex flex-col items-end space-y-4">
+                        {existingGrade && (
+                            <div className="flex justify-end">
+                                <div>
+                                    <p className="text-sm text-muted-foreground">
+                                        ⚠️ Entering a new score below will replace the{' '}
+                                        <span
+                                            onClick={() => {
+                                                // Show the rubric grade view
+                                                if (mostRecentGrade) {
+                                                    const rubricForDisplay: Rubric = {
+                                                        id: mostRecentGrade.rubric.id,
+                                                        title: mostRecentGrade.rubric.title,
+                                                        categories: mostRecentGrade.rubric.categories as Rubric['categories'],
+                                                        teacherId: mostRecentGrade.teacherId,
+                                                        createdAt: new Date(),
+                                                        updatedAt: new Date()
+                                                    };
+                                                    setCurrentRubric(rubricForDisplay);
+                                                }
+                                            }}
+                                            className="text-muted-foreground underline hover:text-primary cursor-pointer"
+                                        >
+                                            current rubric grade
+                                        </span>
+                                        .
+                                    </p>
+                                </div>
                             </div>
+                        )}
+                        <div className="flex items-center mt-5">
+                            <Input
+                                type="text"
+                                name="journalScore"
+                                defaultValue={currentScore}
+                                className="h-7 w-[4.1rem] text-center text-sm"
+                                placeholder="---"
+                                maxLength={3}
+                                onBlur={(e) => {
+                                    const value = parseInt(e.target.value);
+                                    if (!isNaN(value)) {
+                                        updateScoreMutation.mutate(value);
+                                    }
+                                }}
+                            />
+                            <p className="mx-2 text-lg">/</p>
+                            <p className="text-lg">100 </p>
                         </div>
-                    )}
-                    <div className="flex justify-end items-center mt-5">
-                        <Input
-                            type="text"
-                            name="journalScore"
-                            defaultValue={currentScore}
-                            className="h-7 w-[4.1rem] text-center text-sm"
-                            placeholder="---"
-                            maxLength={3}
-                            onBlur={(e) => {
-                                const value = parseInt(e.target.value);
-                                if (!isNaN(value)) {
-                                    updateScoreMutation.mutate(value);
-                                }
-                            }}
-                        />
-                        <p className="mx-2 text-lg">/</p>
-                        <p className="text-lg">100 </p>
-                    </div>
-
-
-                    <div className="flex justify-end mt-4">
                         <Button
-                            size={"sm"}
+                            variant={'outline'}
                             onClick={() => setShowRubricDialog(true)}
                         >
                             Grade with Rubric
