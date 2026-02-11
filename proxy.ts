@@ -18,17 +18,16 @@ export async function proxy(request: NextRequest) {
         if (!pathname.startsWith('/api') && !pathname.startsWith('/_next')) {
             const cspHeader = `
                 default-src 'self';
-                script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vercel.live;
+                script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vercel.live https://static.cloudflareinsights.com;
                 style-src 'self' 'unsafe-inline';
-                img-src 'self' blob: data: https://unfinished-pages.s3.us-east-2.amazonaws.com https://*.googleusercontent.com https://*.yahoo.com https://*.outlook.com https://authjs.dev https://i.ytimg.com/vi/*;
+                img-src 'self' blob: data: https://unfinished-pages.s3.us-east-2.amazonaws.com https://*.googleusercontent.com https://*.yahoo.com https://*.outlook.com https://authjs.dev https://i.ytimg.com;
                 font-src 'self' data:;
                 object-src 'none';
-                frame-src 'https://www.youtube-nocookie.com/';
+                frame-src https://www.youtube-nocookie.com https://vercel.live;
                 base-uri 'self';
                 form-action 'self';
                 frame-ancestors 'none';
                 worker-src 'self' blob:;
-                frame-src https://vercel.live;
                 connect-src 'self' blob:;
                 upgrade-insecure-requests;
             `.replace(/\s{2,}/g, ' ').trim();
