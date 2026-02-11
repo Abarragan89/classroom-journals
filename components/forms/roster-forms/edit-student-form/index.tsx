@@ -53,7 +53,8 @@ export default function EditStudentForm({
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
         }
-    }, [state, pathname, router, queryClient])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [state, pathname, router, queryClient, classId, studentInfo.id])
 
 
     const UpdateButton = () => {

@@ -45,6 +45,7 @@ export default function DeleteStudentForm({
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state, router, pathname])
 
     const [userText, setUserText] = useState<string>('')

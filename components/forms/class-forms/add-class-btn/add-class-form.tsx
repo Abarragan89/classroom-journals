@@ -59,6 +59,7 @@ export default function AddClassForm({
             closeModal()
             router.push(`/classroom/${state.data.id}/${teacherId}/roster?tutorial=start`);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state, pathname, router, queryClient, teacherId])
 
     const [selectedColor, setSelectedColor] = useState<string>('1'); // Default to chart-1

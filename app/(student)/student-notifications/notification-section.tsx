@@ -29,6 +29,7 @@ export default function NotificationSection({
         if (notifications.length > 0) {
             markAllNotificationsAsRead(userId, classId);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // Empty dependency array - only run once on mount
 
     async function clearNotifications() {

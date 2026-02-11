@@ -41,6 +41,7 @@ export default function ToggleBlogStatus({
             setPromptSessionStatus(newStatus)
             closeModal();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state])
 
 

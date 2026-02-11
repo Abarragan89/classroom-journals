@@ -122,7 +122,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
             });
             router.push(callBackUrl as string);
         }
-    }, [state, router, teacherId])
+    }, [state, router, teacherId, queryClient, callBackUrl])
 
     const handleChange = (index: number, newValue: string) => {
         setQuestions(prevQuestions =>

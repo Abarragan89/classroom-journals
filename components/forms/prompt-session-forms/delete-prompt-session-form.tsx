@@ -30,7 +30,7 @@ export default function DeletePromptSessionForm({
             });
             router.push(`/classroom/${classId}/${teacherId}`);
         }
-    }, [state])
+    }, [state, classId, router, teacherId])
 
 
     function DeleteButton() {

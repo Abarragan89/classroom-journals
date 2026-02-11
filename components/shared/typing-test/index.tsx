@@ -61,6 +61,7 @@ export default function TypingTest({
         if (finished) {
             endGameHandler();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [finished]);
 
     // Use Effect to handle the timer
@@ -81,6 +82,7 @@ export default function TypingTest({
         }
 
         return () => clearInterval(intervalRef.current!);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [started]);
 
     const calculateWPM = (): number => {

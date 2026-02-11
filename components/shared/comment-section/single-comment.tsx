@@ -50,7 +50,7 @@ export default function SingleComment({
             setTotalReplies(commentData.replies.length)
             setIsLikeByUser(isLiked);
         }
-    }, [commentData?.likes, studentId]);
+    }, [commentData?.likes, commentData.replies.length, studentId]);
 
 
     async function addCommentReplyHandler(e: React.FormEvent<HTMLFormElement>) {

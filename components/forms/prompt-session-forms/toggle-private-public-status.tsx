@@ -40,6 +40,7 @@ export default function TogglePrivatePublicStatus({
             setPromptSessionStatus(newStatusBoolean)
             closeModal();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state])
 
 
