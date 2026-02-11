@@ -47,7 +47,7 @@ export default function CreateEditRubric({
 }) {
 
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
-    // const [scoreLevels, setScoreLevels] = useState(["1", "2", "3", "4"])
+    const [currentRubricState, setCurrentRubricState] = useState<Rubric | null>(currentRubric)
     const queryClient = useQueryClient();
     const router = useRouter();
 
@@ -151,24 +151,26 @@ export default function CreateEditRubric({
     const onSubmit = async (data: RubricFormData) => {
         try {
             // If currentRubric is provided, update it; otherwise, create a new one
-            if (currentRubric) {
-                const result = await updateRubric(currentRubric.id, data.categories, data.title);
+            if (currentRubricState) {
+                const result = await updateRubric(currentRubricState.id, data.categories, data.title);
                 if (result?.rubric) {
-                    queryClient.setQueryData<Rubric[]>(['rubrics', teacherId], (old) => {
+                    queryClient.setQueryData<Rubric[]>(['teacherRubrics', teacherId], (old) => {
                         if (!old) return old;
                         return old.map(rubricItem =>
                             rubricItem.id === result.rubric.id ? result.rubric as Rubric : rubricItem
                         );
                     });
                 }
+                setCurrentRubricState(result?.rubric as Rubric || null);
             } else {
                 const result = await createRubric(teacherId, data.categories, data.title);
                 if (result?.rubric) {
-                    queryClient.setQueryData<Rubric[]>(['rubrics', teacherId], (old) => {
+                    queryClient.setQueryData<Rubric[]>(['teacherRubrics', teacherId], (old) => {
                         if (!old) return [result.rubric as Rubric];
-                        return [...old, result.rubric as Rubric];
+                        return [result.rubric as Rubric, ...old,];
                     });
                 }
+                setCurrentRubricState(result?.rubric as Rubric || null);
             }
             // Navigate `/classroom/${classId}/${teacherId}/my-rubrics`
             toast.success('Rubric saved successfully', {
@@ -191,13 +193,13 @@ export default function CreateEditRubric({
     }
     // handle delete rubric
     const handleDeleteRubric = async () => {
-        if (!currentRubric) return;
+        if (!currentRubricState) return;
 
         try {
-            await deleteRubric(currentRubric.id)
-            queryClient.setQueryData<Rubric[]>(['rubrics', teacherId], (old) => {
+            await deleteRubric(currentRubricState.id)
+            queryClient.setQueryData<Rubric[]>(['teacherRubrics', teacherId], (old) => {
                 if (!old) return old;
-                return old.filter(rubricItem => rubricItem.id !== currentRubric.id);
+                return old.filter(rubricItem => rubricItem.id !== currentRubricState.id);
             });
             toast.success('Rubric deleted successfully');
             router.push(`/classroom/${classId}/${teacherId}/my-rubrics`);
