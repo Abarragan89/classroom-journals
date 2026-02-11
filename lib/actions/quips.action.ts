@@ -156,10 +156,37 @@ export async function respondToQuip(
                 response: responseText as unknown as InputJsonArray,
                 studentId,
                 promptSessionId,
+            },
+            select: {
+                response: true,
+                id: true,
+                createdAt: true,
+                studentId: true,
+                likeCount: true,
+                likes: {
+                    select: {
+                        userId: true
+                    }
+                },
+                student: {
+                    select: {
+                        username: true,
+                        iv: true,
+                        avatarURL: true,
+                    }
+                }
             }
         })
 
-        return userResponse;
+        const decryptedResponse = {
+            ...userResponse,
+            student: {
+                avatarURL: userResponse.student.avatarURL,
+                username: decryptText(userResponse?.student?.username as string, userResponse?.student?.iv as string)
+            }
+        }
+
+        return decryptedResponse;
 
     } catch (error) {
         if (error instanceof Error) {

@@ -1,6 +1,6 @@
 'use client'
 import { ResponsiveDialog } from '@/components/responsive-dialog';
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
     DropdownMenu,
     DropdownMenuTrigger,
@@ -24,24 +24,14 @@ export default function StudentRosterOptionsMenu({
     classId: string
 }) {
 
-    const [mounted, setMounted] = useState<boolean>(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
 
     function closeDeleteModal() {
         setIsDeleteModalOpen(false)
     }
     function closeEditModal() {
         setIsEditModalOpen(false)
-    }
-
-    // Prevents Hydration Warnings/Errors
-    if (!mounted) {
-        return null
     }
 
     return (

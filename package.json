@@ -7,10 +7,10 @@
   },
   "scripts": {
     "dev": "NODE_OPTIONS=--max-old-space-size=4096 next dev",
-    "build": "next build",
+    "build": "npm run lint && next build",
     "build:analyze": "ANALYZE=true next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "postinstall": "npx prisma generate && npx prisma migrate deploy && next build"
   },
   "overrides": {
@@ -78,6 +78,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@next/bundle-analyzer": "16.1.6",
+    "@next/eslint-plugin-next": "^16.1.6",
     "@prisma/client": "6.9.0",
     "@tanstack/eslint-plugin-query": "^5.73.3",
     "@tanstack/react-query-devtools": "^5.74.6",
@@ -86,8 +87,8 @@
     "@types/react-dom": "19.2.3",
     "@types/ws": "^8.5.14",
     "bufferutil": "^4.0.9",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.1.6",
     "postcss": "^8",
     "prisma": "6.9.0",
     "tailwindcss": "^3.4.1",

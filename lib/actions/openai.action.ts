@@ -25,9 +25,9 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
             - Use only: 1 (fully correct), 0.5 (partially correct), 0 (incorrect)
             - Accept unconventional but correct answers.
             - Accept spelling errors if intent is clear.
-            - Return null if the question or answer is unclear or unintelligible.
-            - Do NOT include explanations, comments, or extra output.
             - Respond ONLY with an array of numbers, e.g., [1, 0.5, 0]
+            - Return null for that item in the array if the question or answer is unclear or unintelligible.
+            - Do NOT include explanations, comments, or extra output.
 
             Example:
             Questions:
@@ -35,13 +35,15 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
             2. What is the capital of France?
             3. What is the boiling point of water?
             4. What is photosynthesis?
+            5. When did we land on the moon?
             Answers:
             1. 4
             2. Paris
             3. 10 degrees Celsius
             4. How plants eat
+            5. jaweoifj;afj
 
-            Expected output: [1, 1, 0, 0.5]
+            Expected output: [1, 1, 0, 0.5, null]
 
             Grade the following:
         `
@@ -64,6 +66,8 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
             },
             max_output_tokens: 4500,
         });
+
+        console.log('responses in the ai ', response)
         return response;
     } catch (error) {
         console.error('error with open ai autograde ', error)

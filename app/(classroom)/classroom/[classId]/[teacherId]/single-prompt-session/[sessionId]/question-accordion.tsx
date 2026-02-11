@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import {
     Accordion,
     AccordionContent,
@@ -40,8 +40,10 @@ export default function QuestionAccordion({
     teacherId: string;
     sessionId: string;
 }) {
+
     const [currentResponseData, setCurrentResponseData] = useState<OrganizedResponses>({});
-    const currentSubQuery = useRef<{ question: string; score: number, questionNumber: number }>({
+
+    const [currentSubQuery, setCurrentSubQuery] = useState<{ question: string; score: number, questionNumber: number }>({
         question: "",
         score: 0,
         questionNumber: 0
@@ -79,7 +81,7 @@ export default function QuestionAccordion({
     }, [responses]); // Dependency array ensures this runs when 'responses' change
 
     function handleShowModal(question: string, score: number, questionNumber: number) {
-        currentSubQuery.current = { question, score, questionNumber };
+        setCurrentSubQuery({ question, score, questionNumber });
         setIsResponseViewModalOpen(true);
     }
 
@@ -90,7 +92,7 @@ export default function QuestionAccordion({
         default: { text: 'Not Graded', color: 'text-muted-foreground' }
     };
 
-    const score = currentSubQuery.current.score;
+    const score = currentSubQuery.score;
     const label = scoreLabelMap[score as keyof typeof scoreLabelMap] ?? scoreLabelMap.default;
 
     return (
@@ -105,9 +107,9 @@ export default function QuestionAccordion({
                     <p className={`absolute font-bold ${label.color} text-center mt-[-15px] text-sm`}>
                         {label.text}
                     </p>
-                    <p className="text-center my-5 font-medium italic w-[97%] mx-auto">{currentSubQuery.current.question}</p>
+                    <p className="text-center my-5 font-medium italic w-[97%] mx-auto">{currentSubQuery.question}</p>
                     <div className="max-h-[500px] overflow-y-auto custom-scrollbar space-y-6 rounded-md">
-                        {currentResponseData?.[currentSubQuery.current.question]?.[currentSubQuery.current.score]?.map((data) => (
+                        {currentResponseData?.[currentSubQuery.question]?.[currentSubQuery.score]?.map((data) => (
                             <div key={data.responseId} className="bg-card border rounded-md text-sm relative shadow-md">
                                 <p className="bg-muted text-muted-foreground py-1 text-center font-bold">{data?.studName}</p>
                                 <p
@@ -117,8 +119,8 @@ export default function QuestionAccordion({
                                 </p>
                                 <GradingPanel
                                     responseId={data.responseId}
-                                    questionNumber={currentSubQuery.current.questionNumber}
-                                    currentScore={currentSubQuery.current.score}
+                                    questionNumber={currentSubQuery.questionNumber}
+                                    currentScore={currentSubQuery.score}
                                     teacherId={teacherId}
                                     sessionId={sessionId}
                                     isInModal={true}

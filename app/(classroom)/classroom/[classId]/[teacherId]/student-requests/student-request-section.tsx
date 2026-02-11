@@ -29,7 +29,7 @@ export default function StudentRequestSection({
         if (studentRequests.length > 0) {
             markAllRequestsAsViewed(teacherId, classId);
         }
-    }, []); // Empty dependency array - only run once on mount
+    }, [studen]); // Empty dependency array - only run once on mount
 
     async function approveRequest(studentId: string, requestText: string, responseId: string, requestType: string) {
         try {

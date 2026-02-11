@@ -1,6 +1,6 @@
 "use client"
 import { PromptSession, Question, Response, ResponseData } from '@/types'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
     AccordionContent,
     AccordionItem,
@@ -14,7 +14,7 @@ import { ClassUserRole } from '@prisma/client'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 import LoadingAnimation from '@/components/loading-animation'
 import { formatDateMonthDayYear } from '@/lib/utils'
-import { Trash2, } from 'lucide-react'
+import { RefreshCcwIcon, Trash2, } from 'lucide-react'
 import QuipSingleResponse from './quip-single-response'
 import Image from 'next/image'
 
@@ -33,31 +33,21 @@ export default function QuipListItem({
 }) {
 
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
-    const [isComplete, setIsComplete] = useState<boolean>(singleQuip?.responses?.some(res => res.studentId === userId) || false)
     const [showResponses, setShowResponses] = useState<boolean>(false)
     const queryClient = useQueryClient();
 
+    const baseComplete = singleQuip?.responses?.some(res => res.studentId === userId) || false
+
     // Fetch responses only when accordion is opened
-    const { data: studentResponses = null } = useQuery({
+    const { data: studentResponses = null, refetch } = useQuery({
         queryKey: ['quipResponses', singleQuip.id],
         queryFn: async () => {
             const responses = await getReponsesForQuip(userId, singleQuip.id);
             return responses as Response[];
         },
-        enabled: showResponses && (isComplete || role === ClassUserRole.TEACHER),
+        enabled: showResponses && (baseComplete || role === ClassUserRole.TEACHER),
         staleTime: 1000 * 60 * 5,
     });
-
-
-
-    // Set complete status
-    useEffect(() => {
-        setIsComplete(singleQuip?.responses?.some(res => res.studentId === userId) || false)
-    }, [singleQuip])
-
-    function completeStatusTrue() {
-        setIsComplete(true)
-    }
 
     async function deleteQuipHandler() {
         try {
@@ -73,6 +63,8 @@ export default function QuipListItem({
     }
 
     const quipQuestion = (singleQuip?.questions as Question[])[0]?.question
+    const isComplete =
+        (studentResponses?.some(res => res.studentId === userId) ?? false) || baseComplete
 
     return (
         <>
@@ -120,41 +112,68 @@ export default function QuipListItem({
                 {/* Post Content - The Question */}
                 <AccordionTrigger
                     onClick={() => setShowResponses(true)}
-                    className='px-6 pt-1 pb-5 rounded-md hover:bg-accent/50 data-[state=open]:rounded-b-none  cursor-pointer hover:no-underline items-center hover:text-primary transition-colors'
+                    className='px-6 pt-1 pb-3 rounded-md hover:bg-accent/50 data-[state=open]:rounded-b-none  cursor-pointer hover:no-underline items-center hover:text-primary transition-colors'
                 >
                     <p className='ml-1 mr-4 font-bold text-xl sm:text-2xl  '>
                         {quipQuestion}
                     </p>
+
                 </AccordionTrigger>
 
                 {/* Responses Section */}
                 <AccordionContent className='bg-muted/30 px-4 py-4 space-y-3'>
+                    {role === ClassUserRole.TEACHER && (
+                        <div className="flex-end">
+                            <Button
+                                onClick={() => refetch()}
+                                size={"sm"}
+                                variant={"outline"}
+                            >
+                                <RefreshCcwIcon /> Refresh
+                            </Button>
+                        </div>
+                    )}
+
                     {isComplete || role !== ClassUserRole.STUDENT ? (
-                        studentResponses ? studentResponses.map((response) => (
-                            <QuipSingleResponse
-                                key={response.id}
-                                responseId={response.id}
-                                responseText={(response?.response as unknown as ResponseData[])[0]?.answer}
-                                userId={userId}
-                                responseDate={response?.createdAt}
-                                isTeacherView={role === ClassUserRole.TEACHER}
-                                responseLikes={response?.likes}
-                                likeCount={response?.likeCount}
-                                authorAvatarUrl={response?.student?.avatarURL as string}
-                                responseAuthor={response?.student?.username as string}
-                                teacherId={singleQuip.authorId || userId}
-                                classId={classId}
-                                quipId={singleQuip.id}
-                            />
+                        studentResponses && studentResponses.length > 0 ? studentResponses.map((response) => (
+                            <>
+                                {role === ClassUserRole.STUDENT && (
+                                    <div className="flex-end">
+                                        <Button
+                                            onClick={() => refetch()}
+                                            size={"sm"}
+                                            variant={"outline"}
+                                            className=' top-0 right-5 m-0 text-xs z-50'
+                                        >
+                                            <RefreshCcwIcon /> Refresh
+                                        </Button>
+                                    </div>
+                                )}
+                                <QuipSingleResponse
+                                    key={response.id}
+                                    responseId={response.id}
+                                    responseText={(response?.response as unknown as ResponseData[])[0]?.answer}
+                                    userId={userId}
+                                    responseDate={response?.createdAt}
+                                    isTeacherView={role === ClassUserRole.TEACHER}
+                                    responseLikes={response?.likes}
+                                    likeCount={response?.likeCount}
+                                    authorAvatarUrl={response?.student?.avatarURL as string}
+                                    responseAuthor={response?.student?.username as string}
+                                    teacherId={singleQuip.authorId || userId}
+                                    classId={classId}
+                                    quipId={singleQuip.id}
+                                />
+                            </>
                         )) : (
-                            <LoadingAnimation />
+                            <p className='text-center text-lg py-5 font-bold text-muted-foreground '>No responses yet.</p>
                         )
                     ) : (
                         <AnswerQuip
                             studentId={userId}
                             promptSessionId={singleQuip.id}
                             quipQuestion={quipQuestion}
-                            completeStatusTrue={completeStatusTrue}
+                            classId={classId}
                         />
                     )}
                 </AccordionContent>

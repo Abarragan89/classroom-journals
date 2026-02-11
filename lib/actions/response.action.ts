@@ -303,7 +303,7 @@ export async function submitStudentResponse(prevState: unknown, formData: FormDa
         return { success: true, message: "responses submitted" };
     } catch (error) {
         if (error instanceof Error) {
-            console.error("Error fetching prompts:", error.message);
+            console.error("Error Grading Assessment:", error.message);
             console.error(error.stack);
         } else {
             console.error("Unexpected error:", error);

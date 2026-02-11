@@ -1,6 +1,6 @@
 "use client"
 import { Response } from "@/types"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 import { useRouter, usePathname, useParams } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -32,12 +32,11 @@ export function StudentComboBox({
     const router = useRouter();
     const [open, setOpen] = useState<boolean>(false)
     const [value, setValue] = useState<string>("")
-    const [currentStudentIndex, setCurrentStudentIndex] = useState<number>(responses.findIndex(response => response.id === responseId))
+    // const [currentStudentIndex, setCurrentStudentIndex] = useState<number>(responses.findIndex(response => response.id === responseId))
 
-    useEffect(() => {
-        setCurrentStudentIndex(responses.findIndex(response => response.id === responseId))
-    }, [params])
-
+    const currentStudentIndex = useMemo(() => {
+        return responses.findIndex(response => response.id === responseId);
+    }, [responses, responseId]);
 
     return (
         <>
@@ -97,7 +96,6 @@ export function StudentComboBox({
                     variant="outline"
                     onClick={() => {
                         const prevIndex = (currentStudentIndex - 1 + responses.length) % responses.length;
-                        setCurrentStudentIndex(prevIndex);
                         router.push(`/${urlSegment}/single-response/${responses[prevIndex].id}`);
                     }}
                     disabled={responses.length === 0}
@@ -108,7 +106,6 @@ export function StudentComboBox({
                     variant="outline"
                     onClick={() => {
                         const nextIndex = (currentStudentIndex + 1) % responses.length;
-                        setCurrentStudentIndex(nextIndex);
                         router.push(`/${urlSegment}/single-response/${responses[nextIndex].id}`);
                     }}
                     disabled={responses.length === 0}

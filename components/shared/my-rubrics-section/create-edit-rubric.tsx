@@ -25,7 +25,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Input } from "@/components/ui/input"
 import { createRubric, deleteRubric, updateRubric } from "@/lib/actions/rubric.actions"
 import { rubricSchema } from "@/lib/validators"
@@ -47,7 +47,7 @@ export default function CreateEditRubric({
 }) {
 
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
-    const [scoreLevels, setScoreLevels] = useState(["1", "2", "3", "4"])
+    // const [scoreLevels, setScoreLevels] = useState(["1", "2", "3", "4"])
     const queryClient = useQueryClient();
     const router = useRouter();
 
@@ -98,8 +98,6 @@ export default function CreateEditRubric({
                 categories: currentRubric?.categories,
                 title: currentRubric?.title
             })
-
-            setScoreLevels(Array.from({ length: currentRubric.categories[0]?.criteria.length }, (_, i) => String(i + 1)))
         }
     }, [currentRubric, form])
 
@@ -113,6 +111,14 @@ export default function CreateEditRubric({
         name: "categories"
     })
 
+    const criteriaCount =
+        categoryFields?.[0]?.criteria?.length ?? initialCategories[0]?.criteria.length
+
+    const scoreLevels = useMemo(
+        () => Array.from({ length: criteriaCount }, (_, i) => String(i + 1)),
+        [criteriaCount]
+    )
+
     const addCategory = () => {
         appendCategory({
             name: `Category ${categoryFields.length + 1}`,
@@ -124,8 +130,6 @@ export default function CreateEditRubric({
     }
     const addScoreLevel = () => {
         const newScore = scoreLevels.length + 1
-        setScoreLevels(prev => [...prev, newScore.toString()])
-
         // Update all categories with a new criterion object
         categoryFields.forEach((cat, idx) => {
             const updatedCriteria = [
@@ -139,7 +143,6 @@ export default function CreateEditRubric({
 
     const deleteScoreLevel = (scoreIdx: number) => {
         const updatedLevels = scoreLevels.filter((_, i) => i !== scoreIdx).map((_, i) => (i + 1).toString())
-        setScoreLevels(updatedLevels)
 
         categoryFields.forEach((cat, idx) => {
             const updatedCriteria = cat.criteria.filter((_, i) => i !== scoreIdx)

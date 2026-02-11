@@ -18,16 +18,10 @@ export default function CommentReplySection({
     deleteCommentHandler: (commentId: string) => void
 }) {
 
-    const [isLikedByUser, setIsLikeByUser] = useState<boolean>(false)
+    const [isLikedByUser, setIsLikeByUser] = useState<boolean>(
+        replyCommentData?.likes?.some((like) => like.userId === studentId) ?? false
+    )
     const [totalCommentLikes, setTotalCommentLikes] = useState<number>(replyCommentData?.likeCount || 0)
-
-
-    useEffect(() => {
-        if (studentId && replyCommentData?.likes?.length > 0) {
-            const isLiked = replyCommentData.likes.some((like) => like.userId === studentId);
-            setIsLikeByUser(isLiked);
-        }
-    }, [replyCommentData?.likes, studentId]);
 
     // This to toggle replies an comment likes.
     async function toggleCommentLikeHandler(toggleOption: string, commentId: string) {

@@ -16,26 +16,14 @@ import { useQueryClient } from '@tanstack/react-query';
 export default function OptionsMenu({ classData, teacherId }: { classData: Class, teacherId: string }) {
 
     const queryClient = useQueryClient();
-
-    const [mounted, setMounted] = useState<boolean>(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
 
     function closeDeleteModal() {
         setIsDeleteModalOpen(false)
     }
     function closeEditModal() {
         setIsEditModalOpen(false)
-    }
-
-
-    // Prevents Hydration Warnings/Errors
-    if (!mounted) {
-        return null
     }
 
     return (

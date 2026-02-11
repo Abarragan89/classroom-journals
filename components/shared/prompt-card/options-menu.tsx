@@ -1,6 +1,6 @@
 'use client'
 import { ResponsiveDialog } from '@/components/responsive-dialog';
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
     DropdownMenu,
     DropdownMenuTrigger,
@@ -23,21 +23,10 @@ export default function OptionsMenu({
 }) {
 
     const pathname = usePathname();
-
-    const [mounted, setMounted] = useState<boolean>(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
 
     function closeModal() {
         setIsDeleteModalOpen(false)
-    }
-
-    // Prevents Hydration Warnings/Errors
-    if (!mounted) {
-        return null
     }
 
     return (
