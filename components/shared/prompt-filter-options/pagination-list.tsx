@@ -24,14 +24,18 @@ export default function PaginationList({
     totalItems,
     itemsPerPage,
 }: Props) {
+
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     const goToPage = (page: number) => {
         if (page < 1 || page > totalPages) return;
         setCurrentPage(page);
-        searchOptionState.paginationSkip = (page - 1) * itemsPerPage;
-        getFilteredSearch(searchOptionState);
+        const nextOptions = {
+            ...searchOptionState,
+            paginationSkip: (page - 1) * itemsPerPage,
+        };
+        getFilteredSearch(nextOptions);
     };
 
     const generatePaginationItems = () => {

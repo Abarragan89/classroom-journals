@@ -3,7 +3,7 @@
 import { toggleResponseLike, deleteResponse as deleteResponseAction } from "@/lib/actions/response.action";
 import { formatDateMonthDayYear } from "@/lib/utils";
 import { ResponseLike, PromptSession, Response as QuipResponse } from "@/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import Image from "next/image";
@@ -44,14 +44,6 @@ export default function QuipSingleResponse({
     const [totalCommentLikes, setTotalCommentLikes] = useState<number>(likeCount);
     const [showConfirmDelete, setShowConfirmDelete] = useState<boolean>(false)
 
-    useEffect(() => {
-        if (userId && responseLikes && likeCount) {
-            const isLiked = responseLikes?.some((like) => like.userId === userId);
-            setTotalCommentLikes(likeCount)
-            setIsBlogLikeByUser(isLiked);
-        }
-    }, [userId, responseLikes, likeCount]);
-
     const likeMutation = useMutation({
         mutationFn: () => toggleResponseLike(responseId, userId),
         onMutate: async () => {
@@ -66,7 +58,7 @@ export default function QuipSingleResponse({
 
             return { previousLiked, previousCount };
         },
-        onError: (err, variables, context) => {
+        onError: (err, _variables, context) => {
             // Automatic rollback with saved state
             console.error('Error toggling like:', err);
             if (context) {

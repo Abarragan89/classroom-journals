@@ -44,6 +44,7 @@ export default function EditClassForm({
             if (onSuccess) onSuccess(state.data as Class);
             toast('Class Updated!');
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state])
 
     // Convert old color format to chart number, default to '1' if invalid

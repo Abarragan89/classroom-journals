@@ -1,3 +1,5 @@
+"use client"
+
 import {
     Table,
     TableBody,
@@ -10,6 +12,7 @@ import { Rubric } from "@/types"
 import { ChevronRight, Table2Icon } from "lucide-react"
 import Link from "next/link"
 import RubricModalTutorial from "./rubric-modal-tutorial"
+import { useQuery } from "@tanstack/react-query"
 
 export default function MyRubricList({
     teacherRubrics,
@@ -20,6 +23,20 @@ export default function MyRubricList({
     classId: string,
     teacherId: string,
 }) {
+
+    const { data: rubrics } = useQuery({
+        queryKey: ['teacherRubrics', teacherId],
+        queryFn: async () => {
+            const response = await fetch(`/api/rubrics/teacher/${teacherId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch rubrics');
+            }
+            const data = await response.json();
+            return data.rubrics as Rubric[];
+        },
+        initialData: teacherRubrics,
+        staleTime: 1000 * 60 * 5,
+    })
 
     if (teacherRubrics.length === 0) {
         return (
@@ -43,7 +60,7 @@ export default function MyRubricList({
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {teacherRubrics.map((rubric: Rubric) => (
+                        {rubrics?.map((rubric: Rubric) => (
                             <TableRow
                                 key={rubric.id}
                                 className="group"

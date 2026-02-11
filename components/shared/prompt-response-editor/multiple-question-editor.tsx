@@ -79,6 +79,7 @@ export default function MultipleQuestionEditor({
             }, 15000); // Save after 15 seconds of inactivity
         }
         return () => clearTimeout(typingTimeoutRef.current);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [journalText, isTyping]);
 
 

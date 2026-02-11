@@ -1,20 +1,9 @@
 "use client";
 import { FadeLoader } from 'react-spinners';
 import { useTheme } from "next-themes"
-import { useEffect, useState } from 'react';
 
 export default function LoadingAnimation() {
     const { theme } = useTheme();
-    const [mounted, setMounted] = useState<boolean>(false)
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
-
-    // Prevents Hydration Warnings/Errors
-    if (!mounted) {
-        return null
-    }
 
     function determineLoadingColor() {
         if (!theme) return '';

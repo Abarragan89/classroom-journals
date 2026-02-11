@@ -44,6 +44,7 @@ export default function AssignPromptForm({
             queryClient.invalidateQueries({ queryKey: ['prompts', teacherId] });
             closeModal();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state]);
 
 

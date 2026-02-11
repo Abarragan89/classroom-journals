@@ -23,6 +23,7 @@ export default function UpdateAvatar({
 
     useEffect(() => {
         fetchPhotos();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 

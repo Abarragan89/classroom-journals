@@ -15,21 +15,16 @@ import {
 import Link from "next/link"
 import { PromptSession } from "@/types"
 import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useMemo } from "react"
 import { Heart, MessageCircle } from "lucide-react"
 
 export function DiscussionSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & { prompt_data: PromptSession }) {
 
     const pathname = usePathname();
-    const [responses, setResponses] = useState(props?.prompt_data?.responses)
-    const [currentResponseId, setCurrentResponseId] = useState<string>('')
 
-    useEffect(() => {
-        if (props?.prompt_data?.responses && props?.prompt_data?.responses !== responses) {
-            setResponses(props?.prompt_data?.responses);
-        }
-        setCurrentResponseId(pathname?.split("/")[4])
-    }, [props?.prompt_data?.responses, pathname])
+    // Using memo because these responses are sorted 
+    const responses = useMemo(() => props?.prompt_data?.responses ?? [], [props?.prompt_data?.responses])
+    const currentResponseId =  pathname?.split("/")[4] ?? ""
 
     return (
         <Sidebar

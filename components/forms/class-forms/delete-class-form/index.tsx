@@ -22,7 +22,7 @@ export default function DeleteClassForm({ classroomId, closeModal, teacherId }: 
     const queryClient = useQueryClient();
 
     //redirect if the state is success
-    useEffect(() => { 
+    useEffect(() => {
         if (state?.success) {
             closeModal()
             // Remove deleted class from cache
@@ -35,6 +35,7 @@ export default function DeleteClassForm({ classroomId, closeModal, teacherId }: 
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state, router, pathname, queryClient, teacherId, classroomId])
 
     const [userText, setUserText] = useState<string>('')

@@ -137,7 +137,7 @@ export default function MultiPromptForm({
             });
             router.push('/prompt-library');
         }
-    }, [state, router])
+    }, [state, router, queryClient, teacherId])
 
     async function handleAddCategory(categoryName: string) {
         try {

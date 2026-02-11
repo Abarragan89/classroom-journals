@@ -29,6 +29,7 @@ export default function NotificationSection({
         if (notifications.length > 0) {
             markAllNotificationsAsRead(userId, classId);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // Empty dependency array - only run once on mount
 
     async function clearNotifications() {
@@ -73,7 +74,14 @@ export default function NotificationSection({
                     </div>
                 </>
             ) : (
-                <h3 className="text-2xl text-accent italic text-center">No Notifications</h3>
+                <div className="flex flex-col justify-between bg-card border shadow-sm rounded-lg p-8 text-center max-w-[500px]">
+                    <div className='xl:max-h-[100px]'>
+                        <h2 className="text-2xl sm:text-3xl font-bold mb-5">No Notifications</h2>
+                        <p className="text-muted-foreground mb-5 text-base sm:text-lg font-medium">
+                            Monitor student blog comments here to ensure discussions stay appropriate.
+                        </p>
+                    </div>
+                </div>
             )}
         </section>
     )

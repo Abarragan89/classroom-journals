@@ -29,6 +29,7 @@ export default function StudentRequestSection({
         if (studentRequests.length > 0) {
             markAllRequestsAsViewed(teacherId, classId);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // Empty dependency array - only run once on mount
 
     async function approveRequest(studentId: string, requestText: string, responseId: string, requestType: string) {

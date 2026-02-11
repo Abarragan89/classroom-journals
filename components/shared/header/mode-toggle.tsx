@@ -18,16 +18,20 @@ import { IoMdCloudOutline } from "react-icons/io";
 
 
 export default function ModeToggle() {
-    const [mounted, setMounted] = useState<boolean>(false)
     const { theme, setTheme } = useTheme()
+    const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true)
     }, [])
 
-    // Prevents Hydration Warnings/Errors
     if (!mounted) {
-        return null
+        return (
+            <Button variant='ghost' className="focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full px-[10px] py-2">
+                <SunIcon />
+            </Button>
+        )
     }
 
     function showModeIcon(theme: string | undefined) {

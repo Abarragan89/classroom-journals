@@ -43,7 +43,7 @@ export default function AddStudentForm({
             });
         }
         inputEl.current?.focus();
-    }, [state, pathname])
+    }, [state, pathname, classId, queryClient])
 
 
     const CreateButton = () => {

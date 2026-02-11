@@ -1,16 +1,24 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+// eslint.config.mjs
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import unusedImports from "eslint-plugin-unused-imports";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const config = [
+  ...nextVitals,
+  {
+    plugins: {
+      "unused-imports": unusedImports,
+    },
+    rules: {
+      "no-unused-vars": "off", // Turn off the base rule to avoid duplicate warnings
+      "unused-imports/no-unused-imports": "error",
+      "unused-imports/no-unused-vars": [
+        "warn",
+        { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+      ],
+    },
+  },
+  // Add global ignores if needed (default ignores are already included in nextVitals)
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+]
 
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-];
-
-export default eslintConfig;
+export default config;

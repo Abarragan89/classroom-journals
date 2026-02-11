@@ -6,7 +6,6 @@ import PromptSearchBar from "../prompt-filter-options/prompt-search-bar"
 import TraitFilterCombobox from "../prompt-filter-options/trait-filter-combobox"
 import PaginationList from "../prompt-filter-options/pagination-list"
 import { useQuery } from "@tanstack/react-query"
-import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 import { Plus } from "lucide-react"
 import Link from "next/link"

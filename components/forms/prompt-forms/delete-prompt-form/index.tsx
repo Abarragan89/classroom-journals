@@ -36,6 +36,7 @@ export default function DeletePromptForm({
             //  queryClient.invalidateQueries(['prompts', teacherId]);
             queryClient.invalidateQueries({ queryKey: ['prompts', teacherId] });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state])
 
 

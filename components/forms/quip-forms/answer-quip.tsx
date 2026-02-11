@@ -13,17 +13,19 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { PromptSession, Response } from "@/types";
 
 export default function AnswerQuip({
     studentId,
     promptSessionId,
     quipQuestion,
-    completeStatusTrue
+    classId,
 }: {
     studentId: string;
     promptSessionId: string;
     quipQuestion: string;
-    completeStatusTrue: () => void;
+    classId: string;
 }) {
 
     const formSchema = z.object({
@@ -38,11 +40,31 @@ export default function AnswerQuip({
         },
     })
 
+    const queryClient = useQueryClient();
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             const responseData = [{ question: quipQuestion, answer: values.responseText, score: 0 }]
-            await respondToQuip(responseData, studentId, promptSessionId)
-            completeStatusTrue();
+            const createdResponse = await respondToQuip(responseData, studentId, promptSessionId)
+
+            if (createdResponse && typeof createdResponse === 'object' && 'id' in createdResponse) {
+                queryClient.setQueryData<Response[]>(['quipResponses', promptSessionId], (old) =>
+                    old ? [...old, createdResponse as Response] : [createdResponse as Response]
+                )
+
+                queryClient.setQueryData<PromptSession[]>(['getAllQuips', classId], (old) => {
+                    if (!old) return old
+                    return old.map((quip) =>
+                        quip.id === promptSessionId
+                            ? ({
+                                ...quip,
+                                responses: [...(quip.responses || []), { studentId } as unknown as Response]
+                            } as PromptSession)
+                            : quip
+                    )
+                })
+            }
+
             toast('Response Posted')
         } catch (error) {
             console.error('erroring making new quip', error)

@@ -1,7 +1,7 @@
 'use client'
 import { Response } from "@/types";
 import { BiMessageRounded } from "react-icons/bi";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import Link from "next/link";
@@ -22,18 +22,8 @@ export default function BlogMetaDetails({
     teacherView
 }: Props) {
 
-    const [isBlogLikedByUser, setIsBlogLikeByUser] = useState<boolean>(false);
+    const [isBlogLikedByUser, setIsBlogLikeByUser] = useState<boolean>(responseData?.likes?.some((like) => like.userId === studentId) || false);
     const [totalCommentLikes, setTotalCommentLikes] = useState<number>(responseData.likeCount);
-    const [totalComments, setTotalComments] = useState<number>(responseData?._count?.comments ?? 0)
-
-    useEffect(() => {
-        if (studentId && responseData._count) {
-            const isLiked = responseData?.likes?.some((like) => like.userId === studentId);
-            setIsBlogLikeByUser(isLiked);
-            setTotalComments(responseData?._count?.comments ?? 0)
-        }
-    }, [responseData.likes, responseData._count, studentId]);
-
 
     async function toggleResponseLikeHandler(toggleOption: string) {
         // there will not be a response id if it is in preview mode
@@ -110,7 +100,7 @@ export default function BlogMetaDetails({
                             className="text-[1.5rem] mr-[2px] hover:cursor-pointer"
                         />
                     </Link>
-                    <p className="text-[.95rem]">{totalComments}</p>
+                    <p className="text-[.95rem]">{responseData?._count?.comments ?? 0}</p>
                 </div>
             </section>
         </>

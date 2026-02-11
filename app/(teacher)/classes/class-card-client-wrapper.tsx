@@ -3,7 +3,6 @@ import AddClassBtn from "@/components/forms/class-forms/add-class-btn"
 import ClassCard from "@/components/shared/class-card"
 import { Class, Session } from "@/types"
 import { useQuery } from "@tanstack/react-query"
-import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 import TutorialMessageVideo from "@/components/tutorial-message-video"
 

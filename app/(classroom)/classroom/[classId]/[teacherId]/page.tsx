@@ -1,8 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { getAllSessionsInClass } from "@/lib/server/prompt-sessions";
 import { PromptCategory, PromptSession } from "@/types";
-import { Plus } from "lucide-react";
-import Link from "next/link";
 import { getAllPromptCategories } from "@/lib/server/student-dashboard";
 import AssignmentListSection from "@/components/shared/AssignmentListSection";
 
