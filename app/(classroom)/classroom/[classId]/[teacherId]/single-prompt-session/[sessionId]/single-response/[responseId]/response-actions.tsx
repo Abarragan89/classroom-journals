@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Response } from '@/types'
 import HandleToggleReturnStateBtn from '@/components/buttons/handle-toggle-return-state-btn'
 import DeleteResponseBtn from './delete-response-btn'
+import { Badge } from '@/components/ui/badge'
 // import { Badge } from '@/components/ui/badge'
 
 export default function ResponseActions({
@@ -29,10 +30,13 @@ export default function ResponseActions({
         staleTime: Infinity,
     });
 
-    // const isNotSubmitted = response?.completionStatus !== 'COMPLETE';
+    const isNotSubmitted = response?.completionStatus !== 'COMPLETE';
 
     return (
-        <div className='relative mb-1'>
+        <div className='mt-5 space-y-4 absolute left-0 top-0'>
+            {isNotSubmitted && (
+                <Badge variant={"destructive"} className=''>Not Submitted</Badge>
+            )}
             <div className='flex gap-x-4 justify-end'>
                 <HandleToggleReturnStateBtn
                     responseId={responseId}
@@ -47,9 +51,6 @@ export default function ResponseActions({
                     classId={classId}
                 />
             </div>
-            {/* {isNotSubmitted && (
-                <Badge variant={"destructive"}  className='absolute -top-8 right-0 font-bold text-xs'>Not Submitted</Badge>
-            )} */}
         </div>
     );
 }

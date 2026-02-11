@@ -46,28 +46,31 @@ export default async function SingleResponse({
                     <StudentComboBox
                         responses={rosterAlphabetized}
                     />
-                    <div className="flex justify-between items-baseline mt-5">
+                    <div className="flex justify-between items-baseline mt-5 relative">
                         <ToggleSpellCheck
                             responseId={responseId}
                             spellCheckEnabled={response?.spellCheckEnabled}
                             teacherId={teacherId}
                         />
-                        <ResponseActions
-                            initialResponse={response}
-                            responseId={responseId}
-                            sessionId={sessionId}
-                            teacherId={teacherId}
-                            classId={classId}
-                        />
+
                     </div>
                     {!isMultiQuestion && (
-                        <ScoreJournalForm
-                            teacherId={teacherId}
-                            responseId={response?.id}
-                            currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
-                            studentWriting={(response.response as unknown as ResponseData[])?.[0]?.answer || ''}
-                            sessionId={sessionId}
-                        />
+                        <div className="flex-end mb-10 relative">
+                            <ResponseActions
+                                initialResponse={response}
+                                responseId={responseId}
+                                sessionId={sessionId}
+                                teacherId={teacherId}
+                                classId={classId}
+                            />
+                            <ScoreJournalForm
+                                teacherId={teacherId}
+                                responseId={response?.id}
+                                currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
+                                studentWriting={(response.response as unknown as ResponseData[])?.[0]?.answer || ''}
+                                sessionId={sessionId}
+                            />
+                        </div>
                     )}
                 </div>
                 <div className="max-w-[1200px] mx-auto relative">
