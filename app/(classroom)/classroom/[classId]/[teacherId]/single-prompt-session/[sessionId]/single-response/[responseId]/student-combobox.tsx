@@ -1,6 +1,6 @@
 "use client"
 import { Response } from "@/types"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 import { useRouter, usePathname, useParams } from "next/navigation"
 import { cn } from "@/lib/utils"

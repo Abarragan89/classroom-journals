@@ -188,7 +188,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     callbacks: {
         // user only comes back when loggin in with  GOogle
-        async session({ session, user, trigger, token }) {
+        async session({ session, token }) {
             if (session.user) {
                 // getRefresh
                 session.refreshToken = token.refreshToken

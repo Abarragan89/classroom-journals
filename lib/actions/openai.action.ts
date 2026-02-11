@@ -66,8 +66,6 @@ export async function gradeResponseWithAI(gradeLevel: string, responseData: Resp
             },
             max_output_tokens: 4500,
         });
-
-        console.log('responses in the ai ', response)
         return response;
     } catch (error) {
         console.error('error with open ai autograde ', error)

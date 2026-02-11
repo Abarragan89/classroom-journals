@@ -1,6 +1,6 @@
 'use client'
 import { ResponsiveDialog } from '@/components/responsive-dialog';
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
     DropdownMenu,
     DropdownMenuTrigger,

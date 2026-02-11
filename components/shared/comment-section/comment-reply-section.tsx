@@ -1,7 +1,7 @@
 import { formatDateMonthDayYear } from "@/lib/utils";
 import { ResponseComment } from "@/types";
 import { toggleCommentLike } from "@/lib/actions/comment.action";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import Image from "next/image";

@@ -142,8 +142,6 @@ export default function CreateEditRubric({
 
 
     const deleteScoreLevel = (scoreIdx: number) => {
-        const updatedLevels = scoreLevels.filter((_, i) => i !== scoreIdx).map((_, i) => (i + 1).toString())
-
         categoryFields.forEach((cat, idx) => {
             const updatedCriteria = cat.criteria.filter((_, i) => i !== scoreIdx)
             updateCategory(idx, { ...cat, criteria: updatedCriteria })

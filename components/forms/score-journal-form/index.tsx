@@ -3,7 +3,7 @@ import { gradeStudentResponse } from "@/lib/actions/response.action";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { saveRubricGrade, deleteRubricGrade } from "@/lib/actions/rubric.actions";
 import { Rubric, RubricGrade, RubricListItem } from "@/types";

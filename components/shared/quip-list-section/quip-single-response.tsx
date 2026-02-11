@@ -3,7 +3,7 @@
 import { toggleResponseLike, deleteResponse as deleteResponseAction } from "@/lib/actions/response.action";
 import { formatDateMonthDayYear } from "@/lib/utils";
 import { ResponseLike, PromptSession, Response as QuipResponse } from "@/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import Image from "next/image";
