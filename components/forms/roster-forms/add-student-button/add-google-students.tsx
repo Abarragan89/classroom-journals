@@ -57,7 +57,7 @@ export default function AddGoogleStudents({
                 <p className='font-bold text-md text-center mb-3'>Choose a class to import</p>
             ) : (
                 <>
-                    <p className='text-md w-[75%] mb-1 mx-auto text-center'>No classrooms associated with your Google Account:</p>
+                    <p className='text-md w-[75%] mb-5 mx-auto text-center'>No classrooms associated with your Google Account</p>
                 </>
 
             )}
