@@ -72,7 +72,7 @@ export default function JotTutorialArrow({
 
     // Desktop: Show arrow pointing to sidebar
     return (
-        <div className="fixed top-[162px] left-[120px] z-50 pointer-events-none">
+        <div className="fixed top-[162px] left-[120px] z-50 pointer-events-none print:hidden">
             <div className="relative  pointer-events-auto">
                 <div className="bg-primary text-primary-foreground px-4 py-3 rounded-lg shadow-lg flex items-center gap-3">
                     <div className="flex flex-col">
@@ -91,9 +91,9 @@ export default function JotTutorialArrow({
                 <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full">
                     <ArrowLeft
                         className="h-6 w-6 text-primary mr-2 animate-[pulse-x_1.5s_ease-in-out_infinite]"
-                        // style={{
-                        //     animation: 'pulse-x 1.5s ease-in-out infinite'
-                        // }}
+                    // style={{
+                    //     animation: 'pulse-x 1.5s ease-in-out infinite'
+                    // }}
                     />
                     <style jsx>{`
                         @keyframes pulse-x {

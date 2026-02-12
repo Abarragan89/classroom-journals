@@ -180,7 +180,7 @@ export default function MultiPromptForm({
 
     const CreateButton = () => {
         const { pending } = useFormStatus();
-        return <Button disabled={pending} type="submit" className="mx-auto mt-5">{pending ? buttonVerb : buttonText}</Button>;
+        return <Button size={"lg"} disabled={pending} type="submit" className="mx-auto my-5 shadow-md">{pending ? buttonVerb : buttonText}</Button>;
     };
 
     if (!isLoaded) {
@@ -276,10 +276,10 @@ export default function MultiPromptForm({
                 {/* Assign to a classroom */}
                 <Card className="shadow-sm hover:scale-[1.01] transition-transform duration-100">
                     <CardContent className="space-y-4">
-                        <div className="space-y-3 mt-5">
+                        <div className="space-y-3">
                             {classrooms?.length > 0 && (
                                 <>
-                                    <p className="text-md font-bold">Assign <span className="text-sm font-normal">(optional)</span></p>
+                                    <p className="text-md font-bold">Assign to Classes <span className="text-sm font-normal">(optional)</span></p>
                                     {classrooms.map((classroom: Classroom) => (
                                         <div key={`classroom-assign-${classroom.id}`} className="flex items-center space-x-3 ml-1">
                                             <Checkbox id={`classroom-assign-${classroom.id}`} value={classroom.id} name={`classroom-assign-${classroom.id}`} />
@@ -297,38 +297,45 @@ export default function MultiPromptForm({
                                 </>
                             )}
                         </div>
-                        {/* this is making spell check enabled */}
-                        <div className="flex items-center space-x-2 mt-4">
-                            <Switch
-                                onCheckedChange={(e) => setEnableSpellCheck(e)}
-                                checked={enableSpellCheck}
-                            />
-                            <Label
-                                className="text-md ml-2"
-                            >
-                                Enable Spell Check
-                            </Label>
-                            <TooltipProvider>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <CiCircleQuestion size={20} />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>Student text editor will spell check</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-                            <input
-                                type='hidden'
-                                readOnly
-                                name='enable-spellcheck'
-                                id='enable-spellcheck'
-                                value={enableSpellCheck.toString()}
-                            />
-                        </div>
                     </CardContent>
                 </Card>
 
+                <Card className="shadow-sm hover:scale-[1.01] transition-transform duration-100">
+                    <CardContent className="space-y-4">
+                        <p className="text-md font-bold">Other Options</p>
+                        <div className="space-y-3">
+                            {/* this is making spell check enabled */}
+                            <div className="flex items-center space-x-2 mt-4">
+                                <Switch
+                                    onCheckedChange={(e) => setEnableSpellCheck(e)}
+                                    checked={enableSpellCheck}
+                                />
+                                <Label
+                                    className="text-md ml-2"
+                                >
+                                    Enable Spell Check
+                                </Label>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <CiCircleQuestion size={20} />
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>Student text editor will spell check</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                                <input
+                                    type='hidden'
+                                    readOnly
+                                    name='enable-spellcheck'
+                                    id='enable-spellcheck'
+                                    value={enableSpellCheck.toString()}
+                                />
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
 
             <input

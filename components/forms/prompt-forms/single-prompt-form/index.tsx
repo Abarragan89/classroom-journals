@@ -150,7 +150,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
 
     const CreateButton = () => {
         const { pending } = useFormStatus();
-        return <Button disabled={pending} type="submit" className="mx-auto mt-5">{pending ? buttonVerb : buttonText}</Button>;
+        return <Button size={"lg"} disabled={pending} type="submit" className="mx-auto mb-5 shadow-md">{pending ? buttonVerb : buttonText}</Button>;
     };
 
     if (!isLoaded) {
@@ -198,7 +198,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
             {/* Assign to a classroom */}
             <Card className="shadow-sm hover:scale-[1.01] transition-transform duration-100">
                 <CardContent>
-                    <p className="text-md font-bold">Assign <span className="text-sm font-normal">(optional)</span></p>
+                    <p className="text-md font-bold">Assign to Classes <span className="text-sm font-normal">(optional)</span></p>
                     <div className="space-y-3 mt-5">
                         {/* <Separator /> */}
                         {classrooms?.length > 0 && (
@@ -220,6 +220,14 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                                 ))}
                             </>
                         )}
+                    </div>
+                </CardContent>
+            </Card>
+            {/* this is making spell check enabled */}
+            <Card className="shadow-sm hover:scale-[1.01] transition-transform duration-100">
+                <CardContent className="space-y-4">
+                    <p className="text-md font-bold">Other Options</p>
+                    <div className="space-y-3">
                         <div className="flex items-center space-x-2">
                             <Switch
                                 onCheckedChange={(e) => setIsPublic(e)}
@@ -248,46 +256,42 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                                 value={isPublic.toString()}
                             />
                         </div>
+                        <div className="flex space-x-2 my-2">
+                            <Switch
+                                onCheckedChange={(e) => setEnableSpellCheck(e)}
+                                checked={enableSpellCheck}
+                            />
+                            <Label
+                                className="text-md ml-2"
+                            >
+                                Enable Spell Check
+                            </Label>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <CiCircleQuestion size={20} />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Student text editor will spell check</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                            <input
+                                type='hidden'
+                                readOnly
+                                name='enable-spellcheck'
+                                id='enable-spellcheck'
+                                value={enableSpellCheck.toString()}
+                            />
+                        </div>
                     </div>
-
                 </CardContent>
             </Card>
-            {/* this is making spell check enabled */}
-            <div>
-                <div className="flex items-center justify-center space-x-2 my-2">
-                    <Switch
-                        onCheckedChange={(e) => setEnableSpellCheck(e)}
-                        checked={enableSpellCheck}
-                    />
-                    <Label
-                        className="text-md ml-2"
-                    >
-                        Enable Spell Check
-                    </Label>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <CiCircleQuestion size={20} />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Student text editor will spell check</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                    <input
-                        type='hidden'
-                        readOnly
-                        name='enable-spellcheck'
-                        id='enable-spellcheck'
-                        value={enableSpellCheck.toString()}
-                    />
-                </div>
-                {state && !state.success && (
-                    <p className="text-center text-destructive">{state.message}</p>
-                )}
-                <div className="flex-center">
-                    <CreateButton />
-                </div>
+            {state && !state.success && (
+                <p className="text-center text-destructive">{state.message}</p>
+            )}
+            <div className="flex-center">
+                <CreateButton />
             </div>
             <input
                 type="hidden"
