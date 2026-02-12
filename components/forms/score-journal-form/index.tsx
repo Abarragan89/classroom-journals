@@ -84,9 +84,9 @@ export default function ScoreJournalForm({
                 createdAt: new Date(),
                 updatedAt: new Date()
             };
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setCurrentRubric(rubricForDisplay);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mostRecentGrade]); // Only run when mostRecentGrade changes, not currentRubric
 
     // Mutation for updating 100-point score

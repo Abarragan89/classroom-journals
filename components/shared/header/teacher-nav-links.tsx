@@ -1,11 +1,40 @@
 'use client'
 import { GraduationCap, PenTool } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
 import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
-export default function TeacherNavLinks() {
+export default function TeacherNavLinks({ isMobile = false, onNavigate }: { isMobile?: boolean; onNavigate?: () => void }) {
     const pathname = usePathname().split('/')[1];
+
+    if (isMobile) {
+        return (
+            <>
+                <Button
+                    asChild
+                    variant="ghost"
+                    className="w-full justify-start gap-3 px-4 py-3 h-auto text-sm font-normal rounded-md hover:bg-accent text-muted-foreground"
+                >
+                    <Link href={`/classes`} onClick={onNavigate}>
+                        <GraduationCap size={18} />
+                        <span>Classes</span>
+                    </Link>
+                </Button>
+
+                <Button
+                    asChild
+                    variant="ghost"
+                    className="w-full justify-start gap-3 px-4 py-3 h-auto text-sm font-normal rounded-md hover:bg-accent text-muted-foreground"
+                >
+                    <Link href={`/prompt-library`} onClick={onNavigate}>
+                        <PenTool size={18} />
+                        <span>My Jots</span>
+                    </Link>
+                </Button>
+            </>
+        )
+    }
+
     return (
         <>
             <Link href={`/classes`} className={`

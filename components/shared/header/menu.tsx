@@ -1,3 +1,5 @@
+"use client"
+import { useState } from "react";
 import ModeToggle from "./mode-toggle"
 import UserButton from "./user-button"
 import { MenuIcon, UserIcon } from "lucide-react";
@@ -27,45 +29,53 @@ export default function Menu({
     session: Session
     isAllowedToMakeNewClass: boolean;
 }) {
-    const renderTeacherHeader = () => (
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+    const closeSheet = () => {
+        setIsSheetOpen(false);
+    };
+
+    const renderTeacherHeader = (isMobile = false) => (
         <>
-            <TeacherNavLinks />
+            <TeacherNavLinks isMobile={isMobile} onNavigate={isMobile ? closeSheet : undefined} />
 
             <ActionSubMenu
                 teacherId={teacherId as string}
                 session={session as Session}
                 isAllowedToMakeNewClass={isAllowedToMakeNewClass as boolean}
+                isMobile={isMobile}
             />
-            <ModeToggle />
-            <UserButton />
+
+            <ModeToggle isMobile={isMobile} />
+            <UserButton isMobile={isMobile} onNavigate={isMobile ? closeSheet : undefined} />
         </>
     );
-    const renderStudentHeader = () => (
+    const renderStudentHeader = (isMobile = false) => (
         <>
-            <StudentNavLinks studentId={studentId as string} classId={session?.classroomId as string} />
-            <ModeToggle />
-            <UserButton />
+            <StudentNavLinks studentId={studentId as string} classId={session?.classroomId as string} isMobile={isMobile} onNavigate={isMobile ? closeSheet : undefined} />
+            <ModeToggle isMobile={isMobile} />
+            <UserButton isMobile={isMobile} onNavigate={isMobile ? closeSheet : undefined} />
         </>
     );
 
-    const renderGuestMenu = () => (
+    const renderGuestMenu = (isMobile = false) => (
         <>
-            <ModeToggle />
-            <Button asChild>
-                <Link href='/sign-in' className="flex gap-x-2">
+            <ModeToggle isMobile={isMobile} />
+            <Button asChild className={isMobile ? "w-full justify-start" : ""}>
+                <Link href='/sign-in' className="flex gap-x-2" onClick={isMobile ? closeSheet : undefined}>
                     <UserIcon /> Sign In
                 </Link>
             </Button>
         </>
     );
 
-    const renderMenuOptions = () => {
+    const renderMenuOptions = (isMobile = false) => {
         if (teacherId) {
-            return renderTeacherHeader()
+            return renderTeacherHeader(isMobile)
         } else if (studentId) {
-            return renderStudentHeader();
+            return renderStudentHeader(isMobile);
         } else {
-            return renderGuestMenu();
+            return renderGuestMenu(isMobile);
         }
     };
 
@@ -77,14 +87,16 @@ export default function Menu({
 
             {/* Sheet Menu for Mobile View */}
             <nav className="sm:hidden">
-                <Sheet>
+                <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                     <SheetTrigger className="align-middle">
                         <MenuIcon />
                     </SheetTrigger>
-                    <SheetContent className="flex flex-col items-start">
+                    <SheetContent className="flex flex-col items-start w-[280px]">
                         <SheetTitle>Menu</SheetTitle>
                         <Separator />
-                        {renderMenuOptions()}
+                        <div className="w-full flex flex-col gap-1 mt-4">
+                            {renderMenuOptions(true)}
+                        </div>
                         <SheetDescription></SheetDescription>
                     </SheetContent>
                 </Sheet>
