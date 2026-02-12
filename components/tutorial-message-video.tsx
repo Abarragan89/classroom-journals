@@ -31,7 +31,7 @@ export default function TutorialMessageVideo({
                     </div>
                 </div>
             </div>
-            <div className="w-full max-w-[500px]">
+            <div className="w-full max-w-[500px] shadow-lg">
                 <LiteYouTubeEmbed
                     id={youtubeId}
                     title={`JotterBlog Tutorial - Jots`}

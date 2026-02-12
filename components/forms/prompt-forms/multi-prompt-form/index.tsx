@@ -36,6 +36,7 @@ export default function MultiPromptForm({
 
     const searchParams = useSearchParams()
     const existingPromptId = searchParams.get('edit')
+    const callBackUrl = searchParams.get('callbackUrl')
 
     const actionFunction = existingPromptId ? updateAPrompt : createNewPrompt
 
@@ -135,9 +136,9 @@ export default function MultiPromptForm({
                     query.queryKey[0] === 'prompts' &&
                     query.queryKey[1] === teacherId,
             });
-            router.push('/prompt-library');
+            router.push(callBackUrl as string);
         }
-    }, [state, router, queryClient, teacherId])
+    }, [state, router, queryClient, teacherId, callBackUrl])
 
     async function handleAddCategory(categoryName: string) {
         try {
