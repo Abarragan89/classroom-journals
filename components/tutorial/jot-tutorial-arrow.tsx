@@ -1,5 +1,5 @@
 'use client'
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { ArrowBigLeftIcon, ArrowLeft, Sidebar, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -14,6 +14,14 @@ export default function JotTutorialArrow({
     const hasDismissed = useRef(false);
     const isMobile = useIsMobile();
 
+    // Prevent scrolling while tutorial is showing
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, []);
+
     const handleDismiss = () => {
         if (hasDismissed.current) return;
         hasDismissed.current = true;
@@ -25,9 +33,9 @@ export default function JotTutorialArrow({
         return (
             <div className="fixed inset-0 z-50 print:hidden bg-black/60 pointer-events-none">
                 {/* Spotlight circle to highlight the menu icon */}
-                <div className="absolute top-[83px] left-[5px] w-10 h-10 rounded-full bg-white/20 animate-pulse pointer-events-none" />
+                <div className="absolute top-[8px] left-[5px] w-10 h-10 rounded-full bg-white/20 animate-pulse pointer-events-none" />
 
-                <div className="fixed flex top-[81px] left-[35px] right-0 z-50 px-4 print:hidden">
+                <div className="absolute flex top-[81px] left-[35px] right-0 z-50 px-4 print:hidden">
                     <ArrowBigLeftIcon className="h-8 w-8 text-primary my-2 animate-[pulse-y_1.5s_ease-in-out_infinite]" />
                     <style jsx>{`
                     @keyframes pulse-y {
@@ -39,28 +47,29 @@ export default function JotTutorialArrow({
                         }
                     }
                 `}</style>
-                    <div className="bg-primary text-primary-foreground p-4 pr-10 rounded-lg shadow-lg relative pointer-events-auto">                        <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1">
-                            <p className="font-semibold text-sm mb-1">Next Step: Create Your First Jot!</p>
-                            <p className="text-xs opacity-90">Tap the <Sidebar className='inline h-4 w-4' /> menu icon and tap &quot;Jots&quot;</p>
+                    <div className="bg-primary text-primary-foreground p-4 pr-10 rounded-lg shadow-lg relative pointer-events-auto">
+                        <div className="flex items-start justify-between gap-3">
+                            <div className="flex-1">
+                                <p className="font-semibold text-sm mb-1">Next Step: Create Your First Jot!</p>
+                                <p className="text-xs opacity-90">Tap the <Sidebar className='inline h-4 w-4' /> menu icon and tap &quot;Jots&quot;</p>
+                                <Button
+                                    asChild
+                                    size="sm"
+                                    variant="secondary"
+                                    className="w-full"
+                                    onClick={handleDismiss}
+                                >
+                                </Button>
+                            </div>
                             <Button
-                                asChild
                                 size="sm"
-                                variant="secondary"
-                                className="w-full"
+                                variant="ghost"
+                                className="h-6 w-6 p-0 hover:bg-primary-foreground/20 flex-shrink-0 absolute top-1 right-1"
                                 onClick={handleDismiss}
                             >
+                                <X className="h-4 w-4" />
                             </Button>
                         </div>
-                        <Button
-                            size="sm"
-                            variant="ghost"
-                            className="h-6 w-6 p-0 hover:bg-primary-foreground/20 flex-shrink-0 absolute top-1 right-1"
-                            onClick={handleDismiss}
-                        >
-                            <X className="h-4 w-4" />
-                        </Button>
-                    </div>
                     </div>
                 </div>
             </div>
