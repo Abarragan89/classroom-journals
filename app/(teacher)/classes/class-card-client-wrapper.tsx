@@ -43,6 +43,7 @@ export default function ClassCardClientWrapper({
                 <TutorialMessageVideo
                     title="Welcome to JotterBlog!"
                     subtitle="Step 1: Create your first Class."
+                    isInClassroom={false}
                     CTAButton={() => (
                         <AddClassBtn
                             variant='default'
