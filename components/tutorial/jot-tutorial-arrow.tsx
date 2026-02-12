@@ -23,7 +23,7 @@ export default function JotTutorialArrow({
     // Mobile: Show banner at top
     if (isMobile) {
         return (
-            <div className="fixed inset-0 z-50 print:hidden bg-black/70 pointer-events-none">
+            <div className="fixed inset-0 z-50 print:hidden bg-black/60 pointer-events-none">
                 {/* Spotlight circle to highlight the menu icon */}
                 <div className="absolute top-[83px] left-[5px] w-10 h-10 rounded-full bg-white/20 animate-pulse pointer-events-none" />
 
