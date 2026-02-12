@@ -1,14 +1,11 @@
 'use client'
 import { useRef } from 'react';
-import { ArrowLeft, X } from 'lucide-react';
+import { ArrowBigLeftIcon, ArrowLeft, Sidebar, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
-import Link from 'next/link';
 
 export default function JotTutorialArrow({
     onDismiss,
-    classId,
-    teacherId
 }: {
     onDismiss: () => void,
     classId: string,
@@ -16,18 +13,6 @@ export default function JotTutorialArrow({
 }) {
     const hasDismissed = useRef(false);
     const isMobile = useIsMobile();
-
-    // Auto-dismiss after 20 seconds
-    // useEffect(() => {
-    //     const timer = setTimeout(() => {
-    //         if (!hasDismissed.current) {
-    //             hasDismissed.current = true;
-    //             onDismiss();
-    //         }
-    //     }, 20000);
-
-    //     return () => clearTimeout(timer);
-    // }, [onDismiss]);
 
     const handleDismiss = () => {
         if (hasDismissed.current) return;
@@ -38,12 +23,26 @@ export default function JotTutorialArrow({
     // Mobile: Show banner at top
     if (isMobile) {
         return (
-            <div className="fixed top-16 left-0 right-0 z-50 px-4">
-                <div className="bg-primary text-primary-foreground p-4 rounded-lg shadow-lg">
-                    <div className="flex items-start justify-between gap-3">
+            <div className="fixed inset-0 z-50 print:hidden bg-black/70 pointer-events-none">
+                {/* Spotlight circle to highlight the menu icon */}
+                <div className="absolute top-[83px] left-[5px] w-10 h-10 rounded-full bg-white/20 animate-pulse pointer-events-none" />
+
+                <div className="fixed flex top-[81px] left-[35px] right-0 z-50 px-4 print:hidden">
+                    <ArrowBigLeftIcon className="h-8 w-8 text-primary my-2 animate-[pulse-y_1.5s_ease-in-out_infinite]" />
+                    <style jsx>{`
+                    @keyframes pulse-y {
+                        0%, 100% {
+                            transform: translateX(0px);
+                        }
+                        50% {
+                            transform: translateX(-8px);
+                        }
+                    }
+                `}</style>
+                    <div className="bg-primary text-primary-foreground p-4 pr-10 rounded-lg shadow-lg relative pointer-events-auto">                        <div className="flex items-start justify-between gap-3">
                         <div className="flex-1">
                             <p className="font-semibold text-sm mb-1">Next Step: Create Your First Jot!</p>
-                            <p className="text-xs opacity-90 mb-3">Open the menu and tap &quot;Jots&quot; to get started</p>
+                            <p className="text-xs opacity-90">Tap the <Sidebar className='inline h-4 w-4' /> menu icon and tap &quot;Jots&quot;</p>
                             <Button
                                 asChild
                                 size="sm"
@@ -51,19 +50,17 @@ export default function JotTutorialArrow({
                                 className="w-full"
                                 onClick={handleDismiss}
                             >
-                                <Link href={`/classroom/${classId}/${teacherId}/jots`}>
-                                    Go to Jots
-                                </Link>
                             </Button>
                         </div>
                         <Button
                             size="sm"
                             variant="ghost"
-                            className="h-6 w-6 p-0 hover:bg-primary-foreground/20 flex-shrink-0"
+                            className="h-6 w-6 p-0 hover:bg-primary-foreground/20 flex-shrink-0 absolute top-1 right-1"
                             onClick={handleDismiss}
                         >
                             <X className="h-4 w-4" />
                         </Button>
+                    </div>
                     </div>
                 </div>
             </div>

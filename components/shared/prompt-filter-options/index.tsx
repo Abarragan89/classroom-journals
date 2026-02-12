@@ -44,7 +44,7 @@ export default function PromptFilterOptions({
     }))
 
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-5 mt-10">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-5 mt-7">
             <PromptSearchBar
                 searchOptionState={searchOptionState}
                 getFilteredSearch={getFilteredSearch}
