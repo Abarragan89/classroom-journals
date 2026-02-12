@@ -14,7 +14,7 @@ export default function TutorialMessageVideo({
     youtubeId: string
 }) {
     return (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 w-[450px] xl:w-full mx-auto">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 w-[370px] md:w-[450px] xl:w-full mx-auto">
             <div className="flex flex-col justify-between bg-card border shadow-sm rounded-lg p-8 text-center max-w-[500px]">
                 <div className='xl:max-h-[100px]'>
                     <h2 className="text-2xl sm:text-3xl font-bold mb-5">{title}</h2>
