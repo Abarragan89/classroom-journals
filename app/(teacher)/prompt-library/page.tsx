@@ -16,6 +16,7 @@ export default async function PromptLibraryPage() {
         <>
             <PromptLibrary
                 teacherId={teacherId}
+                inClassroom={false}
             />
         </>
     )

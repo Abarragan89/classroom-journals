@@ -7,7 +7,7 @@ import { getAllPromptCategories } from "@/lib/server/student-dashboard";
 
 export default async function PromptLibrary({
     teacherId,
-    inClassroom,
+    inClassroom = true,
 }: {
     teacherId: string,
     inClassroom?: boolean,
@@ -34,6 +34,7 @@ export default async function PromptLibrary({
                     categories={allPromptCategoriesWithSpacer}
                     totalPromptCount={allPrompts.totalCount}
                     teacherId={teacherId}
+                    inClassroom={inClassroom}
                 />
             </main>
         </>

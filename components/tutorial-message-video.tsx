@@ -6,27 +6,32 @@ export default function TutorialMessageVideo({
     title,
     subtitle,
     CTAButton,
-    youtubeId
+    youtubeId,
+    isInClassroom = true
 }: {
     title: string,
     subtitle: string,
     CTAButton: React.ComponentType
-    youtubeId: string
+    youtubeId: string,
+    isInClassroom?: boolean
 }) {
     return (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 w-[370px] md:w-[450px] xl:w-full mx-auto">
-            <div className="flex flex-col justify-between bg-card border shadow-sm rounded-lg p-8 text-center max-w-[500px]">
-                <div className='xl:max-h-[100px]'>
+        <div className={`
+        grid grid-cols-1 gap-14 justify-items-center mx-auto max-w-[1040px]
+        ${isInClassroom ? 'xl:grid-cols-2' : 'lg:grid-cols-2'}
+        `}>
+            <div className="flex flex-col justify-between bg-card border shadow-sm rounded-lg p-8 text-center w-full max-w-[500px]">
+                <div className=''>
                     <h2 className="text-2xl sm:text-3xl font-bold mb-5">{title}</h2>
                     <p className="text-muted-foreground mb-5 text-base sm:text-lg font-medium">
                         {subtitle}
                     </p>
-                    <div className='mt-8 xl:mt-16 w-fit mx-auto'>
+                    <div className='w-fit mx-auto mt-10'>
                         <CTAButton />
                     </div>
                 </div>
             </div>
-            <div className="shadow-lg max-w-[500px]">
+            <div className="w-full max-w-[500px]">
                 <LiteYouTubeEmbed
                     id={youtubeId}
                     title={`JotterBlog Tutorial - Jots`}
