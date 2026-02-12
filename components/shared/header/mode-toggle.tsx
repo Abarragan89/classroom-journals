@@ -15,9 +15,11 @@ import { FaUserTie } from "react-icons/fa";
 import { PiNewspaperClipping } from "react-icons/pi";
 import { IoMdCloudOutline } from "react-icons/io";
 
+interface ModeToggleProps {
+    isMobile?: boolean
+}
 
-
-export default function ModeToggle() {
+export default function ModeToggle({ isMobile = false }: ModeToggleProps) {
     const { theme, setTheme } = useTheme()
     const [mounted, setMounted] = useState(false)
 
@@ -59,8 +61,18 @@ export default function ModeToggle() {
         <div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant='ghost' className="focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full px-[10px] py-2">
-                        {showModeIcon(theme)}
+                    <Button
+                        variant='ghost'
+                        className={isMobile
+                            ? "w-full justify-start gap-3 px-4 py-3 h-auto text-sm font-normal rounded-md hover:bg-accent text-muted-foreground"
+                            : "focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full px-[10px] py-2"
+                        }
+                    >
+                        {isMobile && <>
+                            {showModeIcon(theme)}
+                            <span>Theme</span>
+                        </>}
+                        {!isMobile && showModeIcon(theme)}
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

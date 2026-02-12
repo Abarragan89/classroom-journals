@@ -12,11 +12,43 @@ import { Button } from "@/components/ui/button";
 import { LogOut, User } from "lucide-react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
+import { Separator } from "@/components/ui/separator";
 
-export default function UserButton() {
+export default function UserButton({ isMobile = false, onNavigate }: { isMobile?: boolean; onNavigate?: () => void }) {
     const { data: session } = useSession();
-
     if (!session?.user) return null;
+
+    if (isMobile) {
+        return (
+            <div className="w-full flex flex-col gap-1 mt-4">
+                <Separator className="mb-2" />
+                <div className="px-4 py-2 text-xs text-muted-foreground">
+                    {session?.user?.name ?? session?.user?.email}
+                </div>
+                {session.user.role === 'TEACHER' && (
+                    <Button
+                        asChild
+                        variant="ghost"
+                        className="w-full justify-start gap-3 px-4 py-3 h-auto text-sm font-normal rounded-md hover:bg-accent text-muted-foreground"
+                    >
+                        <Link href='/teacher-account' onClick={onNavigate}>
+                            <User size={18} />
+                            <span>Account</span>
+                        </Link>
+                    </Button>
+                )}
+                <form action={signOutUser} className="w-full">
+                    <Button
+                        className="w-full justify-start gap-3 px-4 py-3 h-auto text-sm font-normal rounded-md hover:bg-accent text-muted-foreground"
+                        variant='ghost'
+                    >
+                        <LogOut size={18} />
+                        <span>Sign out</span>
+                    </Button>
+                </form>
+            </div>
+        )
+    }
 
     return (
         <div className="relative">

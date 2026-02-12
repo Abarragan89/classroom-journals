@@ -1,7 +1,7 @@
 'use client';
 import { Button } from "@/components/ui/button"
 import { useState } from "react";
-import { Plus } from "lucide-react"
+import { Plus, GraduationCapIcon } from "lucide-react"
 import AddClassForm from "./add-class-form"
 import { ResponsiveDialog } from "@/components/responsive-dialog"
 import { GoogleClassroom, Session } from "@/types";
@@ -14,13 +14,15 @@ export default function AddClassBtn({
     closeSubMenu,
     variant = 'ghost',
     session,
-    isAllowedToMakeNewClass
+    isAllowedToMakeNewClass,
+    isMobile = false
 }: {
     teacherId: string,
     closeSubMenu?: () => void,
     variant?: "ghost" | "link" | "default" | "destructive" | "outline" | "secondary" | null | undefined,
     session: Session,
-    isAllowedToMakeNewClass: boolean
+    isAllowedToMakeNewClass: boolean,
+    isMobile?: boolean
 }) {
 
 
@@ -84,12 +86,13 @@ export default function AddClassBtn({
 
             </ResponsiveDialog>
             <Button
-                size={"lg"}
-                className="w-full"
+                size={isMobile ? undefined : "lg"}
+                className={isMobile ? "w-full justify-start gap-3 px-4 py-3 h-auto text-sm font-normal rounded-md hover:bg-accent text-muted-foreground" : "w-full"}
                 variant={variant}
                 onClick={() => setIsOpenModal(true)}
             >
-                <Plus />Add Class
+                {isMobile ? <GraduationCapIcon size={18} /> : <Plus />}
+                {isMobile ? <span>Add Class</span> : "Add Class"}
             </Button>
         </>
     )
