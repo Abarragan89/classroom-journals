@@ -1,6 +1,6 @@
 'use client'
 import { Prompt, PromptCategory } from "@/types"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import PromptFilterOptions from "./shared/prompt-filter-options"
 import PromptCard from "./shared/prompt-card"
 import { SearchOptions } from "@/types"
@@ -33,6 +33,11 @@ export default function JotSearchArea({
         paginationSkip: 0,
         searchWords: ''
     });
+
+    // Scroll to top when search options change
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [searchOptions]);
 
     const isThereAtLeastOneJot = initialPrompts.length > 0;
 

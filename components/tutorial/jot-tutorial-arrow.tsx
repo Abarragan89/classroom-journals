@@ -16,7 +16,12 @@ export default function JotTutorialArrow({
 
     // Prevent scrolling while tutorial is showing
     useEffect(() => {
-        document.body.style.overflow = 'hidden';
+        // Scroll to top first - use 0 directly for better browser support
+        window.scrollTo(0, 0);
+        // Wait for next frame to ensure scroll completes, then prevent scrolling
+        requestAnimationFrame(() => {
+            document.body.style.overflow = 'hidden';
+        });
         return () => {
             document.body.style.overflow = '';
         };
@@ -32,10 +37,10 @@ export default function JotTutorialArrow({
     if (isMobile) {
         return (
             <div className="fixed inset-0 z-50 print:hidden bg-black/60 pointer-events-none">
-                {/* Spotlight circle to highlight the menu icon */}
-                <div className="absolute top-[8px] left-[5px] w-10 h-10 rounded-full bg-white/20 animate-pulse pointer-events-none" />
+                {/* Spotlight circle to highlight the menu icon - adjust top/left values to match your menu icon position */}
+                <div className="fixed top-[80px] left-[2px] w-12 h-12 rounded-full bg-white/30 animate-pulse pointer-events-none" />
 
-                <div className="absolute flex top-[81px] left-[35px] right-0 z-50 px-4 print:hidden">
+                <div className="fixed flex top-[82px] left-[55px] right-0 z-50 px-4 print:hidden">
                     <ArrowBigLeftIcon className="h-8 w-8 text-primary my-2 animate-[pulse-y_1.5s_ease-in-out_infinite]" />
                     <style jsx>{`
                     @keyframes pulse-y {
