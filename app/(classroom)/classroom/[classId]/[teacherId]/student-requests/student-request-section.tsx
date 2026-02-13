@@ -78,58 +78,61 @@ export default function StudentRequestSection({
     }
 
     return (
-        <section className='mt-10 grid grid-cols-1 xl:grid-cols-2 gap-6'>
-            {allRequests.length > 0 ? (
-                allRequests.map((studentRequest: StudentRequest) => (
-                    <Card key={studentRequest.id} className="bg-card shadow-lg rounded-xl border border-border mx-auto my-6 w-full">
-                        <CardHeader className="">
-                            <div className="flex-between">
-                                <Badge
-                                    variant={studentRequest.type === "PROMPT" ? "default" : "secondary"}
-                                    className="font-bold text-xs"
-                                >
-                                    {studentRequest.type === "USERNAME" ? "Name Change" : "Prompt Idea"}
-                                </Badge>
-                                <p className='text-card-foreground text-sm font-bold'>{studentRequest.student.username}</p>
-                            </div>
-                        </CardHeader>
-                        <CardContent className="pt-3">
-                            <div className="bg-background border border-border rounded-md p-3 text-center text-md font-medium">
-                                {studentRequest.type === "USERNAME"
-                                    ? studentRequest.displayText
-                                    : studentRequest.text}
-                            </div>
-                        </CardContent>
-                        <CardFooter className="flex justify-center gap-6 px-6 pb-6">
-                            <Button
-                                size={"sm"}
-                                className='bg-success text-success-foreground'
-                                onClick={() => approveRequest(studentRequest.studentId, studentRequest.text, studentRequest.id, studentRequest.type)}
-                                aria-label="Accept Request"
-                            >
-                                Accept
-                            </Button>
-                            <Button
-                                size={"sm"}
-                                variant="destructive"
-                                onClick={() => declineRequest(studentRequest.id)}
-                                aria-label="Decline Request"
-                            >
-                                Decline
-                            </Button>
-                        </CardFooter>
-                    </Card >
+        <div className='mt-10'>
+            {
+                allRequests.length > 0 ? (
+                    <section className='grid grid-cols-1 xl:grid-cols-2 gap-6'>
+                        {allRequests.map((studentRequest: StudentRequest) => (
+                            <Card key={studentRequest.id} className="bg-card shadow-lg rounded-xl border border-border mx-auto my-6 w-full">
+                                <CardHeader className="">
+                                    <div className="flex-between">
+                                        <Badge
+                                            variant={studentRequest.type === "PROMPT" ? "default" : "secondary"}
+                                            className="font-bold text-xs"
+                                        >
+                                            {studentRequest.type === "USERNAME" ? "Name Change" : "Prompt Idea"}
+                                        </Badge>
+                                        <p className='text-card-foreground text-sm font-bold'>{studentRequest.student.username}</p>
+                                    </div>
+                                </CardHeader>
+                                <CardContent className="pt-3">
+                                    <div className="bg-background border border-border rounded-md p-3 text-center text-md font-medium">
+                                        {studentRequest.type === "USERNAME"
+                                            ? studentRequest.displayText
+                                            : studentRequest.text}
+                                    </div>
+                                </CardContent>
+                                <CardFooter className="flex justify-center gap-6 px-6 pb-6">
+                                    <Button
+                                        size={"sm"}
+                                        className='bg-success text-success-foreground'
+                                        onClick={() => approveRequest(studentRequest.studentId, studentRequest.text, studentRequest.id, studentRequest.type)}
+                                        aria-label="Accept Request"
+                                    >
+                                        Accept
+                                    </Button>
+                                    <Button
+                                        size={"sm"}
+                                        variant="destructive"
+                                        onClick={() => declineRequest(studentRequest.id)}
+                                        aria-label="Decline Request"
+                                    >
+                                        Decline
+                                    </Button>
+                                </CardFooter>
+                            </Card >
 
-                ))
-            ) : (
-                <TutorialMessageVideo
-                    title="No Student Requests"
-                    subtitle="Students can submit requests for name changes or new prompts. Approved requests will show up in your class roster or prompt library!"
-                    CTAButton={() => <div></div>}
-                    youtubeId="YPkOROXrt3Q"
-                />
-            )
+                        ))}
+                    </section >
+                ) : (
+                    <TutorialMessageVideo
+                        title="No Student Requests"
+                        subtitle="Students can submit requests for name changes or new prompts. Approved requests will show up in your class roster or prompt library!"
+                        CTAButton={() => <div></div>}
+                        youtubeId="YPkOROXrt3Q"
+                    />
+                )
             }
-        </section >
+        </div>
     )
 }
