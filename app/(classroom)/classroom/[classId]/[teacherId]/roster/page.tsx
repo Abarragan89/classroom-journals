@@ -38,6 +38,7 @@ export default async function Roster({
         classId={classId}
         teacherId={teacherId}
         initialStudentCount={studentRoster.length}
+        session={session}
       />
       <div className="relative">
         <h2 className="text-2xl lg:text-3xl mt-2 print:hidden">Class Roster</h2>

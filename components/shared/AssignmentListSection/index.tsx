@@ -10,7 +10,7 @@ import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 import { Plus } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import TutorialMessageVideo from "@/components/tutorial-message-video"
+import TutorialMessageVideo from "@/components/tutorial/tutorial-message-video"
 
 interface Props {
     categories: PromptCategory[];

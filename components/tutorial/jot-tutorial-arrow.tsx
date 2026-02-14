@@ -19,9 +19,11 @@ export default function JotTutorialArrow({
         // Scroll to top first - use 0 directly for better browser support
         window.scrollTo(0, 0);
         // Wait for next frame to ensure scroll completes, then prevent scrolling
-        requestAnimationFrame(() => {
-            document.body.style.overflow = 'hidden';
-        });
+        if (isMobile) {
+            requestAnimationFrame(() => {
+                document.body.style.overflow = 'hidden';
+            });
+        }
         return () => {
             document.body.style.overflow = '';
         };

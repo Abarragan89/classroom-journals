@@ -4,7 +4,7 @@ import ClassCard from "@/components/shared/class-card"
 import { Class, Session } from "@/types"
 import { useQuery } from "@tanstack/react-query"
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
-import TutorialMessageVideo from "@/components/tutorial-message-video"
+import TutorialMessageVideo from "@/components/tutorial/tutorial-message-video"
 
 export default function ClassCardClientWrapper({
     allClassrooms,

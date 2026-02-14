@@ -4,18 +4,20 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import TutorialModal from '../modals/tutorial-modal';
 import JotTutorialArrow from './jot-tutorial-arrow';
-import { User } from '@/types';
+import { Session, User } from '@/types';
 
 export default function TutorialFlowWrapper({
     tutorialStep,
     classId,
     teacherId,
-    initialStudentCount
+    initialStudentCount,
+    session
 }: {
     tutorialStep?: string,
     classId: string,
     teacherId: string,
-    initialStudentCount: number
+    initialStudentCount: number,
+    session: Session
 }) {
     const router = useRouter();
     const pathname = usePathname();
@@ -35,7 +37,7 @@ export default function TutorialFlowWrapper({
         staleTime: 1000 * 60 * 5, // 5 minutes
     });
 
-    const hasStudents = (allStudents?.length ?? initialStudentCount) > 0;
+    // const hasStudents = (allStudents?.length ?? initialStudentCount) > 0;
 
     const handleModalClose = () => {
         setCurrentStep('showArrow');
@@ -55,9 +57,11 @@ export default function TutorialFlowWrapper({
                 <TutorialModal
                     isModalOpen={true}
                     onClose={handleModalClose}
+                    classId={classId}
+                    session={session}
                 />
             )}
-            {currentStep === 'showArrow' && hasStudents && (
+            {currentStep === 'showArrow' && (
                 <JotTutorialArrow
                     onDismiss={handleArrowDismiss}
                     classId={classId}
