@@ -9,7 +9,7 @@ import CreateQuipForm from "@/components/forms/quip-forms/create-quip"
 import { ResponsiveDialog } from "@/components/responsive-dialog"
 import { useState } from "react";
 import { Accordion } from "@/components/ui/accordion";
-import TutorialMessageVideo from "@/components/tutorial/tutorial-message-video";
+import TutorialMessageVideo from "@/components/tutorial-message-video";
 
 
 export default function QuipListSection({

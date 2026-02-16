@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
-import TutorialMessageVideo from '@/components/tutorial/tutorial-message-video';
+import TutorialMessageVideo from '@/components/tutorial-message-video';
 
 export default function StudentRequestSection({
     teacherId,

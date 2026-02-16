@@ -33,7 +33,7 @@ export default function ResponseActions({
     const isNotSubmitted = response?.completionStatus !== 'COMPLETE';
 
     return (
-        <div className='mt-5 space-y-4 absolute left-0 top-0'>
+        <div className='mt-5 space-y-5 absolute left-0 top-[2px]'>
             {isNotSubmitted && (
                 <Badge variant={"destructive"} className=''>Not Submitted</Badge>
             )}

@@ -1,6 +1,6 @@
 'use client'
 import { ResponsiveDialog } from '../responsive-dialog'
-import { Users, FileText, Send, ArrowBigLeft } from 'lucide-react'
+import { Users, ArrowBigLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import VideoAccordion from '@/app/(classroom)/classroom/[classId]/[teacherId]/teacher-guide/video-accordion';

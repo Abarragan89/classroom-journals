@@ -33,7 +33,7 @@ export default function GoogleClassroomOptions({
                 // Add new class to the beginning of the list (most recent first)
                 return [newClassroom as Class, ...old];
             });
-            router.push(`classroom/${newClassroom.id}/${teacherId}/roster?tutorial=showArrow`);
+            router.push(`/classroom/${newClassroom.id}/${teacherId}/roster?newClass=true&googleImport=true`);
         } catch (error) {
             console.error('error creating classroom', error)
             setIsLoading(false)

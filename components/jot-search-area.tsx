@@ -9,7 +9,7 @@ import PaginationList from "./shared/prompt-filter-options/pagination-list"
 import { useQuery, keepPreviousData } from "@tanstack/react-query"
 import LoadingAnimation from "./loading-animation"
 import CreateNewJot from "./modalBtns/create-new-jot"
-import TutorialMessageVideo from "./tutorial/tutorial-message-video"
+import TutorialMessageVideo from "./tutorial-message-video"
 
 export default function JotSearchArea({
     initialPrompts,

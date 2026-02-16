@@ -10,7 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import PrintViewLogins from "./print-view-logins";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { useState } from "react";
-import TutorialMessageVideo from "@/components/tutorial/tutorial-message-video";
+import TutorialMessageVideo from "@/components/tutorial-message-video";
 
 export default function RosterTable({ studentRoster, session, classId, classCode }: {
     studentRoster: User[],
