@@ -8,7 +8,6 @@ import { createNewClass } from "@/lib/actions/classroom.actions";
 import ColorSelect from "../class-color-select";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { toast } from "sonner"
 import { GoogleClassroom, Session, Class } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { getTeacherGoogleClassrooms } from "@/lib/actions/google.classroom.actions";
@@ -49,7 +48,6 @@ export default function AddClassForm({
     //redirect if the state is success
     useEffect(() => {
         if (state?.success && state.data) {
-            toast.success('Class Added!');
             // Optimistically update cache with the new class returned from the server
             queryClient.setQueryData<Class[]>(['teacherClassrooms', teacherId], (old) => {
                 if (!old) return [state.data as Class];
@@ -57,7 +55,7 @@ export default function AddClassForm({
                 return [state.data as Class, ...old];
             });
             closeModal()
-            router.push(`/classroom/${state.data.id}/${teacherId}/roster?tutorial=start`);
+            router.push(`/classroom/${state.data.id}/${teacherId}/roster?newClass=true`);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state, pathname, router, queryClient, teacherId])

@@ -83,7 +83,9 @@ export default async function RootLayout({
               disableTransitionOnChange
             >
               <AbsentUserChecker />
-              <Toaster />
+              <Toaster 
+                position="top-right"
+              />
               <div className="flex min-h-screen flex-col">
                 <div className="flex-1">
                   {children}

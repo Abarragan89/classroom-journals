@@ -66,7 +66,7 @@ export default function AddStudentForm({
 
 
     return (
-        <form action={action} className="pb-4 pt-2 px-4">
+        <form action={action} className="pb-4 pt-2">
             <div className="flex-between gap-x-5">
                 <div>
                     <Label htmlFor="name" className="text-right relative">
@@ -76,18 +76,18 @@ export default function AddStudentForm({
                         id="name"
                         ref={inputEl}
                         required
-                        placeholder="required"
+                        // placeholder="required"
                         name="name"
                     />
                 </div>
                 <div>
                     <Label htmlFor="username" className="text-right">
-                        Username
+                        Username <span className="text-xs text-muted-foreground">(optional)</span>
                     </Label>
                     <Input
                         id="username"
                         name="username"
-                        placeholder="optional"
+                        // placeholder="optional"
                     />
                 </div>
                 <div className="flex-center mt-5">
@@ -120,7 +120,7 @@ export default function AddStudentForm({
                         <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
                     </p>
 
-                    <Button size="lg" type="button" onClick={fetchGoogleClassrooms} className="mx-auto">
+                    <Button size="lg" type="button" onClick={fetchGoogleClassrooms} className="mx-auto px-2 sm:px-5">
                         <FaGoogle />   Import From Google Classroom
                     </Button>
                 </div>

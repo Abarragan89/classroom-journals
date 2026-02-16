@@ -5,11 +5,14 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { notFound } from "next/navigation";
 import { Classroom, Session } from "@/types";
-import { getAllClassrooms, getSingleClassroom } from "@/lib/server/classroom";
+import { getAllClassrooms, getSingleClassroom, getAllStudents } from "@/lib/server/classroom";
 import DynamicHeader from "@/components/dynamic-header";
 import { determineSubscriptionAllowance } from "@/lib/server/profile";
 import { Suspense } from "react";
 import Loading from "@/app/loading";
+import OnboardingFlow from "@/components/onboarding/onboarding-flow";
+import { getAllTeacherPrompts } from "@/lib/server/prompts";
+import { getAllSessionsInClass } from "@/lib/server/prompt-sessions";
 
 export default async function DashboardLayout({
     children,
@@ -30,10 +33,13 @@ export default async function DashboardLayout({
     if (!classId) return notFound()
 
     // Parallel queries - only fetch what's needed
-    const [teacherClasses, classroomData, subscriptionData] = await Promise.all([
+    const [teacherClasses, classroomData, subscriptionData, studentCount, teacherJotsData, assignmentsData] = await Promise.all([
         getAllClassrooms(teacherId),
         getSingleClassroom(classId, teacherId), // Already includes auth check
-        determineSubscriptionAllowance(teacherId)
+        determineSubscriptionAllowance(teacherId),
+        getAllStudents(classId, teacherId).then(students => students.length),
+        getAllTeacherPrompts(teacherId),
+        getAllSessionsInClass(classId, teacherId),
     ]);
 
     // getSingleClassroom returns null if not authorized
@@ -69,6 +75,15 @@ export default async function DashboardLayout({
                     </Suspense>
                 </main>
             </SidebarInset>
+
+            {/* Persistent Onboarding Toast */}
+            <OnboardingFlow
+                classId={classId}
+                teacherId={teacherId}
+                initialStudentCount={studentCount}
+                initialJotCount={(teacherJotsData as { totalCount: number }).totalCount}
+                initialAssignmentCount={(assignmentsData as { totalCount: number }).totalCount}
+            />
         </SidebarProvider>
     );
 }

@@ -42,6 +42,7 @@ export default function AssignPromptForm({
         if (state?.success && state.data) {
             toast('Jot Assigned!');
             queryClient.invalidateQueries({ queryKey: ['prompts', teacherId] });
+            queryClient.invalidateQueries({ queryKey: ['assignmentListDash'] });
             closeModal();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
