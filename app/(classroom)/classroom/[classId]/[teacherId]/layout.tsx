@@ -13,6 +13,7 @@ import Loading from "@/app/loading";
 import OnboardingFlow from "@/components/onboarding/onboarding-flow";
 import { getAllTeacherPrompts } from "@/lib/server/prompts";
 import { getAllSessionsInClass } from "@/lib/server/prompt-sessions";
+import ScrollToTop from "@/components/scroll-to-top";
 
 export default async function DashboardLayout({
     children,
@@ -75,6 +76,9 @@ export default async function DashboardLayout({
                     </Suspense>
                 </main>
             </SidebarInset>
+
+            {/* Scroll to Top on Route Change */}
+            <ScrollToTop />
 
             {/* Persistent Onboarding Toast */}
             <OnboardingFlow

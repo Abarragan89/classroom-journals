@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import OnboardingCard from './onboarding-card';
+import ProgressStep from './progress-step';
 
 type OnboardingToastProps = {
     completedSteps: OnboardingState;
@@ -49,10 +51,10 @@ export default function OnboardingToast({
         const guidanceMap: Record<string, { desktop: JSX.Element; mobile: JSX.Element }> = {
             addStudents: {
                 desktop: currentPage === 'roster'
-                    ? <>Add at least 1 student to see continue to the next step</>
+                    ? <>Add at least 1 student to complete this step</>
                     : <>Click &quot;Roster&quot; in the sidebar to add students</>,
                 mobile: currentPage === 'roster'
-                    ? <>Add at least 1 student to continue to the next step</>
+                    ? <>Add at least 1 student to complete this step</>
                     : <>Open the <Sidebar className="inline h-3.5 w-3.5 mx-0.5" /> menu and tap &quot;Roster&quot; to add students</>,
             },
             makeJot: {
@@ -94,40 +96,58 @@ export default function OnboardingToast({
             >
                 <X className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
             </button>
-
-            <div className="pr-8">
-                {/* Header with Progress */}
-                <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-semibold">
-                        {isNewClass ? '🎉 Welcome!' : 'Setup Progress'}
-                    </h3>
-                    <span className="text-sm font-bold text-primary tabular-nums">{progressPercent}%</span>
-                </div>
-
-                <Progress value={progressPercent} className="h-1.5 mb-3" />
-
-                {/* Next Step or Completion Message */}
-                {isComplete ? (
-                    <div className="space-y-2">
-                        <p className="text-sm font-semibold text-green-600 dark:text-green-400">🎉 Assignment Posted! You&apos;re ready to go.</p>
-                        <p className="text-xs text-muted-foreground">View student submissions, grades, and class analytics by clicking the assignment.</p>
-                        <p className="text-xs text-muted-foreground">Check out our <Link className='underline text-primary' href={`/classroom/${classId}/${teacherId}/teacher-guide`}>Teacher Guide Videos</Link> to see everything you can do in JotterBlog!</p>
+            <div className="flex">
+                <div className="pr-8">
+                    {/* Header with Progress */}
+                    <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-sm font-semibold">
+                            {isNewClass ? '🎉 Welcome!' : 'Setup Progress'}
+                        </h3>
+                        <span className="text-sm font-bold text-primary tabular-nums">{progressPercent}%</span>
                     </div>
-                ) : (
-                    <div className="space-y-1">
-                        <div className="flex-1 min-w-0">
-                            <p className="text-xs text-muted-foreground mb-1">Next Step:</p>
-                            <p className="text-sm font-semibold">{nextStep?.label}</p>
-                            {navigationGuidance && (
-                                <div className="bg-accent/50 rounded-md mt-2">
-                                    <p className="text-xs text-primary leading-tight">
-                                        <span className="font-medium">{isMobile ? navigationGuidance.mobile : navigationGuidance.desktop}</span>
-                                    </p>
-                                </div>
-                            )}
+
+                    <Progress value={progressPercent} className="h-1.5 mb-3" />
+
+                    {/* Next Step or Completion Message */}
+                    {isComplete ? (
+                        <div className="space-y-2">
+                            <p className="text-sm font-semibold text-green-600 dark:text-green-400">🎉 Assignment Posted! You&apos;re ready to go.</p>
+                            <p className="text-xs text-muted-foreground">View student submissions, grades, and class analytics by clicking the assignment.</p>
+                            <p className="text-xs text-muted-foreground">Need Help? Check out our 1-minute <Link className='underline text-primary' href={`/classroom/${classId}/${teacherId}/teacher-guide`}>Teacher Guide Videos</Link></p>
                         </div>
-                    </div>
-                )}
+                    ) : (
+                        <div className="space-y-1">
+                            <div className="flex-1 min-w-0">
+                                <p className="text-xs text-muted-foreground mb-1">Next Step:</p>
+                                <p className="text-sm font-semibold">{nextStep?.label}</p>
+                                {navigationGuidance && (
+                                    <div className="bg-accent/50 rounded-md mt-2">
+                                        <p className="text-xs text-primary leading-tight">
+                                            Hint: <span className="font-medium">{isMobile ? navigationGuidance.mobile : navigationGuidance.desktop}</span>
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
+                {/* <OnboardingCard 
+                    nextStep={nextStep}
+                    classId={classId}
+                    teacherId={teacherId}
+                    isNewClass={isNewClass}
+                /> */}
+
+                <ProgressStep 
+                    label={nextStep?.label || ''}
+                    description={nextStep?.description || ''}
+                    isCompleted={false}
+                    actionUrl={nextStep ? nextStep.actionUrl(classId, teacherId) : '#'}
+                    actionLabel={nextStep?.actionLabel || ''}
+                    stepNumber={1}
+                    isActive={true}
+                
+                />
             </div>
         </div>
     );
