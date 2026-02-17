@@ -42,6 +42,7 @@ export default function AddStudentForm({
                 return [...(old ?? []), state.data as User];
             });
         }
+        window.scrollTo(0, 0);
         inputEl.current?.focus();
     }, [state, pathname, classId, queryClient])
 
@@ -81,7 +82,7 @@ export default function AddStudentForm({
                 </div>
                 <div>
                     <Label htmlFor="username" className="text-right">
-                        Username 
+                        Username
                     </Label>
                     <Input
                         id="username"
