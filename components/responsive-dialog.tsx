@@ -25,8 +25,18 @@ export function ResponsiveDialog({
 }) {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen} >
-            <DialogContent onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} onPointerMove={(e) => e.stopPropagation()}
-                className="overflow-y-hidden p-4 rounded-md">
+            <DialogContent 
+                onClick={(e) => e.stopPropagation()} 
+                onKeyDown={(e) => e.stopPropagation()} 
+                onPointerMove={(e) => e.stopPropagation()}
+                onOpenAutoFocus={(e) => {
+                    // Prevent auto-focus on mobile only
+                    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                        e.preventDefault();
+                    }
+                }}
+                className="overflow-y-hidden p-4 rounded-md"
+                >
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                     {description && (
