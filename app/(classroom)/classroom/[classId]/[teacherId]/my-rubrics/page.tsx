@@ -17,7 +17,7 @@ export default async function MyRubricsPage({
     return (
         <div className="container mx-auto py-6">
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl lg:text-3xl font-bold">My Rubrics</h2>
+                <h2 className="h2-bold my-3">My Rubrics</h2>
                 <Link href={`/classroom/${classId}/${teacherId}/my-rubrics/new`}>
                     <Button className="shadow-md">
                         <PlusCircle className="mr-2 h-4 w-4" />

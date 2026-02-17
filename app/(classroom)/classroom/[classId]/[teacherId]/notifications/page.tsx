@@ -18,7 +18,7 @@ export default async function Notifications({
 
     return (
         <div>
-            <h2 className="text-2xl lg:text-3xl mt-2">Notifications</h2>
+            <h2 className="h2-bold my-3">Notifications</h2>
             <NotificationSection
                 userId={teacherId}
                 classId={classId}

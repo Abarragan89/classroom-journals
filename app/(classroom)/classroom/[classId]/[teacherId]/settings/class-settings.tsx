@@ -4,6 +4,7 @@ import { Class } from '@/types';
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useQueryClient } from '@tanstack/react-query';
+import { Badge } from '@/components/ui/badge';
 
 export default function ClassSettings({
     classInfo,
@@ -36,10 +37,16 @@ export default function ClassSettings({
 
     return (
         <section className='mb-20'>
-            <h2 className="text-2xl lg:text-3xl mt-2 mb-5">Class Settings</h2>
-            <div className="flex-between mb-10 mr-5">
-                <p>Class Code: <span className='text-sm text-muted-foreground py-1 px-3 bg-muted rounded-full'>{data?.classCode}</span></p>
-                <p>Class Size: <span className='text-sm text-muted-foreground py-1 px-3 bg-muted rounded-full'>{classSize}</span></p>
+            <h2 className="h2-bold my-3">Class Settings</h2>
+            <div className="flex-between mb-5 mr-5">
+                <div className='flex-center'>
+                    <p>Class Code:</p>
+                    <Badge className="ml-1">{data.classCode}</Badge>
+                </div>
+                <div className='flex-center'>
+                    <p>Class Size:</p>
+                    <Badge className="ml-1">{classSize}</Badge>
+                </div>
             </div>
 
             {/* Edit Class Form */}

@@ -20,7 +20,7 @@ export default async function StudentRequests({
 
     return (
         <div>
-            <h2 className="text-2xl lg:text-3xl mt-2">Student Requests</h2>
+            <h2 className="h2-bold my-3">Student Requests</h2>
             <StudentRequestSection
                 classId={classId}
                 teacherId={teacherId}

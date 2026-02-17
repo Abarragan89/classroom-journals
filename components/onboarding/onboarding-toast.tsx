@@ -1,15 +1,14 @@
 'use client';
 
 import { JSX, useMemo } from 'react';
-import { Progress } from '@/components/ui/progress';
-import { X, Sidebar } from 'lucide-react';
+import { X, Sidebar, CheckCircle2, Circle } from 'lucide-react';
 import { OnboardingState, calculateProgress, getNextStep, isOnboardingComplete } from '@/lib/onboarding-utils';
 import { cn } from '@/lib/utils';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import OnboardingCard from './onboarding-card';
-import ProgressStep from './progress-step';
+import { Progress } from '../ui/progress';
+import { Button } from '../ui/button';
 
 type OnboardingToastProps = {
     completedSteps: OnboardingState;
@@ -34,6 +33,8 @@ export default function OnboardingToast({
         const segments = pathname?.split('/').filter(Boolean) || [];
         return segments[segments.length - 1] || '';
     }, [pathname]);
+
+    const checklistStepItems = ['Add Class', 'Add Students', 'Create Jot', 'Assign Jot'];
 
     // Calculate progress percentage
     const progressPercent = useMemo(() => calculateProgress(completedSteps), [completedSteps]);
@@ -88,32 +89,44 @@ export default function OnboardingToast({
                 'print:hidden'
             )}
         >
-            {/* Dismiss Button */}
-            <button
-                onClick={onDismiss}
-                className="absolute top-2 right-2 p-1.5 rounded-full hover:bg-accent transition-colors group"
-                aria-label="Dismiss onboarding"
-            >
-                <X className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
-            </button>
-            <div className="flex">
-                <div className="pr-8">
-                    {/* Header with Progress */}
-                    <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-sm font-semibold">
-                            {isNewClass ? '🎉 Welcome!' : 'Setup Progress'}
-                        </h3>
-                        <span className="text-sm font-bold text-primary tabular-nums">{progressPercent}%</span>
-                    </div>
-
-                    <Progress value={progressPercent} className="h-1.5 mb-3" />
-
+            {/* Dismiss Button doesn't show up if items are complete */}
+            {!isComplete && (
+                <button
+                    onClick={onDismiss}
+                    className="absolute top-2 right-2 p-1.5 rounded-full hover:bg-accent transition-colors group"
+                    aria-label="Dismiss onboarding"
+                >
+                    <X className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
+                </button>
+            )}
+            {/* Header with Progress */}
+            <div className="">
+                <div className='flex-between'>
+                    <h3 className="text-lg font-semibold ">
+                        {isNewClass ? (
+                            <>
+                                <span className='mr-2'>🎉</span>
+                                <span>Welcome to Your Class!</span>
+                            </>
+                        )
+                            : 'Setup Progress'}
+                    </h3>
+                </div>
+                <Progress value={progressPercent} className="h-1.5 mb-2 border muted bg-muted" />
+            </div>
+            <div className="flex gap-4">
+                <div className='flex-1'>
                     {/* Next Step or Completion Message */}
                     {isComplete ? (
                         <div className="space-y-2">
-                            <p className="text-sm font-semibold text-green-600 dark:text-green-400">🎉 Assignment Posted! You&apos;re ready to go.</p>
-                            <p className="text-xs text-muted-foreground">View student submissions, grades, and class analytics by clicking the assignment.</p>
-                            <p className="text-xs text-muted-foreground">Need Help? Check out our 1-minute <Link className='underline text-primary' href={`/classroom/${classId}/${teacherId}/teacher-guide`}>Teacher Guide Videos</Link></p>
+                            <p className="text-sm font-semibold text-green-600 dark:text-green-400">🎉 Assignment Posted! You&apos;re all set!.</p>
+                            <p className="text-xs text-muted-foreground font-bold">These are your posted assignments. Click them to view details, grade, and provide feedback.</p>
+                            <div className='flex-center my-7'>
+                                <Button onClick={onDismiss} className="shadow-sm" size={"sm"}>
+                                    Finished
+                                </Button>
+                            </div>
+                            <p className="text-xs text-muted-foreground text-center">Need Help? <Link className='underline text-primary' href={`/classroom/${classId}/${teacherId}/teacher-guide`}>Teacher Guide Videos</Link></p>
                         </div>
                     ) : (
                         <div className="space-y-1">
@@ -131,23 +144,29 @@ export default function OnboardingToast({
                         </div>
                     )}
                 </div>
-                {/* <OnboardingCard 
-                    nextStep={nextStep}
-                    classId={classId}
-                    teacherId={teacherId}
-                    isNewClass={isNewClass}
-                /> */}
+                {!isComplete && (
+                    <div className='flex-1 text-sm space-y-1'>
+                        {checklistStepItems.map((item, index) => {
+                            const stepKey = Object.keys(completedSteps)[index];
+                            const isChecked = completedSteps[stepKey as keyof OnboardingState];
 
-                <ProgressStep 
-                    label={nextStep?.label || ''}
-                    description={nextStep?.description || ''}
-                    isCompleted={false}
-                    actionUrl={nextStep ? nextStep.actionUrl(classId, teacherId) : '#'}
-                    actionLabel={nextStep?.actionLabel || ''}
-                    stepNumber={1}
-                    isActive={true}
-                
-                />
+                            return (
+                                <div key={item} className="flex items-center gap-2 mb-1">
+                                    <div>
+                                        {isChecked ? (
+                                            <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-500" />
+                                        ) : (
+                                            <Circle className="h-5 w-5 text-muted-foreground/50" />
+                                        )}
+                                    </div>
+                                    <span className={cn('text-xs', isChecked ? 'line-through text-muted-foreground font-medium' : 'text-foreground font-bold')}>
+                                        {item}
+                                    </span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -23,7 +23,7 @@ export default async function Quips({
     return (
         <>
             <div className="relative">
-                <h2 className="text-2xl lg:text-3xl mt-2">Posted Quips</h2>
+                <h2 className="h2-bold my-3">Posted Quips</h2>
                 <QuipsClientWraper
                     classId={classId}
                     teacherId={teacherId}
