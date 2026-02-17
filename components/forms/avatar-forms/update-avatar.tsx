@@ -61,54 +61,6 @@ export default function UpdateAvatar({
         }
     }
 
-
-    // const photos = [
-    //     {
-    //         id: 'awefasd',
-    //         url: '/images/demo-avatars/1.png'
-    //     },
-    //     {
-    //         id: 'aw323ef',
-    //         url: '/images/demo-avatars/2.png'
-    //     },
-    //     {
-    //         id: 'aw234fef',
-    //         url: '/images/demo-avatars/3.png'
-    //     },
-    //     {
-    //         id: 'aweljf',
-    //         url: '/images/demo-avatars/4.png'
-    //     },
-    //     {
-    //         id: 'awe0j3ff',
-    //         url: '/images/demo-avatars/5.png'
-    //     },
-    //     {
-    //         id: 'awec,xnf',
-    //         url: '/images/demo-avatars/6.png'
-    //     },
-    //     {
-    //         id: 'awe1209kff',
-    //         url: '/images/demo-avatars/7.png'
-    //     },
-    //     {
-    //         id: 'awsdpfo90323ref',
-    //         url: '/images/demo-avatars/8.png'
-    //     },
-    //     {
-    //         id: 'aweasdflm2eifm23f',
-    //         url: '/images/demo-avatars/9.png'
-    //     },
-    //     {
-    //         id: 'awe3iom2fmafafsadf',
-    //         url: '/images/demo-avatars/10.png'
-    //     },
-    //     {
-    //         id: 'awe23ofm23fim3fjfadf',
-    //         url: '/images/demo-avatars/11.png'
-    //     },
-    // ]
-
     return (
         <form>
             <>

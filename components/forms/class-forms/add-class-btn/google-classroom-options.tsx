@@ -44,7 +44,7 @@ export default function GoogleClassroomOptions({
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[240px]">
-                <p className='font-bold mt-[-60px]'>Creating Class...</p>
+                <p className='font-bold mt-[-60px]'>Importing Roster from Google Classroom...</p>
                 <LoadingAnimation />
             </div>
         )
