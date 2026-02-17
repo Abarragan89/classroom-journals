@@ -127,14 +127,14 @@ export default function OnboardingToast({
             {/* Header with Progress */}
             <div className="">
                 <div className='flex-between'>
-                    <h3 className="text-lg font-semibold ">
+                    <h3 className="text-lg font-semibold mb-1">
                         {isNewClass ? (
                             <>
                                 <span className='mr-2'>🎉</span>
                                 <span>Welcome to Your Class!</span>
                             </>
                         )
-                            : 'Setup Progress'}
+                            : isComplete ? 'Setup Complete!' : 'Setup Progress'}
                     </h3>
                 </div>
                 <Progress value={progressPercent} className="h-1.5 mb-2 border muted bg-muted" />
@@ -150,7 +150,7 @@ export default function OnboardingToast({
                                 <Button
                                     ref={buttonRef}
                                     onClick={handleFinishClick}
-                                    className="shadow-sm"
+                                    className="shadow-sm my-3"
                                     size={"sm"}
                                 >
                                     Finished
