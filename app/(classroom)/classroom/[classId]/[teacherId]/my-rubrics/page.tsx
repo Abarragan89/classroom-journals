@@ -15,16 +15,16 @@ export default async function MyRubricsPage({
     const teacherRubrics = await getRubricListByTeacherId(teacherId) as unknown as Rubric[]
 
     return (
-        <div className="container mx-auto py-6">
-            <div className="flex items-center justify-between mb-6">
+        <div className="container mx-auto">
                 <h2 className="h2-bold my-3">My Rubrics</h2>
+                <div className="flex-end">
                 <Link href={`/classroom/${classId}/${teacherId}/my-rubrics/new`}>
                     <Button className="shadow-md">
                         <PlusCircle className="mr-2 h-4 w-4" />
                         Create New Rubric
                     </Button>
                 </Link>
-            </div>
+                </div>
 
             <MyRubricList teacherRubrics={teacherRubrics} classId={classId} teacherId={teacherId} />
         </div>

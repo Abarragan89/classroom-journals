@@ -65,7 +65,7 @@ export default function AssignPromptForm({
     return (
         <form action={action} className="space-y-2">
             <div className="grid items-center gap-2">
-                <p className="text-center italic line-clamp-4 text-primary bg-card p-4 border rounded-md">
+                <p className="text-center italic line-clamp-2 p-2 text-primary border rounded-md">
                     {promptTitle}
                 </p>
                 {classroomData?.length > 0 && (

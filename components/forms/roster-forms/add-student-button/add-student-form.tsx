@@ -2,8 +2,7 @@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
-import { useActionState, useEffect, useRef } from "react";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { usePathname } from "next/navigation";
 import { addStudentToRoster } from "@/lib/actions/roster.action";
@@ -31,8 +30,6 @@ export default function AddStudentForm({
     })
     const pathname = usePathname()
     const queryClient = useQueryClient();
-    const inputEl = useRef<HTMLInputElement>(null);
-    const isMobile = useMediaQuery('(max-width: 768px)');
 
 
     //redirect if the state is success
@@ -44,9 +41,8 @@ export default function AddStudentForm({
                 return [...(old ?? []), state.data as User];
             });
             window.scrollTo(0, 0);
-            inputEl.current?.focus();
         }
-    }, [state, pathname, classId, queryClient, isMobile])
+    }, [state, pathname, classId, queryClient])
 
 
     const CreateButton = () => {
@@ -77,8 +73,6 @@ export default function AddStudentForm({
                     </Label>
                     <Input
                         id="name"
-                        ref={inputEl}
-                        // autoFocus={!isMobile}
                         required
                         name="name"
                     />
