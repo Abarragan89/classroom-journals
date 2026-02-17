@@ -112,7 +112,6 @@ export default function AddClassForm({
                     </Label>
                     <Input
                         id="name"
-
                         required
                         placeholder="required"
                         name="name"

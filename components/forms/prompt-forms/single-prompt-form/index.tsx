@@ -3,7 +3,6 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useActionState, useState, useEffect } from "react";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner"
@@ -52,7 +51,6 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
         { name: "question1", label: "Prompt", value: "" }
     ]);
     const [enableSpellCheck, setEnableSpellCheck] = useState<boolean>(false);
-    const isMobile = useMediaQuery('(max-width: 768px)');
 
 
     const router = useRouter()
@@ -178,7 +176,6 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                             value={question.value} // Keep text state for deletion
                             onChange={(e) => handleChange(index, e.target.value)}
                             required
-                            autoFocus={!isMobile}
                             rows={5}
                         />
                     </CardContent>

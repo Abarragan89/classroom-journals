@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useActionState, useState, useEffect } from "react";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { useFormStatus } from "react-dom";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner"
@@ -54,7 +53,6 @@ export default function MultiPromptForm({
     const [isTeacherPremium, setIsTeacherPremium] = useState<boolean>(false);
     const [enableSpellCheck, setEnableSpellCheck] = useState<boolean>(false);
     const queryClient = useQueryClient();
-    const isMobile = useMediaQuery('(max-width: 768px)');
 
     const [questions, setQuestions] = useState<Question[]>([
         { name: "question1", label: "Question 1", value: "" }
@@ -214,7 +212,6 @@ export default function MultiPromptForm({
                             id="title"
                             className="mt-1 bg-background shadow-none"
                             name="title"
-                            autoFocus={!isMobile}
                             required
                             defaultValue={editingPrompt?.title || ''}
                         />

@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
 import { useActionState, useEffect } from "react";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
@@ -38,7 +37,6 @@ export default function EditStudentForm({
     const pathname = usePathname()
     const router = useRouter();
     const queryClient = useQueryClient();
-    const isMobile = useMediaQuery('(max-width: 768px)');
 
     //redirect if the state is success
     useEffect(() => {
@@ -77,7 +75,6 @@ export default function EditStudentForm({
                     </Label>
                     <Input
                         id="name"
-                        autoFocus={!isMobile}
                         required
                         placeholder="required"
                         defaultValue={studentInfo.name}
