@@ -146,7 +146,7 @@ export default function OnboardingToast({
                         <div className="space-y-2">
                             <p className="text-sm font-semibold text-green-600 dark:text-green-400">🎉 Assignment Posted! You&apos;re all set!.</p>
                             <p className="text-xs text-muted-foreground font-bold">These are your posted assignments. Click them to view details, grade, and provide feedback.</p>
-                            <div className='flex-center my-7'>
+                            <div className='flex-center my-5'>
                                 <Button
                                     ref={buttonRef}
                                     onClick={handleFinishClick}
