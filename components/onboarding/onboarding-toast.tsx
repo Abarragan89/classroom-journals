@@ -58,7 +58,7 @@ export default function OnboardingToast({
                     : <>Click &quot;Roster&quot; in the sidebar to add students</>,
                 mobile: currentPage === 'roster'
                     ? <>Add at least 1 student to complete this step</>
-                    : <>Open the <Sidebar className="inline h-3.5 w-3.5 mx-0.5" /> menu and tap &quot;Roster&quot; to add students</>,
+                    : <>Open the <Sidebar className="inline h-3.5 w-3.5 mx-0.5" /> menu and tap &quot;Roster&quot;</>,
             },
             makeJot: {
                 desktop: currentPage === 'jots'
@@ -66,7 +66,7 @@ export default function OnboardingToast({
                     : <>Click the &quot;Jots&quot; link in the sidebar to create your first prompt</>,
                 mobile: currentPage === 'jots'
                     ? <>Tap &quot;+ Create Jot&quot; above to create your first prompt</>
-                    : <>Open the <Sidebar className="inline h-3.5 w-3.5 mx-0.5" /> menu and tap &quot;Jots&quot; to create your first prompt</>,
+                    : <>Open the <Sidebar className="inline h-3.5 w-3.5 mx-0.5" /> menu and tap &quot;Jots&quot;</>,
             },
             assignJot: {
                 desktop: currentPage === 'jots'
@@ -74,7 +74,7 @@ export default function OnboardingToast({
                     : <>Click the &quot;Jots&quot; link in the sidebar to assign your first prompt</>,
                 mobile: currentPage === 'jots'
                     ? <>This is your Jot Library. Assign one to this class.</>
-                    : <>Open the <Sidebar className="inline h-3.5 w-3.5 mx-0.5" /> menu and tap &quot;Jots&quot; to assign your first prompt</>,
+                    : <>Open the <Sidebar className="inline h-3.5 w-3.5 mx-0.5" /> menu and tap &quot;Jots&quot;</>,
             },
         };
 
@@ -153,7 +153,7 @@ export default function OnboardingToast({
                                     className="shadow-sm my-3"
                                     size={"sm"}
                                 >
-                                    Finished
+                                    Got it!
                                 </Button>
                             </div>
                             <p className="text-xs text-muted-foreground text-center">Need Help? <Link className='underline text-primary' href={`/classroom/${classId}/${teacherId}/teacher-guide`}>Teacher Guide Videos</Link></p>

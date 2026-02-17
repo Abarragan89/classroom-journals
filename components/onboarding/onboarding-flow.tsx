@@ -125,14 +125,15 @@ export default function OnboardingFlow({
                 addStudents: true,
             };
             // Syncing external Google Classroom import data with local state - safe and intentional
-            // eslint-disable-next-line react-hooks/set-state-in-effect
+
             setOnboardingState(updatedState);
 
             const progress = loadOnboardingProgress(classId) || initializeOnboardingState(classId);
             progress.completedSteps = updatedState;
             saveOnboardingProgress(progress);
         }
-    }, [fromGoogleImport, students, classId, onboardingState]);
+        //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fromGoogleImport, students, classId]);
 
     // Auto-detect and update completion states based on actual data
     useEffect(() => {
@@ -160,14 +161,14 @@ export default function OnboardingFlow({
 
         if (hasChanges) {
             // Syncing real-time API query results with onboarding state - guarded by hasChanges check
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setOnboardingState(detectedState);
 
             const progress = loadOnboardingProgress(classId) || initializeOnboardingState(classId);
             progress.completedSteps = detectedState;
             saveOnboardingProgress(progress);
         }
-    }, [students, assignments, teacherJotsData, classId, initialStudentCount, initialAssignmentCount, initialJotCount, router, teacherId, onboardingState]);
+        //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [students, assignments, teacherJotsData, classId, initialStudentCount, initialAssignmentCount, initialJotCount, router, teacherId]);
 
     const handleDismiss = () => {
         dismissOnboarding(classId);
