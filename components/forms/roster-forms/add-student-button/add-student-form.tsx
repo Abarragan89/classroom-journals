@@ -78,7 +78,7 @@ export default function AddStudentForm({
                     <Input
                         id="name"
                         ref={inputEl}
-                        autoFocus={!isMobile}
+                        // autoFocus={!isMobile}
                         required
                         name="name"
                     />
