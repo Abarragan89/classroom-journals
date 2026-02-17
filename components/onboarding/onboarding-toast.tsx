@@ -1,6 +1,6 @@
 'use client';
 
-import { JSX, useMemo } from 'react';
+import { JSX, useMemo, useRef } from 'react';
 import { X, Sidebar, CheckCircle2, Circle } from 'lucide-react';
 import { OnboardingState, calculateProgress, getNextStep, isOnboardingComplete } from '@/lib/onboarding-utils';
 import { cn } from '@/lib/utils';
@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Progress } from '../ui/progress';
 import { Button } from '../ui/button';
+import confetti from 'canvas-confetti';
 
 type OnboardingToastProps = {
     completedSteps: OnboardingState;
@@ -27,6 +28,7 @@ export default function OnboardingToast({
 }: OnboardingToastProps) {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const pathname = usePathname();
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
     // Get the last segment of the URL path
     const currentPage = useMemo(() => {
@@ -79,6 +81,29 @@ export default function OnboardingToast({
         return guidanceMap[nextStep.id] || null;
     }, [nextStep, currentPage]);
 
+    const handleFinishClick = () => {
+        // Get button position for confetti origin
+        if (buttonRef.current) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            const x = (rect.left + rect.width / 2) / window.innerWidth;
+            const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+            // Fire confetti burst from button
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { x, y },
+                colors: ['#3b82f6', '#8b5cf6', '#ec4899', '#10b981', '#f59e0b'],
+                ticks: 200,
+            });
+        }
+
+        // Dismiss after confetti animation
+        setTimeout(() => {
+            onDismiss();
+        }, 500);
+    };
+
     return (
         <div
             className={cn(
@@ -122,7 +147,12 @@ export default function OnboardingToast({
                             <p className="text-sm font-semibold text-green-600 dark:text-green-400">🎉 Assignment Posted! You&apos;re all set!.</p>
                             <p className="text-xs text-muted-foreground font-bold">These are your posted assignments. Click them to view details, grade, and provide feedback.</p>
                             <div className='flex-center my-7'>
-                                <Button onClick={onDismiss} className="shadow-sm" size={"sm"}>
+                                <Button
+                                    ref={buttonRef}
+                                    onClick={handleFinishClick}
+                                    className="shadow-sm"
+                                    size={"sm"}
+                                >
                                     Finished
                                 </Button>
                             </div>
