@@ -17,7 +17,7 @@ export default function TutorialMessageVideo({
 }) {
     return (
         <div className={`
-        grid grid-cols-1 gap-14 justify-items-center mx-auto max-w-[1040px]
+        grid grid-cols-1 gap-14 justify-items-center mx-auto max-w-[1040px] mb-36
         ${isInClassroom ? 'xl:grid-cols-2' : 'lg:grid-cols-2'}
         `}>
             <div className="flex flex-col justify-between bg-card border shadow-sm rounded-lg p-8 text-center w-full max-w-[500px]">
@@ -26,7 +26,7 @@ export default function TutorialMessageVideo({
                     <p className="text-muted-foreground mb-5 text-base sm:text-lg font-medium">
                         {subtitle}
                     </p>
-                    <div className='w-fit mx-auto mt-10'>
+                    <div className='w-fit mx-auto mt-6'>
                         <CTAButton />
                     </div>
                 </div>
