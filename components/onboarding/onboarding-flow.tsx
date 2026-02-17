@@ -20,6 +20,7 @@ type OnboardingFlowProps = {
     initialStudentCount: number;
     initialJotCount: number;
     initialAssignmentCount: number;
+    onDismissed?: () => void;
 };
 
 export default function OnboardingFlow({
@@ -28,6 +29,7 @@ export default function OnboardingFlow({
     initialStudentCount,
     initialJotCount,
     initialAssignmentCount,
+    onDismissed,
 }: OnboardingFlowProps) {
 
     const searchParams = useSearchParams();
@@ -48,7 +50,7 @@ export default function OnboardingFlow({
 
         const saved = loadOnboardingProgress(classId);
 
-        if (saved && !saved.isDismissed) {
+        if (saved) {
             return saved.completedSteps;
         }
 
@@ -61,15 +63,6 @@ export default function OnboardingFlow({
         return newState.completedSteps;
     });
 
-    const [isDismissed, setIsDismissed] = useState(() => {
-        if (typeof window === 'undefined') return false;
-        const saved = loadOnboardingProgress(classId);
-        return saved?.isDismissed ?? false;
-    });
-
-    // Only run queries if onboarding should be shown (not dismissed)
-    const shouldShowOnboarding = !isDismissed;
-
     // Query for real-time student count
     const { data: students } = useQuery({
         queryKey: ['getStudentRoster', classId],
@@ -79,7 +72,6 @@ export default function OnboardingFlow({
             const { students } = await response.json();
             return students as User[];
         },
-        enabled: shouldShowOnboarding,
         staleTime: 0,
     });
 
@@ -100,7 +92,6 @@ export default function OnboardingFlow({
             const { prompts } = await response.json();
             return prompts as PromptSession[];
         },
-        enabled: shouldShowOnboarding,
         staleTime: 0,
         refetchOnMount: 'always',
     });
@@ -123,30 +114,28 @@ export default function OnboardingFlow({
         },
         staleTime: 0,
         refetchOnMount: 'always',
-        enabled: shouldShowOnboarding,
     });
 
     // Handle Google Classroom import - marks both class and roster as complete
     useEffect(() => {
-        if (isDismissed) return;
         if (fromGoogleImport && students && students.length > 0) {
             const updatedState = {
                 ...onboardingState,
                 createClass: true,
                 addStudents: true,
             };
+            // Syncing external Google Classroom import data with local state - safe and intentional
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setOnboardingState(updatedState);
 
             const progress = loadOnboardingProgress(classId) || initializeOnboardingState(classId);
             progress.completedSteps = updatedState;
             saveOnboardingProgress(progress);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fromGoogleImport, students, classId, isDismissed]);
+    }, [fromGoogleImport, students, classId, onboardingState]);
 
     // Auto-detect and update completion states based on actual data
     useEffect(() => {
-        if (isDismissed) return;
         const currentStudentCount = students?.length ?? initialStudentCount;
         const currentAssignmentCount = assignments?.length ?? initialAssignmentCount;
         const currentJotCount = teacherJotsData?.totalCount ?? initialJotCount;
@@ -170,22 +159,21 @@ export default function OnboardingFlow({
         );
 
         if (hasChanges) {
+            // Syncing real-time API query results with onboarding state - guarded by hasChanges check
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setOnboardingState(detectedState);
 
             const progress = loadOnboardingProgress(classId) || initializeOnboardingState(classId);
             progress.completedSteps = detectedState;
             saveOnboardingProgress(progress);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [students, assignments, teacherJotsData, classId, initialStudentCount, initialAssignmentCount, initialJotCount, isDismissed, router, teacherId]);
+    }, [students, assignments, teacherJotsData, classId, initialStudentCount, initialAssignmentCount, initialJotCount, router, teacherId, onboardingState]);
 
     const handleDismiss = () => {
-        setIsDismissed(true);
         dismissOnboarding(classId);
+        // Notify wrapper to unmount this component
+        onDismissed?.();
     };
-
-    // Don't show onboarding if dismissed (show briefly at 100% before auto-dismiss)
-    if (isDismissed) return null;
 
     return (
         <OnboardingToast

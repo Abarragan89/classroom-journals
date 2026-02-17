@@ -20,7 +20,7 @@ export default async function Classroom({
     return (
         <div className="relative">
 
-            <h2 className="text-2xl lg:text-3xl mt-2">Posted Assignments</h2>
+            <h2 className="h2-bold my-3">Assignments</h2>
             <AssignmentListSection
                 initialPrompts={allPromptSessions.prompts}
                 categories={categoriesWithAll}

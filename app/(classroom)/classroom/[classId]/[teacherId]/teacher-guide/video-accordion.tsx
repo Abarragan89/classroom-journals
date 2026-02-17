@@ -66,7 +66,7 @@ export default function VideoAccordion() {
     return (
         <div>
             <div className="mt-7 mb-5">
-                <h2 className="h2-bold">Teacher Guide Videos</h2>
+                <h2 className="h2-bold my-3">Teacher Guide Videos</h2>
             </div>
             <Accordion className="rounded-md" type="single" defaultValue="item-1" collapsible>
                 {tutorialVideos.map((video) => (

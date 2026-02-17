@@ -76,18 +76,18 @@ export default function AddStudentForm({
                         id="name"
                         ref={inputEl}
                         required
-                        // placeholder="required"
                         name="name"
                     />
                 </div>
                 <div>
                     <Label htmlFor="username" className="text-right">
-                        Username <span className="text-xs text-muted-foreground">(optional)</span>
+                        Username 
                     </Label>
                     <Input
                         id="username"
                         name="username"
-                        // placeholder="optional"
+                        placeholder="optional"
+                        className="placeholder:italic"
                     />
                 </div>
                 <div className="flex-center mt-5">

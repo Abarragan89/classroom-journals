@@ -10,9 +10,10 @@ import DynamicHeader from "@/components/dynamic-header";
 import { determineSubscriptionAllowance } from "@/lib/server/profile";
 import { Suspense } from "react";
 import Loading from "@/app/loading";
-import OnboardingFlow from "@/components/onboarding/onboarding-flow";
+import OnboardingFlowWrapper from "@/components/onboarding/onboarding-flow-wrapper";
 import { getAllTeacherPrompts } from "@/lib/server/prompts";
 import { getAllSessionsInClass } from "@/lib/server/prompt-sessions";
+import ScrollToTop from "@/components/scroll-to-top";
 
 export default async function DashboardLayout({
     children,
@@ -76,8 +77,11 @@ export default async function DashboardLayout({
                 </main>
             </SidebarInset>
 
+            {/* Scroll to Top on Route Change */}
+            <ScrollToTop />
+
             {/* Persistent Onboarding Toast */}
-            <OnboardingFlow
+            <OnboardingFlowWrapper
                 classId={classId}
                 teacherId={teacherId}
                 initialStudentCount={studentCount}

@@ -24,7 +24,7 @@ export function ResponsiveDialog({
     showDescription?: boolean;
 }) {
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog open={isOpen} onOpenChange={setIsOpen} >
             <DialogContent onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} onPointerMove={(e) => e.stopPropagation()}
                 className="overflow-y-hidden p-4 rounded-md">
                 <DialogHeader>

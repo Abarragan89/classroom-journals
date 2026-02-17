@@ -27,7 +27,7 @@ export default async function Roster({
   return (
     <>
       <div className="relative">
-        <h2 className="text-2xl lg:text-3xl mt-2 print:hidden">Class Roster</h2>
+        <h2 className="h2-bold my-3 print:hidden">Class Roster</h2>
         <RosterTable
           studentRoster={studentRoster}
           session={session}

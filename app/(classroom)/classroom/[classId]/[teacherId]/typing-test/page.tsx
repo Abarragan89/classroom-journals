@@ -20,7 +20,7 @@ export default async function TypingTestPage({
     return (
         <>
             <main className="wrapper">
-                <h1 className="h2-bold mt-2 line-clamp-1">Typing Test</h1>
+                <h1 className="h2-bold my-3 line-clamp-1">Typing Test</h1>
                 <TypingTest
                     classId={classId}
                     studentId={teacherId}
