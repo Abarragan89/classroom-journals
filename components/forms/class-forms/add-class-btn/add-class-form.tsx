@@ -3,7 +3,6 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
 import { useActionState, useState, useEffect } from "react";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { useFormStatus } from "react-dom";
 import { createNewClass } from "@/lib/actions/classroom.actions";
 import ColorSelect from "../class-color-select";
@@ -45,7 +44,6 @@ export default function AddClassForm({
     const pathname = usePathname()
     const router = useRouter();
     const queryClient = useQueryClient();
-    const isMobile = useMediaQuery('(max-width: 768px)');
 
     //redirect if the state is success
     useEffect(() => {
@@ -114,7 +112,7 @@ export default function AddClassForm({
                     </Label>
                     <Input
                         id="name"
-                        autoFocus={!isMobile}
+
                         required
                         placeholder="required"
                         name="name"
@@ -208,7 +206,7 @@ export default function AddClassForm({
             {session?.googleProviderId && (
                 <>
                     <div className="flex flex-col mx-auto w-2/3">
-                        <p className="my-5 text-center relative">
+                        <p className="my-3 text-center relative">
                             <span className="relative z-10 bg-background px-3">or</span>
                             <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t"></span>
                         </p>

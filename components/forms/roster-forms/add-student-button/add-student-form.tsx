@@ -43,10 +43,10 @@ export default function AddStudentForm({
             queryClient.setQueryData<User[]>(['getStudentRoster', classId], (old) => {
                 return [...(old ?? []), state.data as User];
             });
+            window.scrollTo(0, 0);
+            inputEl.current?.focus();
         }
-        window.scrollTo(0, 0);
-        inputEl.current?.focus();
-    }, [state, pathname, classId, queryClient])
+    }, [state, pathname, classId, queryClient, isMobile])
 
 
     const CreateButton = () => {
@@ -120,7 +120,7 @@ export default function AddStudentForm({
             {session?.googleProviderId && (
                 <>
                 <div className="flex flex-col mx-auto w-2/3">
-                    <p className="my-5 text-center relative">
+                    <p className="my-3 text-center relative">
                         <span className="relative z-10 bg-background px-5">or</span>
                         <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
                     </p>
