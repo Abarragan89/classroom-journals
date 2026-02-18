@@ -27,14 +27,21 @@ export default function DeletePromptForm({
 
     // update the cache if successful
     useEffect(() => {
-        if (state?.success) {
+        if (state?.success && state.promptId) {
+            // Remove deleted prompt from all cached prompts queries
+            queryClient.setQueriesData(
+                { queryKey: ['prompts', teacherId], exact: false },
+                (oldData: any) => {
+                    if (!oldData || !Array.isArray(oldData)) return oldData;
+                    // Filter out the deleted prompt
+                    return oldData.filter((prompt: any) => prompt.id !== state.promptId);
+                }
+            );
+
             toast('Jot Deleted!', {
                 style: { background: 'hsl(0 84.2% 60.2%)', color: 'white' }
             });
-            closeModal()
-
-            //  queryClient.invalidateQueries(['prompts', teacherId]);
-            queryClient.invalidateQueries({ queryKey: ['prompts', teacherId] });
+            closeModal();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state])

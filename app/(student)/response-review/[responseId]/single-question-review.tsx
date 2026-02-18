@@ -70,7 +70,16 @@ export default function SingleQuestionReview({
 
 
             if (updatedResponse?.success) {
-                await queryClient.invalidateQueries({ queryKey: ['response-review', responseId] });
+                // Update cache directly instead of refetching
+                const currentCache = queryClient.getQueryData(['response-review', responseId]);
+                if (currentCache && typeof currentCache === 'object') {
+                    queryClient.setQueryData(['response-review', responseId], {
+                        ...currentCache,
+                        response: responseData,
+                        submittedAt: submittedAt,
+                        completionStatus: 'COMPLETE'
+                    });
+                }
                 router.push('/student-dashboard')
                 toast('Assignment Submitted!')
             }
