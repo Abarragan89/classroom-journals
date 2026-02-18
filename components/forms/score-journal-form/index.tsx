@@ -6,7 +6,7 @@ import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { saveRubricGrade, deleteRubricGrade } from "@/lib/actions/rubric.actions";
-import { Rubric, RubricGrade, RubricListItem } from "@/types";
+import { Rubric, RubricGrade, RubricListItem, PromptSession, Response, ResponseData } from "@/types";
 import { FadeLoader } from 'react-spinners';
 import { useTheme } from "next-themes";
 import RubricInstance from "@/app/(classroom)/classroom/[classId]/[teacherId]/single-prompt-session/[sessionId]/single-response/[responseId]/rubric-instance";
@@ -18,13 +18,11 @@ export default function ScoreJournalForm({
     responseId,
     teacherId,
     studentWriting = '',
-    sessionId,
 }: {
     currentScore: number | string,
     responseId: string,
     teacherId: string,
     studentWriting?: string,
-    sessionId?: string,
 }) {
 
     const queryClient = useQueryClient()
@@ -86,7 +84,7 @@ export default function ScoreJournalForm({
             };
             setCurrentRubric(rubricForDisplay);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mostRecentGrade]); // Only run when mostRecentGrade changes, not currentRubric
 
     // Mutation for updating 100-point score
@@ -100,13 +98,52 @@ export default function ScoreJournalForm({
             await gradeStudentResponse(responseId, 0, score, teacherId);
             return score;
         },
-        onSuccess: () => {
-            // Invalidate all related queries to refetch fresh data
-            queryClient.invalidateQueries({ queryKey: ['rubricGrades', responseId] });
-            queryClient.invalidateQueries({ queryKey: ['response', responseId] });
-            if (sessionId) {
-                queryClient.invalidateQueries({ queryKey: ['getSingleSessionData', sessionId] });
+        onSuccess: (score) => {
+            // 1. Clear rubricGrades cache (switching to 100-point score)
+            queryClient.setQueryData(['rubricGrades', responseId], []);
+
+            // 2. Update response cache with new score
+            const responseCache = queryClient.getQueryData(['response', responseId]);
+            if (responseCache && typeof responseCache === 'object' && 'response' in responseCache) {
+                queryClient.setQueryData(['response', responseId], {
+                    ...responseCache,
+                    response: Array.isArray(responseCache.response)
+                        ? responseCache.response.map((r: any) => ({
+                            ...r,
+                            score: score
+                        }))
+                        : responseCache.response
+                });
             }
+
+            // 3. Update all session caches containing this response
+            queryClient.getQueryCache().findAll()
+                .filter(query =>
+                    Array.isArray(query.queryKey) &&
+                    query.queryKey[0] === 'getSingleSessionData'
+                )
+                .forEach((query) => {
+                    const sessionData = query.state.data as PromptSession | undefined;
+                    if (sessionData?.responses?.some((resp: Response) => resp.id === responseId)) {
+                        queryClient.setQueryData(query.queryKey, {
+                            ...sessionData,
+                            responses: sessionData.responses.map((resp: Response) =>
+                                resp.id === responseId
+                                    ? {
+                                        ...resp,
+                                        response: Array.isArray(resp.response)
+                                            ? ((resp.response as unknown) as ResponseData[]).map(r => ({
+                                                ...r,
+                                                score: score
+                                            }))
+                                            : resp.response
+                                    }
+                                    : resp
+                            )
+                        });
+                    }
+                });
+
             setCurrentRubric(null);
             toast('Grade Updated!');
         },
@@ -196,13 +233,54 @@ export default function ScoreJournalForm({
             // Return context with the previous value for potential rollback
             return { previousGrade };
         },
-        onSuccess: () => {
-            // Invalidate all related queries to refetch fresh data from server
-            queryClient.invalidateQueries({ queryKey: ['rubricGrades', responseId] });
-            queryClient.invalidateQueries({ queryKey: ['response', responseId] });
-            if (sessionId) {
-                queryClient.invalidateQueries({ queryKey: ['getSingleSessionData', sessionId] });
+        onSuccess: (rubricResult) => {
+            const percentageScore = rubricResult.grade?.percentageScore || 0;
+
+            // 1. Update rubricGrades cache directly
+            queryClient.setQueryData(['rubricGrades', responseId], [rubricResult.grade]);
+
+            // 2. Update response cache if it exists
+            const responseCache = queryClient.getQueryData(['response', responseId]);
+            if (responseCache && typeof responseCache === 'object' && 'response' in responseCache) {
+                queryClient.setQueryData(['response', responseId], {
+                    ...responseCache,
+                    response: Array.isArray(responseCache.response)
+                        ? responseCache.response.map((r: any) => ({
+                            ...r,
+                            score: percentageScore
+                        }))
+                        : responseCache.response
+                });
             }
+
+            // 3. Update all session caches containing this response
+            queryClient.getQueryCache().findAll()
+                .filter(query =>
+                    Array.isArray(query.queryKey) &&
+                    query.queryKey[0] === 'getSingleSessionData'
+                )
+                .forEach((query) => {
+                    const sessionData = query.state.data as PromptSession | undefined;
+                    if (sessionData?.responses?.some((resp: Response) => resp.id === responseId)) {
+                        queryClient.setQueryData(query.queryKey, {
+                            ...sessionData,
+                            responses: sessionData.responses.map((resp: Response) =>
+                                resp.id === responseId
+                                    ? {
+                                        ...resp,
+                                        response: Array.isArray(resp.response)
+                                            ? ((resp.response as unknown) as ResponseData[]).map(r => ({
+                                                ...r,
+                                                score: percentageScore
+                                            }))
+                                            : resp.response
+                                    }
+                                    : resp
+                            )
+                        });
+                    }
+                });
+
             toast('Rubric grade saved successfully!');
         },
         onError: (error: Error, _grade, context) => {
