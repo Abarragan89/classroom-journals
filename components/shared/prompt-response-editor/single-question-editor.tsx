@@ -147,9 +147,6 @@ export default function SinglePromptEditor({
 
             // Handle collected assignment
             if (result?.isCollected) {
-                // Show modal and redirect
-                // router.push('/student-dashboard');
-                // toast.error('This assignment has been collected');
                 setIsAssignmentCollected(true);
                 return;
             }

@@ -113,8 +113,6 @@ export default function MultipleQuestionEditor({
             if (result?.isCollected) {
                 // Show modal and redirect
                 setIsAssignmentCollected(true);
-                // router.push('/student-dashboard');
-                // toast.error('This assignment has been collected');
                 return;
             }
 
