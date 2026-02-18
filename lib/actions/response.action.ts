@@ -487,6 +487,31 @@ export async function toggleSpellCheck(responseId: string, spellCheckEnabled: bo
         return { success: false, message: "Error toggling Spell Check" };
     }
 }
+// Get toggle voice-to-text for a single response
+export async function toggleVoiceToText(responseId: string, isVoiceToTextEnabled: boolean, teacherId: string) {
+    try {
+        const session = await requireAuth();
+        if (session?.user?.id !== teacherId) {
+            throw new Error('Forbidden')
+        }
+        await prisma.response.update({
+            where: { id: responseId },
+            data: {
+                isVoiceToTextEnabled
+            }
+        })
+        return { success: true, message: "Voice-to-text toggled successfully." };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error("Error toggling voice-to-text:", error.message);
+            console.error(error.stack);
+        } else {
+            console.error("Unexpected error:", error);
+        }
+
+        return { success: false, message: "Error toggling voice-to-text." };
+    }
+}
 
 // Delete Response
 export async function deleteResponse(prevState: unknown, formData: FormData) {
@@ -499,21 +524,23 @@ export async function deleteResponse(prevState: unknown, formData: FormData) {
         const responseId = formData.get('response-id') as string;
 
         if (!responseId) {
-            return { success: false, message: 'Error deleting prompt. Try again.' };
+            return { success: false, message: 'Error deleting response. Try again.' };
         }
 
         await prisma.response.delete({
             where: { id: responseId }
         })
-        return { success: true, message: 'Prompt Updated!', responseId };
+        return { success: true, message: 'Response deleted successfully!', responseId };
 
     } catch (error) {
         if (error instanceof Error) {
-            console.error('Error deleting prompt:', error.message);
+            console.error('Error deleting response:', error.message);
             console.error(error.stack);
         } else {
             console.error('Unexpected error:', error);
         }
-        return { success: false, message: 'Error deleting prompt. Try again.' };
+        return { success: false, message: 'Error deleting response. Try again.' };
     }
 }
+
+

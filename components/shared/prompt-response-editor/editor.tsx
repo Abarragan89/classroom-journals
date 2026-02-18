@@ -1,6 +1,7 @@
 import { Textarea } from "@/components/ui/textarea";
 import { Redo, Undo } from "lucide-react";
 import { useRef, useEffect } from "react";
+import { toast } from "sonner";
 
 
 export default function Editor({
@@ -10,6 +11,7 @@ export default function Editor({
     characterLimit,
     setIsTyping,
     spellCheckEnabled,
+    isVoiceToTextEnabled,
     questionText,
     questionNumber,
     totalQuestions,
@@ -23,6 +25,7 @@ export default function Editor({
     characterLimit?: number,
     setIsTyping?: React.Dispatch<React.SetStateAction<boolean>>;
     spellCheckEnabled: boolean,
+    isVoiceToTextEnabled: boolean,
     questionText?: string;
     questionNumber?: number;
     totalQuestions?: number;
@@ -144,17 +147,17 @@ export default function Editor({
         const lastContent = journalText;
 
         // unless allowMultiCharInput is enabled (for voice typing, IME, etc.)
-        // if (!allowMultiCharInput) {
-
-        const lengthDiff = Math.abs(newContent.length - lastContent.length);
-
-        // If more than 1 character added, block it
-        if (newContent.length > lastContent.length && lengthDiff > 1) {
-            e.target.value = lastContent; // Revert to previous value
-            
-            return; // Early return - don't update state
+        if (!isVoiceToTextEnabled) {
+            const lengthDiff = Math.abs(newContent.length - lastContent.length);
+            // If more than 1 character added, block it
+            if (newContent.length > lastContent.length && lengthDiff > 6) {
+                e.target.value = lastContent; // Revert to previous value
+                toast.error("Please enter one character at a time.", {
+                    duration: 1000,
+                });
+                return; // Early return - don't update state
+            }
         }
-        // }
 
 
         if (

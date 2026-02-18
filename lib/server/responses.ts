@@ -26,6 +26,7 @@ export async function getSingleResponse(responseId: string, userId: string, sess
             likeCount: true,
             submittedAt: true,
             spellCheckEnabled: true,
+            isVoiceToTextEnabled: true,
             response: true,
             completionStatus: true,
             _count: {
@@ -384,6 +385,7 @@ export async function getSingleResponseForReview(responseId: string, studentId: 
             response: true,
             completionStatus: true,
             spellCheckEnabled: true,
+            isVoiceToTextEnabled: true,
             rubricGrades: {
                 select: {
                     id: true,

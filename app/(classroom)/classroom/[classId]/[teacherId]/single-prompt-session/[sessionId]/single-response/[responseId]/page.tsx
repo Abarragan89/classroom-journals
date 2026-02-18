@@ -8,7 +8,7 @@ import { Response, ResponseComment, ResponseData } from '@/types';
 import { getSingleResponse, getAllResponsesFromPrompt } from '@/lib/server/responses';
 import { StudentComboBox } from './student-combobox';
 import PrintViewBlog from './print-view';
-import ToggleSpellCheck from './toggle-spell-check';
+import ToggleSpellCheckAndVoiceToText from './toggle-spell-check';
 import ResponseActions from './response-actions';
 
 
@@ -47,8 +47,9 @@ export default async function SingleResponse({
                         responses={rosterAlphabetized}
                     />
                     <div className="flex justify-between items-baseline mt-5 relative">
-                        <ToggleSpellCheck
+                        <ToggleSpellCheckAndVoiceToText
                             responseId={responseId}
+                            voiceToTextEnabled={response?.isVoiceToTextEnabled as boolean}
                             spellCheckEnabled={response?.spellCheckEnabled}
                             teacherId={teacherId}
                         />

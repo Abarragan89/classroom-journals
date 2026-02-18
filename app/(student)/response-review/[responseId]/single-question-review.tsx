@@ -23,6 +23,7 @@ interface SingleQuestionReviewProps {
     responseId: string,
     showGradesInitial: boolean,
     spellCheckEnabledInitial: boolean,
+    isVoiceToTextEnabledInitial: boolean,
     studentId: string,
     rubricGradesInitial?: RubricGradeDisplay[],
     studentName?: string
@@ -34,6 +35,7 @@ export default function SingleQuestionReview({
     responseId,
     showGradesInitial,
     spellCheckEnabledInitial,
+    isVoiceToTextEnabledInitial,
     studentId,
     rubricGradesInitial,
     studentName
@@ -174,6 +176,7 @@ export default function SingleQuestionReview({
                             journalText={responseData.answer}
                             characterLimit={index === 1 ? 70 : undefined}
                             spellCheckEnabled={spellCheckEnabledInitial}
+                            isVoiceToTextEnabled={isVoiceToTextEnabledInitial}
                             isDisabled={!isSubmittableInitial}
                         />
                     ))}

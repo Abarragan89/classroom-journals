@@ -21,6 +21,7 @@ export default function TextEditorDemo() {
                                 setJournalText={setJournalText}
                                 journalText={journalText}
                                 spellCheckEnabled={false}
+                                isVoiceToTextEnabled={false}
                             />
                         </div>
                     </div>

@@ -93,6 +93,7 @@ export interface Response {
     blogImage?: string;
     completionStatus: 'INCOMPLETE' | 'COMPLETE' | 'RETURNED';
     spellCheckEnabled: boolean;
+    isVoiceToTextEnabled: boolean;
     studentId: string;
     _count: { comments: number }
     response: JsonValue;

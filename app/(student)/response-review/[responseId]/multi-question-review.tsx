@@ -20,6 +20,7 @@ export default function MultiQuestionReview({
     isTeacherPremium,
     gradeLevel,
     spellCheckEnabled,
+    isVoiceToTextEnabled,
     studentId,
     isQuestionReview = false
 }: {
@@ -33,6 +34,7 @@ export default function MultiQuestionReview({
     isTeacherPremium: boolean,
     gradeLevel: string,
     spellCheckEnabled: boolean,
+    isVoiceToTextEnabled: boolean,
     studentId: string,
     // If this is viewed as a question review (before submission)
     isQuestionReview?: boolean
@@ -128,6 +130,7 @@ export default function MultiQuestionReview({
                             setJournalText={(newText) => handleTextChange(index, newText as string)}
                             journalText={responseData.answer}
                             spellCheckEnabled={spellCheckEnabled}
+                            isVoiceToTextEnabled={isVoiceToTextEnabled}
                             isDisabled={!isSubmittable}
                         />
                     ))}
