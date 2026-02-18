@@ -47,6 +47,7 @@ export default async function StudentDashboard({
                             isTeacherPremium={isPremiumTeacher as boolean}
                             gradeLevel={grade as string}
                             spellCheckEnabled={studentResponse?.spellCheckEnabled}
+                            isVoiceToTextEnabled={studentResponse?.isVoiceToTextEnabled}
                             studentId={studentId}
                         />
                         :
@@ -54,6 +55,7 @@ export default async function StudentDashboard({
                             studentResponse={studentResponse.response as unknown as ResponseData[]}
                             responseId={responseId}
                             spellCheckEnabled={studentResponse?.spellCheckEnabled}
+                            isVoiceToTextEnabled={studentResponse?.isVoiceToTextEnabled}
                             studentId={studentId}
                         />
                     }

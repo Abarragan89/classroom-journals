@@ -48,6 +48,7 @@ export default function ReviewWrapper({
                     isSubmittable={responseData?.completionStatus === 'INCOMPLETE' || responseData?.completionStatus === 'RETURNED'}
                     showGrades={responseData?.promptSession?.areGradesVisible as boolean}
                     spellCheckEnabled={responseData?.spellCheckEnabled as boolean}
+                    isVoiceToTextEnabled={responseData?.isVoiceToTextEnabled as boolean}
                     gradeLevel={gradeLevel}
                     isTeacherPremium={isTeacherPremium}
                     setAllQuestions={setQuestions}
@@ -60,6 +61,7 @@ export default function ReviewWrapper({
                     isSubmittableInitial={responseData?.completionStatus === 'INCOMPLETE' || responseData?.completionStatus === 'RETURNED'}
                     showGradesInitial={responseData?.promptSession?.areGradesVisible as boolean}
                     spellCheckEnabledInitial={responseData?.spellCheckEnabled}
+                    isVoiceToTextEnabledInitial={responseData?.isVoiceToTextEnabled}
                     rubricGradesInitial={responseData?.rubricGrades}
                     studentName={responseData?.student?.name}
                     responseId={responseData?.id}

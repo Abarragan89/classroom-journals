@@ -24,6 +24,7 @@ export default function MultipleQuestionEditor({
     gradeLevel,
     responseId,
     spellCheckEnabled,
+    isVoiceToTextEnabled,
     studentId
 }: {
     studentResponse: ResponseData[]
@@ -31,6 +32,7 @@ export default function MultipleQuestionEditor({
     gradeLevel: string
     responseId: string;
     spellCheckEnabled: boolean;
+    isVoiceToTextEnabled: boolean;
     studentId: string;
 }) {
 
@@ -227,6 +229,7 @@ export default function MultipleQuestionEditor({
                             isTeacherPremium={isTeacherPremium}
                             gradeLevel={gradeLevel}
                             spellCheckEnabled={spellCheckEnabled}
+                            isVoiceToTextEnabled={isVoiceToTextEnabled}
                             studentId={studentId}
                         />
                         <div className="flex flex-col justify-center items-center">
@@ -291,6 +294,7 @@ export default function MultipleQuestionEditor({
                             setJournalText={setJournalText}
                             journalText={journalText}
                             spellCheckEnabled={spellCheckEnabled}
+                            isVoiceToTextEnabled={isVoiceToTextEnabled}
                             setIsTyping={setIsTyping}
                             questionNumber={Number(questionNumber) + 1}
                             totalQuestions={studentResponse.length}

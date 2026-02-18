@@ -28,11 +28,13 @@ export default function SinglePromptEditor({
     studentResponse,
     responseId,
     spellCheckEnabled,
+    isVoiceToTextEnabled,
     studentId
 }: {
     studentResponse: ResponseData[],
     responseId: string,
     spellCheckEnabled: boolean,
+    isVoiceToTextEnabled: boolean,
     studentId: string
 }) {
 
@@ -345,6 +347,7 @@ export default function SinglePromptEditor({
                             questionNumber={1}
                             totalQuestions={3}
                             spellCheckEnabled={spellCheckEnabled}
+                            isVoiceToTextEnabled={isVoiceToTextEnabled}
                             setIsTyping={setIsTyping}
                             jotType='BLOG'
                         />
@@ -367,6 +370,7 @@ export default function SinglePromptEditor({
                             setJournalText={setJournalText}
                             journalText={journalText}
                             spellCheckEnabled={spellCheckEnabled}
+                            isVoiceToTextEnabled={isVoiceToTextEnabled}
                             setIsTyping={setIsTyping}
                             characterLimit={70}
                             questionNumber={2}
