@@ -69,7 +69,6 @@ export default async function SingleResponse({
                                 responseId={response?.id}
                                 currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
                                 studentWriting={(response.response as unknown as ResponseData[])?.[0]?.answer || ''}
-                                sessionId={sessionId}
                             />
                         </div>
                     )}
