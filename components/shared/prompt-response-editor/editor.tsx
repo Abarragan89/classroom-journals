@@ -143,6 +143,20 @@ export default function Editor({
         let newContent = e.target.value;
         const lastContent = journalText;
 
+        // unless allowMultiCharInput is enabled (for voice typing, IME, etc.)
+        // if (!allowMultiCharInput) {
+
+        const lengthDiff = Math.abs(newContent.length - lastContent.length);
+
+        // If more than 1 character added, block it
+        if (newContent.length > lastContent.length && lengthDiff > 1) {
+            e.target.value = lastContent; // Revert to previous value
+            
+            return; // Early return - don't update state
+        }
+        // }
+
+
         if (
             newContent?.length > lastContent?.length &&
             newContent.endsWith('\n') &&
@@ -212,6 +226,10 @@ export default function Editor({
                 autoCorrect="off"
                 autoCapitalize="off"
                 spellCheck={spellCheckEnabled}
+                data-gramm="false"
+                data-gramm_editor="false"
+                data-enable-grammarly="false"
+                data-form-type="other"
                 placeholder={isDisabled ? "" : "Enter your response here..."}
                 ref={editorRef}
                 disabled={isDisabled}
