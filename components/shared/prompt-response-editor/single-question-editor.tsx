@@ -350,6 +350,7 @@ export default function SinglePromptEditor({
                             isVoiceToTextEnabled={isVoiceToTextEnabled}
                             setIsTyping={setIsTyping}
                             jotType='BLOG'
+                            onSave={handleSaveResponses}
                         />
                         <div className="flex flex-col justify-center items-center mt-10">
                             <form onSubmit={(e) => saveAndContinue(e)}>
@@ -375,6 +376,7 @@ export default function SinglePromptEditor({
                             characterLimit={70}
                             questionNumber={2}
                             totalQuestions={3}
+                            onSave={handleSaveResponses}
                         />
                         <div className="flex flex-col justify-center items-center mt-10">
                             <form onSubmit={(e) => saveAndContinue(e)}>

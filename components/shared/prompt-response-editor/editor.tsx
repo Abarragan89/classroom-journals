@@ -1,7 +1,9 @@
 import { Textarea } from "@/components/ui/textarea";
-import { Redo, Undo } from "lucide-react";
-import { useRef, useEffect } from "react";
+import { Redo, Undo, Minimize2, HelpCircle, Expand, Maximize2 } from "lucide-react";
+import { useRef, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { ResponsiveDialog } from "@/components/responsive-dialog";
 
 
 export default function Editor({
@@ -17,7 +19,8 @@ export default function Editor({
     totalQuestions,
     isDisabled = false,
     score,
-    isPreGraded = false
+    isPreGraded = false,
+    onSave
 }: {
     journalText: string;
     setJournalText: React.Dispatch<React.SetStateAction<string>>;
@@ -32,6 +35,7 @@ export default function Editor({
     isDisabled?: boolean;
     score?: number;
     isPreGraded?: boolean;
+    onSave?: () => void | Promise<void>;
 }) {
 
     // History for undo and redo
@@ -39,6 +43,23 @@ export default function Editor({
     const redoRef = useRef<string[]>([]);
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const editorRef = useRef<HTMLTextAreaElement | null>(null)
+    const [showQuestionDialog, setShowQuestionDialog] = useState(false);
+
+    // Fullscreen mode state
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
+    // Hide body scrollbar in fullscreen mode
+    useEffect(() => {
+        if (isFullscreen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isFullscreen]);
 
     // Auto-resize textarea based on content
     // Fallback for browsers that don't support field-sizing
@@ -190,6 +211,103 @@ export default function Editor({
     }
 
 
+    // Fullscreen view
+    if (isFullscreen) {
+        return (
+            <div className="fixed inset-0 z-50 bg-background overflow-hidden">
+                <Textarea
+                    onPaste={(e) => e.preventDefault()}
+                    maxLength={characterLimit ?? undefined}
+                    onCopy={(e) => e.preventDefault()}
+                    onCut={(e) => e.preventDefault()}
+                    onDrop={(e) => e.preventDefault()}
+                    onDragOver={(e) => e.preventDefault()}
+                    className="w-full mx-auto h-full rounded-none bg-transparent border-none outline-none custom-scrollbar px-6 pt-20 md:px-14 lg:px-16 resize-none disabled:opacity-80 disabled:text-foreground disabled:cursor-not-allowed leading-normal tracking-widest font-extralight text-foreground md:text-lg shadow-[inset_0_5px_20px_1px_rgba(0,0,0,0.5),inset_0_-5px_20px_1px_rgba(0,0,0,0.5)]"
+                    style={{
+                        fieldSizing: 'content',
+                        minHeight: '100vh',
+                        paddingBottom: '20rem',
+                        scrollPaddingBottom: '3rem'
+                    }}
+                    value={journalText}
+                    onChange={handleOnChange}
+                    onKeyDown={handleKeyDown}
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck={spellCheckEnabled}
+                    data-gramm="false"
+                    data-gramm_editor="false"
+                    data-enable-grammarly="false"
+                    data-form-type="other"
+                    placeholder={isDisabled ? "" : "Enter your response here..."}
+                    ref={editorRef}
+                    disabled={isDisabled}
+                    autoFocus
+                />
+
+                {/* Fixed toolbar */}
+                <div className="fixed top-7 right-4 flex items-center gap-2">
+                    {onSave && (
+                        <Button onClick={onSave} variant="default" size="sm">
+                            Save
+                        </Button>
+                    )}
+
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        onTouchStart={handleUndo}
+                        onMouseDown={handleUndo}
+                    >
+                        <Undo className="h-4 w-4" />
+                    </Button>
+
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        onTouchStart={handleRedo}
+                        onMouseDown={handleRedo}
+                    >
+                        <Redo className="h-4 w-4" />
+                    </Button>
+
+                    {questionText && (
+                        <>
+                            <ResponsiveDialog
+                                title={questionNumber && totalQuestions ? `Question ${questionNumber} of ${totalQuestions}` : 'Question'}
+                                isOpen={showQuestionDialog}
+                                setIsOpen={setShowQuestionDialog}
+                            >
+                                <p className="whitespace-pre-line text-base leading-relaxed tracking-wide max-h-[50vh] overflow-y-auto custom-scrollbar">{questionText}</p>
+                            </ResponsiveDialog>
+                            <Button onClick={() => setShowQuestionDialog(true)} variant="outline" size="sm" className="gap-2">
+                                <HelpCircle className="h-4 w-4" />
+                                View Question
+                            </Button>
+                        </>
+                    )}
+
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => setIsFullscreen(false)}
+                    >
+                        <Minimize2 className="h-4 w-4" />
+                    </Button>
+                </div>
+
+                {/* Character count in fullscreen */}
+                {!isDisabled && characterLimit && (
+                    <p className="fixed bottom-4 right-4 text-sm text-muted-foreground bg-background/80 backdrop-blur-sm px-3 py-1 rounded-md">
+                        {journalText?.length} / {characterLimit}
+                    </p>
+                )}
+            </div>
+        );
+    }
+
+    // Normal view
     return (
         <div className={`w-full mx-auto relative bg-card rounded-md p-8 pb-3 border`}>
 
@@ -204,6 +322,8 @@ export default function Editor({
                     Question {questionNumber} of {totalQuestions}
                 </p>
             )}
+
+
             {questionText && (
                 <p className="pt-5 pb-7 ml-1 whitespace-pre-line lg:text-lg font-medium leading-relaxed tracking-wider">{questionText}</p>
             )}
@@ -211,50 +331,63 @@ export default function Editor({
             {!isDisabled && characterLimit && (
                 <p className="text-sm w-fit text-right text-muted-foreground absolute right-9 bottom-10">{journalText?.length} / {characterLimit}</p>
             )}
+            <div className="relative">
 
-            <Textarea
-                onPaste={(e) => e.preventDefault()}
-                maxLength={characterLimit ?? undefined}
-                onCopy={(e) => e.preventDefault()}
-                onCut={(e) => e.preventDefault()}
-                onDrop={(e) => e.preventDefault()}
-                onDragOver={(e) => e.preventDefault()}
-                className={`
-                w-full md:text-lg bg-transparent outline-ring rounded-lg  shadow-border  custom-scrollbar max-h-[70vh] mb-5
+                <Textarea
+                    onPaste={(e) => e.preventDefault()}
+                    maxLength={characterLimit ?? undefined}
+                    onCopy={(e) => e.preventDefault()}
+                    onCut={(e) => e.preventDefault()}
+                    onDrop={(e) => e.preventDefault()}
+                    onDragOver={(e) => e.preventDefault()}
+                    className={`
+                w-full md:text-lg relative bg-transparent outline-ring rounded-lg  shadow-border  custom-scrollbar max-h-[70vh] mb-5
                 shadow-[inset_0_5px_20px_-5px_rgba(0,0,0,0.35),inset_0_-5px_20px_-5px_rgba(0,0,0,0.35)]
                 p-6 resize-none h-max-full disabled:opacity-80 disabled:text-foreground disabled:cursor-not-allowed leading-normal  tracking-widest font-extralight text-foreground
                 ${jotType === 'BLOG' ? 'min-h-48' : ''}
             `}
-                style={{
-                    fieldSizing: 'content',
-                    minHeight: jotType === 'BLOG' ? '12rem' : '8rem',
-                    paddingBottom: '3rem',
-                    scrollPaddingBottom: '3rem'
-                }}
-                value={journalText}
-                onChange={handleOnChange}
-                onKeyDown={handleKeyDown}
-                autoComplete="off"
-                autoCorrect="off"
-                autoCapitalize="off"
-                spellCheck={spellCheckEnabled}
-                data-gramm="false"
-                data-gramm_editor="false"
-                data-enable-grammarly="false"
-                data-form-type="other"
-                placeholder={isDisabled ? "" : "Enter your response here..."}
-                ref={editorRef}
-                disabled={isDisabled}
-            />
+                    style={{
+                        fieldSizing: 'content',
+                        minHeight: jotType === 'BLOG' ? '12rem' : '8rem',
+                        paddingBottom: '3rem',
+                        scrollPaddingBottom: '3rem'
+                    }}
+                    value={journalText}
+                    onChange={handleOnChange}
+                    onKeyDown={handleKeyDown}
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck={spellCheckEnabled}
+                    data-gramm="false"
+                    data-gramm_editor="false"
+                    data-enable-grammarly="false"
+                    data-form-type="other"
+                    placeholder={isDisabled ? "" : "Enter your response here..."}
+                    ref={editorRef}
+                    disabled={isDisabled}
+                />
+                {/* Fullscreen toggle button */}
+                {!isDisabled && jotType === "BLOG" && (
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute top-1 right-1 z-50"
+                        onClick={() => setIsFullscreen(true)}
+                    >
+                        <Maximize2 size={15} />
+                    </Button>
+                )}
+            </div>
             {!isDisabled && (
                 <div className="flex-center space-x-14">
-                    <button onTouchStart={handleUndo} onMouseDown={handleUndo} className="p-2 hover:text-primary rounded">
+                    <Button variant={"ghost"} onTouchStart={handleUndo} onMouseDown={handleUndo}>
                         <Undo />
-                    </button>
+                    </Button>
 
-                    <button onTouchStart={handleRedo} onMouseDown={handleRedo} className="p-2 hover:text-primary rounded">
+                    <Button variant={"ghost"} onTouchStart={handleRedo} onMouseDown={handleRedo}>
                         <Redo />
-                    </button>
+                    </Button>
                 </div>
             )}
         </div>

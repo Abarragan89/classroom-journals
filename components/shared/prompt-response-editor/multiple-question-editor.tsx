@@ -298,6 +298,7 @@ export default function MultipleQuestionEditor({
                             setIsTyping={setIsTyping}
                             questionNumber={Number(questionNumber) + 1}
                             totalQuestions={studentResponse.length}
+                            onSave={handleSaveResponses}
                         />
                         <div className="flex flex-col justify-center items-center mt-10">
                             <form onSubmit={(e) => saveAndContinue(e)}>
