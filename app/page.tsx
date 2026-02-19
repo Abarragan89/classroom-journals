@@ -9,7 +9,7 @@ import TextEditorDemo from "@/components/text-editor-demo";
 import BlogMetaDetails from "@/components/blog-meta-details";
 import { Separator } from "@/components/ui/separator";
 import CommentSection from "@/components/shared/comment-section";
-import { CornerRightUp, SquareCheckBig } from "lucide-react";
+import { CornerRightUp } from "lucide-react";
 
 export default async function page() {
 
@@ -54,9 +54,7 @@ export default async function page() {
 
     const dummyBlogText = `Shakespeare's Romeo and Juliet is often dismissed as a simple love story, but beneath the romantic tragedy lies a powerful exploration of youth rebellion against societal constraints. The young lovers don't just defy their feuding families—they challenge an entire social system that prioritizes family honor over individual happiness. Their secret marriage, clandestine meetings, and ultimate sacrifice represent a direct rebellion against the adult world's expectations and the rigid social structures of Verona. In this light, Romeo and Juliet becomes less about star-crossed romance and more about the eternal conflict between youthful idealism and established authority.
 
-The play's portrayal of adults reveals Shakespeare's critique of generational power dynamics. The Capulets and Montagues are trapped in a cycle of inherited hatred they can no longer even explain, while figures like Friar Lawrence and the Nurse, despite their good intentions, ultimately fail the young protagonists. The adults in Romeo and Juliet are either actively harmful or ineffectively helpful, creating a world where youth must forge their own path. This pattern reflects the universal experience of young people who feel misunderstood by the older generation and must choose between conformity and authentic self-expression.
-
-Rather than viewing the tragic ending as a cautionary tale against youthful passion, we might read it as an indictment of a society that forces its young people into impossible situations. Romeo and Juliet's deaths serve as the ultimate act of rebellion—a final rejection of a world that offers them no viable path to happiness. Their sacrifice ultimately transforms Verona, ending the ancient feud and proving that sometimes youth's idealistic vision of how the world should be is more powerful than adult pragmatism. In this reading, the play becomes a testament to the transformative power of young people who refuse to accept the status quo, even at the ultimate cost.`
+        The play's portrayal of adults reveals Shakespeare's critique of generational power dynamics. The Capulets and Montagues are trapped in a cycle of inherited hatred they can no longer even explain, while figures like Friar Lawrence and the Nurse, despite their good intentions, ultimately fail the young protagonists. The adults in Romeo and Juliet are either actively harmful or ineffectively helpful, creating a world where youth must forge their own path. This pattern reflects the universal experience of young people who feel misunderstood by the older generation and must choose between conformity and authentic self-expression.`
 
 
     return (
@@ -297,58 +295,113 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                 <Separator />
                 {/* Demo */}
                 <section className="py-16 px-6" id="app-demo-section">
-                    <TextEditorDemo />
-                    <div className="flex flex-col items-center mt-8">
-                        <h5 className="font-bold text-2xl tracking-wider mb-3">Benefits</h5>
-                        {/* <div className=" space-y-3 font-medium text-md">
-                            <p>✅ <span className="underline">CANNOT</span> copy and paste text into the editor (TRY IT!)</p>
-                            <p>✅ Teacher option to enable spell-check</p>
-                            <p>✅ No distractions with font, font-sizes, formatting, images, etc.</p>
-                            <p>✅ Word predication will not complete sentences</p>
-                            <p>✅ Know exactly how well your students write</p>
-                        </div> */}
+                    <div className="max-w-7xl mx-auto">
+                        <TextEditorDemo />
+                        {/* Benefits Section */}
+                        <div className="max-w-3xl mx-auto">
+                            <h3 className="text-xl font-bold text-center mt-8 mb-4">Key Benefits</h3>
 
-                        <div className="space-y-3 font-medium text-md">
-                            <p><SquareCheckBig className="inline-block mr-2" /><span className="font-semibold underline">Stop AI cheating</span> - Copy/paste completely disabled</p>
-                            <p><SquareCheckBig className="inline-block mr-2" /><span className="font-semibold underline">Assess real skills</span> - No autocorrect or word prediction</p>
-                            <p><SquareCheckBig className="inline-block mr-2" /><span className="font-semibold underline">Keep students focused</span> - Zero formatting distractions</p>
-                            <p><SquareCheckBig className="inline-block mr-2" /><span className="font-semibold underline">Teacher-controlled spell-check</span> - Your choice, per assignment</p>
-                            <p><SquareCheckBig className="inline-block mr-2" /><span className="font-semibold underline">Authentic writing</span> - See what they truly know</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                                <div className="relative flex gap-3 items-start bg-card border border-border rounded-lg p-5 pt-6 shadow-sm hover:shadow-md transition-shadow animate-[sway_6s_ease-in-out_infinite] origin-top">
+                                    <div className="absolute top-3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-muted border border-primary shadow-sm"></div>
+                                    <span className="text-2xl">🚫</span>
+                                    <div>
+                                        <p className="font-semibold">Blocks AI paste</p>
+                                        <p className="text-muted-foreground">Copy/paste disabled</p>
+                                    </div>
+                                </div>
+
+                                <div className="relative flex gap-3 items-start bg-card border border-border rounded-lg p-5 pt-6 shadow-sm hover:shadow-md transition-shadow animate-[sway_5s_ease-in-out_infinite_0.5s] origin-top">
+                                    <div className="absolute top-3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-muted border border-primary shadow-sm"></div>
+                                    <span className="text-2xl">✍️</span>
+                                    <div>
+                                        <p className="font-semibold">No autocorrect</p>
+                                        <p className="text-muted-foreground">Tests real writing ability</p>
+                                    </div>
+                                </div>
+
+                                <div className="relative flex gap-3 items-start bg-card border border-border rounded-lg p-5 pt-6 shadow-sm hover:shadow-md transition-shadow animate-[sway_6.5s_ease-in-out_infinite_1s] origin-top">
+                                    <div className="absolute top-3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-muted border border-primary shadow-sm"></div>
+                                    <span className="text-2xl">✨</span>
+                                    <div>
+                                        <p className="font-semibold">Interactive blogs</p>
+                                        <p className="text-muted-foreground">Writing becomes shareable blogs</p>
+                                    </div>
+                                </div>
+
+                                <div className="relative flex gap-3 items-start bg-card border border-border rounded-lg p-5 pt-6 shadow-sm hover:shadow-md transition-shadow animate-[sway_5.5s_ease-in-out_infinite_0.3s] origin-top">
+                                    <div className="absolute top-3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-muted border border-primary shadow-sm"></div>
+                                    <span className="text-2xl">🤖</span>
+                                    <div>
+                                        <p className="font-semibold">AI auto-grading</p>
+                                        <p className="text-muted-foreground">Short answer questions graded instantly</p>
+                                    </div>
+                                </div>
+
+                                <div className="relative flex gap-3 items-start bg-card border border-border rounded-lg p-5 pt-6 shadow-sm hover:shadow-md transition-shadow animate-[sway_7s_ease-in-out_infinite_0.7s] origin-top">
+                                    <div className="absolute top-3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-muted border border-primary shadow-sm"></div>
+                                    <span className="text-2xl">📝</span>
+                                    <div>
+                                        <p className="font-semibold">Custom rubric grading</p>
+                                        <p className="text-muted-foreground">Essays autograde with your rubrics</p>
+                                    </div>
+                                </div>
+
+                                <div className="relative flex gap-3 items-start bg-card border border-border rounded-lg p-5 pt-6 shadow-sm hover:shadow-md transition-shadow animate-[sway_5.3s_ease-in-out_infinite_0.8s] origin-top">
+                                    <div className="absolute top-3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-muted border border-primary shadow-sm"></div>
+                                    <span className="text-2xl">⚙️</span>
+                                    <div>
+                                        <p className="font-semibold">Your control</p>
+                                        <p className="text-muted-foreground">Enable features per assignment</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <h3 className='bg-card font-semibold text-primary border shadow-sm rounded-lg p-5 px-10 mt-16 max-w-[750px] tracking-wide text-xl text-center w-full mx-auto'>Student writing will be transformed into interactive blogs as shown below:</h3>
                 </section>
 
                 <Separator />
 
                 {/* Demo Blog */}
-                <section className="max-w-[700px] py-12 px-10 mx-auto">
-                    <h2 className='h1-bold text-center mb-10 text-muted-foreground'>Example Blog</h2>
-                    <BlogMetaDetails
-                        responseData={response}
-                        studentId="1"
-                        teacherView={false}
-                    />
-                    <Image
-                        src={'https://unfinished-pages.s3.us-east-2.amazonaws.com/user-cm5bmuyhh0001zizwly9lp1td-profile-pic.jpeg-1735709463754'}
-                        width={700}
-                        height={394}
-                        alt={'blog cover photo'}
-                        className="block mx-auto mb-5 w-[700px] h-[394px]"
-                        priority
-                    />
-                    <p className="leading-[2rem] text-foreground text-[16px] sm:text-[19px] whitespace-pre-line">{dummyBlogText}</p>
-                    <Separator className="my-5" />
+                <section className="py-12 px-6">
+                    <div className="max-w-7xl mx-auto">
+                        {/* Section Header */}
+                        <div className="text-center mb-10 space-y-4">
+                            <h2 className="text-3xl sm:text-4xl font-bold">Student Blog Preview</h2>
+                            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                                Every essay transforms into an interactive blog with comments, likes, and engagement features
+                            </p>
+                        </div>
 
-                    <CommentSection
-                        comments={[]}
-                        responseId={'1'}
-                        studentId={'1'}
-                        sessionId={'1'}
-                        classroomId={'1'}
-                        discussionStatus={'OPEN'}
-                        commentCoolDown={20}
-                    />
+                        {/* Blog Example */}
+                        <div className="max-w-[700px] mx-auto bg-card border border-border rounded-2xl p-10 sm:p-12 shadow-lg">
+                            <BlogMetaDetails
+                                responseData={response}
+                                studentId="1"
+                                teacherView={false}
+                            />
+                            <Image
+                                src={'https://unfinished-pages.s3.us-east-2.amazonaws.com/user-cm5bmuyhh0001zizwly9lp1td-profile-pic.jpeg-1735709463754'}
+                                width={700}
+                                height={394}
+                                alt={'blog cover photo'}
+                                className="block mx-auto mb-5 w-[700px] h-[394px]"
+                                priority
+                            />
+                            <p className="leading-[2rem] text-foreground text-[16px] sm:text-[19px] whitespace-pre-line">{dummyBlogText}</p>
+                            <Separator className="my-5" />
+
+                            <CommentSection
+                                comments={[]}
+                                responseId={'1'}
+                                studentId={'1'}
+                                sessionId={'1'}
+                                classroomId={'1'}
+                                discussionStatus={'OPEN'}
+                                commentCoolDown={20}
+                            />
+                        </div>
+                    </div>
                 </section>
 
                 <Separator />
@@ -388,21 +441,7 @@ Rather than viewing the tragic ending as a cautionary tale against youthful pass
                                     <span className="ml-2">→</span>
                                 </Button>
                             </Link>
-                            {/* <p className="text-sm text-muted-foreground">
-                                No credit card • Setup in 5 minutes
-                            </p> */}
                         </div>
-
-                        {/* Trust badges */}
-                        {/* <div className="pt-8 border-t border-border">
-                            <p className="text-sm text-muted-foreground mb-4">Secure & Privacy-Focused</p>
-                            <div className="flex flex-wrap justify-center gap-6 text-xs text-muted-foreground">
-                                <span>🔒 SOC 2 Compliant</span>
-                                <span>🎓 FERPA Aligned</span>
-                                <span>✓ Student Data Encrypted</span>
-                                <span>✓ Google Workspace Integration</span>
-                            </div>
-                        </div> */}
                     </div>
                 </section>
             </main>

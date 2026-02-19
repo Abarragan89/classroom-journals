@@ -10,8 +10,8 @@ export default function TextEditorDemo() {
         <>
             <main className='relative'>
                 <div className='flex flex-col justify-center items-center'>
-                    <h2 className='h1-bold text-center'>Meet Our Restricted Text Editor</h2>
-                    <h3 className='font-bold text-sm text-center'>No word prediction, copy and paste, or distractions. Just typing.</h3>
+                    <h2 className='text-3xl sm:text-4xl font-bold text-center'>Meet Our Restricted Text Editor</h2>
+                    <h3 className='font-bold text-sm text-center text-muted-foreground mt-3'>No distractions. Just typing.</h3>
                     <div className='mt-10 w-full max-w-[750px] relative'>
                         <div className='z-10'>
                             <Editor
