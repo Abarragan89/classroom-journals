@@ -10,6 +10,12 @@ import BlogMetaDetails from "@/components/blog-meta-details";
 import { Separator } from "@/components/ui/separator";
 import CommentSection from "@/components/shared/comment-section";
 import { CornerRightUp } from "lucide-react";
+import { signInWithGoogle } from "@/lib/actions/auth.action";
+
+async function handleGoogleSignIn() {
+    'use server'
+    await signInWithGoogle()
+}
 
 export default async function page() {
 
@@ -90,19 +96,21 @@ export default async function page() {
                                 </div>
 
                                 {/* Google Classroom Integration Highlight */}
-                                <div className="flex items-center justify-center lg:justify-start gap-3 p-4 bg-card rounded-lg border border-border max-w-md mx-auto lg:mx-0">
-                                    <Image
-                                        src='/images/google-classroom-logo.png'
-                                        width={40}
-                                        height={40}
-                                        alt='Google Classroom Logo'
-                                        className="rounded"
-                                    />
-                                    <div className="text-left">
-                                        <p className="font-semibold text-sm">Seamless Google Classroom Sync</p>
-                                        <p className="text-xs text-muted-foreground">Import rosters in seconds</p>
-                                    </div>
-                                </div>
+                                <form action={handleGoogleSignIn} className="max-w-md mx-auto lg:mx-0">
+                                    <button type="submit" className="w-full flex items-center justify-center lg:justify-start gap-3 p-4 bg-card rounded-lg border border-border hover:bg-accent/50 hover:border-primary transition-all cursor-pointer">
+                                        <Image
+                                            src='/images/google-classroom-logo.png'
+                                            width={40}
+                                            height={40}
+                                            alt='Google Classroom Logo'
+                                            className="rounded"
+                                        />
+                                        <div className="text-left">
+                                            <p className="font-semibold text-sm">Seamless Google Classroom Sync</p>
+                                            <p className="text-xs text-muted-foreground">Import rosters in seconds</p>
+                                        </div>
+                                    </button>
+                                </form>
 
                                 {/* Primary CTA */}
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
