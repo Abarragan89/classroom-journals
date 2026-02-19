@@ -58,20 +58,40 @@ export default function StudentDashClientWrapper({
   return (
     <>
       {lastestTaskToDo && (
-        <div
-          className="border border-primary bg-card shadow-lg w-full px-5 py-2 rounded-lg relative mb-16 mt-2"
-        >
-          <div className="flex-between">
-            <div>
-              <p className="h3-bold text-primary">Alert! New Assignment</p>
-              <p className="text-md line-clamp-1">{lastestTaskToDo?.promptSession?.title}</p>
-              <p className="text-sm text-ring">{lastestTaskToDo?.promptSession?.prompt?.category?.name}</p>
+        <div className="relative w-full mb-16 mt-2 overflow-hidden rounded-xl border-2 border-primary bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 shadow-xl">
+          <div className="p-3 sm:p-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                {/* Alert icon */}
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1">
+                  <p className="text-xl font-bold text-primary mb-1">New Assignment Alert!</p>
+                  <p className="text-base font-semibold text-foreground line-clamp-1 mb-1">
+                    {lastestTaskToDo?.promptSession?.title}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {lastestTaskToDo?.promptSession?.prompt?.category?.name}
+                  </p>
+                </div>
+              </div>
+
+              {/* CTA Button */}
+              <Button
+                asChild
+                className="bg-success hover:bg-success/90 text-success-foreground shadow-md w-full sm:w-auto"
+                size="lg"
+              >
+                <Link href={`jot-response/${lastestTaskToDo?.id}?q=0`}>
+                  Complete Now →
+                </Link>
+              </Button>
             </div>
-            <Button asChild className='bg-success text-success-foreground'>
-              <Link href={`jot-response/${lastestTaskToDo?.id}?q=0`}>
-                Complete
-              </Link>
-            </Button>
           </div>
         </div>
       )}
