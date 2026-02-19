@@ -136,15 +136,30 @@ export default {
 						opacity: '1'
 					}
 				},
+				sway: {
+					'0%, 100%': {
+						transform: 'rotate(0deg)'
+					},
+					'25%': {
+						transform: 'rotate(1deg)'
+					},
+					'50%': {
+						transform: 'rotate(0deg)'
+					},
+					'75%': {
+						transform: 'rotate(-1deg)'
+					}
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				fall: 'fall 1.5s ease-out forwards',
 				'bounce-down': 'bounce-down 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1.4s forwards',
+				sway: 'sway 5s ease-in-out infinite',
 			}
 		}
 	},
-	
+
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
