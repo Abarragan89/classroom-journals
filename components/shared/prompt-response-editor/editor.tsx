@@ -41,10 +41,13 @@ export default function Editor({
     const editorRef = useRef<HTMLTextAreaElement | null>(null)
 
     // Auto-resize textarea based on content
+    // Fallback for browsers that don't support field-sizing
     useEffect(() => {
-        if (editorRef.current) {
+        if (editorRef.current && typeof CSS !== 'undefined' && !CSS.supports('field-sizing', 'content')) {
+            const scrollY = window.scrollY;
             editorRef.current.style.height = 'auto'; // Reset height
             editorRef.current.style.height = `${editorRef.current.scrollHeight}px`; // Set to scrollHeight
+            window.scrollTo(0, scrollY); // Restore scroll position to prevent jumping
         }
     }, [journalText]);
 
@@ -222,6 +225,12 @@ export default function Editor({
                 p-6 resize-none h-max-full disabled:opacity-80 disabled:text-foreground disabled:cursor-not-allowed leading-normal  tracking-widest font-extralight text-foreground
                 ${jotType === 'BLOG' ? 'min-h-48' : ''}
             `}
+                style={{
+                    fieldSizing: 'content',
+                    minHeight: jotType === 'BLOG' ? '12rem' : '8rem',
+                    paddingBottom: '3rem',
+                    scrollPaddingBottom: '3rem'
+                }}
                 value={journalText}
                 onChange={handleOnChange}
                 onKeyDown={handleKeyDown}
