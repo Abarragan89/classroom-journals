@@ -244,7 +244,7 @@ model PromptSession {
   assignedAt       DateTime            @default(now())
   areGradesVisible Boolean             @default(false)
   classId          String              @db.Uuid // relate it to which side it is attached to
-  status           PromptSessionStatus @default(OPEN)
+  status           PromptSessionStatus @default(OPEN) // Can be open or closed for comments
   responses        Response[]
   // This is mainly for threads when a student suggests a thread and it is accepted
   authorId         String?             @db.Uuid

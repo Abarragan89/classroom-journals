@@ -134,13 +134,13 @@ export async function getSingleResponse(responseId: string, userId: string, sess
         comments: response?.comments.map(comment => ({
             ...comment,
             user: {
-                ...comment.user,
+                avatarURL: comment.user.avatarURL,
                 username: decryptText(comment.user.username as string, comment.user.iv as string)
             },
             replies: comment.replies.map(reply => ({
                 ...reply,
                 user: {
-                    ...reply.user,
+                    avatarURL: reply.user.avatarURL,
                     username: decryptText(reply.user.username as string, reply.user.iv as string)
                 }
             }))
@@ -339,6 +339,7 @@ export async function getFilteredStudentResponses(filterOptions: SearchOptions, 
             completionStatus: true,
             response: true,
             createdAt: true,
+            
             promptSession: {
                 select: {
                     id: true,
@@ -346,6 +347,7 @@ export async function getFilteredStudentResponses(filterOptions: SearchOptions, 
                     createdAt: true,
                     promptType: true,
                     areGradesVisible: true,
+                    status: true,
                     prompt: {
                         select: {
                             category: {
