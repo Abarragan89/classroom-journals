@@ -67,7 +67,7 @@ export default function HandleToggleReturnStateBtn({
 
       return { previousResponse, previousSession, previousIsSubmittable: !newIsSubmittable };
     },
-    onError: (err, variables, context) => {
+    onError: (err, _variables, context) => {
       console.error('Error toggling return state:', err);
 
       // Rollback both caches

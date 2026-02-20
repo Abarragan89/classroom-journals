@@ -55,25 +55,25 @@ export default async function SingleResponse({
                         />
 
                     </div>
-                    {!isMultiQuestion && (
-                        <div className="flex-end mb-10 relative">
-                            <ResponseActions
-                                initialResponse={response}
-                                responseId={responseId}
-                                sessionId={sessionId}
-                                teacherId={teacherId}
-                                classId={classId}
-                            />
+                    <div className="flex-end mb-8 relative">
+                        <ResponseActions
+                            initialResponse={response}
+                            responseId={responseId}
+                            sessionId={sessionId}
+                            teacherId={teacherId}
+                            classId={classId}
+                        />
+                        {!isMultiQuestion && (
                             <ScoreJournalForm
                                 teacherId={teacherId}
                                 responseId={response?.id}
                                 currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
                                 studentWriting={(response.response as unknown as ResponseData[])?.[0]?.answer || ''}
                             />
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
-                <div className="max-w-[1200px] mx-auto relative">
+                <div className={`max-w-[1200px] mx-auto relative ${isMultiQuestion ? 'mt-[110px]' : ''}`}>
                     {isMultiQuestion ? (
                         <GradeResponseCard
                             questionsAndAnswers={questionsAndAnswers}
@@ -84,7 +84,6 @@ export default async function SingleResponse({
                     ) : (
                         <div className='w-full'>
                             <p className='text-md font-bold'>{response.promptSession?.title}</p>
-
                             <div className="max-w-[700px] px-3 mx-auto mt-5">
                                 <BlogMetaDetails
                                     responseData={response}

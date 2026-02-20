@@ -4,7 +4,6 @@ import { Response } from '@/types'
 import HandleToggleReturnStateBtn from '@/components/buttons/handle-toggle-return-state-btn'
 import DeleteResponseBtn from './delete-response-btn'
 import { Badge } from '@/components/ui/badge'
-// import { Badge } from '@/components/ui/badge'
 
 export default function ResponseActions({
     initialResponse,
@@ -33,24 +32,24 @@ export default function ResponseActions({
     const isNotSubmitted = response?.completionStatus !== 'COMPLETE';
 
     return (
-        <div className='mt-5 space-y-5 absolute left-0 top-[2px]'>
-            {isNotSubmitted && (
-                <Badge variant={"destructive"} className=''>Not Submitted</Badge>
-            )}
+        <div className='mt-5 space-y-3 absolute left-0 top-0'>
             <div className='flex gap-x-4 justify-end'>
                 <HandleToggleReturnStateBtn
                     responseId={responseId}
                     teacherId={teacherId}
                     isCompleted={response?.completionStatus === 'COMPLETE'}
                     sessionId={sessionId}
-                />
+                    />
                 <DeleteResponseBtn
                     responseId={responseId}
                     sessionId={sessionId}
                     teacherId={teacherId}
                     classId={classId}
-                />
+                    />
             </div>
+            {isNotSubmitted && (
+                <Badge variant={"destructive"} className=''>Not Submitted</Badge>
+            )}
         </div>
     );
 }
