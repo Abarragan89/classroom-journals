@@ -92,6 +92,7 @@ export async function addComment(
             // Decrypt username for the frontend response
             const formattedComment = {
                 ...newComment,
+                replies: [],
                 user: {
                     avatarURL: newComment?.user?.avatarURL,
                     username: decryptText(newComment.user.username as string, newComment.user.iv as string)

@@ -22,9 +22,6 @@ export default function AssignmentSectionClient({
     studentId
 }: Props) {
 
-    // const [fetchedPrompts, setFetchedPrompts] = useState<Response[]>(initialPrompts)
-
-
     const [searchOptions, setSearchOptions] = useState<SearchOptions>({
         category: '',
         filter: '',
