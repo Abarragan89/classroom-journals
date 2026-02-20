@@ -1,5 +1,5 @@
 import { Textarea } from "@/components/ui/textarea";
-import { Redo, Undo, Minimize2, HelpCircle, Expand, Maximize2 } from "lucide-react";
+import { Redo, Undo, Minimize2, HelpCircle, Maximize2 } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
