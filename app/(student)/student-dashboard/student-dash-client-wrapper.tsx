@@ -71,7 +71,7 @@ export default function StudentDashClientWrapper({
 
                 {/* Content */}
                 <div className="flex-1">
-                  <p className="text-xl font-bold text-primary mb-1">New Assignment Alert!</p>
+                  <p className="text-xl font-bold text-primary">New Assignment Alert!</p>
                   <p className="text-base font-semibold text-foreground line-clamp-1 mb-1">
                     {lastestTaskToDo?.promptSession?.title}
                   </p>

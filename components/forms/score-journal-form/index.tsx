@@ -61,31 +61,30 @@ export default function ScoreJournalForm({
     });
 
     // Derive existing grade from query data
-    const mostRecentGrade = rubricGradeData && rubricGradeData.length > 0 ? rubricGradeData[0] : null;
-    const existingGrade: RubricGrade | null = mostRecentGrade ? {
-        rubricId: mostRecentGrade.rubricId,
-        responseId: mostRecentGrade.responseId,
-        categories: mostRecentGrade.categories as RubricGrade['categories'],
-        totalScore: mostRecentGrade.totalScore,
-        maxTotalScore: mostRecentGrade.maxTotalScore,
-        comment: mostRecentGrade.comment || undefined
+    const existingGrade: RubricGrade | null = rubricGradeData && rubricGradeData.length > 0 ? {
+        rubricId: rubricGradeData[0].rubricId,
+        responseId: rubricGradeData[0].responseId,
+        categories: rubricGradeData[0].categories as RubricGrade['categories'],
+        totalScore: rubricGradeData[0].totalScore,
+        maxTotalScore: rubricGradeData[0].maxTotalScore,
+        comment: rubricGradeData[0].comment || undefined
     } : null;
 
     // Auto-set currentRubric when existing grade loads (only once)
     useEffect(() => {
-        if (mostRecentGrade && !currentRubric) {
+        if (rubricGradeData && rubricGradeData.length > 0 && !currentRubric) {
             const rubricForDisplay: Rubric = {
-                id: mostRecentGrade.rubric.id,
-                title: mostRecentGrade.rubric.title,
-                categories: mostRecentGrade.rubric.categories as Rubric['categories'],
-                teacherId: mostRecentGrade.teacherId,
+                id: rubricGradeData[0].rubric.id,
+                title: rubricGradeData[0].rubric.title,
+                categories: rubricGradeData[0].rubric.categories as Rubric['categories'],
+                teacherId: rubricGradeData[0].teacherId,
                 createdAt: new Date(),
                 updatedAt: new Date()
             };
             setCurrentRubric(rubricForDisplay);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [mostRecentGrade]); // Only run when mostRecentGrade changes, not currentRubric
+    }, [rubricGradeData]); // Only run when rubricGradeData changes, not currentRubric
 
     // Mutation for updating 100-point score
     const updateScoreMutation = useMutation({
@@ -375,12 +374,12 @@ export default function ScoreJournalForm({
                                         <span
                                             onClick={() => {
                                                 // Show the rubric grade view
-                                                if (mostRecentGrade) {
+                                                if (rubricGradeData && rubricGradeData.length > 0) {
                                                     const rubricForDisplay: Rubric = {
-                                                        id: mostRecentGrade.rubric.id,
-                                                        title: mostRecentGrade.rubric.title,
-                                                        categories: mostRecentGrade.rubric.categories as Rubric['categories'],
-                                                        teacherId: mostRecentGrade.teacherId,
+                                                        id: rubricGradeData[0].rubric.id,
+                                                        title: rubricGradeData[0].rubric.title,
+                                                        categories: rubricGradeData[0].rubric.categories as Rubric['categories'],
+                                                        teacherId: rubricGradeData[0].teacherId,
                                                         createdAt: new Date(),
                                                         updatedAt: new Date()
                                                     };

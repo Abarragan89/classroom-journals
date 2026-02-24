@@ -295,6 +295,7 @@ export type AIGradingResult = {
     comment?: string;
     message?: string;
     error?: string;
+    jobId?: string; // For async polling
 }
 
 // Type for displaying rubric grades with full rubric information (used in student view)

@@ -205,50 +205,30 @@ export default function RubricInstance({
             return;
         }
 
+        if (!responseId) {
+            toast.error('Response ID is required for AI grading');
+            return;
+        }
+
         setIsAIGrading(true);
         try {
-            const result = await gradeRubricWithAI(rubric, studentWriting, undefined);
+            // Queue the job without waiting (allows navigation)
+            const result = await gradeRubricWithAI(rubric, studentWriting, responseId, undefined, false);
 
-            if (result.success && result.scores && result.comment) {
-                // Update the grading instance with AI scores
-                const updatedInstance = {
-                    ...gradingInstance,
-                    categories: gradingInstance.categories.map((cat, idx) => {
-                        // Find the criterion that matches the AI's score for this category
-                        const aiScore = result.scores![idx];
-                        const criterionIndex = cat.criteria.findIndex(criterion => criterion.score === aiScore);
-
-                        return {
-                            ...cat,
-                            selectedScore: criterionIndex >= 0 ? criterionIndex : undefined
-                        };
-                    })
-                };
-
-                setGradingInstance(updatedInstance);
-                setComment(result.comment);
-
+            if (result.success && result.jobId) {
                 // Decrement local allowance
                 setAiAllowance(prev => prev - 1);
 
-                // Check for changes and notify parent
-                checkForChanges(updatedInstance, result.comment);
-
-                if (onGradeChange) {
-                    const grade = calculateGrade(updatedInstance);
-                    grade.comment = result.comment;
-                    onGradeChange(grade);
-                }
-
-                toast.success('AI grading completed successfully!');
+                toast.success('AI grading started! Refresh the page in a few moments to see results.');
+                setIsAIGrading(false);
             } else {
-                toast.error(result.message || 'Failed to grade with AI');
+                setIsAIGrading(false);
+                toast.error(result.message || 'Failed to start AI grading');
             }
         } catch (error) {
             console.error('Error during AI grading:', error);
-            toast.error('Failed to grade with AI. Please try again.');
-        } finally {
             setIsAIGrading(false);
+            toast.error('Failed to grade with AI. Please try again.');
         }
     };
 
@@ -320,9 +300,9 @@ export default function RubricInstance({
                         </div>
 
 
-                        {isComplete && (existingGrade && !hasChanges ? (
+                        {(existingGrade && !hasChanges ? (
                             <Button disabled className="opacity-50 cursor-not-allowed">
-                                No Changes
+                                {!isComplete ? "Incomplete" : "No Changes"}
                             </Button>
                         ) : (
                             <Button onClick={handleSave} disabled={isSaving}>
