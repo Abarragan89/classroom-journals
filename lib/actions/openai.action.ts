@@ -32,6 +32,12 @@ export async function gradeResponseWithAI(
             return { success: false, message: 'AI grading allowance exhausted' };
         }
 
+        // Set isAIGrading = true before queueing
+        await prisma.response.update({
+            where: { id: responseId },
+            data: { isAIGrading: true }
+        });
+
         // Add job to queue
         const job = await openAiQueue.add('grade-responses', {
             teacherId,
@@ -41,12 +47,33 @@ export async function gradeResponseWithAI(
         });
 
         // Wait for job to complete
-        const result = await job.waitUntilFinished(openAiQueueEvents);
-
-        return result;
+        try {
+            const result = await job.waitUntilFinished(openAiQueueEvents);
+            
+            // Check if the job actually failed in the worker
+            const jobState = await job.getState();
+            if (jobState === 'failed') {
+                throw new Error(job.failedReason || 'Worker job failed');
+            }
+            
+            return result;
+        } catch (workerError) {
+            // Worker failed - reset isAIGrading flag
+            await prisma.response.update({
+                where: { id: responseId },
+                data: { isAIGrading: false }
+            });
+            throw workerError; // Re-throw to be caught by outer catch
+        }
     } catch (error) {
-        console.error('error queueing autograde job', error)
-        return { success: false, message: 'Failed to queue grading job' }
+        console.error('error queueing autograde job', error);
+        // Ensure isAIGrading is reset on any error
+        await prisma.response.update({
+            where: { id: responseId },
+            data: { isAIGrading: false }
+        }).catch(err => console.error('Failed to reset isAIGrading:', err));
+        
+        return { success: false, message: 'Failed to queue grading job' };
     }
 }
 
@@ -83,6 +110,12 @@ export async function gradeRubricWithAI(
             };
         }
 
+        // Set isAIGrading = true before queueing
+        await prisma.response.update({
+            where: { id: responseId },
+            data: { isAIGrading: true }
+        });
+
         // Add job to queue
         const job = await openAiQueue.add('grade-rubric', {
             teacherId,
@@ -94,8 +127,25 @@ export async function gradeRubricWithAI(
 
         if (waitForCompletion) {
             // Wait for job to complete and return result
-            const result = await job.waitUntilFinished(openAiQueueEvents);
-            return result;
+            try {
+                // Wait for job to complete and return result
+                const result = await job.waitUntilFinished(openAiQueueEvents);
+
+                // Check if the job actually failed in the worker
+                const jobState = await job.getState();
+                if (jobState === 'failed') {
+                    throw new Error(job.failedReason || 'Worker job failed');
+                }
+
+                return result;
+            } catch (workerError) {
+                // Worker failed - reset isAIGrading flag
+                await prisma.response.update({
+                    where: { id: responseId },
+                    data: { isAIGrading: false }
+                });
+                throw workerError; // Re-throw to be caught by outer catch
+            }
         } else {
             // Return immediately with job info for polling
             return {
@@ -107,6 +157,12 @@ export async function gradeRubricWithAI(
 
     } catch (error) {
         console.error('Error queueing rubric grading:', error);
+        // Ensure isAIGrading is reset on any error
+        await prisma.response.update({
+            where: { id: responseId },
+            data: { isAIGrading: false }
+        }).catch(err => console.error('Failed to reset isAIGrading:', err));
+        
         return {
             success: false,
             message: 'Failed to queue grading job',

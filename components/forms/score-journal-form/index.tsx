@@ -18,11 +18,13 @@ export default function ScoreJournalForm({
     responseId,
     teacherId,
     studentWriting = '',
+    response
 }: {
     currentScore: number | string,
     responseId: string,
     teacherId: string,
     studentWriting?: string,
+    response?: Response
 }) {
 
     const queryClient = useQueryClient()
@@ -30,20 +32,32 @@ export default function ScoreJournalForm({
 
     const [showRubricDialog, setShowRubricDialog] = useState(false);
     const [currentRubric, setCurrentRubric] = useState<Rubric | null>(null);
+    const [isAIGrading, setIsAIGrading] = useState(response?.isAIGrading || false);
 
-    // Fetch existing rubric grades with React Query
-    const { data: rubricGradeData } = useQuery({
-        queryKey: ['rubricGrades', responseId],
+    const { data: responseData } = useQuery({
+        queryKey: ['response', responseId],
         queryFn: async () => {
-            const response = await fetch(`/api/rubrics/response/${responseId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch rubric grades');
-            }
-            const data = await response.json();
-            return data.rubricGrades;
+            const res = await fetch(`/api/responses/${responseId}?userId=${teacherId}`);
+            const data = await res.json() as { response: Response };
+            return data.response;
         },
-        staleTime: 1000 * 60 * 5, // 5 minutes
+        refetchInterval: ({ state }) => {
+            // Poll every 3 seconds while AI is grading
+            return isAIGrading ? 3000 : false;
+        },
+        staleTime: 1000 * 60 * 5,
+        initialData: response // Use the response passed as prop for initial data to avoid loading state
     });
+
+    // Update local state when response data changes (separate from refetchInterval)
+    useEffect(() => {
+        if (responseData?.isAIGrading !== undefined) {
+            setIsAIGrading(responseData.isAIGrading);
+        }
+    }, [responseData?.isAIGrading]);
+
+    // Extract rubric grades from the response data (no separate query needed)
+    const rubricGradeData = responseData?.rubricGrades || [];
 
     // Fetch rubric list with React Query
     const { data: rubricList = [], isLoading: loadingRubricList } = useQuery({
@@ -62,8 +76,8 @@ export default function ScoreJournalForm({
 
     // Derive existing grade from query data
     const existingGrade: RubricGrade | null = rubricGradeData && rubricGradeData.length > 0 ? {
-        rubricId: rubricGradeData[0].rubricId,
-        responseId: rubricGradeData[0].responseId,
+        rubricId: rubricGradeData[0].rubric.id,
+        responseId: responseId,
         categories: rubricGradeData[0].categories as RubricGrade['categories'],
         totalScore: rubricGradeData[0].totalScore,
         maxTotalScore: rubricGradeData[0].maxTotalScore,
@@ -73,15 +87,19 @@ export default function ScoreJournalForm({
     // Auto-set currentRubric when existing grade loads (only once)
     useEffect(() => {
         if (rubricGradeData && rubricGradeData.length > 0 && !currentRubric) {
-            const rubricForDisplay: Rubric = {
-                id: rubricGradeData[0].rubric.id,
-                title: rubricGradeData[0].rubric.title,
-                categories: rubricGradeData[0].rubric.categories as Rubric['categories'],
-                teacherId: rubricGradeData[0].teacherId,
-                createdAt: new Date(),
-                updatedAt: new Date()
-            };
-            setCurrentRubric(rubricForDisplay);
+            const rubricData = rubricGradeData[0]?.rubric;
+            // Only set rubric if it has all required fields
+            if (rubricData?.id && rubricData?.title && rubricData?.categories) {
+                const rubricForDisplay: Rubric = {
+                    id: rubricData.id,
+                    title: rubricData.title,
+                    categories: rubricData.categories as Rubric['categories'],
+                    teacherId: teacherId,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                };
+                setCurrentRubric(rubricForDisplay);
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rubricGradeData]); // Only run when rubricGradeData changes, not currentRubric
@@ -98,24 +116,22 @@ export default function ScoreJournalForm({
             return score;
         },
         onSuccess: (score) => {
-            // 1. Clear rubricGrades cache (switching to 100-point score)
-            queryClient.setQueryData(['rubricGrades', responseId], []);
-
-            // 2. Update response cache with new score
+            // Update response cache with new score and clear rubricGrades
             const responseCache = queryClient.getQueryData(['response', responseId]);
-            if (responseCache && typeof responseCache === 'object' && 'response' in responseCache) {
+            if (responseCache && typeof responseCache === 'object') {
                 queryClient.setQueryData(['response', responseId], {
                     ...responseCache,
-                    response: Array.isArray(responseCache.response)
-                        ? responseCache.response.map((r: any) => ({
+                    rubricGrades: [], // Clear rubric grades when using 100-point score
+                    response: Array.isArray((responseCache as any).response)
+                        ? (responseCache as any).response.map((r: any) => ({
                             ...r,
                             score: score
                         }))
-                        : responseCache.response
+                        : (responseCache as any).response
                 });
             }
 
-            // 3. Update all session caches containing this response
+            // Update all session caches containing this response
             queryClient.getQueryCache().findAll()
                 .filter(query =>
                     Array.isArray(query.queryKey) &&
@@ -130,6 +146,7 @@ export default function ScoreJournalForm({
                                 resp.id === responseId
                                     ? {
                                         ...resp,
+                                        rubricGrades: [], // Clear rubric grades in session cache too
                                         response: Array.isArray(resp.response)
                                             ? ((resp.response as unknown) as ResponseData[]).map(r => ({
                                                 ...r,
@@ -221,38 +238,48 @@ export default function ScoreJournalForm({
         },
         onMutate: async (grade: RubricGrade) => {
             // Cancel any outgoing refetches to avoid overwriting our optimistic update
-            await queryClient.cancelQueries({ queryKey: ['rubricGrades', responseId] });
+            await queryClient.cancelQueries({ queryKey: ['response', responseId] });
 
             // Snapshot the previous value
-            const previousGrade = queryClient.getQueryData(['rubricGrades', responseId]);
+            const previousResponse = queryClient.getQueryData(['response', responseId]);
 
-            // Optimistically update the cache with the new grade
-            queryClient.setQueryData(['rubricGrades', responseId], grade);
+            // Optimistically update the response cache with the new rubric grade
+            const responseCache = queryClient.getQueryData(['response', responseId]);
+            if (responseCache && typeof responseCache === 'object') {
+                queryClient.setQueryData(['response', responseId], {
+                    ...responseCache,
+                    rubricGrades: [{
+                        ...grade,
+                        rubric: currentRubric
+                    }]
+                });
+            }
 
             // Return context with the previous value for potential rollback
-            return { previousGrade };
+            return { previousResponse };
         },
         onSuccess: (rubricResult) => {
             const percentageScore = rubricResult.grade?.percentageScore || 0;
 
-            // 1. Update rubricGrades cache directly
-            queryClient.setQueryData(['rubricGrades', responseId], [rubricResult.grade]);
-
-            // 2. Update response cache if it exists
+            // Update response cache with rubric grade and score
             const responseCache = queryClient.getQueryData(['response', responseId]);
-            if (responseCache && typeof responseCache === 'object' && 'response' in responseCache) {
+            if (responseCache && typeof responseCache === 'object') {
                 queryClient.setQueryData(['response', responseId], {
                     ...responseCache,
-                    response: Array.isArray(responseCache.response)
-                        ? responseCache.response.map((r: any) => ({
+                    rubricGrades: [{
+                        ...rubricResult.grade,
+                        rubric: currentRubric // Preserve full rubric details including categories
+                    }],
+                    response: Array.isArray((responseCache as any).response)
+                        ? (responseCache as any).response.map((r: any) => ({
                             ...r,
                             score: percentageScore
                         }))
-                        : responseCache.response
+                        : (responseCache as any).response
                 });
             }
 
-            // 3. Update all session caches containing this response
+            // Update all session caches containing this response
             queryClient.getQueryCache().findAll()
                 .filter(query =>
                     Array.isArray(query.queryKey) &&
@@ -267,6 +294,10 @@ export default function ScoreJournalForm({
                                 resp.id === responseId
                                     ? {
                                         ...resp,
+                                        rubricGrades: [{
+                                            ...rubricResult.grade,
+                                            rubric: currentRubric
+                                        }],
                                         response: Array.isArray(resp.response)
                                             ? ((resp.response as unknown) as ResponseData[]).map(r => ({
                                                 ...r,
@@ -284,8 +315,8 @@ export default function ScoreJournalForm({
         },
         onError: (error: Error, _grade, context) => {
             // Rollback to the previous value on error
-            if (context?.previousGrade) {
-                queryClient.setQueryData(['rubricGrades', responseId], context.previousGrade);
+            if (context?.previousResponse) {
+                queryClient.setQueryData(['response', responseId], context.previousResponse);
             }
             console.error('Error saving rubric grade:', error);
             toast(error.message || 'Failed to save rubric grade');
@@ -375,15 +406,19 @@ export default function ScoreJournalForm({
                                             onClick={() => {
                                                 // Show the rubric grade view
                                                 if (rubricGradeData && rubricGradeData.length > 0) {
-                                                    const rubricForDisplay: Rubric = {
-                                                        id: rubricGradeData[0].rubric.id,
-                                                        title: rubricGradeData[0].rubric.title,
-                                                        categories: rubricGradeData[0].rubric.categories as Rubric['categories'],
-                                                        teacherId: rubricGradeData[0].teacherId,
-                                                        createdAt: new Date(),
-                                                        updatedAt: new Date()
-                                                    };
-                                                    setCurrentRubric(rubricForDisplay);
+                                                    const rubricData = rubricGradeData[0]?.rubric;
+                                                    // Only set rubric if it has all required fields
+                                                    if (rubricData?.id && rubricData?.title && rubricData?.categories) {
+                                                        const rubricForDisplay: Rubric = {
+                                                            id: rubricData.id,
+                                                            title: rubricData.title,
+                                                            categories: rubricData.categories as Rubric['categories'],
+                                                            teacherId: teacherId,
+                                                            createdAt: new Date(),
+                                                            updatedAt: new Date()
+                                                        };
+                                                        setCurrentRubric(rubricForDisplay);
+                                                    }
                                                 }
                                             }}
                                             className="text-muted-foreground underline hover:text-primary cursor-pointer"
@@ -434,6 +469,8 @@ export default function ScoreJournalForm({
                     <RubricInstance
                         rubric={currentRubric}
                         responseId={responseId}
+                        setIsAIGrading={setIsAIGrading}
+                        isAIGrading={isAIGrading}
                         existingGrade={existingGrade || undefined}
                         onSave={handleSaveGrade}
                         studentWriting={studentWriting}

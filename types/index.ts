@@ -94,6 +94,7 @@ export interface Response {
     completionStatus: 'INCOMPLETE' | 'COMPLETE' | 'RETURNED';
     spellCheckEnabled: boolean;
     isVoiceToTextEnabled: boolean;
+    isAIGrading: boolean;
     studentId: string;
     _count: { comments: number }
     response: JsonValue;

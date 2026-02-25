@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { gradeRubricWithAI, getTeacherAIAllowance } from '@/lib/actions/openai.action'
 import { toast } from "sonner"
-import { PrinterIcon } from 'lucide-react'
+import { PrinterIcon, Loader2 } from 'lucide-react'
 import { checkout } from '@/lib/stripe/checkout'
 import { Badge } from '@/components/ui/badge'
 
@@ -18,8 +18,11 @@ interface RubricInstanceProps {
     existingGrade?: RubricGrade;
     onGradeChange?: (grade: RubricGrade) => void;
     onSave?: (grade: RubricGrade) => void;
+    setIsAIGrading: (isGrading: boolean) => void; // Add this prop to control AI grading state in parent
     studentWriting?: string;
     isSaving?: boolean; // Add this prop
+    isAIGradingInitial?: boolean; // Add this prop to indicate if AI grading is in progress on initial load
+    isAIGrading?: boolean; // Add this prop to indicate if AI grading is currently in progress
 }
 
 export default function RubricInstance({
@@ -27,14 +30,15 @@ export default function RubricInstance({
     responseId,
     existingGrade,
     onGradeChange,
+    setIsAIGrading,
     onSave,
     studentWriting = '',
     isSaving = false,
+    isAIGrading
 }: RubricInstanceProps) {
 
     const [hasChanges, setHasChanges] = useState(false);
     const [comment, setComment] = useState(existingGrade?.comment || '');
-    const [isAIGrading, setIsAIGrading] = useState(false);
     const [aiAllowance, setAiAllowance] = useState<number>(0);
 
     // Fetch AI allowance when component mounts
@@ -48,7 +52,7 @@ export default function RubricInstance({
 
     const [gradingInstance, setGradingInstance] = useState<RubricGradingInstance>(() => {
         // If we have an existing grade, initialize with those scores
-        if (existingGrade) {
+        if (existingGrade && rubric.categories) {
             return {
                 id: rubric.id,
                 title: rubric.title,
@@ -77,7 +81,7 @@ export default function RubricInstance({
         return {
             id: rubric.id,
             title: rubric.title,
-            categories: rubric.categories.map(cat => ({
+            categories: (rubric.categories || []).map(cat => ({
                 ...cat,
                 selectedScore: undefined
             }))
@@ -86,7 +90,7 @@ export default function RubricInstance({
 
     // Update state when existingGrade prop changes
     useEffect(() => {
-        if (existingGrade) {
+        if (existingGrade && rubric.categories) {
             // Update comment
             setComment(existingGrade.comment || '');
 
@@ -214,13 +218,10 @@ export default function RubricInstance({
         try {
             // Queue the job without waiting (allows navigation)
             const result = await gradeRubricWithAI(rubric, studentWriting, responseId, undefined, false);
-
             if (result.success && result.jobId) {
                 // Decrement local allowance
                 setAiAllowance(prev => prev - 1);
-
-                toast.success('AI grading started! Refresh the page in a few moments to see results.');
-                setIsAIGrading(false);
+                toast.success('You can leave the page. AI grading is in progress and will update when complete.');
             } else {
                 setIsAIGrading(false);
                 toast.error(result.message || 'Failed to start AI grading');
@@ -305,7 +306,7 @@ export default function RubricInstance({
                                 {!isComplete ? "Incomplete" : "No Changes"}
                             </Button>
                         ) : (
-                            <Button onClick={handleSave} disabled={isSaving}>
+                            <Button onClick={handleSave} disabled={isSaving || isAIGrading}>
                                 {isSaving ? "Saving..." : "Save Grade"}
                             </Button>
                         ))}
@@ -315,7 +316,17 @@ export default function RubricInstance({
                 )}
             </div>
 
-            <div className="overflow-x-auto border shadow-md mt-3">
+            <div className="overflow-x-auto border shadow-md mt-3 relative">
+                {/* AI Grading Overlay */}
+                {isAIGrading && (
+                    <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex items-center justify-center">
+                        <div className="flex flex-col items-center gap-3">
+                            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                            <p className="text-sm font-medium">AI is grading.</p>
+                            <p className="text-sm font-medium">You can leave this page and come back later.</p>
+                        </div>
+                    </div>
+                )}
                 <Table className="min-w-[920px]">
                     <TableHeader>
                         <TableRow>
@@ -353,6 +364,7 @@ export default function RubricInstance({
                                         <TableCell key={realIdx}>
                                             <button
                                                 onClick={() => handleClick(catIdx, realIdx)}
+                                                disabled={isAIGrading}
                                                 className={cn(
                                                     'w-full p-4 rounded-md transition-all duration-200 ease-in-out',
                                                     'text-left border-4 shadow-sm min-h-[100px]',
@@ -387,6 +399,7 @@ export default function RubricInstance({
                     onChange={(e) => handleCommentChange(e.target.value)}
                     className="min-h-[80px] resize-none"
                     maxLength={500}
+                    disabled={isAIGrading}
                 />
                 <p className="text-xs text-muted-foreground text-right">
                     {comment.length}/500 characters
