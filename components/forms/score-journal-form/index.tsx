@@ -42,8 +42,8 @@ export default function ScoreJournalForm({
             return data.response;
         },
         refetchInterval: ({ state }) => {
-            // Poll every 3 seconds while AI is grading
-            return isAIGrading ? 3000 : false;
+            // Poll every 5 seconds while AI is grading
+            return isAIGrading ? 5000 : false;
         },
         staleTime: 1000 * 60 * 5,
         initialData: response // Use the response passed as prop for initial data to avoid loading state

@@ -11,6 +11,7 @@ import { toast } from "sonner"
 import { PrinterIcon, Loader2 } from 'lucide-react'
 import { checkout } from '@/lib/stripe/checkout'
 import { Badge } from '@/components/ui/badge'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface RubricInstanceProps {
     rubric: Rubric;
@@ -40,6 +41,7 @@ export default function RubricInstance({
     const [hasChanges, setHasChanges] = useState(false);
     const [comment, setComment] = useState(existingGrade?.comment || '');
     const [aiAllowance, setAiAllowance] = useState<number>(0);
+    const queryClient = useQueryClient();
 
     // Fetch AI allowance when component mounts
     useEffect(() => {
@@ -221,6 +223,13 @@ export default function RubricInstance({
             if (result.success && result.jobId) {
                 // Decrement local allowance
                 setAiAllowance(prev => prev - 1);
+                // set the cache for the response to isAIGrading = true so that it starts polling immediately
+                queryClient.setQueryData(['response', responseId], (oldData: any) => {
+                    return {
+                        ...oldData,
+                        isAIGrading: true
+                    }
+                });
                 toast.success('You can leave the page. AI grading is in progress and will update when complete.');
             } else {
                 setIsAIGrading(false);
