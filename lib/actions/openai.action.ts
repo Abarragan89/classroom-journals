@@ -1,79 +1,15 @@
 "use server"
 import { ResponseData, Rubric, AIGradingResult } from "@/types";
-import OpenAI from "openai";
 import { requireAuth } from "./authorization.action";
 import { prisma } from "@/db/prisma";
+import { openAiQueue, openAiQueueEvents } from "@/lib/queues";
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY, // make sure this is set in your .env
-});
 
-export async function gradeResponseWithAI(gradeLevel: string, responseData: ResponseData[]) {
-    try {
-        await requireAuth();
-        const gradeLevelString = gradeLevel
-            ? `You are an expert teacher. Grade each answer according to a ${gradeLevel} level.`
-            : `You are an expert teacher. Grade each answer appropriately based on general educational standards.`
-
-        const systemPrompt = `
-            ${gradeLevelString}
-
-            Your task is to score student responses based on the factual correctness of their answers.
-
-            Strict grading rules:
-            - For math or factual questions, calculate or verify the correct answer step-by-step before scoring.
-            - Use only: 1 (fully correct), 0.5 (partially correct), 0 (incorrect)
-            - Accept unconventional but correct answers.
-            - Accept spelling errors if intent is clear.
-            - Respond ONLY with an array of numbers, e.g., [1, 0.5, 0]
-            - Return null for that item in the array if the question or answer is unclear or unintelligible.
-            - Do NOT include explanations, comments, or extra output.
-
-            Example:
-            Questions:
-            1. What is 2 + 2?
-            2. What is the capital of France?
-            3. What is the boiling point of water?
-            4. What is photosynthesis?
-            5. When did we land on the moon?
-            Answers:
-            1. 4
-            2. Paris
-            3. 10 degrees Celsius
-            4. How plants eat
-            5. jaweoifj;afj
-
-            Expected output: [1, 1, 0, 0.5, null]
-
-            Grade the following:
-        `
-
-        const questions = responseData.map((r, i) => `${i + 1}. ${r.question}`).join('\n');
-        const answers = responseData.map((r, i) => `${i + 1}. ${r.answer}`).join('\n');
-
-        const response = await openai.responses.create({
-            model: "gpt-5-nano",
-            reasoning: { effort: 'medium' },
-            instructions: systemPrompt.trim(),
-            input: [
-                {
-                    role: "user",
-                    content: `Questions:\n${questions}\n\nAnswers:\n${answers}`
-                }
-            ],
-            text: {
-                format: { type: "text" }
-            },
-            max_output_tokens: 4500,
-        });
-        return response;
-    } catch (error) {
-        console.error('error with open ai autograde ', error)
-        return { output_text: 'error' }
-    }
-}
-
-export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, gradeLevel?: string): Promise<AIGradingResult> {
+export async function gradeResponseWithAI(
+    responseId: string,
+    gradeLevel: string,
+    responseData: ResponseData[]
+) {
     try {
         const session = await requireAuth();
         const teacherId = session?.user?.id;
@@ -82,7 +18,81 @@ export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, 
             throw new Error('Authentication required');
         }
 
-        // Check AI allowance before processing
+        // Check AI allowance before queueing
+        const teacher = await prisma.user.findUnique({
+            where: { id: teacherId },
+            select: { openAIAllowance: true, accountType: true, purchasedCredits: true }
+        });
+
+        const monthlyAllowance = teacher?.openAIAllowance || 0;
+        const purchasedCredits = teacher?.purchasedCredits || 0;
+        const totalAllowance = monthlyAllowance + purchasedCredits;
+
+        if (!totalAllowance || totalAllowance <= 0) {
+            return { success: false, message: 'AI grading allowance exhausted' };
+        }
+
+        // Set isAIGrading = true before queueing
+        await prisma.response.update({
+            where: { id: responseId },
+            data: { isAIGrading: true }
+        });
+
+        // Add job to queue
+        const job = await openAiQueue.add('grade-responses', {
+            teacherId,
+            responseId,
+            gradeLevel,
+            responseData
+        });
+
+        // Wait for job to complete
+        try {
+            const result = await job.waitUntilFinished(openAiQueueEvents);
+            
+            // Check if the job actually failed in the worker
+            const jobState = await job.getState();
+            if (jobState === 'failed') {
+                throw new Error(job.failedReason || 'Worker job failed');
+            }
+            
+            return result;
+        } catch (workerError) {
+            // Worker failed - reset isAIGrading flag
+            await prisma.response.update({
+                where: { id: responseId },
+                data: { isAIGrading: false }
+            });
+            throw workerError; // Re-throw to be caught by outer catch
+        }
+    } catch (error) {
+        console.error('error queueing autograde job', error);
+        // Ensure isAIGrading is reset on any error
+        await prisma.response.update({
+            where: { id: responseId },
+            data: { isAIGrading: false }
+        }).catch(err => console.error('Failed to reset isAIGrading:', err));
+        
+        return { success: false, message: 'Failed to queue grading job' };
+    }
+}
+
+export async function gradeRubricWithAI(
+    rubric: Rubric,
+    studentWriting: string,
+    responseId: string,
+    gradeLevel?: string,
+    waitForCompletion: boolean = true
+): Promise<AIGradingResult> {
+    try {
+        const session = await requireAuth();
+        const teacherId = session?.user?.id;
+
+        if (!teacherId) {
+            throw new Error('Authentication required');
+        }
+
+        // Check AI allowance before queueing
         const teacher = await prisma.user.findUnique({
             where: { id: teacherId },
             select: { openAIAllowance: true, accountType: true, purchasedCredits: true }
@@ -100,114 +110,96 @@ export async function gradeRubricWithAI(rubric: Rubric, studentWriting: string, 
             };
         }
 
-        const gradeLevelString = gradeLevel
-            ? `Grade this according to ${gradeLevel} level standards.`
-            : `Grade this according to appropriate educational standards.`;
-
-        // Format rubric categories and criteria for the AI
-        const rubricDescription = rubric.categories.map((category, catIndex) => {
-            const criteriaList = category.criteria.map((criterion) =>
-                `${criterion.score} points: ${criterion.description}`
-            ).join('\n    ');
-
-            return `Category ${catIndex + 1}: ${category.name}\n  Criteria:\n    ${criteriaList}`;
-        }).join('\n\n');
-
-        const systemPrompt = `
-            You are an expert teacher using a rubric to grade student writing. You are a stern grader looking for clarity, complete paragraphs, and relevant details ${gradeLevelString}
-            
-            Your task is to:
-            1. Score each category based on the rubric criteria
-            2. Provide constructive feedback
-            
-            RUBRIC:
-            ${rubricDescription}
-            
-            REQUIREMENTS:
-            - Score each category using ONLY the exact point values from the rubric criteria
-            - Provide feedback that is positive, constructive, and under 500 characters
-            - Include what the student did well, areas for improvement, and specific suggestions
-            - Be encouraging while being honest about areas needing work
-            
-            RESPONSE FORMAT (respond with valid JSON only):
-            {
-                "scores": [score1, score2, score3, ...],
-                "comment": "Your feedback here (under 500 characters)"
-            }
-            
-            The scores array should contain one score for each category in the order they appear in the rubric.
-        `;
-
-        const response = await openai.responses.create({
-            model: "gpt-5-nano",
-            reasoning: { effort: 'medium' },
-            input: [
-                {
-                    role: "system",
-                    content: systemPrompt.trim()
-                },
-                {
-                    role: "user",
-                    content: `Please grade this student writing:\n\n${studentWriting}`
-                }
-            ],
-            max_output_tokens: 4500,
-            text: {
-                format: { type: "json_object" }
-            }
+        // Set isAIGrading = true before queueing
+        await prisma.response.update({
+            where: { id: responseId },
+            data: { isAIGrading: true }
         });
 
-        const result = response.output_text
-        if (!result) {
-            throw new Error('No response from OpenAI');
-        }
+        // Add job to queue
+        const job = await openAiQueue.add('grade-rubric', {
+            teacherId,
+            rubric,
+            studentWriting,
+            responseId,
+            gradeLevel
+        });
 
-        const parsedResult = JSON.parse(result);
+        if (waitForCompletion) {
+            // Wait for job to complete and return result
+            try {
+                // Wait for job to complete and return result
+                const result = await job.waitUntilFinished(openAiQueueEvents);
 
-        // Validate the response structure
-        if (!parsedResult.scores || !Array.isArray(parsedResult.scores) || !parsedResult.comment) {
-            throw new Error('Invalid response format from OpenAI');
-        }
-
-        // Ensure comment is under 500 characters
-        if (parsedResult.comment.length > 500) {
-            parsedResult.comment = parsedResult.comment.substring(0, 497) + '...';
-        }
-
-        // Deduct allowance AFTER successful AI call Deduct Purchased Credits first
-        if (purchasedCredits > 0) {
-            await prisma.user.update({
-                where: { id: teacherId },
-                data: {
-                    purchasedCredits: {
-                        decrement: 1
-                    }
+                // Check if the job actually failed in the worker
+                const jobState = await job.getState();
+                if (jobState === 'failed') {
+                    throw new Error(job.failedReason || 'Worker job failed');
                 }
-            });
+
+                return result;
+            } catch (workerError) {
+                // Worker failed - reset isAIGrading flag
+                await prisma.response.update({
+                    where: { id: responseId },
+                    data: { isAIGrading: false }
+                });
+                throw workerError; // Re-throw to be caught by outer catch
+            }
         } else {
-            await prisma.user.update({
-                where: { id: teacherId },
-                data: {
-                    openAIAllowance: {
-                        decrement: 1
-                    }
-                }
-            });
+            // Return immediately with job info for polling
+            return {
+                success: true,
+                jobId: job.id as string,
+                message: 'Grading job queued successfully'
+            };
         }
-
-        return {
-            success: true,
-            scores: parsedResult.scores,
-            comment: parsedResult.comment
-        };
 
     } catch (error) {
-        console.error('Error with OpenAI rubric grading:', error);
+        console.error('Error queueing rubric grading:', error);
+        // Ensure isAIGrading is reset on any error
+        await prisma.response.update({
+            where: { id: responseId },
+            data: { isAIGrading: false }
+        }).catch(err => console.error('Failed to reset isAIGrading:', err));
+        
         return {
             success: false,
-            message: 'Failed to grade with AI. Please try again.',
+            message: 'Failed to queue grading job',
             error: error instanceof Error ? error.message : 'Unknown error'
         };
+    }
+}
+
+// Check job status
+export async function checkGradingStatus(jobId: string) {
+    try {
+        const job = await openAiQueue.getJob(jobId);
+
+        if (!job) {
+            return { status: 'not-found' };
+        }
+
+        const state = await job.getState();
+
+        if (state === 'completed') {
+            return {
+                status: 'completed',
+                result: job.returnvalue
+            };
+        }
+
+        if (state === 'failed') {
+            return {
+                status: 'failed',
+                error: job.failedReason
+            };
+        }
+
+        return { status: state }; // 'waiting', 'active', 'delayed'
+    } catch (error) {
+        console.error('Error checking job status:', error);
+        return { status: 'error' };
     }
 }
 

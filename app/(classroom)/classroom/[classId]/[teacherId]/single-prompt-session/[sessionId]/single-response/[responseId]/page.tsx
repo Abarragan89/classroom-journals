@@ -67,6 +67,7 @@ export default async function SingleResponse({
                             <ScoreJournalForm
                                 teacherId={teacherId}
                                 responseId={response?.id}
+                                response={response}
                                 currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
                                 studentWriting={(response.response as unknown as ResponseData[])?.[0]?.answer || ''}
                             />

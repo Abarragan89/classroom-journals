@@ -24,6 +24,7 @@ export async function getSingleResponse(responseId: string, userId: string, sess
             createdAt: true,
             likes: true,
             likeCount: true,
+            isAIGrading: true,
             submittedAt: true,
             spellCheckEnabled: true,
             isVoiceToTextEnabled: true,

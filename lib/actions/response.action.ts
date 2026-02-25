@@ -182,25 +182,29 @@ export async function updateASingleResponse(
 
         // Grade it with AI Only if premium member
         if (promptType === 'ASSESSMENT' && isTeacherPremium && gradeLevel) {
-            let { output_text: scores } = await gradeResponseWithAI(gradeLevel, responseData)
-            scores = JSON.parse(scores)
-            responseData = responseData.map((res: ResponseData, index: number) => {
-                if ((scores[index]) === null) {
-                    return ({ ...res })
-                } else {
-                    return ({ ...res, score: parseFloat(scores[index]) })
-                }
-            })
-        }
-
-        await prisma.response.update({
-            where: { id: responseId },
-            data: {
-                response: responseData as unknown as JsonValue[],
-                completionStatus: 'COMPLETE',
-                submittedAt
+            const result = await gradeResponseWithAI(responseId, gradeLevel, responseData);
+            if (!result.success) {
+                return { success: false, message: result.message || 'AI grading failed' };
             }
-        })
+            // Worker already updated the response with scores, just update completion status
+            await prisma.response.update({
+                where: { id: responseId },
+                data: {
+                    completionStatus: 'COMPLETE',
+                    submittedAt
+                }
+            });
+        } else {
+            // No AI grading, just update normally
+            await prisma.response.update({
+                where: { id: responseId },
+                data: {
+                    response: responseData as unknown as JsonValue[],
+                    completionStatus: 'COMPLETE',
+                    submittedAt
+                }
+            });
+        }
         return { success: true, message: "Response updated successfully" };
     } catch (error) {
         if (error instanceof Error) {
@@ -280,25 +284,29 @@ export async function submitStudentResponse(prevState: unknown, formData: FormDa
 
         // Grade it with AI Only if premium member and multiple questions
         if (promptType === 'ASSESSMENT' && isTeacherPremium === 'true') {
-            let { output_text: scores } = await gradeResponseWithAI(gradeLevel, response)
-            scores = JSON.parse(scores)
-            response = response.map((res: ResponseData, index: number) => {
-                if ((scores[index]) === null) {
-                    return ({ ...res })
-                } else {
-                    return ({ ...res, score: parseFloat(scores[index]) })
-                }
-            })
-        }
-
-        await prisma.response.update({
-            where: { id: responseId },
-            data: {
-                response: response,
-                submittedAt: new Date(),
-                completionStatus: 'COMPLETE'
+            const result = await gradeResponseWithAI(responseId, gradeLevel, response);
+            if (!result.success) {
+                return { success: false, message: result.message || 'AI grading failed' };
             }
-        })
+            // Worker already updated the response with scores, just update completion status
+            await prisma.response.update({
+                where: { id: responseId },
+                data: {
+                    submittedAt: new Date(),
+                    completionStatus: 'COMPLETE'
+                }
+            });
+        } else {
+            // No AI grading, just update normally
+            await prisma.response.update({
+                where: { id: responseId },
+                data: {
+                    response: response,
+                    submittedAt: new Date(),
+                    completionStatus: 'COMPLETE'
+                }
+            });
+        }
 
         return { success: true, message: "responses submitted" };
     } catch (error) {

@@ -276,6 +276,7 @@ model Response {
   likeCount            Int            @default(0)
   likes                ResponseLike[]
   notifications        Notification[]
+  isAIGrading          Boolean        @default(false) // Indicates if AI grading is in progress
   comments             Comment[]
   rubricGrades         RubricGrade[] // Rubric grades for this response
   createdAt            DateTime       @default(now())
