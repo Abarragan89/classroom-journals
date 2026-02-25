@@ -94,6 +94,7 @@ export default function RubricInstance({
     useEffect(() => {
         if (existingGrade && rubric.categories) {
             // Update comment
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setComment(existingGrade.comment || '');
 
             // Update grading instance
@@ -238,6 +239,12 @@ export default function RubricInstance({
         } catch (error) {
             console.error('Error during AI grading:', error);
             setIsAIGrading(false);
+            queryClient.setQueryData(['response', responseId], (oldData: any) => {
+                return {
+                    ...oldData,
+                    isAIGrading: true
+                }
+            });
             toast.error('Failed to grade with AI. Please try again.');
         }
     };

@@ -41,7 +41,7 @@ export default function ScoreJournalForm({
             const data = await res.json() as { response: Response };
             return data.response;
         },
-        refetchInterval: ({ state }) => {
+        refetchInterval: () => {
             // Poll every 5 seconds while AI is grading
             return isAIGrading ? 5000 : false;
         },
