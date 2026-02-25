@@ -15,7 +15,7 @@
     "worker:dev": "tsx watch workers/openAIWorker.ts",
     "worker": "node dist/workers/openAIWorker.js",
     "build:worker": "tsc -p tsconfig.worker.json",
-    "postinstall": "npx prisma generate && npx prisma migrate deploy && next build"
+    "postinstall": "npx prisma generate && npx prisma migrate deploy"
   },
   "overrides": {
     "react-is": "^19.0.0",
