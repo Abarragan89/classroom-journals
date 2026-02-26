@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS=--max-old-space-size=4096 next dev",
-    "build": "npm run lint && next build && npm run build:worker",
+    "build": "npm run lint && next build",
     "build:analyze": "ANALYZE=true next build",
     "start": "node .next/standalone/server.js",
     "lint": "eslint .",
