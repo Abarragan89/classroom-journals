@@ -6,7 +6,7 @@
     "dev": "NODE_OPTIONS=--max-old-space-size=4096 next dev",
     "build": "npm run lint && next build && npm run build:worker",
     "build:analyze": "ANALYZE=true next build",
-    "start": "next start",
+    "start": "node .next/standalone/server.js",
     "lint": "eslint .",
     "fix-lint": "eslint . --fix",
     "worker:dev": "tsx watch workers/openAIWorker.ts",
