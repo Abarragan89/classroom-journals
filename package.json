@@ -2,9 +2,6 @@
   "name": "typeitdown",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": "24.13.0"
-  },
   "scripts": {
     "dev": "NODE_OPTIONS=--max-old-space-size=4096 next dev",
     "build": "npm run lint && next build && npm run build:worker",
