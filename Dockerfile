@@ -9,6 +9,6 @@ RUN npm install
 
 COPY . .
 
-RUN next build
+RUN npm run build
 
 CMD ["node", ".next/standalone/server.js"]
