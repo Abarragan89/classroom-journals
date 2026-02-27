@@ -37,7 +37,7 @@ export function StudentComboBox({
         return responses.findIndex(response => response.id === responseId);
     }, [responses, responseId]);
 
-
+    console.log("responses " , responses)
 
 
     return (

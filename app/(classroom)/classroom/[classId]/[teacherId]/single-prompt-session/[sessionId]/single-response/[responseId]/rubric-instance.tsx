@@ -90,6 +90,8 @@ export default function RubricInstance({
         };
     });
 
+    console.log("existingGrade ", existingGrade)
+
     // Update state when existingGrade prop changes
     useEffect(() => {
         if (existingGrade && rubric.categories) {
@@ -220,7 +222,9 @@ export default function RubricInstance({
         setIsAIGrading(true);
         try {
             // Queue the job without waiting (allows navigation)
+
             const result = await gradeRubricWithAI(rubric, studentWriting, responseId, undefined, false);
+
             if (result.success && result.jobId) {
                 // Decrement local allowance
                 setAiAllowance(prev => prev - 1);

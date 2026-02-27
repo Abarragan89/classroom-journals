@@ -75,14 +75,14 @@ export default function ScoreJournalForm({
     });
 
     // Derive existing grade from query data
-    const existingGrade: RubricGrade | null = rubricGradeData && rubricGradeData.length > 0 ? {
+    const existingGrade: RubricGrade | undefined = rubricGradeData && rubricGradeData.length > 0 ? {
         rubricId: rubricGradeData[0].rubric.id,
         responseId: responseId,
         categories: rubricGradeData[0].categories as RubricGrade['categories'],
         totalScore: rubricGradeData[0].totalScore,
         maxTotalScore: rubricGradeData[0].maxTotalScore,
         comment: rubricGradeData[0].comment || undefined
-    } : null;
+    } : undefined;
 
     // Auto-set currentRubric when existing grade loads (only once)
     useEffect(() => {

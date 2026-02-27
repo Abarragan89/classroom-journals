@@ -124,7 +124,6 @@ export async function gradeRubricWithAI(
                     rubricId: rubric.id
                 }
             },
-            select: { id: true }
         });
 
         // If no rubric grade exists, Create one as a placeholder
