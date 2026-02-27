@@ -32,11 +32,13 @@ export function StudentComboBox({
     const router = useRouter();
     const [open, setOpen] = useState<boolean>(false)
     const [value, setValue] = useState<string>("")
-    // const [currentStudentIndex, setCurrentStudentIndex] = useState<number>(responses.findIndex(response => response.id === responseId))
 
     const currentStudentIndex = useMemo(() => {
         return responses.findIndex(response => response.id === responseId);
     }, [responses, responseId]);
+
+
+
 
     return (
         <>

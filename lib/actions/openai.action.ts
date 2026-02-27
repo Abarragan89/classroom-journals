@@ -49,13 +49,13 @@ export async function gradeResponseWithAI(
         // Wait for job to complete
         try {
             const result = await job.waitUntilFinished(openAiQueueEvents);
-            
+
             // Check if the job actually failed in the worker
             const jobState = await job.getState();
             if (jobState === 'failed') {
                 throw new Error(job.failedReason || 'Worker job failed');
             }
-            
+
             return result;
         } catch (workerError) {
             // Worker failed - reset isAIGrading flag
@@ -72,7 +72,7 @@ export async function gradeResponseWithAI(
             where: { id: responseId },
             data: { isAIGrading: false }
         }).catch(err => console.error('Failed to reset isAIGrading:', err));
-        
+
         return { success: false, message: 'Failed to queue grading job' };
     }
 }
@@ -115,6 +115,39 @@ export async function gradeRubricWithAI(
             where: { id: responseId },
             data: { isAIGrading: true }
         });
+
+        // Check if a rubric grade already exists for this response and rubric
+        const currentRubricGrade = await prisma.rubricGrade.findUnique({
+            where: {
+                responseId_rubricId: {
+                    responseId,
+                    rubricId: rubric.id
+                }
+            },
+            select: { id: true }
+        });
+
+        // If no rubric grade exists, Create one as a placeholder
+        if (currentRubricGrade === null) {
+            // generate categories with max scores for each criterion
+            const categories = rubric.categories.map((category, idx) => ({
+                name: category.name,
+                selectedScore: 0,
+                maxScore: Math.max(...category.criteria.map(c => c.score))
+            }));
+            await prisma.rubricGrade.create({
+                data: {
+                    responseId,
+                    rubricId: rubric.id,
+                    teacherId,
+                    categories,
+                    maxTotalScore: 0,
+                    totalScore: 0,
+                    percentageScore: 0
+                }
+            });
+        }
+
 
         // Add job to queue
         const job = await openAiQueue.add('grade-rubric', {
@@ -162,7 +195,7 @@ export async function gradeRubricWithAI(
             where: { id: responseId },
             data: { isAIGrading: false }
         }).catch(err => console.error('Failed to reset isAIGrading:', err));
-        
+
         return {
             success: false,
             message: 'Failed to queue grading job',
