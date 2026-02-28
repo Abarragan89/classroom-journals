@@ -147,7 +147,7 @@ export default function RubricInstance({
         setHasChanges(hasGradeChanges || hasCommentChanges);
     };
 
-    const handleClick = (catIdx: number, scoreIdx: number) => {
+    const handleRubricCategoryClick = (catIdx: number, scoreIdx: number) => {
         const updatedInstance = {
             ...gradingInstance,
             categories: gradingInstance.categories.map((cat, idx) =>
@@ -220,7 +220,9 @@ export default function RubricInstance({
         setIsAIGrading(true);
         try {
             // Queue the job without waiting (allows navigation)
+
             const result = await gradeRubricWithAI(rubric, studentWriting, responseId, undefined, false);
+
             if (result.success && result.jobId) {
                 // Decrement local allowance
                 setAiAllowance(prev => prev - 1);
@@ -379,7 +381,7 @@ export default function RubricInstance({
                                     return (
                                         <TableCell key={realIdx}>
                                             <button
-                                                onClick={() => handleClick(catIdx, realIdx)}
+                                                onClick={() => handleRubricCategoryClick(catIdx, realIdx)}
                                                 disabled={isAIGrading}
                                                 className={cn(
                                                     'w-full p-4 rounded-md transition-all duration-200 ease-in-out',

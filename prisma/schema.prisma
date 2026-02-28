@@ -278,7 +278,7 @@ model Response {
   notifications        Notification[]
   isAIGrading          Boolean        @default(false) // Indicates if AI grading is in progress
   comments             Comment[]
-  rubricGrades         RubricGrade[] // Rubric grades for this response
+  rubricGrades         RubricGrade? // Rubric grades for this response
   createdAt            DateTime       @default(now())
   // Relationship
   promptSession        PromptSession  @relation(fields: [promptSessionId], references: [id], onDelete: Cascade)
@@ -339,7 +339,7 @@ model RubricTemplate {
 // Model to store actual rubric grades for student responses
 model RubricGrade {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  responseId      String   @db.Uuid
+  responseId      String   @db.Uuid @unique
   rubricId        String   @db.Uuid
   teacherId       String   @db.Uuid
   categories      Json // JSON array of category grades: {name, selectedScore, maxScore}
@@ -351,9 +351,9 @@ model RubricGrade {
   updatedAt       DateTime @updatedAt
 
   // Relations
-  response Response       @relation(fields: [responseId], references: [id], onDelete: Cascade)
-  rubric   RubricTemplate @relation(fields: [rubricId], references: [id], onDelete: Cascade)
-  teacher  User           @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  response   Response       @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  rubric     RubricTemplate @relation(fields: [rubricId], references: [id], onDelete: Cascade)
+  teacher    User           @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 
   @@unique([responseId, rubricId]) // Ensure one grade per response per rubric
   @@index([responseId]) // Index for faster lookups by response

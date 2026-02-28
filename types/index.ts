@@ -105,9 +105,10 @@ export interface Response {
     submittedAt: Date;
     createdAt: Date;
     student: User;
-    rubricGrades?: Array<{
+    rubricGrades?: {
         id: string;
         categories: any;
+        rubricId: string;
         totalScore: number;
         maxTotalScore: number;
         percentageScore: number;
@@ -118,7 +119,7 @@ export interface Response {
             title: string;
             categories: any;
         };
-    }>;
+    };
 }
 
 
@@ -277,6 +278,7 @@ export type RubricGradingInstance = {
 
 // Type for saving rubric grades (This is what we save to the database)
 export type RubricGrade = {
+    id?: string;
     rubricId: string;
     responseId: string;
     categories: {

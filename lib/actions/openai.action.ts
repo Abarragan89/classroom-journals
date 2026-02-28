@@ -82,7 +82,7 @@ export async function gradeRubricWithAI(
     studentWriting: string,
     responseId: string,
     gradeLevel?: string,
-    waitForCompletion: boolean = true
+    waitForCompletion: boolean = true,
 ): Promise<AIGradingResult> {
     try {
         const session = await requireAuth();
@@ -116,37 +116,38 @@ export async function gradeRubricWithAI(
             data: { isAIGrading: true }
         });
 
-        // Check if a rubric grade already exists for this response and rubric
-        const currentRubricGrade = await prisma.rubricGrade.findUnique({
-            where: {
-                responseId_rubricId: {
-                    responseId,
-                    rubricId: rubric.id
-                }
-            },
-            select: { id: true }
-        });
 
-        // If no rubric grade exists, Create one as a placeholder
-        if (currentRubricGrade === null) {
-            // generate categories with max scores for each criterion
-            const categories = rubric.categories.map((category, idx) => ({
-                name: category.name,
-                selectedScore: 0,
-                maxScore: Math.max(...category.criteria.map(c => c.score))
-            }));
-            await prisma.rubricGrade.create({
-                data: {
-                    responseId,
-                    rubricId: rubric.id,
-                    teacherId,
-                    categories,
-                    maxTotalScore: 0,
-                    totalScore: 0,
-                    percentageScore: 0
-                }
-            });
-        }
+        // generate categories with max scores for each criterion
+        const categories = rubric.categories.map((category) => ({
+            name: category.name,
+            selectedScore: 0,
+            maxScore: Math.max(...category.criteria.map(c => c.score))
+        }));
+
+        await prisma.rubricGrade.upsert({
+            where: {
+                responseId: responseId
+            },
+            update: {
+                rubricId: rubric.id,
+                categories,
+                totalScore: 0,
+                maxTotalScore: 0,
+                percentageScore: 0,
+                comment: "",
+                updatedAt: new Date()
+            },
+            create: {
+                responseId,
+                rubricId: rubric.id,
+                teacherId,
+                categories,
+                totalScore: 0,
+                maxTotalScore: 0,
+                percentageScore: 0,
+                comment: ""
+            }
+        });
 
 
         // Add job to queue

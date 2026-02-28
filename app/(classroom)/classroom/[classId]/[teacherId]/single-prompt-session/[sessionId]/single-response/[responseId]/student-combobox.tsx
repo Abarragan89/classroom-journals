@@ -38,8 +38,6 @@ export function StudentComboBox({
     }, [responses, responseId]);
 
 
-
-
     return (
         <>
             <div className="flex flex-col items-start sm:flex-row sm:items-center mt-4">

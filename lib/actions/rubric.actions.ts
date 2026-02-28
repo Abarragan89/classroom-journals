@@ -99,13 +99,9 @@ export async function saveRubricGrade(
         const percentageScore = Math.round((totalScore / maxTotalScore) * 100);
 
         const rubricGrade = await prisma.rubricGrade.upsert({
-            where: {
-                responseId_rubricId: {
-                    responseId,
-                    rubricId
-                }
-            },
+            where: { responseId },
             update: {
+                rubricId,
                 categories,
                 totalScore,
                 maxTotalScore,
@@ -136,7 +132,7 @@ export async function saveRubricGrade(
 }
 
 // Delete a rubric grade
-export async function deleteRubricGrade(responseId: string, rubricId: string, teacherId: string) {
+export async function deleteRubricGrade(responseId: string, teacherId: string) {
     try {
         const session = await requireAuth();
         if (session?.user?.id !== teacherId) {
@@ -145,10 +141,7 @@ export async function deleteRubricGrade(responseId: string, rubricId: string, te
 
         await prisma.rubricGrade.delete({
             where: {
-                responseId_rubricId: {
-                    responseId,
-                    rubricId
-                }
+                responseId
             }
         });
 
