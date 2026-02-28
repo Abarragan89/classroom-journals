@@ -88,7 +88,7 @@ export default function PrintViewBlog({
                 </div>
 
                 {/* Rubric Grading Results - On its own page after blog content */}
-                {currentResponse?.rubricGrades && currentResponse.rubricGrades.length > 0 && (
+                {currentResponse?.rubricGrades && (
                     <div
                         className="print:block"
                         style={{
@@ -101,9 +101,9 @@ export default function PrintViewBlog({
                         }}
                     >
                         <div style={{ marginTop: 0, paddingTop: 0 }}>
-                            {currentResponse?.rubricGrades?.[0]?.rubric && (
+                            {currentResponse?.rubricGrades?.rubric && (
                                 <RubricDisplay
-                                    rubricGrade={currentResponse.rubricGrades[0]}
+                                    rubricGrade={currentResponse.rubricGrades}
                                     studentName={currentResponse?.student?.name || currentResponse?.student?.username}
                                     isPrintView={true}
                                 />

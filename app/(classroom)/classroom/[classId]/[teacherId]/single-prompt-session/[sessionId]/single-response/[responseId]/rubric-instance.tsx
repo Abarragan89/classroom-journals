@@ -203,6 +203,9 @@ export default function RubricInstance({
         }
     }
 
+
+    console.log('esisting grade ', existingGrade)
+
     const handleAIGrading = async () => {
         if (!studentWriting.trim()) {
             toast.error('No student writing found to grade');

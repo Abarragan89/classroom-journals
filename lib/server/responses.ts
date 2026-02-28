@@ -203,8 +203,8 @@ export async function getAllResponsesFromPrompt(promptSessionId: string, teacher
                 score = Math.round((numberScore / responsesArr.length) * 100) + '%';
             }
         } else {
-            if (response.rubricGrades && response.rubricGrades.length > 0) {
-                score = response.rubricGrades[0].percentageScore + '%'
+            if (response.rubricGrades) {
+                score = response.rubricGrades.percentageScore + '%'
             } else {
                 const isItScored = (responsesArr?.[0].score)?.toString()
                 score = isItScored ? isItScored + '%' : 'Not Graded'
@@ -340,7 +340,7 @@ export async function getFilteredStudentResponses(filterOptions: SearchOptions, 
             completionStatus: true,
             response: true,
             createdAt: true,
-            
+
             promptSession: {
                 select: {
                     id: true,

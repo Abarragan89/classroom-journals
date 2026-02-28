@@ -228,12 +228,10 @@ async function gradeRubric(job: Job) {
         // Save rubric grade to database
         await prisma.rubricGrade.upsert({
             where: {
-                responseId_rubricId: {
-                    responseId,
-                    rubricId: rubric.id
-                }
+                responseId: responseId
             },
             update: {
+                rubricId: rubric.id,
                 categories,
                 totalScore,
                 maxTotalScore,

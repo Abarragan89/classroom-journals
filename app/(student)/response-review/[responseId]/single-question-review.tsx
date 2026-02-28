@@ -25,7 +25,7 @@ interface SingleQuestionReviewProps {
     spellCheckEnabledInitial: boolean,
     isVoiceToTextEnabledInitial: boolean,
     studentId: string,
-    rubricGradesInitial?: RubricGradeDisplay[],
+    rubricGradesInitial?: RubricGradeDisplay,
     studentName?: string
 }
 
@@ -164,9 +164,9 @@ export default function SingleQuestionReview({
                 {showGradesInitial && (
                     <div className='mb-5'>
                         <Badge className='text-md'>Grade: {gradePercentage}</Badge>
-                        {rubricGradesInitial && rubricGradesInitial.length > 0 && (
+                        {rubricGradesInitial && (
                             <RubricDisplay
-                                rubricGrade={rubricGradesInitial[0]}
+                                rubricGrade={rubricGradesInitial}
                                 studentName={studentName}
                                 isPrintView={false}
                             />
