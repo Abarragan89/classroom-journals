@@ -90,8 +90,6 @@ export default function RubricInstance({
         };
     });
 
-    console.log("existingGrade ", existingGrade)
-
     // Update state when existingGrade prop changes
     useEffect(() => {
         if (existingGrade && rubric.categories) {
@@ -149,7 +147,7 @@ export default function RubricInstance({
         setHasChanges(hasGradeChanges || hasCommentChanges);
     };
 
-    const handleClick = (catIdx: number, scoreIdx: number) => {
+    const handleRubricCategoryClick = (catIdx: number, scoreIdx: number) => {
         const updatedInstance = {
             ...gradingInstance,
             categories: gradingInstance.categories.map((cat, idx) =>
@@ -202,9 +200,6 @@ export default function RubricInstance({
             comment
         }
     }
-
-
-    console.log('esisting grade ', existingGrade)
 
     const handleAIGrading = async () => {
         if (!studentWriting.trim()) {
@@ -386,7 +381,7 @@ export default function RubricInstance({
                                     return (
                                         <TableCell key={realIdx}>
                                             <button
-                                                onClick={() => handleClick(catIdx, realIdx)}
+                                                onClick={() => handleRubricCategoryClick(catIdx, realIdx)}
                                                 disabled={isAIGrading}
                                                 className={cn(
                                                     'w-full p-4 rounded-md transition-all duration-200 ease-in-out',
