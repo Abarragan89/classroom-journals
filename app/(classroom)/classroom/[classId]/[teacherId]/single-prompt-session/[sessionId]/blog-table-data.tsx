@@ -11,10 +11,15 @@ import {
 import { createStudentResponse } from "@/lib/actions/response.action";
 import { formatDateShort } from "@/lib/utils";
 import { Response, ResponseData, User, PromptSession } from "@/types";
-import { ClipboardCheckIcon } from "lucide-react";
+import { ClipboardCheckIcon, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 
 export default function BlogTableData({
@@ -99,7 +104,21 @@ export default function BlogTableData({
                             <TableCell className="font-medium">
                                 {response.student.name}
                             </TableCell>
-                            <TableCell>{(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? '-'}%</TableCell>
+                            <TableCell>
+                                {response.isAIGrading ? (
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>AI is grading...</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                ) : (
+                                    <span>{(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? '-'}%</span>
+                                )}
+
+                            </TableCell>
                             <TableCell>{response?._count?.comments || 0}</TableCell>
                             <TableCell>{response?.likeCount || 0}</TableCell>
                             <TableCell>{formatDateShort(response.submittedAt)}</TableCell>

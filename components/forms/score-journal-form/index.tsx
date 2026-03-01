@@ -13,6 +13,7 @@ import RubricInstance from "@/app/(classroom)/classroom/[classId]/[teacherId]/si
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button } from "@/components/ui/button";
 
+
 export default function ScoreJournalForm({
     currentScore,
     responseId,
@@ -50,6 +51,7 @@ export default function ScoreJournalForm({
         staleTime: 1000 * 60 * 5,
         initialData: response // Use the response passed as prop for initial data to avoid loading state
     });
+
 
     // Update local state when response data changes (separate from refetchInterval)
     useEffect(() => {
@@ -466,6 +468,7 @@ export default function ScoreJournalForm({
                         rubric={currentRubric}
                         responseId={responseId}
                         setIsAIGrading={setIsAIGrading}
+                        sessionId={sessionId}
                         isAIGrading={isAIGrading}
                         existingGrade={existingGrade || undefined}
                         onSave={handleSaveGrade}
