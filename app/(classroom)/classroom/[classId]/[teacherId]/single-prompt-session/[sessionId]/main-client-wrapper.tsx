@@ -7,6 +7,7 @@ import { PromptSession, Question, User, Response, ResponseData } from '@/types'
 import { responsePercentage } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { ResponseStatus } from '@prisma/client'
+import { useMemo } from 'react'
 
 export default function MainClientWrapper({
     promptSession,
@@ -22,6 +23,11 @@ export default function MainClientWrapper({
     sessionId: string
 }) {
 
+
+    const isAIGrading = useMemo(() => {
+        return promptSession.responses?.some(response => response.isAIGrading) || false;
+    }, [promptSession])
+
     const { data: promptSessionData, refetch } = useQuery({
         queryKey: ['getSingleSessionData', sessionId],
         queryFn: async () => {
@@ -34,8 +40,8 @@ export default function MainClientWrapper({
         },
         initialData: promptSession,
         staleTime: 1000,
+        refetchInterval: isAIGrading ? 5000 : false,
     })
-
 
     function calculateClassAverageAssessment() {
         let classTotal = 0;

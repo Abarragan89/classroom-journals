@@ -12,6 +12,7 @@ import { PrinterIcon, Loader2 } from 'lucide-react'
 import { checkout } from '@/lib/stripe/checkout'
 import { Badge } from '@/components/ui/badge'
 import { useQueryClient } from '@tanstack/react-query'
+import { PromptSession, Response } from '@/types'
 
 interface RubricInstanceProps {
     rubric: Rubric;
@@ -24,6 +25,7 @@ interface RubricInstanceProps {
     isSaving?: boolean; // Add this prop
     isAIGradingInitial?: boolean; // Add this prop to indicate if AI grading is in progress on initial load
     isAIGrading?: boolean; // Add this prop to indicate if AI grading is currently in progress
+    sessionId: string; // Add sessionId to props for cache updates
 }
 
 export default function RubricInstance({
@@ -35,7 +37,8 @@ export default function RubricInstance({
     onSave,
     studentWriting = '',
     isSaving = false,
-    isAIGrading
+    isAIGrading,
+    sessionId
 }: RubricInstanceProps) {
 
     const [hasChanges, setHasChanges] = useState(false);
@@ -221,18 +224,52 @@ export default function RubricInstance({
         try {
             // Queue the job without waiting (allows navigation)
 
+            // set the cache for the response to isAIGrading = true so that it starts polling immediately and rubric grade 
+            queryClient.setQueryData(['response', responseId], (oldData: any) => {
+                return {
+                    ...oldData,
+                    isAIGrading: true,
+                    rubricGrades: {
+                        id: 'aowejkfoiajepofaijpefaef', // You can optionally set a temporary ID here
+                        categories: rubric.categories.map(cat => ({
+                            name: cat.name,
+                            selectedScore: 0,
+                            maxScore: Math.max(...cat.criteria.map(c => c.score))
+                        })),
+                        totalScore: 0,
+                        rubric: {
+                            id: rubric.id,
+                            title: rubric.title,
+                            categories: rubric.categories
+                        },
+                        maxTotalScore: 0,
+                        comment: '',
+                        gradedAt: new Date(),
+                    }
+                }
+            });
+
+            queryClient.setQueryData(['getSingleSessionData', sessionId], (oldData: PromptSession | undefined) => {
+                if (!oldData) return oldData;
+                return {
+                    ...oldData,
+                    responses: oldData?.responses?.map((response: Response) => {
+                        if (response.id === responseId) {
+                            return {
+                                ...response,
+                                isAIGrading: true
+                            }
+                        }
+                        return response;
+                    })
+                }
+            });
+
             const result = await gradeRubricWithAI(rubric, studentWriting, responseId, undefined, false);
 
             if (result.success && result.jobId) {
                 // Decrement local allowance
                 setAiAllowance(prev => prev - 1);
-                // set the cache for the response to isAIGrading = true so that it starts polling immediately
-                queryClient.setQueryData(['response', responseId], (oldData: any) => {
-                    return {
-                        ...oldData,
-                        isAIGrading: true
-                    }
-                });
                 toast.success('You can leave the page. AI grading is in progress and will update when complete.');
             } else {
                 setIsAIGrading(false);
