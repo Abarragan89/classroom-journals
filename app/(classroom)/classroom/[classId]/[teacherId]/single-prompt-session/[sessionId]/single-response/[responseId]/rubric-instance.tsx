@@ -12,6 +12,7 @@ import { PrinterIcon, Loader2 } from 'lucide-react'
 import { checkout } from '@/lib/stripe/checkout'
 import { Badge } from '@/components/ui/badge'
 import { useQueryClient } from '@tanstack/react-query'
+import { PromptSession, Response } from '@/types'
 
 interface RubricInstanceProps {
     rubric: Rubric;
@@ -229,13 +230,18 @@ export default function RubricInstance({
                     ...oldData,
                     isAIGrading: true,
                     rubricGrades: {
-                        id: '', // You can optionally set a temporary ID here
+                        id: 'aowejkfoiajepofaijpefaef', // You can optionally set a temporary ID here
                         categories: rubric.categories.map(cat => ({
                             name: cat.name,
                             selectedScore: 0,
                             maxScore: Math.max(...cat.criteria.map(c => c.score))
                         })),
                         totalScore: 0,
+                        rubric: {
+                            id: rubric.id,
+                            title: rubric.title,
+                            categories: rubric.categories
+                        },
                         maxTotalScore: 0,
                         comment: '',
                         gradedAt: new Date(),
@@ -243,10 +249,11 @@ export default function RubricInstance({
                 }
             });
 
-            queryClient.setQueryData(['getSingleSessionData', sessionId], (oldData: any) => {
+            queryClient.setQueryData(['getSingleSessionData', sessionId], (oldData: PromptSession | undefined) => {
+                if (!oldData) return oldData;
                 return {
                     ...oldData,
-                    responses: oldData.responses.map((response: any) => {
+                    responses: oldData?.responses?.map((response: Response) => {
                         if (response.id === responseId) {
                             return {
                                 ...response,

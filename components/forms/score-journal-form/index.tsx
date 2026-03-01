@@ -137,33 +137,26 @@ export default function ScoreJournalForm({
             }
 
             // Update all session caches containing this response
-            queryClient.getQueryCache().findAll()
-                .filter(query =>
-                    Array.isArray(query.queryKey) &&
-                    query.queryKey[0] === 'getSingleSessionData'
-                )
-                .forEach((query) => {
-                    const sessionData = query.state.data as PromptSession | undefined;
-                    if (sessionData?.responses?.some((resp: Response) => resp.id === responseId)) {
-                        queryClient.setQueryData(query.queryKey, {
-                            ...sessionData,
-                            responses: sessionData.responses.map((resp: Response) =>
-                                resp.id === responseId
-                                    ? {
-                                        ...resp,
-                                        rubricGrades: null, // Clear rubric grades in session cache too
-                                        response: Array.isArray(resp.response)
-                                            ? ((resp.response as unknown) as ResponseData[]).map(r => ({
-                                                ...r,
-                                                score: score
-                                            }))
-                                            : resp.response
-                                    }
-                                    : resp
-                            )
-                        });
-                    }
-                });
+            queryClient.setQueryData(['getSingleSessionData', sessionId], (sessionData: PromptSession | undefined) => {
+                if (!sessionData) return sessionData;
+                return {
+                    ...sessionData,
+                    responses: sessionData?.responses?.map((resp: Response) =>
+                        resp.id === responseId
+                            ? {
+                                ...resp,
+                                rubricGrades: null, // Clear rubric grades in session cache too
+                                response: Array.isArray(resp.response)
+                                    ? ((resp.response as unknown) as ResponseData[]).map(r => ({
+                                        ...r,
+                                        score: score
+                                    }))
+                                    : resp.response
+                            }
+                            : resp
+                    )
+                };
+            });
 
             setCurrentRubric(null);
             toast('Grade Updated!');
