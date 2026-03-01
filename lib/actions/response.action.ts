@@ -2,7 +2,7 @@
 import { prisma } from "@/db/prisma";
 import { ResponseData } from "@/types";
 import { InputJsonArray, JsonValue } from "@prisma/client/runtime/library";
-import { gradeResponseWithAI } from "./openai.action";
+import { queueExitTicketGrading } from "./openai.action";
 import { ResponseStatus } from "@prisma/client";
 import { requireAuth } from "./authorization.action";
 import { decryptText } from "../utils";
@@ -181,19 +181,18 @@ export async function updateASingleResponse(
         }
 
         // Grade it with AI Only if premium member
-        if (promptType === 'ASSESSMENT' && isTeacherPremium && gradeLevel) {
-            const result = await gradeResponseWithAI(responseId, gradeLevel, responseData);
-            if (!result.success) {
-                return { success: false, message: result.message || 'AI grading failed' };
-            }
-            // Worker already updated the response with scores, just update completion status
+        if (promptType === 'ASSESSMENT' && isTeacherPremium) {
+            // Save raw response immediately and mark complete — worker grades in background
             await prisma.response.update({
                 where: { id: responseId },
                 data: {
+                    response: responseData as unknown as JsonValue[],
                     completionStatus: 'COMPLETE',
                     submittedAt
                 }
             });
+            // Fire and forget — student doesn't wait for grading
+            await queueExitTicketGrading(responseId, responseData, gradeLevel);
         } else {
             // No AI grading, just update normally
             await prisma.response.update({
@@ -281,21 +280,19 @@ export async function submitStudentResponse(prevState: unknown, formData: FormDa
         const isTeacherPremium = formData.get('is-teacher-premium') as string
         let response = JSON.parse(responseData);
 
-
         // Grade it with AI Only if premium member and multiple questions
         if (promptType === 'ASSESSMENT' && isTeacherPremium === 'true') {
-            const result = await gradeResponseWithAI(responseId, gradeLevel, response);
-            if (!result.success) {
-                return { success: false, message: result.message || 'AI grading failed' };
-            }
-            // Worker already updated the response with scores, just update completion status
+            // Save raw response immediately and mark complete — worker grades in background
             await prisma.response.update({
                 where: { id: responseId },
                 data: {
+                    response: response,
                     submittedAt: new Date(),
                     completionStatus: 'COMPLETE'
                 }
             });
+            // Fire and forget — student doesn't wait for grading
+            await queueExitTicketGrading(responseId, response, gradeLevel);
         } else {
             // No AI grading, just update normally
             await prisma.response.update({

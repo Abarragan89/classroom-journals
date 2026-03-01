@@ -11,4 +11,4 @@ COPY . .
 
 RUN npm run build:worker
 
-CMD ["npm", "run", "worker"]
+CMD ["npm", "run", "workers"]

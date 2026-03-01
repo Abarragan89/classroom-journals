@@ -2,7 +2,7 @@
 import { ResponseData, Rubric, AIGradingResult } from "@/types";
 import { requireAuth } from "./authorization.action";
 import { prisma } from "@/db/prisma";
-import { openAiQueue, openAiQueueEvents } from "@/lib/queues";
+import { openAiQueue, openAiQueueEvents, exitTicketQueue, exitTicketQueueEvents } from "@/lib/queues";
 
 
 export async function gradeResponseWithAI(
@@ -39,7 +39,7 @@ export async function gradeResponseWithAI(
         });
 
         // Add job to queue
-        const job = await openAiQueue.add('grade-responses', {
+        const job = await exitTicketQueue.add('grade-exit-ticket', {
             teacherId,
             responseId,
             gradeLevel,
@@ -48,7 +48,7 @@ export async function gradeResponseWithAI(
 
         // Wait for job to complete
         try {
-            const result = await job.waitUntilFinished(openAiQueueEvents);
+            const result = await job.waitUntilFinished(exitTicketQueueEvents);
 
             // Check if the job actually failed in the worker
             const jobState = await job.getState();
@@ -208,6 +208,12 @@ export async function gradeRubricWithAI(
 // Check job status
 export async function checkGradingStatus(jobId: string) {
     try {
+        const session = await requireAuth();
+        const teacherId = session?.user?.id;
+        if (!teacherId) {
+            throw new Error('Authentication required');
+        }
+
         const job = await openAiQueue.getJob(jobId);
 
         if (!job) {
@@ -234,6 +240,63 @@ export async function checkGradingStatus(jobId: string) {
     } catch (error) {
         console.error('Error checking job status:', error);
         return { status: 'error' };
+    }
+}
+
+// Queue an exit ticket grading job (fire and forget — does not wait for completion)
+export async function queueExitTicketGrading(
+    responseId: string,
+    responseData: ResponseData[],
+    gradeLevel?: string
+) {
+    try {
+        const session = await requireAuth();
+        const teacherId = session?.user?.id;
+        if (!teacherId) {
+            throw new Error('Authentication required');
+        }
+
+        if (!teacherId) {
+            return { success: false, message: 'Could not determine teacher for this response' };
+        }
+
+        // Check AI allowance before queueing
+        const teacher = await prisma.user.findUnique({
+            where: { id: teacherId },
+            select: { openAIAllowance: true, purchasedCredits: true }
+        });
+
+        const monthlyAllowance = teacher?.openAIAllowance || 0;
+        const purchasedCredits = teacher?.purchasedCredits || 0;
+        const totalAllowance = monthlyAllowance + purchasedCredits;
+
+        if (!totalAllowance || totalAllowance <= 0) {
+            return { success: false, message: 'AI grading allowance exhausted' };
+        }
+
+        // Set isAIGrading = true before queueing
+        await prisma.response.update({
+            where: { id: responseId },
+            data: { isAIGrading: true }
+        });
+
+        // Add job to exit-ticket queue and return immediately (fire and forget)
+        await exitTicketQueue.add('grade-exit-ticket', {
+            teacherId,
+            responseId,
+            gradeLevel,
+            responseData
+        });
+
+        return { success: true, message: 'Exit ticket grading queued' };
+    } catch (error) {
+        console.error('Error queueing exit ticket grading job:', error);
+        await prisma.response.update({
+            where: { id: responseId },
+            data: { isAIGrading: false }
+        }).catch(err => console.error('Failed to reset isAIGrading:', err));
+
+        return { success: false, message: 'Failed to queue grading job' };
     }
 }
 

@@ -8,3 +8,11 @@ export const openAiQueue = new Queue('openai', {
 export const openAiQueueEvents = new QueueEvents('openai', {
     connection,
 })
+
+export const exitTicketQueue = new Queue('exit-ticket', {
+    connection,
+})
+
+export const exitTicketQueueEvents = new QueueEvents('exit-ticket', {
+    connection,
+})

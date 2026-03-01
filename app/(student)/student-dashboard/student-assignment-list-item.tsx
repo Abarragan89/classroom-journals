@@ -78,8 +78,8 @@ export default function StudentAssignmentListItem({
                         {studentResponse?.promptSession?.areGradesVisible && (
                             <>
                                 <Separator orientation="vertical" className="h-4" />
-                                <p>Score:
-                                    <span className={`font-bold ${scoreColorClass}`}>
+                                <p>Score: 
+                                    <span className={`font-bold ml-1 ${scoreColorClass}`}>
                                         {score}
                                     </span>
                                 </p>
