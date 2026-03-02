@@ -408,9 +408,9 @@ export default async function page() {
                             <Image
                                 src={'https://unfinished-pages.s3.us-east-2.amazonaws.com/user-cm5bmuyhh0001zizwly9lp1td-profile-pic.jpeg-1735709463754'}
                                 width={700}
-                                height={394}
+                                height={700}
                                 alt={'blog cover photo'}
-                                className="block mx-auto mb-5 w-[700px] h-[394px]"
+                                className="block mx-auto mb-5 w-full max-w-[700px] h-auto"
                                 loading="lazy"
                             />
                             <p className="leading-[2rem] text-foreground text-[16px] sm:text-[19px] whitespace-pre-line">{dummyBlogText}</p>
