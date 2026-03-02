@@ -85,14 +85,14 @@ export default async function page() {
 
                                 {/* Main Headline */}
                                 <div>
-                                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
+                                    <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
                                         Stop Grading.
                                         <br />
                                         <span className="text-muted-foreground">Start Teaching.</span>
-                                    </h1>
-                                    <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
+                                    </h2>
+                                    <h1 className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
                                         Reclaim 10+ hours per week with AI-powered grading that uses <span className="font-semibold text-foreground">your custom rubrics</span>. Your students write, AI grades, you focus on what matters.
-                                    </p>
+                                    </h1>
                                 </div>
 
                                 {/* Google Classroom Integration Highlight */}

@@ -21,22 +21,22 @@ const geistMono = Geist_Mono({
 
 
 export const metadata: Metadata = {
-  title: "JotterBlog",
-  description: "Blogging Platform for Students",
+  title: "JotterBlog — AI Grading for Essays, Journals & Exit Tickets",
+  description: "JotterBlog helps teachers assign essays, journals, and assessments — and lets AI grade them instantly using your own rubric. No answer keys. No multiple choice. Just real writing, automatically scored.",
   keywords: [
     "student writing platform",
     "AI grading",
     "classroom blogging",
     "teacher writing tool",
     "student assessments",
-    "exit tickets",
+    "assessments",
     "classroom assessments",
     "fight against AI",
     "AI in the classroom"
   ],
   openGraph: {
-    title: "JotterBlog",
-    description: "Manage student writing and assessments. Share work as blog posts, auto-grade with AI, and write in a distraction-free, feedback-friendly classroom space.",
+    title: "JotterBlog — AI Grading for Essays, Journals & Exit Tickets",
+    description: "JotterBlog helps teachers assign essays, journals, and assessments — and lets AI grade them instantly using your own rubric. No answer keys. No multiple choice. Just real writing, automatically scored.",
     url: "https://www.jotterblog.com",
     siteName: "JotterBlog",
     images: [
@@ -52,12 +52,12 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "JotterBlog",
-    description: "Manage student writing and assessments. Share work as blog posts, auto-grade with AI, and write in a distraction-free, feedback-friendly classroom space.",
+    title: "JotterBlog — AI Grading for Essays, Journals & Exit Tickets",
+    description: "JotterBlog helps teachers assign essays, journals, and assessments — and lets AI grade them instantly using your own rubric. No answer keys. No multiple choice. Just real writing, automatically scored.",
     images: ["/images/open-graph-logo.png"],
   },
   appleWebApp: {
-    title: 'JotterBlog',
+    title: 'JotterBlog — AI Grading for Essays, Journals & Exit Tickets',
   },
 };
 
