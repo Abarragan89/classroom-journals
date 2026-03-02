@@ -249,7 +249,7 @@ export default function Editor({
                 {/* Fixed toolbar */}
                 <div className="fixed top-7 right-4 flex items-center gap-2">
                     {onSave && (
-                        <Button onClick={onSave} variant="default" size="sm">
+                        <Button onClick={onSave} variant="default" size="sm" aria-label="Save response">
                             Save
                         </Button>
                     )}
@@ -290,6 +290,7 @@ export default function Editor({
 
                     <Button
                         variant="outline"
+                        aria-label="exit full-screen mode"
                         size="icon"
                         onClick={() => setIsFullscreen(false)}
                     >
@@ -370,6 +371,7 @@ export default function Editor({
                 {/* Fullscreen toggle button */}
                 {!isDisabled && jotType === "BLOG" && (
                     <Button
+                        aria-label="Enter full-screen mode"
                         variant="ghost"
                         size="icon"
                         className="absolute top-1 right-1 z-50"
@@ -381,11 +383,11 @@ export default function Editor({
             </div>
             {!isDisabled && (
                 <div className="flex-center space-x-14">
-                    <Button variant={"ghost"} onTouchStart={handleUndo} onMouseDown={handleUndo}>
+                    <Button aria-label="undo last change" variant={"ghost"} onTouchStart={handleUndo} onMouseDown={handleUndo}>
                         <Undo />
                     </Button>
 
-                    <Button variant={"ghost"} onTouchStart={handleRedo} onMouseDown={handleRedo}>
+                    <Button aria-label="redo last change" variant={"ghost"} onTouchStart={handleRedo} onMouseDown={handleRedo}>
                         <Redo />
                     </Button>
                 </div>

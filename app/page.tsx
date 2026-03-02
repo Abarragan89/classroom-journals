@@ -114,7 +114,7 @@ export default async function page() {
 
                                 {/* Google Classroom Integration Highlight */}
                                 <form action={handleGoogleSignIn} className="max-w-md mx-auto lg:mx-0">
-                                    <button type="submit" className="w-full flex items-center justify-center lg:justify-start gap-3 p-4 bg-card rounded-lg border border-border hover:bg-accent/50 hover:border-primary transition-all cursor-pointer">
+                                    <button aria-label="Sign in with Google Classroom" type="submit" className="w-full flex items-center justify-center lg:justify-start gap-3 p-4 bg-card rounded-lg border border-border hover:bg-accent/50 hover:border-primary transition-all cursor-pointer">
                                         <Image
                                             src='/images/google-classroom-logo.png'
                                             width={40}

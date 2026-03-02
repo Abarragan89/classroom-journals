@@ -195,6 +195,7 @@ export default function SingleComment({
                             />
                         </div>
                         <button
+                            aria-label="Submit comment"
                             type="submit"
                             className={`absolute right-[17px] top-[65px] h-[30px]`}
                         >
