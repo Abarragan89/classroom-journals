@@ -151,6 +151,7 @@ export default async function page() {
                                         width={1200}
                                         height={900}
                                         priority
+                                        fetchPriority="high"
                                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
                                         className="object-cover w-full h-full"
                                     />
