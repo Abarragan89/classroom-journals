@@ -85,13 +85,20 @@ export default async function page() {
 
                                 {/* Main Headline */}
                                 <div>
-                                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
-                                        Stop Grading.
-                                        <br />
-                                        <span className="text-muted-foreground">Start Teaching.</span>
+                                    {/* Eyebrow — emotional hook */}
+                                    <p className="text-sm sm:text-base font-semibold tracking-widest uppercase text-primary mb-3">
+                                        Stop Grading. Start Teaching.
+                                    </p>
+                                    {/* H1 — SEO keywords for Google */}
+                                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4 leading-tight">
+                                        The Student Writing Platform with{' '}
+                                        <span className="text-primary">Built-In AI Grading</span>
                                     </h1>
+                                    {/* Subheader */}
                                     <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
-                                        Reclaim 10+ hours per week with AI-powered grading that uses <span className="font-semibold text-foreground">your custom rubrics</span>. Your students write, AI grades, you focus on what matters.
+                                        Assign essays, journals, and assessments in minutes.{' '}
+                                        
+                                        <span className="font-semibold text-foreground">no answer keys, no multiple choice, no busywork.</span>
                                     </p>
                                 </div>
 
@@ -129,7 +136,7 @@ export default async function page() {
 
                                 {/* Trust Indicators */}
                                 <p className="text-sm text-muted-foreground">
-                                    ✓ No credit card required  •  ✓ AI graded Essays and Assessments
+                                    ✓ No credit card required 
                                 </p>
                             </div>
 
@@ -153,7 +160,7 @@ export default async function page() {
                                     <p className="text-xs text-muted-foreground">Graded with your custom rubrics</p>
                                 </div>
                                 <div className="hidden lg:block absolute -right-4 top-1/2 bg-card border border-border rounded-lg p-4 shadow-lg max-w-[180px]">
-                                    <p className="text-xl font-bold text-primary">Exit Tickets</p>
+                                    <p className="text-xl font-bold text-primary">Assessments</p>
                                     <p className="text-xs text-muted-foreground">Just post your questions. AI grades them instantly</p>
                                 </div>
                             </div>
