@@ -62,6 +62,7 @@ export default function ModeToggle({ isMobile = false }: ModeToggleProps) {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
+                        aria-label="Color theme options"
                         variant='ghost'
                         className={isMobile
                             ? "w-full justify-start gap-3 px-4 py-3 h-auto text-sm font-normal rounded-md hover:bg-accent text-muted-foreground"
