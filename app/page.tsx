@@ -100,7 +100,7 @@ export default async function page() {
                                         Stop Grading. Start Teaching.
                                     </p>
                                     {/* H1 — SEO keywords for Google */}
-                                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4 leading-tight">
+                                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4 leading-relaxed">
                                         The Student Writing Platform with{' '}
                                         <span className="text-primary">Built-In AI Grading</span>
                                     </h1>
@@ -137,11 +137,11 @@ export default async function page() {
                                             <span className="ml-2">→</span>
                                         </Link>
                                     </Button>
-                                    <Link href="#app-demo-section">
-                                        <Button variant="outline" size="lg" className="text-base px-8 py-6 w-full sm:w-auto">
+                                    <Button asChild variant="outline" size="lg" className="text-base px-8 py-6 w-full sm:w-auto">
+                                        <Link href="#app-demo-section">
                                             See Demo
-                                        </Button>
-                                    </Link>
+                                        </Link>
+                                    </Button>
                                 </div>
 
                                 {/* Trust Indicators */}
@@ -443,12 +443,12 @@ export default async function page() {
                             </p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                            <Link href="/sign-in">
-                                <Button size="lg" className="text-lg px-10 py-7 w-full sm:w-auto">
+                            <Button asChild size="lg" className="text-lg px-10 py-7 w-full sm:w-auto">
+                                <Link href="/sign-in">
                                     Start Free Today
                                     <span className="ml-2">→</span>
-                                </Button>
-                            </Link>
+                                </Link>
+                            </Button>
                         </div>
                     </div>
                 </section>
