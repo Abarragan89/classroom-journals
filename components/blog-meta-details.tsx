@@ -83,11 +83,13 @@ export default function BlogMetaDetails({
                 <div className="flex items-center text-muted-foreground">
                     {isBlogLikedByUser ?
                         <FaHeart
+                            aria-label="Unlike this post"
                             onClick={() => toggleResponseLikeHandler('remove')}
                             className="text-[1.5rem] mr-[4px] hover:cursor-pointer text-sidebar-primary"
                         />
                         :
                         <FaRegHeart
+                            aria-label="Like this post"
                             onClick={() => toggleResponseLikeHandler('add')}
                             className="text-[1.5rem] mr-[4px] hover:cursor-pointer"
                         />
@@ -95,6 +97,7 @@ export default function BlogMetaDetails({
                     <p className="mr-5 text-[.95rem]">{totalCommentLikes}</p>
                     <Link
                         href="#comment-section-main"
+                        aria-label="Jump to comments section"
                     >
                         <BiMessageRounded
                             className="text-[1.5rem] mr-[2px] hover:cursor-pointer"

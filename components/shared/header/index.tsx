@@ -4,7 +4,7 @@ import { APP_NAME } from "@/lib/constants"
 import Menu from "./menu"
 import { Session } from "@/types"
 
-export default function Header({
+export default function zHeader({
     teacherId,
     session,
     studentId,

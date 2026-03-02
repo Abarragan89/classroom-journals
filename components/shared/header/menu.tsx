@@ -88,7 +88,7 @@ export default function Menu({
             {/* Sheet Menu for Mobile View */}
             <nav className="sm:hidden">
                 <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                    <SheetTrigger className="align-middle">
+                    <SheetTrigger aria-label="Open navigation menu" className="align-middle">
                         <MenuIcon />
                     </SheetTrigger>
                     <SheetContent className="flex flex-col items-start w-[280px]">
