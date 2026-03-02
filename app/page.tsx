@@ -131,12 +131,12 @@ export default async function page() {
 
                                 {/* Primary CTA */}
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                                    <Link href="/sign-in">
-                                        <Button size="lg" className="text-base px-8 py-6 w-full sm:w-auto">
+                                    <Button asChild size="lg" className="text-base px-8 py-6 w-full sm:w-auto">
+                                        <Link href="/sign-in">
                                             Get Started
                                             <span className="ml-2">→</span>
-                                        </Button>
-                                    </Link>
+                                        </Link>
+                                    </Button>
                                     <Link href="#app-demo-section">
                                         <Button variant="outline" size="lg" className="text-base px-8 py-6 w-full sm:w-auto">
                                             See Demo
