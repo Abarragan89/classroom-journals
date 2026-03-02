@@ -21,6 +21,7 @@ const geistMono = Geist_Mono({
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://jotterblog.com"),
   title: "JotterBlog — AI Grading for Essays, Journals & Exit Tickets",
   description: "JotterBlog helps teachers assign essays, journals, and assessments — and lets AI grade them instantly using your own rubric. No answer keys. No multiple choice. Just real writing, automatically scored.",
   keywords: [
