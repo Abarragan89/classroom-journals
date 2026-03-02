@@ -5,10 +5,20 @@ import { Response, Session } from "@/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import TextEditorDemo from "@/components/text-editor-demo";
-import BlogMetaDetails from "@/components/blog-meta-details";
+import dynamic from "next/dynamic";
 import { Separator } from "@/components/ui/separator";
-import CommentSection from "@/components/shared/comment-section";
+
+const TextEditorDemo = dynamic(() => import("@/components/text-editor-demo"), {
+    loading: () => <div className="h-64 animate-pulse bg-muted rounded-xl" />,
+});
+
+const BlogMetaDetails = dynamic(() => import("@/components/blog-meta-details"), {
+    loading: () => <div className="h-12 animate-pulse bg-muted rounded" />,
+});
+
+const CommentSection = dynamic(() => import("@/components/shared/comment-section"), {
+    loading: () => null,
+});
 import { CornerRightUp } from "lucide-react";
 import { signInWithGoogle } from "@/lib/actions/auth.action";
 
@@ -97,7 +107,7 @@ export default async function page() {
                                     {/* Subheader */}
                                     <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
                                         Assign essays, journals, and assessments in minutes.{' '}
-                                        
+
                                         <span className="font-semibold text-foreground">no answer keys, no multiple choice, no busywork.</span>
                                     </p>
                                 </div>
@@ -136,7 +146,7 @@ export default async function page() {
 
                                 {/* Trust Indicators */}
                                 <p className="text-sm text-muted-foreground">
-                                    ✓ No credit card required 
+                                    ✓ No credit card required
                                 </p>
                             </div>
 
@@ -217,7 +227,7 @@ export default async function page() {
                                     height={400}
                                     alt="AI rubric grading screenshot"
                                     className="rounded-xl shadow-2xl border border-border w-full h-auto"
-                                    priority
+                                    loading="lazy"
                                 />
                             </div>
                         </div>
@@ -241,7 +251,7 @@ export default async function page() {
                                 height={300}
                                 alt="assessment data screenshot"
                                 className="rounded-lg w-full h-auto border border-border"
-                                priority
+                                loading="lazy"
                             />
                         </div>
 
@@ -261,7 +271,7 @@ export default async function page() {
                                 height={300}
                                 alt="student text-editor screenshot"
                                 className="rounded-lg w-full h-auto border border-border"
-                                priority
+                                loading="lazy"
                             />
                         </div>
 
@@ -281,7 +291,7 @@ export default async function page() {
                                 height={300}
                                 alt="featured blogs screenshot"
                                 className="rounded-lg w-full h-auto border border-border"
-                                priority
+                                loading="lazy"
                             />
                         </div>
 
@@ -301,7 +311,7 @@ export default async function page() {
                                 height={300}
                                 alt="quip demo screenshot"
                                 className="rounded-lg w-full h-auto border border-border"
-                                priority
+                                loading="lazy"
                             />
                         </div>
                     </div>
@@ -401,7 +411,7 @@ export default async function page() {
                                 height={394}
                                 alt={'blog cover photo'}
                                 className="block mx-auto mb-5 w-[700px] h-[394px]"
-                                priority
+                                loading="lazy"
                             />
                             <p className="leading-[2rem] text-foreground text-[16px] sm:text-[19px] whitespace-pre-line">{dummyBlogText}</p>
                             <Separator className="my-5" />
