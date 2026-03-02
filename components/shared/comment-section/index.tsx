@@ -8,6 +8,7 @@ import { addComment, deleteComment } from "@/lib/actions/comment.action";
 import SingleComment from "./single-comment";
 import { toast } from "sonner";
 import { checkCommentCoolDown } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export default function CommentSection({
     comments,
@@ -92,7 +93,7 @@ export default function CommentSection({
 
     return (
         <section className="relative mx-auto" id="comment-section-main">
-            <h3 className="h3-bold text-center pb-3">Comments</h3>
+            <p className="h3-bold text-center pb-3">Comments</p>
 
             {discussionStatus === 'OPEN' &&
                 <form
@@ -114,9 +115,11 @@ export default function CommentSection({
                             onChange={(e) => setCommentText(e.target.value)}
                         />
                     </div>
-                    <button
+                    <Button
+                        aria-label="Submit comment"
+                        variant={"ghost"}
                         type="submit"
-                        className={`absolute right-[18px] top-[58px] h-[30px]`}
+                        className={`absolute right-[15px] top-[58px] h-[30px]`}
                     >
                         {isLoading ?
                             <BarLoader
@@ -133,7 +136,7 @@ export default function CommentSection({
                                 size={22}
                             />
                         }
-                    </button>
+                    </Button>
                 </form>
             }
             {allComments?.length > 0 && allComments.map((comment: ResponseComment) => (

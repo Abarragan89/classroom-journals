@@ -439,26 +439,9 @@ export default async function page() {
                                 Get Your Evenings Back
                             </h2>
                             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                                Join hundreds of teachers who&apos;ve reclaimed their time while giving students better feedback than ever.
+                                Join the teachers who&apos;ve reclaimed their time while giving students better feedback than ever.
                             </p>
                         </div>
-
-                        {/* Stats Row */}
-                        <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto py-8">
-                            <div>
-                                <p className="text-4xl font-bold text-accent">10+</p>
-                                <p className="text-sm text-muted-foreground mt-1">Hours saved weekly</p>
-                            </div>
-                            <div>
-                                <p className="text-4xl font-bold text-accent">100%</p>
-                                <p className="text-sm text-muted-foreground mt-1">Teacher satisfaction</p>
-                            </div>
-                            <div>
-                                <p className="text-4xl font-bold text-accent">Free</p>
-                                <p className="text-sm text-muted-foreground mt-1">Sign up and start using</p>
-                            </div>
-                        </div>
-
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                             <Link href="/sign-in">
                                 <Button size="lg" className="text-lg px-10 py-7 w-full sm:w-auto">
