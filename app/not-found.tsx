@@ -8,7 +8,7 @@ export default function NotFoundPage() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
             <Image
-                src='/images/logo-v2.png'
+                src='/images/logo-v3.png'
                 height={100}
                 width={100}
                 alt={`${APP_NAME} logo`}
