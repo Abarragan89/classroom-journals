@@ -5,20 +5,11 @@ import { Response, Session } from "@/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { Separator } from "@/components/ui/separator";
 
-const TextEditorDemo = dynamic(() => import("@/components/text-editor-demo"), {
-    loading: () => <div className="h-64 animate-pulse bg-muted rounded-xl" />,
-});
-
-const BlogMetaDetails = dynamic(() => import("@/components/blog-meta-details"), {
-    loading: () => <div className="h-12 animate-pulse bg-muted rounded" />,
-});
-
-const CommentSection = dynamic(() => import("@/components/shared/comment-section"), {
-    loading: () => null,
-});
+import TextEditorDemoClient from "@/components/text-editor-demo-client";
+import CommentSectionClient from "@/components/comment-section-client";
+import BlogMetaDetailsClient from "@/components/blog-meta-details-client";
 import { CornerRightUp } from "lucide-react";
 import { signInWithGoogle } from "@/lib/actions/auth.action";
 
@@ -116,7 +107,7 @@ export default async function page() {
                                 <form action={handleGoogleSignIn} className="max-w-md mx-auto lg:mx-0">
                                     <button aria-label="Sign in with Google Classroom" type="submit" className="w-full flex items-center justify-center lg:justify-start gap-3 p-4 bg-card rounded-lg border border-border hover:bg-accent/50 hover:border-primary transition-all cursor-pointer">
                                         <Image
-                                            src='/images/google-classroom-logo.png'
+                                            src='/images/google-classroom-logo.webp'
                                             width={40}
                                             height={40}
                                             alt='Google Classroom Logo'
@@ -155,11 +146,12 @@ export default async function page() {
                                 {/* Hero Image */}
                                 <div className="aspect-[4/3] rounded-2xl overflow-hidden relative shadow-2xl">
                                     <Image
-                                        src="/images/hero-photo.png"
+                                        src="/images/hero-photo-v2.webp"
                                         alt="Students engaged in writing assignments on JotterBlog platform"
                                         width={1200}
                                         height={900}
                                         priority
+                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
                                         className="object-cover w-full h-full"
                                     />
                                 </div>
@@ -222,11 +214,12 @@ export default async function page() {
                             </div>
                             <div className="order-first lg:order-last">
                                 <Image
-                                    src='/images/custom-rubric-builder.png'
+                                    src='/images/custom-rubric-builder.webp'
                                     width={600}
                                     height={400}
                                     alt="AI rubric grading screenshot"
                                     className="rounded-xl shadow-2xl border border-border w-full h-auto"
+                                    sizes="(max-width: 1024px) 100vw, 50vw"
                                     loading="lazy"
                                 />
                             </div>
@@ -239,18 +232,19 @@ export default async function page() {
                         <div className="bg-card rounded-xl p-8 border border-border shadow-sm hover:shadow-md transition-shadow">
                             <div className="mb-5 flex gap-4">
                                 <div>
-                                    <h3 className="text-2xl font-bold mb-3"><span className="text-2xl">📊</span> Self-Grading Exit Tickets</h3>
+                                    <h3 className="text-2xl font-bold mb-3"><span className="text-2xl">📊</span> Self-Grading Assessments</h3>
                                     <p className="text-muted-foreground mb-4">
-                                        Create short answer exit tickets that AI grades instantly. No more stacks to review—get beautiful visual graphs showing class understanding in real-time.
+                                        Create assessments that AI grades instantly. No answer key or multiple-choice needed. Just real-time data.
                                     </p>
                                 </div>
                             </div>
                             <Image
-                                src='/images/assessment-data-v2.png'
+                                src='/images/assessment-data-v2.webp'
                                 width={500}
                                 height={300}
                                 alt="assessment data screenshot"
                                 className="rounded-lg w-full h-auto border border-border"
+                                sizes="(max-width: 768px) 100vw, 50vw"
                                 loading="lazy"
                             />
                         </div>
@@ -266,11 +260,12 @@ export default async function page() {
                                 </div>
                             </div>
                             <Image
-                                src='/images/text-editor-v3.png'
+                                src='/images/text-editor-v3.webp'
                                 width={500}
                                 height={300}
                                 alt="student text-editor screenshot"
                                 className="rounded-lg w-full h-auto border border-border"
+                                sizes="(max-width: 768px) 100vw, 50vw"
                                 loading="lazy"
                             />
                         </div>
@@ -286,11 +281,12 @@ export default async function page() {
                                 </div>
                             </div>
                             <Image
-                                src='/images/featured-blogs-v3.png'
+                                src='/images/featured-blogs-v3.webp'
                                 width={500}
                                 height={300}
                                 alt="featured blogs screenshot"
                                 className="rounded-lg w-full h-auto border border-border"
+                                sizes="(max-width: 768px) 100vw, 50vw"
                                 loading="lazy"
                             />
                         </div>
@@ -306,11 +302,12 @@ export default async function page() {
                                 </div>
                             </div>
                             <Image
-                                src='/images/quip-demo-v3.png'
+                                src='/images/quip-demo-v3.webp'
                                 width={500}
                                 height={300}
                                 alt="quip demo screenshot"
                                 className="rounded-lg w-full h-auto border border-border"
+                                sizes="(max-width: 768px) 100vw, 50vw"
                                 loading="lazy"
                             />
                         </div>
@@ -321,7 +318,7 @@ export default async function page() {
                 {/* Demo */}
                 <section className="py-16 px-6" id="app-demo-section">
                     <div className="max-w-7xl mx-auto">
-                        <TextEditorDemo />
+                        <TextEditorDemoClient />
                         {/* Benefits Section */}
                         <div className="max-w-3xl mx-auto">
                             <h3 className="text-xl font-bold text-center mt-8 mb-4">Key Benefits</h3>
@@ -400,7 +397,7 @@ export default async function page() {
 
                         {/* Blog Example */}
                         <div className="max-w-[700px] mx-auto bg-card border border-border rounded-2xl p-10 sm:p-12 shadow-lg">
-                            <BlogMetaDetails
+                            <BlogMetaDetailsClient
                                 responseData={response}
                                 studentId="1"
                                 teacherView={false}
@@ -416,7 +413,7 @@ export default async function page() {
                             <p className="leading-[2rem] text-foreground text-[16px] sm:text-[19px] whitespace-pre-line">{dummyBlogText}</p>
                             <Separator className="my-5" />
 
-                            <CommentSection
+                            <CommentSectionClient
                                 comments={[]}
                                 responseId={'1'}
                                 studentId={'1'}

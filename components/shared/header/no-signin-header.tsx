@@ -12,7 +12,7 @@ export default function NoSignInHeader() {
                         href='/'
                         className='flex-start'>
                         <Image
-                            src='/images/logo-v2.png'
+                            src='/images/logo-v3.png'
                             alt={`${APP_NAME} logo`}
                             height={60}
                             width={60}

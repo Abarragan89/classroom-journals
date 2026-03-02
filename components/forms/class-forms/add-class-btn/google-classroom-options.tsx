@@ -74,7 +74,7 @@ export default function GoogleClassroomOptions({
                     className='grid grid-cols-4 p-3 items-center rounded-xl mx-4 mb-6 bg-card border hover:cursor-pointer hover:border-primary hover:shadow-md'
                     key={classroom.id}>
                     <Image
-                        src='/images/google-classroom-logo.png'
+                        src='/images/google-classroom-logo.webp'
                         alt='Google classroom logo'
                         height={65}
                         width={65}

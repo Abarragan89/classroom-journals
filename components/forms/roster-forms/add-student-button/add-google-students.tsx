@@ -67,7 +67,7 @@ export default function AddGoogleStudents({
                     className='grid grid-cols-4 items-center  p-3 bg-card rounded-xl mx-4 mb-6 border hover:cursor-pointer hover:shadow-md hover:border-primary'
                     key={classroom.id}>
                     <Image
-                        src='/images/google-classroom-logo.png'
+                        src='/images/google-classroom-logo.webp'
                         alt='Google classroom logo'
                         height={65}
                         width={65}
