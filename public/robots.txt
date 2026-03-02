@@ -1,9 +1,24 @@
-User-agent: AhrefsBot
-Disallow: /
-
-User-agent: SemrushBot
-Disallow: /
-
 User-agent: *
-Disallow: /
-Allow: /$
+Disallow: /api/
+Disallow: /sign-in/
+Disallow: /classroom/
+Disallow: /classroom-quips/
+Disallow: /discussion-board/
+Disallow: /jot-responses/
+Disallow: /response-review/
+Disallow: /student-dashboard/
+Disallow: /student-notification/
+Disallow: /student-profile/
+Disallow: /typing-test/
+Disallow: /admin/
+Disallow: /classes/
+Disallow: /prompt-form/
+Disallow: /prompt-library/
+Disallow: /teacher-account/
+Disallow: /prompt-form/
+
+Allow: /
+Allow: /privacy-policy
+Allow: /terms-of-service
+
+Sitemap: https://jotterblog.com/sitemap.xml

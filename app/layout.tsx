@@ -56,6 +56,9 @@ export const metadata: Metadata = {
     description: "Manage student writing and assessments. Share work as blog posts, auto-grade with AI, and write in a distraction-free, feedback-friendly classroom space.",
     images: ["/images/open-graph-logo.png"],
   },
+  appleWebApp: {
+    title: 'JotterBlog',
+  },
 };
 
 export default async function RootLayout({
@@ -83,7 +86,7 @@ export default async function RootLayout({
               disableTransitionOnChange
             >
               <AbsentUserChecker />
-              <Toaster 
+              <Toaster
                 position="top-right"
               />
               <div className="flex min-h-screen flex-col">
