@@ -4,7 +4,7 @@ export const studentsCheatingWithAI: Response = {
     id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
     likes: [],
     likeCount: 0,
-    submittedAt: new Date('2026-01-10T01:00:00.000Z'),
+    submittedAt: '2026-01-10T01:00:00.000Z' as unknown as Date,
     response: [
         { answer: '', question: 'Blog Text' },
         { answer: 'Your Students Are Cheating and You Can\'t Stop It — Until Now', question: 'Add a Blog Title' },

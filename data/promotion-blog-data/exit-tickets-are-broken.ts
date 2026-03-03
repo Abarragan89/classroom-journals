@@ -4,7 +4,7 @@ export const exitTicketsAreBroken: Response = {
     id: 'c3d4e5f6-a7b8-9012-cdef-123456789012',
     likes: [],
     likeCount: 0,
-    submittedAt: new Date('2026-02-01T01:00:00.000Z'),
+    submittedAt: '2026-02-01T01:00:00.000Z' as unknown as Date,
     response: [
         { answer: '', question: 'Blog Text' },
         { answer: 'Exit Tickets Are a Great Idea — Until You Have to Grade Them', question: 'Add a Blog Title' },

@@ -4,7 +4,7 @@ export const whatIsJotterBlog: Response = {
     id: '8097935b-c272-48f4-8c6d-289891cba124',
     likes: [],
     likeCount: 0,
-    submittedAt: new Date('2026-01-10T01:00:00.000Z'),
+    submittedAt: '2026-01-10T01:00:00.000Z' as unknown as Date,
     response: [
         { answer: '', question: 'Blog Text' },
         { answer: 'JotterBlog: The Website Teachers Need to Know', question: 'Add a Blog Title' },
