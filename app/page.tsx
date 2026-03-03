@@ -43,7 +43,7 @@ export default async function page() {
             },
             { answer: 'Rethinking Romeo and Juliet: A Study of Youth and Rebellion', question: 'Add a Blog Title' },
             {
-                answer: 'https://unfinished-pages.s3.us-east-2.amazonaws.com/17.png-1735541082906',
+                answer: '/images/promotion-blog-photos/romeo-juliet.webp',
                 question: 'Add a Cover Photo'
             }
         ],
@@ -404,11 +404,12 @@ export default async function page() {
                                 teacherView={false}
                             />
                             <Image
-                                src={'https://unfinished-pages.s3.us-east-2.amazonaws.com/user-cm5bmuyhh0001zizwly9lp1td-profile-pic.jpeg-1735709463754'}
-                                width={700}
-                                height={700}
+                                src={'/images/promotional-blog-photos/romeo-juliet.webp'}
+                                width={1920}
+                                height={1080}
                                 alt={'blog cover photo'}
                                 className="block mx-auto mb-5 w-full max-w-[700px] h-auto"
+                                sizes="(max-width: 700px) 100vw, 700px"
                                 loading="lazy"
                             />
                             <p className="leading-[2rem] text-foreground text-[16px] sm:text-[19px] whitespace-pre-line">{dummyBlogText}</p>

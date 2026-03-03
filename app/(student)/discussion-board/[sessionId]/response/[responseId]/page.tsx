@@ -45,11 +45,13 @@ export default async function SingleResponse({
 
             <Image
                 src={(response?.response as { answer: string }[])?.[2]?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
-                width={700}
-                height={394}
+                width={1920}
+                height={1080}
                 alt={'blog cover photo'}
-                className="block mx-auto mb-5 w-[700px] h-[394px]"
+                className="block mx-auto mb-5 w-full max-w-[700px] h-auto"
+                sizes="(max-width: 700px) 100vw, 700px"
                 priority
+                fetchPriority='high'
             />
             <p className="leading-[2rem] text-foreground text-[16px] sm:text-[19px] whitespace-pre-line break-words">{(response.response as unknown as ResponseData[])?.[0].answer}</p>
             <Separator className="my-5" />
