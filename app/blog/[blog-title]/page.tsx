@@ -6,15 +6,57 @@ import Header from "@/components/shared/header";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import BlogCard from "@/components/blog-card";
+import { Metadata } from "next";
+
+export async function generateMetadata(
+    { params }: { params: Promise<{ 'blog-title': string }> }
+): Promise<Metadata> {
+    const { 'blog-title': blogTitle } = await params;
+    const blogData = AllBlogData[blogTitle];
+
+    if (!blogData) return {};
+
+    const coverImage = blogData.coverImage || '/images/open-graph-logo.png';
+    const url = `https://www.jotterblog.com/blog/${blogTitle}`;
+
+    return {
+        title: `${blogData.title} | JotterBlog`,
+        description: blogData.description,
+        alternates: {
+            canonical: url,
+        },
+        openGraph: {
+            title: blogData.title,
+            description: blogData.description,
+            url,
+            siteName: 'JotterBlog',
+            type: 'article',
+            publishedTime: blogData.publishedAt,
+            authors: ['Anthony Barragan'],
+            images: [
+                {
+                    url: coverImage,
+                    width: 1920,
+                    height: 1080,
+                    alt: blogData.title,
+                },
+            ],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: blogData.title,
+            description: blogData.description,
+            images: [coverImage],
+        },
+    };
+}
 
 export default async function page({ params }: { params: Promise<{ 'blog-title': string }> }) {
 
     const { 'blog-title': blogTitle } = await params;
     const blogData = AllBlogData[blogTitle]
-
     const otherBlogs = Object.entries(AllBlogData).filter(([slug]) => slug !== blogTitle)
 
-    console.log('otherBlogs: ', otherBlogs)
 
     return (
         <>
