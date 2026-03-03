@@ -3,19 +3,23 @@ import Image from "next/image"
 import { APP_NAME } from "@/lib/constants"
 import Menu from "./menu"
 import { Session } from "@/types"
+import BlogPageHeader from "./blog-page-header"
 
 export default function zHeader({
     teacherId,
     session,
     studentId,
     isAllowedToMakeNewClass,
+    isInBlogPage = false
 }: {
     teacherId?: string;
     studentId?: string;
     session?: Session;
     isAllowedToMakeNewClass?: boolean;
-
+    isInBlogPage?: boolean;
 }) {
+
+    if (isInBlogPage) return <BlogPageHeader />
 
     return (
         <header className='w-full border-b print:hidden '>
