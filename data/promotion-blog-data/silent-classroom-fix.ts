@@ -4,7 +4,7 @@ export const silentClassroomFix: Response = {
     id: 'b2c3d4e5-f6a7-8901-bcde-f12345678901',
     likes: [],
     likeCount: 0,
-    submittedAt: new Date('2026-01-20T01:00:00.000Z'),
+    submittedAt: '2026-01-20T01:00:00.000Z' as unknown as Date,
     response: [
         { answer: '', question: 'Blog Text' },
         { answer: 'The Same Three Kids Always Talk in Your Class. Here\'s How to Fix That', question: 'Add a Blog Title' },
