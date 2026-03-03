@@ -4,7 +4,7 @@ export const whatIsJotterBlog: Response = {
     id: '8097935b-c272-48f4-8c6d-289891cba124',
     likes: [],
     likeCount: 0,
-    submittedAt: new Date('2025-012-25T01:18:11.967Z'),
+    submittedAt: new Date('2026-01-10T01:00:00.000Z'),
     response: [
         { answer: '', question: 'Blog Text' },
         { answer: 'JotterBlog: The Website Teachers Need to Know', question: 'Add a Blog Title' },
@@ -26,7 +26,7 @@ export const whatIsJotterBlog: Response = {
 }
 
 export const dummyBlogText =
-`If you've ever spent a Sunday night buried in a stack of essays while your students have already forgotten they wrote them, JotterBlog was built for you. It's a student writing platform that handles the part teachers dread most — the grading. No more choosing between meaningful writing assignments and protecting your personal time. JotterBlog gives you both.
+    `If you've ever spent a Sunday night buried in a stack of essays while your students have already forgotten they wrote them, JotterBlog was built for you. It's a student writing platform that handles the part teachers dread most — the grading. No more choosing between meaningful writing assignments and protecting your personal time. JotterBlog gives you both.
 
 The grading problem is real: writing assignments are the most valuable assessments in any classroom, but they're also the most time-consuming to grade. JotterBlog solves this with built-in AI grading that works the way you actually teach. Essays and journals are scored against your own custom rubrics — your categories, your standards, your expectations — so the feedback reflects your voice, not a generic algorithm. Short answer questions and exit tickets are graded instantly without an answer key or multiple choice, meaning you can create a meaningful assessment in minutes and have results before the period ends.
 
