@@ -6,6 +6,30 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://jotterblog.com/blog/jotterblog-the-website-teachers-need-to-know</loc>
+    <changefreq>monthly</changefreq>
+    <lastmod>2026-02-15</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jotterblog.com/blog/your-students-are-cheating-and-you-cant-prove-it</loc>
+    <changefreq>monthly</changefreq>
+    <lastmod>2026-01-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jotterblog.com/blog/the-same-three-kids-always-talk-in-your-class</loc>
+    <changefreq>monthly</changefreq>
+    <lastmod>2026-01-20</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jotterblog.com/blog/exit-tickets-are-a-great-idea-until-you-have-to-grade-them</loc>
+    <changefreq>monthly</changefreq>
+    <lastmod>2026-02-01</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jotterblog.com/privacy-policy</loc>
     <priority>0.3</priority>
   </url>

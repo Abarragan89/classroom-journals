@@ -67,7 +67,7 @@ export default function BlogMetaDetails({
                     <div>
                         <p className="leading-5">{responseData.student.username}</p>
                         <div className="flex justify-between w-full">
-                            <p className="leading-5">{formatDateMonthDayYear(responseData?.submittedAt)}</p>
+                            <p className="leading-5" suppressHydrationWarning>{formatDateMonthDayYear(responseData?.submittedAt)}</p>
                         </div>
                     </div>
                     {teacherView && (
