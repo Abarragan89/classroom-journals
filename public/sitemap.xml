@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://jotterblog.com/</loc>
+    <loc>https://www.jotterblog.com/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://jotterblog.com/blog/jotterblog-the-website-teachers-need-to-know</loc>
+    <loc>https://www.jotterblog.com/blog/jotterblog-the-website-teachers-need-to-know</loc>
     <changefreq>monthly</changefreq>
     <lastmod>2026-02-15</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jotterblog.com/blog/your-students-are-cheating-and-you-cant-prove-it</loc>
+    <loc>https://www.jotterblog.com/blog/your-students-are-cheating-and-you-cant-prove-it</loc>
     <changefreq>monthly</changefreq>
     <lastmod>2026-01-10</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jotterblog.com/blog/the-same-three-kids-always-talk-in-your-class</loc>
+    <loc>https://www.jotterblog.com/blog/the-same-three-kids-always-talk-in-your-class</loc>
     <changefreq>monthly</changefreq>
     <lastmod>2026-01-20</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jotterblog.com/blog/exit-tickets-are-a-great-idea-until-you-have-to-grade-them</loc>
+    <loc>https://www.jotterblog.com/blog/exit-tickets-are-a-great-idea-until-you-have-to-grade-them</loc>
     <changefreq>monthly</changefreq>
     <lastmod>2026-02-01</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jotterblog.com/privacy-policy</loc>
+    <loc>https://www.jotterblog.com/privacy-policy</loc>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://jotterblog.com/terms-of-service</loc>
+    <loc>https://www.jotterblog.com/terms-of-service</loc>
     <priority>0.3</priority>
   </url>
 </urlset>
