@@ -21,11 +21,11 @@ const geistMono = Geist_Mono({
 
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://jotterblog.com"),
+  metadataBase: new URL("https://www.jotterblog.com"),
   title: "JotterBlog — AI Grading for Essays, Journals & Exit Tickets",
   description: "JotterBlog helps teachers assign essays, journals, and assessments — and lets AI grade them instantly using your own rubric. No answer keys. No multiple choice. Just real writing, automatically scored.",
   alternates: {
-    canonical: "https://jotterblog.com",
+    canonical: "https://www.jotterblog.com",
   },
   keywords: [
     "student writing platform",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "JotterBlog — AI Grading for Essays, Journals & Exit Tickets",
     description: "JotterBlog helps teachers assign essays, journals, and assessments — and lets AI grade them instantly using your own rubric. No answer keys. No multiple choice. Just real writing, automatically scored.",
-    url: "https://jotterblog.com",
+    url: "https://www.jotterblog.com",
     siteName: "JotterBlog",
     images: [
       {

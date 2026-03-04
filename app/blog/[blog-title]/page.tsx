@@ -17,7 +17,7 @@ export async function generateMetadata(
     if (!blogData) return {};
 
     const coverImage = blogData.coverImage || '/images/open-graph-logo.png';
-    const url = `https://jotterblog.com/blog/${blogTitle}`;
+    const url = `https://www.jotterblog.com/blog/${blogTitle}`;
 
     return {
         title: `${blogData.title} | JotterBlog`,
