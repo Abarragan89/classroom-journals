@@ -13,7 +13,7 @@ export default function PrintViewLogins({
             <div className='flex-between flex-wrap gap-x-5'>
                 {studentRoster?.length > 0 && studentRoster?.map(student => (
                     <div key={student.id} className='border border-gray-950 mb-14 rounded-lg w-[290px] break-inside-avoid'>
-                        <p className='text-center text-gray-950 font-bold text-md p-2'>www.jotterblog.com</p>
+                        <p className='text-center text-gray-950 font-bold text-md p-2'>jotterblog.com</p>
                         <div className="border-y border-gray-950 p-3 space-y-2">
                             <p className='font-bold text-gray-950'>Username: <span className='font-normal'>{student.name}</span></p>
                             <p className='font-bold text-gray-950'>Password: <span className='font-normal'>{student.password}</span></p>
