@@ -20,11 +20,14 @@ import { CiCircleQuestion } from "react-icons/ci";
 import LoadingAnimation from "@/components/loading-animation";
 import { Card, CardContent } from "@/components/ui/card";
 import { useQueryClient } from "@tanstack/react-query";
+import QuestionAttachmentUploader from "@/components/forms/question-attachment-uploader";
+import { useRef } from "react";
 
 interface Question {
     name: string;
     label: string;
     value: string;
+    attachments: string[];
 }
 
 
@@ -55,15 +58,16 @@ export default function MultiPromptForm({
     const queryClient = useQueryClient();
 
     const [questions, setQuestions] = useState<Question[]>([
-        { name: "question1", label: "Question 1", value: "" }
+        { name: "question1", label: "Question 1", value: "", attachments: [] }
     ]);
+    const questionsJsonRef = useRef<HTMLInputElement>(null);
 
     const router = useRouter()
 
     // Reset state when navigating to the same page with different query params
     useEffect(() => {
         setEditingPrompt(null);
-        setQuestions([{ name: "question1", label: "Question 1", value: "" }]);
+        setQuestions([{ name: "question1", label: "Question 1", value: "", attachments: [] }]);
     }, [existingPromptId]);
 
     useEffect(() => {
@@ -108,10 +112,11 @@ export default function MultiPromptForm({
                         const promptResponse = results[3] as Response;
                         if (promptResponse.ok) {
                             const { prompt: promptData } = await promptResponse.json();
-                            setQuestions(promptData.questions.map((q: { question: string }, index: number) => ({
+                            setQuestions(promptData.questions.map((q: { question: string; attachments?: string[] }, index: number) => ({
                                 name: `question${index + 1}`,
                                 label: `Question ${index + 1}`,
-                                value: q.question || "", // Ensure there's always a value
+                                value: q.question || "",
+                                attachments: q.attachments || [],
                             })));
                             setEditingPrompt(promptData as Prompt);
                         }
@@ -158,8 +163,14 @@ export default function MultiPromptForm({
     const handleAddQuestion = () => {
         setQuestions(prevQuestions => [
             ...prevQuestions,
-            { name: `question${prevQuestions.length + 1}`, label: `Question ${prevQuestions.length + 1}`, value: "" }
+            { name: `question${prevQuestions.length + 1}`, label: `Question ${prevQuestions.length + 1}`, value: "", attachments: [] }
         ]);
+    };
+
+    const handleAttachmentsChange = (index: number, urls: string[]) => {
+        setQuestions(prevQuestions =>
+            prevQuestions.map((q, i) => (i === index ? { ...q, attachments: urls } : q))
+        );
     };
 
     const handleRemoveQuestion = (index: number) => {
@@ -169,6 +180,13 @@ export default function MultiPromptForm({
                 .map((q, i) => ({ ...q, name: `question${i + 1}`, label: `Question ${i + 1}` })) // Renumbering
         );
     };
+
+    function serializeQuestionsToHiddenInput() {
+        if (questionsJsonRef.current) {
+            const payload = questions.map(q => ({ question: q.value.trim(), attachments: q.attachments }));
+            questionsJsonRef.current.value = JSON.stringify(payload);
+        }
+    }
 
     const handleChange = (index: number, newValue: string) => {
         setQuestions(prevQuestions =>
@@ -193,7 +211,7 @@ export default function MultiPromptForm({
     }
 
     return (
-        <form action={action} className="grid relative">
+        <form action={action} className="grid relative" onSubmit={serializeQuestionsToHiddenInput}>
             {!isTeacherPremium &&
                 <div className="mb-5">
                     <UpgradeAccountBtn
@@ -245,6 +263,10 @@ export default function MultiPromptForm({
                                         onChange={(e) => handleChange(index, e.target.value)}
                                         required
                                         rows={3}
+                                    />
+                                    <QuestionAttachmentUploader
+                                        attachments={question.attachments}
+                                        onChange={(urls) => handleAttachmentsChange(index, urls)}
                                     />
                                 </div>
                             </div>
@@ -338,6 +360,11 @@ export default function MultiPromptForm({
                 </Card>
             </div>
 
+            <input
+                ref={questionsJsonRef}
+                type="hidden"
+                name="questions-json"
+            />
             <input
                 type="hidden"
                 name="teacherId"

@@ -18,7 +18,9 @@ const config = [
     },
   },
   // Add global ignores if needed (default ignores are already included in nextVitals)
-
+  {
+    ignores: ["public/pdf.worker.min.mjs"],
+  },
 ]
 
 export default config;

@@ -18,12 +18,14 @@ import { CiCircleQuestion } from "react-icons/ci";
 import LoadingAnimation from "@/components/loading-animation";
 import { Card, CardContent } from "@/components/ui/card";
 import { useQueryClient } from "@tanstack/react-query";
-
+import QuestionAttachmentUploader from "@/components/forms/question-attachment-uploader";
+import { useRef } from "react";
 
 interface Question {
     name: string;
     label: string;
     value: string;
+    attachments: string[];
 }
 
 export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
@@ -48,9 +50,10 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     const [isPublic, setIsPublic] = useState<boolean>(false);
     const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null)
     const [questions, setQuestions] = useState<Question[]>([
-        { name: "question1", label: "Prompt", value: "" }
+        { name: "question1", label: "Prompt", value: "", attachments: [] }
     ]);
     const [enableSpellCheck, setEnableSpellCheck] = useState<boolean>(false);
+    const questionsJsonRef = useRef<HTMLInputElement>(null);
 
 
     const router = useRouter()
@@ -58,7 +61,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     // Reset state when navigating to the same page with different query params
     useEffect(() => {
         setEditingPrompt(null);
-        setQuestions([{ name: "question1", label: "Prompt", value: "" }]);
+        setQuestions([{ name: "question1", label: "Prompt", value: "", attachments: [] }]);
     }, [existingPromptId]);
 
     useEffect(() => {
@@ -92,12 +95,16 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                         setCategories(categoryData as PromptCategory[]);
                     }
 
-                    // Process prompt data if it exists (third result, optional)
                     if (existingPromptId && results[2]) {
                         const promptResponse = results[2] as Response;
                         if (promptResponse.ok) {
                             const { prompt: promptData } = await promptResponse.json();
-                            setQuestions([{ name: "question1", label: "Prompt", value: promptData.questions[0].question }]);
+                            setQuestions([{
+                                name: "question1",
+                                label: "Prompt",
+                                value: promptData.questions[0].question,
+                                attachments: promptData.questions[0].attachments || [],
+                            }]);
                             setEditingPrompt(promptData as Prompt);
                         }
                     }
@@ -129,6 +136,19 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
             prevQuestions.map((q, i) => (i === index ? { ...q, value: newValue } : q))
         );
     };
+
+    const handleAttachmentsChange = (index: number, urls: string[]) => {
+        setQuestions(prevQuestions =>
+            prevQuestions.map((q, i) => (i === index ? { ...q, attachments: urls } : q))
+        );
+    };
+
+    function serializeQuestionsToHiddenInput() {
+        if (questionsJsonRef.current) {
+            const payload = questions.map(q => ({ question: q.value.trim(), attachments: q.attachments }));
+            questionsJsonRef.current.value = JSON.stringify(payload);
+        }
+    }
 
 
     async function handleAddCategory(categoryName: string) {
@@ -162,7 +182,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     }
 
     return (
-        <form action={action} className="grid relative space-y-5">
+        <form action={action} className="grid relative space-y-5" onSubmit={serializeQuestionsToHiddenInput}>
             {questions.map((question, index) => (
                 <Card key={question.name} className="shadow-sm hover:scale-[1.01] transition-transform duration-100">
                     <CardContent>
@@ -177,6 +197,10 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                             onChange={(e) => handleChange(index, e.target.value)}
                             required
                             rows={5}
+                        />
+                        <QuestionAttachmentUploader
+                            attachments={question.attachments}
+                            onChange={(urls) => handleAttachmentsChange(index, urls)}
                         />
                     </CardContent>
                 </Card>
@@ -292,6 +316,11 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
             <div className="flex-center">
                 <CreateButton />
             </div>
+            <input
+                ref={questionsJsonRef}
+                type="hidden"
+                name="questions-json"
+            />
             <input
                 type="hidden"
                 name="teacherId"

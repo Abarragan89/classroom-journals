@@ -1,6 +1,6 @@
 "use client"
 import { PromptSession, Question, Response, ResponseData } from '@/types'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
     AccordionContent,
     AccordionItem,
@@ -16,6 +16,7 @@ import { formatDateMonthDayYear } from '@/lib/utils'
 import { RefreshCcwIcon, Trash2, } from 'lucide-react'
 import QuipSingleResponse from './quip-single-response'
 import Image from 'next/image'
+import AttachmentViewer from '@/components/shared/attachment-viewer'
 
 export default function QuipListItem({
     singleQuip,
@@ -36,7 +37,6 @@ export default function QuipListItem({
     const queryClient = useQueryClient();
 
     const baseComplete = singleQuip?.responses?.some(res => res.studentId === userId) || false
-
     // Fetch responses only when accordion is opened
     const { data: studentResponses = null, refetch } = useQuery({
         queryKey: ['quipResponses', singleQuip.id],
@@ -61,7 +61,9 @@ export default function QuipListItem({
         }
     }
 
+
     const quipQuestion = (singleQuip?.questions as Question[])[0]?.question
+    const quipAttachments = (singleQuip?.questions as Question[])[0]?.attachments ?? []
     const isComplete =
         (studentResponses?.some(res => res.studentId === userId) ?? false) || baseComplete
 
@@ -79,7 +81,7 @@ export default function QuipListItem({
             </ResponsiveDialog>
 
 
-            <AccordionItem value={`item-${indexNumber}`} className='rounded-lg mb-5 bg-card shadow-sm overflow-hidden border data-[state=open]:border-primary hover:border-primary transition-all'>
+            <AccordionItem value={`item-${indexNumber}`} className='rounded-lg mb-5 bg-card shadow-sm overflow-hidden border data-[state=open]:border-primary transition-all'>
                 {/* Post Header */}
                 <div className="flex items-center gap-3 p-4 pb-2">
                     <Image
@@ -108,48 +110,50 @@ export default function QuipListItem({
                     )}
                 </div>
 
+                <div className="mx-4">
+                    <p className='font-bold text-xl sm:text-2xl '>{quipQuestion}</p>
+                    {quipAttachments && quipAttachments?.length > 0 && (
+                        <div className="mt-3">
+                            <AttachmentViewer attachments={quipAttachments} />
+                        </div>
+                    )}
+                </div>
                 {/* Post Content - The Question */}
                 <AccordionTrigger
                     onClick={() => setShowResponses(true)}
-                    className='px-6 pt-1 pb-3 rounded-md hover:bg-accent/50 data-[state=open]:rounded-b-none  cursor-pointer hover:no-underline items-center hover:text-primary transition-colors'
+                    // showChevron={false}
+                    className='flex-start gap-x-2 rounded-md mx-4'
                 >
-                    <p className='ml-1 mr-4 font-bold text-xl sm:text-2xl  '>
-                        {quipQuestion}
-                    </p>
-
+                    {isComplete || role !== ClassUserRole.STUDENT ? 'View Responses' : 'Answer Quip'}
                 </AccordionTrigger>
 
                 {/* Responses Section */}
-                <AccordionContent className='bg-muted/30 px-4 py-4 space-y-3'>
+                <AccordionContent className='bg-muted/30 px-4 pb-4 space-y-3'>
                     {role === ClassUserRole.TEACHER && (
-                        <div className="flex-end">
-                            <Button
-                                onClick={() => refetch()}
-                                size={"sm"}
-                                variant={"outline"}
-                            >
-                                <RefreshCcwIcon /> Refresh
-                            </Button>
-                        </div>
+                        <Button
+                            onClick={() => refetch()}
+                            size={"sm"}
+                            variant={"outline"}
+                            className='w-full mb-4'
+                        >
+                            <RefreshCcwIcon /> Refresh Responses
+                        </Button>
                     )}
 
                     {isComplete || role !== ClassUserRole.STUDENT ? (
                         studentResponses && studentResponses.length > 0 ? studentResponses.map((response) => (
-                            <>
+                            <div key={response.id}>
                                 {role === ClassUserRole.STUDENT && (
-                                    <div className="flex-end">
-                                        <Button
-                                            onClick={() => refetch()}
-                                            size={"sm"}
-                                            variant={"outline"}
-                                            className=' top-0 right-5 m-0 text-xs z-50'
-                                        >
-                                            <RefreshCcwIcon /> Refresh
-                                        </Button>
-                                    </div>
+                                    <Button
+                                        onClick={() => refetch()}
+                                        size={"sm"}
+                                        variant={"outline"}
+                                        className='w-full mb-4'
+                                    >
+                                        <RefreshCcwIcon /> Refresh Responses
+                                    </Button>
                                 )}
                                 <QuipSingleResponse
-                                    key={response.id}
                                     responseId={response.id}
                                     responseText={(response?.response as unknown as ResponseData[])[0]?.answer}
                                     userId={userId}
@@ -163,7 +167,7 @@ export default function QuipListItem({
                                     classId={classId}
                                     quipId={singleQuip.id}
                                 />
-                            </>
+                            </div>
                         )) : (
                             <p className='text-center text-lg py-5 font-bold text-muted-foreground '>No responses yet.</p>
                         )
@@ -174,6 +178,7 @@ export default function QuipListItem({
                             quipQuestion={quipQuestion}
                             classId={classId}
                         />
+                        // <></>
                     )}
                 </AccordionContent>
             </AccordionItem>

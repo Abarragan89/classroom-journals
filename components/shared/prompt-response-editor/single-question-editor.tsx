@@ -45,6 +45,7 @@ export default function SinglePromptEditor({
     const [journalText, setJournalText] = useState<string>("");
     const [studentResponseData, setStudentResponseData] = useState<ResponseData[]>(studentResponse);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
+    const [currentAttachments, setCurrentAttachments] = useState<string[]>([]);
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
     const [isLoadingPhotos, setIsLoadingPhotos] = useState<boolean>(false)
@@ -101,6 +102,9 @@ export default function SinglePromptEditor({
 
             setJournalText(current.answer || '');
             setCurrentQuestion(current.question);
+            if (questionNumber === '0') {
+                setCurrentAttachments(current.attachments ?? []);
+            }
             inputRef.current?.focus();
         }
     }, [questionNumber, studentResponseData]);
@@ -351,6 +355,7 @@ export default function SinglePromptEditor({
                             setIsTyping={setIsTyping}
                             jotType='BLOG'
                             onSave={handleSaveResponses}
+                            questionAttachments={currentAttachments}
                         />
                         <div className="flex flex-col justify-center items-center mt-10">
                             <form onSubmit={(e) => saveAndContinue(e)}>

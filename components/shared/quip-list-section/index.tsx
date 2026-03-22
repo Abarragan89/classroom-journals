@@ -67,7 +67,7 @@ export default function QuipListSection({
                 </>
 
             )}
-            <Accordion className='mt-10' type="single" collapsible>
+            <Accordion className='mt-10 max-w-[700px] mx-auto' type="single" collapsible>
                 {currentQuips && currentQuips?.length > 0 ? currentQuips.map((singleQuip, index) => (
                     <QuipListItem
                         singleQuip={singleQuip}
@@ -77,7 +77,7 @@ export default function QuipListSection({
                         classId={classId}
                         indexNumber={(index + 1).toString()}
                     />
-                )) : (
+                )) : role === "TEACHER" ? (
                     <TutorialMessageVideo
                         title="No Quips Posted"
                         subtitle="Create your first Quip!"
@@ -88,6 +88,8 @@ export default function QuipListSection({
                         )}
                         youtubeId="xa4sxeBoQ24"
                     />
+                ) : (
+                    <p className="h3-bold text-center text-muted-foreground">Your teacher has not posted any quips yet.</p>
                 )}
             </Accordion>
         </section>

@@ -2,7 +2,7 @@
 import { prisma } from '@/db/prisma';
 import {
     S3Client, PutObjectCommand,
-    // DeleteObjectCommand
+    DeleteObjectCommand
 } from '@aws-sdk/client-s3'
 import { requireAuth } from './authorization.action';
 
@@ -24,8 +24,26 @@ const s3Client = new S3Client({
 //     return false;
 // }
 
+function getS3Key(imageUrl: string): string | false {
+    if (imageUrl.includes('.amazonaws.com/')) {
+        return imageUrl.split('.amazonaws.com/')[1];
+    }
+    return false;
+}
+
+async function deleteFileFromS3(key: string) {
+    const s3Params = {
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: key
+    };
+    const command = new DeleteObjectCommand(s3Params);
+    await s3Client.send(command);
+}
+
 function getContentType(fileName: string): string {
-    const extension = fileName.split('.').pop();
+    // Strip timestamp suffix (-digits at end) before reading extension
+    const baseName = fileName.replace(/-\d+$/, '');
+    const extension = baseName.split('.').pop()?.toLowerCase();
     switch (extension) {
         case 'jpeg':
         case 'jpg':
@@ -34,6 +52,8 @@ function getContentType(fileName: string): string {
             return 'image/png';
         case 'webp':
             return 'image/webp';
+        case 'pdf':
+            return 'application/pdf';
         default:
             return 'application/octet-stream'; // Fallback for unknown types
     }
@@ -114,6 +134,59 @@ export async function addPhotoToLibrary(prevData: unknown, formData: FormData) {
     } catch (error) {
         console.error('Error uploading photo 123 ', error);
         return { success: false, message: 'Error uploading photo', error }
+    }
+}
+
+// Upload a question attachment (image or PDF) to S3 and return its URL
+export async function uploadQuestionAttachment(formData: FormData): Promise<{ success: boolean; url?: string; message?: string }> {
+    try {
+        await requireAuth();
+        const file = formData.get('file');
+
+        if (!file || typeof file === 'string') {
+            return { success: false, message: 'No file provided' };
+        }
+
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
+        if (!validTypes.includes(file.type)) {
+            return { success: false, message: 'Invalid file type. Please upload a JPEG, PNG, WebP image, or PDF.' };
+        }
+
+        const maxSizeBytes = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSizeBytes) {
+            return { success: false, message: 'File size must be less than 10MB.' };
+        }
+
+        const buffer = Buffer.from(await file.arrayBuffer());
+        const cleanName = file.name.replace(/\s+/g, '-');
+        const url = await uploadFileToS3(buffer, `question-attachment-${cleanName}`);
+
+        if (!url) {
+            return { success: false, message: 'Failed to upload file.' };
+        }
+
+        return { success: true, url };
+    } catch (error) {
+        console.error('Error uploading question attachment:', error);
+        return { success: false, message: 'Error uploading file.' };
+    }
+}
+
+// Delete one or more S3 objects by their full URLs
+export async function deleteAttachmentsFromS3(urls: string[]): Promise<void> {
+    try {
+        await requireAuth();
+        await Promise.allSettled(
+            urls.map(async (url) => {
+                const key = getS3Key(url);
+                if (key) {
+                    await deleteFileFromS3(key);
+                }
+            })
+        );
+    } catch (error) {
+        // Log but do not propagate — callers should continue even if S3 cleanup fails
+        console.error('Error deleting attachments from S3:', error);
     }
 }
 

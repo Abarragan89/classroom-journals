@@ -42,6 +42,7 @@ export default function MultipleQuestionEditor({
     const [journalText, setJournalText] = useState<string>("");
     const [studentResponseData, setStudentResponseData] = useState<ResponseData[]>(studentResponse);
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
+    const [currentAttachments, setCurrentAttachments] = useState<string[]>([]);
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [isTyping, setIsTyping] = useState(false);
     const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -64,6 +65,7 @@ export default function MultipleQuestionEditor({
     useEffect(() => {
         if (questionNumber && studentResponseData) {
             setCurrentQuestion(studentResponseData?.[Number(questionNumber)]?.question)
+            setCurrentAttachments(studentResponseData?.[Number(questionNumber)]?.attachments ?? [])
             setJournalText(studentResponseData?.[Number(questionNumber)]?.answer ?? '')
         }
     }, [questionNumber, studentResponseData])
@@ -299,6 +301,7 @@ export default function MultipleQuestionEditor({
                             questionNumber={Number(questionNumber) + 1}
                             totalQuestions={studentResponse.length}
                             onSave={handleSaveResponses}
+                            questionAttachments={currentAttachments}
                         />
                         <div className="flex flex-col justify-center items-center mt-10">
                             <form onSubmit={(e) => saveAndContinue(e)}>

@@ -5,12 +5,12 @@ import { ClassUserRole } from "@prisma/client"
 
 export default function QuipsClientWraper({
     classId,
-    teacherId,
+    userId,
     allQuips,
     role,
 }: {
     classId: string;
-    teacherId: string;
+    userId: string;
     allQuips: PromptSession[]
     role: ClassUserRole
 }) {
@@ -20,7 +20,7 @@ export default function QuipsClientWraper({
             <QuipListSection
                 allQuips={allQuips}
                 role={role}
-                userId={teacherId}
+                userId={userId}
                 classId={classId}
             />
         </>
