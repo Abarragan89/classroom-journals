@@ -140,6 +140,7 @@ export default function MultiQuestionReview({
                             spellCheckEnabled={spellCheckEnabled}
                             isVoiceToTextEnabled={isVoiceToTextEnabled}
                             isDisabled={!isSubmittable}
+                            questionAttachments={responseData.attachments ?? []}
                         />
                     ))}
                 </div>

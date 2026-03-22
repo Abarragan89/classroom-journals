@@ -66,7 +66,7 @@ export default function QuestionAttachmentUploader({ attachments, onChange, disa
                 }
             }
             if (uploaded.length > 0) {
-                onChange([...attachments, ...uploaded]);
+                onChange([...(attachments ?? []), ...uploaded]);
             }
         } catch (err) {
             console.error('Attachment upload error:', err);
@@ -83,7 +83,7 @@ export default function QuestionAttachmentUploader({ attachments, onChange, disa
         // Fire-and-forget S3 cleanup
         deleteAttachmentsFromS3([url]).catch(console.error);
     }
-console.log('Current attachments:', attachments);
+
     return (
         <div className="mt-2 space-y-2">
             {/* Thumbnail strip */}

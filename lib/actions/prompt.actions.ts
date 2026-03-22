@@ -80,7 +80,6 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             return { success: false, message: "Missing a required field" };
         }
 
-        console.log('questions ', questions)
         const finalTransaction = await prisma.$transaction(async (prisma) => {
             // Create the Prompt
             const createdPrompt = await prisma.prompt.create({

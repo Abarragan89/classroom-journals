@@ -67,7 +67,7 @@ export default function MultiPromptForm({
     // Reset state when navigating to the same page with different query params
     useEffect(() => {
         setEditingPrompt(null);
-        setQuestions([{ name: "question1", label: "Question 1", value: "" }]);
+        setQuestions([{ name: "question1", label: "Question 1", value: "", attachments: [] }]);
     }, [existingPromptId]);
 
     useEffect(() => {

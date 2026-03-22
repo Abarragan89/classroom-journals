@@ -1,7 +1,6 @@
 'use client';
 import { ResponseData } from '@/types'
 import { useState } from 'react'
-import React from 'react'
 import MultiQuestionReview from './multi-question-review'
 import { Response } from '@/types';
 import { useQuery } from '@tanstack/react-query';

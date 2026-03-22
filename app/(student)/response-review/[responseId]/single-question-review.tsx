@@ -187,6 +187,7 @@ export default function SingleQuestionReview({
                             spellCheckEnabled={spellCheckEnabledInitial}
                             isVoiceToTextEnabled={isVoiceToTextEnabledInitial}
                             isDisabled={!isSubmittableInitial}
+                            questionAttachments={responseData.attachments ?? []}
                         />
                     ))}
                 </div>

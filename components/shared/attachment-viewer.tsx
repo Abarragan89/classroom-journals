@@ -1,8 +1,13 @@
 'use client';
-import { useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import useEmblaCarousel from 'embla-carousel-react';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel"
+
 
 // ssr: false prevents react-pdf's DOMMatrix from running in Node.js
 const PdfSlide = dynamic(() => import('@/components/shared/pdf-slide'), { ssr: false });
@@ -17,7 +22,7 @@ function AttachmentSlide({ url }: { url: string }) {
     }
 
     return (
-        <div className="w-full h-[280px] overflow-hidden rounded-md">
+        <div className="w-full overflow-hidden rounded-md">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
                 src={url}
@@ -29,10 +34,6 @@ function AttachmentSlide({ url }: { url: string }) {
 }
 
 export default function AttachmentViewer({ attachments }: { attachments: string[] }) {
-    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
-
-    const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
-    const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
     if (!attachments || attachments.length === 0) return null;
 
@@ -45,34 +46,18 @@ export default function AttachmentViewer({ attachments }: { attachments: string[
     }
 
     return (
-        <div className="w-full rounded-md overflow-hidden border bg-muted/20 relative">
-            <div className="embla__viewport" ref={emblaRef}>
-                <div className="embla__container flex">
-                    {attachments.map((url) => (
-                        <div key={url} className="embla__slide flex-[0_0_100%] min-w-0 p-2">
+        <div className="w-full rounded-md border bg-muted/20">
+            <Carousel className="w-full" opts={{ loop: true }}>
+                <CarouselContent>
+                    {attachments.map((url, index) => (
+                        <CarouselItem key={index} className="w-full p-2">
                             <AttachmentSlide url={url} />
-                        </div>
+                        </CarouselItem>
                     ))}
-                </div>
-            </div>
-            <div className="flex justify-between w-[120px] mx-auto py-2">
-                <button
-                    type="button"
-                    onClick={scrollPrev}
-                    aria-label="Previous attachment"
-                    className="text-[1.75rem] text-primary hover:opacity-70 transition-opacity"
-                >
-                    <IoIosArrowBack />
-                </button>
-                <button
-                    type="button"
-                    onClick={scrollNext}
-                    aria-label="Next attachment"
-                    className="text-[1.75rem] text-primary hover:opacity-70 transition-opacity"
-                >
-                    <IoIosArrowForward />
-                </button>
-            </div>
+                </CarouselContent>
+                <CarouselPrevious className="left-2" />
+                <CarouselNext className="right-2" />
+            </Carousel>
         </div>
     );
 }
