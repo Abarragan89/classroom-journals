@@ -121,7 +121,7 @@ export default function QuipListItem({
                 {/* Post Content - The Question */}
                 <AccordionTrigger
                     onClick={() => setShowResponses(true)}
-                    // showChevron={false}
+
                     className='flex-start gap-x-2 rounded-md mx-4'
                 >
                     {isComplete || role !== ClassUserRole.STUDENT ? 'View Responses' : 'Answer Quip'}
