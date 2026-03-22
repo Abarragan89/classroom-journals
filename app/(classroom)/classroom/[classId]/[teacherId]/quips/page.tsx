@@ -26,7 +26,7 @@ export default async function Quips({
                 <h2 className="h2-bold my-3">Posted Quips</h2>
                 <QuipsClientWraper
                     classId={classId}
-                    teacherId={teacherId}
+                    userId={teacherId}
                     allQuips={allQuips}
                     role={ClassUserRole.TEACHER}
                 />

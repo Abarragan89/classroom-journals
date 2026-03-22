@@ -5,8 +5,8 @@ import { PromptSession, Session } from "@/types"
 import { ArrowLeftIcon } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import QuipListSection from "@/components/shared/quip-list-section"
 import { clearAllQuipAlerts } from "@/lib/actions/alert.action"
+import QuipsClientWraper from "@/app/(classroom)/classroom/[classId]/[teacherId]/quips/quips-client-wrapper"
 
 
 export default async function ClassroomQuips() {
@@ -38,12 +38,12 @@ export default async function ClassroomQuips() {
                 </Link>
                 <h1 className="h1-bold mt-2 line-clamp-1">Class Quips</h1>
                 <div className="mt-5">
-                    <QuipListSection
-                        allQuips={allQuips}
-                        userId={studentId}
-                        role={session?.user?.role}
-                        classId={classroomId}
-                    />
+                <QuipsClientWraper
+                    classId={classroomId}
+                    userId={studentId}
+                    allQuips={allQuips}
+                    role={session?.user?.role}
+                />
                 </div>
             </main>
         </>

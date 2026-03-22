@@ -24,6 +24,7 @@ export const promptSchema = z.object({
             question: z.string().min(1, 'Question is required'),
             answer: z.string().optional(),
             score: z.number().optional(),
+            attachments: z.array(z.string()).optional(),
         })
     ).min(1, 'At least one question is required'),
     promptType: z.string().optional()
@@ -56,6 +57,6 @@ export const rubricSchema = z.object({
             ).min(1, "At least one criterion is required")
         })
     ).min(1, "At least one category is required"),
-    
+
     title: z.string().min(1, "Rubric name is required")
 })

@@ -72,6 +72,9 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `if(typeof URL!=="undefined"&&!URL.parse){URL.parse=function(u,b){try{return new URL(u,b);}catch(_){return null;}};}` }} />
+      </head>
       <body
         className={`
           ${geistSans.variable} ${geistMono.variable} antialiased

@@ -44,6 +44,13 @@ export default function QuipListSection({
         setIsModalOpen(false)
     }
 
+    console.log('Current quips in QuipListSection:', currentQuips)
+    for (const quip of currentQuips) {
+        console.dir(quip.questions)
+    }
+
+    console.log('user id in quip list section index', userId)
+
     return (
         <section>
             {role === "TEACHER" && (

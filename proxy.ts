@@ -20,15 +20,15 @@ export async function proxy(request: NextRequest) {
                 default-src 'self';
                 script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vercel.live https://static.cloudflareinsights.com;
                 style-src 'self' 'unsafe-inline';
-                img-src 'self' blob: data: https://unfinished-pages.s3.us-east-2.amazonaws.com https://*.googleusercontent.com https://*.yahoo.com https://*.outlook.com https://authjs.dev https://i.ytimg.com;
+                img-src 'self' blob: data: https://unfinished-pages.s3.us-east-2.amazonaws.com https://jotter-blog.s3.us-east-2.amazonaws.com https://*.googleusercontent.com https://*.yahoo.com https://*.outlook.com https://authjs.dev https://i.ytimg.com;
                 font-src 'self' data:;
                 object-src 'none';
-                frame-src https://www.youtube-nocookie.com https://vercel.live;
+                frame-src https://www.youtube-nocookie.com https://vercel.live https://jotter-blog.s3.us-east-2.amazonaws.com;
                 base-uri 'self';
                 form-action 'self';
                 frame-ancestors 'none';
                 worker-src 'self' blob:;
-                connect-src 'self' blob:;
+                connect-src 'self' blob: https://jotter-blog.s3.us-east-2.amazonaws.com;
                 upgrade-insecure-requests;
             `.replace(/\s{2,}/g, ' ').trim();
 

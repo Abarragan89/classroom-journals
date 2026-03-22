@@ -4,6 +4,7 @@ import { promptSchema } from "../validators";
 import { Question, Prompt } from "@/types";
 import { ClassUserRole, Prisma, PromptSessionStatus, PromptType, ResponseStatus } from '@prisma/client';
 import { requireAuth } from "./authorization.action";
+import { deleteAttachmentsFromS3 } from "./s3-upload";
 
 // Create new prompt 
 export async function createNewPrompt(prevState: unknown, formData: FormData) {
@@ -22,9 +23,20 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
         const questions: Question[] = [];
         const classesAssignTo: string[] = []
 
-        // Extract all questions from formData & dump into questions[]
+        // Use pre-serialized questions-json if provided (preserves attachments)
+        const questionsJson = formData.get('questions-json') as string | null;
+        if (questionsJson) {
+            try {
+                const parsed = JSON.parse(questionsJson) as Question[];
+                questions.push(...parsed.filter(q => q.question.trim()));
+            } catch {
+                // fall through to forEach below
+            }
+        }
+
+        // Extract classroom assignments and (if questions-json was absent) questions from formData
         formData.forEach((value, key) => {
-            if (key.startsWith("question")) {
+            if (questions.length === 0 && key.startsWith("question")) {
                 questions.push({ question: (value as string).trim() }); // Convert into correct format
             }
             if (key.startsWith("classroom-assign")) {
@@ -68,6 +80,7 @@ export async function createNewPrompt(prevState: unknown, formData: FormData) {
             return { success: false, message: "Missing a required field" };
         }
 
+        console.log('questions ', questions)
         const finalTransaction = await prisma.$transaction(async (prisma) => {
             // Create the Prompt
             const createdPrompt = await prisma.prompt.create({
@@ -217,9 +230,20 @@ export async function updateAPrompt(prevState: unknown, formData: FormData) {
         const questions: Question[] = [];
         const classesAssignTo: string[] = []
 
-        // Extract all questions from formData & dump into questions[]
+        // Use pre-serialized questions-json if provided (preserves attachments)
+        const questionsJsonUpdate = formData.get('questions-json') as string | null;
+        if (questionsJsonUpdate) {
+            try {
+                const parsed = JSON.parse(questionsJsonUpdate) as Question[];
+                questions.push(...parsed.filter(q => q.question.trim()));
+            } catch {
+                // fall through to forEach below
+            }
+        }
+
+        // Extract classroom assignments and (if questions-json was absent) questions from formData
         formData.forEach((value, key) => {
-            if (key.startsWith("question")) {
+            if (questions.length === 0 && key.startsWith("question")) {
                 questions.push({ question: (value as string).trim() }); // Convert into correct format
             }
             if (key.startsWith("classroom-assign")) {
@@ -529,6 +553,17 @@ export async function deletePrompt(prevState: unknown, formData: FormData) {
             throw new Error('Forbidden')
         }
         const promptId = formData.get('promptId') as string
+
+        // Delete S3 attachments before removing DB record
+        const existingPrompt = await prisma.prompt.findUnique({
+            where: { id: promptId },
+            select: { questions: true }
+        });
+        const allUrls = (existingPrompt?.questions as unknown as Question[] ?? [])
+            .flatMap(q => q.attachments ?? []);
+        if (allUrls.length > 0) {
+            await deleteAttachmentsFromS3(allUrls);
+        }
 
         await prisma.prompt.delete({
             where: { id: promptId }

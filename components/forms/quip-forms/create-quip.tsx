@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { PromptSession } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import QuestionAttachmentUploader from "@/components/forms/question-attachment-uploader";
 
 
 export default function CreateQuipForm({
@@ -44,12 +45,13 @@ export default function CreateQuipForm({
         },
     })
     const [error, setError] = useState('')
+    const [attachments, setAttachments] = useState<string[]>([])
 
     const queryClient = useQueryClient();
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            const newQuip = await createNewQuip(values.qiupText, values.classId, values.teacherId)
+            const newQuip = await createNewQuip(values.qiupText, values.classId, values.teacherId, attachments)
             if (!newQuip.success) {
                 throw new Error(newQuip.message as string)
             }
@@ -90,6 +92,10 @@ export default function CreateQuipForm({
                                     placeholder="New Quip..." {...field}
                                 />
                             </FormControl>
+                            <QuestionAttachmentUploader
+                                attachments={attachments}
+                                onChange={setAttachments}
+                            />
                             <FormMessage />
                         </FormItem>
                     )}

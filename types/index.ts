@@ -51,6 +51,7 @@ export interface Question {
     question: string;
     answer?: string;
     score?: number;
+    attachments?: string[];
 }
 
 export type Prompt = z.infer<typeof promptSchema> & {
@@ -127,6 +128,7 @@ export interface ResponseData {
     answer: string;
     question: string;
     score: number;
+    attachments?: string[];
 }
 
 export interface SearchOptions {

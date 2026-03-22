@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
+import AttachmentViewer from "@/components/shared/attachment-viewer";
 
 
 export default function Editor({
@@ -20,7 +21,8 @@ export default function Editor({
     isDisabled = false,
     score,
     isPreGraded = false,
-    onSave
+    onSave,
+    questionAttachments = [],
 }: {
     journalText: string;
     setJournalText: React.Dispatch<React.SetStateAction<string>>;
@@ -36,6 +38,7 @@ export default function Editor({
     score?: number;
     isPreGraded?: boolean;
     onSave?: () => void | Promise<void>;
+    questionAttachments?: string[];
 }) {
 
     // History for undo and redo
@@ -327,6 +330,12 @@ export default function Editor({
 
             {questionText && (
                 <p className="pt-5 pb-7 ml-1 whitespace-pre-line lg:text-lg font-medium leading-relaxed tracking-wider">{questionText}</p>
+            )}
+
+            {questionAttachments?.length > 0 && (
+                <div className="mb-5">
+                    <AttachmentViewer attachments={questionAttachments} />
+                </div>
             )}
 
             {!isDisabled && characterLimit && (

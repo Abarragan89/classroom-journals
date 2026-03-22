@@ -2,14 +2,16 @@
 import { prisma } from "@/db/prisma";
 import { requireAuth } from "./authorization.action";
 import { AlertType, ClassUserRole, PromptSessionStatus, PromptType } from "@prisma/client";
-import { ResponseData } from "@/types";
+import { Question, ResponseData } from "@/types";
 import { InputJsonArray } from "@prisma/client/runtime/library";
 import { decryptText } from "../utils";
+import { deleteAttachmentsFromS3 } from "./s3-upload";
 
 export async function createNewQuip(
     quipText: string,
     classId: string,
-    teacherId: string
+    teacherId: string,
+    attachments: string[] = []
 ) {
     try {
         // Authenticate User
@@ -46,6 +48,7 @@ export async function createNewQuip(
         // generate quip question
         const questions = [{
             question: quipText,
+            attachments,
         }]
 
         // Create Prompt session
@@ -211,15 +214,24 @@ export async function deleteQuip(
             throw new Error('Forbidden');
         }
 
-        const deletedQuip = await prisma.promptSession.delete({
+        const deletedQuip = await prisma.promptSession.findUnique({
+            where: { id: promptSessionId },
+            select: { id: true, questions: true }
+        });
+
+        if (deletedQuip) {
+            const attachmentUrls = ((deletedQuip.questions as unknown as Question[])?.[0]?.attachments ?? []);
+            if (attachmentUrls.length > 0) {
+                await deleteAttachmentsFromS3(attachmentUrls);
+            }
+        }
+
+        await prisma.promptSession.delete({
             where: {
                 id: promptSessionId
             },
-            select: {
-                id: true
-            }
         })
-        return deletedQuip
+        return { id: deletedQuip?.id }
 
     } catch (error) {
         if (error instanceof Error) {
@@ -228,7 +240,7 @@ export async function deleteQuip(
         } else {
             console.error("Unexpected error:", error);
         }
-        return { success: false, message: "Error assigning prompt. Try again." };
+        return { success: false, message: "Error deleting quip. Try again." };
     }
 }
 
@@ -283,11 +295,11 @@ export async function getReponsesForQuip(
 
     } catch (error) {
         if (error instanceof Error) {
-            console.error("Error deleting quip:", error.message);
+            console.error("Error getting responses for quip:", error.message);
             console.error(error.stack);
         } else {
             console.error("Unexpected error:", error);
         }
-        return { success: false, message: "Error assigning prompt. Try again." };
+        return { success: false, message: "Error getting responses for quip. Try again." };
     }
 }
