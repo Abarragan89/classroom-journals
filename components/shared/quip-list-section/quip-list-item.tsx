@@ -129,7 +129,7 @@ export default function QuipListItem({
 
                 {/* Responses Section */}
                 <AccordionContent className='bg-muted/30 px-4 pb-4 space-y-3'>
-                    {role === ClassUserRole.TEACHER && (
+                    {role === ClassUserRole.TEACHER || isComplete && (
                         <Button
                             onClick={() => refetch()}
                             size={"sm"}
@@ -142,32 +142,22 @@ export default function QuipListItem({
 
                     {isComplete || role !== ClassUserRole.STUDENT ? (
                         studentResponses && studentResponses.length > 0 ? studentResponses.map((response) => (
-                            <div key={response.id}>
-                                {role === ClassUserRole.STUDENT && (
-                                    <Button
-                                        onClick={() => refetch()}
-                                        size={"sm"}
-                                        variant={"outline"}
-                                        className='w-full mb-4'
-                                    >
-                                        <RefreshCcwIcon /> Refresh Responses
-                                    </Button>
-                                )}
-                                <QuipSingleResponse
-                                    responseId={response.id}
-                                    responseText={(response?.response as unknown as ResponseData[])[0]?.answer}
-                                    userId={userId}
-                                    responseDate={response?.createdAt}
-                                    isTeacherView={role === ClassUserRole.TEACHER}
-                                    responseLikes={response?.likes}
-                                    likeCount={response?.likeCount}
-                                    authorAvatarUrl={response?.student?.avatarURL as string}
-                                    responseAuthor={response?.student?.username as string}
-                                    teacherId={singleQuip.authorId || userId}
-                                    classId={classId}
-                                    quipId={singleQuip.id}
-                                />
-                            </div>
+
+                            <QuipSingleResponse
+                                key={response.id}
+                                responseId={response.id}
+                                responseText={(response?.response as unknown as ResponseData[])[0]?.answer}
+                                userId={userId}
+                                responseDate={response?.createdAt}
+                                isTeacherView={role === ClassUserRole.TEACHER}
+                                responseLikes={response?.likes}
+                                likeCount={response?.likeCount}
+                                authorAvatarUrl={response?.student?.avatarURL as string}
+                                responseAuthor={response?.student?.username as string}
+                                teacherId={singleQuip.authorId || userId}
+                                classId={classId}
+                                quipId={singleQuip.id}
+                            />
                         )) : (
                             <p className='text-center text-lg py-5 font-bold text-muted-foreground '>No responses yet.</p>
                         )
