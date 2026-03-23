@@ -42,7 +42,7 @@ export async function createNewQuip(
 
 
         if (!isAllowedToAssign) {
-            return { success: false, message: 'You need to delete some assignments or upgrade your account before you can assign a new quip' }
+            return { success: false, message: 'Assignment Limit Reached: You need to delete some assignments or upgrade your account before you can assign a new Quip' }
         }
 
         // generate quip question
