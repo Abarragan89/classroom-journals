@@ -122,7 +122,7 @@ export default function QuipListItem({
                 <AccordionTrigger
                     onClick={() => setShowResponses(true)}
 
-                    className='flex-start gap-x-2 rounded-md mx-4'
+                    className='flex-center gap-x-2 rounded-md mx-4 font-bold hover:underline bg-secondary text-secondary-foreground py-2 my-3'
                 >
                     {isComplete || role !== ClassUserRole.STUDENT ? 'View Responses' : 'Answer Quip'}
                 </AccordionTrigger>
@@ -130,14 +130,16 @@ export default function QuipListItem({
                 {/* Responses Section */}
                 <AccordionContent className='bg-muted/30 px-4 pb-4 space-y-3'>
                     {role === ClassUserRole.TEACHER || isComplete && (
-                        <Button
-                            onClick={() => refetch()}
-                            size={"sm"}
-                            variant={"outline"}
-                            className='w-full mb-4'
-                        >
-                            <RefreshCcwIcon /> Refresh Responses
-                        </Button>
+                        <div className="flex-end">
+                            <Button
+                                onClick={() => refetch()}
+                                size={"sm"}
+                                variant={"outline"}
+                                className='mb-2'
+                            >
+                                <RefreshCcwIcon /> Refresh
+                            </Button>
+                        </div>
                     )}
 
                     {isComplete || role !== ClassUserRole.STUDENT ? (

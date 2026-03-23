@@ -7,6 +7,7 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
+import { useState } from 'react';
 
 
 // ssr: false prevents react-pdf's DOMMatrix from running in Node.js
@@ -17,17 +18,33 @@ function isPdf(url: string) {
 }
 
 function AttachmentSlide({ url }: { url: string }) {
+    const [style, setStyle] = useState({ aspectRatio: '4/5' }); // default while loading
+
     if (isPdf(url)) {
         return <PdfSlide url={url} />;
     }
 
     return (
-        <div className="w-full overflow-hidden rounded-md">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+        // <div className="w-full overflow-hidden rounded-lg" style={{ aspectRatio: '4/5' }}>
+        //     <img
+        //         src={url}
+        //         alt=""
+        //         loading="lazy"
+        //         className="w-full h-full object-cover"
+        //     />
+        // </div>
+        <div className="w-full overflow-hidden rounded-lg" style={style}>
             <img
                 src={url}
-                alt="Question attachment"
+                alt=""
+                loading="lazy"
                 className="w-full h-full object-cover"
+                onLoad={(e) => {
+                    const img = e.target as HTMLImageElement;
+                    const { naturalWidth, naturalHeight } = img;
+                    const ratio = naturalWidth / naturalHeight;
+                    setStyle({ aspectRatio: ratio > 4 / 5 ? `${naturalWidth}/${naturalHeight}` : '4/5' });
+                }}
             />
         </div>
     );
@@ -46,11 +63,11 @@ export default function AttachmentViewer({ attachments }: { attachments: string[
     }
 
     return (
-        <div className="w-full rounded-md border bg-muted/20">
+        <div className="w-full rounded-md bg-muted/20">
             <Carousel className="w-full" opts={{ loop: true }}>
-                <CarouselContent>
+                <CarouselContent className='items-center'>
                     {attachments.map((url, index) => (
-                        <CarouselItem key={index} className="w-full p-2">
+                        <CarouselItem key={index} className="w-full p-0">
                             <AttachmentSlide url={url} />
                         </CarouselItem>
                     ))}
