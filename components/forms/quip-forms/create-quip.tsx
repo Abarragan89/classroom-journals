@@ -16,8 +16,8 @@ import {
 import { toast } from "sonner";
 import { PromptSession } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import QuestionAttachmentUploader from "@/components/forms/question-attachment-uploader";
+import { useState, useRef } from "react";
+import QuestionAttachmentUploader, { UploaderHandle } from "@/components/forms/question-attachment-uploader";
 
 
 export default function CreateQuipForm({
@@ -46,13 +46,16 @@ export default function CreateQuipForm({
     })
     const [error, setError] = useState('')
     const [attachments, setAttachments] = useState<string[]>([])
-    const [isUploading, setIsUploading] = useState(false)
+    const uploaderRef = useRef<UploaderHandle | null>(null);
 
     const queryClient = useQueryClient();
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            const newQuip = await createNewQuip(values.qiupText, values.classId, values.teacherId, attachments)
+            const finalAttachments = uploaderRef.current
+                ? await uploaderRef.current.uploadPending()
+                : attachments;
+            const newQuip = await createNewQuip(values.qiupText, values.classId, values.teacherId, finalAttachments)
             if (!newQuip.success) {
                 throw new Error(newQuip.message as string)
             }
@@ -94,9 +97,9 @@ export default function CreateQuipForm({
                                 />
                             </FormControl>
                             <QuestionAttachmentUploader
+                                ref={uploaderRef}
                                 attachments={attachments}
                                 onChange={setAttachments}
-                                onUploadingChange={setIsUploading}
                             />
                             <FormMessage />
                         </FormItem>
@@ -104,7 +107,7 @@ export default function CreateQuipForm({
                 />
                 {error && (<p className="text-sm text-destructive text-center mt-1">{error}</p>)}
                 <Button
-                    disabled={form.formState.isSubmitting || isUploading}
+                    disabled={form.formState.isSubmitting}
                     className="mt-4" type="submit">
                     {form.formState.isSubmitting ? "Posting..." : "Post Quip"}
                 </Button>

@@ -20,7 +20,7 @@ import { CiCircleQuestion } from "react-icons/ci";
 import LoadingAnimation from "@/components/loading-animation";
 import { Card, CardContent } from "@/components/ui/card";
 import { useQueryClient } from "@tanstack/react-query";
-import QuestionAttachmentUploader from "@/components/forms/question-attachment-uploader";
+import QuestionAttachmentUploader, { UploaderHandle } from "@/components/forms/question-attachment-uploader";
 import { useRef } from "react";
 
 interface Question {
@@ -60,8 +60,11 @@ export default function MultiPromptForm({
     const [questions, setQuestions] = useState<Question[]>([
         { name: "question1", label: "Question 1", value: "", attachments: [] }
     ]);
-    const [uploadingStates, setUploadingStates] = useState<boolean[]>([false]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const questionsJsonRef = useRef<HTMLInputElement>(null);
+    const formRef = useRef<HTMLFormElement>(null);
+    const uploaderRefs = useRef<(UploaderHandle | null)[]>([]);
+    const uploadsDone = useRef(false);
 
     const router = useRouter()
 
@@ -69,7 +72,6 @@ export default function MultiPromptForm({
     useEffect(() => {
         setEditingPrompt(null);
         setQuestions([{ name: "question1", label: "Question 1", value: "", attachments: [] }]);
-        setUploadingStates([false]);
     }, [existingPromptId]);
 
     useEffect(() => {
@@ -167,7 +169,6 @@ export default function MultiPromptForm({
             ...prevQuestions,
             { name: `question${prevQuestions.length + 1}`, label: `Question ${prevQuestions.length + 1}`, value: "", attachments: [] }
         ]);
-        setUploadingStates(prev => [...prev, false]);
     };
 
     const handleAttachmentsChange = (index: number, urls: string[]) => {
@@ -182,15 +183,7 @@ export default function MultiPromptForm({
                 .filter((_, i) => i !== index)
                 .map((q, i) => ({ ...q, name: `question${i + 1}`, label: `Question ${i + 1}` })) // Renumbering
         );
-        setUploadingStates(prev => prev.filter((_, i) => i !== index));
     };
-
-    function serializeQuestionsToHiddenInput() {
-        if (questionsJsonRef.current) {
-            const payload = questions.map(q => ({ question: q.value.trim(), attachments: q.attachments }));
-            questionsJsonRef.current.value = JSON.stringify(payload);
-        }
-    }
 
     const handleChange = (index: number, newValue: string) => {
         setQuestions(prevQuestions =>
@@ -198,21 +191,41 @@ export default function MultiPromptForm({
         );
     };
 
-    const handleUploadingChange = (index: number, isUploading: boolean) => {
-        setUploadingStates(prev => {
-            const next = [...prev];
-            next[index] = isUploading;
-            return next;
-        });
-    };
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        if (uploadsDone.current) {
+            uploadsDone.current = false;
+            return;
+        }
+        e.preventDefault();
+        setIsSubmitting(true);
+        try {
+            const finalAttachmentsList = await Promise.all(
+                questions.map((q, i) => {
+                    const ref = uploaderRefs.current[i];
+                    return ref ? ref.uploadPending() : Promise.resolve(q.attachments);
+                })
+            );
+            if (questionsJsonRef.current) {
+                questionsJsonRef.current.value = JSON.stringify(
+                    questions.map((q, i) => ({ question: q.value.trim(), attachments: finalAttachmentsList[i] }))
+                );
+            }
+            uploadsDone.current = true;
+            formRef.current?.requestSubmit();
+        } catch (err) {
+            console.error('Upload failed before submit:', err);
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
 
     const buttonText = existingPromptId ? 'Update Jot' : 'Create Jot'
     const buttonVerb = existingPromptId ? 'Updating...' : 'Creating...'
 
-    const CreateButton = () => {
+    const CreateButton = ({ isSubmitting }: { isSubmitting: boolean }) => {
         const { pending } = useFormStatus();
-        const isAnyUploading = uploadingStates.some(Boolean);
-        return <Button size={"lg"} disabled={pending || isAnyUploading} type="submit" className="mx-auto my-5 shadow-md">{pending ? buttonVerb : buttonText}</Button>;
+        const label = pending ? buttonVerb : isSubmitting ? 'Uploading...' : buttonText;
+        return <Button size={"lg"} disabled={pending || isSubmitting} type="submit" className="mx-auto my-5 shadow-md">{label}</Button>;
     };
 
     if (!isLoaded) {
@@ -224,7 +237,7 @@ export default function MultiPromptForm({
     }
 
     return (
-        <form action={action} className="grid relative" onSubmit={serializeQuestionsToHiddenInput}>
+        <form ref={formRef} action={action} className="grid relative" onSubmit={handleSubmit}>
             {!isTeacherPremium &&
                 <div className="mb-5">
                     <UpgradeAccountBtn
@@ -278,9 +291,9 @@ export default function MultiPromptForm({
                                         rows={3}
                                     />
                                     <QuestionAttachmentUploader
+                                        ref={(el) => { uploaderRefs.current[index] = el; }}
                                         attachments={question.attachments}
                                         onChange={(urls) => handleAttachmentsChange(index, urls)}
-                                        onUploadingChange={(isUploading) => handleUploadingChange(index, isUploading)}
                                     />
                                 </div>
                             </div>
@@ -406,7 +419,7 @@ export default function MultiPromptForm({
             )}
             {/* <Separator className="mt-10 mb-3" /> */}
             <div className="my-5 flex-center">
-                <CreateButton />
+                <CreateButton isSubmitting={isSubmitting} />
             </div>
         </form>
     )
