@@ -81,7 +81,7 @@ export default function QuipListItem({
             </ResponsiveDialog>
 
 
-            <AccordionItem value={`item-${indexNumber}`} className='rounded-lg mb-5 bg-card shadow-sm overflow-hidden border data-[state=open]:border-primary transition-all'>
+            <AccordionItem value={`item-${indexNumber}`} className='rounded-lg mb-5 bg-card shadow-sm overflow-hidden border max-w-[540px] mx-auto data-[state=open]:border-primary transition-all'>
                 {/* Post Header */}
                 <div className="flex items-center gap-3 p-4 pb-2">
                     <Image
