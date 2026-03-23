@@ -42,7 +42,7 @@ export async function createNewQuip(
 
 
         if (!isAllowedToAssign) {
-            throw new Error('You need to delete some assignments or upgrade your account before you can assign a new quip')
+            return { success: false, message: 'You need to delete some assignments or upgrade your account before you can assign a new quip' }
         }
 
         // generate quip question
