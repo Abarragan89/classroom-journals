@@ -18,7 +18,7 @@ import { CiCircleQuestion } from "react-icons/ci";
 import LoadingAnimation from "@/components/loading-animation";
 import { Card, CardContent } from "@/components/ui/card";
 import { useQueryClient } from "@tanstack/react-query";
-import QuestionAttachmentUploader from "@/components/forms/question-attachment-uploader";
+import QuestionAttachmentUploader, { UploaderHandle } from "@/components/forms/question-attachment-uploader";
 import { useRef } from "react";
 
 interface Question {
@@ -53,7 +53,11 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
         { name: "question1", label: "Prompt", value: "", attachments: [] }
     ]);
     const [enableSpellCheck, setEnableSpellCheck] = useState<boolean>(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const questionsJsonRef = useRef<HTMLInputElement>(null);
+    const formRef = useRef<HTMLFormElement>(null);
+    const uploaderRef = useRef<UploaderHandle | null>(null);
+    const uploadsDone = useRef(false);
 
 
     const router = useRouter()
@@ -151,6 +155,31 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     }
 
 
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        if (uploadsDone.current) {
+            uploadsDone.current = false;
+            return;
+        }
+        e.preventDefault();
+        setIsSubmitting(true);
+        try {
+            const finalAttachments = uploaderRef.current
+                ? await uploaderRef.current.uploadPending()
+                : questions[0].attachments;
+            if (questionsJsonRef.current) {
+                questionsJsonRef.current.value = JSON.stringify(
+                    questions.map((q, i) => ({ question: q.value.trim(), attachments: i === 0 ? finalAttachments : q.attachments }))
+                );
+            }
+            uploadsDone.current = true;
+            formRef.current?.requestSubmit();
+        } catch (err) {
+            console.error('Upload failed before submit:', err);
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+
     async function handleAddCategory(categoryName: string) {
         try {
             setIsAddingCategory(true)
@@ -168,9 +197,10 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     const buttonText = existingPromptId ? 'Update Jot' : 'Create Jot'
     const buttonVerb = existingPromptId ? 'Updating...' : 'Creating...'
 
-    const CreateButton = () => {
+    const CreateButton = ({ isSubmitting }: { isSubmitting: boolean }) => {
         const { pending } = useFormStatus();
-        return <Button size={"lg"} disabled={pending} type="submit" className="mx-auto mb-5 shadow-md">{pending ? buttonVerb : buttonText}</Button>;
+        const label = pending ? buttonVerb : isSubmitting ? 'Uploading...' : buttonText;
+        return <Button size={"lg"} disabled={pending || isSubmitting} type="submit" className="mx-auto mb-5 shadow-md">{label}</Button>;
     };
 
     if (!isLoaded) {
@@ -182,7 +212,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
     }
 
     return (
-        <form action={action} className="grid relative space-y-5" onSubmit={serializeQuestionsToHiddenInput}>
+        <form ref={formRef} action={action} className="grid relative space-y-5" onSubmit={handleSubmit}>
             {questions.map((question, index) => (
                 <Card key={question.name} className="shadow-sm hover:scale-[1.01] transition-transform duration-100">
                     <CardContent>
@@ -199,6 +229,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                             rows={5}
                         />
                         <QuestionAttachmentUploader
+                            ref={uploaderRef}
                             attachments={question.attachments}
                             onChange={(urls) => handleAttachmentsChange(index, urls)}
                         />
@@ -314,7 +345,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                 <p className="text-center text-destructive">{state.message}</p>
             )}
             <div className="flex-center">
-                <CreateButton />
+                <CreateButton isSubmitting={isSubmitting} />
             </div>
             <input
                 ref={questionsJsonRef}
