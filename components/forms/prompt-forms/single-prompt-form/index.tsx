@@ -53,6 +53,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
         { name: "question1", label: "Prompt", value: "", attachments: [] }
     ]);
     const [enableSpellCheck, setEnableSpellCheck] = useState<boolean>(false);
+    const [isUploading, setIsUploading] = useState<boolean>(false);
     const questionsJsonRef = useRef<HTMLInputElement>(null);
 
 
@@ -170,7 +171,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
 
     const CreateButton = () => {
         const { pending } = useFormStatus();
-        return <Button size={"lg"} disabled={pending} type="submit" className="mx-auto mb-5 shadow-md">{pending ? buttonVerb : buttonText}</Button>;
+        return <Button size={"lg"} disabled={pending || isUploading} type="submit" className="mx-auto mb-5 shadow-md">{pending ? buttonVerb : buttonText}</Button>;
     };
 
     if (!isLoaded) {
@@ -201,6 +202,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                         <QuestionAttachmentUploader
                             attachments={question.attachments}
                             onChange={(urls) => handleAttachmentsChange(index, urls)}
+                            onUploadingChange={setIsUploading}
                         />
                     </CardContent>
                 </Card>

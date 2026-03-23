@@ -8,6 +8,7 @@ import { Paperclip, X, FileText, Loader2 } from 'lucide-react';
 interface Props {
     attachments: string[];
     onChange: (urls: string[]) => void;
+    onUploadingChange?: (isUploading: boolean) => void;
     disabled?: boolean;
 }
 
@@ -19,7 +20,7 @@ function getFilename(url: string) {
     return decodeURIComponent(url.split('/').pop()?.split('?')[0] ?? 'file');
 }
 
-export default function QuestionAttachmentUploader({ attachments, onChange, disabled }: Props) {
+export default function QuestionAttachmentUploader({ attachments, onChange, onUploadingChange, disabled }: Props) {
     const inputRef = useRef<HTMLInputElement>(null);
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState('');
@@ -29,6 +30,7 @@ export default function QuestionAttachmentUploader({ attachments, onChange, disa
         if (!files.length) return;
         setError('');
         setUploading(true);
+        onUploadingChange?.(true);
 
         try {
             const uploaded: string[] = [];
@@ -73,6 +75,7 @@ export default function QuestionAttachmentUploader({ attachments, onChange, disa
             setError('Upload failed. Please try again.');
         } finally {
             setUploading(false);
+            onUploadingChange?.(false);
             // Reset input so the same file can be re-selected
             if (inputRef.current) inputRef.current.value = '';
         }

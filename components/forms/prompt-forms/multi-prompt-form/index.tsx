@@ -60,6 +60,7 @@ export default function MultiPromptForm({
     const [questions, setQuestions] = useState<Question[]>([
         { name: "question1", label: "Question 1", value: "", attachments: [] }
     ]);
+    const [uploadingStates, setUploadingStates] = useState<boolean[]>([false]);
     const questionsJsonRef = useRef<HTMLInputElement>(null);
 
     const router = useRouter()
@@ -68,6 +69,7 @@ export default function MultiPromptForm({
     useEffect(() => {
         setEditingPrompt(null);
         setQuestions([{ name: "question1", label: "Question 1", value: "", attachments: [] }]);
+        setUploadingStates([false]);
     }, [existingPromptId]);
 
     useEffect(() => {
@@ -165,6 +167,7 @@ export default function MultiPromptForm({
             ...prevQuestions,
             { name: `question${prevQuestions.length + 1}`, label: `Question ${prevQuestions.length + 1}`, value: "", attachments: [] }
         ]);
+        setUploadingStates(prev => [...prev, false]);
     };
 
     const handleAttachmentsChange = (index: number, urls: string[]) => {
@@ -179,6 +182,7 @@ export default function MultiPromptForm({
                 .filter((_, i) => i !== index)
                 .map((q, i) => ({ ...q, name: `question${i + 1}`, label: `Question ${i + 1}` })) // Renumbering
         );
+        setUploadingStates(prev => prev.filter((_, i) => i !== index));
     };
 
     function serializeQuestionsToHiddenInput() {
@@ -194,12 +198,21 @@ export default function MultiPromptForm({
         );
     };
 
+    const handleUploadingChange = (index: number, isUploading: boolean) => {
+        setUploadingStates(prev => {
+            const next = [...prev];
+            next[index] = isUploading;
+            return next;
+        });
+    };
+
     const buttonText = existingPromptId ? 'Update Jot' : 'Create Jot'
     const buttonVerb = existingPromptId ? 'Updating...' : 'Creating...'
 
     const CreateButton = () => {
         const { pending } = useFormStatus();
-        return <Button size={"lg"} disabled={pending} type="submit" className="mx-auto my-5 shadow-md">{pending ? buttonVerb : buttonText}</Button>;
+        const isAnyUploading = uploadingStates.some(Boolean);
+        return <Button size={"lg"} disabled={pending || isAnyUploading} type="submit" className="mx-auto my-5 shadow-md">{pending ? buttonVerb : buttonText}</Button>;
     };
 
     if (!isLoaded) {
@@ -267,6 +280,7 @@ export default function MultiPromptForm({
                                     <QuestionAttachmentUploader
                                         attachments={question.attachments}
                                         onChange={(urls) => handleAttachmentsChange(index, urls)}
+                                        onUploadingChange={(isUploading) => handleUploadingChange(index, isUploading)}
                                     />
                                 </div>
                             </div>

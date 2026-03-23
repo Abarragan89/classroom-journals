@@ -46,6 +46,7 @@ export default function CreateQuipForm({
     })
     const [error, setError] = useState('')
     const [attachments, setAttachments] = useState<string[]>([])
+    const [isUploading, setIsUploading] = useState(false)
 
     const queryClient = useQueryClient();
 
@@ -95,6 +96,7 @@ export default function CreateQuipForm({
                             <QuestionAttachmentUploader
                                 attachments={attachments}
                                 onChange={setAttachments}
+                                onUploadingChange={setIsUploading}
                             />
                             <FormMessage />
                         </FormItem>
@@ -102,7 +104,7 @@ export default function CreateQuipForm({
                 />
                 {error && (<p className="text-sm text-destructive text-center mt-1">{error}</p>)}
                 <Button
-                    disabled={form.formState.isSubmitting}
+                    disabled={form.formState.isSubmitting || isUploading}
                     className="mt-4" type="submit">
                     {form.formState.isSubmitting ? "Posting..." : "Post Quip"}
                 </Button>
