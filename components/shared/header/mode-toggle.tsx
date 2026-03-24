@@ -39,14 +39,14 @@ export default function ModeToggle({ isMobile = false }: ModeToggleProps) {
     function showModeIcon(theme: string | undefined) {
         if (!theme) return <SunIcon />
         switch (theme) {
-            case 'tech':
-                return <ComputerIcon />
-            case 'dark':
-                return <MoonIcon />
-            case 'cupid':
-                return <Heart />
             case 'light':
                 return <PiNewspaperClipping />
+            case 'dark':
+                return <MoonIcon />
+            case 'tech':
+                return <ComputerIcon />
+            case 'cupid':
+                return <Heart />
             case 'tuxedo':
                 return <FaUserTie />
             case 'avocado':
