@@ -113,7 +113,7 @@ export default function PrivacyPolicy() {
                         These responses are <strong>not  linked </strong> to any personal
                         identifying information. While content is shared with OpenAI for
                         processing, it is done anonymously and solely to provide educational
-                        assistance within the platform. Student responses sent to OpenAI for grading are processed through the OpenAI API in accordance with OpenAI&apos;s API data usage policies. OpenAI does not use API data to train models by default. For more information, see OpenAI's
+                        assistance within the platform. Student responses sent to OpenAI for grading are processed through the OpenAI API in accordance with OpenAI&apos;s API data usage policies. OpenAI does not use API data to train models by default. For more information, see OpenAI&apos;s
                         <a
                             className="text-blue-600 underline"
                             href="https://openai.com/policies/privacy-policy/"

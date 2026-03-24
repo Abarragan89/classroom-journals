@@ -25,14 +25,6 @@ function AttachmentSlide({ url }: { url: string }) {
     }
 
     return (
-        // <div className="w-full overflow-hidden rounded-lg" style={{ aspectRatio: '4/5' }}>
-        //     <img
-        //         src={url}
-        //         alt=""
-        //         loading="lazy"
-        //         className="w-full h-full object-cover"
-        //     />
-        // </div>
         <div className="w-full overflow-hidden rounded-lg" style={style}>
             <img
                 src={url}

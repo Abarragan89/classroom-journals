@@ -147,13 +147,6 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
         );
     };
 
-    function serializeQuestionsToHiddenInput() {
-        if (questionsJsonRef.current) {
-            const payload = questions.map(q => ({ question: q.value.trim(), attachments: q.attachments }));
-            questionsJsonRef.current.value = JSON.stringify(payload);
-        }
-    }
-
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         if (uploadsDone.current) {
