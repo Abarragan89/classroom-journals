@@ -6,7 +6,7 @@ export default function TermsOfService() {
             <NoSignInHeader />
             <main className="max-w-3xl mx-auto p-6 space-y-6">
                 <h1 className="text-3xl font-bold mb-4 text-center">Terms of Service for JotterBlog</h1>
-                <p className="text-sm text-gray-500 mb-6 text-center">Last updated: April 22, 2025</p>
+                <p className="text-sm text-gray-500 mb-6 text-center">Last updated: March 24, 2026</p>
 
                 <section className="mb-6">
                     <h2 className="text-xl font-semibold mb-2">1. Acceptance of Terms</h2>
@@ -34,7 +34,7 @@ export default function TermsOfService() {
                         Teachers are responsible for creating and managing student accounts securely.
                         Users agree not to share their login credentials and to notify us of any unauthorized access.
                         Teachers are solely responsible for the use of the platform within their classroom and must monitor student
-                        use for bullying or inappropriate content.
+                        use for bullying or inappropriate content. Student accounts may not be used to post content that is threatening, harassing, or inappropriate. Teachers are responsible for enforcing this within their classroom.
                     </p>
                 </section>
 
@@ -63,8 +63,8 @@ export default function TermsOfService() {
                     <h2 className="text-xl font-semibold mb-2">6. Use of AI Services</h2>
                     <p>
                         JotterBlog uses OpenAI&apos;s ChatGPT to assist with auto-grading and writing support.
-                        Student responses may be processed by OpenAI, but are not linked to any personal identifiers.
-                        AI-generated responses are for educational purposes only and may not be 100% accurate.
+                        Student responses may be processed by OpenAI, but are not  linked to any personal identifiers.
+                        AI-generated responses are for educational purposes only and may not be 100% accurate. AI-generated grades and feedback are provided as a tool to assist teachers and should not be used as the sole basis for academic evaluation.
                     </p>
                 </section>
 
@@ -87,13 +87,19 @@ export default function TermsOfService() {
                 <section className="mb-6">
                     <h2 className="text-xl font-semibold mb-2">9. Disclaimer of Warranty</h2>
                     <p>
-                    &ldquo;as is&ldquo; without any warranties, express or implied.
+                        JotterBlog is provided &apos;as is&apos; without any warranties, express or implied.
                         We do not guarantee that the app will always be error-free, available, or secure.
+                    </p>
+                </section>
+                <section className="mb-6">
+                    <h2 className="text-xl font-semibold mb-2">10. Indemnification Clause</h2>
+                    <p>
+                        You agree to indemnify and hold harmless JotterBlog and Anthony Barragan from any claims, damages, or expenses arising from your use of the platform or violation of these terms.
                     </p>
                 </section>
 
                 <section className="mb-6">
-                    <h2 className="text-xl font-semibold mb-2">10. Limitation of Liability</h2>
+                    <h2 className="text-xl font-semibold mb-2">11. Limitation of Liability</h2>
                     <p>
                         To the maximum extent permitted by law, JotterBlog shall not be held liable for any indirect, incidental,
                         or consequential damages resulting from the use or inability to use the platform.
@@ -101,14 +107,14 @@ export default function TermsOfService() {
                 </section>
 
                 <section className="mb-6">
-                    <h2 className="text-xl font-semibold mb-2">11. Governing Law</h2>
+                    <h2 className="text-xl font-semibold mb-2">12. Governing Law</h2>
                     <p>
                         These Terms are governed by the laws of the State of California, without regard to its conflict of law principles.
                     </p>
                 </section>
 
                 <section>
-                    <h2 className="text-xl font-semibold mb-2">12. Contact</h2>
+                    <h2 className="text-xl font-semibold mb-2">13. Contact</h2>
                     <p>
                         For questions or concerns regarding these terms, please contact us:
                     </p>
