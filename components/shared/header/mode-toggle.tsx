@@ -56,7 +56,6 @@ export default function ModeToggle({ isMobile = false }: ModeToggleProps) {
 
         }
     }
-
     return (
         <div>
             <DropdownMenu>
