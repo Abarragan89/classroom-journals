@@ -6,7 +6,7 @@ import { signOutUser } from "@/lib/actions/auth.action"
 
 export default function NotFoundPage() {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen">
+        <main id="main-content" className="flex flex-col items-center justify-center min-h-screen">
             <Image
                 src='/images/logo-v3.png'
                 height={100}
@@ -15,15 +15,19 @@ export default function NotFoundPage() {
                 priority={true}
             />
             <div className="p-6 w-[80%] max-w-lg border border-border bg-card rounded-lg shadow-md text-center mt-10">
-                <h1 className="text-3xl font-bold mb-4">Not Found</h1>
-                <p className="text-destructive">Cound not find requested page</p>
-                <Button variant='outline' className="mt-4 ml-2" onClick={() => (window.location.href = '/')}>
-                    Back To Home
-                </Button>
-                <Button variant='outline' className="mt-4 ml-2" onClick={signOutUser}>
-                    Sign Out
-                </Button>
+                <h1 className="text-3xl font-bold mb-4">Page Not Found</h1>
+                <p className="text-destructive">Could not find requested page.</p>
+                <div className="mt-4 flex justify-center gap-2">
+                    <Button variant='outline' asChild>
+                        <a href='/'>
+                            Back To Home
+                        </a>
+                    </Button>
+                    <Button variant='outline' onClick={signOutUser}>
+                        Sign Out
+                    </Button>
+                </div>
             </div>
-        </div>
+        </main>
     )
 }

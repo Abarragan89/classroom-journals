@@ -67,7 +67,7 @@ export default async function page() {
     return (
         <>
             <Header />
-            <main className="min-h-screen relative">
+            <main id="main-content" className="min-h-screen relative">
                 {/* Hero Section - Above the Fold */}
                 <section className="relative max-w-7xl mx-auto">
                     <div className="p-10 lg:py-14">
@@ -407,7 +407,7 @@ export default async function page() {
                                 src={'/images/promotional-blog-photos/romeo-juliet.webp'}
                                 width={1920}
                                 height={1080}
-                                alt={'blog cover photo'}
+                                alt={'Cover image for Rethinking Romeo and Juliet: A Study of Youth and Rebellion'}
                                 className="block mx-auto mb-5 w-full max-w-[700px] h-auto"
                                 sizes="(max-width: 700px) 100vw, 700px"
                                 loading="lazy"

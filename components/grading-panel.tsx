@@ -104,6 +104,7 @@ export default function GradingPanel({
                     <button
                         type="button"
                         aria-label="Mark Incorrect"
+                        aria-pressed={currentScoreState === 0}
                         onClick={() => { if (currentScoreState !== 0) updateResponseScore(0) }}
                         className={`
                         flex-1 flex flex-col items-center justify-center
@@ -122,6 +123,7 @@ export default function GradingPanel({
                     <button
                         type="button"
                         aria-label="Mark Half Credit"
+                        aria-pressed={currentScoreState === 0.5}
                         onClick={() => { if (currentScoreState !== 0.5) updateResponseScore(0.5) }}
                         className={`
                         flex-1 flex flex-col items-center justify-center
@@ -132,18 +134,13 @@ export default function GradingPanel({
                         
                     `}
                     >
-                        {/* Custom SVG for half credit */}
-                        {/* <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 50 50">
-                            <text x="37%" y="30%" dominantBaseline="middle" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="22" fontWeight={600} fill="white">1</text>
-                            <line x1="12" y1="40" x2="40" y2="9" stroke="white" strokeWidth="3" />
-                            <text x="66%" y="80%" dominantBaseline="middle" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="22" fontWeight={600} fill="white">2</text>
-                        </svg> */}
                         <span className="text-xs mt-1">Half Credit</span>
                     </button>
                     {/* Correct */}
                     <button
                         type="button"
                         aria-label="Mark Correct"
+                        aria-pressed={currentScoreState === 1}
                         onClick={() => { if (currentScoreState !== 1) updateResponseScore(1) }}
                         className={`
                         flex-1 flex flex-col items-center justify-center

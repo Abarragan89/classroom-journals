@@ -26,7 +26,7 @@ export default function AssignedToPopUp({ classesData }: { classesData: PromptSe
                 <Popover>
                     <PopoverTrigger asChild>
                         <button className='flex items-center gap-1.5 hover:text-primary transition-colors'>
-                            <Calendar className="w-3.5 h-3.5" />
+                            <Calendar aria-hidden="true" className="w-3.5 h-3.5" />
                             <span>Assignment history</span>
                         </button>
                     </PopoverTrigger>
@@ -49,7 +49,7 @@ export default function AssignedToPopUp({ classesData }: { classesData: PromptSe
                 </Popover>
             ) : (
                 <span className='flex items-center gap-1.5 text-muted-foreground'>
-                    <Calendar className="w-3.5 h-3.5" />
+                    <Calendar aria-hidden="true" className="w-3.5 h-3.5" />
                     <span>Never assigned</span>
                 </span>
             )}

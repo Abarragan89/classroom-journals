@@ -72,15 +72,22 @@ export default function UpdateAvatar({
                     <>
                         <div className="h-[355px] mx-auto overflow-y-auto flex-center flex-wrap gap-3 custom-scrollbar">
                             {allAvatarPhotos && allAvatarPhotos.map((img) => (
-                                <Image
+                                <button
                                     key={img.id}
-                                    src={img.url}
-                                    alt="blog cover photo"
-                                    width={80}
-                                    height={80}
+                                    type="button"
+                                    aria-label="Select avatar"
                                     onClick={() => { updateUserAvatarHandler(img.url); setOpenPhotoModal(false) }}
-                                    className="hover:cursor-pointer hover:scale-105 rounded-full w-[80px] h-[80px]"
-                                />
+                                    className="rounded-full hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                >
+                                    <Image
+                                        src={img.url}
+                                        alt=""
+                                        aria-hidden="true"
+                                        width={80}
+                                        height={80}
+                                        className="rounded-full w-[80px] h-[80px]"
+                                    />
+                                </button>
                             ))}
                         </div>
                     </>

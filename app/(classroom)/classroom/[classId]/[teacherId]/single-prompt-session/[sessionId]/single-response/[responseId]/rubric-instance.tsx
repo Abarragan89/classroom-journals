@@ -314,11 +314,14 @@ export default function RubricInstance({
                                 ({Math.round((currentGrade.totalScore / currentGrade.maxTotalScore) * 100)}%)
                             </p>
                             {/* Print Btn */}
-                            <PrinterIcon
+                            <button
+                                type="button"
+                                aria-label="Print rubric"
                                 className="ml-2 hover:text-accent cursor-pointer"
-                                size={23}
                                 onClick={() => window.print()}
-                            />
+                            >
+                                <PrinterIcon aria-hidden="true" size={23} />
+                            </button>
                         </div>
                     )}
                 </div>
@@ -340,7 +343,8 @@ export default function RubricInstance({
                                         AI grading allowance exhausted
                                     </p>
                                     <p className="text-muted-foreground text-sm">
-                                        <span
+                                        <button
+                                            type="button"
                                             onClick={() => {
                                                 checkout({
                                                     priceId: process.env.NEXT_PUBLIC_AI_CREDITS_LINK as string,
@@ -349,7 +353,7 @@ export default function RubricInstance({
                                             }}
                                             className="text-primary hover:underline hover:cursor-pointer hover:text-accent"
                                         >
-                                            Click here to add credits</span>
+                                            Click here to add credits</button>
                                     </p>
                                 </div>
                             )}

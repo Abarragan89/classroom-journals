@@ -42,12 +42,12 @@ export default function BlogCard({
                     <p>{author}</p>
                     <div className="flex">
                         <div className="flex items-center pr-3">
-                            <FaRegHeart />
-                            <p className="ml-1">{likeCount}</p>
+                            <FaRegHeart aria-hidden="true" />
+                            <p className="ml-1"><span className="sr-only">Likes: </span>{likeCount}</p>
                         </div>
                         <div className="flex items-center">
-                            <FiMessageCircle />
-                            <p className=" ml-1">{totalCommentCount}</p>
+                            <FiMessageCircle aria-hidden="true" />
+                            <p className=" ml-1"><span className="sr-only">Comments: </span>{totalCommentCount}</p>
                         </div>
                     </div>
                 </div>

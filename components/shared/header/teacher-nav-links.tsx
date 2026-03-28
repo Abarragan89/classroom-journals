@@ -37,18 +37,24 @@ export default function TeacherNavLinks({ isMobile = false, onNavigate }: { isMo
 
     return (
         <>
-            <Link href={`/classes`} className={`
+            <Link
+                href={`/classes`}
+                aria-current={pathname === 'classes' || pathname === 'classroom' ? 'page' : undefined}
+                className={`
                       flex-start hover:cursor-pointer hover:text-foreground text-sm
             ${pathname === 'classes' || pathname === 'classroom' ? 'text-foreground' : 'text-muted-foreground'} 
                     `}>
-                <GraduationCap size={23} className='mr-2' />Classes
+                <GraduationCap size={23} className='mr-2' aria-hidden="true" />Classes
             </Link>
 
-            <Link href={`/prompt-library`} className={`
+            <Link
+                href={`/prompt-library`}
+                aria-current={pathname.includes("prompt") ? 'page' : undefined}
+                className={`
                        ml-3 flex-start hover:cursor-pointer hover:text-foreground text-sm
             ${pathname.includes("prompt") ? 'text-foreground' : 'text-muted-foreground'}  
                     `}>
-                <PenTool size={20} className='mr-2' />My Jots
+                <PenTool size={20} className='mr-2' aria-hidden="true" />My Jots
             </Link>
         </>
     )

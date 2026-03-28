@@ -249,6 +249,7 @@ export default function CreateEditRubric({
                                         <FormControl>
                                             <Input
                                                 {...field}
+                                                aria-label="Rubric name"
                                                 placeholder="Enter rubric name"
                                                 required={true}
                                                 className="min-w-[275px] font-bold"
@@ -282,8 +283,8 @@ export default function CreateEditRubric({
                             </div>
                             <div className="border rounded-md shadow-lg mt-3 relative">
                                 <div className="flex flex-wrap gap-x-8 my-5 text-sm text-primary absolute -top-1 left-3 z-10">
-                                    <Button type="button" variant="secondary" onClick={addCategory} className="gap-x-1"><PlusCircle size={17} /> Category</Button>
-                                    <Button type="button" variant="secondary" onClick={addScoreLevel} className="gap-x-1"><PlusCircle size={17} /> Score</Button>
+                                    <Button type="button" variant="secondary" onClick={addCategory} className="gap-x-1"><PlusCircle aria-hidden="true" size={17} /> Category</Button>
+                                    <Button type="button" variant="secondary" onClick={addScoreLevel} className="gap-x-1"><PlusCircle aria-hidden="true" size={17} /> Score</Button>
                                 </div>
                                 <Table className="min-w-[920px]">
                                     <TableHeader>
@@ -296,13 +297,13 @@ export default function CreateEditRubric({
                                                     <TableHead key={level} className="relative min-h-[48px]">
                                                         <div className="flex items-center justify-center gap-1 py-4 ">
                                                             <span className="text-2xl font-bold text-foreground">{level}</span>
-                                                            <button
+                                                                <button
                                                                 type="button"
                                                                 onClick={() => deleteScoreLevel(realIdx)}
                                                                 className="text-destructive"
-                                                                title="Delete column"
+                                                                aria-label={`Delete score level ${level}`}
                                                             >
-                                                                <OctagonX size={14} />
+                                                                <OctagonX aria-hidden="true" size={14} />
                                                             </button>
                                                         </div>
                                                     </TableHead>
@@ -334,9 +335,9 @@ export default function CreateEditRubric({
                                                         type="button"
                                                         onClick={() => removeCategory(catIdx)}
                                                         className="text-destructive ml-3"
-                                                        title="Delete row"
+                                                        aria-label={`Delete category`}
                                                     >
-                                                        <OctagonX size={16} />
+                                                        <OctagonX aria-hidden="true" size={16} />
                                                     </button>
                                                 </TableCell>
 

@@ -44,8 +44,16 @@ export function DiscussionSidebar({ ...props }: React.ComponentProps<typeof Side
                                                     <span className="flex justify-between items-center gap-2">
                                                         {response?.student?.username}
                                                         <div className="flex items-baseline justify-between text-xs text-muted-foreground space-x-2">
-                                                            <span className="flex">{response?.likeCount} <Heart className="ml-1" size={15} /></span>
-                                                            <span className="flex">{response?._count?.comments} <MessageCircle className="ml-1" size={13} /></span>
+                                                            <span className="flex">
+                                                                <span className="sr-only">Likes: </span>
+                                                                {response?.likeCount}
+                                                                <Heart aria-hidden="true" className="ml-1" size={15} />
+                                                            </span>
+                                                            <span className="flex">
+                                                                <span className="sr-only">Comments: </span>
+                                                                {response?._count?.comments}
+                                                                <MessageCircle aria-hidden="true" className="ml-1" size={13} />
+                                                            </span>
                                                         </div>
                                                     </span>
                                                 </SidebarMenuButton>

@@ -15,7 +15,7 @@ export default function StudentTaskListItem({ jotData }: { jotData: PromptSessio
                         :
                         <p>Blog</p>
                     }
-                    <p>Status: <span className='text-destructive'>incomplete</span></p>
+                    <p>Status: <span className='text-destructive' aria-label="Status: incomplete">incomplete</span></p>
                 </div>
                 <p className='text-md pt-2 font-bold line-clamp-4'>{jotData.title}</p>
             </article>

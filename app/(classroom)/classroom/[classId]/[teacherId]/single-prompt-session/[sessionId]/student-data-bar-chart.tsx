@@ -77,16 +77,18 @@ export function StudentDataBarChart({
                         <button
                             onClick={onPrevious}
                             disabled={!canGoBack}
+                            aria-label="Previous questions"
                             className={`${chevronStyles} ${!canGoBack ? 'opacity-30 cursor-not-allowed' : ''}`}
                         >
-                            <BiChevronLeft size={20} />
+                            <BiChevronLeft size={20} aria-hidden="true" />
                         </button>
                         <button
                             onClick={onNext}
                             disabled={!canGoNext}
+                            aria-label="Next questions"
                             className={`${chevronStyles} ${!canGoNext ? 'opacity-30 cursor-not-allowed' : ''}`}
                         >
-                            <BiChevronRight size={20} />
+                            <BiChevronRight size={20} aria-hidden="true" />
                         </button>
                     </div>
                 </div>

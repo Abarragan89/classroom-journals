@@ -54,7 +54,7 @@ export default function MyRubricList({
                     <TableHeader className="border-b-2 border-primary/20">
                         <TableRow>
                             <TableHead className="h3-bold flex items-center gap-2 py-4">
-                                <Table2Icon size={20} className="text-primary" />
+                                <Table2Icon aria-hidden="true" size={20} className="text-primary" />
                                 Rubric List
                             </TableHead>
                         </TableRow>
@@ -71,7 +71,7 @@ export default function MyRubricList({
                                         className="flex items-center gap-3 font-semibold text-base cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all py-4 px-4"
                                     >
                                         <span className="opacity-0 group-hover:opacity-100 transition-opacity text-primary">
-                                            <Table2Icon size={18} />
+                                            <Table2Icon aria-hidden="true" size={18} />
                                         </span>
                                         <span className="flex-1">{rubric.title}</span>
                                         {/* Optional metadata */}
@@ -79,7 +79,7 @@ export default function MyRubricList({
                                             Edit
                                         </span>
                                         <span className="opacity-50 group-hover:opacity-100 transition-opacity">
-                                            <ChevronRight size={18} />
+                                            <ChevronRight aria-hidden="true" size={18} />
                                         </span>
                                     </Link>
                                 </TableCell>

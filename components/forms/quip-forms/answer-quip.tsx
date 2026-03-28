@@ -81,6 +81,7 @@ export default function AnswerQuip({
                             <FormControl>
                                 <Textarea
                                     rows={3}
+                                    aria-label="Your response"
                                     placeholder="Your response..." {...field}
                                     onPaste={(e) => e.preventDefault()}
                                     onCopy={(e) => e.preventDefault()}

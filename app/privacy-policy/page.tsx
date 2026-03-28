@@ -8,8 +8,8 @@ export default function PrivacyPolicy() {
         <>
             <NoSignInHeader />
             <main className='max-w-3xl mx-auto p-6 space-y-5'>
-                <Link href='/'>
-                    <ArrowLeftIcon />
+                <Link href='/' aria-label="Go back to home">
+                    <ArrowLeftIcon aria-hidden="true" />
                 </Link>
                 <h1 className="text-3xl font-bold text-center">Privacy Policy for JotterBlog</h1>
                 <p className="text-sm text-gray-500 mb-6 text-center">Last updated: March 24, 2026</p>

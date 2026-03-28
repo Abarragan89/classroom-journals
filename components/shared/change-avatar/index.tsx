@@ -35,12 +35,12 @@ export default function ChangeAvatar({
             <div className="flex items-end relative w-fit mt-3 mb-5">
                 <Image
                     src={currentAvatar || '/images/demo-avatars/1.png'}
-                    alt="blog cover photo"
+                    alt="Your avatar"
                     width={80}
                     height={80}
                     className="hover:cursor-pointer hover:scale-105 rounded-full w-[80px] h-[80px] border"
                 />
-                <Button onClick={() => setIsModalOpen(true)} variant={'link'} className="p-0 text-xs absolute -bottom-3 -right-10">
+                <Button type="button" onClick={() => setIsModalOpen(true)} variant={'link'} className="p-0 text-xs absolute -bottom-3 -right-10">
                     Change
                 </Button>
             </div>

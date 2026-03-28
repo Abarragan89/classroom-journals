@@ -39,7 +39,7 @@ export default function PrintViewBlog({
                     <section className="flex mx-auto">
                         <Image
                             src={currentResponse?.student?.avatarURL || '/images/demo-avatars/1.png'}
-                            alt="blog cover photo"
+                            alt={`${currentResponse?.student?.username ?? 'Student'}'s avatar`}
                             width={38}
                             height={38}
                             className="rounded-full w-[40px] h-[40px] border border-slate-700"
@@ -79,7 +79,7 @@ export default function PrintViewBlog({
                         src={(currentResponse?.response as { answer: string }[])?.[2]?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
                         width={700}
                         height={394}
-                        alt={'blog cover photo'}
+                        alt={`Cover photo for ${(currentResponse?.response as { answer: string }[])?.[1]?.answer ?? 'blog post'}`}
                         className="block mx-auto mb-5 h-[394px]"
                         priority
                     />

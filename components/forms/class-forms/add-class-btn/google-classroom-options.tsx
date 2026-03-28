@@ -69,9 +69,11 @@ export default function GoogleClassroomOptions({
                 </div>
             )}
             {googleClassrooms?.length > 0 && googleClassrooms.map((classroom) => (
-                <div
+                <button
+                    type="button"
                     onClick={() => createClassroom(classroom)}
-                    className='grid grid-cols-4 p-3 items-center rounded-xl mx-4 mb-6 bg-card border hover:cursor-pointer hover:border-primary hover:shadow-md'
+                    aria-label={`Import class: ${classroom.name}`}
+                    className='grid grid-cols-4 p-3 items-center rounded-xl mx-4 mb-6 bg-card border hover:cursor-pointer hover:border-primary hover:shadow-md w-full text-left'
                     key={classroom.id}>
                     <Image
                         src='/images/google-classroom-logo.webp'
@@ -89,7 +91,7 @@ export default function GoogleClassroomOptions({
                             <p className='text-sm'><span className='font-bold mr-1'>Class Code:</span> {classroom?.enrollmentCode ? classroom.enrollmentCode : 'N/A'}</p>
                         </div>
                     </div>
-                </div>
+                </button>
             ))}
             <div className="flex-center">
                 <Button variant='outline' onClick={() => updateGoogleClassrooms([], false)}>Back</Button>

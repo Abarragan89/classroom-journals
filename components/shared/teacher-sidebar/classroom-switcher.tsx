@@ -37,13 +37,13 @@ export function ClassroomSwitcher({
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                         >
                             <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                                <GalleryVerticalEnd className="size-4" />
+                                <GalleryVerticalEnd aria-hidden="true" className="size-4" />
                             </div>
                             <div className="flex flex-col gap-0.5 leading-none">
                                 <span className="font-semibold">Classes</span>
                                 <span className="line-clamp-1">{selectedClassroom.name}</span>
                             </div>
-                            <ChevronsUpDown className="ml-auto" />
+                            <ChevronsUpDown aria-hidden="true" className="ml-auto" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent

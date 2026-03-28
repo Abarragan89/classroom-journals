@@ -51,7 +51,7 @@ export default function CommentReplySection({
             <div className="flex items-center">
                 <Image
                     src={replyCommentData?.user?.avatarURL || '/images/demo-avatars/1.png'}
-                    alt="blog cover photo"
+                    alt={`${replyCommentData?.user?.username ?? 'User'}'s avatar`}
                     width={80}
                     height={80}
                     className="rounded-full w-[40px] h-[40px] border"
@@ -63,26 +63,35 @@ export default function CommentReplySection({
                     </div>
                     <div className="flex items-center text-primary">
                         {isTeacherView &&
-                            <p
+                            <button
+                                type="button"
                                 onClick={() => deleteCommentHandler(replyCommentData.id)}
                                 className="text-destructive mr-3 text-sm hover:cursor-pointer hover:underline"
                             >
                                 Delete
-                            </p>
+                            </button>
 
                         }
                         {isLikedByUser ?
-                            <FaHeart
+                            <button
+                                type="button"
+                                aria-label="Unlike this reply"
                                 onClick={() => toggleCommentLikeHandler('remove', replyCommentData?.id)}
-                                size={20}
-                                className="hover:cursor-pointer text-sidebar-primary" />
+                                className="hover:cursor-pointer text-sidebar-primary"
+                            >
+                                <FaHeart aria-hidden="true" size={20} />
+                            </button>
                             :
-                            <FaRegHeart
+                            <button
+                                type="button"
+                                aria-label="Like this reply"
                                 onClick={() => toggleCommentLikeHandler('add', replyCommentData?.id)}
-                                size={20}
-                                className="hover:cursor-pointer" />
+                                className="hover:cursor-pointer"
+                            >
+                                <FaRegHeart aria-hidden="true" size={20} />
+                            </button>
                         }
-                        <p className="text-[.95rem] ml-1">{totalCommentLikes?.toString()}</p>
+                        <span className="text-[.95rem] ml-1" aria-label={`${totalCommentLikes} likes`}>{totalCommentLikes?.toString()}</span>
                     </div>
                 </div>
             </div>

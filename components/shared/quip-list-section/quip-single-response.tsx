@@ -134,7 +134,7 @@ export default function QuipSingleResponse({
             <div className='mb-1 flex'>
                 <Image
                     src={authorAvatarUrl || '/images/demo-avatars/1.png'}
-                    alt="blog cover photo"
+                    alt={`${responseAuthor ?? 'User'}'s avatar`}
                     width={35}
                     height={35}
                     className="rounded-full w-[35px] h-[35px] border"
@@ -180,17 +180,25 @@ export default function QuipSingleResponse({
                         )}
                         <div className="flex-center">
                             {isBlogLikedByUser ?
-                                <FaHeart
+                                <button
+                                    type="button"
+                                    aria-label="Unlike this response"
                                     onClick={toggleResponseLikeHandler}
-                                    className="text-[1.1rem] mr-[4px] hover:cursor-pointer text-sidebar-primary"
-                                />
+                                    className="mr-[4px] hover:cursor-pointer text-sidebar-primary"
+                                >
+                                    <FaHeart aria-hidden="true" className="text-[1.1rem]" />
+                                </button>
                                 :
-                                <FaRegHeart
+                                <button
+                                    type="button"
+                                    aria-label="Like this response"
                                     onClick={toggleResponseLikeHandler}
-                                    className="text-[1.1rem] mr-[4px] hover:cursor-pointer"
-                                />
+                                    className="mr-[4px] hover:cursor-pointer"
+                                >
+                                    <FaRegHeart aria-hidden="true" className="text-[1.1rem]" />
+                                </button>
                             }
-                            <p className="text-[.95rem] text-muted-foreground">{totalCommentLikes}</p>
+                            <span className="text-[.95rem] text-muted-foreground" aria-label={`${totalCommentLikes} likes`}>{totalCommentLikes}</span>
                         </div>
                     </div>
                 </div>

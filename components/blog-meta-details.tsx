@@ -58,7 +58,7 @@ export default function BlogMetaDetails({
             <section className="flex max-w-[700px] mx-auto">
                 <Image
                     src={responseData?.student?.avatarURL || '/images/demo-avatars/1.png'}
-                    alt="blog cover photo"
+                    alt={`${responseData.student.username}'s avatar`}
                     width={40}
                     height={40}
                     className="rounded-full w-[40px] h-[40px] border"
@@ -71,10 +71,14 @@ export default function BlogMetaDetails({
                         </div>
                     </div>
                     {teacherView && (
-                        <PrinterIcon
+                        <button
+                            type="button"
+                            aria-label="Print blog post"
                             className="hover:cursor-pointer hover:text-ring"
                             onClick={() => window.print()}
-                        />
+                        >
+                            <PrinterIcon aria-hidden="true" />
+                        </button>
                     )}
                 </div>
             </section>
@@ -82,28 +86,32 @@ export default function BlogMetaDetails({
             <section className="flex items-center mx-auto mb-5 justify-between py-[5px] max-w-[700px] my-3 px-4 text-muted-foreground border-t border-b border-input">
                 <div className="flex items-center text-muted-foreground">
                     {isBlogLikedByUser ?
-                        <FaHeart
+                        <button
+                            type="button"
                             aria-label="Unlike this post"
                             onClick={() => toggleResponseLikeHandler('remove')}
-                            className="text-[1.5rem] mr-[4px] hover:cursor-pointer text-sidebar-primary"
-                        />
+                            className="mr-[4px] hover:cursor-pointer text-sidebar-primary"
+                        >
+                            <FaHeart aria-hidden="true" className="text-[1.5rem]" />
+                        </button>
                         :
-                        <FaRegHeart
+                        <button
+                            type="button"
                             aria-label="Like this post"
                             onClick={() => toggleResponseLikeHandler('add')}
-                            className="text-[1.5rem] mr-[4px] hover:cursor-pointer"
-                        />
+                            className="mr-[4px] hover:cursor-pointer"
+                        >
+                            <FaRegHeart aria-hidden="true" className="text-[1.5rem]" />
+                        </button>
                     }
-                    <p className="mr-5 text-[.95rem]">{totalCommentLikes}</p>
+                    <span aria-label={`${totalCommentLikes} likes`} className="mr-5 text-[.95rem]">{totalCommentLikes}</span>
                     <Link
                         href="#comment-section-main"
                         aria-label="Jump to comments section"
                     >
-                        <BiMessageRounded
-                            className="text-[1.5rem] mr-[2px] hover:cursor-pointer"
-                        />
+                        <BiMessageRounded aria-hidden="true" className="text-[1.5rem] mr-[2px] hover:cursor-pointer" />
                     </Link>
-                    <p className="text-[.95rem]">{responseData?._count?.comments ?? 0}</p>
+                    <span className="text-[.95rem]">{responseData?._count?.comments ?? 0}</span>
                 </div>
             </section>
         </>

@@ -95,11 +95,15 @@ export default function BlogTableData({
                         return lastNameA.localeCompare(lastNameB);
                     }).map((response) => (
                         <TableRow key={response.id}>
-                            <TableCell
-                                className="hover:cursor-pointer hover:text-accent"
-                                onClick={() => router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`)}
-                            >
-                                <ClipboardCheckIcon />
+                            <TableCell className="hover:text-accent">
+                                <button
+                                    type="button"
+                                    aria-label={`View ${response.student.name}'s response`}
+                                    className="hover:cursor-pointer"
+                                    onClick={() => router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`)}
+                                >
+                                    <ClipboardCheckIcon aria-hidden="true" />
+                                </button>
                             </TableCell>
                             <TableCell className="font-medium">
                                 {response.student.name}
@@ -136,11 +140,15 @@ export default function BlogTableData({
                         return lastNameA.localeCompare(lastNameB);
                     }).map((response) => (
                         <TableRow key={response.id}>
-                            <TableCell
-                                className="hover:cursor-pointer hover:text-accent"
-                                onClick={() => router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`)}
-                            >
-                                <ClipboardCheckIcon />
+                            <TableCell className="hover:text-accent">
+                                <button
+                                    type="button"
+                                    aria-label={`View ${response.student.name}'s response`}
+                                    className="hover:cursor-pointer"
+                                    onClick={() => router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`)}
+                                >
+                                    <ClipboardCheckIcon aria-hidden="true" />
+                                </button>
                             </TableCell>
                             <TableCell className="font-medium">
                                 {response.student.name}
@@ -151,7 +159,7 @@ export default function BlogTableData({
                             <TableCell>-</TableCell>
                         </TableRow>
                     ))}
-                    {/* RETURNED ASSIGNMENTS */}
+                    {/* RETURNED ASSIGNMENTS */}}
                     {returnedResponses.length > 0 && (
                         <TableRow>
                             <TableCell colSpan={6} className="text-center font-bold text-warning">Returned</TableCell>
@@ -163,11 +171,15 @@ export default function BlogTableData({
                         return lastNameA.localeCompare(lastNameB);
                     }).map((response) => (
                         <TableRow key={response.id}>
-                            <TableCell
-                                className="hover:cursor-pointer hover:text-accent"
-                                onClick={() => router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`)}
-                            >
-                                <ClipboardCheckIcon />
+                            <TableCell className="hover:text-accent">
+                                <button
+                                    type="button"
+                                    aria-label={`View ${response.student.name}'s response`}
+                                    className="hover:cursor-pointer"
+                                    onClick={() => router.push(`/classroom/${classId}/${teacherId}/single-prompt-session/${promptSessionId}/single-response/${response.id}`)}
+                                >
+                                    <ClipboardCheckIcon aria-hidden="true" />
+                                </button>
                             </TableCell>
                             <TableCell className="font-medium">
                                 {response.student.name}

@@ -21,16 +21,16 @@ export default function GoogleButton() {
 
     return (
         <form action={dispatchGoogle} className="mt-1">
-            <Button className="w-full flex items-center justify-center" variant='default' disabled={pending}>
-                <FaGoogle size={20} />
+            <Button className="w-full flex items-center justify-center" variant='default' disabled={pending} type="submit">
+                <FaGoogle size={20} aria-hidden="true" />
                 <p>Google<span className="text-xs ml-2">(recommended)</span></p>
             </Button>
             <p className="text-xs font-bold text-center mt-1">Connects with Google Classroom</p>
             {error === 'OAuthAccountNotLinked' && (
-                <>
+                <div role="alert" aria-live="assertive">
                     <p className="text-center text-destructive my-5 text-sm">Another account already exists with the same e-mail.</p>
                     <p className="text-center text-destructive  text-sm">Try logging in with Magic Link</p>
-                </>
+                </div>
             )}
         </form>
     )

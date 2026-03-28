@@ -286,7 +286,9 @@ export default function SinglePromptEditor({
                         </div>
                     ) : (
                         <>
+                            <label htmlFor="photo-search" className="sr-only">Search images by tag</label>
                             <Input
+                                id="photo-search"
                                 type="text"
                                 placeholder="Search images..."
                                 onChange={(e) => filterByTags(e.target.value)}
@@ -308,15 +310,21 @@ export default function SinglePromptEditor({
                             </Select>
                             <div className="h-[355px] mx-auto overflow-y-auto flex-center flex-wrap gap-3 custom-scrollbar py-5">
                                 {filteredBlogPhotos && filteredBlogPhotos.map((img) => (
-                                    <Image
+                                    <button
                                         key={img.id}
-                                        src={img.url}
-                                        alt="blog cover photo"
-                                        width={195}
-                                        height={110}
+                                        type="button"
+                                        aria-label={`Select photo: ${img.tags?.[0] ?? 'blog image'}`}
                                         onClick={() => { setJournalText(img.url); setOpenPhotoModal(false) }}
-                                        className="hover:cursor-pointer rounded-sm hover:scale-105 max-w-[195px]"
-                                    />
+                                        className="hover:cursor-pointer rounded-sm hover:scale-105"
+                                    >
+                                        <Image
+                                            src={img.url}
+                                            alt=""
+                                            width={195}
+                                            height={110}
+                                            className="max-w-[195px]"
+                                        />
+                                    </button>
                                 ))}
                             </div>
                         </>
@@ -326,7 +334,8 @@ export default function SinglePromptEditor({
 
             <div className="w-full max-w-[1000px] mx-auto relative">
                 <div className="flex-between">
-                    <div
+                    <button
+                        type="button"
                         className="flex-center hover:cursor-pointer hover:text-primary"
                         onClick={() => {
                             router.back();
@@ -335,9 +344,9 @@ export default function SinglePromptEditor({
                             }
                         }}
                     >
-                        <ArrowBigLeft size={30} />
-                        <p className="ml-2 font-medium">Back</p>
-                    </div>
+                        <ArrowBigLeft aria-hidden="true" size={30} />
+                        <span className="ml-2 font-medium">Back</span>
+                    </button>
                     <Badge className="text-sm">Blog Post</Badge>
                 </div>
 
@@ -407,14 +416,14 @@ export default function SinglePromptEditor({
                                 <CardContent>
                                     <Image
                                         src={journalText || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
-                                        alt="blog cover photo"
+                                        alt="Selected blog cover photo"
                                         width={448}
                                         height={252}
                                         priority
                                         className="rounded-md max-w-md"
                                     />
                                     <div className="flex-center">
-                                        <Button className=" mt-8 mb-5" onClick={() => { setOpenPhotoModal(true); fetchPhotos() }}>Change Photo</Button>
+                                        <Button type="button" className=" mt-8 mb-5" onClick={() => { setOpenPhotoModal(true); fetchPhotos() }}>Change Photo</Button>
                                     </div>
                                 </CardContent>
                             </Card>
@@ -469,7 +478,7 @@ export default function SinglePromptEditor({
                                     <p className="text-center mt-10 tracking-wider mb-5 text-xl font-bold">Ready to submit?</p>
                                     <div className="flex-center gap-5 mb-20">
                                         {/* <Button variant='secondary' onClick={() => { handleSaveResponses(); toast('Answers Saved!') }} className="flex justify-center mx-auto">Save</Button> */}
-                                        <Button size={"lg"} className="text-md bg-success" onClick={async () => { await handleSaveResponses(); setConfirmSubmission(true) }}>Submit Responses</Button>
+                                        <Button size={"lg"} type="button" className="text-md bg-success" onClick={async () => { await handleSaveResponses(); setConfirmSubmission(true) }}>Submit Responses</Button>
                                     </div>
                                 </>
                             )}

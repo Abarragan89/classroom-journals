@@ -34,11 +34,12 @@ export default function TutorialModal({
             {showTutorialVideos ? (
                 <>
                     <Button
+                        type="button"
                         onClick={() => setShowTutorialVideos(false)}
                         variant={"secondary"}
                         className='w-fit'
                     >
-                        <ArrowBigLeft /> Back
+                        <ArrowBigLeft aria-hidden="true" /> Back
                     </Button>
                     <div className='custom-scrollbar overflow-y-scroll h-[60vh]'>
                         <VideoAccordion />
@@ -55,7 +56,7 @@ export default function TutorialModal({
                             </div>
                             <div className="flex-1">
                                 <div className="flex items-center gap-2 mb-2">
-                                    <Users className="w-5 h-5 text-primary" />
+                                    <Users aria-hidden="true" className="w-5 h-5 text-primary" />
                                     <h3 className="font-semibold text-lg">Build Your Roster</h3>
                                 </div>
                                 <p className="text-sm text-muted-foreground">
@@ -75,6 +76,7 @@ export default function TutorialModal({
                         <p className="text-sm text-center">
                             <span className="text-muted-foreground">Need help? Watch our</span>
                             <Button
+                                type="button"
                                 onClick={() => setShowTutorialVideos(true)}
                                 variant={"link"}
                                 className={"p-0 ml-2 underline"}
@@ -85,6 +87,7 @@ export default function TutorialModal({
                     </div>
                     {/* CTA Button */}
                     <Button
+                        type="button"
                         onClick={handleClose}
                         className="w-full mt-4 mb-4"
                     >

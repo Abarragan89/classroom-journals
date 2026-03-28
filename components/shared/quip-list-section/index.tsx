@@ -61,7 +61,7 @@ export default function QuipListSection({
                     </ResponsiveDialog>
                     <div className="flex-end my-4">
                         <Button onClick={() => setIsModalOpen(true)} className="">
-                            <Plus /> New Quip
+                            <Plus aria-hidden="true" /> New Quip
                         </Button>
                     </div>
                 </>
@@ -83,7 +83,7 @@ export default function QuipListSection({
                         subtitle="Create your first Quip!"
                         CTAButton={() => (
                             <Button onClick={() => setIsModalOpen(true)} className="">
-                                <Plus /> New Quip
+                                <Plus aria-hidden="true" /> New Quip
                             </Button>
                         )}
                         youtubeId="xa4sxeBoQ24"

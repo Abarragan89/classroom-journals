@@ -62,22 +62,19 @@ export default function OptionsMenu({ classData, teacherId }: { classData: Class
             {/* Options Menu */}
             <div className='absolute right-4 top-4 z-10'>
                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        {/* Ellipse */}
-                        <div
-                            style={{ backgroundColor: `var(--chart-${classData.color || 'var(--primary)'})` }}
-                            className="w-7 h-7 rounded-full flex-center bg-primary"
-                        >
-                            <EllipsisVertical size={20} className="hover:cursor-pointer text-white" />
-                        </div>
-
+                    <DropdownMenuTrigger
+                        aria-label="Class options"
+                        style={{ backgroundColor: `var(--chart-${classData.color || 'var(--primary)'})` }}
+                        className="w-7 h-7 rounded-full flex-center bg-primary"
+                    >
+                        <EllipsisVertical aria-hidden="true" size={20} className="hover:cursor-pointer text-white" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuItem onClick={() => setIsEditModalOpen(true)} className="hover:cursor-pointer rounded-md">
-                            <Edit />Edit
+                            <Edit aria-hidden="true" />Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => setIsDeleteModalOpen(true)} className="hover:cursor-pointer text-destructive rounded-md">
-                            <Trash2Icon />Delete
+                            <Trash2Icon aria-hidden="true" />Delete
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

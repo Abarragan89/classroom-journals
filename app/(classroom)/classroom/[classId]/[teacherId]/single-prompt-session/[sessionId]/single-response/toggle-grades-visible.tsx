@@ -43,12 +43,13 @@ export default function ToggleGradesVisible({
         <span className="text-sm mt-2">Hide</span>
         <Switch
           className="text-sm mx-2"
+          aria-label="Toggle grade visibility for students"
           onCheckedChange={(e) => toggleGradeVisibiltyHandler(e)}
           checked={areGradesVisible}
         />
         <span className="text-sm">Show</span>
       </div>
-      <Button size={"sm"} onClick={() => refetch()}> <RefreshCcwIcon /> Refresh Data</Button>
+      <Button size={"sm"} onClick={() => refetch()}> <RefreshCcwIcon aria-hidden="true" /> Refresh Data</Button>
 
     </div>
   )

@@ -108,11 +108,12 @@ export default function AddClassForm({
             <div className="grid grid-cols-2 gap-x-5 mb-5">
                 <div className="flex flex-col col-span-1 items-start space-y-1">
                     <Label htmlFor="name" className="text-right relative">
-                        Name <span className="absolute -bottom-1.5 -right-2.5 text-lg text-destructive">*</span>
+                        Name <span aria-hidden="true" className="absolute -bottom-1.5 -right-2.5 text-lg text-destructive">*</span>
                     </Label>
                     <Input
                         id="name"
                         required
+                        aria-required="true"
                         placeholder="required"
                         name="name"
                     />
@@ -131,12 +132,13 @@ export default function AddClassForm({
             <div className="grid grid-cols-3 gap-x-5 mb-4">
                 <div className="flex flex-col col-span-1 items-start space-y-1">
                     <Label htmlFor="year" className="text-right relative">
-                        Year <span className="absolute -bottom-1.5 -right-2.5 text-lg text-destructive">*</span>
+                        Year <span aria-hidden="true" className="absolute -bottom-1.5 -right-2.5 text-lg text-destructive">*</span>
                     </Label>
                     <Input
                         id="year"
                         name="year"
                         required
+                        aria-required="true"
                         maxLength={12}
                         placeholder="required"
                     />
@@ -199,7 +201,7 @@ export default function AddClassForm({
                 hidden
             />
             {state && !state.success === false && (
-                <p className="text-center text-destructive">{state.message}</p>
+                <p role="alert" aria-live="assertive" className="text-center text-destructive">{state.message}</p>
             )}
 
             {session?.googleProviderId && (
@@ -212,7 +214,7 @@ export default function AddClassForm({
                     </div>
                     <div className="flex-center">
                     <Button size={"lg"} type="button" onClick={fetchGoogleClassrooms} className="mx-auto">
-                        <FaGoogle />  Import From Google Classroom
+                        <FaGoogle aria-hidden="true" />  Import From Google Classroom
                     </Button>
                     </div>
                 </>

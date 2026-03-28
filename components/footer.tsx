@@ -10,14 +10,14 @@ export default function Footer() {
                 <div className="text-center md:text-left">
                     &copy; {currentYear} {APP_NAME}. All rights reserved.
                 </div>
-                <div className="flex flex-wrap gap-4 justify-center md:justify-end">
+                <nav aria-label="Footer navigation" className="flex flex-wrap gap-4 justify-center md:justify-end">
                     <Link href="/terms-of-service" className="hover:underline text-gray-600">
                         Terms of Service
                     </Link>
                     <Link href="/privacy-policy" className="hover:underline text-gray-600">
                         Privacy Policy
                     </Link>
-                </div>
+                </nav>
             </div>
         </footer>
     )

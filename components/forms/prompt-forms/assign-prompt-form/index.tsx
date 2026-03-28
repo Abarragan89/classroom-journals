@@ -112,18 +112,20 @@ export default function AssignPromptForm({
                     {promptType === 'BLOG' &&
                         <div className="flex items-center space-x-2">
                             <Switch
+                                id="public-switch"
                                 onCheckedChange={(e) => setIsPublic(e)}
                                 checked={isPublic}
                             />
                             <Label
+                                htmlFor="public-switch"
                                 className="text-md text-sm ml-2"
                             >
                                 Make Public
                             </Label>
                             <TooltipProvider>
                                 <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <CiCircleQuestion size={20} />
+                                    <TooltipTrigger type="button" aria-label="Public setting: responses are visible to everyone">
+                                        <CiCircleQuestion size={20} aria-hidden="true" />
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>Responses are visible to everyone</p>
@@ -142,18 +144,20 @@ export default function AssignPromptForm({
                     {/* this is making spell check enabled */}
                     <div className="flex items-center space-x-2">
                         <Switch
+                            id="spellcheck-switch"
                             onCheckedChange={(e) => setEnableSpellCheck(e)}
                             checked={enableSpellCheck}
                         />
                         <Label
+                            htmlFor="spellcheck-switch"
                             className="text-sm ml-2"
                         >
                             Enable Spell Check
                         </Label>
                         <TooltipProvider>
                             <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <CiCircleQuestion size={20} />
+                                <TooltipTrigger type="button" aria-label="Spell check: text editor will spell check">
+                                    <CiCircleQuestion size={20} aria-hidden="true" />
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Text editor will spell check</p>
@@ -172,7 +176,7 @@ export default function AssignPromptForm({
 
                 <AssignButton />
                 {state && !state.success && (
-                    <p className="text-center text-destructive">{state.message}</p>
+                    <p role="alert" aria-live="assertive" className="text-center text-destructive">{state.message}</p>
                 )}
             </div>
         </form>

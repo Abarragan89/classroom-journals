@@ -41,8 +41,12 @@ export default function StudentNavLinks({
                     variant="ghost"
                     className="w-full justify-start gap-3 px-4 py-3 h-auto text-sm font-normal rounded-md hover:bg-accent text-muted-foreground"
                 >
-                    <Link href={`/student-dashboard`} onClick={onNavigate}>
-                        <LayoutDashboard size={18} />
+                    <Link
+                        href={`/student-dashboard`}
+                        onClick={onNavigate}
+                        aria-current={pathname === 'student-dashboard' ? 'page' : undefined}
+                    >
+                        <LayoutDashboard size={18} aria-hidden="true" />
                         <span>Dashboard</span>
                     </Link>
                 </Button>
@@ -51,8 +55,12 @@ export default function StudentNavLinks({
                     variant="ghost"
                     className="w-full justify-start gap-3 px-4 py-3 h-auto text-sm font-normal rounded-md hover:bg-accent text-muted-foreground"
                 >
-                    <Link href={`/student-profile`} onClick={onNavigate}>
-                        <User size={18} />
+                    <Link
+                        href={`/student-profile`}
+                        onClick={onNavigate}
+                        aria-current={pathname === 'student-profile' ? 'page' : undefined}
+                    >
+                        <User size={18} aria-hidden="true" />
                         <span>Profile</span>
                     </Link>
                 </Button>
@@ -61,12 +69,19 @@ export default function StudentNavLinks({
                     variant="ghost"
                     className="w-full justify-start gap-3 px-4 py-3 h-auto text-sm font-normal rounded-md hover:bg-accent text-muted-foreground"
                 >
-                    <Link href={`/student-notifications`} onClick={onNavigate}>
-                        <Bell size={18} />
+                    <Link
+                        href={`/student-notifications`}
+                        onClick={onNavigate}
+                        aria-current={pathname === 'student-notifications' ? 'page' : undefined}
+                    >
+                        <Bell size={18} aria-hidden="true" />
                         <span>Notifications</span>
                         {notificationCount !== undefined && notificationCount > 0 && (
-                            <span className='ml-auto min-w-5 px-2 py-[2px] rounded-full bg-destructive text-destructive-foreground text-xs'>
-                                {notificationCount}
+                            <span
+                                className='ml-auto min-w-5 px-2 py-[2px] rounded-full bg-destructive text-destructive-foreground text-xs'
+                                aria-label={`${notificationCount} unread`}
+                            >
+                                <span aria-hidden="true">{notificationCount}</span>
                             </span>
                         )}
                     </Link>
@@ -77,30 +92,41 @@ export default function StudentNavLinks({
 
     return (
         <>
-            <Link href={`/student-dashboard`} className={`
+            <Link
+                href={`/student-dashboard`}
+                aria-current={pathname === 'student-dashboard' ? 'page' : undefined}
+                className={`
             flex-start hover:cursor-pointer hover:text-foreground text-sm
             ${pathname === 'student-dashboard' ? 'text-foreground' : 'text-muted-foreground'}  
             `}>
-                <LayoutDashboard size={16} className='mr-1' />Dashboard
+                <LayoutDashboard size={16} className='mr-1' aria-hidden="true" />Dashboard
             </Link>
-            <Link href={`/student-profile`} className={`
+            <Link
+                href={`/student-profile`}
+                aria-current={pathname === 'student-profile' ? 'page' : undefined}
+                className={`
                 ml-3 flex-center hover:cursor-pointer hover:text-foreground text-sm
                 ${pathname === 'student-profile' ? 'text-foreground' : 'text-muted-foreground'}    
                 `}>
-                <User size={17} className='mr-1' />Profile
+                <User size={17} className='mr-1' aria-hidden="true" />Profile
             </Link>
             <div className='relative ml-3'>
                 {notificationCount !== undefined && notificationCount > 0 && (
-                    <p className='opacity-80 text-center min-w-5 absolute top-[-10px] right-[-16px] py-[2px] rounded-full bg-destructive text-destructive-foreground text-xs'
+                    <p
+                        className='opacity-80 text-center min-w-5 absolute top-[-10px] right-[-16px] py-[2px] rounded-full bg-destructive text-destructive-foreground text-xs'
+                        aria-label={`${notificationCount} unread notifications`}
                     >
-                        {notificationCount}
+                        <span aria-hidden="true">{notificationCount}</span>
                     </p>
                 )}
-                <Link href={`/student-notifications`} className={`
+                <Link
+                    href={`/student-notifications`}
+                    aria-current={pathname === 'student-notifications' ? 'page' : undefined}
+                    className={`
                 flex-center hover:cursor-pointer hover:text-foreground text-sm
                 ${pathname === 'student-notifications' ? 'text-foreground' : 'text-muted-foreground'}    
                 `}>
-                    <Bell size={16} className='mr-1' />Notifications
+                    <Bell size={16} className='mr-1' aria-hidden="true" />Notifications
                 </Link>
             </div>
         </>

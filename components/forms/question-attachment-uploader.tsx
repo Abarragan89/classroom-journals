@@ -211,7 +211,7 @@ const QuestionAttachmentUploader = forwardRef<UploaderHandle, Props>(function Qu
                 </Button>
                 <span className="text-xs text-muted-foreground">JPEG, PNG, WebP, PDF — max 10MB</span>
             </div>
-            {error && <p className="text-xs text-destructive">{error}</p>}
+            {error && <p className="text-xs text-destructive" role="alert" aria-live="assertive">{error}</p>}
 
             <input
                 ref={inputRef}
@@ -219,6 +219,7 @@ const QuestionAttachmentUploader = forwardRef<UploaderHandle, Props>(function Qu
                 accept="image/jpeg,image/jpg,image/png,image/webp,application/pdf"
                 multiple
                 className="hidden"
+                aria-label="Upload file attachment"
                 onChange={handleFileSelect}
             />
         </div>

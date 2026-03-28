@@ -25,11 +25,11 @@ export default function Carousel({ children }: { children: React.ReactNode }) {
                 </div>
             </div>
             <div className='flex justify-between w-[180px] mx-auto mb-5 relative z-20'>
-                <button className="embla__prev mt-4 text-[2.2rem] text-primary" onClick={scrollPrev}>
-                    <IoIosArrowBack />
+                <button type="button" aria-label="Previous slide" className="embla__prev mt-4 text-[2.2rem] text-primary" onClick={scrollPrev}>
+                    <IoIosArrowBack aria-hidden="true" />
                 </button>
-                <button className="embla__next mt-4 text-[2.2rem] text-primary" onClick={scrollNext}>
-                    <IoIosArrowForward />
+                <button type="button" aria-label="Next slide" className="embla__next mt-4 text-[2.2rem] text-primary" onClick={scrollNext}>
+                    <IoIosArrowForward aria-hidden="true" />
                 </button>
             </div>
         </div>

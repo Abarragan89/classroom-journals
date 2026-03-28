@@ -59,6 +59,7 @@ export default function SuggestPromptForm({
                             <FormControl>
                                 <Textarea
                                     {...field}
+                                    aria-label="Enter your prompt suggestion"
                                     placeholder='enter your prompt suggestion...'
                                 />
                             </FormControl>

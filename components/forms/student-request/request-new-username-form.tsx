@@ -59,6 +59,7 @@ export default function RequestNewUsernameForm({
                             <FormControl>
                                 <Input
                                     {...field}
+                                    aria-label="Request new username"
                                     placeholder='Request new username'
                                     maxLength={20}
                                     onChange={(e) => field.onChange(e.target.value.replace(/\s/g, ''))}
