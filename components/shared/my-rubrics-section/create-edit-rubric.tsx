@@ -297,7 +297,7 @@ export default function CreateEditRubric({
                                                     <TableHead key={level} className="relative min-h-[48px]">
                                                         <div className="flex items-center justify-center gap-1 py-4 ">
                                                             <span className="text-2xl font-bold text-foreground">{level}</span>
-                                                                <button
+                                                            <button
                                                                 type="button"
                                                                 onClick={() => deleteScoreLevel(realIdx)}
                                                                 className="text-destructive"

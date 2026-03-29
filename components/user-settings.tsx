@@ -28,9 +28,12 @@ export default function UserSettings({
     const accountStatus = isSubscriptionValid ? teacherData?.accountType : 'Basic-Free'
 
 
-    async function updateUsernameHandler() {
+
+    async function updateUsernameHandler() { 
+        if (updatedUsername.trim() === teacherData?.username) return;
         try {
-            await updateUsername(updatedUsername, teacherData?.id);
+            await updateUsername(updatedUsername.trim(), teacherData?.id);
+            teacherData.username = updatedUsername.trim();
             toast('Username updated!')
         } catch (error) {
             console.error('error updating username ', error)

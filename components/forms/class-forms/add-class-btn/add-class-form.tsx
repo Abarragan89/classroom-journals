@@ -213,9 +213,9 @@ export default function AddClassForm({
                         </p>
                     </div>
                     <div className="flex-center">
-                    <Button size={"lg"} type="button" onClick={fetchGoogleClassrooms} className="mx-auto">
-                        <FaGoogle aria-hidden="true" />  Import From Google Classroom
-                    </Button>
+                        <Button size={"lg"} type="button" onClick={fetchGoogleClassrooms} className="mx-auto">
+                            <FaGoogle aria-hidden="true" />  Import From Google Classroom
+                        </Button>
                     </div>
                 </>
             )}

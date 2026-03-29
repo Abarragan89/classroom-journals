@@ -63,7 +63,7 @@ export default function ActionSubMenu({
 
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenuTrigger asChild>
-                <Button variant='ghost' aria-label="Create new class or jot" aria-expanded={isOpen} className="focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full px-[10px] py-2">
+                <Button variant='ghost' aria-label="Create new class or jot" aria-expanded={isOpen} className="rounded-full px-[10px] py-2">
                     <Plus className="hover:cursor-pointer hover:bg-background" aria-hidden="true" />
                 </Button>
             </DropdownMenuTrigger>

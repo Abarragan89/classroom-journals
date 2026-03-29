@@ -107,7 +107,7 @@ export default function AssessmentTableData({
                         </TableRow>
                     ))}
 
-                    {/* INCOMPLETE ASSIGNMENTS */}}
+                    {/* INCOMPLETE ASSIGNMENTS */}
                     {incompleteResponses.length > 0 && (
                         <TableRow>
                             <TableCell colSpan={6} className="text-center font-bold text-destructive">Not Submitted</TableCell>
@@ -138,7 +138,7 @@ export default function AssessmentTableData({
                         </TableRow>
                     ))}
 
-                    {/* RETURNED ASSIGNMENTS */}}
+                    {/* RETURNED ASSIGNMENTS */}
                     {returnedResponses.length > 0 && (
                         <TableRow>
                             <TableCell colSpan={6} className="text-center font-bold text-warning">Returned</TableCell>

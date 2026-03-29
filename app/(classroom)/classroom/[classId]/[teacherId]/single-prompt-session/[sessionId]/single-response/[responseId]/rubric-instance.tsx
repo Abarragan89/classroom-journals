@@ -427,7 +427,6 @@ export default function RubricInstance({
                                                 className={cn(
                                                     'w-full p-4 rounded-md transition-all duration-200 ease-in-out',
                                                     'text-left border-4 shadow-sm min-h-[100px]',
-                                                    'focus:outline-none',
                                                     isSelected
                                                         ? 'border-primary bg-primary/10 scale-[0.98]'
                                                         : 'border-border hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] active:translate-y-0'

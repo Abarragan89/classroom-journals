@@ -98,29 +98,13 @@ export default function AssignmentListSection({
             {fetchedPrompts && fetchedPrompts.length > 0 && (
                 <Button asChild className="absolute top-[40px] right-0 shadow-sm">
                     <Link href={`/classroom/${classId}/${teacherId}/jots`}>
-                        <Plus />Assignment
+                        <Plus />Assign a Jot
                     </Link>
                 </Button>
             )}
 
             {fetchedPrompts && fetchedPrompts?.length > 0 ? (
-                < div className="flex flex-col-reverse items-center lg:flex-row lg:items-start justify-between mt-16">
-                    <div className="flex-2 w-full lg:mr-10 space-y-5">
-                        {fetchedPrompts?.map((prompt: PromptSession) => (
-                            <AssignmentListItem
-                                key={prompt.id}
-                                jotData={prompt}
-                                classId={classId}
-                                teacherId={teacherId}
-                            />
-                        ))}
-                        <PaginationList
-                            searchOptionState={searchOptions}
-                            getFilteredSearch={handleFilterChange}
-                            totalItems={promptCountTotal}
-                            itemsPerPage={30}
-                        />
-                    </div>
+                < div className="flex flex-col items-center lg:flex-row-reverse lg:items-start justify-between mt-16">
                     <div className="flex-1 top-5 mb-5 w-full flex flex-wrap md:flex-col lg:flex-col items-stretch lg:min-w-[280px] gap-3">
                         {/* Search Bar (always full width) */}
                         <div className="w-full">
@@ -151,6 +135,23 @@ export default function AssignmentListSection({
                             </div>
                         </div>
                     </div>
+                    <div className="flex-2 w-full lg:mr-10 space-y-5">
+                        {fetchedPrompts?.map((prompt: PromptSession) => (
+                            <AssignmentListItem
+                                key={prompt.id}
+                                jotData={prompt}
+                                classId={classId}
+                                teacherId={teacherId}
+                            />
+                        ))}
+                        <PaginationList
+                            searchOptionState={searchOptions}
+                            getFilteredSearch={handleFilterChange}
+                            totalItems={promptCountTotal}
+                            itemsPerPage={30}
+                        />
+                    </div>
+
                 </div>
             ) : (
                 <div className="mt-10">

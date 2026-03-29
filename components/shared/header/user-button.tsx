@@ -1,5 +1,6 @@
 "use client"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { signOutUser } from "@/lib/actions/auth.action"
 import {
     DropdownMenu,
@@ -16,6 +17,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function UserButton({ isMobile = false, onNavigate }: { isMobile?: boolean; onNavigate?: () => void }) {
     const { data: session } = useSession();
+    const router = useRouter();
     if (!session?.user) return null;
 
     if (isMobile) {
@@ -76,23 +78,18 @@ export default function UserButton({ isMobile = false, onNavigate }: { isMobile?
                     </div>
                 </DropdownMenuLabel>
                 {session.user.role === 'TEACHER' &&
-                    <DropdownMenuLabel className="p-0 mb-1">
-                        <Button asChild className="w-full py-4 px-2 h-4 justify-start" variant='ghost'>
-                            <Link
-                                href='/teacher-account'
-                                className="flex-start"
-                            >
-                                <User size={18} aria-hidden="true" /> Account
-                            </Link>
-                        </Button>
-                    </DropdownMenuLabel>
+                    <DropdownMenuItem
+                        className="gap-2 cursor-pointer"
+                        onSelect={() => router.push('/teacher-account')}
+                    >
+                        <User size={18} aria-hidden="true" /> Account
+                    </DropdownMenuItem>
                 }
-                <DropdownMenuItem className="p-0 mb-1">
-                    <form action={signOutUser} className="w-full">
-                        <Button className="w-full py-4 px-2 h-4 justify-start" variant='ghost' type="submit">
-                            <LogOut aria-hidden="true" /> Sign out
-                        </Button>
-                    </form>
+                <DropdownMenuItem
+                    className="gap-2 cursor-pointer"
+                    onSelect={() => signOutUser()}
+                >
+                    <LogOut size={18} aria-hidden="true" /> Sign out
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

@@ -60,7 +60,7 @@ export default async function page({ params }: { params: Promise<{ 'blog-title':
 
     return (
         <>
-            <Header/>
+            <Header />
             <main className="wrapper">
                 <div className="max-w-[700px] mx-auto">
                     <BlogMetaDetail

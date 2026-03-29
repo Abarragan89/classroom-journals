@@ -104,23 +104,24 @@ export default function Editor({
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         const textarea = e.currentTarget;
-        if (e.key === 'Tab') {
-            e.preventDefault();
+        // if (e.key === 'Tab') {
+        //     e.preventDefault();
 
-            const start = textarea.selectionStart;
-            const end = textarea.selectionEnd;
-            const value = textarea.value;
+        //     const start = textarea.selectionStart;
+        //     const end = textarea.selectionEnd;
+        //     const value = textarea.value;
 
-            const spaces = '     ';
-            const newValue = value.substring(0, start) + spaces + value.substring(end);
+        //     const spaces = '     ';
+        //     const newValue = value.substring(0, start) + spaces + value.substring(end);
 
-            setJournalText(newValue);
+        //     setJournalText(newValue);
 
-            requestAnimationFrame(() => {
-                textarea.selectionStart = textarea.selectionEnd = start + spaces.length;
-            });
+        //     requestAnimationFrame(() => {
+        //         textarea.selectionStart = textarea.selectionEnd = start + spaces.length;
+        //     });
 
-        } else if (e.key === 'Backspace') {
+        // } else 
+        if (e.key === 'Backspace') {
             const textarea = e.currentTarget;
             const start = textarea.selectionStart;
             const end = textarea.selectionEnd;
@@ -381,7 +382,7 @@ export default function Editor({
                     ref={editorRef}
                     disabled={isDisabled}
                 />
-                {/* Fullscreen toggle button */}}
+                {/* Fullscreen toggle button */}
                 {!isDisabled && jotType === "BLOG" && (
                     <Button
                         aria-label="Enter full-screen mode"

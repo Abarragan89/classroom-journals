@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 export default function PringLoginBtn() {
     return (
         <Button
-        className="shadow-sm"
+            className="shadow-sm"
             type="button"
             variant={"secondary"}
             onClick={() => window.print()}

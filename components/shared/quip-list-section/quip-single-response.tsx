@@ -89,7 +89,7 @@ export default function QuipSingleResponse({
             const previousQuips = queryClient.getQueryData<PromptSession[]>(['getAllQuips', classId]);
 
             // Optimistically update quipResponses cache
-            queryClient.setQueryData<QuipResponse[]>(['quipResponses', quipId], (old) => 
+            queryClient.setQueryData<QuipResponse[]>(['quipResponses', quipId], (old) =>
                 old?.filter(response => response.id !== responseId) || []
             );
 

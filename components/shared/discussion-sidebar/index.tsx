@@ -24,7 +24,7 @@ export function DiscussionSidebar({ ...props }: React.ComponentProps<typeof Side
 
     // Using memo because these responses are sorted 
     const responses = useMemo(() => props?.prompt_data?.responses ?? [], [props?.prompt_data?.responses])
-    const currentResponseId =  pathname?.split("/")[4] ?? ""
+    const currentResponseId = pathname?.split("/")[4] ?? ""
 
     return (
         <Sidebar

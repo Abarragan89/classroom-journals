@@ -6,7 +6,7 @@ export default function Footer() {
 
     return (
         <footer className="border-t print:hidden">
-            <div className="p-5 flex flex-col md:flex-row items-center justify-between gap-4 text-sm max-w-5xl mx-auto w-full">
+            <div className="p-5 py-7 flex flex-col md:flex-row items-center justify-between gap-4 text-sm max-w-5xl mx-auto w-full">
                 <div className="text-center md:text-left">
                     &copy; {currentYear} {APP_NAME}. All rights reserved.
                 </div>
@@ -16,6 +16,9 @@ export default function Footer() {
                     </Link>
                     <Link href="/privacy-policy" className="hover:underline text-gray-600">
                         Privacy Policy
+                    </Link>
+                    <Link href="/accessibility" className="hover:underline text-gray-600">
+                        Accessibility
                     </Link>
                 </nav>
             </div>
