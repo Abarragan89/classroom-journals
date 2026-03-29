@@ -417,6 +417,16 @@
   flex: 0 0 300px;
 }
 
+/* Respect user's preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Pinned card sway animation */
 @keyframes sway {
   0%,

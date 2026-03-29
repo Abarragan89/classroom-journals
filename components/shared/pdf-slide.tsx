@@ -16,14 +16,18 @@ export default function PdfSlide({ url }: { url: string }) {
             {/* Zoom controls */}
             <div className="flex items-center gap-2 self-end">
                 <button
+                    type="button"
+                    aria-label="Zoom out"
                     onClick={() => setScale(s => Math.max(0.5, +(s - 0.25).toFixed(2)))}
                     disabled={scale <= 0.5}
                     className="text-sm px-2 py-1 rounded border disabled:opacity-40"
                 >
                     −
                 </button>
-                <span className="text-sm text-muted-foreground w-12 text-center">{Math.round(scale * 100)}%</span>
+                <span className="text-sm text-muted-foreground w-12 text-center" aria-label={`Zoom level: ${Math.round(scale * 100)}%`}>{Math.round(scale * 100)}%</span>
                 <button
+                    type="button"
+                    aria-label="Zoom in"
                     onClick={() => setScale(s => Math.min(3, +(s + 0.25).toFixed(2)))}
                     disabled={scale >= 3}
                     className="text-sm px-2 py-1 rounded border disabled:opacity-40"
@@ -44,14 +48,18 @@ export default function PdfSlide({ url }: { url: string }) {
             {numPages > 1 && (
                 <div className="flex items-center gap-3 mt-2">
                     <button
+                        type="button"
+                        aria-label="Previous page"
                         onClick={() => setPageNumber(p => Math.max(1, p - 1))}
                         disabled={pageNumber <= 1}
                         className="text-sm px-2 py-1 rounded border disabled:opacity-40"
                     >
                         Prev
                     </button>
-                    <span className="text-sm text-muted-foreground">{pageNumber} / {numPages}</span>
+                    <span className="text-sm text-muted-foreground" aria-label={`Page ${pageNumber} of ${numPages}`}>{pageNumber} / {numPages}</span>
                     <button
+                        type="button"
+                        aria-label="Next page"
                         onClick={() => setPageNumber(p => Math.min(numPages, p + 1))}
                         disabled={pageNumber >= numPages}
                         className="text-sm px-2 py-1 rounded border disabled:opacity-40"

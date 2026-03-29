@@ -135,7 +135,7 @@ export default function SingleComment({
             <div className="flex items-center">
                 <Image
                     src={commentData?.user?.avatarURL || '/images/demo-avatars/1.png'}
-                    alt="blog cover photo"
+                    alt={`${commentData?.user?.username ?? 'User'}'s avatar`}
                     width={40}
                     height={40}
                     className="rounded-full w-[40px] h-[40px] mr-2 border"
@@ -147,26 +147,35 @@ export default function SingleComment({
                     </div>
                     <div className="flex items-center text-primary">
                         {isTeacherView &&
-                            <p
+                            <button
+                                type="button"
                                 onClick={() => deleteCommentHandler(commentData.id)}
                                 className="text-destructive mr-3 text-sm hover:cursor-pointer hover:underline"
                             >
                                 Delete
-                            </p>
+                            </button>
 
                         }
                         {isLikedByUser ?
-                            <FaHeart
+                            <button
+                                type="button"
+                                aria-label="Unlike this comment"
                                 onClick={() => toggleCommentLikeHandler('remove', commentData?.id, studentId)}
-                                size={20}
-                                className="hover:cursor-pointer text-sidebar-primary" />
+                                className="hover:cursor-pointer text-sidebar-primary"
+                            >
+                                <FaHeart aria-hidden="true" size={20} />
+                            </button>
                             :
-                            <FaRegHeart
+                            <button
+                                type="button"
+                                aria-label="Like this comment"
                                 onClick={() => toggleCommentLikeHandler('add', commentData?.id, studentId)}
-                                size={20}
-                                className="hover:cursor-pointer" />
+                                className="hover:cursor-pointer"
+                            >
+                                <FaRegHeart aria-hidden="true" size={20} />
+                            </button>
                         }
-                        <p className="text-[.95rem] ml-1">{totalCommentLikes?.toString()}</p>
+                        <span className="text-[.95rem] ml-1" aria-label={`${totalCommentLikes} likes`}>{totalCommentLikes?.toString()}</span>
                     </div>
                 </div>
             </div>
@@ -187,6 +196,7 @@ export default function SingleComment({
                                 onDrop={(e) => e.preventDefault()}
                                 onDragOver={(e) => e.preventDefault()}
                                 required={true}
+                                aria-label="Reply to comment"
                                 placeholder="reply to comment..."
                                 rows={3}
                                 value={replyText}
@@ -210,6 +220,7 @@ export default function SingleComment({
                                 />
                                 :
                                 <SendHorizonalIcon
+                                    aria-hidden="true"
                                     className="text-primary"
                                     size={22}
                                 />
@@ -220,29 +231,34 @@ export default function SingleComment({
             }
 
             <div className="flex justify-between text-muted-foreground items-center text-[.975rem] mx-[50px] mt-2">
-                <div
+                <button
+                    type="button"
+                    aria-expanded={showReplies}
+                    aria-label={`${showReplies ? 'Hide' : 'Show'} replies (${totalReplies})`}
                     onClick={() => setShowReplies(prev => !prev)}
                     className="w-fit mr-0 flex justify-end items-center hover:cursor-pointer"
                 >
-                    <p>replies</p>
-                    <p className="text-[.9rem] ml-[4px]">{totalReplies}</p>
-                    {showReplies ? <ChevronLeft size={18} /> : <ChevronDown size={18} />}
-                </div>
+                    <span>replies</span>
+                    <span className="text-[.9rem] ml-[4px]" aria-hidden="true">{totalReplies}</span>
+                    {showReplies ? <ChevronLeft aria-hidden="true" size={18} /> : <ChevronDown aria-hidden="true" size={18} />}
+                </button>
                 {showReplyTextarea ?
-                    <p
+                    <button
+                        type="button"
                         onClick={() => setShowReplyTextarea(false)}
                         className="hover:cursor-pointer text-[.95rem] underline text-primary opacity-[0.7] hover:opacity-[1]"
                     >
                         Cancel
-                    </p>
+                    </button>
                     :
                     discussionStatus === 'OPEN' &&
-                    <p
+                    <button
+                        type="button"
                         onClick={() => setShowReplyTextarea(true)}
                         className="hover:cursor-pointer text-[.95rem] underline text-primary opacity-[0.7] hover:opacity-[1]"
                     >
                         Reply
-                    </p>
+                    </button>
                 }
             </div>
 

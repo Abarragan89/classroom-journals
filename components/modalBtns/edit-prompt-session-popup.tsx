@@ -104,7 +104,9 @@ export default function EditPromptSessionPopUp({
             <div className={`flex-end ${promptSessionType === 'ASSESSMENT' ? 'w-full' : ''} relative z-10`}>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Edit size={22} className="hover:cursor-pointer hover:text-accent text-foreground" />
+                        <button type="button" aria-label="Edit assignment options" className="hover:cursor-pointer hover:text-accent text-foreground">
+                            <Edit aria-hidden="true" size={22} />
+                        </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className='mr-[2.5rem]'>
                         {promptSessionType === 'BLOG' && isSessionPublic &&
@@ -140,9 +142,11 @@ export default function EditPromptSessionPopUp({
                 </DropdownMenu>
                 <Link
                     className="ml-6"
+                    aria-label="Review assessment questions"
                     href={`/classroom/${classId}/${teacherId}/single-prompt-session/${sessionId}/review-assessment-questions`}
                 >
                     <Monitor
+                        aria-hidden="true"
                         className='hover:cursor-pointer hover:text-accent'
                     />
                 </Link>

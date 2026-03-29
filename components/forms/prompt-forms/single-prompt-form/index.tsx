@@ -277,18 +277,20 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                     <div className="space-y-3">
                         <div className="flex items-center space-x-2">
                             <Switch
+                                id="public-switch"
                                 onCheckedChange={(e) => setIsPublic(e)}
                                 checked={isPublic}
                             />
                             <Label
+                                htmlFor="public-switch"
                                 className="text-md ml-2"
                             >
                                 Public
                             </Label>
                             <TooltipProvider>
                                 <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <CiCircleQuestion size={20} />
+                                    <TooltipTrigger type="button" aria-label="Public setting: responses visible to everyone">
+                                        <CiCircleQuestion size={20} aria-hidden="true" />
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>Responses are visible to everyone</p>
@@ -305,18 +307,20 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                         </div>
                         <div className="flex space-x-2 my-2">
                             <Switch
+                                id="spellcheck-switch"
                                 onCheckedChange={(e) => setEnableSpellCheck(e)}
                                 checked={enableSpellCheck}
                             />
                             <Label
+                                htmlFor="spellcheck-switch"
                                 className="text-md ml-2"
                             >
                                 Enable Spell Check
                             </Label>
                             <TooltipProvider>
                                 <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <CiCircleQuestion size={20} />
+                                    <TooltipTrigger type="button" aria-label="Spell check: student text editor will spell check">
+                                        <CiCircleQuestion size={20} aria-hidden="true" />
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>Student text editor will spell check</p>
@@ -335,7 +339,7 @@ export default function SinglePromptForm({ teacherId }: { teacherId: string }) {
                 </CardContent>
             </Card>
             {state && !state.success && (
-                <p className="text-center text-destructive">{state.message}</p>
+                <p role="alert" aria-live="assertive" className="text-center text-destructive">{state.message}</p>
             )}
             <div className="flex-center">
                 <CreateButton isSubmitting={isSubmitting} />

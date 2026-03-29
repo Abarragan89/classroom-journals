@@ -62,9 +62,11 @@ export default function AddGoogleStudents({
 
             )}
             {googleClassrooms?.length > 0 && googleClassrooms.map((classroom) => (
-                <div
+                <button
+                    type="button"
                     onClick={() => addRosterFromGoogle(classroom)}
-                    className='grid grid-cols-4 items-center  p-3 bg-card rounded-xl mx-4 mb-6 border hover:cursor-pointer hover:shadow-md hover:border-primary'
+                    aria-label={`Import roster from class: ${classroom.name}`}
+                    className='grid grid-cols-4 items-center  p-3 bg-card rounded-xl mx-4 mb-6 border hover:cursor-pointer hover:shadow-md hover:border-primary w-full text-left'
                     key={classroom.id}>
                     <Image
                         src='/images/google-classroom-logo.webp'
@@ -82,7 +84,7 @@ export default function AddGoogleStudents({
                             <p className='text-sm'><span className='font-bold mr-1'>Class Code:</span> {classroom?.enrollmentCode ? classroom.enrollmentCode : 'N/A'}</p>
                         </div>
                     </div>
-                </div>
+                </button>
             ))}
             <div className="flex-center">
                 <Button variant='outline' onClick={() => updateGoogleClassrooms([], false)}>Back</Button>

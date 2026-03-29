@@ -158,7 +158,7 @@ export default function TypingTest({
     return (
         <>
             {finished && (
-                <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center">
+                <div role="dialog" aria-modal="true" aria-label="Typing test results" className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center">
                     {showConfetti && (
                         <Confetti
                             width={width}
@@ -188,7 +188,7 @@ export default function TypingTest({
                                 <p className="text-lg">WPM</p>
                             </>
                         )}
-                        <Button className='mt-5' onClick={() => { setShowConfetti(false); setFinished(false) }}>Done</Button>
+                        <Button type="button" className='mt-5' onClick={() => { setShowConfetti(false); setFinished(false) }}>Done</Button>
                     </div>
                 </div>
             )}
@@ -222,6 +222,7 @@ export default function TypingTest({
                 <Textarea
                     ref={inputRef}
                     value={input}
+                    aria-label="Typing test input — type the text shown below"
                     tabIndex={0}
                     onChange={(e) => handleChange(e)}
                     onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -237,12 +238,13 @@ export default function TypingTest({
 
                 <div className='flex justify-between items-baseline'>
                     {started && !finished && !needsReset && (
-                        <div className="text-lg font-semibold">
+                        <div role="timer" aria-live="polite" aria-atomic="true" className="text-lg font-semibold">
                             Time left: {timer}s
                         </div>
                     )}
                     {!started && (
                         <Button
+                            type="button"
                             className='mb-3'
                             onClick={handleStart}
                         >
@@ -251,6 +253,7 @@ export default function TypingTest({
                     )}
                     {needsReset && (
                         <Button
+                            type="button"
                             variant='secondary'
                             className='mb-3'
                             onClick={resetHandler}
@@ -259,7 +262,7 @@ export default function TypingTest({
                         </Button>
                     )}
                     <div className='flex flex-col justify-end'>
-                        <Button className='mb-3' onClick={() => setOpenModal(true)}>
+                        <Button type="button" className='mb-3' onClick={() => setOpenModal(true)}>
                             Class Scores
                         </Button>
                         <p className='font-bold'>Highscore: <span className='font-normal'>{currentHighScore} WPM</span></p>

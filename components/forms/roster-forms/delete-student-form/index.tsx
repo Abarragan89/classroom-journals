@@ -74,6 +74,7 @@ export default function DeleteStudentForm({
                     className="max-w-[320px] mx-auto"
                     name="confirmText"
                     required
+                    aria-required="true"
                     placeholder="required"
                     onChange={(e) => setUserText(e.target.value)}
                 />
@@ -93,7 +94,7 @@ export default function DeleteStudentForm({
             </div>
             <DeleteButton />
             {state && !state.success && (
-                <p className="text-center text-destructive">{state.message}</p>
+                <p role="alert" aria-live="assertive" className="text-center text-destructive">{state.message}</p>
             )}
         </form>
     )

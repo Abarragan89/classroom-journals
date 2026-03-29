@@ -63,6 +63,9 @@ export default function StudentSignInCard({ changeTab }: { changeTab: () => void
                             name='class-code'
                             className='col-span-3'
                             onChange={(e) => setClassCode(e.target.value)}
+                            aria-required="true"
+                            aria-invalid={!!error}
+                            aria-describedby={error ? 'signin-error' : undefined}
                         />
                     </div>
                     <div>
@@ -75,9 +78,14 @@ export default function StudentSignInCard({ changeTab }: { changeTab: () => void
                             name='password'
                             className='col-span-3'
                             onChange={(e) => setPassword(e.target.value)}
+                            aria-required="true"
+                            aria-invalid={!!error}
+                            aria-describedby={error ? 'signin-error' : undefined}
                         />
                     </div>
-                    {error && <p className="text-red-500">{error}</p>}
+                    {error && (
+                        <p id="signin-error" className="text-red-500" role="alert" aria-live="assertive">{error}</p>
+                    )}
                     <Button
                         className={isLoading ? 'opacity-75' : 'opacity-100'}
                         disabled={isLoading}

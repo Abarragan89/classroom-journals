@@ -121,7 +121,7 @@ export default function OnboardingToast({
                     className="absolute top-2 right-2 p-1.5 rounded-full hover:bg-accent transition-colors group"
                     aria-label="Dismiss onboarding"
                 >
-                    <X className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
+                    <X aria-hidden="true" className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
                 </button>
             )}
             {/* Header with Progress */}
@@ -184,9 +184,9 @@ export default function OnboardingToast({
                                 <div key={item} className="flex items-center gap-2 mb-1">
                                     <div>
                                         {isChecked ? (
-                                            <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-500" />
+                                            <CheckCircle2 aria-hidden="true" className="h-5 w-5 text-green-600 dark:text-green-500" />
                                         ) : (
-                                            <Circle className="h-5 w-5 text-muted-foreground/50" />
+                                            <Circle aria-hidden="true" className="h-5 w-5 text-muted-foreground/50" />
                                         )}
                                     </div>
                                     <span className={cn('text-xs', isChecked ? 'line-through text-muted-foreground font-medium' : 'text-foreground font-bold')}>

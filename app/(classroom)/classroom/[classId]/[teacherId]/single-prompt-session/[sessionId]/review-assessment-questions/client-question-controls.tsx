@@ -40,20 +40,28 @@ export default function ClientQuestionControls({
         <>
             {sessionType === 'ASSESSMENT' && (
                 <div className="flex-between max-w-[100px] my-3">
-                    <BiChevronLeft
-                        size={25}
+                    <button
+                        type="button"
+                        aria-label="Previous question"
                         onClick={prevQuestion}
+                        disabled={currentQuestion === 0}
                         className={`
                         ${currentQuestion === 0 ? disabledArrowStyles : enabledArrowStyles}    
                         `}
-                    />
-                    <BiChevronRight
-                        size={25}
+                    >
+                        <BiChevronLeft aria-hidden="true" size={25} />
+                    </button>
+                    <button
+                        type="button"
+                        aria-label="Next question"
                         onClick={nextQuestion}
+                        disabled={currentQuestion === questions.length - 1}
                         className={`
                         ${currentQuestion === questions.length - 1 ? disabledArrowStyles : enabledArrowStyles}
                     `}
-                    />
+                    >
+                        <BiChevronRight aria-hidden="true" size={25} />
+                    </button>
                 </div>
             )}
             <p
@@ -61,11 +69,11 @@ export default function ClientQuestionControls({
             >{questions[currentQuestion].question}</p>
             <Separator className='mt-5 mb-2' />
             <div className='flex-between mb-9 mx-auto max-w-[500px]'>
-                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'blank' ? 'text-muted-foreground' : ''}`} onClick={() => setSelectedPaper('blank')}>Blank</p>
-                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'line1' ? 'text-muted-foreground' : ''}`} onClick={() => setSelectedPaper('line1')}>Line 1</p>
-                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'line2' ? 'text-muted-foreground' : ''}`} onClick={() => setSelectedPaper('line2')}>Line 2</p>
-                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'graph1' ? 'text-muted-foreground' : ''}`} onClick={() => setSelectedPaper('graph1')}>Graph 1</p>
-                <p className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'graph2' ? 'text-muted-foreground' : ''}`} onClick={() => setSelectedPaper('graph2')}>Graph 2</p>
+                <button type="button" onClick={() => setSelectedPaper('blank')} className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'blank' ? 'text-muted-foreground' : ''}`}>Blank</button>
+                <button type="button" onClick={() => setSelectedPaper('line1')} className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'line1' ? 'text-muted-foreground' : ''}`}>Line 1</button>
+                <button type="button" onClick={() => setSelectedPaper('line2')} className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'line2' ? 'text-muted-foreground' : ''}`}>Line 2</button>
+                <button type="button" onClick={() => setSelectedPaper('graph1')} className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'graph1' ? 'text-muted-foreground' : ''}`}>Graph 1</button>
+                <button type="button" onClick={() => setSelectedPaper('graph2')} className={`hover:cursor-pointer hover:text-accent mx-2 text-center text-sm ${selectedPaper === 'graph2' ? 'text-muted-foreground' : ''}`}>Graph 2</button>
             </div>
             <div className={`
                 ${selectedPaper === 'blank' ? blankPaper : ''}

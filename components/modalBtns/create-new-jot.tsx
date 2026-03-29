@@ -14,8 +14,13 @@ export default function CreateNewJot() {
                 setIsModalOpen={setIsJotTypeModalOpen}
                 isModalOpen={isJotTypeModalOpen}
             />
-            <Button className='shadow-sm' onClick={() => setIsJotTypeModalOpen(true)}>
-                <Plus />Create Jot
+            <Button
+                className='shadow-sm'
+                type="button"
+                onClick={() => setIsJotTypeModalOpen(true)}
+                aria-expanded={isJotTypeModalOpen}
+            >
+                <Plus aria-hidden="true" />Create Jot
             </Button>
         </>
 

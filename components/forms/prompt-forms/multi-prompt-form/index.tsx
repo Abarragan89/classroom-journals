@@ -272,13 +272,15 @@ export default function MultiPromptForm({
                                             {question.label}
                                         </Label>
                                         {questions.length > 1 ?
-                                            <p
+                                            <button
+                                                type="button"
                                                 onClick={() => handleRemoveQuestion(index)}
+                                                aria-label={`Remove question ${index + 1}`}
                                                 className="hover:cursor-pointer hover:underline p-1 pt-2 text-[.875rem] text-destructive w-fit leading-none">
-                                                <X size={18} />
-                                            </p>
+                                                <X size={18} aria-hidden="true" />
+                                            </button>
                                             :
-                                            <p className="opacity-0"><X /></p>
+                                            <span className="opacity-0" aria-hidden="true"><X /></span>
                                         }
                                     </div>
                                     <Textarea
@@ -304,7 +306,7 @@ export default function MultiPromptForm({
                             className="flex-center block w-fit mx-auto mt-5 "
                         >
                             <>
-                                <Plus />Add question
+                                <Plus aria-hidden="true" />Add question
                             </>
                         </Button>
                     </CardContent>
@@ -356,18 +358,20 @@ export default function MultiPromptForm({
                             {/* this is making spell check enabled */}
                             <div className="flex items-center space-x-2 mt-4">
                                 <Switch
+                                    id="spellcheck-switch"
                                     onCheckedChange={(e) => setEnableSpellCheck(e)}
                                     checked={enableSpellCheck}
                                 />
                                 <Label
+                                    htmlFor="spellcheck-switch"
                                     className="text-md ml-2"
                                 >
                                     Enable Spell Check
                                 </Label>
                                 <TooltipProvider>
                                     <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <CiCircleQuestion size={20} />
+                                        <TooltipTrigger type="button" aria-label="Spell check: student text editor will spell check">
+                                            <CiCircleQuestion size={20} aria-hidden="true" />
                                         </TooltipTrigger>
                                         <TooltipContent>
                                             <p>Student text editor will spell check</p>
@@ -415,7 +419,7 @@ export default function MultiPromptForm({
             }
 
             {state && !state.success && (
-                <p className="text-center text-destructive">{state.message}</p>
+                <p role="alert" aria-live="assertive" className="text-center text-destructive">{state.message}</p>
             )}
             {/* <Separator className="mt-10 mb-3" /> */}
             <div className="my-5 flex-center">

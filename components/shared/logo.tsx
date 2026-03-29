@@ -14,6 +14,8 @@ export default function Logo({
             fill="none"
             width={width}
             height={height}
+            role="img"
+            aria-label="JotterBlog logo"
             className={`text-primary ${className}`}
         >
             {/* Notepad background with rounded corners */}

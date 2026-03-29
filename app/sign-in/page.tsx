@@ -17,7 +17,7 @@ export default async function SignIn() {
         return redirect('/')
     }
     return (
-        <main>
+        <main id="main-content">
             <Header />
             <h1 className="text-center h1-bold mt-[110px] mb-2">Sign In</h1>
             <div className="flex-center w-full">

@@ -97,7 +97,7 @@ export default async function SingleResponse({
                                     src={(response?.response as { answer: string }[])?.[2]?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
                                     width={1920}
                                     height={1080}
-                                    alt={'blog cover photo'}
+                                    alt={`Cover photo for ${(response?.response as { answer: string }[])?.[1]?.answer ?? 'blog post'}`}
                                     className="block mx-auto mb-5 w-full max-w-[700px] h-auto"
                                     sizes="(max-width: 700px) 100vw, 700px"
                                     fetchPriority='high'

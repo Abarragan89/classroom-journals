@@ -107,6 +107,7 @@ export default function CommentSection({
                             onCut={(e) => e.preventDefault()}
                             onDrop={(e) => e.preventDefault()}
                             onDragOver={(e) => e.preventDefault()}
+                            aria-label="Add a comment"
                             placeholder="Add a comment..."
                             required={true}
                             rows={3}
@@ -132,6 +133,7 @@ export default function CommentSection({
                             />
                             :
                             <SendHorizonalIcon
+                                aria-hidden="true"
                                 className="text-primary"
                                 size={22}
                             />

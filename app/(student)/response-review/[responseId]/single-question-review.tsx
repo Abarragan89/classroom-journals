@@ -205,7 +205,9 @@ export default function SingleQuestionReview({
                                 </div>
                             ) : (
                                 <>
+                                    <label htmlFor="photo-search" className="sr-only">Search images by tag</label>
                                     <Input
+                                        id="photo-search"
                                         type="text"
                                         placeholder="Search images..."
                                         onChange={(e) => filterByTags(e.target.value)}
@@ -227,12 +229,10 @@ export default function SingleQuestionReview({
                                     </Select>
                                     <div className="h-[355px] mx-auto overflow-y-auto flex-center flex-wrap gap-3 custom-scrollbar py-5">
                                         {filteredBlogPhotos && filteredBlogPhotos.map((img) => (
-                                            <Image
+                                            <button
                                                 key={img.id}
-                                                src={img.url}
-                                                alt="blog cover photo"
-                                                width={195}
-                                                height={110}
+                                                type="button"
+                                                aria-label={`Select photo: ${img.tags?.[0] ?? 'image'}`}
                                                 onClick={() => {
                                                     setAllQuestions(prev => {
                                                         const updated = [...prev];
@@ -241,8 +241,16 @@ export default function SingleQuestionReview({
                                                     });
                                                     setOpenPhotoModal(false)
                                                 }}
-                                                className="hover:cursor-pointer rounded-sm hover:scale-105 max-w-[195px]"
-                                            />
+                                                className="hover:cursor-pointer rounded-sm hover:scale-105"
+                                            >
+                                                <Image
+                                                    src={img.url}
+                                                    alt=""
+                                                    width={195}
+                                                    height={110}
+                                                    className="max-w-[195px]"
+                                                />
+                                            </button>
                                         ))}
                                     </div>
                                 </>
@@ -258,7 +266,7 @@ export default function SingleQuestionReview({
                         <CardContent>
                             <Image
                                 src={allQuestions[2]?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
-                                alt="blog cover photo"
+                                alt="Selected blog cover photo"
                                 width={448}
                                 height={252}
                                 priority

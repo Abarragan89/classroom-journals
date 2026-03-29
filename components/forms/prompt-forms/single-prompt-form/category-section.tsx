@@ -86,7 +86,9 @@ export default function CategorySection({
                 <div className="items-center space-y-4 px-3 pb-2">
                     <p className="text-center"><span className="text-destructive font-bold">Important! </span>Deleting this category will de-categorize all Jots associated with it. You will have to re-categorize them manually.</p>
                     <p className="text-sm font-bold m-0 p-0">Type: &ldquo;delete {promptName.toLowerCase()}&rdquo; to confirm</p>
+                    <label htmlFor="delete-category-confirm" className="sr-only">Type to confirm deletion</label>
                     <Input
+                        id="delete-category-confirm"
                         type="text"
                         value={userText}
                         placeholder={`delete ${promptName.toLowerCase()}`}
@@ -111,6 +113,7 @@ export default function CategorySection({
                 description="Confirm you want to edit this category"
             >
                 <div className="items-center space-y-4 px-3 pb-2">
+                    <label htmlFor="new-category-name" className="sr-only">New category name</label>
                     <Input
                         name="new-category-name"
                         id="new-category-name"
@@ -135,7 +138,9 @@ export default function CategorySection({
                 <CardContent className="space-y-4">
                     <p className="text-md font-bold">Category <span className="text-sm font-normal">(optional)</span></p>
                     <div className="flex-start">
+                        <label htmlFor="new-category-input" className="sr-only">Add new category name</label>
                         <Input
+                            id="new-category-input"
                             type="text"
                             placeholder="add new category"
                             value={newCategoryName}
@@ -161,9 +166,8 @@ export default function CategorySection({
                                         <Label htmlFor={category.name}>{category.name}</Label>
 
                                         <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                {/* Ellipse */}
-                                                <Edit className="hover:text-input hover:cursor-pointer" size={15} />
+                                            <DropdownMenuTrigger aria-label={`Edit or delete category ${category.name}`}>
+                                                <Edit aria-hidden="true" className="hover:text-input hover:cursor-pointer" size={15} />
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent>
                                                 <DropdownMenuItem onClick={() => showEditModalHandler(category.id, category.name)} className="hover:cursor-pointer rounded-md">

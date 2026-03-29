@@ -207,16 +207,19 @@ export default function MultipleQuestionEditor({
             {/* If finished the last question, show answer review */}
             <div className="w-full max-w-[1000px] mx-auto relative">
                 <div className="flex-between">
-                    <div className="flex-center hover:cursor-pointer hover:text-primary"
+                    <button
+                        type="button"
+                        className="flex-center hover:cursor-pointer hover:text-primary"
                         onClick={() => {
                             router.back();
                             if (typingTimeoutRef.current) {
                                 clearTimeout(typingTimeoutRef.current);
                             }
-                        }}>
-                        <ArrowBigLeft size={30} />
-                        <p className="ml-2 text-md">Back</p>
-                    </div>
+                        }}
+                    >
+                        <ArrowBigLeft aria-hidden="true" size={30} />
+                        <span className="ml-2 text-md">Back</span>
+                    </button>
                     <Badge className="text-sm">Assessment</Badge>
                 </div>
                 {Number(questionNumber) === studentResponse.length ? (

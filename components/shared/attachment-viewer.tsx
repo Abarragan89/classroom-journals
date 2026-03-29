@@ -28,7 +28,7 @@ function AttachmentSlide({ url }: { url: string }) {
         <div className="w-full overflow-hidden rounded-lg" style={style}>
             <img
                 src={url}
-                alt=""
+                alt="Question attachment"
                 loading="lazy"
                 className="w-full h-full object-cover"
                 onLoad={(e) => {

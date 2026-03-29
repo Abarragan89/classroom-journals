@@ -91,6 +91,7 @@ export default function SubscriptionCard({
                 <p>Type &lsquo;confirm cancellation&lsquo; to confirm</p>
                 <Input
                     type="text"
+                    aria-label="Type 'confirm cancellation' to confirm"
                     onChange={(e) => setUserConfirmationText(e.target.value)}
                 />
                 <Button

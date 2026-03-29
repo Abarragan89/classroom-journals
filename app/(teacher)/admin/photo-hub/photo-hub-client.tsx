@@ -102,10 +102,10 @@ export default function PhotoHubClient() {
                     width={1920}
                     height={1080}
                 />
-                <Label htmlFor="category" className="text-right">
+                <Label id="category-label" className="text-right">
                     Category
                 </Label>
-                <Select name="category" value={selectedCategory} onValueChange={(value) => setSelectedCategory(value)}>
+                <Select name="category" value={selectedCategory} onValueChange={(value) => setSelectedCategory(value)} aria-labelledby="category-label">
                     <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select a category" />
                     </SelectTrigger>

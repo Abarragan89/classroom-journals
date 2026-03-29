@@ -108,23 +108,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
                       {item.isLink ? (
                         <SidebarMenuButton asChild isActive={item.isActive}>
                           <Link href={`${item.slug}`} className="flex items-center gap-2" onClick={() => setOpenMobile(false)}>
-                            {Icon && <Icon size={18} />}
+                            {Icon && <Icon aria-hidden="true" size={18} />}
                             {item.title}
                             {/* Show notification count if notifications exists */}
                             {item.title === 'Notifications' && notificationCount !== undefined && notificationCount > 0 && (
-                              <p
+                              <span
+                                aria-label={`${notificationCount} unread notifications`}
                                 className="text-center min-w-6 p-[3px] rounded-full text-xs bg-destructive text-destructive-foreground"
                               >
-                                {notificationCount}
-                              </p>
+                                <span aria-hidden="true">{notificationCount}</span>
+                              </span>
                             )}
                             {/* Show requests count if exists */}
                             {item.title === 'Student Requests' && studentRequestCount !== undefined && studentRequestCount > 0 && (
-                              <p
+                              <span
+                                aria-label={`${studentRequestCount} pending student requests`}
                                 className="text-center min-w-6 p-[3px] rounded-full text-xs bg-destructive text-destructive-foreground"
                               >
-                                {studentRequestCount}
-                              </p>
+                                <span aria-hidden="true">{studentRequestCount}</span>
+                              </span>
                             )}
                           </Link>
                         </SidebarMenuButton>

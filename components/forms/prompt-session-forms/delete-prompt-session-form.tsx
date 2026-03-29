@@ -1,7 +1,6 @@
 'use client'
 import { useActionState, useEffect } from "react"
 import { useFormStatus } from "react-dom"
-import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { toast } from 'sonner'
 import { deletePromptSession } from "@/lib/actions/prompt.session.actions";
@@ -49,9 +48,7 @@ export default function DeletePromptSessionForm({
     return (
         <form action={action} className="space-y-5">
             <div className="grid items-center gap-4">
-                <Label htmlFor="year" className="text-center mx-auto mt-1 px-5 leading-normal">
-                    <p>Are you sure you want to delete this assignment?</p>
-                </Label>
+                <p className="text-center mx-auto mt-1 px-5 leading-normal">Are you sure you want to delete this assignment?</p>
                 <input
                     hidden
                     defaultValue={promptSessionId}
@@ -67,7 +64,7 @@ export default function DeletePromptSessionForm({
             </div>
             <DeleteButton />
             {state && !state.success && (
-                <p className="text-center text-destructive">{state.message}</p>
+                <p role="alert" aria-live="assertive" className="text-center text-destructive">{state.message}</p>
             )}
         </form>
     )

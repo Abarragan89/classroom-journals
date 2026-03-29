@@ -65,10 +65,10 @@ const tutorialVideos = [
 export default function VideoAccordion() {
     return (
         <div>
-            <div className="mt-7 mb-5">
+            <div className="my-7">
                 <h2 className="h2-bold my-3">Teacher Guide Videos</h2>
             </div>
-            <Accordion className="rounded-md" type="single" defaultValue="item-1" collapsible>
+            <Accordion className="rounded-md max-w-[650px] mx-auto" type="single" defaultValue="item-1" collapsible>
                 {tutorialVideos.map((video) => (
                     <AccordionItem
                         key={video.id}

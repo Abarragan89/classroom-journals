@@ -351,10 +351,12 @@ export default function ScoreJournalForm({
                             rubricList.map((rubricItem: RubricListItem) => {
                                 const isCurrentlyLoading = selectRubricMutation.isPending;
                                 return (
-                                    <div
+                                    <button
+                                        type="button"
                                         key={rubricItem.id}
                                         onClick={() => !isCurrentlyLoading && handleRubricSelect(rubricItem)}
-                                        className={`p-2 flex justify-between items-center ${isCurrentlyLoading
+                                        disabled={isCurrentlyLoading}
+                                        className={`p-2 w-full text-left flex justify-between items-center ${isCurrentlyLoading
                                             ? 'cursor-not-allowed opacity-50'
                                             : 'hover:bg-accent hover:text-accent-foreground cursor-pointer'
                                             }`}
@@ -375,7 +377,7 @@ export default function ScoreJournalForm({
                                                 </div>
                                             )}
                                         </div>
-                                    </div>
+                                    </button>
                                 );
                             })
                         )}
@@ -393,7 +395,8 @@ export default function ScoreJournalForm({
                                 <div>
                                     <p className="text-sm text-muted-foreground">
                                         ⚠️ Entering a new score below will replace the{' '}
-                                        <span
+                                        <button
+                                            type="button"
                                             onClick={() => {
                                                 // Show the rubric grade view
                                                 if (rubricGradeData) {
@@ -415,14 +418,16 @@ export default function ScoreJournalForm({
                                             className="text-muted-foreground underline hover:text-primary cursor-pointer"
                                         >
                                             current rubric grade
-                                        </span>
+                                        </button>
                                         .
                                     </p>
                                 </div>
                             </div>
                         )}
                         <div className="flex items-center mt-5">
+                            <label htmlFor="journal-score" className="sr-only">Score out of 100</label>
                             <Input
+                                id="journal-score"
                                 type="text"
                                 name="journalScore"
                                 defaultValue={currentScore}
@@ -440,6 +445,7 @@ export default function ScoreJournalForm({
                             <p className="text-lg">100 </p>
                         </div>
                         <Button
+                            type="button"
                             variant={'outline'}
                             onClick={() => setShowRubricDialog(true)}
                         >
@@ -451,6 +457,7 @@ export default function ScoreJournalForm({
                 <div className="flex flex-col items-center justify-center">
                     <div className="w-full flex justify-end mt-10">
                         <Button
+                            type="button"
                             onClick={() => setCurrentRubric(null)}
                             variant={"outline"}
                         >

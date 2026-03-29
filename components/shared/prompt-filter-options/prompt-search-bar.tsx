@@ -19,10 +19,11 @@ export default function PromptSearchBar({ searchOptionState, getFilteredSearch }
     };
     return (
         <div className="relative col-span-2 sm:col-span-1">
-            <Search size={20} className="absolute bottom-2 left-1 text-border" />
+            <Search aria-hidden="true" size={20} className="absolute bottom-2 left-1 text-border" />
             <Input
                 className="pl-8"
-                type="email"
+                type="text"
+                aria-label="Search prompts by title"
                 placeholder="Search by title..."
                 onChange={(e) => (handlePromptTraitChange(e.target.value))}
             />

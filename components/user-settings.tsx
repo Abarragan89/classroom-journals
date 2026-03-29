@@ -28,9 +28,12 @@ export default function UserSettings({
     const accountStatus = isSubscriptionValid ? teacherData?.accountType : 'Basic-Free'
 
 
-    async function updateUsernameHandler() {
+
+    async function updateUsernameHandler() { 
+        if (updatedUsername.trim() === teacherData?.username) return;
         try {
-            await updateUsername(updatedUsername, teacherData?.id);
+            await updateUsername(updatedUsername.trim(), teacherData?.id);
+            teacherData.username = updatedUsername.trim();
             toast('Username updated!')
         } catch (error) {
             console.error('error updating username ', error)
@@ -63,12 +66,15 @@ export default function UserSettings({
                 <p>Are you sure you want to delete your account?</p>
                 <p>Type &lsquo;confirm delete&lsquo; to confirm</p>
                 <Input
+                    id="confirm-delete-input"
                     type="text"
+                    aria-label="Type confirm delete to confirm account deletion"
                     onChange={(e) => setUserConfirmationText(e.target.value)}
                 />
                 <Button
                     disabled={userConfirmationText !== 'confirm delete' || isLoading}
                     variant='destructive'
+                    type="button"
                     onClick={handleDeleteAccount}
                 >
                     {isLoading ? 'Deleting...' : 'Delete Account'}
@@ -82,16 +88,18 @@ export default function UserSettings({
                 />
                 <div className="md:flex-between space-y-5 md:space-y-0">
                     <div className="w-full md:mr-3 min-w-[275px]">
-                        <Label>Username</Label>
+                        <Label htmlFor="username-input">Username</Label>
                         <Input
+                            id="username-input"
                             defaultValue={teacherData?.username}
                             onBlur={updateUsernameHandler}
                             onChange={(e) => setUpdatedUsername(e.target.value)}
                         />
                     </div>
                     <div className="w-full md:ml-3 min-w-[275px]">
-                        <Label>Name</Label>
+                        <Label htmlFor="name-input">Name</Label>
                         <Input
+                            id="name-input"
                             defaultValue={teacherData?.name}
                             readOnly
                             disabled
@@ -100,16 +108,18 @@ export default function UserSettings({
                 </div>
                 <div className="md:flex-between mt-5 space-y-5 md:space-y-0">
                     <div className="w-full md:mr-3 min-w-[275px]">
-                        <Label>Email</Label>
+                        <Label htmlFor="email-input">Email</Label>
                         <Input
+                            id="email-input"
                             defaultValue={teacherData?.email}
                             readOnly
                             disabled
                         />
                     </div>
                     <div className="w-full md:ml-3 min-w-[275px] relative">
-                        <Label>Account Type</Label>
+                        <Label htmlFor="account-type-input">Account Type</Label>
                         <Input
+                            id="account-type-input"
                             defaultValue={accountStatus}
                             readOnly
                             disabled
@@ -132,11 +142,18 @@ export default function UserSettings({
                         </Link>
                     }
                     <div className="flex flex-col items-center space-y-2">
-                        <Button disabled={isCancelling === false} variant='destructive' onClick={() => setIsModalOpen(true)} >
+                        <Button
+                            disabled={isCancelling === false}
+                            aria-disabled={isCancelling === false}
+                            aria-describedby={!isCancelling && isSubscriptionValid ? 'delete-account-note' : undefined}
+                            variant='destructive'
+                            type="button"
+                            onClick={() => setIsModalOpen(true)}
+                        >
                             Delete Account
                         </Button>
                         {!isCancelling && isSubscriptionValid && teacherData?.subscriptionId && (
-                            <p className="text-xs text-muted-foreground">You must first unsubscribe to delete account</p>
+                            <p id="delete-account-note" className="text-xs text-muted-foreground">You must first unsubscribe to delete account</p>
                         )}
                     </div>
                 </div>

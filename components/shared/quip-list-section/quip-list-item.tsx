@@ -97,6 +97,8 @@ export default function QuipListItem({
                     </div>
                     {role === ClassUserRole.TEACHER && (
                         <Button
+                            type="button"
+                            aria-label="Delete this quip"
                             variant="ghost"
                             size="icon"
                             className="text-destructive hover:text-destructive hover:bg-destructive/10"
@@ -105,7 +107,7 @@ export default function QuipListItem({
                                 setOpenDeleteModal(true);
                             }}
                         >
-                            <Trash2 size={18} />
+                            <Trash2 aria-hidden="true" size={18} />
                         </Button>
                     )}
                 </div>
@@ -132,12 +134,13 @@ export default function QuipListItem({
                     {role === ClassUserRole.TEACHER || isComplete && (
                         <div className="flex-end">
                             <Button
+                                type="button"
                                 onClick={() => refetch()}
                                 size={"sm"}
                                 variant={"outline"}
                                 className='mb-2'
                             >
-                                <RefreshCcwIcon /> Refresh
+                                <RefreshCcwIcon aria-hidden="true" /> Refresh
                             </Button>
                         </div>
                     )}

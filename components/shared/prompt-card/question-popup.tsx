@@ -14,7 +14,7 @@ export default function QuestionPopup({ promptQuestions }: { promptQuestions: Pr
         <Popover>
             <PopoverTrigger asChild>
                 <button className='flex items-center gap-1.5 hover:text-primary transition-colors'>
-                    <MessageSquare className="w-3.5 h-3.5" />
+                    <MessageSquare aria-hidden="true" className="w-3.5 h-3.5" />
                     <span>
                         {promptQuestions?.promptType === 'ASSESSMENT' ? (
                             <>{questionCount} {questionCount === 1 ? 'question' : 'questions'}</>

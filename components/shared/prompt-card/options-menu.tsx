@@ -50,18 +50,17 @@ export default function OptionsMenu({
             {/* Options Menu */}
             <div className='absolute right-3 top-3 z-10'>
                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        {/* Ellipse */}
-                        <EllipsisVertical size={20} className="hover:cursor-pointer text-primary" />
+                    <DropdownMenuTrigger aria-label="Prompt options" className="hover:cursor-pointer text-primary">
+                        <EllipsisVertical aria-hidden="true" size={20} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <Link href={`/prompt-form/?type=${promptData.promptType}&edit=${promptData.id}&callbackUrl=${pathname}`}>
                             <DropdownMenuItem className="hover:cursor-pointer rounded-md">
-                                <Edit />Edit
+                                <Edit aria-hidden="true" />Edit
                             </DropdownMenuItem>
                         </Link>
                         <DropdownMenuItem onClick={() => setIsDeleteModalOpen(true)} className="hover:cursor-pointer text-destructive rounded-md">
-                            <Trash2Icon />Delete
+                            <Trash2Icon aria-hidden="true" />Delete
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

@@ -67,21 +67,20 @@ export default function StudentRosterOptionsMenu({
             </ResponsiveDialog>
 
             <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    {/* Ellipse trigger */}
-                    <Ellipsis size={20} className="hover:cursor-pointer text-foreground" />
+                <DropdownMenuTrigger aria-label="Student options" className="hover:cursor-pointer text-foreground">
+                    <Ellipsis aria-hidden="true" size={20} />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <Link href={`/classroom/${classId}/${session.user.id}/roster/${studentInfo.id}`}>
                         <DropdownMenuItem className="hover:cursor-pointer rounded-md">
-                            <Eye />Work
+                            <Eye aria-hidden="true" />Work
                         </DropdownMenuItem>
                     </Link>
                     <DropdownMenuItem onClick={() => setIsEditModalOpen(true)} className="hover:cursor-pointer rounded-md">
-                        <Edit />Edit
+                        <Edit aria-hidden="true" />Edit
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setIsDeleteModalOpen(true)} className="hover:cursor-pointer text-destructive rounded-md">
-                        <Trash2Icon />Delete
+                        <Trash2Icon aria-hidden="true" />Delete
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

@@ -314,11 +314,14 @@ export default function RubricInstance({
                                 ({Math.round((currentGrade.totalScore / currentGrade.maxTotalScore) * 100)}%)
                             </p>
                             {/* Print Btn */}
-                            <PrinterIcon
+                            <button
+                                type="button"
+                                aria-label="Print rubric"
                                 className="ml-2 hover:text-accent cursor-pointer"
-                                size={23}
                                 onClick={() => window.print()}
-                            />
+                            >
+                                <PrinterIcon aria-hidden="true" size={23} />
+                            </button>
                         </div>
                     )}
                 </div>
@@ -340,7 +343,8 @@ export default function RubricInstance({
                                         AI grading allowance exhausted
                                     </p>
                                     <p className="text-muted-foreground text-sm">
-                                        <span
+                                        <button
+                                            type="button"
                                             onClick={() => {
                                                 checkout({
                                                     priceId: process.env.NEXT_PUBLIC_AI_CREDITS_LINK as string,
@@ -349,7 +353,7 @@ export default function RubricInstance({
                                             }}
                                             className="text-primary hover:underline hover:cursor-pointer hover:text-accent"
                                         >
-                                            Click here to add credits</span>
+                                            Click here to add credits</button>
                                     </p>
                                 </div>
                             )}
@@ -423,7 +427,6 @@ export default function RubricInstance({
                                                 className={cn(
                                                     'w-full p-4 rounded-md transition-all duration-200 ease-in-out',
                                                     'text-left border-4 shadow-sm min-h-[100px]',
-                                                    'focus:outline-none',
                                                     isSelected
                                                         ? 'border-primary bg-primary/10 scale-[0.98]'
                                                         : 'border-border hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] active:translate-y-0'

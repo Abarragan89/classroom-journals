@@ -81,15 +81,17 @@ export default function Menu({
 
     return (
         <div className="flex justify-end gap-3">
-            <nav className="hidden sm:flex-center w-full max-w-md gap-3">
+            <nav aria-label="Main navigation" className="hidden sm:flex-center w-full max-w-md gap-3">
                 {renderMenuOptions()}
             </nav>
 
             {/* Sheet Menu for Mobile View */}
-            <nav className="sm:hidden">
+            <nav aria-label="Mobile navigation" className="sm:hidden">
                 <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                    <SheetTrigger aria-label="Open navigation menu" className="align-middle">
-                        <MenuIcon />
+                    <SheetTrigger asChild aria-label="Open navigation menu">
+                        <button type="button" className="align-middle p-1" aria-expanded={isSheetOpen}>
+                            <MenuIcon aria-hidden="true" />
+                        </button>
                     </SheetTrigger>
                     <SheetContent className="flex flex-col items-start w-[280px]">
                         <SheetTitle>Menu</SheetTitle>

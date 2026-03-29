@@ -76,6 +76,7 @@ export default function EditStudentForm({
                     <Input
                         id="name"
                         required
+                        aria-required="true"
                         placeholder="required"
                         defaultValue={studentInfo.name}
                         name="name"
@@ -101,6 +102,7 @@ export default function EditStudentForm({
                     <Input
                         id="password"
                         required
+                        aria-required="true"
                         placeholder="required"
                         maxLength={5}
                         minLength={5}
@@ -117,7 +119,7 @@ export default function EditStudentForm({
                         defaultValue={studentInfo?.commentCoolDown?.toString()}
                         name="comment-cool-down"
                     >
-                        <SelectTrigger className="w-[180px]">
+                        <SelectTrigger id="comment-cool-down" className="w-[180px]">
                             <SelectValue placeholder="Comments Disabled" />
                         </SelectTrigger>
                         <SelectContent>
@@ -167,7 +169,7 @@ export default function EditStudentForm({
                 hidden
             />
             {state && !state.success === false && (
-                <p className="text-center text-destructive mt-3">{state.message}</p>
+                <p role="alert" aria-live="assertive" className="text-center text-destructive mt-3">{state.message}</p>
             )}
 
         </form>

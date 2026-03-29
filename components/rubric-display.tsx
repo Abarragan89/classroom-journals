@@ -131,7 +131,7 @@ export default function RubricDisplay({ rubricGrade, studentName, isPrintView = 
 
             {/* Modal View - Existing Logic */}
             {!isPrintView && isOpen && (
-                <div className="print:hidden fixed inset-0 z-50 flex items-center justify-center">
+                <div role="dialog" aria-modal="true" aria-label="Rubric grading results" className="print:hidden fixed inset-0 z-50 flex items-center justify-center">
                     {/* Backdrop */}
                     <div
                         className="absolute inset-0 bg-black/50"
@@ -148,10 +148,11 @@ export default function RubricDisplay({ rubricGrade, studentName, isPrintView = 
                             <Button
                                 variant="ghost"
                                 size="sm"
+                                aria-label="Close rubric"
                                 onClick={() => setIsOpen(false)}
                                 className="h-8 w-8 p-0"
                             >
-                                <X className="h-4 w-4" />
+                                <X aria-hidden="true" className="h-4 w-4" />
                             </Button>
                         </div>
 

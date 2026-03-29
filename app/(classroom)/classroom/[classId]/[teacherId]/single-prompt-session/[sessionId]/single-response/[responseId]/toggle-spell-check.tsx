@@ -51,6 +51,7 @@ export default function ToggleSpellCheckAndVoiceToText({
                 <p className="text-center font-bold text-sm text-muted-foreground">Spell Check</p>
                 <Switch
                     className="text-sm mx-2"
+                    aria-label="Toggle spell check"
                     onCheckedChange={(e) => toggleSpellCheckHandler(e)}
                     checked={isSpellCheckEnabled}
                 />
@@ -59,6 +60,7 @@ export default function ToggleSpellCheckAndVoiceToText({
                 <p className="text-center font-bold text-sm text-muted-foreground">Voice To Text</p>
                 <Switch
                     className="text-sm mx-2"
+                    aria-label="Toggle voice to text"
                     onCheckedChange={(e) => toggleVoiceToTextHandler(e)}
                     checked={isVoiceToTextEnabled}
                 />

@@ -104,23 +104,24 @@ export default function Editor({
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         const textarea = e.currentTarget;
-        if (e.key === 'Tab') {
-            e.preventDefault();
+        // if (e.key === 'Tab') {
+        //     e.preventDefault();
 
-            const start = textarea.selectionStart;
-            const end = textarea.selectionEnd;
-            const value = textarea.value;
+        //     const start = textarea.selectionStart;
+        //     const end = textarea.selectionEnd;
+        //     const value = textarea.value;
 
-            const spaces = '     ';
-            const newValue = value.substring(0, start) + spaces + value.substring(end);
+        //     const spaces = '     ';
+        //     const newValue = value.substring(0, start) + spaces + value.substring(end);
 
-            setJournalText(newValue);
+        //     setJournalText(newValue);
 
-            requestAnimationFrame(() => {
-                textarea.selectionStart = textarea.selectionEnd = start + spaces.length;
-            });
+        //     requestAnimationFrame(() => {
+        //         textarea.selectionStart = textarea.selectionEnd = start + spaces.length;
+        //     });
 
-        } else if (e.key === 'Backspace') {
+        // } else 
+        if (e.key === 'Backspace') {
             const textarea = e.currentTarget;
             const start = textarea.selectionStart;
             const end = textarea.selectionEnd;
@@ -243,6 +244,7 @@ export default function Editor({
                     data-gramm_editor="false"
                     data-enable-grammarly="false"
                     data-form-type="other"
+                    aria-label={questionText ? `Response to: ${questionText}` : 'Enter your response'}
                     placeholder={isDisabled ? "" : "Enter your response here..."}
                     ref={editorRef}
                     disabled={isDisabled}
@@ -260,19 +262,21 @@ export default function Editor({
                     <Button
                         variant="outline"
                         size="icon"
+                        aria-label="Undo last change"
                         onTouchStart={handleUndo}
                         onMouseDown={handleUndo}
                     >
-                        <Undo className="h-4 w-4" />
+                        <Undo aria-hidden="true" className="h-4 w-4" />
                     </Button>
 
                     <Button
                         variant="outline"
                         size="icon"
+                        aria-label="Redo last change"
                         onTouchStart={handleRedo}
                         onMouseDown={handleRedo}
                     >
-                        <Redo className="h-4 w-4" />
+                        <Redo aria-hidden="true" className="h-4 w-4" />
                     </Button>
 
                     {questionText && (
@@ -285,7 +289,7 @@ export default function Editor({
                                 <p className="whitespace-pre-line text-base leading-relaxed tracking-wide max-h-[50vh] overflow-y-auto custom-scrollbar">{questionText}</p>
                             </ResponsiveDialog>
                             <Button onClick={() => setShowQuestionDialog(true)} variant="outline" size="sm" className="gap-2">
-                                <HelpCircle className="h-4 w-4" />
+                                <HelpCircle aria-hidden="true" className="h-4 w-4" />
                                 View Question
                             </Button>
                         </>
@@ -297,7 +301,7 @@ export default function Editor({
                         size="icon"
                         onClick={() => setIsFullscreen(false)}
                     >
-                        <Minimize2 className="h-4 w-4" />
+                        <Minimize2 aria-hidden="true" className="h-4 w-4" />
                     </Button>
                 </div>
 
@@ -373,6 +377,7 @@ export default function Editor({
                     data-gramm_editor="false"
                     data-enable-grammarly="false"
                     data-form-type="other"
+                    aria-label={questionText ? `Response to: ${questionText}` : 'Enter your response'}
                     placeholder={isDisabled ? "" : "Enter your response here..."}
                     ref={editorRef}
                     disabled={isDisabled}
@@ -386,18 +391,18 @@ export default function Editor({
                         className="absolute top-1 right-1 z-50"
                         onClick={() => setIsFullscreen(true)}
                     >
-                        <Maximize2 size={15} />
+                        <Maximize2 aria-hidden="true" size={15} />
                     </Button>
                 )}
             </div>
             {!isDisabled && (
                 <div className="flex-center space-x-14">
                     <Button aria-label="undo last change" variant={"ghost"} onTouchStart={handleUndo} onMouseDown={handleUndo}>
-                        <Undo />
+                        <Undo aria-hidden="true" />
                     </Button>
 
                     <Button aria-label="redo last change" variant={"ghost"} onTouchStart={handleRedo} onMouseDown={handleRedo}>
-                        <Redo />
+                        <Redo aria-hidden="true" />
                     </Button>
                 </div>
             )}

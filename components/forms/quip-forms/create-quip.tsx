@@ -105,7 +105,7 @@ export default function CreateQuipForm({
                         </FormItem>
                     )}
                 />
-                {error && (<p className="text-sm text-destructive text-center mt-1">{error}</p>)}
+                {error && (<p className="text-sm text-destructive text-center mt-1" role="alert" aria-live="assertive">{error}</p>)}
                 <Button
                     disabled={form.formState.isSubmitting}
                     className="mt-4" type="submit">

@@ -69,11 +69,12 @@ export default function AddStudentForm({
             <div className="flex-between gap-x-5">
                 <div>
                     <Label htmlFor="name" className="text-right relative">
-                        Name <span className="absolute -bottom-1.5 -right-2.5 text-lg text-destructive">*</span>
+                        Name <span aria-hidden="true" className="absolute -bottom-1.5 -right-2.5 text-lg text-destructive">*</span>
                     </Label>
                     <Input
                         id="name"
                         required
+                        aria-required="true"
                         name="name"
                     />
                 </div>
@@ -108,23 +109,23 @@ export default function AddStudentForm({
                 hidden
             />
             {state && !state.success && (
-                <p className="text-center text-destructive mt-3">{state.message}</p>
+                <p role="alert" aria-live="assertive" className="text-center text-destructive mt-3">{state.message}</p>
             )}
 
             {session?.googleProviderId && (
                 <>
-                <div className="flex flex-col mx-auto w-2/3">
-                    <p className="my-3 text-center relative">
-                        <span className="relative z-10 bg-background px-5">or</span>
-                        <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
-                    </p>
+                    <div className="flex flex-col mx-auto w-2/3">
+                        <p className="my-3 text-center relative">
+                            <span className="relative z-10 bg-background px-5">or</span>
+                            <span className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 border-t border-gray-500"></span>
+                        </p>
 
-                </div>
-                <div className="flex-center">
-                    <Button size="lg" type="button" onClick={fetchGoogleClassrooms} className="mx-auto px-2 md:px-5">
-                        <FaGoogle />   Import From Google Classroom
-                    </Button>
-                </div>
+                    </div>
+                    <div className="flex-center">
+                        <Button size="lg" type="button" onClick={fetchGoogleClassrooms} className="mx-auto px-2 md:px-5">
+                            <FaGoogle aria-hidden="true" />   Import From Google Classroom
+                        </Button>
+                    </div>
                 </>
             )}
 
