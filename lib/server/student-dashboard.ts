@@ -105,7 +105,6 @@ export async function getFeaturedBlogs(classroomId: string) {
                 }
             },
             studentId: true,
-            response: true,
             submittedAt: true,
             likeCount: true,
             _count: {
@@ -128,12 +127,6 @@ export async function getFeaturedBlogs(classroomId: string) {
     const today = new Date();
     const decryptedBlogNames = featuredBlogs
         .map((blog) => {
-            const responseData = blog?.response as unknown as ResponseData[];
-            const answer = responseData?.[0]?.answer || "";
-            const characterCount = answer.length;
-
-            // Exclude very short blogs
-            if (characterCount < 250) return null;
 
             // Convert submittedAt to Date
             const submittedAtDate = new Date(blog.submittedAt as Date);
