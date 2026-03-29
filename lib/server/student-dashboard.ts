@@ -47,7 +47,7 @@ export async function getAllPromptCategories(userId: string) {
 
 // Get classroom Grade for AI
 export async function getClassroomGrade(classroomId: string) {
-    
+
     const session = await requireAuth();
     if (session?.classroomId !== classroomId) {
         throw new Error("Forbidden");
@@ -92,9 +92,10 @@ export async function getFeaturedBlogs(classroomId: string) {
         where: {
             studentId: { in: studentIdArray },
             completionStatus: ResponseStatus.COMPLETE,
-            promptSession: {
-                isPublic: true,
-            },
+            promptSession: { isPublic: true },
+            submittedAt: {
+                gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 100) // last 100 days
+            }
         },
         select: {
             id: true,
@@ -119,10 +120,9 @@ export async function getFeaturedBlogs(classroomId: string) {
                 }
             }
         },
-        orderBy: {
-            likeCount: 'desc'
-        },
-        take: 10,
+        orderBy:
+            { submittedAt: 'desc' },
+        take: 200,
     });
 
     const today = new Date();
@@ -144,7 +144,9 @@ export async function getFeaturedBlogs(classroomId: string) {
             const totalComments = blog?._count?.comments || 0;
 
             // Priority score: weight likes, comments, and recency
-            const priorityScore = totalLikes * 2 + totalComments * 1.5 - daysAgo;
+            // Half-life of ~14 days — a blog loses half its score every 2 weeks
+            const decayFactor = Math.exp(-daysAgo / 14);
+            const priorityScore = (totalLikes * 2 + totalComments * 1.5 + 1) * decayFactor;
 
             return {
                 ...blog,
