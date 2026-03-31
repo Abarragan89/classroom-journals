@@ -97,7 +97,7 @@ const nextConfig: NextConfig = {
   // Server actions configuration
   experimental: {
     serverActions: {
-      bodySizeLimit: '4mb'
+      bodySizeLimit: '10mb'
     },
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
   },

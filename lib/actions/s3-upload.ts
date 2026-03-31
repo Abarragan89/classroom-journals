@@ -15,15 +15,6 @@ const s3Client = new S3Client({
     }
 })
 
-// function getS3Key(imageUrl: string): string | boolean {
-//     // Check if the URL is a full S3 URL
-//     if (imageUrl.includes('.amazonaws.com/')) {
-//         return imageUrl.split('.amazonaws.com/')[1];
-//     }
-//     // If it's already a key (without the full URL)
-//     return false;
-// }
-
 function getS3Key(imageUrl: string): string | false {
     if (imageUrl.includes('.amazonaws.com/')) {
         return imageUrl.split('.amazonaws.com/')[1];
@@ -82,17 +73,6 @@ export async function uploadFileToS3(file: Buffer, filename: string) {
         console.error('error uploading photo', error)
     }
 }
-
-// // Function to delete a file from S3
-// async function deleteFileFromS3(key: string) {
-//     const s3Params = {
-//         Bucket: process.env.AWS_S3_BUCKET_NAME,
-//         Key: key
-//     };
-
-//     const command = new DeleteObjectCommand(s3Params);
-//     await s3Client.send(command);
-// }
 
 // Add user image to S3 and database
 export async function addPhotoToLibrary(prevData: unknown, formData: FormData) {
@@ -190,23 +170,45 @@ export async function deleteAttachmentsFromS3(urls: string[]): Promise<void> {
     }
 }
 
+// Add user image to S3 and database
+export async function addPhotoToLibraryWithAI(formData: FormData) {
+    try {
+        await requireAuth();
+        const imageFile = formData.getAll('file');
+        const tags = formData.getAll('tags') as string[];
+        const category = formData.get('category') as string;
 
-// export async function DELETE(request: NextRequest) {
-//     try {
-//         const { imageUrl } = await request.json();
-//         if (!imageUrl) {
-//             return NextResponse.json({ error: 'S3 object key is required' }, { status: 400 });
-//         }
+        if (imageFile.length === 0) {
+            return { success: false, message: 'Not a photos on file' }
+        }
 
-//         // get the key from the url
-//         const key = getS3Key(imageUrl);
-//         // Delete the file from S3 with key
-//         if (key && typeof key === 'string') await deleteFileFromS3(key);
+        for (let i = 0; i < imageFile.length; i++) {
+            const file = imageFile[i];
+            if (
+                file &&
+                typeof file === 'object' &&
+                'arrayBuffer' in file &&
+                typeof file.arrayBuffer === 'function'
+            ) {
+                const buffer = Buffer.from(await file.arrayBuffer());
 
+                const pictureURL = await uploadFileToS3(
+                    buffer,
+                    file.name.replace(/\s+/g, '')
+                )
 
-//         return NextResponse.json({ message: 'File deleted successfully' }, { status: 200 });
-//     } catch (error) {
-//         console.error('Error deleting file from S3:', error);
-//         return NextResponse.json({ error: error }, { status: 500 });
-//     }
-// }
+                await prisma.image.create({
+                    data: {
+                        url: pictureURL as string,
+                        tags: tags[i].split(" "),
+                        category,
+                    },
+                })
+            }
+        }
+        return { success: true, message: 'Photo Uploaded Successfully!' }
+    } catch (error) {
+        console.error('Error uploading photo with AI integration:', error);
+        return { success: false, message: 'Error uploading photo', error }
+    }
+}

@@ -23,7 +23,7 @@ export default async function page() {
     const session = await auth() as Session;
 
     if (session) {
-        if (session?.user?.role === 'TEACHER') {
+        if (session?.user?.role === 'TEACHER' || session?.user?.role === 'ADMIN') {
             redirect(`/classes`)
         } else if (session?.user?.role === 'STUDENT') {
             redirect('/student-dashboard')
