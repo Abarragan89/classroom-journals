@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { addPhotoToLibraryWithAI } from "@/lib/actions/s3-upload";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { photoCategoriesForAdmin } from "@/data/photo-categories";
 
 export type GeneratedImage = {
     imageData: string;
@@ -22,24 +23,6 @@ export default function AIIntegration() {
     const [isSaving, setIsSaving] = useState(false);
 
     const isLoading = isGenerating || isSaving;
-
-    const photoCategories = [
-        { label: "Academics", value: "academics" },
-        { label: "Family", value: "family" },
-        { label: "Social Studies", value: "history" },
-        { label: "Nature", value: "nature" },
-        { label: "Science", value: "science" },
-        { label: "Art", value: "art" },
-        { label: "Emotions", value: "emotions" },
-        { label: "Career", value: "career" },
-        { label: "Health", value: "health" },
-        { label: "Holidays/Seasons", value: "seasons" },
-        { label: "Sports", value: "sports" },
-        { label: "Designs", value: "designs" },
-        { label: "Avatar", value: "avatar" },
-    ]
-
-
 
     async function generateImages(photoPrompt: string) {
         setIsGenerating(true);
@@ -128,7 +111,7 @@ export default function AIIntegration() {
                     <SelectContent className="w-full">
                         <SelectGroup>
                             <SelectLabel>Category</SelectLabel>
-                            {photoCategories.map((category) => (
+                            {photoCategoriesForAdmin.map((category) => (
                                 <SelectItem key={category.value} value={category.value}>{category.label}</SelectItem>
                             ))}
                         </SelectGroup>

@@ -23,6 +23,7 @@ import Link from "next/link";
 import LoadingAnimation from "@/components/loading-animation";
 import { Dialog, DialogHeader, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { photoCategories } from "@/data/photo-categories";
 
 export default function SinglePromptEditor({
     studentResponse,
@@ -243,21 +244,6 @@ export default function SinglePromptEditor({
 
         )
     }
-
-    const photoCategories = [
-        { label: "Academics", value: "academics" },
-        { label: "Social Studies", value: "history" },
-        { label: "Family", value: "family" },
-        { label: "Nature", value: "nature" },
-        { label: "Science", value: "science" },
-        { label: "Art", value: "art" },
-        { label: "Emotions", value: "emotions" },
-        { label: "Career", value: "career" },
-        { label: "Health", value: "health" },
-        { label: "Holidays/Seasons", value: "seasons" },
-        { label: "Sports", value: "sports" },
-        { label: "Designs", value: "designs" },
-    ]
 
     return (
         <>
