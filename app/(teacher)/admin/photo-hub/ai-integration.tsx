@@ -86,20 +86,20 @@ export default function AIIntegration() {
             <h2 className="h2-bold">Add With AI</h2>
             <div>
                 <Label htmlFor="prompt">Enter a prompt to generate photos:</Label>
-                <Textarea 
-                rows={2} 
-                id="prompt" 
-                value={photoPrompt} 
-                onChange={(e) => setPhotoPrompt(e.target.value)} 
-                placeholder="Enter a prompt" 
-                className="mt-1"
+                <Textarea
+                    rows={2}
+                    id="prompt"
+                    value={photoPrompt}
+                    onChange={(e) => setPhotoPrompt(e.target.value)}
+                    placeholder="Enter a prompt"
+                    className="mt-1"
                 />
             </div>
             <div>
                 <Label id="category-label" className="text-right" htmlFor="category">
                     Category
                 </Label>
-                <Select 
+                <Select
                     name="category"
                     value={selectedCategory}
                     onValueChange={(value) => setSelectedCategory(value)}
@@ -120,40 +120,41 @@ export default function AIIntegration() {
             <Button onClick={() => generateImages(photoPrompt)}>
                 Generate Images
             </Button>
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                {images.map((img, index) => (
+                    <div key={index} className={`${selectedImages.some(i => i.imageData === img.imageData) ? 'ring-4 ring-blue-500' : 'border-4'}`}>
+                        <img
+                            key={index}
+                            src={`data:image/png;base64,${img.imageData}`}
+                            alt={`Generated ${index}`}
+                            onClick={() => handleImageSelection(img)}
+                            className={`w-full max-w-2xl mx-auto h-auto cursor-pointer`}
+                        />
+                        <Textarea
+                            rows={3}
+                            value={img.tags}
+                            className="rounded-none"
+                            onChange={(e) => {
+                                const newTags = e.target.value;
+                                setImages(prev => {
+                                    const newImages = [...prev];
+                                    newImages[index] = { ...newImages[index], tags: newTags };
+                                    return newImages;
+                                });
+                            }}
+                            placeholder="Edit tags (comma separated)"
+                        />
+                    </div>
 
-            {images.map((img, index) => (
-                <div key={index} className={`${selectedImages.some(i => i.imageData === img.imageData) ? 'ring-4 ring-blue-500' : 'border-5'}`}>
-                    <img
-                        key={index}
-                        src={`data:image/png;base64,${img.imageData}`}
-                        alt={`Generated ${index}`}
-                        onClick={() => handleImageSelection(img)}
-                        className={`w-full max-w-2xl mx-auto h-auto cursor-pointer`}
-                    />
-                    <Textarea
-                        rows={3}
-                        value={img.tags}
-                        className="rounded-none"
-                        onChange={(e) => {
-                            const newTags = e.target.value;
-                            setImages(prev => {
-                                const newImages = [...prev];
-                                newImages[index] = { ...newImages[index], tags: newTags };
-                                return newImages;
-                            });
-                        }}
-                        placeholder="Edit tags (comma separated)"
-                    />
-                </div>
-
-            ))}
+                ))}
+            </div>
             {selectedImages.length > 0 && !selectedCategory && (
                 <p className="text-destructive text-sm mt-2">Please select a category before saving.</p>
             )}
             {selectedImages.length > 0 && (
                 <p className="text-sm mt-2">{selectedImages.length} image(s) selected.</p>
             )}
-            {selectedImages.length > 0 && !selectedCategory && (
+            {selectedImages.length > 0 && selectedCategory && (
                 <div className="mt-5">
                     <Button onClick={saveSelectedImages} disabled={selectedImages.length === 0 || !selectedCategory}>
                         Save Selected Images

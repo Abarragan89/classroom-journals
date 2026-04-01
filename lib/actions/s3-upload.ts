@@ -50,11 +50,29 @@ function getContentType(fileName: string): string {
     }
 }
 
-export async function uploadFileToS3(file: Buffer, filename: string) {
+function slugify(text: string): string {
+    return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace(/-+$/, '');            // Trim - from end of text
+}
+
+export async function uploadFileToS3(file: Buffer, filename: string, category: string): Promise<string | void> {
     try {
         await requireAuth();
+        const safeCategory = slugify(category) || 'general';
+        const safeFilename = slugify(filename.split('.')[0]);
+        const extension = filename.split('.').pop();
+
         const contentType = getContentType(filename);
-        const timestampedKey = `${filename}-${Date.now()}`;
+        const timestampedKey = `${safeCategory}/${safeFilename}-${Date.now()}.${extension}`;
+        // const contentType = getContentType(filename);
+        // const timestampedKey = `${category}/${filename}-${Date.now()}`;
 
         const s3Params = {
             Bucket: process.env.AWS_S3_BUCKET_NAME,
@@ -67,7 +85,7 @@ export async function uploadFileToS3(file: Buffer, filename: string) {
 
         const command = new PutObjectCommand(s3Params)
         await s3Client.send(command)
-        const url = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${timestampedKey}`;
+        const url = `https://images.jotterblog.com/${timestampedKey}`;
         return url;
     } catch (error) {
         console.error('error uploading photo', error)
@@ -96,7 +114,8 @@ export async function addPhotoToLibrary(prevData: unknown, formData: FormData) {
 
             const pictureURL = await uploadFileToS3(
                 buffer,
-                imageFile.name.replace(/\s+/g, '')
+                imageFile.name.replace(/\s+/g, ''),
+                category
             )
 
             await prisma.image.create({
@@ -139,7 +158,10 @@ export async function uploadQuestionAttachment(formData: FormData): Promise<{ su
 
         const buffer = Buffer.from(await file.arrayBuffer());
         const cleanName = file.name.replace(/\s+/g, '-');
-        const url = await uploadFileToS3(buffer, `question-attachment-${cleanName}`);
+        const url = await uploadFileToS3(
+            buffer, `question-attachment-${cleanName}`,
+            'question-attachments'
+        );
 
         if (!url) {
             return { success: false, message: 'Failed to upload file.' };
@@ -194,7 +216,8 @@ export async function addPhotoToLibraryWithAI(formData: FormData) {
 
                 const pictureURL = await uploadFileToS3(
                     buffer,
-                    file.name.replace(/\s+/g, '')
+                    file.name.replace(/\s+/g, ''),
+                    category
                 )
 
                 await prisma.image.create({

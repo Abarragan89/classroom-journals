@@ -200,7 +200,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 // Set the user ID from the token
                 // @ts-expect-error: let there be any here
                 session.user.id = token.sub;
-                session.user.role = token?.role as string;
+                // this was needed for an update, can just set this to token.role as string after May 15th
+                session.user.role = token?.role ? token.role as string : token?.email ? 'TEACHER' : 'STUDENT';
                 session.user.name = token.name;
                 session.user.username = token.username as string;
                 session.user.avatarURL = token.avatarURL as string;

@@ -39,6 +39,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'images.jotterblog.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'profile.yahoo.com',
         port: '',
         pathname: '/**',
