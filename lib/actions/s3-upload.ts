@@ -71,8 +71,6 @@ export async function uploadFileToS3(file: Buffer, filename: string, category: s
 
         const contentType = getContentType(filename);
         const timestampedKey = `${safeCategory}/${safeFilename}-${Date.now()}.${extension}`;
-        // const contentType = getContentType(filename);
-        // const timestampedKey = `${category}/${filename}-${Date.now()}`;
 
         const s3Params = {
             Bucket: process.env.AWS_S3_BUCKET_NAME,
