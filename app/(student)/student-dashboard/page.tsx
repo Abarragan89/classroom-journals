@@ -50,6 +50,8 @@ export default async function StudentDashboard() {
         getAllQuipAlerts(studentId),
     ]);
 
+    console.log("featuredBlogs", featuredBlogs)
+
     return (
         <>
             <Header session={session} studentId={studentId} />

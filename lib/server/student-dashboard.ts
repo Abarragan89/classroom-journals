@@ -106,6 +106,7 @@ export async function getFeaturedBlogs(classroomId: string) {
             studentId: true,
             submittedAt: true,
             likeCount: true,
+            response: true,
             _count: {
                 select: {
                     comments: true
