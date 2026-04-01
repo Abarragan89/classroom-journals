@@ -30,7 +30,6 @@ export async function GET(request: Request) {
             config: {
                 numberOfImages: 4,
                 aspectRatio: '16:9',
-                personGeneration: PersonGeneration.ALLOW_ALL
             },
         });
 

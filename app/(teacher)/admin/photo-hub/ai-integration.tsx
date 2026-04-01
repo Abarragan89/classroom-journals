@@ -18,6 +18,10 @@ export default function AIIntegration() {
     const [selectedImages, setSelectedImages] = useState<GeneratedImage[]>([]);
     const [photoPrompt, setPhotoPrompt] = useState<string>("");
     const [selectedCategory, setSelectedCategory] = useState<string>('');
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+
+    const isLoading = isGenerating || isSaving;
 
     const photoCategories = [
         { label: "Academics", value: "academics" },
@@ -38,13 +42,17 @@ export default function AIIntegration() {
 
 
     async function generateImages(photoPrompt: string) {
-        const imagesWithLabels = await fetch(`/api/google-imagen-photo-gen?prompt=${encodeURIComponent(photoPrompt)}`)
-            .then(res => res.json())
-            .catch(err => {
-                console.error("Error generating images:", err);
-            });
-
-        setImages(imagesWithLabels);
+        setIsGenerating(true);
+        try {
+            const imagesWithLabels = await fetch(`/api/google-imagen-photo-gen?prompt=${encodeURIComponent(photoPrompt)}`)
+                .then(res => res.json())
+                .catch(err => {
+                    console.error("Error generating images:", err);
+                });
+            setImages(imagesWithLabels);
+        } finally {
+            setIsGenerating(false);
+        }
     }
 
     function handleImageSelection(img: GeneratedImage) {
@@ -58,6 +66,7 @@ export default function AIIntegration() {
     }
 
     async function saveSelectedImages() {
+        setIsSaving(true);
         const formData = new FormData();
         selectedImages.forEach((img, index) => {
             const blob = new Blob([Uint8Array.from(atob(img.imageData), c => c.charCodeAt(0))], { type: 'image/png' });
@@ -76,12 +85,20 @@ export default function AIIntegration() {
         } else {
             toast.error(`Error saving images: ${result.message}`);
         }
-
+        setIsSaving(false);
     }
 
 
     return (
-        <section className=" max-w-3xl mx-auto mt-14 space-y-5 mb-20">
+        <section className="relative max-w-3xl mx-auto mt-14 space-y-5 mb-20">
+            {isLoading && (
+                <div className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-3 rounded-lg bg-background/70 backdrop-blur-sm">
+                    <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+                    <p className="text-sm font-medium text-muted-foreground">
+                        {isGenerating ? 'Generating images…' : 'Saving images…'}
+                    </p>
+                </div>
+            )}
             <h2 className="h2-bold">Add With AI</h2>
             <div>
                 <Label htmlFor="prompt">Enter a prompt to generate photos:</Label>
@@ -92,6 +109,7 @@ export default function AIIntegration() {
                     onChange={(e) => setPhotoPrompt(e.target.value)}
                     placeholder="Enter a prompt"
                     className="mt-1"
+                    disabled={isLoading}
                 />
             </div>
             <div>
@@ -102,7 +120,8 @@ export default function AIIntegration() {
                     name="category"
                     value={selectedCategory}
                     onValueChange={(value) => setSelectedCategory(value)}
-                    aria-labelledby="category-label">
+                    aria-labelledby="category-label"
+                    disabled={isLoading}>
                     <SelectTrigger className="w-full mt-1">
                         <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
@@ -116,7 +135,7 @@ export default function AIIntegration() {
                     </SelectContent>
                 </Select>
             </div>
-            <Button onClick={() => generateImages(photoPrompt)}>
+            <Button onClick={() => generateImages(photoPrompt)} disabled={isLoading}>
                 Generate Images
             </Button>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -155,7 +174,7 @@ export default function AIIntegration() {
             )}
             {selectedImages.length > 0 && selectedCategory && (
                 <div className="mt-5">
-                    <Button onClick={saveSelectedImages} disabled={selectedImages.length === 0 || !selectedCategory}>
+                    <Button onClick={saveSelectedImages} disabled={selectedImages.length === 0 || !selectedCategory || isLoading}>
                         Save Selected Images
                     </Button>
                 </div>
