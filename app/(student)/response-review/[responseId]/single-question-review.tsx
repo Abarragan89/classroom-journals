@@ -16,6 +16,7 @@ import RubricDisplay from '@/components/rubric-display'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { useQueryClient } from '@tanstack/react-query'
+import { photoCategories } from '@/data/photo-categories'
 
 interface SingleQuestionReviewProps {
     questions: ResponseData[],
@@ -129,20 +130,6 @@ export default function SingleQuestionReview({
         setFilteredBlogPhotos(allBlogPhotos?.filter(img => img.category === category) ?? [])
     }
 
-    const photoCategories = [
-        { label: "Academics", value: "academics" },
-        { label: "Social Studies", value: "history" },
-        { label: "Family", value: "family" },
-        { label: "Nature", value: "nature" },
-        { label: "Science", value: "science" },
-        { label: "Art", value: "art" },
-        { label: "Emotions", value: "emotions" },
-        { label: "Career", value: "career" },
-        { label: "Health", value: "health" },
-        { label: "Holidays/Seasons", value: "seasons" },
-        { label: "Sports", value: "sports" },
-        { label: "Designs", value: "designs" },
-    ]
     const gradePercentage = questions?.[0].score !== undefined ? `${questions?.[0]?.score}%` : 'N/A';
 
 
