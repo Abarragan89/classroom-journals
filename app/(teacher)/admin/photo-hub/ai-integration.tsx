@@ -19,6 +19,7 @@ export default function AIIntegration() {
     const [selectedImages, setSelectedImages] = useState<GeneratedImage[]>([]);
     const [photoPrompt, setPhotoPrompt] = useState<string>("");
     const [selectedCategory, setSelectedCategory] = useState<string>('');
+    const [photoCount, setPhotoCount] = useState<number>(1);
     const [isGenerating, setIsGenerating] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -27,7 +28,7 @@ export default function AIIntegration() {
     async function generateImages(photoPrompt: string) {
         setIsGenerating(true);
         try {
-            const imagesWithLabels = await fetch(`/api/google-imagen-photo-gen?prompt=${encodeURIComponent(photoPrompt)}`)
+            const imagesWithLabels = await fetch(`/api/google-imagen-photo-gen?prompt=${encodeURIComponent(photoPrompt)}&photoCount=${photoCount}`)
                 .then(res => res.json())
                 .catch(err => {
                     console.error("Error generating images:", err);
@@ -95,28 +96,53 @@ export default function AIIntegration() {
                     disabled={isLoading}
                 />
             </div>
-            <div>
-                <Label id="category-label" className="text-right" htmlFor="category">
-                    Category
-                </Label>
-                <Select
-                    name="category"
-                    value={selectedCategory}
-                    onValueChange={(value) => setSelectedCategory(value)}
-                    aria-labelledby="category-label"
-                    disabled={isLoading}>
-                    <SelectTrigger className="w-full mt-1">
-                        <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                    <SelectContent className="w-full">
-                        <SelectGroup>
-                            <SelectLabel>Category</SelectLabel>
-                            {photoCategoriesForAdmin.map((category) => (
-                                <SelectItem key={category.value} value={category.value}>{category.label}</SelectItem>
-                            ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
+            <div className="flex-between gap-x-5">
+                <div className="flex-1">
+                    <Label id="category-label" className="text-right" htmlFor="category">
+                        Category
+                    </Label>
+                    <Select
+                        name="category"
+                        value={selectedCategory}
+                        onValueChange={(value) => setSelectedCategory(value)}
+                        aria-labelledby="category-label"
+                        disabled={isLoading}>
+                        <SelectTrigger className="w-full mt-1">
+                            <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent className="w-full">
+                            <SelectGroup>
+                                <SelectLabel>Category</SelectLabel>
+                                {photoCategoriesForAdmin.map((category) => (
+                                    <SelectItem key={category.value} value={category.value}>{category.label}</SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="w-40">
+                    <Label id="category-label" className="text-right" htmlFor="category">
+                        Photo Count
+                    </Label>
+                    <Select
+                        name="photoCount"
+                        value={photoCount.toString()}
+                        onValueChange={(value) => setPhotoCount(parseInt(value))}
+                        aria-labelledby="photo-count-label"
+                        disabled={isLoading}>
+                        <SelectTrigger className="w-full mt-1">
+                            <SelectValue placeholder="Select photo count" />
+                        </SelectTrigger>
+                        <SelectContent className="w-full">
+                            <SelectGroup>
+                                <SelectLabel>Photo Count</SelectLabel>
+                                {[1, 2, 3, 4, 5].map((count) => (
+                                    <SelectItem key={count} value={count.toString()}>{count}</SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
             <Button onClick={() => generateImages(photoPrompt)} disabled={isLoading}>
                 Generate Images

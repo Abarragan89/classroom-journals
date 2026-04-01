@@ -18,6 +18,8 @@ export async function GET(request: Request) {
 
         const { searchParams } = new URL(request.url);
         const prompt = searchParams.get('prompt')
+        const photoCountParam = searchParams.get('photoCount');
+        const photoCount = photoCountParam ? parseInt(photoCountParam) : 1;
 
         if (!prompt) {
             return NextResponse.json({ error: 'Prompt is required' }, { status: 400 });
@@ -28,7 +30,7 @@ export async function GET(request: Request) {
             model: 'imagen-4.0-generate-001',
             prompt: prompt,
             config: {
-                numberOfImages: 4,
+                numberOfImages: photoCount,
                 aspectRatio: '16:9',
             },
         });
