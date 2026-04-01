@@ -1,6 +1,6 @@
 // make a get route that generates a photo using google imagen and returns the url of the photo
 import { NextResponse } from 'next/server'
-import { GoogleGenAI, PersonGeneration } from '@google/genai'
+import { GoogleGenAI } from '@google/genai'
 import { RekognitionClient, DetectLabelsCommand } from "@aws-sdk/client-rekognition";
 import { GeneratedImage } from '@/app/(teacher)/admin/photo-hub/ai-integration';
 import { requireAuth } from '@/lib/actions/authorization.action';
