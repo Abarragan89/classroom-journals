@@ -1,5 +1,4 @@
 import { auth } from '@/auth'
-import { prisma } from '@/db/prisma'
 import { Session } from '@/types'
 import { notFound } from 'next/navigation'
 import PhotoHubClient from './photo-hub-client'

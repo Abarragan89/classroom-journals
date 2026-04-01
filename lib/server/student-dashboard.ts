@@ -2,7 +2,6 @@ import { prisma } from "@/db/prisma"
 import { requireAuth } from "@/lib/actions/authorization.action"
 import { ClassUserRole, ResponseStatus } from "@prisma/client"
 import { decryptText } from "../utils"
-import { ResponseData } from "@/types"
 
 export async function getStudentName(studentId: string) {
     if (!studentId) {
