@@ -3,6 +3,7 @@ import { prisma } from "@/db/prisma";
 
 // Get all photos from prisma for blogs
 export async function getAllPhotos() {
+    await requireAuth();
     const allPhotos = await prisma.image.findMany({
         where: {
             category: {

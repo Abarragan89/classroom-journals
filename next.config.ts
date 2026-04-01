@@ -39,6 +39,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'images.jotterblog.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'profile.yahoo.com',
         port: '',
         pathname: '/**',
@@ -97,7 +103,7 @@ const nextConfig: NextConfig = {
   // Server actions configuration
   experimental: {
     serverActions: {
-      bodySizeLimit: '4mb'
+      bodySizeLimit: '10mb'
     },
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
   },

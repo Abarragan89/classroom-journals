@@ -10,6 +10,7 @@ import {
     getFeaturedBlogs,
     getStudentRequests
 } from "@/lib/server/student-dashboard";
+import ReloginPage from "@/components/relogin-page";
 
 
 export default async function StudentDashboard() {
@@ -17,6 +18,10 @@ export default async function StudentDashboard() {
     const session = await auth() as Session
 
     if (!session) return notFound()
+
+    if (!session.user.role) {
+        return <ReloginPage />
+    }
 
     const studentId = session?.user?.id as string
     if (session?.user?.role !== 'STUDENT' || !studentId) {

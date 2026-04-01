@@ -93,14 +93,17 @@ export default function PhotoHubClient() {
         { label: "Avatar", value: "avatar" },
     ]
     return (
-        <form action={action} className="mx-auto max-w-md">
+        <>
+        <h2 className='h2-bold mt-10 text-center'>Add Single Photo</h2>
+        <form action={action} className="max-w-3xl mx-auto">
             <>
                 <Image
                     src={imagePreview || "https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png"}
                     alt="Preview"
-                    className="my-4 rounded w-full max-w-2xl mx-auto h-auto"
+                    className="my-4 rounded w-full max-w-3xl mx-auto h-auto"
                     width={1920}
                     height={1080}
+                    loading="eager"
                 />
                 <Label id="category-label" className="text-right">
                     Category
@@ -127,7 +130,7 @@ export default function PhotoHubClient() {
                         <SubmitButton />
                     )}
                     <Button className={`${file ? 'hidden' : ''}`} asChild>
-                        <label className="block mt-5 cursor-pointer" htmlFor="file">
+                        <label className="block mt-3 cursor-pointer" htmlFor="file">
                             {file ? 'Change Photo' : 'Add Photo'}
                             <input
                                 id="file"
@@ -148,5 +151,6 @@ export default function PhotoHubClient() {
                 )}
             </>
         </form>
+        </>
     );
 }

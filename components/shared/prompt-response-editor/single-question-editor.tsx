@@ -315,14 +315,14 @@ export default function SinglePromptEditor({
                                         type="button"
                                         aria-label={`Select photo: ${img.tags?.[0] ?? 'blog image'}`}
                                         onClick={() => { setJournalText(img.url); setOpenPhotoModal(false) }}
-                                        className="hover:cursor-pointer rounded-sm hover:scale-105"
+                                        className="hover:cursor-pointer rounded-md hover:border-ring border-4 border-transparent"
                                     >
                                         <Image
                                             src={img.url}
                                             alt=""
                                             width={195}
                                             height={110}
-                                            className="max-w-[195px]"
+                                            className="max-w-[195px] rounded-sm"
                                         />
                                     </button>
                                 ))}

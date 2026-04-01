@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
-
 import TextEditorDemoClient from "@/components/text-editor-demo-client";
 import CommentSectionClient from "@/components/comment-section-client";
 import BlogMetaDetailsClient from "@/components/blog-meta-details-client";
 import { CornerRightUp } from "lucide-react";
 import { signInWithGoogle } from "@/lib/actions/auth.action";
+import ReloginPage from "@/components/relogin-page";
 
 async function handleGoogleSignIn() {
     'use server'
@@ -21,12 +21,15 @@ async function handleGoogleSignIn() {
 export default async function page() {
 
     const session = await auth() as Session;
-
     if (session) {
-        if (session?.user?.role === 'TEACHER') {
+        if (session?.user?.role === 'TEACHER' || session?.user?.role === 'ADMIN') {
             redirect(`/classes`)
         } else if (session?.user?.role === 'STUDENT') {
             redirect('/student-dashboard')
+        }
+        // this case should be hit if the user is authenticated but their role is not set for some reason
+        else {
+            return<ReloginPage />
         }
     }
 

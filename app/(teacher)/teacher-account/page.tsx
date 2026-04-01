@@ -11,7 +11,7 @@ export default async function PromptLibraryPage() {
     if (!session) return notFound()
 
     const teacherId = session?.user?.id as string
-    if (!teacherId || session?.user?.role !== 'TEACHER') return notFound()
+    if (!teacherId || (session?.user?.role !== 'TEACHER' && session?.user?.role !== 'ADMIN')) return notFound()
 
     const decryptedTeacher = await getTeacherAccountData(teacherId) as unknown as User
 

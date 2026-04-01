@@ -28,6 +28,7 @@ declare module "next-auth" {
         classroomId?: string // Add classroomId to user
         teacherId?: string // Add teacherId to user
         avatarURL?: string // Add avatarURL to user
+        isAdmin?: boolean // Add isAdmin to user
     }
 }
 
@@ -199,7 +200,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 // Set the user ID from the token
                 // @ts-expect-error: let there be any here
                 session.user.id = token.sub;
-                session.user.role = token?.email ? 'TEACHER' : 'STUDENT';
+                // this was needed for an update, can just set this to token.role as string after May 15th
+                session.user.role = token?.role ? token.role as string : token?.email ? 'TEACHER' : 'STUDENT';
                 session.user.name = token.name;
                 session.user.username = token.username as string;
                 session.user.avatarURL = token.avatarURL as string;
@@ -248,6 +250,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         token.name = decryptText(user.name as string, user.iv as string)
                         token.username = decryptText(user.username as string, user.iv as string)
                         token.avatarURL = user.avatarURL
+                        token.role = user.isAdmin ? 'ADMIN' : user.email ? 'TEACHER' : 'STUDENT'
                     }
                 }
             } catch (error) {

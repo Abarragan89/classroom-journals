@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
         const subscriptionData = await determineSubscriptionAllowance(teacherId);
 
         return NextResponse.json({ subscriptionData });
+        
     } catch (error) {
         console.error("Error determining subscription allowance:", error);
 
