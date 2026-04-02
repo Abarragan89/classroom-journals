@@ -5,7 +5,6 @@ import {
     DeleteObjectCommand
 } from '@aws-sdk/client-s3'
 import { requireAuth } from './authorization.action';
-import { console } from 'inspector/promises';
 
 
 const s3Client = new S3Client({
