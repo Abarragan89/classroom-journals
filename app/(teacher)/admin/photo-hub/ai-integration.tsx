@@ -65,7 +65,6 @@ export default function AIIntegration() {
             setSelectedImages([]);
             setImages([]);
             setPhotoPrompt("");
-            setSelectedCategory('');
         } else {
             toast.error(`Error saving images: ${result.message}`);
         }
