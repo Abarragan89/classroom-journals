@@ -60,6 +60,7 @@ export default function AIIntegration() {
                 formData.append('category', selectedCategory);
             });
 
+            console.log("made the blobs and form data, now calling addPhotoToLibraryWithAI with formData:", formData);
             const result = await addPhotoToLibraryWithAI(formData);
             if (result.success) {
                 toast.success('Selected images saved successfully!');
