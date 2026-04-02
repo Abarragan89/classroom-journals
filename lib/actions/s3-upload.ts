@@ -5,6 +5,7 @@ import {
     DeleteObjectCommand
 } from '@aws-sdk/client-s3'
 import { requireAuth } from './authorization.action';
+import { console } from 'inspector/promises';
 
 
 const s3Client = new S3Client({
@@ -193,10 +194,13 @@ export async function deleteAttachmentsFromS3(urls: string[]): Promise<void> {
 // Add user image to S3 and database
 export async function addPhotoToLibraryWithAI(formData: FormData) {
     try {
+        console.log("Adding photo to library with AI integration...");
         await requireAuth();
         const imageFile = formData.getAll('file');
         const tags = formData.getAll('tags') as string[];
         const category = formData.get('category') as string;
+
+        console.log("Received form data - files:", imageFile, "tags:", tags, "category:", category);
 
         if (imageFile.length === 0) {
             return { success: false, message: 'Not a photos on file' }
@@ -210,8 +214,9 @@ export async function addPhotoToLibraryWithAI(formData: FormData) {
                 'arrayBuffer' in file &&
                 typeof file.arrayBuffer === 'function'
             ) {
+                console.log(`Processing file ${i + 1}/${imageFile.length}:`, file);
                 const buffer = Buffer.from(await file.arrayBuffer());
-
+                console.log(`Buffer created for file ${i + 1}/${imageFile.length}, size: ${buffer.length} bytes`);
                 const pictureURL = await uploadFileToS3(
                     buffer,
                     file.name.replace(/\s+/g, ''),
