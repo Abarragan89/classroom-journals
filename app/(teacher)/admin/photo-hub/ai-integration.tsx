@@ -51,24 +51,30 @@ export default function AIIntegration() {
 
     async function saveSelectedImages() {
         setIsSaving(true);
-        const formData = new FormData();
-        selectedImages.forEach((img, index) => {
-            const blob = new Blob([Uint8Array.from(atob(img.imageData), c => c.charCodeAt(0))], { type: 'image/png' });
-            formData.append('file', blob, `image-${index}.png`);
-            formData.append('tags', img.tags);
-            formData.append('category', selectedCategory);
-        });
+        try {
+            const formData = new FormData();
+            selectedImages.forEach((img, index) => {
+                const blob = new Blob([Uint8Array.from(atob(img.imageData), c => c.charCodeAt(0))], { type: 'image/png' });
+                formData.append('file', blob, `image-${index}.png`);
+                formData.append('tags', img.tags);
+                formData.append('category', selectedCategory);
+            });
 
-        const result = await addPhotoToLibraryWithAI(formData);
-        if (result.success) {
-            toast.success('Selected images saved successfully!');
-            setSelectedImages([]);
-            setImages([]);
-            setPhotoPrompt("");
-        } else {
-            toast.error(`Error saving images: ${result.message}`);
+            const result = await addPhotoToLibraryWithAI(formData);
+            if (result.success) {
+                toast.success('Selected images saved successfully!');
+                setSelectedImages([]);
+                setImages([]);
+                setPhotoPrompt("");
+            } else {
+                toast.error(`Error saving images: ${result.message}`);
+            }
+        } catch (err) {
+            console.error('saveSelectedImages threw:', err);
+            toast.error('An unexpected error occurred while saving.');
+        } finally {
+            setIsSaving(false);
         }
-        setIsSaving(false);
     }
 
 
