@@ -190,50 +190,34 @@ export async function deleteAttachmentsFromS3(urls: string[]): Promise<void> {
     }
 }
 
-// Add user image to S3 and database
-export async function addPhotoToLibraryWithAI(formData: FormData) {
+// Add user image to S3 and database (AI-generated, base64 input)
+export async function addPhotoToLibraryWithAI(
+    images: { imageData: string; tags: string }[],
+    category: string
+) {
     try {
-        console.log("Adding photo to library with AI integration...");
         await requireAuth();
-        const imageFile = formData.getAll('file');
-        const tags = formData.getAll('tags') as string[];
-        const category = formData.get('category') as string;
 
-        console.log("Received form data - files:", imageFile, "tags:", tags, "category:", category);
-
-        if (imageFile.length === 0) {
-            return { success: false, message: 'Not a photos on file' }
+        if (images.length === 0) {
+            return { success: false, message: 'No images provided' };
         }
 
-        for (let i = 0; i < imageFile.length; i++) {
-            const file = imageFile[i];
-            if (
-                file &&
-                typeof file === 'object' &&
-                'arrayBuffer' in file &&
-                typeof file.arrayBuffer === 'function'
-            ) {
-                console.log(`Processing file ${i + 1}/${imageFile.length}:`, file);
-                const buffer = Buffer.from(await file.arrayBuffer());
-                console.log(`Buffer created for file ${i + 1}/${imageFile.length}, size: ${buffer.length} bytes`);
-                const pictureURL = await uploadFileToS3(
-                    buffer,
-                    file.name.replace(/\s+/g, ''),
-                    category
-                )
+        for (const img of images) {
+            const buffer = Buffer.from(img.imageData, 'base64');
+            const pictureURL = await uploadFileToS3(buffer, `ai-image-${Date.now()}.png`, category);
 
-                await prisma.image.create({
-                    data: {
-                        url: pictureURL as string,
-                        tags: tags[i].split(" "),
-                        category,
-                    },
-                })
-            }
+            await prisma.image.create({
+                data: {
+                    url: pictureURL as string,
+                    tags: img.tags.split(' ').filter(Boolean),
+                    category,
+                },
+            });
         }
-        return { success: true, message: 'Photo Uploaded Successfully!' }
+
+        return { success: true, message: 'Photo Uploaded Successfully!' };
     } catch (error) {
         console.error('Error uploading photo with AI integration:', error);
-        return { success: false, message: 'Error uploading photo', error }
+        return { success: false, message: 'Error uploading photo', error };
     }
 }

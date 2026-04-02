@@ -52,16 +52,10 @@ export default function AIIntegration() {
     async function saveSelectedImages() {
         setIsSaving(true);
         try {
-            const formData = new FormData();
-            selectedImages.forEach((img, index) => {
-                const blob = new Blob([Uint8Array.from(atob(img.imageData), c => c.charCodeAt(0))], { type: 'image/png' });
-                formData.append('file', blob, `image-${index}.png`);
-                formData.append('tags', img.tags);
-                formData.append('category', selectedCategory);
-            });
-
-            console.log("made the blobs and form data, now calling addPhotoToLibraryWithAI with formData:", formData);
-            const result = await addPhotoToLibraryWithAI(formData);
+            const result = await addPhotoToLibraryWithAI(
+                selectedImages.map(img => ({ imageData: img.imageData, tags: img.tags })),
+                selectedCategory
+            );
             if (result.success) {
                 toast.success('Selected images saved successfully!');
                 setSelectedImages([]);
