@@ -27,7 +27,7 @@ export async function GET(request: Request) {
 
         // Make the photos
         const { generatedImages } = await ai.models.generateImages({
-            model: 'imagen-4.0-generate-001',
+            model: 'imagen-4.0-fast-generate-001',
             prompt: prompt,
             config: {
                 numberOfImages: photoCount,
