@@ -56,6 +56,8 @@ model User {
   PromptSession       PromptSession[]
   rubricTemplates     RubricTemplate[]
   rubricGrades        RubricGrade[] // Grades given by this teacher
+  lessons             Lesson[]
+  checkpointResponses CheckpointResponse[]
 }
 
 model Account {
@@ -103,10 +105,11 @@ model Classroom {
   grade         String?
   year          String?         @db.VarChar(12)
   period        String?
-  users         ClassUser[] // Many-to-many relationship(can be a teacher role or student rol)
-  createdAt     DateTime        @default(now()) @db.Timestamp(6)
-  updatedAt     DateTime        @default(now()) @updatedAt @db.Timestamp(6)
-  PromptSession PromptSession[]
+  users          ClassUser[] // Many-to-many relationship(can be a teacher role or student rol)
+  createdAt      DateTime        @default(now()) @db.Timestamp(6)
+  updatedAt      DateTime        @default(now()) @updatedAt @db.Timestamp(6)
+  PromptSession  PromptSession[]
+  lessonSessions LessonSession[]
 }
 
 enum ClassUserRole {
@@ -358,4 +361,82 @@ model RubricGrade {
   @@unique([responseId, rubricId]) // Ensure one grade per response per rubric
   @@index([responseId]) // Index for faster lookups by response
   @@index([teacherId]) // Index for faster lookups by teacher
+}
+
+// ─── Lessons ──────────────────────────────────────────────────────────────────
+
+enum LessonStatus {
+  DRAFT
+  READY
+  ACTIVE
+  COMPLETED
+}
+
+enum SlideType {
+  CONTENT
+  CHECKPOINT
+}
+
+model Lesson {
+  id         String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title      String
+  teacherId  String          @db.Uuid
+  teacher    User            @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  slides     LessonSlide[]
+  sessions   LessonSession[]
+  status     LessonStatus    @default(DRAFT)
+  sourceFile String?
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+}
+
+model LessonSlide {
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lessonId   String      @db.Uuid
+  lesson     Lesson      @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  order      Int
+  type       SlideType   @default(CONTENT)
+  content    Json
+  checkpoint Checkpoint?
+
+  @@index([lessonId, order])
+}
+
+model Checkpoint {
+  id        String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slideId   String               @unique @db.Uuid
+  slide     LessonSlide          @relation(fields: [slideId], references: [id], onDelete: Cascade)
+  question  String
+  responses CheckpointResponse[]
+}
+
+model LessonSession {
+  id                   String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lessonId             String               @db.Uuid
+  classroomId          String               @db.Uuid
+  lesson               Lesson               @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  classroom            Classroom            @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+  currentSlideIndex    Int                  @default(0)
+  currentFragmentIndex Int                  @default(-1)
+  isActive             Boolean              @default(true)
+  startedAt            DateTime             @default(now())
+  endedAt              DateTime?
+  responses            CheckpointResponse[]
+
+  @@index([classroomId, isActive])
+}
+
+model CheckpointResponse {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId    String        @db.Uuid
+  checkpointId String        @db.Uuid
+  studentId    String        @db.Uuid
+  answer       String
+  submittedAt  DateTime      @default(now())
+  session      LessonSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  checkpoint   Checkpoint    @relation(fields: [checkpointId], references: [id], onDelete: Cascade)
+  student      User          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, checkpointId, studentId])
+  @@index([sessionId, checkpointId])
 }

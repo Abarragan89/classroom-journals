@@ -1,5 +1,5 @@
 'use client'
-import { GraduationCap, PenTool } from 'lucide-react'
+import { GraduationCap, PenTool, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -31,6 +31,17 @@ export default function TeacherNavLinks({ isMobile = false, onNavigate }: { isMo
                         <span>My Jots</span>
                     </Link>
                 </Button>
+
+                <Button
+                    asChild
+                    variant="ghost"
+                    className="w-full justify-start gap-3 px-4 py-3 h-auto text-sm font-normal rounded-md hover:bg-accent text-muted-foreground"
+                >
+                    <Link href={`/lessons`} onClick={onNavigate}>
+                        <BookOpen size={18} />
+                        <span>Lessons</span>
+                    </Link>
+                </Button>
             </>
         )
     }
@@ -55,6 +66,16 @@ export default function TeacherNavLinks({ isMobile = false, onNavigate }: { isMo
             ${pathname.includes("prompt") ? 'text-foreground' : 'text-muted-foreground'}  
                     `}>
                 <PenTool size={20} className='mr-2' aria-hidden="true" />My Jots
+            </Link>
+
+            <Link
+                href={`/lessons`}
+                aria-current={pathname === 'lessons' ? 'page' : undefined}
+                className={`
+                       ml-3 flex-start hover:cursor-pointer hover:text-foreground text-sm
+            ${pathname === 'lessons' ? 'text-foreground' : 'text-muted-foreground'}  
+                    `}>
+                <BookOpen size={20} className='mr-2' aria-hidden="true" />Lessons
             </Link>
         </>
     )

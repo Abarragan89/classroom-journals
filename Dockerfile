@@ -10,8 +10,6 @@ RUN npm install
 COPY . .
 
 RUN npm run build
+RUN npm run build:server
 
-RUN cp -r .next/static .next/standalone/.next/static
-RUN cp -r public .next/standalone/public
-
-CMD ["node", ".next/standalone/server.js"]
+CMD ["node", "dist/server.js"]
