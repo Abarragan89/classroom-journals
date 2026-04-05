@@ -16,6 +16,7 @@ export const photoCategories: photoCategory[] = [
     { label: "Career", value: "career" },
     { label: "Health", value: "health" },
     { label: "Holidays/Seasons", value: "seasons" },
+    { label: "Food", value: "food" },
     { label: "Sports", value: "sports" },
     { label: "Designs", value: "designs" },
 ]
@@ -33,6 +34,7 @@ export const photoCategoriesForAdmin: photoCategory[] = [
     { label: "Career", value: "career" },
     { label: "Health", value: "health" },
     { label: "Holidays/Seasons", value: "seasons" },
+    { label: "Food", value: "food" },
     { label: "Sports", value: "sports" },
     { label: "Designs", value: "designs" },
     { label: "Avatar", value: "avatar" },
