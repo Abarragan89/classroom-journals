@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import TanstackQueryProvider from "@/components/providers/tanstack-query-provider";
 import SessionProvider from "@/components/providers/session-provider";
 import AbsentUserChecker from "@/components/absent-user-checker";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

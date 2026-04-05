@@ -12,30 +12,30 @@ const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
-  const httpServer = createServer(async (req, res) => {
-    try {
-      const parsedUrl = parse(req.url!, true);
-      await handle(req, res, parsedUrl);
-    } catch (err) {
-      console.error('Error handling', req.url, err);
-      res.statusCode = 500;
-      res.end('Internal server error');
-    }
-  });
+    const httpServer = createServer(async (req, res) => {
+        try {
+            const parsedUrl = parse(req.url!, true);
+            await handle(req, res, parsedUrl);
+        } catch (err) {
+            console.error('Error handling', req.url, err);
+            res.statusCode = 500;
+            res.end('Internal server error');
+        }
+    });
 
-  const io = new SocketIOServer(httpServer, {
-    cors: {
-      origin: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
-      credentials: true,
-    },
-    path: '/api/socket.io',
-  });
+    const io = new SocketIOServer(httpServer, {
+        cors: {
+            origin: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
+            credentials: true,
+        },
+        path: '/api/socket.io',
+    });
 
-  registerSocketHandlers(io);
+    registerSocketHandlers(io);
 
-  httpServer.listen(port, hostname, () => {
-    console.log(
-      `> Ready on http://${hostname}:${port} [${dev ? 'dev' : 'production'}]`,
-    );
-  });
+    httpServer.listen(port, hostname, () => {
+        console.log(
+            `> Ready on http://${hostname}:${port} [${dev ? 'dev' : 'production'}]`,
+        );
+    });
 });

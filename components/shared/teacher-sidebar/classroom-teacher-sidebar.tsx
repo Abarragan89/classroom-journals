@@ -72,7 +72,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar> & 
           { title: "Roster", icon: User, slug: `/classroom/${currentClassroomId}/${teacherId}/roster`, isActive: currentRoute === 'roster', isLink: true },
           { title: "Jots", icon: PenTool, slug: `/classroom/${currentClassroomId}/${teacherId}/jots`, isActive: currentRoute === 'jots', isLink: true },
           { title: "Quips", icon: MessageCircle, slug: `/classroom/${currentClassroomId}/${teacherId}/quips`, isActive: currentRoute === 'quips', isLink: true },
-          { title: "My Lessons", icon: ShieldQuestion, slug: `/classroom/${currentClassroomId}/${teacherId}/my-lessons`, isActive: currentRoute === 'my-lessons', isLink: true },
           { title: "Notifications", icon: Bell, slug: `/classroom/${currentClassroomId}/${teacherId}/notifications`, isActive: currentRoute === 'notifications', isLink: true },
           // { title: "Score Sheet", icon: Table, slug: `/classroom/${currentClassroomId}/${teacherId}/scoresheet`, isActive: currentRoute === 'scoresheet', isLink: true },
           { title: "My Rubrics", icon: Grid3x3, slug: `/classroom/${currentClassroomId}/${teacherId}/my-rubrics`, isActive: currentRoute === 'my-rubrics', isLink: true },
