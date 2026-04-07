@@ -4,6 +4,7 @@ import { classSchema } from "../validators";
 import { generateClassCode } from "../utils";
 import { ClassUserRole } from "@prisma/client";
 import { requireAuth } from "./authorization.action";
+import { getClassUserRole, findTeacherByEmail } from "../server/classroom";
 
 // Create a new class
 export async function createNewClass(prevState: unknown, formData: FormData) {
@@ -207,5 +208,98 @@ export async function deleteClassroom(prevState: unknown, formData: FormData) {
         console.error('error deleting class', error)
         return { success: true, message: 'Error deleting class' }
 
+    }
+}
+
+// Look up a teacher by email for the co-teacher search flow
+export async function findTeacherByEmailAction(classId: string, email: string) {
+    try {
+        const session = await requireAuth();
+        const sessionUserId = session.user.id as string;
+
+        const sessionUserRole = await getClassUserRole(classId, sessionUserId);
+        if (sessionUserRole !== ClassUserRole.TEACHER) {
+            throw new Error('Forbidden');
+        }
+
+        const user = await findTeacherByEmail(email);
+        if (!user || !user.id) {
+            return { success: false, message: 'No teacher account found with that email.' };
+        }
+
+        if (user.id === sessionUserId) {
+            return { success: false, message: 'You cannot add yourself as a co-teacher.' };
+        }
+
+        const existingRole = await getClassUserRole(classId, user.id);
+        if (existingRole) {
+            return { success: false, message: 'This teacher is already in this class.' };
+        }
+
+        return { success: true, data: { id: user.id, name: user.name ?? null, username: user.username ?? null, email: user.email ?? null } };
+    } catch (error) {
+        console.error('error finding teacher', error);
+        return { success: false, message: 'Error looking up teacher. Try again.' };
+    }
+}
+
+// Add a co-teacher to a class by email
+export async function addCoTeacher(classId: string, email: string) {
+    try {
+        const session = await requireAuth();
+        const sessionUserId = session.user.id as string;
+
+        // Only the class TEACHER (owner) can add co-teachers
+        const sessionUserRole = await getClassUserRole(classId, sessionUserId);
+        if (sessionUserRole !== ClassUserRole.TEACHER) {
+            throw new Error('Forbidden');
+        }
+
+        const userToAdd = await findTeacherByEmail(email);
+        if (!userToAdd.id) {
+            return { success: false, message: 'No teacher account found with that email.' };
+        }
+
+        if (userToAdd.id === sessionUserId) {
+            return { success: false, message: 'You cannot add yourself as a co-teacher.' };
+        }
+
+        const existingRole = await getClassUserRole(classId, userToAdd.id);
+        if (existingRole) {
+            return { success: false, message: 'This teacher is already in this class.' };
+        }
+
+        await prisma.classUser.create({
+            data: { userId: userToAdd.id, classId, role: ClassUserRole.CO_TEACHER }
+        });
+
+        return { success: true, message: 'Co-teacher added!', data: userToAdd };
+    } catch (error) {
+        console.error('error adding co-teacher', error);
+        return { success: false, message: 'Error adding co-teacher. Try again.' };
+    }
+}
+
+// Remove a co-teacher from a class (owner or self-removal only)
+export async function removeCoTeacher(classId: string, coTeacherId: string) {
+    try {
+        const session = await requireAuth();
+        const sessionUserId = session.user.id as string;
+
+        const sessionUserRole = await getClassUserRole(classId, sessionUserId);
+        const isSelfRemoval = sessionUserId === coTeacherId;
+
+        if (!isSelfRemoval && sessionUserRole !== ClassUserRole.TEACHER) {
+            throw new Error('Forbidden');
+        }
+
+        await prisma.classUser.delete({
+            where: { userId_classId: { userId: coTeacherId, classId } }
+        });
+
+        return { success: true, selfRemoval: isSelfRemoval };
+    } catch (error) {
+        console.error('error removing co-teacher', error);
+        return { success: false, message: 'Error removing co-teacher. Try again.' };
     }
 }

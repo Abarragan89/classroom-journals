@@ -111,6 +111,7 @@ model Classroom {
 
 enum ClassUserRole {
   TEACHER
+  CO_TEACHER
   STUDENT
 }
 
@@ -339,7 +340,7 @@ model RubricTemplate {
 // Model to store actual rubric grades for student responses
 model RubricGrade {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  responseId      String   @db.Uuid @unique
+  responseId      String   @unique @db.Uuid
   rubricId        String   @db.Uuid
   teacherId       String   @db.Uuid
   categories      Json // JSON array of category grades: {name, selectedScore, maxScore}
@@ -351,9 +352,9 @@ model RubricGrade {
   updatedAt       DateTime @updatedAt
 
   // Relations
-  response   Response       @relation(fields: [responseId], references: [id], onDelete: Cascade)
-  rubric     RubricTemplate @relation(fields: [rubricId], references: [id], onDelete: Cascade)
-  teacher    User           @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  response Response       @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  rubric   RubricTemplate @relation(fields: [rubricId], references: [id], onDelete: Cascade)
+  teacher  User           @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 
   @@unique([responseId, rubricId]) // Ensure one grade per response per rubric
   @@index([responseId]) // Index for faster lookups by response

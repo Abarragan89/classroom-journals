@@ -45,26 +45,27 @@ export async function getAllStudents(classId: string, teacherId: string) {
     return decryptedStudents
 }
 
-// Get all Teacher Classes
+// Get all Teacher Classes (owned + co-taught)
 export async function getAllClassrooms(teacherId: string) {
     const session = await requireAuth();
     if (session?.user?.id !== teacherId) {
         throw new Error("Forbidden");
     }
-    const allClasses = await prisma.classroom.findMany({
+    const classUsers = await prisma.classUser.findMany({
         where: {
-            users: {
-                some: {
-                    userId: teacherId,
-                    role: ClassUserRole.TEACHER
-                }
-            }
+            userId: teacherId,
+            role: { in: [ClassUserRole.TEACHER, ClassUserRole.CO_TEACHER] }
         },
-        orderBy: {
-            updatedAt: 'desc'
-        }
-    })
-    return allClasses
+        select: {
+            role: true,
+            class: true
+        },
+        orderBy: { class: { updatedAt: 'desc' } }
+    });
+    return classUsers.map(({ role, class: cls }) => ({
+        ...cls,
+        isCoTeacher: role === ClassUserRole.CO_TEACHER
+    }));
 }
 
 // Get all Teacher Classes
@@ -78,7 +79,7 @@ export async function getAllClassroomIds(teacherId: string) {
             users: {
                 some: {
                     userId: teacherId,
-                    role: ClassUserRole.TEACHER
+                    role: { in: [ClassUserRole.TEACHER, ClassUserRole.CO_TEACHER] }
                 }
             }
         },
@@ -96,7 +97,7 @@ export async function getAllClassroomIds(teacherId: string) {
                 }
             }
         },
-        
+
         orderBy: {
             updatedAt: 'desc'
         }
@@ -104,11 +105,19 @@ export async function getAllClassroomIds(teacherId: string) {
     return allClasses
 }
 
-// Get a single Classroom
+// Get a single Classroom (accessible to TEACHER and CO_TEACHER)
 export async function getSingleClassroom(classroomId: string, teacherId: string) {
     const session = await requireAuth();
     if (session?.user?.id !== teacherId) {
         throw new Error('Forbidden')
+    }
+    // Verify the user is a member of this class (TEACHER or CO_TEACHER)
+    const membership = await prisma.classUser.findUnique({
+        where: { userId_classId: { userId: teacherId, classId: classroomId } },
+        select: { role: true }
+    });
+    if (!membership || membership.role === ClassUserRole.STUDENT) {
+        return null;
     }
     const classroom = await prisma.classroom.findUnique({
         where: { id: classroomId },
@@ -129,4 +138,46 @@ export async function getSingleClassroom(classroomId: string, teacherId: string)
         }
     })
     return classroom
+}
+
+// Get the ClassUserRole for a specific user in a specific class, or null if not a member
+export async function getClassUserRole(classId: string, userId: string): Promise<ClassUserRole | null> {
+    await requireAuth();
+    const classUser = await prisma.classUser.findUnique({
+        where: { userId_classId: { userId, classId } },
+        select: { role: true }
+    });
+    return classUser?.role ?? null;
+}
+
+// Find a teacher account by their email address
+export async function findTeacherByEmail(email: string) {
+    await requireAuth();
+    const user = await prisma.user.findUnique({
+        where: { email },
+        select: { id: true, name: true, username: true, email: true, iv: true }
+    });
+    return {
+        ...user,
+        name: user?.name ? decryptText(user.name, user.iv as string) : null,
+        username: user?.username ? decryptText(user.username, user.iv as string) : null,
+    };
+}
+
+// Get all co-teachers for a class
+export async function getCoTeachersInClass(classId: string) {
+    await requireAuth();
+    const coTeachers = await prisma.classUser.findMany({
+        where: { classId, role: ClassUserRole.CO_TEACHER },
+        select: {
+            user: {
+                select: { id: true, name: true, username: true, email: true, iv: true }
+            }
+        }
+    });
+    return coTeachers.map(({ user }) => ({
+        ...user,
+        name: user?.name ? decryptText(user.name, user.iv as string) : null,
+        username: user?.username ? decryptText(user.username, user.iv as string) : null,
+    }));
 }

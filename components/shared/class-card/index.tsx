@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card"
 import { Class } from "@/types";
 import OptionsMenu from "./options-menu";
+import CoTeacherBadge from "./co-teacher-badge";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 
@@ -16,11 +17,12 @@ export default function ClassCard({ classData, teacherId }: { classData: Class, 
 
     return (
         <Card className="w-[350px] shadow-sm relative border hover:shadow-md hover:border-primary transition-border">
-            {/* Absolutely positions options menu with responsive dialogs */}
-            <OptionsMenu
-                teacherId={teacherId}
-                classData={classData}
-            />
+            {/* Absolutely positioned badge or options menu */}
+            {classData.isCoTeacher ? (
+                <CoTeacherBadge classId={classData.id} teacherId={teacherId} />
+            ) : (
+                <OptionsMenu teacherId={teacherId} classData={classData} />
+            )}
             <Link
                 href={`/classroom/${classData.id}/${teacherId}`}
                 className="hover:cursor-pointer"

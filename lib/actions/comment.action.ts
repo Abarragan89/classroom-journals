@@ -22,19 +22,12 @@ export async function addComment(
         }
 
         const result = await prisma.$transaction(async (prisma) => {
-            // Get teacher Id
-            const teacherData = await prisma.classUser.findFirst({
-                where: { classId: classroomId, role: ClassUserRole.TEACHER },
-                select: {
-                    user: {
-                        select: {
-                            id: true,
-                        }
-                    }
-                }
-            })
-
-            const teacherId = teacherData?.user?.id as string
+            // Get all TEACHER + CO_TEACHER user IDs in the class
+            const teacherMembers = await prisma.classUser.findMany({
+                where: { classId: classroomId, role: { in: [ClassUserRole.TEACHER, ClassUserRole.CO_TEACHER] } },
+                select: { user: { select: { id: true } } }
+            });
+            const teacherIds = new Set(teacherMembers.map(m => m.user.id));
 
             // Create the new comment
             const newComment = await prisma.comment.create({
@@ -86,8 +79,10 @@ export async function addComment(
             if (response?.studentId && response.studentId !== userId) {
                 usersToNotify.add(response.studentId); // Add response author if they aren't the commenter
             }
-            // Add Teacher id so they get all notifications
-            usersToNotify.add(teacherId)
+            // Add all TEACHER + CO_TEACHER ids so they each get notifications
+            for (const tId of teacherIds) {
+                if (tId !== userId) usersToNotify.add(tId);
+            }
 
             // Decrypt username for the frontend response
             const formattedComment = {
@@ -102,12 +97,12 @@ export async function addComment(
             // Create notifications for all users
             const notifications = Array.from(usersToNotify).map((notifyUserId) => {
                 const isAuthor = notifyUserId === response?.studentId;
-                const isTeacher = teacherId === notifyUserId
+                const isTeacher = teacherIds.has(notifyUserId);
                 let message: string = '';
                 let notificationLink: string = '';
                 if (isTeacher) {
                     message = `${formattedComment.user.username} added the following comment:`
-                    notificationLink = `/classroom/${classroomId}/${teacherId}/single-prompt-session/${sessionId}/single-response/${responseId}#comment-section-main`
+                    notificationLink = `/classroom/${classroomId}/${notifyUserId}/single-prompt-session/${sessionId}/single-response/${responseId}#comment-section-main`
                 } else if (!isAuthor) {
                     message = `${formattedComment.user.username} added to a blog you interacted with:`
                     notificationLink = `/discussion-board/${sessionId}/response/${responseId}#comment-section-main`
@@ -161,19 +156,12 @@ export async function replyComment(
         }
 
         const result = await prisma.$transaction(async (prisma) => {
-            // Get teacher Id
-            const teacherData = await prisma.classUser.findFirst({
-                where: { classId: classroomId, role: ClassUserRole.TEACHER },
-                select: {
-                    user: {
-                        select: {
-                            id: true,
-                        }
-                    }
-                }
-            })
-
-            const teacherId = teacherData?.user?.id as string;
+            // Get all TEACHER + CO_TEACHER user IDs in the class
+            const teacherMembers = await prisma.classUser.findMany({
+                where: { classId: classroomId, role: { in: [ClassUserRole.TEACHER, ClassUserRole.CO_TEACHER] } },
+                select: { user: { select: { id: true } } }
+            });
+            const teacherIds = new Set(teacherMembers.map(m => m.user.id));
 
             // Create the new reply comment
             const newComment = await prisma.comment.create({
@@ -239,8 +227,10 @@ export async function replyComment(
             if (response?.studentId && response.studentId !== userId) {
                 usersToNotify.add(response.studentId);
             }
-            // Add Teacher id so they get all notifications
-            usersToNotify.add(teacherId)
+            // Add all TEACHER + CO_TEACHER ids so they each get notifications
+            for (const tId of teacherIds) {
+                if (tId !== userId) usersToNotify.add(tId);
+            }
 
             // Decrypt username for the frontend response
             const formattedComment = {
@@ -262,9 +252,9 @@ export async function replyComment(
                 } else if (notifyUserId === parentComment?.userId) {
                     message = `${formattedComment.user.username} replied to your comment:`;
                     notificationLink = `/discussion-board/${sessionId}/response/${responseId}#comment-section-main`
-                } else if (teacherId === notifyUserId) {
+                } else if (teacherIds.has(notifyUserId)) {
                     message = `${formattedComment.user.username} added the following comment:`
-                    notificationLink = `/classroom/${classroomId}/${teacherId}/single-prompt-session/${sessionId}/single-response/${responseId}#comment-section-main`
+                    notificationLink = `/classroom/${classroomId}/${notifyUserId}/single-prompt-session/${sessionId}/single-response/${responseId}#comment-section-main`
                 }
 
                 return {

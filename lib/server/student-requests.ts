@@ -1,4 +1,4 @@
-import { StudentRequestStatus, StudentRequestType } from "@prisma/client";
+import { ClassUserRole, StudentRequestStatus, StudentRequestType } from "@prisma/client";
 import { requireAuth } from "../actions/authorization.action";
 import { decryptText } from "../utils";
 import { prisma } from "@/db/prisma";
@@ -6,12 +6,17 @@ import { prisma } from "@/db/prisma";
 // These requests are for the teacher to see
 export async function getTeacherRequests(teacherId: string, classId: string) {
     const session = await requireAuth();
-    if (session?.user?.id !== teacherId) {
+    const sessionUserId = session?.user?.id as string;
+    // Allow TEACHER or CO_TEACHER in this class
+    const membership = await prisma.classUser.findUnique({
+        where: { userId_classId: { userId: sessionUserId, classId } },
+        select: { role: true }
+    });
+    if (!membership || (membership.role !== ClassUserRole.TEACHER && membership.role !== ClassUserRole.CO_TEACHER)) {
         throw new Error("Forbidden");
     }
     const teacherRequests = await prisma.studentRequest.findMany({
         where: {
-            teacherId,
             classId
         },
         include: {
@@ -53,11 +58,17 @@ export async function getTeacherRequests(teacherId: string, classId: string) {
 // This is for the teacher to get notifications if there are requests, work as notifications
 export async function getStudentRequestCount(teacherId: string, classId: string) {
     const session = await requireAuth();
-    if (session?.user?.id !== teacherId) {
+    const sessionUserId = session?.user?.id as string;
+    // Allow TEACHER or CO_TEACHER in this class
+    const membership = await prisma.classUser.findUnique({
+        where: { userId_classId: { userId: sessionUserId, classId } },
+        select: { role: true }
+    });
+    if (!membership || (membership.role !== ClassUserRole.TEACHER && membership.role !== ClassUserRole.CO_TEACHER)) {
         throw new Error("Forbidden");
     }
     const count = await prisma.studentRequest.count({
-        where: { teacherId, status: StudentRequestStatus.PENDING, classId },
+        where: { classId, status: StudentRequestStatus.PENDING },
     });
 
     return count;
