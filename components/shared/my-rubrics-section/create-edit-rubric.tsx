@@ -69,7 +69,7 @@ export default function CreateEditRubric({
         }
         const interval = setInterval(() => {
             setParseMessageIdx(prev => (prev + 1) % PARSE_MESSAGES.length);
-        }, 4000);
+        }, 8000);
         return () => clearInterval(interval);
     }, [isParsing]);
 
@@ -175,22 +175,12 @@ export default function CreateEditRubric({
             // If currentRubric is provided, update it; otherwise, create a new one
             if (currentRubricState) {
                 const result = await updateRubric(currentRubricState.id, data.categories, data.title);
-                if (result?.rubric) {
-                    queryClient.setQueryData<Rubric[]>(['teacherRubrics', teacherId], (old) => {
-                        if (!old) return old;
-                        return old.map(rubricItem =>
-                            rubricItem.id === result.rubric.id ? result.rubric as Rubric : rubricItem
-                        );
-                    });
-                }
+                queryClient.invalidateQueries({ queryKey: ['teacherRubrics', teacherId] });
                 setCurrentRubricState(result?.rubric as Rubric || null);
             } else {
                 const result = await createRubric(teacherId, data.categories, data.title);
+                queryClient.invalidateQueries({ queryKey: ['teacherRubrics', teacherId] });
                 if (result?.rubric) {
-                    queryClient.setQueryData<Rubric[]>(['teacherRubrics', teacherId], (old) => {
-                        if (!old) return [result.rubric as Rubric];
-                        return [result.rubric as Rubric, ...old,];
-                    });
                     // Silently update URL from /new to /[rubricId] so reloading loads the saved rubric
                     window.history.replaceState(null, '', `/classroom/${classId}/${teacherId}/my-rubrics/${result.rubric.id}`);
                 }
@@ -235,15 +225,8 @@ export default function CreateEditRubric({
                 return;
             }
 
-            // Update react-query cache
-            queryClient.setQueryData<Rubric[]>(['teacherRubrics', teacherId], (old) => {
-                if (!old) return [result.rubric as Rubric];
-                const exists = old.some(r => r.id === result.rubric!.id);
-                if (exists) {
-                    return old.map(r => r.id === result.rubric!.id ? result.rubric as Rubric : r);
-                }
-                return [result.rubric as Rubric, ...old];
-            });
+            queryClient.invalidateQueries({ queryKey: ['teacherRubrics', teacherId] });
+
 
             setCurrentRubricState(result.rubric);
             form.reset({
@@ -290,7 +273,7 @@ export default function CreateEditRubric({
             toast.error('Error deleting rubric. Please try again.');
         }
     }
-    
+
     return (
         <>
             {/* Dialog to confirm rubric deletion */}
@@ -327,7 +310,7 @@ export default function CreateEditRubric({
                         <p className="text-xl font-bold text-foreground transition-all duration-500">
                             {PARSE_MESSAGES[parseMessageIdx]}
                         </p>
-                        <p className="text-sm text-muted-foreground">This may take a few moments.</p>
+                        <p className="font-bold ">This may take a few moments.</p>
                     </div>
                 )}
                 <Form {...form}>
