@@ -16,11 +16,9 @@ type CoTeacher = {
 
 export default function CoTeacherSection({
     classId,
-    teacherId,
     initialCoTeachers,
 }: {
     classId: string;
-    teacherId: string;
     initialCoTeachers: CoTeacher[];
 }) {
     const [email, setEmail] = useState('');

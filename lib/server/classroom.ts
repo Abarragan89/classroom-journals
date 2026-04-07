@@ -79,7 +79,7 @@ export async function getAllClassroomIds(teacherId: string) {
             users: {
                 some: {
                     userId: teacherId,
-                    role: ClassUserRole.TEACHER
+                    role: { in: [ClassUserRole.TEACHER, ClassUserRole.CO_TEACHER] }
                 }
             }
         },

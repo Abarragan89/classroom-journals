@@ -15,14 +15,13 @@ export default async function StudentRequests({
 
     const [studentRequests] = await Promise.all([
         getTeacherRequests(teacherId, classId) as unknown as StudentRequest[],
-        markAllRequestsAsViewed(teacherId, classId)
+        markAllRequestsAsViewed(teacherId)
     ])
 
     return (
         <div>
             <h2 className="h2-bold my-3">Student Requests</h2>
             <StudentRequestSection
-                classId={classId}
                 teacherId={teacherId}
                 studentRequests={studentRequests}
             />

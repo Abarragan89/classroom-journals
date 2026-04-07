@@ -2,7 +2,7 @@
 import { prisma } from "@/db/prisma"
 import { encryptText } from "../utils"
 import { Question } from "@/types"
-import { Prisma, PromptType, StudentRequestStatus, StudentRequestType } from "@prisma/client"
+import { ClassUserRole, Prisma, PromptType, StudentRequestStatus, StudentRequestType } from "@prisma/client"
 import { requireAuth } from "./authorization.action"
 
 export async function createStudentRequest(studentId: string, teacherId: string, text: string, type: string, classId: string) {
@@ -56,14 +56,19 @@ export async function createStudentRequest(studentId: string, teacherId: string,
 }
 
 // This is for the students to see which requests they have made and their status
-export async function markAllRequestsAsViewed(teacherId: string, classId: string) {
+export async function markAllRequestsAsViewed(classId: string) {
     try {
         const session = await requireAuth();
-        if (session?.user?.id !== teacherId) {
-            throw new Error("Forbidden");
+        const sessionUserId = session?.user?.id as string;
+        const membership = await prisma.classUser.findUnique({
+            where: { userId_classId: { userId: sessionUserId, classId } },
+            select: { role: true }
+        });
+        if (!membership || (membership.role !== ClassUserRole.TEACHER && membership.role !== ClassUserRole.CO_TEACHER)) {
+            throw new Error('Forbidden');
         }
         const count = await prisma.studentRequest.updateMany({
-            where: { teacherId, classId },
+            where: { classId },
             data: {
                 status: StudentRequestStatus.VIEWED
             }
@@ -82,11 +87,21 @@ export async function markAllRequestsAsViewed(teacherId: string, classId: string
 }
 
 // This is for the students to see which requests they have made and their status
-export async function approveUsernameChange(studentId: string, username: string, responseId: string, teacherId: string) {
+export async function approveUsernameChange(studentId: string, username: string, responseId: string) {
     try {
         const session = await requireAuth();
-        if (session?.user?.id !== teacherId) {
-            throw new Error("Forbidden");
+        const sessionUserId = session?.user?.id as string;
+        const request = await prisma.studentRequest.findUnique({
+            where: { id: responseId },
+            select: { classId: true }
+        });
+        if (!request) throw new Error('Request not found');
+        const membership = await prisma.classUser.findUnique({
+            where: { userId_classId: { userId: sessionUserId, classId: request.classId } },
+            select: { role: true }
+        });
+        if (!membership || (membership.role !== ClassUserRole.TEACHER && membership.role !== ClassUserRole.CO_TEACHER)) {
+            throw new Error('Forbidden');
         }
         // Update the user with the new encrypted username
         await prisma.user.update({
@@ -118,8 +133,18 @@ export async function approveUsernameChange(studentId: string, username: string,
 export async function approveNewPrompt(teacherId: string, requestText: string, responseId: string) {
     try {
         const session = await requireAuth();
-        if (session?.user?.id !== teacherId) {
-            throw new Error("Forbidden");
+        const sessionUserId = session?.user?.id as string;
+        const request = await prisma.studentRequest.findUnique({
+            where: { id: responseId },
+            select: { classId: true }
+        });
+        if (!request) throw new Error('Request not found');
+        const membership = await prisma.classUser.findUnique({
+            where: { userId_classId: { userId: sessionUserId, classId: request.classId } },
+            select: { role: true }
+        });
+        if (!membership || (membership.role !== ClassUserRole.TEACHER && membership.role !== ClassUserRole.CO_TEACHER)) {
+            throw new Error('Forbidden');
         }
         // build up the questions for the prompt Session
         const questions: Question[] = [];
@@ -133,19 +158,11 @@ export async function approveNewPrompt(teacherId: string, requestText: string, r
             await prisma.prompt.create({
                 data: {
                     title: requestText.trim(),
-                    teacherId,
+                    teacherId: sessionUserId,
                     promptType: PromptType.BLOG,
                     questions: questions as unknown as Prisma.InputJsonValue,
                 },
             });
-
-            // change the status of the request
-            // await prisma.studentRequest.update({
-            //     where: { id: responseId },
-            //     data: {
-            //         status: 'approved'
-            //     }
-            // })
 
             // delete request once approved
             await prisma.studentRequest.delete({
@@ -153,7 +170,7 @@ export async function approveNewPrompt(teacherId: string, requestText: string, r
             })
         })
 
-        return { success: true, message: 'Error adding student. Try again.' }
+        return { success: true, message: 'Prompt created successfully.' }
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
@@ -167,19 +184,22 @@ export async function approveNewPrompt(teacherId: string, requestText: string, r
 }
 
 // This is for the students to see which requests they have made and their status
-export async function declineStudentRequest(responseId: string, teacherId: string) {
+export async function declineStudentRequest(responseId: string) {
     try {
         const session = await requireAuth();
-        if (session?.user?.id !== teacherId) {
-            throw new Error("Forbidden");
+        const sessionUserId = session?.user?.id as string;
+        const request = await prisma.studentRequest.findUnique({
+            where: { id: responseId },
+            select: { classId: true }
+        });
+        if (!request) throw new Error('Request not found');
+        const membership = await prisma.classUser.findUnique({
+            where: { userId_classId: { userId: sessionUserId, classId: request.classId } },
+            select: { role: true }
+        });
+        if (!membership || (membership.role !== ClassUserRole.TEACHER && membership.role !== ClassUserRole.CO_TEACHER)) {
+            throw new Error('Forbidden');
         }
-        // change the status of the request
-        // await prisma.studentRequest.update({
-        //     where: { id: responseId },
-        //     data: {
-        //         status: 'denied'
-        //     }
-        // })
 
         // delete request once approved
         await prisma.studentRequest.delete({

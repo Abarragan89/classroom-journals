@@ -73,7 +73,6 @@ export default function ClassSettings({
             {/* Co-Teacher Management */}
             <CoTeacherSection
                 classId={classId}
-                teacherId={teacherId}
                 initialCoTeachers={coTeachers}
             />
         </section>

@@ -13,11 +13,9 @@ import TutorialMessageVideo from '@/components/tutorial-message-video';
 export default function StudentRequestSection({
     teacherId,
     studentRequests,
-    classId
 }: {
     teacherId: string;
     studentRequests: StudentRequest[];
-    classId: string
 }) {
 
 
@@ -27,7 +25,7 @@ export default function StudentRequestSection({
     // Mark all requests as viewed on component mount
     useEffect(() => {
         if (studentRequests.length > 0) {
-            markAllRequestsAsViewed(teacherId, classId);
+            markAllRequestsAsViewed(teacherId);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // Empty dependency array - only run once on mount
@@ -35,7 +33,7 @@ export default function StudentRequestSection({
     async function approveRequest(studentId: string, requestText: string, responseId: string, requestType: string) {
         try {
             if (requestType === 'USERNAME') {
-                const response = await approveUsernameChange(studentId, requestText, responseId, teacherId)
+                const response = await approveUsernameChange(studentId, requestText, responseId)
                 if (!response) {
                     throw new Error("error approving new username")
                 }
@@ -60,7 +58,7 @@ export default function StudentRequestSection({
 
     async function declineRequest(responseId: string) {
         try {
-            const response = await declineStudentRequest(responseId, teacherId)
+            const response = await declineStudentRequest(responseId)
             if (!response) {
                 throw new Error("error approving new username")
             }

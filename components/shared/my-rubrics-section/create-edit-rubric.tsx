@@ -71,7 +71,7 @@ export default function CreateEditRubric({
             setParseMessageIdx(prev => (prev + 1) % PARSE_MESSAGES.length);
         }, 8000);
         return () => clearInterval(interval);
-    }, [isParsing]);
+    }, [isParsing, PARSE_MESSAGES.length]);
 
     const initialCategories = [
         {
