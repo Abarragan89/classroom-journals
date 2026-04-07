@@ -4,6 +4,7 @@ import OpenAI from 'openai'
 import { prisma } from '../db/prisma'
 import { Rubric } from '@/types'
 
+
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 })

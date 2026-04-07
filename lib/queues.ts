@@ -16,3 +16,11 @@ export const exitTicketQueue = new Queue('exit-ticket', {
 export const exitTicketQueueEvents = new QueueEvents('exit-ticket', {
     connection,
 })
+
+export const rubricParseQueue = new Queue('rubric-parse', {
+    connection,
+})
+
+export const rubricParseQueueEvents = new QueueEvents('rubric-parse', {
+    connection,
+})

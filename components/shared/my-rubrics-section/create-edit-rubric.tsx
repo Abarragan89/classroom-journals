@@ -24,10 +24,11 @@ import {
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { PlusCircle } from "lucide-react"
-import { useState, useEffect, useMemo } from "react"
+import { PlusCircle, Upload, Loader2 } from "lucide-react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import { Input } from "@/components/ui/input"
 import { createRubric, deleteRubric, updateRubric } from "@/lib/actions/rubric.actions"
+import { parseAndSaveRubricFromFile } from "@/lib/actions/rubric-parse.action"
 import { rubricSchema } from "@/lib/validators"
 import { Rubric, RubricFormData } from "@/types"
 import { ResponsiveDialog } from "@/components/responsive-dialog"
@@ -46,10 +47,31 @@ export default function CreateEditRubric({
     classId: string
 }) {
 
+    const PARSE_MESSAGES = [
+        "Reading your file…",
+        "Analyzing rubric structure…",
+        "Extracting categories and criteria…",
+        "Almost there…",
+    ]
+
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
     const [currentRubricState, setCurrentRubricState] = useState<Rubric | null>(currentRubric)
+    const [isParsing, setIsParsing] = useState(false)
+    const [parseMessageIdx, setParseMessageIdx] = useState(0)
+    const fileInputRef = useRef<HTMLInputElement>(null)
     const queryClient = useQueryClient();
     const router = useRouter();
+
+    useEffect(() => {
+        if (!isParsing) {
+            setParseMessageIdx(0);
+            return;
+        }
+        const interval = setInterval(() => {
+            setParseMessageIdx(prev => (prev + 1) % PARSE_MESSAGES.length);
+        }, 4000);
+        return () => clearInterval(interval);
+    }, [isParsing]);
 
     const initialCategories = [
         {
@@ -169,6 +191,8 @@ export default function CreateEditRubric({
                         if (!old) return [result.rubric as Rubric];
                         return [result.rubric as Rubric, ...old,];
                     });
+                    // Silently update URL from /new to /[rubricId] so reloading loads the saved rubric
+                    window.history.replaceState(null, '', `/classroom/${classId}/${teacherId}/my-rubrics/${result.rubric.id}`);
                 }
                 setCurrentRubricState(result?.rubric as Rubric || null);
             }
@@ -191,6 +215,64 @@ export default function CreateEditRubric({
             }
         }
     }
+    // handle file upload → parse → save
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Reset input so the same file can be re-uploaded if needed
+        e.target.value = '';
+
+        setIsParsing(true);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const result = await parseAndSaveRubricFromFile(formData, currentRubricState?.id);
+
+            if (!result.success || !result.rubric) {
+                toast.error(result.message ?? 'Failed to parse rubric. Please try again.');
+                return;
+            }
+
+            // Update react-query cache
+            queryClient.setQueryData<Rubric[]>(['teacherRubrics', teacherId], (old) => {
+                if (!old) return [result.rubric as Rubric];
+                const exists = old.some(r => r.id === result.rubric!.id);
+                if (exists) {
+                    return old.map(r => r.id === result.rubric!.id ? result.rubric as Rubric : r);
+                }
+                return [result.rubric as Rubric, ...old];
+            });
+
+            setCurrentRubricState(result.rubric);
+            form.reset({
+                title: result.rubric.title,
+                categories: result.rubric.categories as RubricFormData['categories'],
+            });
+
+            // Silently update URL so reloading loads the saved rubric instead of /new defaults
+            window.history.replaceState(null, '', `/classroom/${classId}/${teacherId}/my-rubrics/${result.rubric.id}`);
+
+            toast.success('Rubric uploaded and saved successfully', {
+                action: {
+                    label: 'Back to Rubric List',
+                    onClick: () => router.back()
+                },
+                actionButtonStyle: {
+                    backgroundColor: 'var(--secondary)',
+                    color: 'var(--secondary-foreground)',
+                    border: "var(--border)"
+                }
+            });
+        } catch (error) {
+            console.error('Error uploading rubric file:', error);
+            toast.error('Failed to parse rubric. Please try again.');
+        } finally {
+            setIsParsing(false);
+        }
+    }
+
     // handle delete rubric
     const handleDeleteRubric = async () => {
         if (!currentRubricState) return;
@@ -208,7 +290,7 @@ export default function CreateEditRubric({
             toast.error('Error deleting rubric. Please try again.');
         }
     }
-
+    
     return (
         <>
             {/* Dialog to confirm rubric deletion */}
@@ -237,7 +319,17 @@ export default function CreateEditRubric({
             </ResponsiveDialog>
 
 
-            <div className="mt-4">
+            <div className="mt-4 relative">
+                {/* Overlay while parsing */}
+                {isParsing && (
+                    <div className="absolute inset-0 z-20 backdrop-blur-sm bg-background/60 flex flex-col items-center justify-center rounded-md gap-y-2">
+                        <Loader2 className="animate-spin h-8 w-8 text-primary" aria-hidden="true" />
+                        <p className="text-xl font-bold text-foreground transition-all duration-500">
+                            {PARSE_MESSAGES[parseMessageIdx]}
+                        </p>
+                        <p className="text-sm text-muted-foreground">This may take a few moments.</p>
+                    </div>
+                )}
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
                         <div className="flex justify-start items-center gap-x-5">
@@ -280,6 +372,35 @@ export default function CreateEditRubric({
                                         Delete Rubric
                                     </Button>
                                 )}
+
+                                {/* Upload rubric from file */}
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    disabled={isParsing}
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="gap-x-1.5"
+                                >
+                                    {isParsing ? (
+                                        <>
+                                            <Loader2 size={15} className="animate-spin" aria-hidden="true" />
+                                            Importing...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Upload size={15} aria-hidden="true" />
+                                            Import Rubric
+                                        </>
+                                    )}
+                                </Button>
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept=".pdf,.doc,.docx,.csv,.xls,.xlsx,.odt,.rtf,.txt,.pages"
+                                    className="hidden"
+                                    onChange={handleFileUpload}
+                                    aria-label="Upload rubric file"
+                                />
                             </div>
                             <div className="border rounded-md shadow-lg mt-3 relative">
                                 <div className="flex flex-wrap gap-x-8 my-5 text-sm text-primary absolute -top-1 left-3 z-10">
@@ -324,8 +445,8 @@ export default function CreateEditRubric({
                                                         render={({ field }) => (
                                                             <Textarea
                                                                 {...field}
-                                                                rows={3}
-                                                                className="resize-none font-bold md:text-lg shadow-none"
+                                                                rows={4}
+                                                                className="resize-none font-bold md:text-lg shadow-none custom-scrollbar"
                                                                 placeholder="Criteria"
                                                                 required={true}
                                                             />
@@ -352,7 +473,7 @@ export default function CreateEditRubric({
                                                                 render={({ field }) => (
                                                                     <Textarea
                                                                         {...field}
-                                                                        rows={4}
+                                                                        rows={6}
                                                                         className="resize-none shadow-none custom-scrollbar"
                                                                         required={false}
                                                                         placeholder="Criteria"
