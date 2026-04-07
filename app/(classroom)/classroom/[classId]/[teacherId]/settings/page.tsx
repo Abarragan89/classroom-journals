@@ -1,6 +1,9 @@
 import { Class } from "@/types";
 import ClassSettings from "./class-settings";
-import { getSingleClassroom } from "@/lib/server/classroom";
+import { getSingleClassroom, getClassUserRole, getCoTeachersInClass } from "@/lib/server/classroom";
+import { auth } from "@/auth";
+import { notFound, redirect } from "next/navigation";
+import { ClassUserRole } from "@prisma/client";
 
 export default async function Settings({
     params
@@ -8,15 +11,32 @@ export default async function Settings({
     params: Promise<{ classId: string, teacherId: string }>
 }) {
 
-    const { teacherId, classId } = await params;
+    const { classId } = await params;
+    const session = await auth();
+    if (!session) return notFound();
 
-    const teacherInfo = await getSingleClassroom(classId, teacherId) as Class;
+    const userId = session.user?.id as string;
+
+    const userRole = await getClassUserRole(classId, userId);
+
+    if (userRole === ClassUserRole.CO_TEACHER) {
+        redirect(`/classroom/${classId}/${userId}`);
+    }
+    if (!userRole || userRole !== ClassUserRole.TEACHER) {
+        return notFound();
+    }
+
+    const [teacherInfo, coTeachers] = await Promise.all([
+        getSingleClassroom(classId, userId) as Promise<Class>,
+        getCoTeachersInClass(classId),
+    ]);
 
     return (
         <ClassSettings
             classInfo={teacherInfo}
-            teacherId={teacherId}
+            teacherId={userId}
             classId={classId}
+            coTeachers={coTeachers}
         />
     )
 }

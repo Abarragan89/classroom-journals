@@ -43,16 +43,23 @@ export default async function DashboardLayout({
         getAllSessionsInClass(classId, teacherId),
     ]);
 
-    // getSingleClassroom returns null if not authorized
+    // getSingleClassroom returns null if not authorized or class doesn't exist
     if (!classroomData) {
         return notFound()
     }
+
+    // Derive co-teacher status from the already-fetched class list
+    const currentClass = (teacherClasses as (Classroom & { isCoTeacher?: boolean })[]).find(c => c.id === classId);
+    if (!currentClass) {
+        return notFound()
+    }
+    const isCoTeacher = currentClass.isCoTeacher ?? false;
 
     const { isAllowedToMakeNewClass } = subscriptionData
 
     return (
         <SidebarProvider>
-            <AppSidebar classes={teacherClasses as Classroom[]} />
+            <AppSidebar classes={teacherClasses as Classroom[]} isCoTeacher={isCoTeacher} />
             <SidebarInset>
                 <Header
                     teacherId={teacherId}

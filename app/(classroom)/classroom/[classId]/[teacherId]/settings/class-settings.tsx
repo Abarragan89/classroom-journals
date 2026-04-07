@@ -5,15 +5,25 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useQueryClient } from '@tanstack/react-query';
 import { Badge } from '@/components/ui/badge';
+import CoTeacherSection from '@/components/shared/class-settings/co-teacher-section';
+
+type CoTeacher = {
+    id: string;
+    name: string | null;
+    username: string | null;
+    email: string | null;
+};
 
 export default function ClassSettings({
     classInfo,
     teacherId,
-    classId
+    classId,
+    coTeachers,
 }: {
     classInfo: Class,
     teacherId: string,
-    classId: string
+    classId: string,
+    coTeachers: CoTeacher[],
 }) {
 
     const queryClient = useQueryClient();
@@ -59,6 +69,13 @@ export default function ClassSettings({
                     }}
                 />
             </div>
+
+            {/* Co-Teacher Management */}
+            <CoTeacherSection
+                classId={classId}
+                teacherId={teacherId}
+                initialCoTeachers={coTeachers}
+            />
         </section>
     )
 }

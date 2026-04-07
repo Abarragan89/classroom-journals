@@ -96,20 +96,12 @@ export async function approveUsernameChange(studentId: string, username: string,
             },
         });
 
-        // change the status of the request
-        // await prisma.studentRequest.update({
-        //     where: { id: responseId },
-        //     data: {
-        //         status: 'approved'
-        //     }
-        // })
-
         // delete request once approved
         await prisma.studentRequest.delete({
             where: { id: responseId }
         })
 
-        return { success: true, message: 'Error adding student. Try again.' }
+        return { success: true, message: 'Username change approved.' }
     } catch (error) {
         // Improved error logging
         if (error instanceof Error) {
