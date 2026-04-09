@@ -1,7 +1,7 @@
 import { User } from "@/types";
 import { PromptSession } from "@/types";
 import { getAllStudents } from "@/lib/server/classroom";
-import EditPromptSessionPopUp from "@/components/modalBtns/edit-prompt-session-popup";
+import SessionSettingsCard from "@/components/shared/session-settings-card";
 import { getSinglePromptSessionTeacherDashboard } from "@/lib/server/prompt-sessions";
 import MainClientWrapper from "./main-client-wrapper";
 
@@ -29,18 +29,16 @@ export default async function SinglePromptSession({
     return (
         <div>
             <h2 className="h2-bold font-medium line-clamp-3 my-5">{promptSession?.title}</h2>
-            <div className="flex-between items-center mt-3">
-                <EditPromptSessionPopUp
-                    promptSessionType={promptSession?.promptType}
-                    promptSessionId={promptSession?.id}
-                    initialStatus={promptSession?.status}
-                    initialPublicStatus={promptSession?.isPublic}
-                    classId={classId}
-                    teacherId={teacherId}
-                    sessionId={sessionId}
-                />
-
-            </div>
+            <SessionSettingsCard
+                promptSessionType={promptSession?.promptType}
+                promptSessionId={promptSession?.id}
+                initialStatus={promptSession?.status}
+                initialPublicStatus={promptSession?.isPublic}
+                initialGradesVisible={promptSession?.areGradesVisible}
+                classId={classId}
+                teacherId={teacherId}
+                sessionId={sessionId}
+            />
             <MainClientWrapper
                 promptSession={promptSession}
                 classId={classId}

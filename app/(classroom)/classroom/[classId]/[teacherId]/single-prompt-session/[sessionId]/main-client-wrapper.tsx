@@ -1,5 +1,4 @@
 'use client'
-import ToggleGradesVisible from './single-response/toggle-grades-visible'
 import DataClientWrapper from './data-client-wrapper'
 import AssessmentTableData from './assessment-table-data'
 import BlogTableData from './blog-table-data'
@@ -8,6 +7,7 @@ import { responsePercentage } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { ResponseStatus } from '@prisma/client'
 import { useMemo } from 'react'
+import { Badge } from '@/components/ui/badge'
 
 export default function MainClientWrapper({
     promptSession,
@@ -28,7 +28,7 @@ export default function MainClientWrapper({
         return promptSession.responses?.some(response => response.isAIGrading) || false;
     }, [promptSession])
 
-    const { data: promptSessionData, refetch } = useQuery({
+    const { data: promptSessionData } = useQuery({
         queryKey: ['getSingleSessionData', sessionId],
         queryFn: async () => {
             const response = await fetch(`/api/prompt-sessions/${sessionId}?teacherId=${teacherId}`);
@@ -90,17 +90,10 @@ export default function MainClientWrapper({
 
     return (
         <div>
-            <div className="flex">
-                <div className='space-y-4 w-full'>
-                    <p className="text-muted-foreground">Class Average: {classAverage}</p>
-                    <ToggleGradesVisible
-                        promptSessionId={promptSessionData?.id}
-                        gradesVisibility={promptSessionData?.areGradesVisible}
-                        teacherId={teacherId}
-                        refetch={refetch}
-                    />
-                </div>
-            </div>
+            <Badge className="w-max text-sm mt-8">
+                Class Average: {classAverage}
+            </Badge>
+
             {/* Bar chart */}
             {promptSessionData?.promptType === 'ASSESSMENT' &&
                 <DataClientWrapper
