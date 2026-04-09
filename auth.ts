@@ -47,8 +47,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 const iv = crypto.randomBytes(16);
                 const { encryptedData } = encryptText(user.name!, iv);
 
-                const premiumExpiresAt = new Date();
-                premiumExpiresAt.setDate(premiumExpiresAt.getDate() + 14);
+                const premiumExpiresAt = new Date('2026-07-14'); 
+                // premiumExpiresAt.setDate(premiumExpiresAt.getDate() + 14);
 
                 await prisma.user.update({
                     where: { id: user.id },
