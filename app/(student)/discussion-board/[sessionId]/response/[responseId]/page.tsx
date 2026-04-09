@@ -36,7 +36,7 @@ export default async function SingleResponse({
     const promptStatus = response?.promptSession?.status
 
     return (
-        <div className="max-w-[700px] px-3 mx-auto">
+        <div className="bg-card border border-muted text-card-foreground rounded-md p-8 shadow-sm w-fit mx-auto mt-5">
             <BlogMetaDetails
                 responseData={response}
                 studentId={studentId}
@@ -48,7 +48,7 @@ export default async function SingleResponse({
                 width={1920}
                 height={1080}
                 alt={`Cover photo for ${(response?.response as { answer: string }[])?.[1]?.answer ?? 'blog post'}`}
-                className="block mx-auto mb-5 w-full max-w-[700px] h-auto"
+                className="block mx-auto mb-5 w-full  h-auto"
                 sizes="(max-width: 700px) 100vw, 700px"
                 priority
                 fetchPriority='high'

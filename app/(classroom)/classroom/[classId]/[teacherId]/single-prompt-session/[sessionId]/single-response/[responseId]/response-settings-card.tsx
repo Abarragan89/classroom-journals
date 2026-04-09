@@ -74,7 +74,7 @@ export default function ResponseSettingsCard({
     }
 
     return (
-        <Card className="my-6 shadow-sm">
+        <Card className="my-6 shadow-sm border border-muted">
             <CardHeader className="p-4 pb-3 flex flex-row items-center justify-between">
                 <CardTitle className="text-base font-semibold">Response Settings</CardTitle>
                 {isNotSubmitted && (
@@ -82,7 +82,7 @@ export default function ResponseSettingsCard({
                 )}
             </CardHeader>
 
-            <CardContent className="space-y-5 p-4 pt-2">
+            <CardContent className="space-y-5 p-4 pt-2 rounded-md">
                 {/* Spell Check */}
                 <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
