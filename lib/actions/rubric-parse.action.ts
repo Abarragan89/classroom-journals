@@ -21,6 +21,17 @@ const SUPPORTED_MIME_TYPES = new Set([
     "text/rtf",                                                                                    // .rtf (alternate)
     "text/plain",                                                                                  // .txt
     "application/vnd.apple.pages",                                                                 // .pages
+    "image/jpeg",                                                                                  // .jpg/.jpeg
+    "image/png",                                                                                   // .png
+    "image/webp",                                                                                  // .webp
+    "image/gif",                                                                                   // .gif
+]);
+
+const IMAGE_MIME_TYPES = new Set([
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/gif",
 ]);
 
 export async function parseAndSaveRubricFromFile(
@@ -56,9 +67,11 @@ export async function parseAndSaveRubricFromFile(
         file_id = uploadedFile.id;
 
         // Enqueue parse job and wait for result
+        const isImage = IMAGE_MIME_TYPES.has(file.type);
         const job = await rubricParseQueue.add("parse-rubric-file", {
             file_id,
             teacherId,
+            isImage,
         });
 
         const result = await job.waitUntilFinished(rubricParseQueueEvents) as {

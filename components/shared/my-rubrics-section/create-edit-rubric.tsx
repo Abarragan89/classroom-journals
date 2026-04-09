@@ -175,12 +175,23 @@ export default function CreateEditRubric({
             // If currentRubric is provided, update it; otherwise, create a new one
             if (currentRubricState) {
                 const result = await updateRubric(currentRubricState.id, data.categories, data.title);
-                queryClient.invalidateQueries({ queryKey: ['teacherRubrics', teacherId] });
+                if (result?.rubric) {
+                    queryClient.setQueryData<Rubric[]>(['teacherRubrics', teacherId], (old) => {
+                        if (!old) return old;
+                        return old.map(r => r.id === currentRubricState.id ? result.rubric as Rubric : r);
+                    });
+                }
+                // queryClient.invalidateQueries({ queryKey: ['teacherRubrics', teacherId] });
                 setCurrentRubricState(result?.rubric as Rubric || null);
             } else {
                 const result = await createRubric(teacherId, data.categories, data.title);
-                queryClient.invalidateQueries({ queryKey: ['teacherRubrics', teacherId] });
                 if (result?.rubric) {
+                    const existing = queryClient.getQueryData<Rubric[]>(['teacherRubrics', teacherId]);
+                    if (existing) {
+                        queryClient.setQueryData<Rubric[]>(['teacherRubrics', teacherId], [...existing, result.rubric as Rubric]);
+                    } else {
+                        queryClient.invalidateQueries({ queryKey: ['teacherRubrics', teacherId] });
+                    }
                     // Silently update URL from /new to /[rubricId] so reloading loads the saved rubric
                     window.history.replaceState(null, '', `/classroom/${classId}/${teacherId}/my-rubrics/${result.rubric.id}`);
                 }
@@ -225,8 +236,17 @@ export default function CreateEditRubric({
                 return;
             }
 
-            queryClient.invalidateQueries({ queryKey: ['teacherRubrics', teacherId] });
-
+            const existing = queryClient.getQueryData<Rubric[]>(['teacherRubrics', teacherId]);
+            if (existing) {
+                const exists = existing.some(r => r.id === result.rubric!.id);
+                queryClient.setQueryData<Rubric[]>(['teacherRubrics', teacherId],
+                    exists
+                        ? existing.map(r => r.id === result.rubric!.id ? result.rubric! : r)
+                        : [...existing, result.rubric!]
+                );
+            } else {
+                queryClient.invalidateQueries({ queryKey: ['teacherRubrics', teacherId] });
+            }
 
             setCurrentRubricState(result.rubric);
             form.reset({
@@ -379,7 +399,7 @@ export default function CreateEditRubric({
                                 <input
                                     ref={fileInputRef}
                                     type="file"
-                                    accept=".pdf,.doc,.docx,.csv,.xls,.xlsx,.odt,.rtf,.txt,.pages"
+                                    accept=".pdf,.doc,.docx,.csv,.xls,.xlsx,.odt,.rtf,.txt,.pages,.jpg,.jpeg,.png,.webp,.gif"
                                     className="hidden"
                                     onChange={handleFileUpload}
                                     aria-label="Upload rubric file"

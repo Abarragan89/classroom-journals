@@ -25,7 +25,7 @@ type ParseRubricResult = {
 };
 
 async function parseRubricFile(job: Job): Promise<ParseRubricResult> {
-    const { file_id } = job.data as { file_id: string; teacherId: string };
+    const { file_id, isImage } = job.data as { file_id: string; teacherId: string; isImage: boolean };
 
     const systemPrompt = `
         You are an expert at reading and extracting rubric data from documents.
@@ -66,10 +66,9 @@ async function parseRubricFile(job: Job): Promise<ParseRubricResult> {
                 {
                     role: 'user',
                     content: [
-                        {
-                            type: 'input_file',
-                            file_id,
-                        },
+                        isImage
+                            ? { type: 'input_image' as const, file_id, detail: 'auto' as const }
+                            : { type: 'input_file' as const, file_id },
                         {
                             type: 'input_text',
                             text: 'Extract the rubric from this document and return it as JSON matching the required format.',
