@@ -71,13 +71,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="custom-scrollbar">
       <head>
         <script dangerouslySetInnerHTML={{ __html: `if(typeof URL!=="undefined"&&!URL.parse){URL.parse=function(u,b){try{return new URL(u,b);}catch(_){return null;}};}` }} />
       </head>
       <body
         className={`
-          ${geistSans.variable} ${geistMono.variable} antialiased
+          ${geistSans.variable} ${geistMono.variable} antialiasedju
           `}
       >
         <a
