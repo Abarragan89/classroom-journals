@@ -40,15 +40,14 @@ export function StudentComboBox({
 
     return (
         <>
-            <div className="flex flex-col items-start sm:flex-row sm:items-center mt-4">
-                <h2 className="text-xl lg:text-2xl mr-3">Response By: </h2>
+            <div className="flex flex-col items-start sm:flex-row sm:items-center mt-10">
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                         <Button
                             variant="outline"
                             role="combobox"
                             aria-expanded={open}
-                            className="text-xl sm:text-2xl py-5 px-5"
+                            className="text-2xl py-5 px-5"
                         >
                             <div className="flex items-baseline">
                                 {responses?.[currentStudentIndex]?.student?.name} <span className="text-[1.1rem] ml-2">({responses?.[currentStudentIndex].score})</span>
@@ -89,7 +88,6 @@ export function StudentComboBox({
                         </Command>
                     </PopoverContent>
                 </Popover>
-
             </div>
             <div className="flex gap-2 mb-2 mt-3">
                 <Button

@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableRow, TableHeader } from '@/components/ui/table'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { Rubric, RubricGradingInstance, RubricGrade } from '@/types'
 import { Button } from '@/components/ui/button'
@@ -304,9 +305,9 @@ export default function RubricInstance({
 
     return (
         <div className="mt-4">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-wrap justify-between items-end gap-x-6">
                 <div>
-                    <h3 className="h3-bold mt-10">{gradingInstance.title}</h3>
+                    <h3 className="h3-bold">{gradingInstance.title}</h3>
                     {isComplete && (
                         <div className='flex items-start justify-start'>
                             <p className="text-muted-foreground font-semibold">
@@ -335,7 +336,7 @@ export default function RubricInstance({
                                     disabled={isAIGrading || !studentWriting.trim()}
                                     className="w-full"
                                 >
-                                    {isAIGrading ? "Grading with AI..." : `Autograde with AI! (${aiAllowance} credits left)`}
+                                    {isAIGrading ? "Grading..." : `Autograde (${aiAllowance} credits left)`}
                                 </Button>
                             ) : (
                                 <div className="text-center">
@@ -375,7 +376,8 @@ export default function RubricInstance({
                 )}
             </div>
 
-            <div className="overflow-x-auto border shadow-md mt-3 relative">
+            {/* ── Desktop table ── */}
+            <div className="hidden lg:block overflow-x-auto border mt-3 relative">
                 {/* AI Grading Overlay */}
                 {isAIGrading && (
                     <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex items-center justify-center">
@@ -386,7 +388,7 @@ export default function RubricInstance({
                         </div>
                     </div>
                 )}
-                <Table className="min-w-[920px]">
+                <Table>
                     <TableHeader>
                         <TableRow>
                             <TableHead>Category</TableHead>
@@ -401,9 +403,8 @@ export default function RubricInstance({
                     <TableBody>
                         {gradingInstance.categories.map((category, catIdx) => (
                             <TableRow key={`${catIdx}-${category.name}`}>
-                                {/* Category Name with Selected Score */}
-                                <TableCell className="w-60 relative">
-                                    <div className="p-4 rounded-md min-h-[100px] flex items-center">
+                                <TableCell className="relative">
+                                    <div className="p-4 rounded-md min-h-[150px] flex items-center">
                                         <div>
                                             <div className="font-semibold text-lg">{category.name}</div>
                                             {category.selectedScore !== undefined && (
@@ -415,7 +416,6 @@ export default function RubricInstance({
                                     </div>
                                 </TableCell>
 
-                                {/* Criteria Buttons (in reverse order to match template) */}
                                 {[...category.criteria].reverse().map((criterion, revIdx) => {
                                     const realIdx = category.criteria.length - 1 - revIdx
                                     const isSelected = category.selectedScore === realIdx
@@ -426,7 +426,7 @@ export default function RubricInstance({
                                                 disabled={isAIGrading}
                                                 className={cn(
                                                     'w-full p-4 rounded-md transition-all duration-200 ease-in-out',
-                                                    'text-left border-4 shadow-sm min-h-[100px]',
+                                                    'text-left border-4 shadow-sm min-h-[150px]',
                                                     isSelected
                                                         ? 'border-primary bg-primary/10 scale-[0.98]'
                                                         : 'border-border hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] active:translate-y-0'
@@ -443,6 +443,55 @@ export default function RubricInstance({
                         ))}
                     </TableBody>
                 </Table>
+            </div>
+
+            {/* ── Mobile card view ── */}
+            <div className="lg:hidden mt-3 space-y-4 relative">
+                {isAIGrading && (
+                    <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-md">
+                        <div className="flex flex-col items-center gap-3">
+                            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                            <p className="text-sm font-medium">AI is grading.</p>
+                            <p className="text-sm font-medium">You can leave this page and come back later.</p>
+                        </div>
+                    </div>
+                )}
+                {gradingInstance.categories.map((category, catIdx) => (
+                    <Card key={`mobile-${catIdx}-${category.name}`} className="border shadow-md">
+                        <CardHeader className="pb-2 flex flex-row items-center justify-between">
+                            <CardTitle className="text-base font-semibold">{category.name}</CardTitle>
+                            {category.selectedScore !== undefined && (
+                                <Badge variant="secondary" className="text-xs">
+                                    Credit: {category.criteria[category.selectedScore].score}
+                                </Badge>
+                            )}
+                        </CardHeader>
+                        <CardContent className="space-y-2 pt-0">
+                            {[...category.criteria].reverse().map((criterion, revIdx) => {
+                                const realIdx = category.criteria.length - 1 - revIdx
+                                const isSelected = category.selectedScore === realIdx
+                                return (
+                                    <button
+                                        key={realIdx}
+                                        onClick={() => handleRubricCategoryClick(catIdx, realIdx)}
+                                        disabled={isAIGrading}
+                                        className={cn(
+                                            'w-full p-3 rounded-md text-left border-4 transition-all duration-200 ease-in-out',
+                                            isSelected
+                                                ? 'border-primary bg-primary/10 scale-[0.98]'
+                                                : 'border-border hover:shadow-md active:scale-[0.98]'
+                                        )}
+                                    >
+                                        <p className="text-xs font-semibold text-muted-foreground mb-1">
+                                            Score {criterion.score}
+                                        </p>
+                                        <p className="text-sm leading-relaxed">{criterion.description}</p>
+                                    </button>
+                                )
+                            })}
+                        </CardContent>
+                    </Card>
+                ))}
             </div>
 
             {/* Comment Section */}

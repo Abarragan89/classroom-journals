@@ -115,7 +115,7 @@ export default function SessionSettingsCard({
                 <DeletePromptSessionForm promptSessionId={promptSessionId} />
             </ResponsiveDialog>
 
-            <Card className="w-full my-8 shadow-sm">
+            <Card className="w-full my-8 shadow-sm border border-muted">
                 <CardHeader className="p-4 flex flex-row items-center justify-between">
                     <CardTitle className="text-base font-semibold">Assignment Settings</CardTitle>
                     <TooltipProvider>

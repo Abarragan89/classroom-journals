@@ -8,8 +8,7 @@ import { Response, ResponseComment, ResponseData } from '@/types';
 import { getSingleResponse, getAllResponsesFromPrompt } from '@/lib/server/responses';
 import { StudentComboBox } from './student-combobox';
 import PrintViewBlog from './print-view';
-import ToggleSpellCheckAndVoiceToText from './toggle-spell-check';
-import ResponseActions from './response-actions';
+import ResponseSettingsCard from './response-settings-card';
 
 
 export default async function SingleResponse({
@@ -41,41 +40,30 @@ export default async function SingleResponse({
 
     return (
         <>
-            <div className='mb-10 print:hidden'>
+            <div className='mb-10 print:hidden overflow-x-hidden px-1'>
                 <div className="mb-5">
                     <StudentComboBox
                         responses={rosterAlphabetized}
                     />
-                    <div className="flex justify-between items-baseline mt-5 relative">
-                        <ToggleSpellCheckAndVoiceToText
-                            responseId={responseId}
-                            voiceToTextEnabled={response?.isVoiceToTextEnabled as boolean}
-                            spellCheckEnabled={response?.spellCheckEnabled}
+                    <ResponseSettingsCard
+                        initialResponse={response}
+                        responseId={responseId}
+                        sessionId={sessionId}
+                        teacherId={teacherId}
+                        classId={classId}
+                    />
+                    {!isMultiQuestion && (
+                        <ScoreJournalForm
                             teacherId={teacherId}
-                        />
-
-                    </div>
-                    <div className="flex-end mb-8 relative">
-                        <ResponseActions
-                            initialResponse={response}
-                            responseId={responseId}
+                            responseId={response?.id}
                             sessionId={sessionId}
-                            teacherId={teacherId}
-                            classId={classId}
+                            response={response}
+                            currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
+                            studentWriting={(response.response as unknown as ResponseData[])?.[0]?.answer || ''}
                         />
-                        {!isMultiQuestion && (
-                            <ScoreJournalForm
-                                teacherId={teacherId}
-                                responseId={response?.id}
-                                sessionId={sessionId}
-                                response={response}
-                                currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
-                                studentWriting={(response.response as unknown as ResponseData[])?.[0]?.answer || ''}
-                            />
-                        )}
-                    </div>
+                    )}
                 </div>
-                <div className={`max-w-[1200px] mx-auto relative ${isMultiQuestion ? 'mt-[110px]' : ''}`}>
+                <div className="max-w-[1200px] mx-auto p-1">
                     {isMultiQuestion ? (
                         <GradeResponseCard
                             questionsAndAnswers={questionsAndAnswers}
@@ -84,7 +72,7 @@ export default async function SingleResponse({
                             sessionId={sessionId}
                         />
                     ) : (
-                        <div className='w-full'>
+                        <div className='bg-card text-card-foreground border border-muted rounded-md p-5 shadow-sm w-fit mx-auto mt-5'>
                             <p className='text-md font-bold'>{response.promptSession?.title}</p>
                             <div className="max-w-[700px] px-3 mx-auto mt-5">
                                 <BlogMetaDetails

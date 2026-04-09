@@ -2,7 +2,7 @@
 import { gradeStudentResponse } from "@/lib/actions/response.action";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { ResponsiveDialog } from "@/components/responsive-dialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { saveRubricGrade, deleteRubricGrade } from "@/lib/actions/rubric.actions";
@@ -12,6 +12,7 @@ import { useTheme } from "next-themes";
 import RubricInstance from "@/app/(classroom)/classroom/[classId]/[teacherId]/single-prompt-session/[sessionId]/single-response/[responseId]/rubric-instance";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 
 export default function ScoreJournalForm({
@@ -33,8 +34,9 @@ export default function ScoreJournalForm({
     const queryClient = useQueryClient()
     const { theme } = useTheme();
 
-    const [showRubricDialog, setShowRubricDialog] = useState(false);
+    const [activeTab, setActiveTab] = useState<'manual' | 'rubric'>(response?.rubricGrades ? 'rubric' : 'manual');
     const [currentRubric, setCurrentRubric] = useState<Rubric | null>(null);
+    const [previousRubric, setPreviousRubric] = useState<Rubric | null>(null);
     const [isAIGrading, setIsAIGrading] = useState(response?.isAIGrading || false);
 
     const { data: responseData } = useQuery({
@@ -74,7 +76,7 @@ export default function ScoreJournalForm({
             const data = await response.json();
             return data.rubrics || [];
         },
-        enabled: showRubricDialog, // Only fetch when dialog is open
+        enabled: activeTab === 'rubric', // Only fetch when rubric tab is active
         staleTime: 1000 * 60 * 5, // 5 minutes
     });
 
@@ -179,7 +181,7 @@ export default function ScoreJournalForm({
         },
         onSuccess: (fullRubric) => {
             setCurrentRubric(fullRubric);
-            setShowRubricDialog(false);
+            setPreviousRubric(null);
         },
         onError: (error) => {
             console.error('Error fetching full rubric:', error);
@@ -319,164 +321,141 @@ export default function ScoreJournalForm({
     };
 
     return (
-        <>
-            <ResponsiveDialog
-                title="My Rubrics"
-                description="Select a rubric to grade this response"
-                isOpen={showRubricDialog}
-                setIsOpen={setShowRubricDialog}
-            >
-                <div className="flex flex-col items-center justify-center">
-                    {/* Your Rubrics */}
-                    <p className="text-center text-sm text-muted-foreground mt-0">
-                        Select a rubric to grade this response
-                    </p>
-                    {/* This needs to be a scrollable list */}
-                    <ScrollArea className="w-[95%] mb-5 mx-auto h-64 mt-4 border border-muted rounded-md">
-                        {loadingRubricList ? (
-                            <div className="flex flex-col justify-center items-center h-full">
-                                <FadeLoader
-                                    color={determineLoadingColor()}
-                                    aria-label="Loading Rubrics"
-                                    data-testid="rubric-loader"
-                                    className="my-3 mx-auto"
+        <Card className="shadow-sm border border-muted">
+            <CardHeader className="pb-2 pt-4 px-4">
+                <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Grading</CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-4">
+                <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'manual' | 'rubric')}>
+                    <TabsList className="w-full mb-4">
+                        <TabsTrigger value="manual" className="flex-1">Score / 100</TabsTrigger>
+                        <TabsTrigger value="rubric" className="flex-1 gap-1.5">
+                            Use Rubric
+                            {existingGrade && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+                        </TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="manual">
+                        <div className="flex flex-col items-end space-y-1">
+                            <p className="text-xs text-muted-foreground">Score</p>
+                            <div className="flex items-center gap-2">
+                                <Input
+                                    id="journal-score"
+                                    type="text"
+                                    name="journalScore"
+                                    defaultValue={currentScore}
+                                    className="h-8 w-[4.1rem] text-center font-bold"
+                                    placeholder="---"
+                                    maxLength={3}
+                                    onBlur={(e) => {
+                                        const value = parseInt(e.target.value);
+                                        if (!isNaN(value) && value !== parseInt(String(currentScore))) {
+                                            updateScoreMutation.mutate(value);
+                                        }
+                                    }}
                                 />
-                                <p className="text-sm text-muted-foreground mt-2">Loading rubrics...</p>
+                                <span className="text-muted-foreground font-bold text-md">/ 100</span>
                             </div>
-                        ) : rubricList.length === 0 ? (
-                            <p className="p-2 text-center text-muted-foreground">
-                                No rubrics found. Please create a rubric first.
-                            </p>
-                        ) : (
-                            rubricList.map((rubricItem: RubricListItem) => {
-                                const isCurrentlyLoading = selectRubricMutation.isPending;
-                                return (
-                                    <button
-                                        type="button"
-                                        key={rubricItem.id}
-                                        onClick={() => !isCurrentlyLoading && handleRubricSelect(rubricItem)}
-                                        disabled={isCurrentlyLoading}
-                                        className={`p-2 w-full text-left flex justify-between items-center ${isCurrentlyLoading
-                                            ? 'cursor-not-allowed opacity-50'
-                                            : 'hover:bg-accent hover:text-accent-foreground cursor-pointer'
-                                            }`}
-                                    >
-                                        <span>{rubricItem.title}</span>
-                                        <div className="flex items-center gap-2">
-                                            {isCurrentlyLoading && (
-                                                <div className="flex items-center gap-1">
-                                                    <FadeLoader
-                                                        color={determineLoadingColor()}
-                                                        height={10}
-                                                        width={2}
-                                                        margin={1}
-                                                    />
-                                                    <span className="text-xs text-muted-foreground">
-                                                        Loading...
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </button>
-                                );
-                            })
-                        )}
-                    </ScrollArea>
-                </div>
-            </ResponsiveDialog>
-
-
-            {/* Show the Input to Grade */}
-            {currentRubric === null ? (
-                <>
-                    <div className="flex flex-col items-end space-y-4">
-                        {existingGrade && (
-                            <div className="flex justify-end">
-                                <div>
-                                    <p className="text-sm text-muted-foreground">
-                                        ⚠️ Entering a new score below will replace the{' '}
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                // Show the rubric grade view
-                                                if (rubricGradeData) {
-                                                    const rubricData = rubricGradeData?.rubric;
-                                                    // Only set rubric if it has all required fields
-                                                    if (rubricData?.id && rubricData?.title && rubricData?.categories) {
-                                                        const rubricForDisplay: Rubric = {
-                                                            id: rubricData.id,
-                                                            title: rubricData.title,
-                                                            categories: rubricData.categories as Rubric['categories'],
-                                                            teacherId: teacherId,
-                                                            createdAt: new Date(),
-                                                            updatedAt: new Date()
-                                                        };
-                                                        setCurrentRubric(rubricForDisplay);
-                                                    }
-                                                }
-                                            }}
-                                            className="text-muted-foreground underline hover:text-primary cursor-pointer"
-                                        >
-                                            current rubric grade
-                                        </button>
-                                        .
-                                    </p>
-                                </div>
-                            </div>
-                        )}
-                        <div className="flex items-center mt-5">
-                            <label htmlFor="journal-score" className="sr-only">Score out of 100</label>
-                            <Input
-                                id="journal-score"
-                                type="text"
-                                name="journalScore"
-                                defaultValue={currentScore}
-                                className="h-7 w-[4.1rem] text-center text-sm"
-                                placeholder="---"
-                                maxLength={3}
-                                onBlur={(e) => {
-                                    const value = parseInt(e.target.value);
-                                    if (!isNaN(value)) {
-                                        updateScoreMutation.mutate(value);
-                                    }
-                                }}
-                            />
-                            <p className="mx-2 text-lg">/</p>
-                            <p className="text-lg">100 </p>
                         </div>
-                        <Button
-                            type="button"
-                            variant={'outline'}
-                            onClick={() => setShowRubricDialog(true)}
-                        >
-                            Grade with Rubric
-                        </Button>
-                    </div>
-                </>
-            ) : (
-                <div className="flex flex-col items-center justify-center">
-                    <div className="w-full flex justify-end mt-10">
-                        <Button
-                            type="button"
-                            onClick={() => setCurrentRubric(null)}
-                            variant={"outline"}
-                        >
-                            Grade out of 100
-                        </Button>
-                    </div>
-                    <RubricInstance
-                        rubric={currentRubric}
-                        responseId={responseId}
-                        setIsAIGrading={setIsAIGrading}
-                        sessionId={sessionId}
-                        isAIGrading={isAIGrading}
-                        existingGrade={existingGrade || undefined}
-                        onSave={handleSaveGrade}
-                        studentWriting={studentWriting}
-                        isSaving={saveGradeMutation.isPending}
-                    />
-                </div>
-            )}
-        </>
+                    </TabsContent>
+
+                    <TabsContent value="rubric">
+                        {currentRubric === null ? (
+                            <div className="flex flex-col">
+                                <div className="flex justify-between items-center mb-2">
+                                    <p className="text-sm font-medium">Select a rubric</p>
+                                    {previousRubric && (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => {
+                                                setCurrentRubric(previousRubric);
+                                                setPreviousRubric(null);
+                                            }}
+                                        >
+                                            Cancel
+                                        </Button>
+                                    )}
+                                </div>
+                                <ScrollArea className="w-full h-64 border border-muted rounded-md">
+                                    {loadingRubricList ? (
+                                        <div className="flex flex-col justify-center items-center py-8">
+                                            <FadeLoader
+                                                color={determineLoadingColor()}
+                                                aria-label="Loading Rubrics"
+                                                data-testid="rubric-loader"
+                                                className="my-3 mx-auto"
+                                            />
+                                            <p className="text-sm text-muted-foreground mt-2">Loading rubrics...</p>
+                                        </div>
+                                    ) : rubricList.length === 0 ? (
+                                        <p className="p-4 text-center text-sm text-muted-foreground">
+                                            No rubrics found. Please create a rubric first.
+                                        </p>
+                                    ) : (
+                                        rubricList.map((rubricItem: RubricListItem) => {
+                                            const isCurrentlyLoading = selectRubricMutation.isPending;
+                                            return (
+                                                <button
+                                                    type="button"
+                                                    key={rubricItem.id}
+                                                    onClick={() => !isCurrentlyLoading && handleRubricSelect(rubricItem)}
+                                                    disabled={isCurrentlyLoading}
+                                                    className={`p-2 w-full text-left flex justify-between items-center ${isCurrentlyLoading
+                                                        ? 'cursor-not-allowed opacity-50'
+                                                        : 'hover:bg-accent hover:text-accent-foreground cursor-pointer'
+                                                        }`}
+                                                >
+                                                    <span>{rubricItem.title}</span>
+                                                    {isCurrentlyLoading && (
+                                                        <div className="flex items-center gap-1">
+                                                            <FadeLoader
+                                                                color={determineLoadingColor()}
+                                                                height={10}
+                                                                width={2}
+                                                                margin={1}
+                                                            />
+                                                            <span className="text-xs text-muted-foreground">Loading...</span>
+                                                        </div>
+                                                    )}
+                                                </button>
+                                            );
+                                        })
+                                    )}
+                                </ScrollArea>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col">
+                                <div className="flex justify-end mb-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                            setPreviousRubric(currentRubric);
+                                            setCurrentRubric(null);
+                                        }}
+                                    >
+                                        Change rubric
+                                    </Button>
+                                </div>
+                                <RubricInstance
+                                    rubric={currentRubric}
+                                    responseId={responseId}
+                                    setIsAIGrading={setIsAIGrading}
+                                    sessionId={sessionId}
+                                    isAIGrading={isAIGrading}
+                                    existingGrade={existingGrade || undefined}
+                                    onSave={handleSaveGrade}
+                                    studentWriting={studentWriting}
+                                    isSaving={saveGradeMutation.isPending}
+                                />
+                            </div>
+                        )}
+                    </TabsContent>
+                </Tabs>
+            </CardContent>
+        </Card>
     )
 }
