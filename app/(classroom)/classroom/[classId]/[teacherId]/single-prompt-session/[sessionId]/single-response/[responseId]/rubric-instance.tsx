@@ -401,9 +401,8 @@ export default function RubricInstance({
                     <TableBody>
                         {gradingInstance.categories.map((category, catIdx) => (
                             <TableRow key={`${catIdx}-${category.name}`}>
-                                {/* Category Name with Selected Score */}
                                 <TableCell className="w-60 relative">
-                                    <div className="p-4 rounded-md min-h-[100px] flex items-center">
+                                    <div className="p-4 rounded-md min-h-[150px] flex items-center">
                                         <div>
                                             <div className="font-semibold text-lg">{category.name}</div>
                                             {category.selectedScore !== undefined && (
@@ -415,7 +414,6 @@ export default function RubricInstance({
                                     </div>
                                 </TableCell>
 
-                                {/* Criteria Buttons (in reverse order to match template) */}
                                 {[...category.criteria].reverse().map((criterion, revIdx) => {
                                     const realIdx = category.criteria.length - 1 - revIdx
                                     const isSelected = category.selectedScore === realIdx
@@ -426,7 +424,7 @@ export default function RubricInstance({
                                                 disabled={isAIGrading}
                                                 className={cn(
                                                     'w-full p-4 rounded-md transition-all duration-200 ease-in-out',
-                                                    'text-left border-4 shadow-sm min-h-[100px]',
+                                                    'text-left border-4 shadow-sm min-h-[150px]',
                                                     isSelected
                                                         ? 'border-primary bg-primary/10 scale-[0.98]'
                                                         : 'border-border hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] active:translate-y-0'
