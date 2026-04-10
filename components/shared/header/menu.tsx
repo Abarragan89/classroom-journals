@@ -61,7 +61,7 @@ export default function Menu({
     const renderGuestMenu = (isMobile = false) => (
         <>
             <ModeToggle isMobile={isMobile} />
-            <Button asChild className={isMobile ? "w-full justify-start" : ""}>
+            <Button size="lg" asChild className={`${isMobile ? "w-full justify-start" : ""} text-md ml-3`}>
                 <Link href='/sign-in' className="flex gap-x-2" onClick={isMobile ? closeSheet : undefined}>
                     <UserIcon /> Sign In
                 </Link>
