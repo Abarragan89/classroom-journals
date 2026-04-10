@@ -95,17 +95,12 @@ export default async function page() {
                                         Stop Grading. Start Teaching.
                                     </p>
                                     {/* H1 — SEO keywords for Google */}
-                                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4 leading-relaxed">
+                                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4 leading-tight sm:leading-snug ">
                                         The Student Writing Platform with
                                         <AnimatedHeadline />
                                     </h1>
                                     {/* Subheader */}
-                                    {/* <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
-                                        Assign essays, journals, and assessments in seconds.{' '}
-
-                                        <span className="font-semibold text-foreground">No answer keys. No multiple choice. No busywork.</span>
-                                    </p> */}
-                                    <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
+                                    <p className="text-md sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
                                         Essays Instantly Graded with Your Rubrics. Assessments Autograde with No Answer Key or Multiple Choice.
                                     </p>
 
@@ -132,7 +127,7 @@ export default async function page() {
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                                     <Button asChild size="lg" className="text-base px-8 py-6 w-full sm:w-auto">
                                         <Link href="/sign-in">
-                                            Get Started
+                                            Create Free Account
                                             <span className="ml-2">→</span>
                                         </Link>
                                     </Button>
@@ -144,14 +139,14 @@ export default async function page() {
                                 </div>
 
                                 {/* Trust Indicators */}
-                                <div className="space-y-2">
+                                {/* <div className="space-y-2">
                                     <p className="text-sm text-muted-foreground">
                                         ✓ No credit card required
                                     </p>
                                     <p className="text-sm text-muted-foreground">
                                         ✓ Free to use
                                     </p>
-                                </div>
+                                </div> */}
                             </div>
 
                             {/* Right Column - Hero Image */}
