@@ -10,7 +10,7 @@ import {
     DropdownMenuCheckboxItem
 } from "@/components/ui/dropdown-menu"
 import { useTheme } from "next-themes"
-import { SunIcon, MoonIcon, ComputerIcon, Heart, Sprout } from 'lucide-react'
+import { MoonIcon, ComputerIcon, Heart, Sprout } from 'lucide-react'
 import { FaUserTie } from "react-icons/fa";
 import { PiNewspaperClipping } from "react-icons/pi";
 import { IoMdCloudOutline } from "react-icons/io";
@@ -31,13 +31,13 @@ export default function ModeToggle({ isMobile = false }: ModeToggleProps) {
     if (!mounted) {
         return (
             <Button variant='ghost' className="focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full px-[10px] py-2">
-                <SunIcon />
+                <PiNewspaperClipping />
             </Button>
         )
     }
 
     function showModeIcon(theme: string | undefined) {
-        if (!theme) return <SunIcon />
+        if (!theme) return <PiNewspaperClipping />
         switch (theme) {
             case 'light':
                 return <PiNewspaperClipping />

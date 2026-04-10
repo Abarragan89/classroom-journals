@@ -9,9 +9,10 @@ import { Separator } from "@/components/ui/separator";
 import TextEditorDemoClient from "@/components/text-editor-demo-client";
 import CommentSectionClient from "@/components/comment-section-client";
 import BlogMetaDetailsClient from "@/components/blog-meta-details-client";
-import { CornerRightUp } from "lucide-react";
+// import { CornerRightUp } from "lucide-react";
 import { signInWithGoogle } from "@/lib/actions/auth.action";
 import ReloginPage from "@/components/relogin-page";
+import AnimatedHeadline from "@/components/animated-headline";
 
 async function handleGoogleSignIn() {
     'use server'
@@ -29,7 +30,7 @@ export default async function page() {
         }
         // this case should be hit if the user is authenticated but their role is not set for some reason
         else {
-            return<ReloginPage />
+            return <ReloginPage />
         }
     }
 
@@ -95,15 +96,19 @@ export default async function page() {
                                     </p>
                                     {/* H1 — SEO keywords for Google */}
                                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4 leading-relaxed">
-                                        The Student Writing Platform with{' '}
-                                        <span className="text-primary">Built-In AI Grading</span>
+                                        The Student Writing Platform with
+                                        <AnimatedHeadline />
                                     </h1>
                                     {/* Subheader */}
-                                    <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
-                                        Assign essays, journals, and assessments in minutes.{' '}
+                                    {/* <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
+                                        Assign essays, journals, and assessments in seconds.{' '}
 
-                                        <span className="font-semibold text-foreground">no answer keys, no multiple choice, no busywork.</span>
+                                        <span className="font-semibold text-foreground">No answer keys. No multiple choice. No busywork.</span>
+                                    </p> */}
+                                    <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
+                                        Essays Instantly Graded with Your Rubrics. Assessments Autograde with No Answer Key or Multiple Choice.
                                     </p>
+
                                 </div>
 
                                 {/* Google Classroom Integration Highlight */}
@@ -139,9 +144,14 @@ export default async function page() {
                                 </div>
 
                                 {/* Trust Indicators */}
-                                <p className="text-sm text-muted-foreground">
-                                    ✓ No credit card required
-                                </p>
+                                <div className="space-y-2">
+                                    <p className="text-sm text-muted-foreground">
+                                        ✓ No credit card required
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                        ✓ Free to use
+                                    </p>
+                                </div>
                             </div>
 
                             {/* Right Column - Hero Image */}
@@ -161,21 +171,21 @@ export default async function page() {
                                 </div>
 
                                 {/* Floating stats cards */}
-                                <div className="hidden lg:block absolute -left-4 top-1/4 bg-card border border-border rounded-lg p-4 shadow-lg max-w-[180px]">
-                                    <p className="text-xl font-bold text-primary">Essays</p>
-                                    <p className="text-xs text-muted-foreground">Graded with your custom rubrics</p>
+                                <div className="hidden lg:block absolute -left-4 top-1/4 bg-card border border-border rounded-lg p-4 shadow-lg max-w-[200px]">
+                                    <p className="text-xl font-bold text-primary">Real Writing</p>
+                                    <p className="text-xs text-muted-foreground">No word prediction, grammar checks, or AI assistance.</p>
                                 </div>
                                 <div className="hidden lg:block absolute -right-4 top-1/2 bg-card border border-border rounded-lg p-4 shadow-lg max-w-[180px]">
-                                    <p className="text-xl font-bold text-primary">Assessments</p>
-                                    <p className="text-xs text-muted-foreground">Just post your questions. AI grades them instantly</p>
+                                    <p className="text-xl font-bold text-primary">Exit Tickets</p>
+                                    <p className="text-xs text-muted-foreground">Just post your questions. Get class data instantly.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className='hidden sm:flex items-baseline text-sm absolute -top-7 right-36 text-muted-foreground italic font-medium opacity-0 animate-bounce-down gap-2'>
+                    {/* <div className='hidden sm:flex items-baseline text-sm absolute right-36 text-muted-foreground italic font-medium opacity-0 gap-2'>
                         Try our themes!
                         <CornerRightUp className="w-4 h-4" />
-                    </div>
+                    </div> */}
                     {/* Theme switcher hint - repositioned */}
 
                 </section>
@@ -204,7 +214,7 @@ export default async function page() {
                                 <ul className="space-y-3 text-foreground">
                                     <li className="flex items-start gap-3">
                                         <span className="mt-1">✓</span>
-                                        <span>Grade 120 essays in under 5 minutes</span>
+                                        <span>Upload your rubric in seconds</span>
                                     </li>
                                     <li className="flex items-start gap-3">
                                         <span className="mt-1">✓</span>
@@ -359,7 +369,7 @@ export default async function page() {
                                     <div className="absolute top-3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-muted border border-primary shadow-sm"></div>
                                     <span className="text-2xl">🤖</span>
                                     <div>
-                                        <p className="font-semibold">AI auto-grading</p>
+                                        <p className="font-semibold">Autograded Assessments</p>
                                         <p className="text-muted-foreground">Short answer questions graded instantly</p>
                                     </div>
                                 </div>

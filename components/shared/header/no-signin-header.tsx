@@ -14,8 +14,8 @@ export default function NoSignInHeader() {
                         <Image
                             src='/images/logo-v3.png'
                             alt={`${APP_NAME} logo`}
-                            height={60}
-                            width={60}
+                            height={77}
+                            width={77}
                             priority={true}
                         />
                     </Link>
