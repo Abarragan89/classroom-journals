@@ -96,7 +96,7 @@ export default function SinglePromptEditor({
             if (!current) return;
 
             if (questionNumber === '2') {
-                setJournalText(current?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png');
+                setJournalText(current?.answer || 'https://unfinished-pages-photos.s3.us-east-2.amazonaws.com/fillerImg.png');
                 setCurrentQuestion(current.question);
                 return;
             }
@@ -401,7 +401,7 @@ export default function SinglePromptEditor({
                                 </CardHeader>
                                 <CardContent>
                                     <Image
-                                        src={journalText || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
+                                        src={journalText || 'https://unfinished-pages-photos.s3.us-east-2.amazonaws.com/fillerImg.png'}
                                         alt="Selected blog cover photo"
                                         width={448}
                                         height={252}

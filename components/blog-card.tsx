@@ -26,7 +26,7 @@ export default function BlogCard({
         <div className="embla__slide-inner flex-col h-full w-[300px] relative rounded-md">
             {/* Your slide content here */}
             <Image
-                src={coverPhotoUrl ? coverPhotoUrl : "https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png"}
+                src={coverPhotoUrl ? coverPhotoUrl : "https://unfinished-pages-photos.s3.us-east-2.amazonaws.com/fillerImg.png"}
                 width={298}
                 height={167}
                 alt={title ? `Cover image for ${title}` : "Blog post cover image"}
