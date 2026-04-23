@@ -27,13 +27,13 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'unfinished-pages.s3.us-east-2.amazonaws.com',
+        hostname: 'unfinished-pages-photos.s3.us-east-2.amazonaws.com',
         port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
-        hostname: 'jotter-blog.s3.us-east-2.amazonaws.com',
+        hostname: 'jotter-blog-photos.s3.us-east-2.amazonaws.com',
         port: '',
         pathname: '/**',
       },

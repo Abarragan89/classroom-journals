@@ -44,7 +44,7 @@ export default async function SingleResponse({
             />
 
             <Image
-                src={(response?.response as { answer: string }[])?.[2]?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
+                src={(response?.response as { answer: string }[])?.[2]?.answer || 'https://unfinished-pages-photos.s3.us-east-2.amazonaws.com/fillerImg.png'}
                 width={1920}
                 height={1080}
                 alt={`Cover photo for ${(response?.response as { answer: string }[])?.[1]?.answer ?? 'blog post'}`}

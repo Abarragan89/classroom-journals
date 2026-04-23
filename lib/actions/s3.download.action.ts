@@ -16,7 +16,7 @@ export async function listS3Urls() {
     const response = await s3Client.send(command);
 
     const urls = response.Contents?.map((item) =>
-      `https://unfinished-pages.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${item.Key}`
+      `https://unfinished-pages-photos.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${item.Key}`
     ) || [];
 
     return urls;

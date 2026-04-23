@@ -76,7 +76,7 @@ export default function PrintViewBlog({
                     </section>
 
                     <Image
-                        src={(currentResponse?.response as { answer: string }[])?.[2]?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
+                        src={(currentResponse?.response as { answer: string }[])?.[2]?.answer || 'https://unfinished-pages-photos.s3.us-east-2.amazonaws.com/fillerImg.png'}
                         width={700}
                         height={394}
                         alt={`Cover photo for ${(currentResponse?.response as { answer: string }[])?.[1]?.answer ?? 'blog post'}`}

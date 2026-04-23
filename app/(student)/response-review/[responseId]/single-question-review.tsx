@@ -252,7 +252,7 @@ export default function SingleQuestionReview({
                         </CardHeader>
                         <CardContent>
                             <Image
-                                src={allQuestions[2]?.answer || 'https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png'}
+                                src={allQuestions[2]?.answer || 'https://unfinished-pages-photos.s3.us-east-2.amazonaws.com/fillerImg.png'}
                                 alt="Selected blog cover photo"
                                 width={448}
                                 height={252}

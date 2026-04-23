@@ -84,7 +84,7 @@ export default function PhotoHubClient() {
         <form action={action} className="max-w-3xl mx-auto">
             <>
                 <Image
-                    src={imagePreview || "https://unfinished-pages.s3.us-east-2.amazonaws.com/fillerImg.png"}
+                    src={imagePreview || "https://unfinished-pages-photos.s3.us-east-2.amazonaws.com/fillerImg.png"}
                     alt="Preview"
                     className="my-4 rounded w-full max-w-3xl mx-auto h-auto"
                     width={1920}
