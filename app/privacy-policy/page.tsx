@@ -75,7 +75,7 @@ export default function PrivacyPolicy() {
                         <li className="pl-2">JotterBlog acts as a school official with legitimate educational interest, accessing student data only to provide the services requested by the teacher</li>
                         <li className="pl-2">We do not disclose student educational records to any third party without the consent of the school or parent, except as required by law.</li>
                         <li className="pl-2">Student data is never used for advertising, analytics, or any purpose outside of providing educational services within JotterBlog</li>
-                        <li className="pl-2">Schools may request the deletion of all student records at any time by contacting us at <span className='underline'>customer.team@jotterblog.com</span></li>
+                        <li className="pl-2">Schools may request the deletion of all student records at any time by contacting us at <span className='underline'>support@jotterblog.com</span></li>
                     </ul>
                 </section>
 
@@ -203,7 +203,7 @@ export default function PrivacyPolicy() {
                         If you have any questions about this policy, please reach out to us at:
                     </p>
                     <ul className="list-none mt-2">
-                        <li>Email: <a href="mailto:customer.team@jotterblog.com" className="text-blue-600 underline">customer.team@jotterblog.com</a></li>
+                        <li>Email: <a href="mailto:support@jotterblog.com" className="text-blue-600 underline">support@jotterblog.com</a></li>
                         <li>Website: <a href="https://jotterblog.com" className="text-blue-600 underline">https://jotterblog.com</a></li>
                     </ul>
                 </section>
