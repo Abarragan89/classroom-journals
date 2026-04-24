@@ -50,7 +50,7 @@ export default function page() {
                     <h2 className="text-xl font-semibold mb-2">Feedback and Contact</h2>
                     <p className="mb-3">We welcome feedback on the accessibility of JotterBlog. If you experience any accessibility barriers or have suggestions for improvement, please reach out to us.</p>
                     <ul className="list-disc list-outside ml-8 space-y-2">
-                        <li className="pl-2">Email: <a href="mailto:customer.team@jotterblog.com" className="underline">customer.team@jotterblog.com</a></li>
+                        <li className="pl-2">Email: <a href="mailto:support@jotterblog.com" className="underline">support@jotterblog.com</a></li>
                     </ul>
                 </section>
 
