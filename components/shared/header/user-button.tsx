@@ -27,7 +27,7 @@ export default function UserButton({ isMobile = false, onNavigate }: { isMobile?
                 <div className="px-4 py-2 text-xs text-muted-foreground">
                     {session?.user?.name ?? session?.user?.email}
                 </div>
-                {session.user.role === 'TEACHER' && (
+                {session.user.role === 'TEACHER' || session.user.role === 'ADMIN' ? (
                     <Button
                         asChild
                         variant="ghost"
@@ -38,7 +38,7 @@ export default function UserButton({ isMobile = false, onNavigate }: { isMobile?
                             <span>Account</span>
                         </Link>
                     </Button>
-                )}
+                ) : null}
                 <form action={signOutUser} className="w-full">
                     <Button
                         className="w-full justify-start gap-3 px-4 py-3 h-auto text-sm font-normal rounded-md hover:bg-accent text-muted-foreground"
@@ -77,14 +77,14 @@ export default function UserButton({ isMobile = false, onNavigate }: { isMobile?
                         </div>
                     </div>
                 </DropdownMenuLabel>
-                {session.user.role === 'TEACHER' &&
+                {session.user.role === 'TEACHER' || session.user.role === 'ADMIN' ? (
                     <DropdownMenuItem
                         className="gap-2 cursor-pointer"
                         onSelect={() => router.push('/teacher-account')}
                     >
                         <User size={18} aria-hidden="true" /> Account
                     </DropdownMenuItem>
-                }
+                ) : null}
                 <DropdownMenuItem
                     className="gap-2 cursor-pointer"
                     onSelect={() => signOutUser()}
