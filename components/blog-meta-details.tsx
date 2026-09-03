@@ -53,9 +53,9 @@ export default function BlogMetaDetails({
 
     return (
         <>
-            <h1 className="max-w-[700px] mx-auto leading-[2rem] sm:leading-[2.2rem] text-[30px] sm:text-[36px] mb-[18px] font-[700]">{(responseData?.response as { answer: string }[])?.[1]?.answer}</h1>
+            <h1 className=" mx-auto leading-[2rem] sm:leading-[2.2rem] text-[30px] sm:text-[36px] mb-[18px] font-[700]">{(responseData?.response as { answer: string }[])?.[1]?.answer}</h1>
             {/* Author information */}
-            <section className="flex max-w-[700px] mx-auto">
+            <section className="flex mx-auto">
                 <Image
                     src={responseData?.student?.avatarURL || '/images/demo-avatars/1.png'}
                     alt={`${responseData.student.username}'s avatar`}
@@ -83,7 +83,7 @@ export default function BlogMetaDetails({
                 </div>
             </section>
             {/* Comment LIke Bar */}
-            <section className="flex items-center mx-auto mb-5 justify-between py-[5px] max-w-[700px] my-3 px-4 text-muted-foreground border-t border-b border-input">
+            <section className="flex items-center mx-auto mb-5 justify-between py-[5px] my-3 px-4 text-muted-foreground border-t border-b border-input">
                 <div className="flex items-center text-muted-foreground">
                     {isBlogLikedByUser ?
                         <button

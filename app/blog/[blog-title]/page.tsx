@@ -73,7 +73,7 @@ export default async function page({ params }: { params: Promise<{ 'blog-title':
                         width={1920}
                         height={1080}
                         alt={`Cover photo for ${blogData?.title ?? 'blog post'}`}
-                        className="block mx-auto mb-5 w-full max-w-[700px] h-auto"
+                        className="block mx-auto mb-5 w-full h-auto"
                         sizes="(max-width: 700px) 100vw, 700px"
                         priority
                         fetchPriority='high'

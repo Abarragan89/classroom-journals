@@ -416,7 +416,7 @@ export default async function page() {
                                 width={1920}
                                 height={1080}
                                 alt={'Cover image for Rethinking Romeo and Juliet: A Study of Youth and Rebellion'}
-                                className="block mx-auto mb-5 w-full max-w-[700px] h-auto"
+                                className="block mx-auto mb-5 w-full h-auto"
                                 sizes="(max-width: 700px) 100vw, 700px"
                                 loading="lazy"
                             />
