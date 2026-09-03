@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { PlusCircle, Upload, Loader2 } from "lucide-react"
+import { PlusCircle, Upload, Loader2, Printer } from "lucide-react"
 import { useState, useEffect, useMemo, useRef } from "react"
 import { Input } from "@/components/ui/input"
 import { createRubric, deleteRubric, updateRubric } from "@/lib/actions/rubric.actions"
@@ -32,6 +32,7 @@ import { parseAndSaveRubricFromFile } from "@/lib/actions/rubric-parse.action"
 import { rubricSchema } from "@/lib/validators"
 import { Rubric, RubricFormData } from "@/types"
 import { ResponsiveDialog } from "@/components/responsive-dialog"
+import RubricPrintView from "./rubric-print-view"
 import { OctagonX } from "lucide-react"
 import { useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
@@ -58,6 +59,7 @@ export default function CreateEditRubric({
     const [currentRubricState, setCurrentRubricState] = useState<Rubric | null>(currentRubric)
     const [isParsing, setIsParsing] = useState(false)
     const [parseMessageIdx, setParseMessageIdx] = useState(0)
+    const [printData, setPrintData] = useState<RubricFormData | null>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
     const queryClient = useQueryClient();
     const router = useRouter();
@@ -122,6 +124,25 @@ export default function CreateEditRubric({
             })
         }
     }, [currentRubric, form])
+
+    // Open the print preview once the print-only layer has rendered the snapshot
+    useEffect(() => {
+        if (!printData) return;
+
+        const clearPrintData = () => setPrintData(null);
+        window.addEventListener('afterprint', clearPrintData);
+
+        let innerFrame = 0;
+        const outerFrame = requestAnimationFrame(() => {
+            innerFrame = requestAnimationFrame(() => window.print());
+        });
+
+        return () => {
+            cancelAnimationFrame(outerFrame);
+            cancelAnimationFrame(innerFrame);
+            window.removeEventListener('afterprint', clearPrintData);
+        };
+    }, [printData]);
 
     const {
         fields: categoryFields,
@@ -276,6 +297,11 @@ export default function CreateEditRubric({
         }
     }
 
+    // Snapshot the current (possibly unsaved) form state and print it
+    const handlePrint = () => {
+        setPrintData(form.getValues());
+    }
+
     // handle delete rubric
     const handleDeleteRubric = async () => {
         if (!currentRubricState) return;
@@ -296,6 +322,9 @@ export default function CreateEditRubric({
 
     return (
         <>
+            {/* Print-only rendering of the rubric (landscape letter) */}
+            <RubricPrintView rubric={printData} />
+
             {/* Dialog to confirm rubric deletion */}
             <ResponsiveDialog
                 isOpen={showConfirmDelete}
@@ -395,6 +424,16 @@ export default function CreateEditRubric({
                                             Import Rubric
                                         </>
                                     )}
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant={"outline"}
+                                    onClick={handlePrint}
+                                    disabled={isParsing}
+                                    title="Print rubric"
+                                    aria-label="Print rubric"
+                                >
+                                    <Printer aria-hidden="true" />
                                 </Button>
                                 <input
                                     ref={fileInputRef}
