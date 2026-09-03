@@ -427,6 +427,132 @@
   }
 }
 
+/* Rubric print view — hidden on screen, laid out for landscape letter paper */
+.rubric-print-layer {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: letter landscape;
+    margin: 0.4in;
+  }
+
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  /* Only the rubric prints; the app chrome, toasts and portals stay out */
+  body > *:not(.rubric-print-layer) {
+    display: none !important;
+  }
+
+  .rubric-print-layer {
+    display: block !important;
+    color: #1a1a1a;
+    background: #fff;
+    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+      "Segoe UI", sans-serif;
+    font-size: var(--rubric-print-font-size, 10pt);
+    line-height: 1.35;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .rubric-print-title {
+    font-size: calc(var(--rubric-print-font-size, 10pt) * 1.7);
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 0.14in;
+    padding-bottom: 0.06in;
+    border-bottom: 1.5pt solid #1a1a1a;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* `separate` keeps cell borders intact on continuation pages in Chrome */
+  .rubric-print-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  /* Repeat the score header at the top of every page */
+  .rubric-print-table thead {
+    display: table-header-group;
+  }
+
+  .rubric-print-table tbody {
+    display: table-row-group;
+  }
+
+  /* Never split a category row across two pages */
+  .rubric-print-table tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .rubric-print-table th,
+  .rubric-print-table td {
+    border-right: 0.75pt solid #444;
+    border-bottom: 0.75pt solid #444;
+    padding: 0.08in 0.1in;
+    text-align: left;
+    vertical-align: top;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+    white-space: pre-wrap;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .rubric-print-table th:first-child,
+  .rubric-print-table td:first-child {
+    border-left: 0.75pt solid #444;
+  }
+
+  .rubric-print-table thead th {
+    border-top: 0.75pt solid #444;
+    background: #ececec;
+  }
+
+  .rubric-print-corner {
+    background: #ececec;
+  }
+
+  .rubric-print-corner-label {
+    font-size: calc(var(--rubric-print-font-size, 10pt) * 0.85);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #555;
+  }
+
+  .rubric-print-score {
+    text-align: center;
+    font-size: calc(var(--rubric-print-font-size, 10pt) * 1.5);
+    font-weight: 700;
+    line-height: 1.1;
+    padding-top: 0.05in;
+    padding-bottom: 0.05in;
+  }
+
+  .rubric-print-category {
+    font-weight: 700;
+    font-size: calc(var(--rubric-print-font-size, 10pt) * 1.05);
+    background: #f6f6f6;
+  }
+
+  .rubric-print-criterion {
+    font-weight: 400;
+  }
+}
+
 /* Pinned card sway animation */
 @keyframes sway {
   0%,
