@@ -66,8 +66,8 @@ export default async function DashboardLayout({
                     session={session as Session}
                     isAllowedToMakeNewClass={isAllowedToMakeNewClass as boolean}
                 />
-                <div className="flex h-10 shrink-0 items-center gap-2 border-b px-4 print:hidden">
-                    <SidebarTrigger size='sm' className="-ml-1" />
+                <div className="flex  shrink-0 items-center border-b print:hidden">
+                    <SidebarTrigger />
                     <Separator orientation="vertical" className="mr-2 h-4" />
                 </div>
                 <main className="wrapper">

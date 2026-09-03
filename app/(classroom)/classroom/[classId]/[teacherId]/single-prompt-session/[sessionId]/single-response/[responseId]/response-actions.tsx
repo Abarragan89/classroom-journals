@@ -39,13 +39,13 @@ export default function ResponseActions({
                     teacherId={teacherId}
                     isCompleted={response?.completionStatus === 'COMPLETE'}
                     sessionId={sessionId}
-                    />
+                />
                 <DeleteResponseBtn
                     responseId={responseId}
                     sessionId={sessionId}
                     teacherId={teacherId}
                     classId={classId}
-                    />
+                />
             </div>
             {isNotSubmitted && (
                 <Badge variant={"destructive"} className=''>Not Submitted</Badge>

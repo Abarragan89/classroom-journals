@@ -53,17 +53,19 @@ export default async function SingleResponse({
                         classId={classId}
                     />
                     {!isMultiQuestion && (
-                        <ScoreJournalForm
-                            teacherId={teacherId}
-                            responseId={response?.id}
-                            sessionId={sessionId}
-                            response={response}
-                            currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
-                            studentWriting={(response.response as unknown as ResponseData[])?.[0]?.answer || ''}
-                        />
+                        <div className='max-w-[900px] mx-auto'>
+                            <ScoreJournalForm
+                                teacherId={teacherId}
+                                responseId={response?.id}
+                                sessionId={sessionId}
+                                response={response}
+                                currentScore={(response?.response as { score?: number }[] | undefined)?.[0]?.score ?? ''}
+                                studentWriting={(response.response as unknown as ResponseData[])?.[0]?.answer || ''}
+                            />
+                        </div>
                     )}
                 </div>
-                <div className="max-w-[1200px] mx-auto p-1">
+                <div className="mx-auto p-1">
                     {isMultiQuestion ? (
                         <GradeResponseCard
                             questionsAndAnswers={questionsAndAnswers}
@@ -72,9 +74,9 @@ export default async function SingleResponse({
                             sessionId={sessionId}
                         />
                     ) : (
-                        <div className='bg-card text-card-foreground border border-muted rounded-md p-5 shadow-sm w-fit mx-auto mt-5'>
+                        <div className='bg-card text-card-foreground border border-muted rounded-md p-5 shadow-sm w-full max-w-[800px] mx-auto mt-5'>
                             <p className='text-md font-bold'>{response.promptSession?.title}</p>
-                            <div className="max-w-[700px] px-3 mx-auto mt-5">
+                            <div className=" px-3 mx-auto mt-5">
                                 <BlogMetaDetails
                                     responseData={response}
                                     studentId={teacherId}
@@ -86,7 +88,7 @@ export default async function SingleResponse({
                                     width={1920}
                                     height={1080}
                                     alt={`Cover photo for ${(response?.response as { answer: string }[])?.[1]?.answer ?? 'blog post'}`}
-                                    className="block mx-auto mb-5 w-full max-w-[700px] h-auto"
+                                    className="block mx-auto mb-5 w-full h-auto"
                                     sizes="(max-width: 700px) 100vw, 700px"
                                     fetchPriority='high'
                                     priority

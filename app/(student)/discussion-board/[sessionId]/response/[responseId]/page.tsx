@@ -36,7 +36,7 @@ export default async function SingleResponse({
     const promptStatus = response?.promptSession?.status
 
     return (
-        <div className="bg-card border border-muted text-card-foreground rounded-md p-8 shadow-sm w-fit mx-auto mt-5">
+        <div className="bg-card border border-muted text-card-foreground rounded-md p-8 shadow-sm w-full max-w-[700px] mx-auto mt-5">
             <BlogMetaDetails
                 responseData={response}
                 studentId={studentId}

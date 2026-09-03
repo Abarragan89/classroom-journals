@@ -74,7 +74,7 @@ export default function ResponseSettingsCard({
     }
 
     return (
-        <Card className="my-6 shadow-sm border border-muted">
+        <Card className="my-6 shadow-sm border border-muted max-w-[900px] mx-auto">
             <CardHeader className="p-4 pb-3 flex flex-row items-center justify-between">
                 <CardTitle className="text-base font-semibold">Response Settings</CardTitle>
                 {isNotSubmitted && (
