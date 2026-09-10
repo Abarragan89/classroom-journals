@@ -102,6 +102,8 @@ async function gradeRubric(job: Job) {
         const maxTotalScore = categories.reduce((sum, cat) => sum + cat.maxScore, 0);
         const percentageScore = Math.round((totalScore / maxTotalScore) * 100);
 
+        console.log("repsonse id", responseId)
+
         // Save rubric grade to database
         await prisma.rubricGrade.upsert({
             where: {
