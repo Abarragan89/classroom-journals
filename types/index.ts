@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v3";
 import { classSchema, promptSchema, rubricSchema } from "@/lib/validators";
 import { JsonValue } from "@prisma/client/runtime/library";
 

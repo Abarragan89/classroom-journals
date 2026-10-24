@@ -80,14 +80,14 @@ async function parseRubricFile(job: Job): Promise<ParseRubricResult> {
         });
     } catch (err) {
         // Clean up the file on API error, then re-throw
-        openai.files.del(file_id).catch((cleanupErr: unknown) =>
+        openai.files.delete(file_id).catch((cleanupErr: unknown) =>
             console.error(`Failed to clean up OpenAI file ${file_id}:`, cleanupErr)
         );
         throw err;
     }
 
     // Clean up the file after a successful response
-    openai.files.del(file_id).catch((err: unknown) =>
+    openai.files.delete(file_id).catch((err: unknown) =>
         console.error(`Failed to clean up OpenAI file ${file_id}:`, err)
     );
 
