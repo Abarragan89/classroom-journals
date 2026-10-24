@@ -1,9 +1,6 @@
 import { Worker, Job } from 'bullmq'
 import { connection } from '../lib/redis'
 import OpenAI from 'openai'
-import { loadEnvConfig } from '@next/env'
-
-loadEnvConfig(process.cwd())
 
 
 const openai = new OpenAI({
@@ -112,7 +109,7 @@ async function parseRubricFile(job: Job): Promise<ParseRubricResult> {
     };
 }
 
-const worker = new Worker(
+export const worker = new Worker(
     'rubric-parse',
     async (job: Job) => {
         console.log(`Processing rubric-parse job ${job.id} of type ${job.name}`);

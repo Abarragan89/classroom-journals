@@ -132,7 +132,7 @@ async function gradeExitTicket(job: Job) {
     }
 }
 
-const worker = new Worker(
+export const worker = new Worker(
     'exit-ticket',
     async (job: Job) => {
         console.log(`Processing exit ticket job ${job.id} of type ${job.name}`);

@@ -17,7 +17,7 @@
     "worker:exit-ticket": "node dist/workers/exitTicketWorker.js",
     "worker:rubric-parse": "node dist/workers/rubricParseWorker.js",
     "workers": "concurrently \"npm run worker:rubric-ai\" \"npm run worker:exit-ticket\" \"npm run worker:rubric-parse\"",
-    "build:worker": "tsc -p tsconfig.worker.json",
+    "build:worker": "node build-worker.mjs",
     "postinstall": "npx prisma generate && npx prisma migrate deploy"
   },
   "overrides": {
@@ -104,6 +104,7 @@
     "@types/react-dom": "19.2.3",
     "@types/ws": "^8.5.14",
     "bufferutil": "^4.0.9",
+    "esbuild": "^0.28.2",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.6",
     "eslint-plugin-unused-imports": "^4.4.1",

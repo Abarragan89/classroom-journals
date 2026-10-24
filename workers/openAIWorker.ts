@@ -199,7 +199,7 @@ async function gradeRubric(job: Job) {
     }
 }
 
-const worker = new Worker(
+export const worker = new Worker(
     'openai',
     async (job: Job) => {
         console.log(`Processing job ${job.id} of type ${job.name}`);
