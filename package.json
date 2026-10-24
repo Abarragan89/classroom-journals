@@ -16,7 +16,7 @@
     "worker:rubric-ai": "node dist/workers/openAIWorker.js",
     "worker:exit-ticket": "node dist/workers/exitTicketWorker.js",
     "worker:rubric-parse": "node dist/workers/rubricParseWorker.js",
-    "workers": "concurrently \"npm run worker:rubric-ai\" \"npm run worker:exit-ticket\" \"npm run worker:rubric-parse\"",
+    "workers": "node dist/worker.mjs",
     "build:worker": "node build-worker.mjs",
     "postinstall": "npx prisma generate && npx prisma migrate deploy"
   },
