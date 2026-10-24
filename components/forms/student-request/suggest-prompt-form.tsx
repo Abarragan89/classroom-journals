@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { requestNewPromptSchema } from '@/lib/validators'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from 'zod'
+import { z } from 'zod/v3'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { createStudentRequest } from '@/lib/actions/student-request'

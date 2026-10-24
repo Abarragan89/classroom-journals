@@ -2,7 +2,7 @@
 import { createNewQuip } from "@/lib/actions/quips.action";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { z } from "zod"
+import { z } from "zod/v3"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import {

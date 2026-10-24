@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v3";
 
 //  Schema for signing users in
 export const signInFormSchema = z.object({

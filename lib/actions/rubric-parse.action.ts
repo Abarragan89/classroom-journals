@@ -100,7 +100,7 @@ export async function parseAndSaveRubricFromFile(
     } catch (error) {
         // Clean up OpenAI file if the job was never queued or save failed
         if (file_id) {
-            openai.files.del(file_id).catch((err: unknown) =>
+            openai.files.delete(file_id).catch((err: unknown) =>
                 console.error(`Failed to clean up OpenAI file ${file_id}:`, err)
             );
         }
