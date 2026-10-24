@@ -8,15 +8,10 @@ RUN npm ci
 COPY . .
 RUN npm run build:worker
 
-# Remove devDependencies now that the build is done
-RUN npm prune --omit=dev
-
 FROM node:24-alpine AS runner
 ENV NODE_ENV=production
 WORKDIR /app
 
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/dist/worker.mjs ./worker.mjs
 
-CMD ["npm", "run", "workers"]
+CMD ["node", "worker.mjs"]
