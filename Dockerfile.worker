@@ -13,5 +13,7 @@ ENV NODE_ENV=production
 WORKDIR /app
 
 COPY --from=builder /app/dist/worker.mjs ./worker.mjs
+# Prisma's native query engine can't be bundled, so copy it where Prisma looks
+COPY --from=builder /app/node_modules/.prisma/client/libquery_engine-*.so.node ./node_modules/.prisma/client/
 
 CMD ["node", "worker.mjs"]
