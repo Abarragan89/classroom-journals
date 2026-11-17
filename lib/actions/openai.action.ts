@@ -3,13 +3,20 @@ import { ResponseData, Rubric, AIGradingResult } from "@/types";
 import { requireAuth } from "./authorization.action";
 import { prisma } from "@/db/prisma";
 import { openAiQueue, openAiQueueEvents, exitTicketQueue, exitTicketQueueEvents } from "@/lib/queues";
+import { AI_FEATURES_ENABLED } from "@/lib/constants";
 
+const AI_DISABLED_MESSAGE = 'AI grading is currently unavailable.';
 
 export async function gradeResponseWithAI(
     responseId: string,
     gradeLevel: string,
     responseData: ResponseData[]
 ) {
+    // Bail out before touching isAIGrading or queueing anything
+    if (!AI_FEATURES_ENABLED) {
+        return { success: false, message: AI_DISABLED_MESSAGE };
+    }
+
     try {
         const session = await requireAuth();
         const teacherId = session?.user?.id;
@@ -84,6 +91,11 @@ export async function gradeRubricWithAI(
     gradeLevel?: string,
     waitForCompletion: boolean = true,
 ): Promise<AIGradingResult> {
+    // Bail out before touching isAIGrading, the rubric grade, or the queue
+    if (!AI_FEATURES_ENABLED) {
+        return { success: false, message: AI_DISABLED_MESSAGE, error: 'AI features disabled' };
+    }
+
     try {
         const session = await requireAuth();
         const teacherId = session?.user?.id;
@@ -249,6 +261,12 @@ export async function queueExitTicketGrading(
     responseData: ResponseData[],
     gradeLevel?: string
 ) {
+    // Bail out before touching isAIGrading or queueing anything — the student's
+    // response has already been saved by the caller, so nothing else is needed
+    if (!AI_FEATURES_ENABLED) {
+        return { success: false, message: AI_DISABLED_MESSAGE };
+    }
+
     try {
         const session = await requireAuth();
         const teacherId = session?.user?.id;

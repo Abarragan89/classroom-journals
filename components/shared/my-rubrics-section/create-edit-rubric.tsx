@@ -30,6 +30,7 @@ import { Input } from "@/components/ui/input"
 import { createRubric, deleteRubric, updateRubric } from "@/lib/actions/rubric.actions"
 import { parseAndSaveRubricFromFile } from "@/lib/actions/rubric-parse.action"
 import { rubricSchema } from "@/lib/validators"
+import { AI_FEATURES_ENABLED } from "@/lib/constants"
 import { Rubric, RubricFormData } from "@/types"
 import { ResponsiveDialog } from "@/components/responsive-dialog"
 import RubricPrintView from "./rubric-print-view"
@@ -405,7 +406,8 @@ export default function CreateEditRubric({
                                     </Button>
                                 )}
 
-                                {/* Upload rubric from file */}
+                                {/* Upload rubric from file (AI-powered) */}
+                                {AI_FEATURES_ENABLED && (
                                 <Button
                                     type="button"
                                     variant="secondary"
@@ -425,6 +427,7 @@ export default function CreateEditRubric({
                                         </>
                                     )}
                                 </Button>
+                                )}
                                 <Button
                                     type="button"
                                     variant={"outline"}
@@ -435,6 +438,7 @@ export default function CreateEditRubric({
                                 >
                                     <Printer aria-hidden="true" />
                                 </Button>
+                                {AI_FEATURES_ENABLED && (
                                 <input
                                     ref={fileInputRef}
                                     type="file"
@@ -443,6 +447,7 @@ export default function CreateEditRubric({
                                     onChange={handleFileUpload}
                                     aria-label="Upload rubric file"
                                 />
+                                )}
                             </div>
                             <div className="border rounded-md shadow-lg mt-3 relative">
                                 <div className="flex flex-wrap gap-x-8 my-5 text-sm text-primary absolute -top-1 left-3 z-10">

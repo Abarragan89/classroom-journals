@@ -1,6 +1,7 @@
 import { Worker, Job } from 'bullmq'
 import { connection } from '../lib/redis'
 import OpenAI from 'openai'
+import { AI_FEATURES_ENABLED } from '../lib/constants'
 
 
 const openai = new OpenAI({
@@ -116,6 +117,10 @@ export const worker = new Worker(
 
         try {
             if (job.name === 'parse-rubric-file') {
+                if (!AI_FEATURES_ENABLED) {
+                    // Skip OpenAI; the calling action treats this as a failure and cleans up
+                    return { success: false };
+                }
                 return await parseRubricFile(job);
             } else {
                 throw new Error(`Unknown job type: ${job.name}`);
