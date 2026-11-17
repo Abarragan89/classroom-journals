@@ -14,6 +14,7 @@ import { checkout } from '@/lib/stripe/checkout'
 import { Badge } from '@/components/ui/badge'
 import { useQueryClient } from '@tanstack/react-query'
 import { PromptSession, Response } from '@/types'
+import { AI_FEATURES_ENABLED } from '@/lib/constants'
 
 interface RubricInstanceProps {
     rubric: Rubric;
@@ -49,6 +50,7 @@ export default function RubricInstance({
 
     // Fetch AI allowance when component mounts
     useEffect(() => {
+        if (!AI_FEATURES_ENABLED) return;
         async function fetchAllowance() {
             const allowance = await getTeacherAIAllowance();
             setAiAllowance(allowance);
@@ -329,6 +331,7 @@ export default function RubricInstance({
                 {onSave && (
                     <div className="flex gap-3 items-center mt-5">
                         {/* AI Grading Button */}
+                        {AI_FEATURES_ENABLED && (
                         <div className="flex flex-col items-center space-y-2">
                             {aiAllowance > 0 ? (
                                 <Button
@@ -359,6 +362,7 @@ export default function RubricInstance({
                                 </div>
                             )}
                         </div>
+                        )}
 
 
                         {(existingGrade && !hasChanges ? (

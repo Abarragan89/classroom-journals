@@ -3,6 +3,7 @@ import { connection } from '../lib/redis'
 import OpenAI from 'openai'
 import { prisma } from '../db/prisma'
 import { Rubric } from '@/types'
+import { AI_FEATURES_ENABLED } from '../lib/constants'
 
 
 const openai = new OpenAI({
@@ -206,6 +207,14 @@ export const worker = new Worker(
 
         try {
             if (job.name === 'grade-rubric') {
+                if (!AI_FEATURES_ENABLED) {
+                    // Skip OpenAI, but clear the flag so a leftover job doesn't leave the response stuck "grading"
+                    await prisma.response.update({
+                        where: { id: job.data.responseId },
+                        data: { isAIGrading: false }
+                    }).catch(err => console.error('Failed to reset isAIGrading:', err));
+                    return { success: false, message: 'AI features are disabled' };
+                }
                 return await gradeRubric(job);
             } else {
                 throw new Error(`Unknown job type: ${job.name}`);

@@ -4,6 +4,7 @@ import { rubricParseQueue, rubricParseQueueEvents } from "@/lib/queues";
 import { createRubric, updateRubric } from "./rubric.actions";
 import { Rubric } from "@/types";
 import OpenAI from "openai";
+import { AI_FEATURES_ENABLED } from "@/lib/constants";
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -38,6 +39,11 @@ export async function parseAndSaveRubricFromFile(
     formData: FormData,
     rubricId?: string
 ): Promise<{ success: boolean; rubric?: Rubric; message?: string }> {
+    // Bail out before the file is uploaded to OpenAI
+    if (!AI_FEATURES_ENABLED) {
+        return { success: false, message: "Rubric import is currently unavailable." };
+    }
+
     let file_id: string | null = null;
 
     try {
